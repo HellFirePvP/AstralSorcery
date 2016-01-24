@@ -1,0 +1,16 @@
+[
+{
+  "modid": "astralSorcery",
+  "name": "Astral Sorcery",
+  "description": "Write something interesting here Kappa",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["HellFirePvP"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
