@@ -23,6 +23,7 @@ hs_err_pid*
 /gradlew
 /gradlew.bat
 /gradle
+/.gradle
 
 # maven
 /build.xml
@@ -39,6 +40,7 @@ hs_err_pid*
 /run
 /libs
 /eclipse
+/classes
 
 # Mac filesystem dust
 /.DS_Store
