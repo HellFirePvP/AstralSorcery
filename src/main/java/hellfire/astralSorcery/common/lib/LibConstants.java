@@ -7,7 +7,7 @@ package hellfire.astralSorcery.common.lib;
  */
 public class LibConstants {
 
-    public static final String MODID = "astralSorcery";
+    public static final String MODID = "astralsorcery";
     public static final String VERSION = "1.8.9-0.1.0";
     public static final String NAME = "Astral Sorcery";
 

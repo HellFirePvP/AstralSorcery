@@ -27,18 +27,18 @@ import java.util.Random;
  */
 public class RenderDefaultSkybox extends IRenderHandler {
 
-    protected static VertexBuffer skyVBO;
-    protected static VertexBuffer sky2VBO;
-    protected static VertexBuffer starVBO;
+    private static VertexBuffer skyVBO;
+    private static VertexBuffer sky2VBO;
+    private static VertexBuffer starVBO;
 
-    protected static int starGLCallList = -1;
-    protected static int glSkyList = -1;
-    protected static int glSkyList2 = -1;
+    private static int starGLCallList = -1;
+    private static int glSkyList = -1;
+    private static int glSkyList2 = -1;
 
-    protected static VertexFormat vertexBufferFormat;
+    private static VertexFormat vertexBufferFormat;
 
-    protected static final ResourceLocation MC_DEF_SUN_PNG = new ResourceLocation("textures/environment/sun.png");
-    protected static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation("textures/environment/moon_phases.png");
+    private static final ResourceLocation MC_DEF_SUN_PNG = new ResourceLocation("textures/environment/sun.png");
+    private static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation("textures/environment/moon_phases.png");
 
     public static void setupDefaultSkybox() {
         vertexBufferFormat = new VertexFormat();
@@ -128,8 +128,9 @@ public class RenderDefaultSkybox extends IRenderHandler {
         //int j = 6;
         worldRendererIn.begin(7, DefaultVertexFormats.POSITION);
 
-        for (int k = -384; k <= 384; k += 64) {
+        for (int k = -384; k <= 384; k += 64) { //Runs 12 times. wtf. why so complicated...
             for (int l = -384; l <= 384; l += 64) {
+
                 float f = (float)k;
                 float f1 = (float)(k + 64);
 

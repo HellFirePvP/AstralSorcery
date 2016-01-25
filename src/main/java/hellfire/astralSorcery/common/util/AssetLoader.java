@@ -69,7 +69,8 @@ public final class AssetLoader {
 
     public static enum TextureLocation implements SubLocation {
 
-        BLOCKS("blocks");
+        BLOCKS("blocks"),
+        ENVIRONMENT("environment");
 
         private final String location;
 

@@ -3,6 +3,7 @@ package hellfire.astralSorcery.client.event;
 import hellfire.astralSorcery.client.renderer.sky.RenderSkybox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,11 @@ public class SkyboxRenderEventHandler {
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().theWorld;
         if(world.provider.getDimensionId() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-            world.provider.setSkyRenderer(new RenderSkybox());
+            //Take over other sky renderer.
+            //I do not expect soo many mods out there overwrite overworld's Skybox. or any Skybox at all...
+            //Except: Mystcraft or RFTools or related. But those do not modify the overworld, so yea.
+            //TODO removed handling for other sky renderers. Change back at some point? Check compatibility!
+            world.provider.setSkyRenderer(new RenderSkybox(/*world.provider.getSkyRenderer()*/));
         }
     }
 

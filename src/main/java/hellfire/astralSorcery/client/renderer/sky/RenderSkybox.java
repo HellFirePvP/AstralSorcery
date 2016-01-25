@@ -27,18 +27,34 @@ public class RenderSkybox extends IRenderHandler {
     private static final RenderDefaultSkybox defaultSky = new RenderDefaultSkybox();
     private static final RenderAstralSkybox astralSky = new RenderAstralSkybox();
 
+    //private final IRenderHandler otherSkyRenderer;
+
+    public RenderSkybox(/*IRenderHandler skyRenderer*/) {
+        //this.otherSkyRenderer = skyRenderer;
+    }
+
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
+        /*if(otherSkyRenderer != null) {
+            //Expecting a world renderer that does not render the whole sky, only a part of it.
+            //Its the overworld after all. The sky "should" not be changed Kappa
+            otherSkyRenderer.render(partialTicks, world, mc);
+        }*/
+
+        if(!astralSky.isInitialized() && world.provider.getDimensionId() == 0) { //DimID == 0 should always be the case tho.
+            astralSky.setInitialized(world.getWorldInfo().getSeed());
+        }
+
         if(true) {
-            defaultSky.render(partialTicks, world, mc);
-        } else {
             astralSky.render(partialTicks, world, mc);
+        } else {
+            /*if(otherSkyRenderer == null) */
+                defaultSky.render(partialTicks, world, mc);
         }
     }
 
     static {
         RenderDefaultSkybox.setupDefaultSkybox();
-        RenderAstralSkybox.setupSkybox();
     }
 
 }
