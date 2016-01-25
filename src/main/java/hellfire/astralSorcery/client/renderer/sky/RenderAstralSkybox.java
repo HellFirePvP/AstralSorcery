@@ -43,7 +43,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
-        if(!isInitialized()) return;
+        if (!isInitialized()) return;
 
         renderSky(partialTicks);
     }
@@ -64,7 +64,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         starCoords1 = setupStars(500, 0, 1);
         starCoords2 = setupStars(400, 1, 1);
         starCoords3 = setupStars(200, 2, 1);
-        starCoords4 = setupStars(100, 3, 1);
+        starCoords4 = setupStars(100, 3, 2);
     }
 
     private DoubleTriple[] setupStars(int amount, long seedModifier, double multiplier) {
@@ -72,10 +72,10 @@ public class RenderAstralSkybox extends IRenderHandler {
         DoubleTriple[] coords = new DoubleTriple[amount * 4];
         int addr = 0;
         for (int i = 0; i < amount; ++i) { //Amount of stars.
-            double x = (double)(random.nextFloat() * 2.0F - 1.0F);
-            double y = (double)(random.nextFloat() * 2.0F - 1.0F);
-            double z = (double)(random.nextFloat() * 2.0F - 1.0F);
-            double ovrSize = (double)(0.15F + random.nextFloat() * 0.2F); //Size flat increase.
+            double x = (double) (random.nextFloat() * 2.0F - 1.0F);
+            double y = (double) (random.nextFloat() * 2.0F - 1.0F);
+            double z = (double) (random.nextFloat() * 2.0F - 1.0F);
+            double ovrSize = (double) (0.15F + random.nextFloat() * 0.2F); //Size flat increase.
             double d4 = x * x + y * y + z * z;
             if (d4 < 1.0D && d4 > 0.01D) {
 
@@ -105,8 +105,8 @@ public class RenderAstralSkybox extends IRenderHandler {
 
                 //Set 2D vertices
                 for (int j = 0; j < 4; ++j) {
-                    double d18 = (double)((j & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
-                    double d19 = (double)((j + 1 & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
+                    double d18 = (double) ((j & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
+                    double d19 = (double) ((j + 1 & 2) - 1) * ovrSize; //0 = -1 * [0.15-0.25[
 
                     double d21 = d18 * d16 - d19 * size;
                     double d22 = d19 * d16 + d18 * size;
@@ -163,10 +163,10 @@ public class RenderAstralSkybox extends IRenderHandler {
                     px = k;
                     p = k + 64;
                 }
-                wr.pos(p,  16, l     ).endVertex();
-                wr.pos(px, 16, l     ).endVertex();
+                wr.pos(p, 16, l).endVertex();
+                wr.pos(px, 16, l).endVertex();
                 wr.pos(px, 16, l + 64).endVertex();
-                wr.pos(p,  16, l + 64).endVertex();
+                wr.pos(p, 16, l + 64).endVertex();
             }
         }
     }
@@ -174,9 +174,9 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderSky(float partialTicks) {
         GlStateManager.disableTexture2D();
         Vec3 vec3 = Minecraft.getMinecraft().theWorld.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
-        float f = (float)vec3.xCoord;
-        float f1 = (float)vec3.yCoord;
-        float f2 = (float)vec3.zCoord;
+        float f = (float) vec3.xCoord;
+        float f1 = (float) vec3.yCoord;
+        float f2 = (float) vec3.zCoord;
 
         if (Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
@@ -199,7 +199,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.disableStandardItemLighting();
         float[] sunsetColors = Minecraft.getMinecraft().theWorld.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks), partialTicks);
-        if(sunsetColors != null) {
+        if (sunsetColors != null) {
             renderSunsetToBackground(sunsetColors, partialTicks);
         }
         renderDefaultCelestials(partialTicks);
@@ -210,22 +210,22 @@ public class RenderAstralSkybox extends IRenderHandler {
             GlStateManager.translate(0.0F, 12.0F, 0.0F);
             GlStateManager.callList(glSkyList2);
             GlStateManager.popMatrix();
-            float yabs = -((float)(absPlayerHorizon + 65.0D));
+            float yabs = -((float) (absPlayerHorizon + 65.0D));
             worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            worldrenderer.pos(-1.0D, (double)yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(1.0D, (double)yabs, 1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(-1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(1.0D, (double)yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(-1.0D, (double)yabs, -1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(-1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(1.0D, (double)yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(1.0D, (double)yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(-1.0D, (double)yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            worldrenderer.pos(-1.0D, (double)yabs, 1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(-1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
+            worldrenderer.pos(-1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
             worldrenderer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
@@ -242,7 +242,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0.0F, -((float)(absPlayerHorizon - 16.0D)), 0.0F);
+        GlStateManager.translate(0.0F, -((float) (absPlayerHorizon - 16.0D)), 0.0F);
         GlStateManager.callList(glSkyList2);
         GlStateManager.popMatrix();
         GlStateManager.enableTexture2D();
@@ -262,80 +262,88 @@ public class RenderAstralSkybox extends IRenderHandler {
         float f17 = 30.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldRenderer.pos((double)(-f17), 100.0D, (double)(-f17)).tex(0.0D, 0.0D).endVertex();
-        worldRenderer.pos((double)f17, 100.0D, (double)(-f17)).tex(1.0D, 0.0D).endVertex();
-        worldRenderer.pos((double)f17, 100.0D, (double)f17).tex(1.0D, 1.0D).endVertex();
-        worldRenderer.pos((double)(-f17), 100.0D, (double)f17).tex(0.0D, 1.0D).endVertex();
+        worldRenderer.pos((double) (-f17), 100.0D, (double) (-f17)).tex(0.0D, 0.0D).endVertex();
+        worldRenderer.pos((double) f17, 100.0D, (double) (-f17)).tex(1.0D, 0.0D).endVertex();
+        worldRenderer.pos((double) f17, 100.0D, (double) f17).tex(1.0D, 1.0D).endVertex();
+        worldRenderer.pos((double) (-f17), 100.0D, (double) f17).tex(0.0D, 1.0D).endVertex();
         tessellator.draw();
         f17 = 20.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
         int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
-        float f22 = (float)(k) / 4.0F;
-        float f23 = (float)(i1) / 2.0F;
-        float f24 = (float)(k + 1) / 4.0F;
-        float f14 = (float)(i1 + 1) / 2.0F;
+        float f22 = (float) (k) / 4.0F;
+        float f23 = (float) (i1) / 2.0F;
+        float f24 = (float) (k + 1) / 4.0F;
+        float f14 = (float) (i1 + 1) / 2.0F;
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldRenderer.pos((double)(-f17), -100.0D, (double)f17).tex((double)f24, (double)f14).endVertex();
-        worldRenderer.pos((double)f17, -100.0D, (double)f17).tex((double)f22, (double)f14).endVertex();
-        worldRenderer.pos((double)f17, -100.0D, (double)(-f17)).tex((double)f22, (double)f23).endVertex();
-        worldRenderer.pos((double)(-f17), -100.0D, (double)(-f17)).tex((double)f24, (double)f23).endVertex();
+        worldRenderer.pos((double) (-f17), -100.0D, (double) f17).tex((double) f24, (double) f14).endVertex();
+        worldRenderer.pos((double) f17, -100.0D, (double) f17).tex((double) f22, (double) f14).endVertex();
+        worldRenderer.pos((double) f17, -100.0D, (double) (-f17)).tex((double) f22, (double) f23).endVertex();
+        worldRenderer.pos((double) (-f17), -100.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
-        GlStateManager.color(1F, 1F, 1F);
+        float rainDim = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
+        float brightness = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * rainDim;
 
-        for (int j = 0; j < 4; j++) {
-            DoubleTriple[] toIt;
-            ResourceLocation texture;
-            switch (j) {
-                case 0:
-                    toIt = starCoords1;
-                    texture = TEX_STAR_1;
-                    break;
-                case 1:
-                    toIt = starCoords2;
-                    texture = TEX_STAR_2;
-                    break;
-                case 2:
-                    toIt = starCoords3;
-                    texture = TEX_STAR_3;
-                    break;
-                case 3:
-                    toIt = starCoords4;
-                    texture = TEX_STAR_4;
-                    break;
-                default:
-                    toIt = starCoords1;
-                    texture = TEX_STAR_1;
-                    break;
-            }
-            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-            worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            for (int i2 = 0; i2 < toIt.length; i2++) {
-                DoubleTriple entry = toIt[i2];
-                if(entry == null) continue;
-                int mod = i2 % 4;
-                int u = 0, v = 0;
-                switch (mod) {
+        if (brightness > 0.0F) {
+            GlStateManager.color(brightness, brightness, brightness, brightness);
+            for (int j = 0; j < 4; j++) {
+                DoubleTriple[] toIt;
+                ResourceLocation texture;
+                switch (j) {
                     case 0:
-                        u = 0; v = 1;
+                        toIt = starCoords1;
+                        texture = TEX_STAR_1;
                         break;
                     case 1:
-                        u = 1; v = 1;
+                        toIt = starCoords2;
+                        texture = TEX_STAR_2;
                         break;
                     case 2:
-                        u = 1; v = 0;
+                        toIt = starCoords3;
+                        texture = TEX_STAR_3;
                         break;
                     case 3:
-                        u = 0; v = 0;
+                        toIt = starCoords4;
+                        texture = TEX_STAR_4;
+                        break;
+                    default:
+                        toIt = starCoords1;
+                        texture = TEX_STAR_1;
                         break;
                 }
-                worldRenderer.pos(entry.x, entry.y, entry.z).tex(u, v).endVertex();
+                Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+                worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+                for (int i2 = 0; i2 < toIt.length; i2++) {
+                    DoubleTriple entry = toIt[i2];
+                    if (entry == null) continue;
+                    int mod = i2 % 4;
+                    int u = 0, v = 0;
+                    switch (mod) {
+                        case 0:
+                            u = 0;
+                            v = 1;
+                            break;
+                        case 1:
+                            u = 1;
+                            v = 1;
+                            break;
+                        case 2:
+                            u = 1;
+                            v = 0;
+                            break;
+                        case 3:
+                            u = 0;
+                            v = 0;
+                            break;
+                    }
+                    worldRenderer.pos(entry.x, entry.y, entry.z).tex(u, v).endVertex();
+                }
+                tessellator.draw();
             }
-            tessellator.draw();
         }
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -374,10 +382,10 @@ public class RenderAstralSkybox extends IRenderHandler {
         //int j = 16;
 
         for (int l = 0; l <= 16; ++l) {
-            float f21 = (float)l * (float)Math.PI * 2.0F / 16.0F;
+            float f21 = (float) l * (float) Math.PI * 2.0F / 16.0F;
             float f12 = MathHelper.sin(f21);
             float f13 = MathHelper.cos(f21);
-            worldRenderer.pos((double)(f12 * 120.0F), (double)(f13 * 120.0F), (double)(-f13 * 40.0F * sunsetColors[3])).color(sunsetColors[0], sunsetColors[1], sunsetColors[2], 0.0F).endVertex();
+            worldRenderer.pos((double) (f12 * 120.0F), (double) (f13 * 120.0F), (double) (-f13 * 40.0F * sunsetColors[3])).color(sunsetColors[0], sunsetColors[1], sunsetColors[2], 0.0F).endVertex();
         }
 
         tessellator.draw();
