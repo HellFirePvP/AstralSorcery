@@ -1,8 +1,10 @@
 package hellfire.astralSorcery.client;
 
+import hellfire.astralSorcery.client.event.SkyboxRenderEventHandler;
 import hellfire.astralSorcery.common.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,6 +21,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         super.init();
+
+        MinecraftForge.EVENT_BUS.register(new SkyboxRenderEventHandler());
     }
 
     @Override
