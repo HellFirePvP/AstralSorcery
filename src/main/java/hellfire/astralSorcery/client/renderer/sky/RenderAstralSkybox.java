@@ -35,11 +35,13 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static final ResourceLocation TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
     private static final ResourceLocation TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
-    //More specifically: lists containing vertices for star textures. default mc list contains 1 list -> 1500 * 4 vertices
-    private static DoubleTriple[] starCoords1, starCoords2, starCoords3, starCoords4;
-
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
+
+    private static int glStarList1 = -1;
+    private static int glStarList2 = -1;
+    private static int glStarList3 = -1;
+    private static int glStarList4 = -1;
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
@@ -61,16 +63,58 @@ public class RenderAstralSkybox extends IRenderHandler {
     }
 
     private void setupStarVertices() {
-        starCoords1 = setupStars(500, 0, 1);
-        starCoords2 = setupStars(400, 1, 1);
-        starCoords3 = setupStars(200, 2, 1);
-        starCoords4 = setupStars(100, 3, 2);
+        if (glStarList1 >= 0) {
+            GLAllocation.deleteDisplayLists(glStarList1);
+            glStarList1 = -1;
+        }
+        glStarList1 = GLAllocation.generateDisplayLists(1);
+        GL11.glNewList(glStarList1, GL11.GL_COMPILE);
+        WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_1);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        setupStars(wr, 500, 0, 1);
+        Tessellator.getInstance().draw();
+        GL11.glEndList();
+
+        if (glStarList2 >= 0) {
+            GLAllocation.deleteDisplayLists(glStarList2);
+            glStarList2 = -1;
+        }
+        glStarList2 = GLAllocation.generateDisplayLists(1);
+        GL11.glNewList(glStarList2, GL11.GL_COMPILE);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_2);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        setupStars(wr, 400, 1, 1.3);
+        Tessellator.getInstance().draw();
+        GL11.glEndList();
+
+        if (glStarList3 >= 0) {
+            GLAllocation.deleteDisplayLists(glStarList3);
+            glStarList3 = -1;
+        }
+        glStarList3 = GLAllocation.generateDisplayLists(1);
+        GL11.glNewList(glStarList3, GL11.GL_COMPILE);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_3);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        setupStars(wr, 200, 2, 1.2);
+        Tessellator.getInstance().draw();
+        GL11.glEndList();
+
+        if (glStarList4 >= 0) {
+            GLAllocation.deleteDisplayLists(glStarList4);
+            glStarList4 = -1;
+        }
+        glStarList4 = GLAllocation.generateDisplayLists(1);
+        GL11.glNewList(glStarList4, GL11.GL_COMPILE);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_4);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        setupStars(wr, 100, 3, 1.4);
+        Tessellator.getInstance().draw();
+        GL11.glEndList();
     }
 
-    private DoubleTriple[] setupStars(int amount, long seedModifier, double multiplier) {
+    private void setupStars(WorldRenderer wr, int amount, long seedModifier, double multiplier) {
         Random random = new Random(worldSeed + seedModifier); //Yea. that's the whole reason we need the seed.
-        DoubleTriple[] coords = new DoubleTriple[amount * 4];
-        int addr = 0;
         for (int i = 0; i < amount; ++i) { //Amount of stars.
             double x = (double) (random.nextFloat() * 2.0F - 1.0F);
             double y = (double) (random.nextFloat() * 2.0F - 1.0F);
@@ -117,16 +161,10 @@ public class RenderAstralSkybox extends IRenderHandler {
                     double d25 = d24 * d9 - d22 * d10;
                     double d26 = d22 * d9 + d24 * d10;
 
-                    DoubleTriple entry = new DoubleTriple();
-                    entry.x = d5 + d25;
-                    entry.y = d6 + d23;
-                    entry.z = d7 + d26;
-                    coords[addr] = entry;
-                    addr++;
+                    wr.pos(d5 + d25, d6 + d23, d7 + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
                 }
             }
         }
-        return coords;
     }
 
     private void setupSkybox() {
@@ -290,60 +328,10 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         if (brightness > 0.0F) {
             GlStateManager.color(brightness, brightness, brightness, brightness);
-            for (int j = 0; j < 4; j++) {
-                DoubleTriple[] toIt;
-                ResourceLocation texture;
-                switch (j) {
-                    case 0:
-                        toIt = starCoords1;
-                        texture = TEX_STAR_1;
-                        break;
-                    case 1:
-                        toIt = starCoords2;
-                        texture = TEX_STAR_2;
-                        break;
-                    case 2:
-                        toIt = starCoords3;
-                        texture = TEX_STAR_3;
-                        break;
-                    case 3:
-                        toIt = starCoords4;
-                        texture = TEX_STAR_4;
-                        break;
-                    default:
-                        toIt = starCoords1;
-                        texture = TEX_STAR_1;
-                        break;
-                }
-                Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-                worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-                for (int i2 = 0; i2 < toIt.length; i2++) {
-                    DoubleTriple entry = toIt[i2];
-                    if (entry == null) continue;
-                    int mod = i2 % 4;
-                    int u = 0, v = 0;
-                    switch (mod) {
-                        case 0:
-                            u = 0;
-                            v = 1;
-                            break;
-                        case 1:
-                            u = 1;
-                            v = 1;
-                            break;
-                        case 2:
-                            u = 1;
-                            v = 0;
-                            break;
-                        case 3:
-                            u = 0;
-                            v = 0;
-                            break;
-                    }
-                    worldRenderer.pos(entry.x, entry.y, entry.z).tex(u, v).endVertex();
-                }
-                tessellator.draw();
-            }
+            callStarList(glStarList1, TEX_STAR_1);
+            callStarList(glStarList2, TEX_STAR_2);
+            callStarList(glStarList3, TEX_STAR_3);
+            callStarList(glStarList4, TEX_STAR_4);
         }
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -353,6 +341,13 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
+    }
+
+    private void callStarList(int glList, ResourceLocation texture) {
+        if(glList > 0) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+            GlStateManager.callList(glList);
+        }
     }
 
     private void renderSunsetToBackground(float[] sunsetColors, float partialTicks) {
@@ -393,9 +388,10 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.shadeModel(7424);
     }
 
-    private static class DoubleTriple {
+    private static class RenderInfo {
 
         private double x, y, z;
+        private int u, v;
 
     }
 
