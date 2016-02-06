@@ -388,11 +388,4 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.shadeModel(7424);
     }
 
-    private static class RenderInfo {
-
-        private double x, y, z;
-        private int u, v;
-
-    }
-
 }

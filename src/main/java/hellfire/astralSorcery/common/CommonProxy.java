@@ -7,6 +7,7 @@ import hellfire.astralSorcery.common.lib.LibConstants;
 import hellfire.astralSorcery.common.lib.LibMisc;
 import hellfire.astralSorcery.common.net.PacketChannel;
 import hellfire.astralSorcery.common.registry.RegistryBlocks;
+import hellfire.astralSorcery.common.registry.RegistryConstellations;
 import hellfire.astralSorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +32,8 @@ public class CommonProxy implements IGuiHandler {
                 return new ItemStack(Blocks.stone).getItem();
             }
         };
+
+        RegistryConstellations.init();
 
         PacketChannel.init();
 

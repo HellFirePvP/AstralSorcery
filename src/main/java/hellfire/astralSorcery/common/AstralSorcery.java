@@ -1,7 +1,10 @@
 package hellfire.astralSorcery.common;
 
+import hellfire.astralSorcery.api.AstralSorceryAPI;
+import hellfire.astralSorcery.common.api.DefaultAPIHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,6 +28,11 @@ public class AstralSorcery {
     public static CommonProxy proxy;
 
     public static Logger log = LogManager.getLogger(NAME);
+
+    @Mod.EventHandler
+    public void onConstruct(FMLConstructionEvent event) {
+        AstralSorceryAPI.setAPIHandler(new DefaultAPIHandler());
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
