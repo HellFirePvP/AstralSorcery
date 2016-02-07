@@ -3,6 +3,7 @@ package hellfire.astralSorcery.common.net.packet;
 import hellfire.astralSorcery.common.AstralSorcery;
 import hellfire.astralSorcery.common.config.Config;
 import hellfire.astralSorcery.common.config.Sync;
+import hellfire.astralSorcery.common.util.Tuple;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -27,24 +28,24 @@ import java.util.List;
  */
 public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, IMessage> {
 
-    public List<Tuple> fields = new ArrayList<Tuple>();
+    public List<SyncTuple> fields = new ArrayList<SyncTuple>();
 
     @Override
     public void fromBytes(ByteBuf buf) {
         int count = buf.readByte();
-        fields = new ArrayList<Tuple>();
+        fields = new ArrayList<SyncTuple>();
 
         for(int i = 0; i < count; i++) {
             byte[] data = new byte[buf.readShort()];
             buf.readBytes(data);
 
             ByteArrayInputStream in = new ByteArrayInputStream(data);
-            Tuple tuple = null;
+            SyncTuple tuple = null;
             String key = null;
             try {
                 key = new DataInputStream(in).readUTF();
                 Object value = new ObjectInputStream(in).readObject();
-                tuple = new Tuple(key, value);
+                tuple = new SyncTuple(key, value);
             } catch (Exception ignored) {}
 
             if(tuple == null) {
@@ -85,7 +86,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
     @Override
     public IMessage onMessage(PktSyncConfig message, MessageContext ctx) {
         try {
-            for(Tuple tuple : message.fields) {
+            for(SyncTuple tuple : message.fields) {
                 Field field = Config.class.getField(tuple.key);
                 field.set(null, tuple.value);
             }
@@ -96,14 +97,10 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
         return null;
     }
 
-    public static class Tuple {
+    public static class SyncTuple extends Tuple<String, Object> {
 
-        public final String key;
-        public final Object value;
-
-        public Tuple(String key, Object value) {
-            this.key = key;
-            this.value = value;
+        public SyncTuple(String key, Object value) {
+            super(key, value);
         }
     }
 

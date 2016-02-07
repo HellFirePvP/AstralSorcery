@@ -1,5 +1,6 @@
 package hellfire.astralSorcery.client;
 
+import hellfire.astralSorcery.client.event.ClientTickHandler;
 import hellfire.astralSorcery.client.event.SkyboxRenderEventHandler;
 import hellfire.astralSorcery.common.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,7 @@ public class ClientProxy extends CommonProxy {
         super.init();
 
         MinecraftForge.EVENT_BUS.register(new SkyboxRenderEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
     }
 
     @Override

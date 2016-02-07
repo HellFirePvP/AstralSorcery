@@ -1,5 +1,7 @@
 package hellfire.astralSorcery.api.constellation;
 
+import java.util.List;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * <p/>
@@ -12,5 +14,9 @@ public interface IConstellation {
     public StarConnection addConnection(StarLocation star1, StarLocation star2);
 
     public void register(int tier);
+
+    public List<StarLocation> getStars();
+
+    public List<StarConnection> getConnections();
 
 }

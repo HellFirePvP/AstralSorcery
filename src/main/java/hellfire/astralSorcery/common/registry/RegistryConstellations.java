@@ -1,7 +1,10 @@
 package hellfire.astralSorcery.common.registry;
 
+import hellfire.astralSorcery.api.constellation.IConstellationTier;
 import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.constellation.Constellation;
+import hellfire.astralSorcery.common.constellation.ConstellationRegistry;
+import hellfire.astralSorcery.common.util.Vector3;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -10,7 +13,15 @@ import hellfire.astralSorcery.common.constellation.Constellation;
  */
 public class RegistryConstellations {
 
+    //Yea. don't ask how i got those coordinates. or how to get those. or how you may change them. just. leave. it.
+    //never. touch. it. again.
     public static void init() {
+        IConstellationTier.RInformation renderInfo = new IConstellationTier.RInformation(
+                new Vector3(21.76776695296637, -18.23223304703363, 2.5),
+                new Vector3(18.23223304703363, -21.76776695296637, 2.5),
+                new Vector3(21.76776695296637, -18.23223304703363, -2.5), 5);
+        ConstellationRegistry.registerTier(0, renderInfo, 1.0F);
+
         Constellation bigDipper = new Constellation();
         StarLocation sl1 = bigDipper.addStar(1, 3);
         StarLocation sl2 = bigDipper.addStar(11, 7);

@@ -2,6 +2,7 @@ package hellfire.astralSorcery.common;
 
 import hellfire.astralSorcery.common.data.SyncDataHolder;
 import hellfire.astralSorcery.common.event.EventHandlerNetwork;
+import hellfire.astralSorcery.common.event.EventHandlerServer;
 import hellfire.astralSorcery.common.integration.IntegrationHandler;
 import hellfire.astralSorcery.common.lib.LibConstants;
 import hellfire.astralSorcery.common.lib.LibMisc;
@@ -43,6 +44,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void init() {
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
 
         SyncDataHolder.initialize();
     }
