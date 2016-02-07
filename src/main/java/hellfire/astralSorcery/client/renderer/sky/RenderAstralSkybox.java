@@ -1,6 +1,13 @@
 package hellfire.astralSorcery.client.renderer.sky;
 
+import hellfire.astralSorcery.api.constellation.IConstellation;
+import hellfire.astralSorcery.api.constellation.IConstellationTier;
+import hellfire.astralSorcery.api.constellation.StarLocation;
+import hellfire.astralSorcery.common.AstralSorcery;
+import hellfire.astralSorcery.common.constellation.ConstellationHandler;
 import hellfire.astralSorcery.common.util.AssetLoader;
+import hellfire.astralSorcery.common.util.Tuple;
+import hellfire.astralSorcery.common.util.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -15,6 +22,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
 import java.util.Random;
 
 /**
@@ -34,6 +42,8 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static final ResourceLocation TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     private static final ResourceLocation TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
     private static final ResourceLocation TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+
+    //private static final ResourceLocation TEST = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "Test");
 
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
@@ -59,6 +69,12 @@ public class RenderAstralSkybox extends IRenderHandler {
         this.worldSeed = worldSeed;
         setupSkybox();
         setupStarVertices();
+        //TODO fix, they have the same ID's for some reason.
+        AstralSorcery.log.info("TEXTURE GL ID'S");
+        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_1).getGlTextureId());
+        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_2).getGlTextureId());
+        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_3).getGlTextureId());
+        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_4).getGlTextureId());
         this.initialized = true;
     }
 
@@ -72,7 +88,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
         Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_1);
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 500, 0, 1);
+        setupStars(wr, 500, 0, 1.2);
         Tessellator.getInstance().draw();
         GL11.glEndList();
 
@@ -96,7 +112,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glNewList(glStarList3, GL11.GL_COMPILE);
         Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_3);
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 200, 2, 1.2);
+        setupStars(wr, 200, 2, 0.7);
         Tessellator.getInstance().draw();
         GL11.glEndList();
 
@@ -108,7 +124,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glNewList(glStarList4, GL11.GL_COMPILE);
         Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_4);
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 100, 3, 1.4);
+        setupStars(wr, 200, 3, 1.4);
         Tessellator.getInstance().draw();
         GL11.glEndList();
     }
@@ -123,6 +139,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             double d4 = x * x + y * y + z * z;
             if (d4 < 1.0D && d4 > 0.01D) {
 
+                //d4 = Vector3.fastInvSqrt(d4);
                 d4 = 1.0D / Math.sqrt(d4);
                 x *= d4;
                 y *= d4;
@@ -293,36 +310,145 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.enableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
         GlStateManager.pushMatrix();
+
+        //Bind alpha according to rain strength - if it rains "completely", moon, sun and stars are not rendered.
         float f16 = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, f16);
+
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
-        float f17 = 30.0F;
+
+        float xzSize = 30.0F; //texture size of sun
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
+
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldRenderer.pos((double) (-f17), 100.0D, (double) (-f17)).tex(0.0D, 0.0D).endVertex();
-        worldRenderer.pos((double) f17, 100.0D, (double) (-f17)).tex(1.0D, 0.0D).endVertex();
-        worldRenderer.pos((double) f17, 100.0D, (double) f17).tex(1.0D, 1.0D).endVertex();
-        worldRenderer.pos((double) (-f17), 100.0D, (double) f17).tex(0.0D, 1.0D).endVertex();
+        worldRenderer.pos((double) (-xzSize), 100.0D, (double) (-xzSize)).tex(0.0D, 0.0D).endVertex();
+        worldRenderer.pos((double) xzSize, 100.0D, (double) (-xzSize)).tex(1.0D, 0.0D).endVertex();
+        worldRenderer.pos((double) xzSize, 100.0D, (double) xzSize).tex(1.0D, 1.0D).endVertex();
+        worldRenderer.pos((double) (-xzSize), 100.0D, (double) xzSize).tex(0.0D, 1.0D).endVertex();
         tessellator.draw();
-        f17 = 20.0F;
+
+        xzSize = 20.0F; //texture size of moon.
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
+
+        //moon phase uv selection
         int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
-        float f22 = (float) (k) / 4.0F;
-        float f23 = (float) (i1) / 2.0F;
-        float f24 = (float) (k + 1) / 4.0F;
-        float f14 = (float) (i1 + 1) / 2.0F;
+        float maxU = (float) (k) / 4.0F;
+        float maxV = (float) (i1) / 2.0F;
+        float minU = (float) (k + 1) / 4.0F;
+        float minV = (float) (i1 + 1) / 2.0F;
+
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldRenderer.pos((double) (-f17), -100.0D, (double) f17).tex((double) f24, (double) f14).endVertex();
-        worldRenderer.pos((double) f17, -100.0D, (double) f17).tex((double) f22, (double) f14).endVertex();
-        worldRenderer.pos((double) f17, -100.0D, (double) (-f17)).tex((double) f22, (double) f23).endVertex();
-        worldRenderer.pos((double) (-f17), -100.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
+        worldRenderer.pos((double) (-xzSize), -100.0D, (double) xzSize).tex((double) minU, (double) minV).endVertex();
+        worldRenderer.pos((double) xzSize, -100.0D, (double) xzSize).tex((double) maxU, (double) minV).endVertex();
+        worldRenderer.pos((double) xzSize, -100.0D, (double) (-xzSize)).tex((double) maxU, (double) maxV).endVertex();
+        worldRenderer.pos((double) (-xzSize), -100.0D, (double) (-xzSize)).tex((double) minU, (double) maxV).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
+
+        renderStars(partialTicks);
+
+        renderConstellations(partialTicks);
+
+        //Used for debug purposes. define x,y,z,size at will to produce favorable outcomes..
+        //y<0 is used to render on moon-side of the skybox.
+        /*double x, y, z;
+        x = 0.2;
+        y = -0.2;
+        z = 0;
+        double size = 5;
+
+        double fx = x * 100.0D;
+        double fy = y * 100.0D;
+        double fz = z * 100.0D;
+
+        double d8 = Math.atan2(x, z); // [-PI - PI]
+        double d9 = Math.sin(d8);
+        double d10 = Math.cos(d8);
+
+        //                                pythagoras?
+        double d11 = Math.atan2(Math.sqrt(x * x + z * z), y); // [-PI - PI]
+        double d12 = Math.sin(d11);
+        double d13 = Math.cos(d11);
+
+        //double d14 = random.nextDouble() * Math.PI * 2.0D;
+        //double d16 = Math.cos(d14); rotation!
+
+        double rotation = 0;
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEST);
+        worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        for (int j = 0; j < 4; ++j) {
+            double d18 = (double) ((j & 2) - 1) * 0.5;
+            double d19 = (double) ((j + 1 & 2) - 1) * 0.5;
+
+            double d21 = d18 * rotation - d19 * size;
+            double d22 = d19 * rotation + d18 * size;
+            double d23 = d21 * d12;
+
+            double d24 = -(d21 * d13);
+
+            double d25 = d24 * d9 - d22 * d10;
+            double d26 = d22 * d9 + d24 * d10;
+
+            System.out.println((((j + 1) & 2) >> 1) + "" + (((j + 2) & 2) >> 1) + " === " + (fx + d25) + " --- " + (fy + d23) + " --- " + (fz + d26));
+            worldRenderer.pos(fx + d25, fy + d23, fz + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
+        }
+        tessellator.draw();*/
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableFog();
+        GlStateManager.popMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(0.0F, 0.0F, 0.0F);
+    }
+
+    private void renderConstellations(float partialTicks) {
+        long wTime = Minecraft.getMinecraft().theWorld.getWorldTime() % 24000;
+        if(wTime < 12000) return; //Daytime.
+        float starBrightness = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks);
+        if(starBrightness <= 0.0F) return;
+
+        Tessellator tes = Tessellator.getInstance();
+        WorldRenderer wr = tes.getWorldRenderer();
+        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_2);
+        GlStateManager.color(0.0F, 1.0F, 0.0F, starBrightness);
+        //long nano = System.nanoTime();
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        Collection<Tuple<IConstellationTier, IConstellation>> constellations = ConstellationHandler.getActiveConstellations();
+        for(Tuple<IConstellationTier, IConstellation> t : constellations) {
+            IConstellationTier tier = t.key;
+            IConstellation c = t.value;
+            IConstellationTier.RInformation renderInfo = tier.getRenderInformation();
+
+            //Now we build from the exact UV vectors a 32x32 grid and render the stars & connections.
+            Vector3 renderOffset = renderInfo.offset;
+            Vector3 dirU = renderInfo.incU.clone().subtract(renderOffset).divide(32);
+            Vector3 dirV = renderInfo.incV.clone().subtract(renderOffset).divide(32);
+            for(StarLocation star : c.getStars()) {
+                int x = star.x;
+                int y = star.y;
+                Vector3 ofStar = renderOffset.clone().add(dirU.clone().multiply(x)).add(dirV.clone().multiply(y));
+                for (int i = 0; i < 4; i++) {
+                    int u = ((i + 1) & 2) >> 1;
+                    int v = ((i + 2) & 2) >> 1;
+                    Vector3 pos = ofStar.clone().add(dirU.clone().multiply(u << 1)).add(dirV.clone().multiply(v << 1));
+                    wr.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
+                }
+            }
+        }
+        tes.draw();
+        //AstralSorcery.log.info("Rendering Constellation took " + (System.nanoTime() - nano) + " ns");
+    }
+
+    private void renderStars(float partialTicks) {
         float rainDim = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
         float brightness = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * rainDim;
 
@@ -333,14 +459,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             callStarList(glStarList3, TEX_STAR_3);
             callStarList(glStarList4, TEX_STAR_4);
         }
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableFog();
-        GlStateManager.popMatrix();
-        GlStateManager.disableTexture2D();
-        GlStateManager.color(0.0F, 0.0F, 0.0F);
     }
 
     private void callStarList(int glList, ResourceLocation texture) {
