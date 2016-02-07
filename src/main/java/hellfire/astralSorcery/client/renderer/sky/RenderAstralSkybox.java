@@ -6,6 +6,7 @@ import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.AstralSorcery;
 import hellfire.astralSorcery.common.constellation.ConstellationHandler;
 import hellfire.astralSorcery.common.util.AssetLoader;
+import hellfire.astralSorcery.common.util.BindableResource;
 import hellfire.astralSorcery.common.util.Tuple;
 import hellfire.astralSorcery.common.util.Vector3;
 import net.minecraft.client.Minecraft;
@@ -19,9 +20,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
 
@@ -38,26 +41,27 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static final ResourceLocation MC_DEF_SUN_PNG = new ResourceLocation("textures/environment/sun.png");
     private static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation("textures/environment/moon_phases.png");
 
-    private static final ResourceLocation TEX_STAR_1 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
-    private static final ResourceLocation TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
-    private static final ResourceLocation TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
-    private static final ResourceLocation TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
-
-    //private static final ResourceLocation TEST = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "Test");
+    private static final BindableResource TEX_STAR_1 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+    private static final BindableResource TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
+    private static final BindableResource TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
+    private static final BindableResource TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
 
-    private static int glStarList1 = -1;
-    private static int glStarList2 = -1;
-    private static int glStarList3 = -1;
-    private static int glStarList4 = -1;
+    private static final int[] starAmountMap = new int[] {200, 200, 100, 100, 100, /**/ 200, 100, 50, 50, 100, /**/ 50, 50, 100, 100, 100, /**/ 50, 50, 100, 100, 100 };
+    private static final double[] starSizeMap = new double[] {1, 1, 1, 1.2, 1,    /**/ 1, 1.1, 1.2, 1, 1,     /**/ 1.2, 1.1, 1, 1, 1,      /**/ 1.2, 1.3, 1, 1, 1};
+    private static StarDList[] starLists = new StarDList[0];
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
         if (!isInitialized()) return;
 
+        //Avg 0,36-0,5ms rendering time.
+
+        //long n = System.nanoTime();
         renderSky(partialTicks);
+        //AstralSorcery.log.info(System.nanoTime() - n);
     }
 
     public boolean isInitialized() {
@@ -69,68 +73,58 @@ public class RenderAstralSkybox extends IRenderHandler {
         this.worldSeed = worldSeed;
         setupSkybox();
         setupStarVertices();
-        //TODO fix, they have the same ID's for some reason.
-        AstralSorcery.log.info("TEXTURE GL ID'S");
-        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_1).getGlTextureId());
-        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_2).getGlTextureId());
-        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_3).getGlTextureId());
-        AstralSorcery.log.info(Minecraft.getMinecraft().renderEngine.getTexture(TEX_STAR_4).getGlTextureId());
         this.initialized = true;
     }
 
     private void setupStarVertices() {
-        if (glStarList1 >= 0) {
-            GLAllocation.deleteDisplayLists(glStarList1);
-            glStarList1 = -1;
+        cleanStarVertices();
+
+        starLists = new StarDList[20];
+        for (int i = 0; i < starLists.length; i++) {
+            starLists[i] = new StarDList();
         }
-        glStarList1 = GLAllocation.generateDisplayLists(1);
-        GL11.glNewList(glStarList1, GL11.GL_COMPILE);
+
         WorldRenderer wr = Tessellator.getInstance().getWorldRenderer();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_1);
-        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 500, 0, 1.2);
-        Tessellator.getInstance().draw();
-        GL11.glEndList();
 
-        if (glStarList2 >= 0) {
-            GLAllocation.deleteDisplayLists(glStarList2);
-            glStarList2 = -1;
+        Random vRand = new Random(worldSeed);
+        int list = GLAllocation.generateDisplayLists(20);
+        for (int i = 0; i < starLists.length; i++) {
+            StarDList l = starLists[i];
+            l.glList = list + i;
+            l.sinDivisor = 10 + vRand.nextInt(15);
+            switch (i / (starLists.length / 4)) {
+                case 0:
+                    l.resource = TEX_STAR_1;
+                    break;
+                case 1:
+                    l.resource = TEX_STAR_2;
+                    break;
+                case 2:
+                    l.resource = TEX_STAR_3;
+                    break;
+                case 3:
+                    l.resource = TEX_STAR_4;
+                    break;
+            }
+            GL11.glNewList(l.glList, GL11.GL_COMPILE);
+            l.resource.bind();
+            wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+            setupStars(wr, vRand, starAmountMap[i], i, starSizeMap[i]);
+            Tessellator.getInstance().draw();
+            GL11.glEndList();
         }
-        glStarList2 = GLAllocation.generateDisplayLists(1);
-        GL11.glNewList(glStarList2, GL11.GL_COMPILE);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_2);
-        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 400, 1, 1.3);
-        Tessellator.getInstance().draw();
-        GL11.glEndList();
-
-        if (glStarList3 >= 0) {
-            GLAllocation.deleteDisplayLists(glStarList3);
-            glStarList3 = -1;
-        }
-        glStarList3 = GLAllocation.generateDisplayLists(1);
-        GL11.glNewList(glStarList3, GL11.GL_COMPILE);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_3);
-        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 200, 2, 0.7);
-        Tessellator.getInstance().draw();
-        GL11.glEndList();
-
-        if (glStarList4 >= 0) {
-            GLAllocation.deleteDisplayLists(glStarList4);
-            glStarList4 = -1;
-        }
-        glStarList4 = GLAllocation.generateDisplayLists(1);
-        GL11.glNewList(glStarList4, GL11.GL_COMPILE);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_4);
-        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-        setupStars(wr, 200, 3, 1.4);
-        Tessellator.getInstance().draw();
-        GL11.glEndList();
     }
 
-    private void setupStars(WorldRenderer wr, int amount, long seedModifier, double multiplier) {
-        Random random = new Random(worldSeed + seedModifier); //Yea. that's the whole reason we need the seed.
+    private void cleanStarVertices() {
+        for (StarDList list : starLists) {
+            if (list.glList != -1) {
+                GLAllocation.deleteDisplayLists(list.glList);
+                list.glList = -1;
+            }
+        }
+    }
+
+    private void setupStars(WorldRenderer wr, Random random, int amount, long seedModifier, double multiplier) {
         for (int i = 0; i < amount; ++i) { //Amount of stars.
             double x = (double) (random.nextFloat() * 2.0F - 1.0F);
             double y = (double) (random.nextFloat() * 2.0F - 1.0F);
@@ -350,7 +344,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(false);
 
-        renderStars(partialTicks);
+        renderStars(Minecraft.getMinecraft().theWorld, partialTicks);
 
         renderConstellations(partialTicks);
 
@@ -418,7 +412,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         Tessellator tes = Tessellator.getInstance();
         WorldRenderer wr = tes.getWorldRenderer();
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEX_STAR_2);
+        TEX_STAR_2.bind();
         GlStateManager.color(0.0F, 1.0F, 0.0F, starBrightness);
         //long nano = System.nanoTime();
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -448,23 +442,19 @@ public class RenderAstralSkybox extends IRenderHandler {
         //AstralSorcery.log.info("Rendering Constellation took " + (System.nanoTime() - nano) + " ns");
     }
 
-    private void renderStars(float partialTicks) {
-        float rainDim = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
-        float brightness = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * rainDim;
+    private void renderStars(World w, float partialTicks) {
+        float rainDim = 1.0F - w.getRainStrength(partialTicks);
+        float brightness = w.getStarBrightness(partialTicks) * rainDim;
 
         if (brightness > 0.0F) {
-            GlStateManager.color(brightness, brightness, brightness, brightness);
-            callStarList(glStarList1, TEX_STAR_1);
-            callStarList(glStarList2, TEX_STAR_2);
-            callStarList(glStarList3, TEX_STAR_3);
-            callStarList(glStarList4, TEX_STAR_4);
-        }
-    }
-
-    private void callStarList(int glList, ResourceLocation texture) {
-        if(glList > 0) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-            GlStateManager.callList(glList);
+            for (StarDList list : starLists) {
+                if(list.glList > 0) {
+                    double sinBr = flickerSin(w.getWorldTime(), partialTicks, list.sinDivisor) - brightness;
+                    GlStateManager.color(brightness, brightness, brightness, sinBr < 0 ? 0 : (float) sinBr);
+                    list.resource.bind();
+                    GlStateManager.callList(list.glList);
+                }
+            }
         }
     }
 
@@ -504,6 +494,18 @@ public class RenderAstralSkybox extends IRenderHandler {
         tessellator.draw();
         GlStateManager.popMatrix();
         GlStateManager.shadeModel(7424);
+    }
+
+    private static double flickerSin(long wtime, float partialTicks, int divisor) {
+        return Math.sin((((double) wtime) + partialTicks) / divisor) / 2 + 0.5;
+    }
+
+    private static class StarDList {
+
+        private int glList = -1;
+        private BindableResource resource;
+        private int sinDivisor = 1;
+
     }
 
 }

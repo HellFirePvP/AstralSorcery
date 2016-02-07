@@ -15,17 +15,17 @@ public final class AssetLoader {
 
     private AssetLoader() {}
 
-    public static ResourceLocation load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
+    public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         builder = new StringBuilder();
         builder.append(LibConstants.MODID).append(':').append(location.location).append("/");
         if(subLocation != null) {
             builder.append(subLocation.getLocation()).append("/");
         }
         builder.append(name).append(suffix);
-        return new ResourceLocation(builder.toString());
+        return new BindableResource(builder.toString());
     }
 
-    public static ResourceLocation loadTexture(TextureLocation location, String name) {
+    public static BindableResource loadTexture(TextureLocation location, String name) {
         return load(AssetLocation.TEXTURES, location, name, ".png");
     }
 

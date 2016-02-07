@@ -65,7 +65,7 @@ public class ConstellationHandler {
             //Resetting and recalculating until specified day is reached!
             rand = new Random(savedSeed);
             iteration.clear();
-            scheduleDayProgression(days + 1); //0-indexed.
+            scheduleDayProgression(days + 1);
             lastTrackedDate = days;
         }
 
