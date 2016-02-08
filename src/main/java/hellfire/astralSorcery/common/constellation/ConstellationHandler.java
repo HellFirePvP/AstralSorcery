@@ -110,6 +110,7 @@ public class ConstellationHandler {
         public IConstellation getConstellationToShow(IConstellationTier tier) {
             if(!shouldShow()) return null;
             List<IConstellation> constellations = tier.getConstellations();
+            if(constellations.size() == 0) return null;
             int toShow = counter % constellations.size();
             return constellations.get(toShow);
         }

@@ -3,6 +3,7 @@ package hellfire.astralSorcery.common.constellation;
 import hellfire.astralSorcery.api.constellation.IConstellation;
 import hellfire.astralSorcery.api.constellation.IConstellationTier;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +44,12 @@ public class Tier implements IConstellationTier {
     @Override
     public RInformation getRenderInformation() {
         return renderinfo;
+    }
+
+    @Override
+    public Color calcRenderColor() {
+        float perc = ((float) tierNumber) / ((float) ConstellationRegistry.getHighestTierNumber());
+        return new Color(Color.HSBtoRGB((230F + (50F * perc)) / 360F, (70F + 30F * perc) / 100F, 0.8F));
     }
 
     @Override

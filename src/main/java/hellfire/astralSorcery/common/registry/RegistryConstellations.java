@@ -16,6 +16,7 @@ public class RegistryConstellations {
     //never. touch. it. again.
     public static void init() {
         ConstellationRegistry.registerTier(0, createRInfo(0.2, -0.2, 0, 5), 1.0F);
+        ConstellationRegistry.registerTier(1, createRInfo(0, 0, 0, 0), 0.0F); //TODO Fill with actual data.
 
         Constellation bigDipper = new Constellation();
         StarLocation sl1 = bigDipper.addStar(1, 3);

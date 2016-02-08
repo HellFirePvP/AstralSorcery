@@ -2,6 +2,7 @@ package hellfire.astralSorcery.api.constellation;
 
 import hellfire.astralSorcery.common.util.Vector3;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public interface IConstellationTier {
     public void addConstellation(IConstellation constellation);
 
     public RInformation getRenderInformation();
+
+    public Color calcRenderColor();
 
     public float getShowupChance();
 

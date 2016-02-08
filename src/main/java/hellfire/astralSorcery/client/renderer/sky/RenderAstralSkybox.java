@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
@@ -109,7 +110,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             GL11.glNewList(l.glList, GL11.GL_COMPILE);
             l.resource.bind();
             wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-            setupStars(wr, vRand, starAmountMap[i], i, starSizeMap[i]);
+            setupStars(wr, vRand, starAmountMap[i], starSizeMap[i]);
             Tessellator.getInstance().draw();
             GL11.glEndList();
         }
@@ -124,7 +125,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
     }
 
-    private void setupStars(WorldRenderer wr, Random random, int amount, long seedModifier, double multiplier) {
+    private void setupStars(WorldRenderer wr, Random random, int amount, double multiplier) {
         for (int i = 0; i < amount; ++i) { //Amount of stars.
             double x = (double) (random.nextFloat() * 2.0F - 1.0F);
             double y = (double) (random.nextFloat() * 2.0F - 1.0F);
@@ -413,7 +414,6 @@ public class RenderAstralSkybox extends IRenderHandler {
         Tessellator tes = Tessellator.getInstance();
         WorldRenderer wr = tes.getWorldRenderer();
         TEX_STAR_2.bind();
-        GlStateManager.color(0.0F, 1.0F, 0.0F, starBrightness);
         //long nano = System.nanoTime();
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
         Collection<Tuple<IConstellationTier, IConstellation>> constellations = ConstellationHandler.getActiveConstellations();
@@ -421,6 +421,8 @@ public class RenderAstralSkybox extends IRenderHandler {
             IConstellationTier tier = t.key;
             IConstellation c = t.value;
             IConstellationTier.RInformation renderInfo = tier.getRenderInformation();
+            Color rC = tier.calcRenderColor();
+            GlStateManager.color(((float) rC.getRed()) / 256F, ((float) rC.getGreen()) / 256F, ((float) rC.getBlue()) / 256F, starBrightness);
 
             //Now we build from the exact UV vectors a 32x32 grid and render the stars & connections.
             Vector3 renderOffset = renderInfo.offset;

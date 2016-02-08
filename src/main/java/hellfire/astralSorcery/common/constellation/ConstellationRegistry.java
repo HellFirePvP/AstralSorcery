@@ -37,6 +37,10 @@ public class ConstellationRegistry {
         return tiers.get(tierNumber);
     }
 
+    public static int getHighestTierNumber() {
+        return tiers.lastKey();
+    }
+
     public static Collection<IConstellationTier> ascendingTiers() {
         LinkedList<IConstellationTier> sortedTiers = new LinkedList<IConstellationTier>();
         for(Integer tierInt : tiers.keySet()) {
