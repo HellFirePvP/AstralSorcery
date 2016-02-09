@@ -2,6 +2,7 @@ package hellfire.astralSorcery.client.renderer.sky;
 
 import hellfire.astralSorcery.api.constellation.IConstellation;
 import hellfire.astralSorcery.api.constellation.IConstellationTier;
+import hellfire.astralSorcery.api.constellation.StarConnection;
 import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.AstralSorcery;
 import hellfire.astralSorcery.common.constellation.ConstellationHandler;
@@ -46,6 +47,8 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static final BindableResource TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     private static final BindableResource TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
     private static final BindableResource TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+
+    private static final BindableResource TEX_CONNECTION = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
 
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
@@ -347,15 +350,15 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         renderStars(Minecraft.getMinecraft().theWorld, partialTicks);
 
-        renderConstellations(partialTicks);
+        renderConstellations(Minecraft.getMinecraft().theWorld, partialTicks);
 
         //Used for debug purposes. define x,y,z,size at will to produce favorable outcomes..
         //y<0 is used to render on moon-side of the skybox.
         /*double x, y, z;
-        x = 0.2;
+        x = -0.2;
         y = -0.2;
-        z = 0;
-        double size = 5;
+        z = -0.05;
+        double size = 6;
 
         double fx = x * 100.0D;
         double fy = y * 100.0D;
@@ -376,7 +379,8 @@ public class RenderAstralSkybox extends IRenderHandler {
         double rotation = 0;
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getMinecraft().renderEngine.bindTexture(TEST);
+        //Minecraft.getMinecraft().renderEngine.bindTexture(TEST);
+        AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "Test").bind();
         worldRenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         for (int j = 0; j < 4; ++j) {
             double d18 = (double) ((j & 2) - 1) * 0.5;
@@ -391,7 +395,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             double d25 = d24 * d9 - d22 * d10;
             double d26 = d22 * d9 + d24 * d10;
 
-            System.out.println((((j + 1) & 2) >> 1) + "" + (((j + 2) & 2) >> 1) + " === " + (fx + d25) + " --- " + (fy + d23) + " --- " + (fz + d26));
+            //System.out.println((((j + 1) & 2) >> 1) + "" + (((j + 2) & 2) >> 1) + " === " + (fx + d25) + " --- " + (fy + d23) + " --- " + (fz + d26));
             worldRenderer.pos(fx + d25, fy + d23, fz + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
         }
         tessellator.draw();*/
@@ -405,30 +409,60 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.color(0.0F, 0.0F, 0.0F);
     }
 
-    private void renderConstellations(float partialTicks) {
-        long wTime = Minecraft.getMinecraft().theWorld.getWorldTime() % 24000;
+    private void renderConstellations(World w, float partialTicks) {
+        long wTime = w.getWorldTime() % 24000;
         if(wTime < 12000) return; //Daytime.
-        float starBrightness = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks);
-        if(starBrightness <= 0.0F) return;
+        float rainDim = 1.0F - w.getRainStrength(partialTicks);
+        float brightness = w.getStarBrightness(partialTicks) * rainDim;
+        if(brightness <= 0.0F) return;
+        Random flRand = new Random(w.getSeed());
 
         Tessellator tes = Tessellator.getInstance();
         WorldRenderer wr = tes.getWorldRenderer();
-        TEX_STAR_2.bind();
-        //long nano = System.nanoTime();
+
         wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        tes.draw();
+        //long nano = System.nanoTime();
+        //wr.begin(7, DefaultVertexFormats.POSITION_TEX);
         Collection<Tuple<IConstellationTier, IConstellation>> constellations = ConstellationHandler.getActiveConstellations();
         for(Tuple<IConstellationTier, IConstellation> t : constellations) {
             IConstellationTier tier = t.key;
             IConstellation c = t.value;
             IConstellationTier.RInformation renderInfo = tier.getRenderInformation();
             Color rC = tier.calcRenderColor();
-            GlStateManager.color(((float) rC.getRed()) / 256F, ((float) rC.getGreen()) / 256F, ((float) rC.getBlue()) / 256F, starBrightness);
 
             //Now we build from the exact UV vectors a 32x32 grid and render the stars & connections.
             Vector3 renderOffset = renderInfo.offset;
             Vector3 dirU = renderInfo.incU.clone().subtract(renderOffset).divide(32);
             Vector3 dirV = renderInfo.incV.clone().subtract(renderOffset).divide(32);
+            double uLength = dirU.length();
+            TEX_CONNECTION.bind();
+            for (int j = 0; j < 2; j++) {
+                for(StarConnection con : c.getConnections()) {
+                    wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+                    float sinBr = conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) - brightness;
+                    GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, sinBr < 0 ? 0 : sinBr);
+                    Vector3 vecA = renderOffset.clone().add(dirU.clone().multiply(con.from.x + 1)).add(dirV.clone().multiply(con.from.y + 1));
+                    Vector3 vecB = renderOffset.clone().add(dirU.clone().multiply(con.to.x + 1)).add(dirV.clone().multiply(con.to.y + 1));
+                    Vector3 vecCV = vecB.subtract(vecA);
+                    Vector3 oPane = dirV.clone().crossProduct(vecCV);
+                    Vector3 vecAD = oPane.clone().crossProduct(vecCV).normalize().multiply(uLength);
+                    Vector3 offset00 = vecA.subtract(vecAD.clone().multiply(j == 0 ? 1 : -1));
+                    Vector3 vecU = vecAD.clone().multiply(j == 0 ? 2 : -2);
+
+                    for (int i = 0; i < 4; i++) {
+                        Vector3 pos = offset00.clone().add(vecU.clone().multiply(((i + 1) & 2) >> 1)).add(vecCV.clone().multiply(((i + 2) & 2) >> 1));
+                        wr.pos(pos.getX(), pos.getY(), pos.getZ()).tex(((i + 2) & 2) >> 1, ((i + 3) & 2) >> 1).endVertex();
+                    }
+                    tes.draw();
+                }
+            }
+
+            TEX_STAR_1.bind();
             for(StarLocation star : c.getStars()) {
+                wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+                float sinBr = conSFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) - brightness;
+                GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, sinBr < 0 ? 0 : sinBr);
                 int x = star.x;
                 int y = star.y;
                 Vector3 ofStar = renderOffset.clone().add(dirU.clone().multiply(x)).add(dirV.clone().multiply(y));
@@ -438,10 +472,12 @@ public class RenderAstralSkybox extends IRenderHandler {
                     Vector3 pos = ofStar.clone().add(dirU.clone().multiply(u << 1)).add(dirV.clone().multiply(v << 1));
                     wr.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
                 }
+                tes.draw();
             }
         }
-        tes.draw();
-        //AstralSorcery.log.info("Rendering Constellation took " + (System.nanoTime() - nano) + " ns");
+        //tes.draw();
+        //long now = System.nanoTime();
+        //AstralSorcery.log.info("Rendering Constellations took " + (now - nano) + " ns");
     }
 
     private void renderStars(World w, float partialTicks) {
@@ -449,12 +485,16 @@ public class RenderAstralSkybox extends IRenderHandler {
         float brightness = w.getStarBrightness(partialTicks) * rainDim;
 
         if (brightness > 0.0F) {
+            Tessellator tes = Tessellator.getInstance();
+            WorldRenderer wr = tes.getWorldRenderer();
             for (StarDList list : starLists) {
                 if(list.glList > 0) {
-                    double sinBr = flickerSin(w.getWorldTime(), partialTicks, list.sinDivisor) - brightness;
-                    GlStateManager.color(brightness, brightness, brightness, sinBr < 0 ? 0 : (float) sinBr);
+                    float sinBr = stdFlicker(w.getWorldTime(), partialTicks, list.sinDivisor) - brightness;
+                    GlStateManager.color(brightness, brightness, brightness, sinBr < 0 ? 0 : sinBr);
                     list.resource.bind();
+                    wr.begin(7, DefaultVertexFormats.POSITION_TEX);
                     GlStateManager.callList(list.glList);
+                    tes.draw();
                 }
             }
         }
@@ -498,8 +538,22 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.shadeModel(7424);
     }
 
-    private static double flickerSin(long wtime, float partialTicks, int divisor) {
-        return Math.sin((((double) wtime) + partialTicks) / divisor) / 2 + 0.5;
+    private static float stdFlicker(long wtime, float partialTicks, int divisor) {
+        return flickerSin(wtime, partialTicks, divisor, 2F, 0.5F);
+    }
+
+    private static float conSFlicker(long wtime, float partialTicks, int divisor) {
+        return flickerSin(wtime, partialTicks, divisor, 8F, 0.875F);
+    }
+
+    private static float conCFlicker(long wtime, float partialTicks, int divisor) {
+        return flickerSin(wtime, partialTicks, divisor, 8F, 0.775F);
+    }
+
+    private static float flickerSin(long wtime, float partialTicks, int divisor, float div, float move) {
+        double rad = (((double) wtime) + partialTicks) / divisor;
+        float sin = MathHelper.sin((float) rad);
+        return (sin / div) + move;
     }
 
     private static class StarDList {

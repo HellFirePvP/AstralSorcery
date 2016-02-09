@@ -49,7 +49,7 @@ public class Tier implements IConstellationTier {
     @Override
     public Color calcRenderColor() {
         float perc = ((float) tierNumber) / ((float) ConstellationRegistry.getHighestTierNumber());
-        return new Color(Color.HSBtoRGB((230F + (50F * perc)) / 360F, (70F + 30F * perc) / 100F, 0.8F));
+        return new Color(Color.HSBtoRGB((230F + (50F * perc)) / 360F, (70F + 20F * perc) / 100F, 0.8F));
     }
 
     @Override

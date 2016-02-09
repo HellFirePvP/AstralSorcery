@@ -14,6 +14,10 @@ public class StarLocation {
         this.y = y;
     }
 
+    public int getDistanceToOrigin() {
+        return x + y;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

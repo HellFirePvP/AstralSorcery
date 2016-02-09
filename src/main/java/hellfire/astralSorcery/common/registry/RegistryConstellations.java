@@ -12,15 +12,13 @@ import hellfire.astralSorcery.common.constellation.ConstellationRegistry;
  */
 public class RegistryConstellations {
 
-    //Yea. don't ask how i got those coordinates. or how to get those. or how you may change them. just. leave. it.
-    //never. touch. it. again.
     public static void init() {
         ConstellationRegistry.registerTier(0, createRInfo(0.2, -0.2, 0, 5), 1.0F);
-        ConstellationRegistry.registerTier(1, createRInfo(0, 0, 0, 0), 0.0F); //TODO Fill with actual data.
+        ConstellationRegistry.registerTier(1, createRInfo(-0.2, -0.2, -0.05, 6), 1.0F);
 
         Constellation bigDipper = new Constellation();
         StarLocation sl1 = bigDipper.addStar(1, 3);
-        StarLocation sl2 = bigDipper.addStar(11, 7);
+        StarLocation sl2 = bigDipper.addStar(10, 7);
         StarLocation sl3 = bigDipper.addStar(13, 13);
         StarLocation sl4 = bigDipper.addStar(15, 19);
         StarLocation sl5 = bigDipper.addStar(12, 27);
@@ -37,6 +35,23 @@ public class RegistryConstellations {
 
         bigDipper.register(0);
 
+        Constellation orion = new Constellation();
+        sl1 = orion.addStar(8, 0);
+        sl2 = orion.addStar(20, 2);
+        sl3 = orion.addStar(12, 18);
+        sl4 = orion.addStar(15, 17);
+        sl5 = orion.addStar(18, 15);
+        sl6 = orion.addStar(8, 31);
+        sl7 = orion.addStar(24, 29);
+
+        orion.addConnection(sl1, sl3);
+        orion.addConnection(sl3, sl4);
+        orion.addConnection(sl4, sl5);
+        orion.addConnection(sl2, sl5);
+        orion.addConnection(sl6, sl3);
+        orion.addConnection(sl7, sl5);
+
+        orion.register(1);
     }
 
     private static IConstellationTier.RInformation createRInfo(double x, double y, double z, double size) {
