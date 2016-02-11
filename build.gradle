@@ -22,7 +22,7 @@ plugins {
 */
 version = "1.8.9-0.1.0"
 group= "hellfire.astralSorcery" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "astralsorcery"
+archivesBaseName = "astralSorcery"
 
 minecraft {
     version = "1.8.9-11.15.0.1710"
