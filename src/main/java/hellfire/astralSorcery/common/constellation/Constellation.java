@@ -26,6 +26,7 @@ public class Constellation implements IConstellation {
     private int tier = -1;
     private List<StarLocation> starLocations = new ArrayList<StarLocation>(); //32x32 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<StarConnection>(); //The connections between 2 tuples/stars in the constellation.
+
     private List<StarLocation> unmodifiableStars;
     private List<StarConnection> unmodifiableConnections;
 

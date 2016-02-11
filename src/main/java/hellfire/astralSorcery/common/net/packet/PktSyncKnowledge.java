@@ -23,6 +23,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     private byte state;
     public List<String> knownConstellations = new ArrayList<String>();
+    public int progressTier = 0;
 
     public PktSyncKnowledge() {}
 
@@ -32,6 +33,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     public void load(PlayerProgress progress) {
         this.knownConstellations = progress.getKnownConstellations();
+        this.progressTier = progress.getTierReached();
     }
 
     @Override
@@ -46,6 +48,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
                 knownConstellations.add(val);
             }
         }
+        this.progressTier = buf.readInt();
     }
 
     @Override
@@ -60,14 +63,15 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         } else {
             buf.writeInt(-1);
         }
+
+        buf.writeInt(this.progressTier);
     }
 
     @Override
     public PktSyncKnowledge onMessage(PktSyncKnowledge message, MessageContext ctx) {
         switch (message.state) {
             case STATE_ADD:
-                ResearchManager.clientProgress = new PlayerProgress();
-                ResearchManager.clientProgress.receive(message);
+                ResearchManager.recieveProgressFromServer(message);
                 break;
             case STATE_WIPE:
                 ResearchManager.clientProgress = new PlayerProgress();

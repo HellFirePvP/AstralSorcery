@@ -4,8 +4,10 @@ import hellfire.astralSorcery.api.constellation.IConstellation;
 import hellfire.astralSorcery.api.constellation.IConstellationTier;
 import hellfire.astralSorcery.common.AstralSorcery;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -56,6 +58,14 @@ public class ConstellationRegistry {
             sortedTiers.addLast(tiers.get(tierInt));
         }
         return sortedTiers;
+    }
+
+    public static Collection<IConstellation> getAllConstellations() {
+        List<IConstellation> constellations = new ArrayList<IConstellation>();
+        for (IConstellationTier t : ascendingTiers()) {
+            for(IConstellation c : t.getConstellations()) constellations.add(c);
+        }
+        return constellations;
     }
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +27,26 @@ public class ResearchManager {
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<UUID, PlayerProgress>();
 
-    public static void wipeClientKnowledge(EntityPlayer p) {
+    public static PlayerProgress getProgress(EntityPlayer player) {
+        return getProgress(player.getUniqueID());
+    }
+
+    public static PlayerProgress getProgress(UUID uuid) {
+        PlayerProgress progress = playerProgressServer.get(uuid);
+        if(progress == null) {
+            loadPlayerKnowledge(uuid);
+        }
+        progress = playerProgressServer.get(uuid);
+        if(progress == null) {
+            AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
+            AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
+        }
+        return progress;
+    }
+
+    public static void wipeKnowledge(EntityPlayer p) {
+        wipeFile(p);
+        playerProgressServer.remove(p.getUniqueID());
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
     }
@@ -44,7 +64,7 @@ public class ResearchManager {
         pushProgressToClientUnsafe(p);
     }
 
-    public static void discoverConstellation(IConstellation c, EntityPlayer player) {
+    public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = playerProgressServer.get(player.getUniqueID());
         if(progress == null) {
             loadPlayerKnowledge(player);
@@ -53,11 +73,31 @@ public class ResearchManager {
         if(progress == null) {
             AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + player.getName());
             AstralSorcery.log.warn("Erroneous file: " + player.getUniqueID().toString() + ".astral");
-            return;
+            return false;
+        }
+        for(IConstellation c : csts) {
+            progress.discoverConstellation(c.getName());
+        }
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
+        PlayerProgress progress = playerProgressServer.get(player.getUniqueID());
+        if(progress == null) {
+            loadPlayerKnowledge(player);
+        }
+        progress = playerProgressServer.get(player.getUniqueID());
+        if(progress == null) {
+            AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + player.getName());
+            AstralSorcery.log.warn("Erroneous file: " + player.getUniqueID().toString() + ".astral");
+            return false;
         }
         progress.discoverConstellation(c.getName());
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
+        return true;
     }
 
     private static void pushProgressToClientUnsafe(EntityPlayer p) {
@@ -65,6 +105,10 @@ public class ResearchManager {
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_ADD);
         pkt.load(progress);
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
+    }
+
+    private static void wipeFile(EntityPlayer player) {
+        new File(getPlayerDirectory(), player.getUniqueID().toString() + ".astral").delete();
     }
 
     public static void savePlayerKnowledge(EntityPlayer p) {
@@ -110,4 +154,13 @@ public class ResearchManager {
         return pDir;
     }
 
+    public static void logoutResetClient(EntityPlayer player) {
+        PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
+        PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);
+    }
+
+    public static void recieveProgressFromServer(PktSyncKnowledge message) {
+        clientProgress = new PlayerProgress();
+        clientProgress.receive(message);
+    }
 }

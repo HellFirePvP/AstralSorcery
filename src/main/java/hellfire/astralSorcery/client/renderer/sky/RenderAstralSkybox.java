@@ -46,7 +46,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     private static final BindableResource TEX_STAR_1 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
     private static final BindableResource TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
-    private static final BindableResource TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star3");
+    private static final BindableResource TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     private static final BindableResource TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     private static final BindableResource TEX_CONNECTION = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
