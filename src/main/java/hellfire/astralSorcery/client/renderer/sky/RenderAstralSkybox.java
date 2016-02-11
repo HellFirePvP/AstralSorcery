@@ -6,6 +6,7 @@ import hellfire.astralSorcery.api.constellation.StarConnection;
 import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.AstralSorcery;
 import hellfire.astralSorcery.common.constellation.ConstellationHandler;
+import hellfire.astralSorcery.common.data.research.ResearchManager;
 import hellfire.astralSorcery.common.util.AssetLoader;
 import hellfire.astralSorcery.common.util.BindableResource;
 import hellfire.astralSorcery.common.util.Tuple;
@@ -428,6 +429,8 @@ public class RenderAstralSkybox extends IRenderHandler {
         for(Tuple<IConstellationTier, IConstellation> t : constellations) {
             IConstellationTier tier = t.key;
             IConstellation c = t.value;
+            if(!ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) continue;
+
             IConstellationTier.RInformation renderInfo = tier.getRenderInformation();
             Color rC = tier.calcRenderColor();
 
@@ -440,7 +443,8 @@ public class RenderAstralSkybox extends IRenderHandler {
             for (int j = 0; j < 2; j++) {
                 for(StarConnection con : c.getConnections()) {
                     wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    float sinBr = conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) - brightness;
+                    float sinBr = conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10));
+                    sinBr *= (2 *brightness);
                     GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, sinBr < 0 ? 0 : sinBr);
                     Vector3 vecA = renderOffset.clone().add(dirU.clone().multiply(con.from.x + 1)).add(dirV.clone().multiply(con.from.y + 1));
                     Vector3 vecB = renderOffset.clone().add(dirU.clone().multiply(con.to.x + 1)).add(dirV.clone().multiply(con.to.y + 1));
@@ -461,7 +465,8 @@ public class RenderAstralSkybox extends IRenderHandler {
             TEX_STAR_1.bind();
             for(StarLocation star : c.getStars()) {
                 wr.begin(7, DefaultVertexFormats.POSITION_TEX);
-                float sinBr = conSFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) - brightness;
+                float sinBr = conSFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10));
+                sinBr *= (2 *brightness);
                 GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, sinBr < 0 ? 0 : sinBr);
                 int x = star.x;
                 int y = star.y;
@@ -543,11 +548,11 @@ public class RenderAstralSkybox extends IRenderHandler {
     }
 
     private static float conSFlicker(long wtime, float partialTicks, int divisor) {
-        return flickerSin(wtime, partialTicks, divisor, 8F, 0.875F);
+        return flickerSin(wtime, partialTicks, divisor, 4F, 0.575F);
     }
 
     private static float conCFlicker(long wtime, float partialTicks, int divisor) {
-        return flickerSin(wtime, partialTicks, divisor, 8F, 0.775F);
+        return flickerSin(wtime, partialTicks, divisor, 4F, 0.375F);
     }
 
     private static float flickerSin(long wtime, float partialTicks, int divisor, float div, float move) {

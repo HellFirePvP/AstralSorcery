@@ -1,8 +1,8 @@
 package hellfire.astralSorcery.common.net.packet;
 
 import hellfire.astralSorcery.common.AstralSorcery;
-import hellfire.astralSorcery.common.data.AbstractData;
-import hellfire.astralSorcery.common.data.SyncDataHolder;
+import hellfire.astralSorcery.common.data.sync.AbstractData;
+import hellfire.astralSorcery.common.data.sync.SyncDataHolder;
 import hellfire.astralSorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompressedStreamTools;

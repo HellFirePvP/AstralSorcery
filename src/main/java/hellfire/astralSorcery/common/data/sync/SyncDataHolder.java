@@ -1,5 +1,6 @@
-package hellfire.astralSorcery.common.data;
+package hellfire.astralSorcery.common.data.sync;
 
+import hellfire.astralSorcery.common.data.sync.AbstractData;
 import hellfire.astralSorcery.common.net.PacketChannel;
 import hellfire.astralSorcery.common.net.packet.PktSyncData;
 import net.minecraft.entity.player.EntityPlayer;

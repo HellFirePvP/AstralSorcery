@@ -6,6 +6,8 @@ import hellfire.astralSorcery.api.constellation.IConstellationTier;
 import hellfire.astralSorcery.api.constellation.StarConnection;
 import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.util.Vector3;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +22,8 @@ import java.util.List;
 public class Constellation implements IConstellation {
 
     private boolean finished = false;
+    private String name = null;
+    private int tier = -1;
     private List<StarLocation> starLocations = new ArrayList<StarLocation>(); //32x32 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<StarConnection>(); //The connections between 2 tuples/stars in the constellation.
     private List<StarLocation> unmodifiableStars;
@@ -51,9 +55,26 @@ public class Constellation implements IConstellation {
     }
 
     @Override
-    public void register(int tier) {
-        finished = true;
+    public void register(String name, int tier) {
         AstralSorceryAPI.registerConstellation(tier, this);
+        this.tier = tier;
+        ModContainer current = Loader.instance().activeModContainer();
+        if(current == null) {
+            this.name = "unknown." + name;
+        } else {
+            this.name = current.getModId() + "." + name;
+        }
+        finished = true;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int getAssociatedTier() {
+        return tier;
     }
 
     @Override

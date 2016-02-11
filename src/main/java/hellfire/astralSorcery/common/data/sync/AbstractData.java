@@ -1,4 +1,4 @@
-package hellfire.astralSorcery.common.data;
+package hellfire.astralSorcery.common.data.sync;
 
 import net.minecraft.nbt.NBTTagCompound;
 

@@ -1,5 +1,6 @@
 package hellfire.astralSorcery.common.registry;
 
+import hellfire.astralSorcery.api.constellation.IConstellation;
 import hellfire.astralSorcery.api.constellation.IConstellationTier;
 import hellfire.astralSorcery.api.constellation.StarLocation;
 import hellfire.astralSorcery.common.constellation.Constellation;
@@ -16,7 +17,7 @@ public class RegistryConstellations {
         ConstellationRegistry.registerTier(0, createRInfo(0.2, -0.2, 0, 5), 1.0F);
         ConstellationRegistry.registerTier(1, createRInfo(-0.2, -0.2, -0.05, 6), 1.0F);
 
-        Constellation bigDipper = new Constellation();
+        IConstellation bigDipper = new Constellation();
         StarLocation sl1 = bigDipper.addStar(1, 3);
         StarLocation sl2 = bigDipper.addStar(10, 7);
         StarLocation sl3 = bigDipper.addStar(13, 13);
@@ -33,9 +34,9 @@ public class RegistryConstellations {
         bigDipper.addConnection(sl6, sl7);
         bigDipper.addConnection(sl7, sl4);
 
-        bigDipper.register(0);
+        bigDipper.register("bigDipper", 0);
 
-        Constellation orion = new Constellation();
+        IConstellation orion = new Constellation();
         sl1 = orion.addStar(8, 0);
         sl2 = orion.addStar(20, 2);
         sl3 = orion.addStar(12, 18);
@@ -51,7 +52,7 @@ public class RegistryConstellations {
         orion.addConnection(sl6, sl3);
         orion.addConnection(sl7, sl5);
 
-        orion.register(1);
+        orion.register("orion", 1);
     }
 
     private static IConstellationTier.RInformation createRInfo(double x, double y, double z, double size) {

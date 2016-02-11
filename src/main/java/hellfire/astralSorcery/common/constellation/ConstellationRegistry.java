@@ -37,6 +37,15 @@ public class ConstellationRegistry {
         return tiers.get(tierNumber);
     }
 
+    public static IConstellation getConstellationByName(String name) {
+        for (IConstellationTier tier : tiers.values()) {
+            for(IConstellation c : tier.getConstellations()) {
+                if(c.getName().equals(name)) return c;
+            }
+        }
+        return null;
+    }
+
     public static int getHighestTierNumber() {
         return tiers.lastKey();
     }

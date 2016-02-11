@@ -1,6 +1,7 @@
 package hellfire.astralSorcery.common.event;
 
-import hellfire.astralSorcery.common.data.SyncDataHolder;
+import hellfire.astralSorcery.common.data.research.ResearchManager;
+import hellfire.astralSorcery.common.data.sync.SyncDataHolder;
 import hellfire.astralSorcery.common.net.PacketChannel;
 import hellfire.astralSorcery.common.net.packet.PktSyncConfig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,12 +23,17 @@ public class EventHandlerNetwork {
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
+
+        ResearchManager.sendInitClientKnowledge(p);
+
         SyncDataHolder.syncAllDataTo(p);
     }
 
     @SubscribeEvent
     public void onLogout(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
+
+        ResearchManager.wipeClientKnowledge(player);
     }
 
     @SubscribeEvent

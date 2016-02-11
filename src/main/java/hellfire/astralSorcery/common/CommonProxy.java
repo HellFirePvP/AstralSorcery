@@ -1,6 +1,6 @@
 package hellfire.astralSorcery.common;
 
-import hellfire.astralSorcery.common.data.SyncDataHolder;
+import hellfire.astralSorcery.common.data.sync.SyncDataHolder;
 import hellfire.astralSorcery.common.event.EventHandlerNetwork;
 import hellfire.astralSorcery.common.event.EventHandlerServer;
 import hellfire.astralSorcery.common.integration.IntegrationHandler;
@@ -33,7 +33,6 @@ public class CommonProxy implements IGuiHandler {
                 return new ItemStack(Blocks.stone).getItem();
             }
         };
-
         RegistryConstellations.init();
 
         PacketChannel.init();

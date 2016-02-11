@@ -1,6 +1,7 @@
 package hellfire.astralSorcery.common.registry;
 
 import hellfire.astralSorcery.common.AstralSorcery;
+import hellfire.astralSorcery.common.items.ItemConstellationPaper;
 import hellfire.astralSorcery.common.lib.LibConstants;
 import hellfire.astralSorcery.common.lib.LibMisc;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,12 +19,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class RegistryItems {
 
+    public static ItemConstellationPaper constellationPaper;
+
     public static void init() {
         registerItems();
     }
 
     private static void registerItems() {
-
+        constellationPaper = registerItem(new ItemConstellationPaper());
     }
 
     private static <T extends Item> T registerItem(T item, String name) {
