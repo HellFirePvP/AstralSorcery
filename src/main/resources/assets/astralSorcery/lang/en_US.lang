@@ -1,1 +1,6 @@
-itemGroup.astralSorcery=Astral Sorcery
+itemGroup.astralsorcery=Astral Sorcery
+
+item.ItemConstellationPaper.name=Constellation Paper
+
+constellation.astralsorcery.orion.name=Orion
+constellation.astralsorcery.bigDipper.name=Big Dipper
