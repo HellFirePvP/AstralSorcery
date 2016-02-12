@@ -10,6 +10,7 @@ import hellfire.astralSorcery.common.net.PacketChannel;
 import hellfire.astralSorcery.common.registry.RegistryBlocks;
 import hellfire.astralSorcery.common.registry.RegistryConstellations;
 import hellfire.astralSorcery.common.registry.RegistryItems;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -42,6 +43,8 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
+        registerDisplayInformationInit();
+
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
 
@@ -61,4 +64,17 @@ public class CommonProxy implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return null;
     }
+
+    public void registerBlockRender(Block block, int metadata, String name) {}
+
+    public void registerVariantName(Item item, String name) {}
+
+    public void registerItemRender(Item block, int metadata, String name) {}
+
+    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
+
+    public void registerFromSubItems(Item item, String name) {}
+
+    public void registerDisplayInformationInit() {}
+
 }

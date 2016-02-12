@@ -29,7 +29,7 @@ import java.util.List;
  * <p/>
  * Created by HellFirePvP @ 09.02.2016 11:40
  */
-public class ItemConstellationPaper extends Item {
+public class ItemConstellationPaper extends Item implements IMetaItem {
 
     public ItemConstellationPaper() {
         setUnlocalizedName("ItemConstellationPaper");
@@ -41,7 +41,7 @@ public class ItemConstellationPaper extends Item {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        subItems.add(new ItemStack(itemIn, 1));
+        subItems.add(new ItemStack(this, 1));
 
         for (IConstellationTier tier : ConstellationRegistry.ascendingTiers()) {
             for(IConstellation c : tier.getConstellations()) {
@@ -146,4 +146,8 @@ public class ItemConstellationPaper extends Item {
         ItemNBTHelper.getPersistentData(stack).setString("constellation", name);
     }
 
+    @Override
+    public int[] getSubItems() {
+        return new int[] {0, 1};
+    }
 }

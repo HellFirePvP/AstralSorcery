@@ -1,13 +1,9 @@
 package hellfire.astralSorcery.common.registry;
 
 import hellfire.astralSorcery.common.AstralSorcery;
+import hellfire.astralSorcery.common.items.IVariant;
 import hellfire.astralSorcery.common.items.ItemConstellationPaper;
-import hellfire.astralSorcery.common.lib.LibConstants;
-import hellfire.astralSorcery.common.lib.LibMisc;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -30,7 +26,7 @@ public class RegistryItems {
     }
 
     private static <T extends Item> T registerItem(T item, String name) {
-        GameRegistry.registerItem(item, name);
+        register(item, name);
         return item;
     }
 
@@ -48,13 +44,34 @@ public class RegistryItems {
             Object oldMod = modController.getClass().getField("activeContainer").get(modController);
             modController.getClass().getField("activeContainer").set(modController, Loader.instance().getIndexedModList().get(modId));
 
-            GameRegistry.registerItem(item, name);
+            register(item, name);
 
             modController.getClass().getField("activeContainer").set(modController, oldMod);
             return item;
         } catch (Exception exc) {
             AstralSorcery.log.error("Could not register item with name " + name);
             return null;
+        }
+    }
+
+    private static <T extends Item> void register(T item, String name) {
+        GameRegistry.registerItem(item, name);
+
+        if (item instanceof IVariant) {
+            for (int i = 0; i < ((IVariant)item).getVNames().length; i++)
+            {
+                int m = i;
+                if (((IVariant) item).getVMeta() != null) {
+                    m = ((IVariant) item).getVMeta()[i];
+                }
+                String qq = name + "_" + ((IVariant)item).getVNames()[i];
+                if (((IVariant) item).getVNames()[i].equals("*")) {
+                    qq = name;
+                }
+                AstralSorcery.proxy.registerItemRender(item, m, qq, true);
+            }
+        } else {
+            AstralSorcery.proxy.registerFromSubItems(item, name);
         }
     }
 
