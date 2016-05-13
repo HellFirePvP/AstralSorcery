@@ -38,7 +38,10 @@ hs_err_pid*
 /dist
 /manifest.mf
 /run
+<<<<<<< HEAD
 /libs
+=======
+>>>>>>> 126151966d9df7acf033afcdc792fb94ee4e9045
 /eclipse
 /classes
 
