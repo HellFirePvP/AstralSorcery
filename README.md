@@ -1,0 +1,3 @@
+# AstralSorcery
+
+indev Magic mod~
