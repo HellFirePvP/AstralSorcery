@@ -1,0 +1,23 @@
+itemGroup.astralsorcery=Astral Sorcery
+
+misc.moreInformation=<Hold SHIFT for more details>
+
+crystal.size=Size
+crystal.purity=Purity
+crystal.collectivity=Collectivity
+crystal.attuned=Tuned to
+
+entity.astralsorcery.EntityTelescope.name=Telescope
+
+item.ItemConstellationPaper.name=Constellation Paper
+item.ItemRockCrystalBase.name=Rock Crystal
+item.ItemTunedCrystal.name=Attuned Rock Crystal
+item.ItemTelescopePlacer.name=Telescope
+
+tile.BlockCustomOre.crystal.name=Rock Crystal Ore
+tile.BlockStoneMachine.altar.name=Celestial Altar
+
+astralsorcery.orion=Orion
+astralsorcery.bigDipper=Big Dipper
+
+constellation.noInformation=No useful information

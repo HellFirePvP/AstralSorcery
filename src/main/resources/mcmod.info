@@ -1,0 +1,16 @@
+[
+{
+  "modid": "astralsorcery",
+  "name": "Astral Sorcery",
+  "description": "Magic mod that draws power from stars and their constellations",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["HellFirePvP"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

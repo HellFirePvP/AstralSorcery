@@ -1,0 +1,85 @@
+package hellfirepvp.astralsorcery.common.block;
+
+import hellfirepvp.astralsorcery.common.CommonProxy;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import java.util.List;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: BlockOpaqueCosmetic
+ * Created by HellFirePvP
+ * Date: 12.05.2016 / 16:58
+ */
+public class BlockOpaqueCosmetic extends Block implements BlockCustomName {
+
+    public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
+
+    public BlockOpaqueCosmetic() {
+        super(Material.rock, MapColor.ironColor);
+        setHardness(2.0F);
+        setHarvestLevel("pickaxe", 3);
+        setResistance(20.0F);
+        setStepSound(SoundType.STONE);
+        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return FULL_BLOCK_AABB;
+    }
+
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+        list.add(new ItemStack(item, 1, 0));
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return meta < BlockType.values().length ? getDefaultState().withProperty(BLOCK_TYPE, BlockType.values()[meta]) : getDefaultState();
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        BlockType type = state.getValue(BLOCK_TYPE);
+        return type == null ? 0 : type.ordinal();
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState(){
+        return new BlockStateContainer(this, BLOCK_TYPE);
+    }
+
+    @Override
+    public String getIdentifierForMeta(int meta) {
+        BlockType mt = getStateFromMeta(meta).getValue(BLOCK_TYPE);
+        return mt == null ? "null" : mt.getName();
+    }
+
+    public static enum BlockType implements IStringSerializable {
+
+        TEST;
+
+        @Override
+        public String getName() {
+            return name().toLowerCase();
+        }
+    }
+
+}
