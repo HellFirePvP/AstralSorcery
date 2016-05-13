@@ -31,8 +31,8 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'FMLAT': 'astralSorcery_transform.cfg',
-                'FMLCorePlugin': 'hellfire.astralSorcery.core.AstralCore',
+        attributes 'FMLAT': 'astralsorcery_at.cfg',
+                'FMLCorePlugin': 'hellfire.astralsorcery.core.AstralCore',
                 'FMLCorePluginContainsFMLMod': 'true'
     }
 }

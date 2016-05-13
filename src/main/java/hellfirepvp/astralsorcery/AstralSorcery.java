@@ -28,8 +28,6 @@ public class AstralSorcery {
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
-    //Test Git
-
     @Mod.Instance(MODID)
     public static AstralSorcery instance;
 
