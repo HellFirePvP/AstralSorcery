@@ -21,7 +21,7 @@ public class SkyboxRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().theWorld;
-        if(world.provider.getDimension() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
+        if (world.provider.getDimension() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
             world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
         }
     }

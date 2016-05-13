@@ -39,22 +39,22 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
         List<String> tTip = new LinkedList<String>();
         addTooltip(stack, tTip, shDown);
         tooltip.addAll(tTip);
-        if(tTip.size() == 0 || tTip.size() == 1) return;
+        if (tTip.size() == 0 || tTip.size() == 1) return;
         Constellation c = getConstellation(stack);
-        if(c != null) {
+        if (c != null) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.attuned") + " " + TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
         }
     }
 
     public static void applyConstellation(ItemStack stack, Constellation constellation) {
-        if(!(stack.getItem() instanceof ItemTunedCrystal)) return;
+        if (!(stack.getItem() instanceof ItemTunedCrystal)) return;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
         cmp.setString("constellation", constellation.getName());
     }
 
     public static Constellation getConstellation(ItemStack stack) {
-        if(!(stack.getItem() instanceof ItemTunedCrystal)) return null;
+        if (!(stack.getItem() instanceof ItemTunedCrystal)) return null;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
         String strCName = cmp.getString("constellation");

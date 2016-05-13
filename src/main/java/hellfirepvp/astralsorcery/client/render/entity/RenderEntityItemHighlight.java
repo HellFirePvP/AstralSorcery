@@ -3,7 +3,6 @@ package hellfirepvp.astralsorcery.client.render.entity;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,6 +19,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.Random;
 
 /**
@@ -30,6 +30,8 @@ import java.util.Random;
  * Date: 13.05.2016 / 13:59
  */
 public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
+
+    private static final Field ageField = ReflectionHelper.findField(EntityItem.class, "age", "field_70292_b");
 
     private static final Random rand = new Random();
     private final RenderEntityItem renderItem;
@@ -80,10 +82,10 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
             float f4 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
             fa /= 30.0F / (Math.min(entity.getAge(), 10) / 10.0F);
             f4 /= 30.0F / (Math.min(entity.getAge(), 10) / 10.0F);
-            vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int)(255.0F * (1.0F - f2))).endVertex();
+            vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
             vb.pos(-0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos( 0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos(   0.0D,      fa,  1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
+            vb.pos(0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
+            vb.pos(0.0D, fa, 1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             vb.pos(-0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             tes.draw();
         }
@@ -101,9 +103,14 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
         GL11.glPushMatrix();
         ItemStack stack = entity.getEntityItem();
-        if(stack != null) {
+        if (stack != null) {
             EntityItem ei = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, stack);
-            ReflectionHelper.setPrivateValue(EntityItem.class, ei, entity.getAge(), "age", "field_70292_b"); //FIXME CHANGE PLEASE
+            if (ageField != null) {
+                try {
+                    ageField.set(ei, entity.getAge());
+                } catch (IllegalAccessException e) {
+                }
+            }
             ei.hoverStart = entity.hoverStart;
 
             renderItem.doRender(ei, x, y, z, entityYaw, partialTicks);

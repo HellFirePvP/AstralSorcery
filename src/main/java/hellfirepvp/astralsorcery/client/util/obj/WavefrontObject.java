@@ -144,7 +144,7 @@ public class WavefrontObject {
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
 
         VertexFormat vf;
-        if(expectTexture) {
+        if (expectTexture) {
             vf = DefaultVertexFormats.POSITION_TEX;
         } else {
             vf = DefaultVertexFormats.POSITION;

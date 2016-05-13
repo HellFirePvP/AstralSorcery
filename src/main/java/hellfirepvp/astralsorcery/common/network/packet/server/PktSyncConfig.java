@@ -37,7 +37,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
         int count = buf.readByte();
         fields = new ArrayList<SyncTuple>();
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             byte[] data = new byte[buf.readShort()];
             buf.readBytes(data);
 
@@ -48,11 +48,12 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
                 key = new DataInputStream(in).readUTF();
                 Object value = new ObjectInputStream(in).readObject();
                 tuple = new SyncTuple(key, value);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
-            if(tuple == null) {
+            if (tuple == null) {
                 fields = null;
-                if(key != null) {
+                if (key != null) {
                     AstralSorcery.log.info("Could not read config from server with key: " + key);
                 }
                 break;
@@ -64,22 +65,24 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
     @Override
     public void toBytes(ByteBuf buf) {
         List<byte[]> bufferedFieldContents = new ArrayList<byte[]>();
-        for(Field f : Config.class.getFields()) {
-            if(Modifier.isStatic(f.getModifiers()) && f.isAnnotationPresent(Sync.class)) {
+        for (Field f : Config.class.getFields()) {
+            if (Modifier.isStatic(f.getModifiers()) && f.isAnnotationPresent(Sync.class)) {
                 ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 try {
                     new DataOutputStream(byteStream).writeUTF(f.getName());
                     new ObjectOutputStream(byteStream).writeObject(f.get(null));
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
                 bufferedFieldContents.add(byteStream.toByteArray());
                 try {
                     byteStream.close();
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
         }
 
         buf.writeByte(bufferedFieldContents.size());
-        for(byte[] data : bufferedFieldContents) {
+        for (byte[] data : bufferedFieldContents) {
             buf.writeShort(data.length);
             buf.writeBytes(data);
         }
@@ -88,7 +91,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
     @Override
     public IMessage onMessage(PktSyncConfig message, MessageContext ctx) {
         try {
-            for(SyncTuple tuple : message.fields) {
+            for (SyncTuple tuple : message.fields) {
                 Field field = Config.class.getField(tuple.key);
                 field.set(null, tuple.value);
             }

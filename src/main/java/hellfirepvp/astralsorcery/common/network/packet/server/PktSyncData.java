@@ -27,7 +27,8 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
     private Map<String, AbstractData> data = new HashMap<String, AbstractData>();
     private boolean shouldSyncAll = false;
 
-    public PktSyncData() {}
+    public PktSyncData() {
+    }
 
     public PktSyncData(Map<String, AbstractData> dataToSend, boolean shouldSyncAll) {
         this.data = dataToSend;
@@ -44,7 +45,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
             byte providerId = pb.readByte();
             AbstractData.AbstractDataProvider<? extends AbstractData> provider = AbstractData.Registry.getProvider(providerId);
-            if(provider == null) {
+            if (provider == null) {
                 AstralSorcery.log.warn("Provider for ID " + providerId + " doesn't exist! Skipping...");
                 continue;
             }
@@ -70,10 +71,10 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
         PacketBuffer pb = new PacketBuffer(buf);
         pb.writeInt(data.size());
 
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
             AbstractData dat = data.get(key);
             NBTTagCompound cmp = new NBTTagCompound();
-            if(shouldSyncAll) {
+            if (shouldSyncAll) {
                 dat.writeAllDataToPacket(cmp);
             } else {
                 dat.writeToPacket(cmp);

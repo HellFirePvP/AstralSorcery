@@ -27,7 +27,7 @@ public class ItemNBTHelper {
 
     public static NBTTagCompound getPersistentData(NBTTagCompound base) {
         NBTTagCompound compound;
-        if(hasPersistentData(base)) {
+        if (hasPersistentData(base)) {
             compound = base.getCompoundTag(AstralSorcery.MODID);
         } else {
             compound = new NBTTagCompound();
@@ -53,8 +53,9 @@ public class ItemNBTHelper {
     public static void removePersistentData(Entity entity) {
         removePersistentData(entity.getEntityData());
     }
+
     public static void removePersistentData(ItemStack item) {
-        if(item.hasTagCompound()) removePersistentData(item.getTagCompound());
+        if (item.hasTagCompound()) removePersistentData(item.getTagCompound());
     }
 
     public static void removePersistentData(NBTTagCompound base) {
@@ -64,7 +65,7 @@ public class ItemNBTHelper {
 
     public static NBTTagCompound getData(ItemStack stack) {
         NBTTagCompound compound = stack.getTagCompound();
-        if(compound == null) {
+        if (compound == null) {
             compound = new NBTTagCompound();
             stack.setTagCompound(compound);
         }
@@ -95,14 +96,14 @@ public class ItemNBTHelper {
 
     //Get tags with default value
     public static ItemStack getStack(NBTTagCompound compound, String tag, ItemStack defaultValue) {
-        if(compound.hasKey(tag)) {
+        if (compound.hasKey(tag)) {
             return ItemStack.loadItemStackFromNBT(compound.getCompoundTag(tag));
         }
         return defaultValue;
     }
 
     public static UUID getUUID(NBTTagCompound compound, String tag, UUID defaultValue) {
-        if(compound.hasKey(tag)) {
+        if (compound.hasKey(tag)) {
             NBTTagCompound uuidComp = compound.getCompoundTag(tag);
             return new UUID(uuidComp.getLong("mostSigBits"), uuidComp.getLong("leastSigBits"));
         }

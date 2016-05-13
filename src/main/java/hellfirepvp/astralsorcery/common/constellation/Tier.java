@@ -20,7 +20,7 @@ public class Tier {
     private final int tierNumber;
     private final float chance;
     private final AppearanceCondition condition;
-    private LinkedList<Constellation> constellations = new LinkedList<Constellation>();
+    private LinkedList<Constellation> constellations = new LinkedList<>();
 
     public Tier(int tierNumber, float chance, RInformation renderinfo, AppearanceCondition condition) {
         this.tierNumber = tierNumber;
@@ -55,16 +55,16 @@ public class Tier {
     }
 
     public boolean areAppearanceConditionsMet(CelestialHandler.MoonPhase currentMoonPhase, boolean isDayOfSolarEclipse, boolean isDayOfLunarEclipse) {
-        if(condition.needsLunarEclipse && !isDayOfLunarEclipse) return false;
-        if(condition.needsSolarEclipse && !isDayOfSolarEclipse) return false;
+        if (condition.needsLunarEclipse && !isDayOfLunarEclipse) return false;
+        if (condition.needsSolarEclipse && !isDayOfSolarEclipse) return false;
         boolean lunarCondition;
-        if(condition.ignoresLunarCycles) {
+        if (condition.ignoresLunarCycles) {
             lunarCondition = true;
         } else {
             int eOrdinal = condition.endingPhaseIncl.ordinal();
             int bOrdinal = condition.beginningPhaseIncl.ordinal();
             int cOrdinal = currentMoonPhase.ordinal();
-            if(bOrdinal > eOrdinal) {
+            if (bOrdinal > eOrdinal) {
                 int mov = 8 - bOrdinal;
                 bOrdinal += mov;
                 eOrdinal += mov;

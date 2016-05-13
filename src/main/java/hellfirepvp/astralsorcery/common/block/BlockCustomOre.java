@@ -17,7 +17,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;

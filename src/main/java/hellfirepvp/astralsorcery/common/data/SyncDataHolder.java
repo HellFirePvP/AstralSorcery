@@ -20,8 +20,8 @@ public class SyncDataHolder {
 
     public static final String DATA_CONSTELLATIONS = "AstralConstellations";
 
-    private static Map<String, AbstractData> serverData = new HashMap<String, AbstractData>();
-    private static Map<String, AbstractData> clientData = new HashMap<String, AbstractData>();
+    private static Map<String, AbstractData> serverData = new HashMap<>();
+    private static Map<String, AbstractData> clientData = new HashMap<>();
 
     private static List<String> dirtyData = new ArrayList<String>();
     private static byte providerCounter = 0;
@@ -51,7 +51,7 @@ public class SyncDataHolder {
     }
 
     public static void markForUpdate(String key) {
-        if(!dirtyData.contains(key)) {
+        if (!dirtyData.contains(key)) {
             dirtyData.add(key);
         }
     }
@@ -62,20 +62,20 @@ public class SyncDataHolder {
     }
 
     public static void receiveServerPacket(Map<String, AbstractData> data) {
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
             AbstractData dat = clientData.get(key);
-            if(dat != null) {
+            if (dat != null) {
                 dat.handleIncomingData(data.get(key));
             }
         }
     }
 
     public static void doNecessaryUpdates() {
-        if(dirtyData.isEmpty()) return;
+        if (dirtyData.isEmpty()) return;
         Map<String, AbstractData> pktData = new HashMap<String, AbstractData>();
-        for(String s : dirtyData) {
+        for (String s : dirtyData) {
             AbstractData d = getDataServer(s);
-            if(d.needsUpdate()) {
+            if (d.needsUpdate()) {
                 pktData.put(s, d);
             }
         }

@@ -3,9 +3,7 @@ package hellfirepvp.astralsorcery.client.effect.text;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.common.util.AssetLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -40,10 +38,10 @@ public final class OverlayText {
 
     public OverlayText(String text, int ticksUntilRemoval, OverlayTextProperties properties) {
         this(text, ticksUntilRemoval);
-        if(properties != null) {
-            if(properties.color != null) this.color = properties.color;
-            if(properties.alpha != -1) this.alpha = properties.alpha;
-            if(properties.policy != null) {
+        if (properties != null) {
+            if (properties.color != null) this.color = properties.color;
+            if (properties.alpha != -1) this.alpha = properties.alpha;
+            if (properties.policy != null) {
                 this.policy = properties.policy;
                 this.fontRendererObj = new OverlayFontRenderer(this.policy, ticksUntilRemoval);
             }
@@ -65,7 +63,8 @@ public final class OverlayText {
         private float alpha = -1;
         private OverlayTextPolicy policy;
 
-        public OverlayTextProperties() {}
+        public OverlayTextProperties() {
+        }
 
         public OverlayTextProperties setColor(Color color) {
             this.color = color;
@@ -92,20 +91,20 @@ public final class OverlayText {
         ticksUntilRemoval--;
         animationTick++;
 
-        if(ticksUntilRemoval <= 0) {
+        if (ticksUntilRemoval <= 0) {
             EffectHandler.getInstance().unregisterTextOverlay(this);
         }
     }
 
     public static void tickTexts(List<OverlayText> texts) {
         synchronized (EffectHandler.lock) {
-            for(OverlayText text : texts) text.tick();
+            for (OverlayText text : texts) text.tick();
         }
     }
 
     public static void sheduleRender(List<OverlayText> overlayTexts, ScaledResolution resolution, float partialTicks) {
         synchronized (EffectHandler.lock) {
-            for(OverlayText text : overlayTexts) text.doRender(resolution, partialTicks);
+            for (OverlayText text : overlayTexts) text.doRender(resolution, partialTicks);
         }
     }
 
@@ -131,7 +130,7 @@ public final class OverlayText {
         public void drawString(String string, float x, float y, Color color, float alpha, int animationTick) {
             GL11.glPushMatrix();
             boolean lightning = GL11.glGetBoolean(GL11.GL_LIGHTING);
-            if(lightning) {
+            if (lightning) {
                 GL11.glDisable(GL11.GL_LIGHTING);
             }
             GL11.glEnable(GL11.GL_BLEND);
@@ -140,7 +139,7 @@ public final class OverlayText {
             char[] contents = string.toCharArray();
             for (int i = 0; i < contents.length; i++) {
                 Character c = contents[i];
-                if(c.equals(' ')) {
+                if (c.equals(' ')) {
                     x += getCharWidth(c);
                     continue;
                 }
@@ -149,7 +148,7 @@ public final class OverlayText {
             }
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glDisable(GL11.GL_BLEND);
-            if(lightning) {
+            if (lightning) {
                 GL11.glEnable(GL11.GL_LIGHTING);
             }
             GL11.glPopMatrix();
@@ -159,7 +158,7 @@ public final class OverlayText {
             RenderChar rend = loadedCharacters.get(c);
             float aWidth = rend.def_width * font_size_multiplicator;
             float aHeight = rend.def_height * font_size_multiplicator;
-            if(policy != null) {
+            if (policy != null) {
                 policy.onCharRender(this, full, c, index, rend, x, y, zLevel, color, alpha, aWidth, aHeight, animationTick, maxLiving);
             }
             GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
@@ -176,16 +175,16 @@ public final class OverlayText {
 
         public int getStringWidth(String string) {
             int width = 0;
-            for(Character c : string.toCharArray()) {
+            for (Character c : string.toCharArray()) {
                 width += getCharWidth(c);
             }
             return width;
         }
 
         public float getCharWidth(Character c) {
-            if(c.equals(' ')) return SPACE_CHAR_SIZE * font_size_multiplicator;
+            if (c.equals(' ')) return SPACE_CHAR_SIZE * font_size_multiplicator;
             RenderChar rend = loadedCharacters.get(c);
-            if(rend == null) throw new RuntimeException("Using OverlayFontRenderer with invalid chars!");
+            if (rend == null) throw new RuntimeException("Using OverlayFontRenderer with invalid chars!");
             return (rend.higherX - rend.lowerX) * font_size_multiplicator;
         }
 

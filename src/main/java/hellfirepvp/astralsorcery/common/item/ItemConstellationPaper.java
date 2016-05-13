@@ -7,7 +7,6 @@ import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemNBTHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import net.minecraft.creativetab.CreativeTabs;
@@ -46,7 +45,7 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
         subItems.add(new ItemStack(this, 1));
 
         for (Tier tier : ConstellationRegistry.ascendingTiers()) {
-            for(Constellation c : tier.getConstellations()) {
+            for (Constellation c : tier.getConstellations()) {
                 ItemStack cPaper = new ItemStack(this, 1);
                 setConstellation(cPaper, c);
                 subItems.add(cPaper);
@@ -56,42 +55,42 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        if(stack.getItemDamage() == 1) {
+        if (stack.getItemDamage() == 1) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("constellation.noInformation"));
             return;
         }
         Constellation c = getConstellation(stack);
-        if(c != null) {
+        if (c != null) {
             tooltip.add(TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
         }
     }
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(worldIn.isRemote || getConstellation(stack) != null) return;
+        if (worldIn.isRemote || getConstellation(stack) != null) return;
 
-        if(entityIn != null && entityIn instanceof EntityPlayer) {
+        if (entityIn != null && entityIn instanceof EntityPlayer) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
-            if(progress != null) {
+            if (progress != null) {
                 int highest = progress.getTierReached();
                 List<Constellation> constellations = new ArrayList<Constellation>();
-                for(Tier tier : ConstellationRegistry.ascendingTiers()) {
-                    if(tier.tierNumber() > highest) continue;
+                for (Tier tier : ConstellationRegistry.ascendingTiers()) {
+                    if (tier.tierNumber() > highest) continue;
                     for (Constellation c : tier.getConstellations()) {
-                        if(!progress.hasConstellationDiscovered(c.getName())) constellations.add(c);
+                        if (!progress.hasConstellationDiscovered(c.getName())) constellations.add(c);
                     }
                 }
 
                 removeInventoryConstellations(((EntityPlayer) entityIn).inventory, constellations);
 
-                if(constellations.isEmpty()) {
+                if (constellations.isEmpty()) {
                     stack.setItemDamage(1);
                     return;
                 }
 
                 List<WRItemObject<Constellation>> wrp = buildWeightedRandomList(constellations);
                 WRItemObject<Constellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
-                if(worldIn.rand.nextBoolean()) {
+                if (worldIn.rand.nextBoolean()) {
                     stack.setItemDamage(1);
                 } else {
                     setConstellation(stack, result.getValue());
@@ -101,12 +100,12 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
     }
 
     private void removeInventoryConstellations(InventoryPlayer inventory, List<Constellation> constellations) {
-        if(inventory == null) return;
+        if (inventory == null) return;
         for (ItemStack stack : inventory.mainInventory) {
-            if(stack == null || stack.getItem() == null) continue;
-            if(stack.getItem() instanceof ItemConstellationPaper) {
+            if (stack == null || stack.getItem() == null) continue;
+            if (stack.getItem() instanceof ItemConstellationPaper) {
                 Constellation c = getConstellation(stack);
-                if(c != null) {
+                if (c != null) {
                     constellations.remove(c);
                 }
             }
@@ -117,7 +116,7 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
         List<WRItemObject<Constellation>> wrc = new ArrayList<WRItemObject<Constellation>>();
         for (Constellation c : constellations) {
             Tier tier = ConstellationRegistry.getTier(c.getAssociatedTier());
-            if(tier == null) continue;
+            if (tier == null) continue;
             WRItemObject<Constellation> i = new WRItemObject<Constellation>((int) (tier.getShowupChance() * 100), c);
             wrc.add(i);
         }
@@ -126,23 +125,23 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
 
     public static Constellation getConstellation(ItemStack stack) {
         Item i = stack.getItem();
-        if(!(i instanceof ItemConstellationPaper)) return null;
+        if (!(i instanceof ItemConstellationPaper)) return null;
         String name = ItemNBTHelper.getPersistentData(stack).getString("constellation");
-        if(name == null || name.isEmpty()) return null;
+        if (name == null || name.isEmpty()) return null;
         return ConstellationRegistry.getConstellationByName(name);
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {
         Item i = stack.getItem();
-        if(!(i instanceof ItemConstellationPaper)) return;
+        if (!(i instanceof ItemConstellationPaper)) return;
         String name = constellation.getName();
-        if(name == null) return;
+        if (name == null) return;
         ItemNBTHelper.getPersistentData(stack).setString("constellation", name);
     }
 
     @Override
     public int[] getSubItems() {
-        return new int[] {0, 1};
+        return new int[]{0, 1};
     }
 
 }

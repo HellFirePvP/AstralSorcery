@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -63,15 +62,20 @@ public class CommonProxy implements IGuiHandler {
         SyncDataHolder.initialize();
     }
 
-    public void postInit() {}
+    public void postInit() {
+    }
 
-    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
+    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {
+    }
 
-    public void registerFromSubItems(Item item, String name) {}
+    public void registerFromSubItems(Item item, String name) {
+    }
 
-    public void registerDisplayInformationInit() {}
+    public void registerDisplayInformationInit() {
+    }
 
-    public void registerEntityRenderers() {}
+    public void registerEntityRenderers() {
+    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

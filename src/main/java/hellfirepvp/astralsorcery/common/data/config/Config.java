@@ -19,7 +19,8 @@ public class Config {
 
     public static int crystalDensity = 100;
 
-    private Config() {}
+    private Config() {
+    }
 
     public static void load(File file) {
         latestConfig = new Configuration(file);

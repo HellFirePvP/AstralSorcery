@@ -29,19 +29,19 @@ public class ItemTelescopePlacer extends Item {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(hand == null || hand == EnumHand.OFF_HAND)
+        if (hand == null || hand == EnumHand.OFF_HAND)
             return EnumActionResult.PASS; //LUL rekt 1.9 features
 
-        if(worldIn.isRemote) return EnumActionResult.PASS;
+        if (worldIn.isRemote) return EnumActionResult.PASS;
         BlockPos positionSuggested = pos.offset(facing);
-        if(worldIn.isAirBlock(positionSuggested)) {
+        if (worldIn.isAirBlock(positionSuggested)) {
             EntityTelescope telescope = new EntityTelescope(worldIn);
             telescope.setPositionAndRotation(
                     positionSuggested.getX() + 0.5, positionSuggested.getY(), positionSuggested.getZ() + 0.5,
                     0.5F, 0.5F);
             worldIn.spawnEntityInWorld(telescope);
 
-            if(!playerIn.isCreative()) {
+            if (!playerIn.isCreative()) {
                 stack.stackSize -= 1;
             }
         }

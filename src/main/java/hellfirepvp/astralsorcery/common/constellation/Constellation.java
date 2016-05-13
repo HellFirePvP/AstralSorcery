@@ -21,18 +21,18 @@ public class Constellation {
     private boolean finished = false;
     private String name = null;
     private int tier = -1;
-    private List<StarLocation> starLocations = new ArrayList<StarLocation>(); //32x32 locations are valid. 0-indexed.
-    private List<StarConnection> connections = new ArrayList<StarConnection>(); //The connections between 2 tuples/stars in the constellation.
+    private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
+    private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
 
     private List<StarLocation> unmodifiableStars;
     private List<StarConnection> unmodifiableConnections;
 
     public StarLocation addStar(int x, int y) {
-        if(finished) return null;
+        if (finished) return null;
         x &= 31; //32x32
         y &= 31;
         StarLocation star = new StarLocation(x, y);
-        if(!starLocations.contains(star)) {
+        if (!starLocations.contains(star)) {
             starLocations.add(star);
             return star;
         }
@@ -40,10 +40,10 @@ public class Constellation {
     }
 
     public StarConnection addConnection(StarLocation star1, StarLocation star2) {
-        if(finished) return null;
-        if(star1.equals(star2)) return null;
+        if (finished) return null;
+        if (star1.equals(star2)) return null;
         StarConnection sc = new StarConnection(star1, star2);
-        if(!connections.contains(sc)) {
+        if (!connections.contains(sc)) {
             connections.add(sc);
             return sc;
         }
@@ -57,7 +57,7 @@ public class Constellation {
     public void registerModConstellation(ModContainer mod, String name, int tier) {
         ConstellationRegistry.registerConstellation(tier, this);
         this.tier = tier;
-        if(mod == null) {
+        if (mod == null) {
             this.name = "unknown." + name;
         } else {
             this.name = mod.getModId() + "." + name;
@@ -66,7 +66,7 @@ public class Constellation {
     }
 
     public Tier queryTier() {
-        if(!finished) return null;
+        if (!finished) return null;
 
         return ConstellationRegistry.getTier(getAssociatedTier());
     }
@@ -80,14 +80,14 @@ public class Constellation {
     }
 
     public List<StarLocation> getStars() {
-        if(!finished) return null;
-        if(unmodifiableStars != null) return unmodifiableStars;
+        if (!finished) return null;
+        if (unmodifiableStars != null) return unmodifiableStars;
         return (unmodifiableStars = Collections.unmodifiableList(starLocations));
     }
 
     public List<StarConnection> getConnections() {
-        if(!finished) return null;
-        if(unmodifiableConnections != null) return unmodifiableConnections;
+        if (!finished) return null;
+        if (unmodifiableConnections != null) return unmodifiableConnections;
         return (unmodifiableConnections = Collections.unmodifiableList(connections));
     }
 

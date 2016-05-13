@@ -1,7 +1,5 @@
 package hellfirepvp.astralsorcery.client.sky;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.IRenderHandler;
@@ -27,11 +25,11 @@ public class RenderSkybox extends IRenderHandler {
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
-        if(!astralSky.isInitialized() && world.provider.getDimension() == 0) { //DimID == 0 should always be the case tho.
+        if (!astralSky.isInitialized() && world.provider.getDimension() == 0) { //DimID == 0 should always be the case tho.
             astralSky.setInitialized(world.getWorldInfo().getSeed());
         }
 
-        if(otherSkyRenderer != null) {
+        if (otherSkyRenderer != null) {
             //Expecting a world renderer that does not render the whole sky, only a part of it.
             //Its the overworld after all. The sky "should" not be changed Kappa
             otherSkyRenderer.render(partialTicks, world, mc);

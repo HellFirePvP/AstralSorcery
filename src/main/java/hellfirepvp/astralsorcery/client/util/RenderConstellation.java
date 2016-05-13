@@ -17,8 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,7 +42,7 @@ public class RenderConstellation {
         double uLength = dirU.length();
         RenderAstralSkybox.TEX_CONNECTION.bind();
         for (int j = 0; j < 2; j++) {
-            for(StarConnection con : c.getConnections()) {
+            for (StarConnection con : c.getConnections()) {
                 vb.begin(7, DefaultVertexFormats.POSITION_TEX);
                 float brightness = brFunc.getBrightness();
                 GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
@@ -67,7 +65,7 @@ public class RenderConstellation {
         }
 
         RenderAstralSkybox.TEX_STAR_1.bind();
-        for(StarLocation star : c.getStars()) {
+        for (StarLocation star : c.getStars()) {
             vb.begin(7, DefaultVertexFormats.POSITION_TEX);
             float brightness = brFunc.getBrightness();
             GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
@@ -98,13 +96,13 @@ public class RenderConstellation {
 
         Vector3 offsetVec = new Vector3(offsetX, offsetY, zLevel);
         RenderAstralSkybox.TEX_CONNECTION.bind();
-        if(isKnown) {
+        if (isKnown) {
             for (int j = 0; j < 2; j++) {
                 for (StarConnection sc : c.getConnections()) {
                     float brightness = func.getBrightness();
-                    if(applyStarBrightness) {
+                    if (applyStarBrightness) {
                         float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
-                        if(starBr <= 0.23F) {
+                        if (starBr <= 0.23F) {
                             continue;
                         }
                         brightness *= (starBr * 2);
@@ -139,16 +137,16 @@ public class RenderConstellation {
         for (StarLocation sl : c.getStars()) {
 
             float brightness = func.getBrightness();
-            if(applyStarBrightness) {
+            if (applyStarBrightness) {
                 float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
-                if(starBr <= 0.23F) {
+                if (starBr <= 0.23F) {
                     continue;
                 }
                 brightness *= (starBr * 2);
             }
 
             vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-            if(isKnown) {
+            if (isKnown) {
                 GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
             } else {
                 GlStateManager.color(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);

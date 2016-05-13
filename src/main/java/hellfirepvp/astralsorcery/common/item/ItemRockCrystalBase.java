@@ -11,7 +11,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Keyboard;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -44,8 +43,8 @@ public class ItemRockCrystalBase extends Item {
 
     protected void addTooltip(ItemStack stack, List<String> tooltip, boolean isShiftDown) {
         CrystalProperties prop = getCrystalProperties(stack);
-        if(prop != null) {
-            if(isShiftDown) {
+        if (prop != null) {
+            if (isShiftDown) {
                 tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.size") + ": " + TextFormatting.BLUE + prop.getSize());
                 tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.purity") + ": " + TextFormatting.BLUE + prop.getPurity() + "%");
                 tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.collectivity") + ": " + TextFormatting.BLUE + prop.getCollectiveCapability() + "%");
@@ -56,7 +55,7 @@ public class ItemRockCrystalBase extends Item {
     }
 
     public static void applyCrystalProperties(ItemStack stack, CrystalProperties properties) {
-        if(!(stack.getItem() instanceof ItemRockCrystalBase)) return;
+        if (!(stack.getItem() instanceof ItemRockCrystalBase)) return;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
         NBTTagCompound crystalProp = new NBTTagCompound();
@@ -67,10 +66,10 @@ public class ItemRockCrystalBase extends Item {
     }
 
     public static CrystalProperties getCrystalProperties(ItemStack stack) {
-        if(!(stack.getItem() instanceof ItemRockCrystalBase)) return null;
+        if (!(stack.getItem() instanceof ItemRockCrystalBase)) return null;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
-        if(!cmp.hasKey("crystalProperties")) return null;
+        if (!cmp.hasKey("crystalProperties")) return null;
         NBTTagCompound prop = cmp.getCompoundTag("crystalProperties");
         Integer size = prop.getInteger("size");
         Integer purity = prop.getInteger("purity");

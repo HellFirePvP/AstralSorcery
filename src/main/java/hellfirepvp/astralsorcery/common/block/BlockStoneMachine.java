@@ -60,7 +60,7 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if(type == null) return null;
+        if (type == null) return null;
         return type.provideTileEntity(world, state);
     }
 
@@ -82,7 +82,7 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
     }
 
     @Override
-    protected BlockStateContainer createBlockState(){
+    protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, MACHINE_TYPE);
     }
 

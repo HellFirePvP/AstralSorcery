@@ -50,5 +50,5 @@ public class EntityItemHighlighted extends EntityItem {
         int colorInt = this.getDataManager().get(DATA_COLOR);
         return new Color(colorInt, false);
     }
-    
+
 }

@@ -3,9 +3,9 @@ package hellfirepvp.astralsorcery.client;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
+import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
-import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
@@ -62,7 +62,7 @@ public class ClientProxy extends CommonProxy {
         switch (ID) {
             case 0: {
                 Entity e = world.getEntityByID(x); //Suggested entity id;
-                if(e == null || !(e instanceof EntityTelescope)) {
+                if (e == null || !(e instanceof EntityTelescope)) {
                     AstralSorcery.log.info("Tried opening Telescope GUI without valid telescope entity?");
                     return null;
                 } else {
@@ -107,9 +107,9 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerFromSubItems(Item item, String name) {
-        if(item instanceof IMetaItem) {
+        if (item instanceof IMetaItem) {
             int[] additionalMetas = ((IMetaItem) item).getSubItems();
-            if(additionalMetas != null) {
+            if (additionalMetas != null) {
                 for (int meta : additionalMetas) {
                     registerItemRender(item, meta, name);
                 }

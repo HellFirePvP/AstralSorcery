@@ -99,7 +99,7 @@ public class GuiTelescope extends GuiScreen {
         Map<Rectangle, Integer> cells = new HashMap<Rectangle, Integer>();
         Map<Integer, ConstellationInformation> starRectangles = new HashMap<Integer, ConstellationInformation>();
 
-        if(world.provider.getDimension() == 0 && canSeeSky) {
+        if (world.provider.getDimension() == 0 && canSeeSky) {
             int wstep = guiWidth / 4;
             int hstep = guiHeight / 2;
             int cnt = 0;
@@ -112,7 +112,7 @@ public class GuiTelescope extends GuiScreen {
                     zLevel -= 1;
 
                     cells.put(new Rectangle(offsetX, offsetZ, wstep, hstep), cnt);
-                    if(stars.isPresent()) {
+                    if (stars.isPresent()) {
                         ConstellationInformation info = new ConstellationInformation(stars.get(), constellations[cnt]);
                         starRectangles.put(cnt, info);
                     }
@@ -132,8 +132,8 @@ public class GuiTelescope extends GuiScreen {
     }
 
     private void drawDrawnLines(final Random r, final float pTicks) {
-        if(!canStartDrawing()) {
-            if(currentLinesCell != -1) {
+        if (!canStartDrawing()) {
+            if (currentLinesCell != -1) {
                 clearLines();
                 abortDrawing();
             }
@@ -155,7 +155,7 @@ public class GuiTelescope extends GuiScreen {
                 drawLine(l.start, l.end, func, linebreadth, true);
             }
 
-            if(currentDrawCell != -1 && start != null && end != null) {
+            if (currentDrawCell != -1 && start != null && end != null) {
                 Point adjStart = new Point(start.x - guiLeft, start.y - guiTop);
                 Point adjEnd = new Point(end.x - guiLeft, end.y - guiTop);
                 drawLine(adjStart, adjEnd, func, linebreadth, false);
@@ -168,7 +168,7 @@ public class GuiTelescope extends GuiScreen {
         VertexBuffer vb = tes.getBuffer();
 
         float brightness;
-        if(applyFunc) {
+        if (applyFunc) {
             brightness = func.getBrightness();
         } else {
             brightness = 1F;
@@ -220,7 +220,7 @@ public class GuiTelescope extends GuiScreen {
     private void drawGridBackground(float partialTicks, boolean canSeeSky) {
         World renderWorld = Minecraft.getMinecraft().theWorld;
         int rgbFrom, rgbTo;
-        if(canSeeSky) {
+        if (canSeeSky) {
             float starBr = renderWorld.getStarBrightness(partialTicks) * 2;
             rgbFrom = calcRGBFrom(starBr);
             rgbTo = calcRGBTo(starBr);
@@ -238,7 +238,7 @@ public class GuiTelescope extends GuiScreen {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
                 BlockPos highest = renderWorld.getTopSolidOrLiquidBlock(other);
-                if(highest.getY() > other.getY()) {
+                if (highest.getY() > other.getY()) {
                     return false;
                 }
             }
@@ -378,7 +378,7 @@ public class GuiTelescope extends GuiScreen {
     private void tryStartDrawing(int mouseX, int mouseY) {
         if (currentDrawCell != -1) return;
 
-        if(!canStartDrawing()) return;
+        if (!canStartDrawing()) return;
 
         int cell = findCurrentCell(mouseX, mouseY);
         if (currentLinesCell == -1) {
@@ -451,29 +451,29 @@ public class GuiTelescope extends GuiScreen {
     }
 
     private void checkConstellation(int currentLinesCell, List<Line> drawnLines) {
-        if(!currentInformation.starRectangleMap.containsKey(currentLinesCell)) return;
+        if (!currentInformation.starRectangleMap.containsKey(currentLinesCell)) return;
 
         ConstellationInformation constellationInfo = currentInformation.starRectangleMap.get(currentLinesCell);
         Constellation c = constellationInfo.constellation;
-        if(c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) return;
+        if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) return;
 
         List<StarConnection> sc = c.getConnections();
-        if(sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
+        if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
 
         Map<StarLocation, Rectangle> stars = constellationInfo.starRectangles;
 
         for (StarConnection connection : sc) {
             Rectangle fromRect = stars.get(connection.from);
-            if(fromRect == null) {
+            if (fromRect == null) {
                 AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                 return;
             }
             Rectangle toRect = stars.get(connection.to);
-            if(toRect == null) {
+            if (toRect == null) {
                 AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
                 return;
             }
-            if(!containsMatch(drawnLines, fromRect, toRect)) {
+            if (!containsMatch(drawnLines, fromRect, toRect)) {
                 return;
             }
         }
@@ -490,7 +490,7 @@ public class GuiTelescope extends GuiScreen {
             Point end = l.end;
             start = new Point(start.x + guiLeft, start.y + guiTop);
             end = new Point(end.x + guiLeft, end.y + guiTop);
-            if((r1.contains(start) && r2.contains(end)) ||
+            if ((r1.contains(start) && r2.contains(end)) ||
                     (r2.contains(start) && r1.contains(end))) {
                 return true;
             }

@@ -5,13 +5,10 @@ import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
-import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
-import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.AssetLoader;
-import hellfirepvp.astralsorcery.common.util.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -27,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -56,8 +52,8 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
 
-    private static final int[] starAmountMap = new int[] {200, 200, 100, 100, 100, /**/ 200, 100, 50, 50, 100, /**/ 50, 50, 100, 100, 100, /**/ 50, 50, 100, 100, 100 };
-    private static final double[] starSizeMap = new double[] {1, 1, 1, 1.2, 1,    /**/ 1, 1.1, 1.2, 1, 1,     /**/ 1.2, 1.1, 1, 1, 1,      /**/ 1.2, 1.3, 1, 1, 1};
+    private static final int[] starAmountMap = new int[]{200, 200, 100, 100, 100, /**/ 200, 100, 50, 50, 100, /**/ 50, 50, 100, 100, 100, /**/ 50, 50, 100, 100, 100};
+    private static final double[] starSizeMap = new double[]{1, 1, 1, 1.2, 1,    /**/ 1, 1.1, 1.2, 1, 1,     /**/ 1.2, 1.1, 1, 1, 1,      /**/ 1.2, 1.3, 1, 1, 1};
     private static StarDList[] starLists = new StarDList[0];
 
     @Override
@@ -319,15 +315,15 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 
-        if(CelestialHandler.solarEclipse) {
+        if (CelestialHandler.solarEclipse) {
 
         } else {
             renderSun();
         }
 
-        if(CelestialHandler.lunarEclipse) {
+        if (CelestialHandler.lunarEclipse) {
             int eclTick = CelestialHandler.lunarEclipseTick;
-            if(eclTick >= CelestialHandler.LUNAR_ECLIPSE_HALF_DUR) { //fading out
+            if (eclTick >= CelestialHandler.LUNAR_ECLIPSE_HALF_DUR) { //fading out
                 eclTick -= CelestialHandler.LUNAR_ECLIPSE_HALF_DUR;
             } else {
                 eclTick = CelestialHandler.LUNAR_ECLIPSE_HALF_DUR - eclTick;
@@ -405,10 +401,10 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     private void renderConstellations(final World w, final float partialTicks) {
         long wTime = w.getWorldTime() % 24000;
-        if(wTime < 12000) return; //Daytime.
+        if (wTime < 12000) return; //Daytime.
         float rainDim = 1.0F - w.getRainStrength(partialTicks);
         final float brightness = w.getStarBrightness(partialTicks) * rainDim;
-        if(brightness <= 0.0F) return;
+        if (brightness <= 0.0F) return;
         final Random flRand = new Random(w.getSeed());
 
         Tessellator tes = Tessellator.getInstance();
@@ -417,9 +413,9 @@ public class RenderAstralSkybox extends IRenderHandler {
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         tes.draw();
         List<Constellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
-        for(Constellation c : toShow) {
+        for (Constellation c : toShow) {
             Tier tier = c.queryTier();
-            if(!ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) continue;
+            if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) continue;
 
             RenderConstellation.renderConstellation(tier, c, tier.getRenderInformation().offset, new RenderConstellation.BrightnessFunction() {
                 @Override
@@ -476,7 +472,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             Tessellator tes = Tessellator.getInstance();
             VertexBuffer vb = tes.getBuffer();
             for (StarDList list : starLists) {
-                if(list.glList > 0) {
+                if (list.glList > 0) {
                     float sinBr = RenderConstellation.stdFlicker(w.getWorldTime(), partialTicks, list.sinDivisor) - brightness;
                     GlStateManager.color(brightness, brightness, brightness, sinBr < 0 ? 0 : sinBr);
                     list.resource.bind();

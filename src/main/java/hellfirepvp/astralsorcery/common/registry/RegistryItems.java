@@ -67,7 +67,7 @@ public class RegistryItems {
 
     private static <T extends Item> T registerItem(T item) {
         String simpleName = item.getClass().getSimpleName();
-        if(item instanceof ItemBlock) {
+        if (item instanceof ItemBlock) {
             simpleName = ((ItemBlock) item).getBlock().getClass().getSimpleName();
         }
         return registerItem(item, simpleName);
@@ -98,19 +98,19 @@ public class RegistryItems {
     private static <T extends IForgeRegistryEntry> void register(T item, String name) {
         GameRegistry.register(item);
 
-        if(item instanceof Item) {
+        if (item instanceof Item) {
             registerItemInformations((Item) item, name);
         }
     }
 
     private static <T extends Item> void registerItemInformations(T item, String name) {
         if (item instanceof IItemVariants) {
-            for (int i = 0; i < ((IItemVariants)item).getVariants().length; i++) {
+            for (int i = 0; i < ((IItemVariants) item).getVariants().length; i++) {
                 int m = i;
                 if (((IItemVariants) item).getVariantMetadatas() != null) {
                     m = ((IItemVariants) item).getVariantMetadatas()[i];
                 }
-                String vName = name + "_" + ((IItemVariants)item).getVariants()[i];
+                String vName = name + "_" + ((IItemVariants) item).getVariants()[i];
                 if (((IItemVariants) item).getVariants()[i].equals("*")) {
                     vName = name;
                 }

@@ -23,7 +23,7 @@ public class DataActiveCelestials extends AbstractData {
 
     private boolean gotUpdated = false;
 
-    private List<Constellation> activeConstellations = new LinkedList<Constellation>();
+    private List<Constellation> activeConstellations = new LinkedList<>();
 
     @Override
     public boolean needsUpdate() {
@@ -37,9 +37,9 @@ public class DataActiveCelestials extends AbstractData {
     public void updateIterations(Collection<CelestialHandler.TierIteration> iterations) {
         List<Constellation> list = new LinkedList<Constellation>();
         for (CelestialHandler.TierIteration ti : iterations) {
-            if(ti.isShowing()) {
+            if (ti.isShowing()) {
                 Constellation c = ti.getCurrentConstellation();
-                if(c != null) {
+                if (c != null) {
                     list.add(c);
                 }
             }
@@ -83,7 +83,7 @@ public class DataActiveCelestials extends AbstractData {
 
     @Override
     public void readRawFromPacket(NBTTagCompound compound) {
-        if(!compound.hasKey("constellations")) {
+        if (!compound.hasKey("constellations")) {
             this.activeConstellations = new LinkedList<Constellation>();
             return;
         }
@@ -92,7 +92,7 @@ public class DataActiveCelestials extends AbstractData {
         for (int i = 0; i < list.tagCount(); i++) {
             String str = list.getStringTagAt(i);
             Constellation c = ConstellationRegistry.getConstellationByName(str);
-            if(c == null) {
+            if (c == null) {
                 AstralSorcery.log.info("Received unknown constellation from server: " + str);
             } else {
                 this.activeConstellations.add(c);
@@ -102,7 +102,7 @@ public class DataActiveCelestials extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
-        if(!(serverData instanceof DataActiveCelestials)) return;
+        if (!(serverData instanceof DataActiveCelestials)) return;
 
         this.activeConstellations = ((DataActiveCelestials) serverData).activeConstellations;
     }

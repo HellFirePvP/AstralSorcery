@@ -44,13 +44,13 @@ public class CelestialHandler {
     public static int lunarEclipseTick = 0;
 
     public static void informTick(World world) {
-        if(world.provider.getDimension() != 0) return;
+        if (world.provider.getDimension() != 0) return;
 
-        if(!seedInit) {
+        if (!seedInit) {
             savedSeed = world.getSeed();
             seedInit = true;
         }
-        if(rand == null) {
+        if (rand == null) {
             rand = new Random(savedSeed);
         }
 
@@ -61,10 +61,10 @@ public class CelestialHandler {
         int trackingDifference = days - lastTrackedDate;
 
         lastTrackedDate = days;
-        if(trackingDifference > 0) {
+        if (trackingDifference > 0) {
             //Calculating until that day is reached.
             scheduleDayProgression(trackingDifference);
-        } else if(trackingDifference < 0) {
+        } else if (trackingDifference < 0) {
             //Resetting and recalculating until specified day is reached!
             rand = new Random(savedSeed);
             constellationIterations.clear();
@@ -75,7 +75,7 @@ public class CelestialHandler {
     private static void calcSolarLunarEclipseTimes(World world) {
         int solarTime = (int) ((world.getWorldTime() % 888000) - 864000);
         dayOfSolarEclipse = solarTime > 0;
-        if(solarTime > 3600 && solarTime < 8400) {
+        if (solarTime > 3600 && solarTime < 8400) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
             solarEclipseTick = solarTime - 3600;
@@ -87,7 +87,7 @@ public class CelestialHandler {
 
         int lunarTime = (int) ((world.getWorldTime() % 1656000) - 1632000);
         dayOfLunarEclipse = lunarTime > 0;
-        if(lunarTime > 15600 && lunarTime < 20400) {
+        if (lunarTime > 15600 && lunarTime < 20400) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
             lunarEclipseTick = lunarTime - 15600;
@@ -111,26 +111,26 @@ public class CelestialHandler {
     }
 
     private static void scheduleDayProgression(boolean sendUpdates) {
-        for(Tier tier : constellationIterations.keySet()) {
+        for (Tier tier : constellationIterations.keySet()) {
             constellationIterations.get(tier).nextDay();
         }
 
-        for(Tier t : ConstellationRegistry.ascendingTiers()) {
+        for (Tier t : ConstellationRegistry.ascendingTiers()) {
             TierIteration ti;
-            if(!constellationIterations.containsKey(t)) {
+            if (!constellationIterations.containsKey(t)) {
                 ti = new TierIteration(t);
                 constellationIterations.put(t, ti);
             } else {
                 ti = constellationIterations.get(t);
             }
 
-            if(ti.isShowing()) continue; //We don't need to change if the tier agrees that it doesn't need to vanish.
-            if(ti.shouldShow() && rand.nextFloat() < t.getShowupChance()) {
+            if (ti.isShowing()) continue; //We don't need to change if the tier agrees that it doesn't need to vanish.
+            if (ti.shouldShow() && rand.nextFloat() < t.getShowupChance()) {
                 ti.setShowing();
             }
         }
 
-        if(sendUpdates) {
+        if (sendUpdates) {
             ((DataActiveCelestials) SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS)).updateIterations(constellationIterations.values());
         }
 
@@ -138,23 +138,23 @@ public class CelestialHandler {
     }
 
     public static Float getCurrentDistribution(Constellation c) {
-        if(starlightDistribution == null) return 0F;
+        if (starlightDistribution == null) return 0F;
         return starlightDistribution.getDistributionCharge(c);
     }
 
     private static void computeDistribution() {
-        Map<Tier, StarlightDistribution.ConstellationDistribution> resultDistribution = new HashMap<Tier, StarlightDistribution.ConstellationDistribution>();
+        Map<Tier, StarlightDistribution.ConstellationDistribution> resultDistribution = new HashMap<>();
         for (Tier t : ConstellationRegistry.ascendingTiers()) {
             TierIteration ti = constellationIterations.get(t);
             Constellation active = null;
             boolean activeShowing = false;
             int cIndex = -1;
-            if(ti != null) {
-                if(ti.getCurrentConstellation() != null) {
+            if (ti != null) {
+                if (ti.getCurrentConstellation() != null) {
                     active = ti.getCurrentConstellation();
                     activeShowing = ti.isShowing();
                 }
-                if(active != null) {
+                if (active != null) {
                     List<Constellation> constellations = t.getConstellations();
                     for (int i = 0; i < constellations.size(); i++) {
                         Constellation c = constellations.get(i);
@@ -164,12 +164,12 @@ public class CelestialHandler {
                     }
                 }
             }
-            Map<Constellation, Float> distribution = new HashMap<Constellation, Float>();
+            Map<Constellation, Float> distribution = new HashMap<>();
             List<Constellation> constellations = t.getConstellations();
             float maxDst = constellations.size() / 2;
             for (int i = 0; i < constellations.size(); i++) {
                 Constellation c = constellations.get(i);
-                if(i != cIndex) {
+                if (i != cIndex) {
                     float distance = Math.abs(cIndex - i);
                     float perc = 1F - (distance / maxDst);
                     distribution.put(c, MIN_DISTRIBUTION_RATE + (perc * DISTRIBUTION_MULTIPLIER));
@@ -195,7 +195,7 @@ public class CelestialHandler {
 
         //We only let it vanish, if the conditions are no longer met.
         public void nextDay() {
-            if(!shouldShow())
+            if (!shouldShow())
                 showing = false;
         }
 

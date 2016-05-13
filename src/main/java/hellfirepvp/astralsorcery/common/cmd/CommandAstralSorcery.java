@@ -11,7 +11,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
@@ -61,21 +60,21 @@ public class CommandAstralSorcery extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if(args.length == 0) {
+        if (args.length == 0) {
             sender.addChatMessage(new TextComponentString("§cNot enough arguments."));
             sender.addChatMessage(new TextComponentString("§cType \"/astralsorcery help\" for help"));
             return;
         }
-        if(args.length >= 1) {
+        if (args.length >= 1) {
             String identifier = args[0];
-            if(identifier.equalsIgnoreCase("help")) {
+            if (identifier.equalsIgnoreCase("help")) {
                 displayHelp(sender);
-            } else if(identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
-                if(args.length == 1) {
+            } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
+                if (args.length == 1) {
                     listConstellations(sender);
-                } else if(args.length == 2) {
+                } else if (args.length == 2) {
                     listConstellations(server, sender, args[1]);
-                } else if(args.length == 3) {
+                } else if (args.length == 3) {
                     addConstellations(server, sender, args[1], args[2]);
                 }
             }
@@ -90,34 +89,34 @@ public class CommandAstralSorcery extends CommandBase {
             sender.addChatMessage(new TextComponentString("§cSpecified player (" + otherPlayerName + ") is not online!"));
             return;
         }
-        if(other == null) {
+        if (other == null) {
             sender.addChatMessage(new TextComponentString("§cSpecified player (" + otherPlayerName + ") is not online!"));
             return;
         }
         PlayerProgress progress = ResearchManager.getProgress(other.getUniqueID());
-        if(progress == null) {
+        if (progress == null) {
             sender.addChatMessage(new TextComponentString("§cCould not get Progress for (" + otherPlayerName + ") !"));
             return;
         }
-        if(argument.equals("all")) {
+        if (argument.equals("all")) {
             Collection<Constellation> constellations = ConstellationRegistry.getAllConstellations();
-            if(!ResearchManager.discoverConstellations(constellations, other)) {
+            if (!ResearchManager.discoverConstellations(constellations, other)) {
                 sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
                 return;
             }
             other.addChatMessage(new TextComponentString("§aDiscovered all Constellations!"));
             sender.addChatMessage(new TextComponentString("§aSuccess!"));
-        } else if(argument.equals("reset")) {
+        } else if (argument.equals("reset")) {
             ResearchManager.wipeKnowledge(other);
             other.addChatMessage(new TextComponentString("§cYour research has been reset!"));
             sender.addChatMessage(new TextComponentString("§aSuccess!"));
         } else {
             Constellation c = ConstellationRegistry.getConstellationByName(argument);
-            if(c == null) {
+            if (c == null) {
                 sender.addChatMessage(new TextComponentString("§cUnknown constellation: " + argument));
                 return;
             }
-            if(!ResearchManager.discoverConstellation(c, other)) {
+            if (!ResearchManager.discoverConstellation(c, other)) {
                 sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
                 return;
             }
@@ -134,17 +133,17 @@ public class CommandAstralSorcery extends CommandBase {
             sender.addChatMessage(new TextComponentString("§cSpecified player (" + otherPlayerName + ") is not online!"));
             return;
         }
-        if(other == null) {
+        if (other == null) {
             sender.addChatMessage(new TextComponentString("§cSpecified player (" + otherPlayerName + ") is not online!"));
             return;
         }
         PlayerProgress progress = ResearchManager.getProgress(other.getUniqueID());
-        if(progress == null) {
+        if (progress == null) {
             sender.addChatMessage(new TextComponentString("§cCould not get Progress for (" + otherPlayerName + ") !"));
             return;
         }
         sender.addChatMessage(new TextComponentString("§c" + otherPlayerName + " has discovered the constellations:"));
-        if(progress.getKnownConstellations().size() == 0) {
+        if (progress.getKnownConstellations().size() == 0) {
             sender.addChatMessage(new TextComponentString("§c NONE"));
             return;
         }
@@ -160,12 +159,12 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void listConstellations(ICommandSender sender) {
-        for(Tier tier : ConstellationRegistry.ascendingTiers()) {
+        for (Tier tier : ConstellationRegistry.ascendingTiers()) {
             sender.addChatMessage(new TextComponentString("§cTier: " + tier.tierNumber() + " - showupChance: " + tier.getShowupChance()));
-            for(Constellation c : tier.getConstellations()) {
+            for (Constellation c : tier.getConstellations()) {
                 sender.addChatMessage(new TextComponentString("§7" + c.getName()));
             }
         }
     }
-    
+
 }

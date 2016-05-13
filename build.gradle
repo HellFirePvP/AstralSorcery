@@ -25,6 +25,11 @@ minecraft {
     mappings = "snapshot_20160312"
 }
 
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
 dependencies {
 
 }

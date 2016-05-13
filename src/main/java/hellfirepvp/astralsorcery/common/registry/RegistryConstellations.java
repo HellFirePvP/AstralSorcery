@@ -6,7 +6,8 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 
-import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
+import static hellfirepvp.astralsorcery.common.lib.Constellations.bigDipper;
+import static hellfirepvp.astralsorcery.common.lib.Constellations.orion;
 
 /**
  * This class is part of the Astral Sorcery Mod

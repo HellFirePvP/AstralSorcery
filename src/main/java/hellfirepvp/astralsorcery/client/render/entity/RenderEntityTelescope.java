@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.entity;
 
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
-import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +13,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 23:30
  */
-public class  RenderEntityTelescope<T extends EntityTelescope> extends Render<T> {
+public class RenderEntityTelescope<T extends EntityTelescope> extends Render<T> {
 
     protected RenderEntityTelescope(RenderManager renderManager) {
         super(renderManager);
@@ -36,7 +35,7 @@ public class  RenderEntityTelescope<T extends EntityTelescope> extends Render<T>
 
         @Override
         public Render<? super EntityTelescope> createRenderFor(RenderManager manager) {
-            return new RenderEntityTelescope<EntityTelescope>(manager);
+            return new RenderEntityTelescope<>(manager);
         }
 
     }

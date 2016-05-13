@@ -19,9 +19,9 @@ public class StarlightDistribution {
 
     public Float getDistributionCharge(Constellation c) {
         Tier t = c.queryTier();
-        if(t == null) return 0F;
+        if (t == null) return 0F;
         ConstellationDistribution cd = currentDistributions.get(t);
-        if(!cd.distributionPercentage.containsKey(c)) return 0F;
+        if (!cd.distributionPercentage.containsKey(c)) return 0F;
         return cd.distributionPercentage.get(c);
     }
 

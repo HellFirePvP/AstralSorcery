@@ -27,7 +27,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<String> knownConstellations = new ArrayList<String>();
     public int progressTier = 0;
 
-    public PktSyncKnowledge() {}
+    public PktSyncKnowledge() {
+    }
 
     public PktSyncKnowledge(byte state) {
         this.state = state;
@@ -43,7 +44,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.state = buf.readByte();
 
         int cLength = buf.readInt();
-        if(cLength != -1) {
+        if (cLength != -1) {
             knownConstellations = new ArrayList<String>();
             for (int i = 0; i < cLength; i++) {
                 String val = ByteBufUtils.readString(buf);
@@ -57,7 +58,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public void toBytes(ByteBuf buf) {
         buf.writeByte(state);
 
-        if(knownConstellations != null) {
+        if (knownConstellations != null) {
             buf.writeInt(knownConstellations.size());
             for (String dat : knownConstellations) {
                 ByteBufUtils.writeString(buf, dat);

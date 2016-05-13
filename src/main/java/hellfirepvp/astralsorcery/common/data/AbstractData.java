@@ -18,7 +18,7 @@ public abstract class AbstractData {
 
     public final void markDirty() {
         AbstractDataProvider<? extends AbstractData> provider = Registry.getProvider(getProviderID());
-        if(provider != null) {
+        if (provider != null) {
             SyncDataHolder.markForUpdate(provider.getKey());
         }
     }

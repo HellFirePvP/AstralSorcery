@@ -13,12 +13,13 @@ import java.util.Arrays;
  * Gadomancy is Open Source and distributed under the
  * GNU LESSER GENERAL PUBLIC LICENSE
  * for more read the LICENSE file
- *
+ * <p>
  * Created by makeo @ 02.12.13 18:45
  */
 public class Injector {
     Class clazz;
     Object object;
+
     public Injector(Object object, Class clazz) {
         this.object = object;
         this.clazz = clazz;
@@ -103,7 +104,7 @@ public class Injector {
         try {
             method.setAccessible(true);
             Object result = method.invoke(object, params);
-            if(result != null)
+            if (result != null)
                 return (T) result;
         } catch (Exception e) {//InvocationTargetException | IllegalAccessException | ClassCastException
             e.printStackTrace();
@@ -113,7 +114,7 @@ public class Injector {
 
     private Class[] extractClasses(Object... objects) {
         Class[] classes = new Class[objects.length];
-        for(int i = 0; i < objects.length; i++)
+        for (int i = 0; i < objects.length; i++)
             classes[i] = objects[i].getClass();
         return classes;
     }
@@ -129,7 +130,7 @@ public class Injector {
 
     public boolean setField(Field field, Object value) {
         try {
-            if(Modifier.isFinal(field.getModifiers())) {
+            if (Modifier.isFinal(field.getModifiers())) {
                 Field modifiers = Field.class.getDeclaredField("modifiers");
                 modifiers.setAccessible(true);
                 modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
@@ -153,11 +154,11 @@ public class Injector {
         return null;
     }
 
-    public  <T> T getField(Field field) {
+    public <T> T getField(Field field) {
         try {
             field.setAccessible(true);
             Object result = field.get(object);
-            if(result != null)
+            if (result != null)
                 return (T) result;
         } catch (Exception e) {//IllegalAccessException | ClassCastException
             e.printStackTrace();
@@ -174,8 +175,8 @@ public class Injector {
     }
 
     public static Method findMethod(Class clazz, Class returnType, Class[] paramTypes) {
-        for(Method m : clazz.getDeclaredMethods()) {
-            if(Arrays.equals(m.getParameterTypes(), paramTypes) && m.getReturnType().equals(returnType)) {
+        for (Method m : clazz.getDeclaredMethods()) {
+            if (Arrays.equals(m.getParameterTypes(), paramTypes) && m.getReturnType().equals(returnType)) {
                 return m;
             }
         }
@@ -191,8 +192,8 @@ public class Injector {
     }
 
     public static Field findField(Class clazz, Class type) {
-        for(Field f : clazz.getDeclaredFields()) {
-            if(f.getType().equals(type)) {
+        for (Field f : clazz.getDeclaredFields()) {
+            if (f.getType().equals(type)) {
                 return f;
             }
         }
@@ -209,7 +210,7 @@ public class Injector {
     }
 
     public static Method getMethod(String name, Class clazz, Class... classes) {
-        if(clazz == null)
+        if (clazz == null)
             return null;
 
         try {

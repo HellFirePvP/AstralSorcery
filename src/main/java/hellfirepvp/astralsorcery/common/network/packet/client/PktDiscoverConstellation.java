@@ -23,7 +23,8 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
 
     private String discoveredConstellation;
 
-    public PktDiscoverConstellation() {}
+    public PktDiscoverConstellation() {
+    }
 
     public PktDiscoverConstellation(String discoveredConstellation) {
         this.discoveredConstellation = discoveredConstellation;
@@ -42,7 +43,7 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
     @Override
     public IMessage onMessage(PktDiscoverConstellation message, MessageContext ctx) {
         Constellation received = ConstellationRegistry.getConstellationByName(message.discoveredConstellation);
-        if(received == null) {
+        if (received == null) {
             AstralSorcery.log.info("Received unknown constellation from client: " + message.discoveredConstellation);
         } else {
             ResearchManager.discoverConstellation(received, ctx.getServerHandler().playerEntity);

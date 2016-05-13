@@ -11,12 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class BlockOpaqueCosmetic extends Block implements BlockCustomName {
     }
 
     @Override
-    protected BlockStateContainer createBlockState(){
+    protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, BLOCK_TYPE);
     }
 

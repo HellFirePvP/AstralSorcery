@@ -42,7 +42,7 @@ public class EventHandlerNetwork {
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent event) {
-        if(event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END) return;
         serverTick++;
 
         SyncDataHolder.doNecessaryUpdates();

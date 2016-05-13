@@ -55,11 +55,11 @@ public abstract class OverlayTextPolicy {
         }
 
         private float evaluateAlpha(String toRenderFully, int index, float posShowAtPercent, float currentRenderPercent, float alpha) {
-            if(currentRenderPercent > 0.9F) return evaluteEndAlpha(currentRenderPercent, alpha);
+            if (currentRenderPercent > 0.9F) return evaluteEndAlpha(currentRenderPercent, alpha);
 
-            if(currentRenderPercent < posShowAtPercent) return 0F;
+            if (currentRenderPercent < posShowAtPercent) return 0F;
             float diff = currentRenderPercent - posShowAtPercent;
-            if(diff > 0.2F) return alpha;
+            if (diff > 0.2F) return alpha;
             return alpha * (diff / 0.2F);
         }
 

@@ -22,24 +22,24 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onTick(TickEvent.WorldTickEvent event) {
-        if(event.phase != TickEvent.Phase.END) return;
-        if(event.world.provider.getDimension() == 0) {
+        if (event.phase != TickEvent.Phase.END) return;
+        if (event.world.provider.getDimension() == 0) {
             CelestialHandler.informTick(event.world);
         }
     }
 
     @SubscribeEvent
     public void onJoin(EntityJoinWorldEvent event) {
-        if(event.getWorld().isRemote) return;
+        if (event.getWorld().isRemote) return;
 
         Entity joined = event.getEntity();
-        if(joined instanceof EntityItem && !(joined instanceof EntityItemHighlighted)) {
+        if (joined instanceof EntityItem && !(joined instanceof EntityItemHighlighted)) {
             EntityItem ei = (EntityItem) joined;
-            if(ei.getEntityItem() != null && (ei.getEntityItem().getItem() instanceof ItemConstellationPaper)) {
+            if (ei.getEntityItem() != null && (ei.getEntityItem().getItem() instanceof ItemConstellationPaper)) {
                 ei.setDead();
                 EntityItemHighlighted newItem = new EntityItemHighlighted(ei.worldObj, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
                 int dmg = ei.getEntityItem().getItemDamage();
-                if(dmg == 1) {
+                if (dmg == 1) {
                     newItem.applyColor(Color.GRAY);
                 } else {
                     newItem.applyColor(Color.BLUE);

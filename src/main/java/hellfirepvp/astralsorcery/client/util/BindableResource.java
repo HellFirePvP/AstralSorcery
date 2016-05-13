@@ -38,7 +38,7 @@ public class BindableResource {
     }
 
     public void allocateGlId() {
-        if(resource != null) return;
+        if (resource != null) return;
         resource = new SimpleTexture(new ResourceLocation(path));
         try {
             resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
@@ -50,7 +50,7 @@ public class BindableResource {
     }
 
     public void bind() {
-        if(resource == null) {
+        if (resource == null) {
             allocateGlId();
         }
         GlStateManager.bindTexture(resource.getGlTextureId());

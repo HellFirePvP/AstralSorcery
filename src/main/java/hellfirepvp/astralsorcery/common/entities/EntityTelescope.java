@@ -31,7 +31,7 @@ public class EntityTelescope extends EntityLivingBase {
 
     @Override
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
-        if(player.worldObj.isRemote) {
+        if (player.worldObj.isRemote) {
             player.openGui(AstralSorcery.instance, 0, player.worldObj, getEntityId(), 0, 0);
         }
         return EnumActionResult.SUCCESS;
@@ -48,7 +48,8 @@ public class EntityTelescope extends EntityLivingBase {
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {}
+    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+    }
 
     @Override
     public EnumHandSide getPrimaryHand() {

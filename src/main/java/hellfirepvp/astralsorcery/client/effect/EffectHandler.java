@@ -23,7 +23,8 @@ public final class EffectHandler {
 
     public static final Object lock = new Object();
 
-    private EffectHandler() {}
+    private EffectHandler() {
+    }
 
     public static EffectHandler getInstance() {
         return instance;
@@ -31,21 +32,21 @@ public final class EffectHandler {
 
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
-        if(event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             OverlayText.sheduleRender(overlayTexts, event.getResolution(), event.getPartialTicks());
         }
     }
 
     @SubscribeEvent
     public void onClTick(TickEvent.ClientTickEvent event) {
-        if(event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END) return;
 
         tick();
     }
 
     public OverlayText overlayText(String message, int tickTimeout, OverlayText.OverlayTextProperties properties) {
         OverlayText text;
-        if(properties == null) {
+        if (properties == null) {
             text = new OverlayText(message, tickTimeout);
         } else {
             text = new OverlayText(message, tickTimeout, properties);

@@ -14,12 +14,13 @@ public class AssetLoader {
 
     private static StringBuilder builder;
 
-    private AssetLoader() {}
+    private AssetLoader() {
+    }
 
     public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         builder = new StringBuilder();
         builder.append(AstralSorcery.MODID).append(':').append(location.location).append("/");
-        if(subLocation != null) {
+        if (subLocation != null) {
             builder.append(subLocation.getLocation()).append("/");
         }
         builder.append(name).append(suffix);

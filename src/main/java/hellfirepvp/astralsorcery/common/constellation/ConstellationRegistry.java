@@ -16,11 +16,11 @@ import java.util.TreeMap;
  */
 public class ConstellationRegistry {
 
-    private static TreeMap<Integer, Tier> tiers = new TreeMap<Integer, Tier>();
+    private static TreeMap<Integer, Tier> tiers = new TreeMap<>();
 
     public static void registerConstellation(int tier, Constellation constellation) {
         Tier t = getTier(tier);
-        if(t == null) {
+        if (t == null) {
             AstralSorcery.log.warn("Tried to register Constellation on TierID=" + tier + " which does not exist!");
             return;
         }
@@ -28,8 +28,8 @@ public class ConstellationRegistry {
     }
 
     public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp, Tier.AppearanceCondition condition) {
-        if(tiers.containsKey(tierNumber)) return;
-        if(tierNumber < 0 || (tierNumber > 0 && !tiers.containsKey(tierNumber - 1))) return;
+        if (tiers.containsKey(tierNumber)) return;
+        if (tierNumber < 0 || (tierNumber > 0 && !tiers.containsKey(tierNumber - 1))) return;
         Tier t = new Tier(tierNumber, chanceForShowingUp, renderInfo, condition);
         tiers.put(tierNumber, t);
     }
@@ -40,8 +40,8 @@ public class ConstellationRegistry {
 
     public static Constellation getConstellationByName(String name) {
         for (Tier tier : tiers.values()) {
-            for(Constellation c : tier.getConstellations()) {
-                if(c.getName().equals(name)) return c;
+            for (Constellation c : tier.getConstellations()) {
+                if (c.getName().equals(name)) return c;
             }
         }
         return null;
@@ -53,7 +53,7 @@ public class ConstellationRegistry {
 
     public static Collection<Tier> ascendingTiers() {
         LinkedList<Tier> sortedTiers = new LinkedList<Tier>();
-        for(Integer tierInt : tiers.keySet()) {
+        for (Integer tierInt : tiers.keySet()) {
             sortedTiers.addLast(tiers.get(tierInt));
         }
         return sortedTiers;
@@ -62,7 +62,7 @@ public class ConstellationRegistry {
     public static Collection<Constellation> getAllConstellations() {
         List<Constellation> constellations = new LinkedList<Constellation>();
         for (Tier t : ascendingTiers()) {
-            for(Constellation c : t.getConstellations()) constellations.add(c);
+            for (Constellation c : t.getConstellations()) constellations.add(c);
         }
         return constellations;
     }

@@ -31,7 +31,7 @@ public class AstralTransformer extends AccessTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         boolean needsTransform = transformedName.equalsIgnoreCase(WORLD);
-        if(!needsTransform) return super.transform(name, transformedName, bytes);
+        if (!needsTransform) return super.transform(name, transformedName, bytes);
 
         FMLLog.info("[AstralTransformer] Transforming " + name + " : " + transformedName);
 
@@ -39,9 +39,9 @@ public class AstralTransformer extends AccessTransformer {
         ClassReader reader = new ClassReader(bytes);
         reader.accept(node, 0);
 
-        if(transformedName.equalsIgnoreCase(WORLD)) {
+        if (transformedName.equalsIgnoreCase(WORLD)) {
             for (MethodNode mn : node.methods) {
-                if(mn.name.equalsIgnoreCase("getSunBrightnessFactor")) { //TODO check srgs
+                if (mn.name.equalsIgnoreCase("getSunBrightnessFactor")) { //TODO check srgs
                     mn.instructions.clear();
                     mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
                     mn.instructions.add(new VarInsnNode(Opcodes.FLOAD, 1));
@@ -52,7 +52,7 @@ public class AstralTransformer extends AccessTransformer {
                             false));
                     mn.instructions.add(new InsnNode(Opcodes.FRETURN));
                 }
-                if(mn.name.equalsIgnoreCase("getSunBrightnessBody")) { //TODO check srgs
+                if (mn.name.equalsIgnoreCase("getSunBrightnessBody")) { //TODO check srgs
                     mn.instructions.clear();
                     mn.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
                     mn.instructions.add(new VarInsnNode(Opcodes.FLOAD, 1));
