@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMessage> {
 
-    private Map<String, AbstractData> data = new HashMap<String, AbstractData>();
+    private Map<String, AbstractData> data = new HashMap<>();
     private boolean shouldSyncAll = false;
 
     public PktSyncData() {

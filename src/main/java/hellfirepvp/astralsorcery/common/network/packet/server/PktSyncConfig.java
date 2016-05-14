@@ -30,12 +30,12 @@ import java.util.List;
  */
 public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, IMessage> {
 
-    public List<SyncTuple> fields = new ArrayList<SyncTuple>();
+    public List<SyncTuple> fields = new ArrayList<>();
 
     @Override
     public void fromBytes(ByteBuf buf) {
         int count = buf.readByte();
-        fields = new ArrayList<SyncTuple>();
+        fields = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
             byte[] data = new byte[buf.readShort()];
@@ -64,7 +64,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
 
     @Override
     public void toBytes(ByteBuf buf) {
-        List<byte[]> bufferedFieldContents = new ArrayList<byte[]>();
+        List<byte[]> bufferedFieldContents = new ArrayList<>();
         for (Field f : Config.class.getFields()) {
             if (Modifier.isStatic(f.getModifiers()) && f.isAnnotationPresent(Sync.class)) {
                 ByteArrayOutputStream byteStream = new ByteArrayOutputStream();

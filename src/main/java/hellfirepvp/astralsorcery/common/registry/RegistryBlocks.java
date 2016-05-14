@@ -22,7 +22,7 @@ import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
  */
 public class RegistryBlocks {
 
-    public static List<Block> defaultItemBlocksToRegister = new LinkedList<Block>();
+    public static List<Block> defaultItemBlocksToRegister = new LinkedList<>();
 
     public static void init() {
         registerBlocks();

@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common;
+package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.data.config.Config;

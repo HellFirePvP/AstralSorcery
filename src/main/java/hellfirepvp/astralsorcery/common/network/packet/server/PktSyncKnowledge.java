@@ -24,7 +24,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public static final byte STATE_WIPE = 1;
 
     private byte state;
-    public List<String> knownConstellations = new ArrayList<String>();
+    public List<String> knownConstellations = new ArrayList<>();
     public int progressTier = 0;
 
     public PktSyncKnowledge() {

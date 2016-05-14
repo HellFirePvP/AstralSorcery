@@ -13,6 +13,8 @@ import net.minecraft.world.World;
  */
 public class EventHandlerRedirect {
 
+    /*
+
     public static float getWorldBrightness(World world, float parTicks) {
         return getWorldBrightnessRedirect(world, parTicks);
     }
@@ -69,6 +71,6 @@ public class EventHandlerRedirect {
         f1 = (float) ((double) f1 * (1.0D - (double) (world.getRainStrength(parTicks) * 5.0F) / 16.0D));
         f1 = (float) ((double) f1 * (1.0D - (double) (world.getThunderStrength(parTicks) * 5.0F) / 16.0D));
         return f1;
-    }
+    }*/
 
 }

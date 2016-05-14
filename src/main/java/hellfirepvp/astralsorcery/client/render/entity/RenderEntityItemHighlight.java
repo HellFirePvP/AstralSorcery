@@ -67,7 +67,6 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
         GL11.glPushMatrix();
         for (int i = 0; i < fancy_count; i++) {
@@ -91,7 +90,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
         }
         GL11.glPopMatrix();
         GL11.glDepthMask(true);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -108,8 +107,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
             if (ageField != null) {
                 try {
                     ageField.set(ei, entity.getAge());
-                } catch (IllegalAccessException e) {
-                }
+                } catch (IllegalAccessException e) {}
             }
             ei.hoverStart = entity.hoverStart;
 

@@ -41,9 +41,7 @@ public class RegistryItems {
 
     //Items associated to blocks/itemblocks
     private static void registerBlockItems() {
-        for (Block b : RegistryBlocks.defaultItemBlocksToRegister) {
-            registerDefaultItemBlock(b);
-        }
+        RegistryBlocks.defaultItemBlocksToRegister.forEach(hellfirepvp.astralsorcery.common.registry.RegistryItems::registerDefaultItemBlock);
 
         registerItem(new ItemBlockCustomName(BlocksAS.customOre));
         registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));

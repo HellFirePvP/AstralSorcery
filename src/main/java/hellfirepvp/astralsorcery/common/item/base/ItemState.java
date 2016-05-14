@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class ItemState {
 
-    private Map<String, ItemProperty<?>> properties = new HashMap<String, ItemProperty<?>>();
+    private Map<String, ItemProperty<?>> properties = new HashMap<>();
 
     public ItemState defineProperty(ItemProperty<?> property, String key) {
         this.properties.put(key, property);
