@@ -15,6 +15,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.List;
 
@@ -25,11 +26,11 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 12.05.2016 / 16:58
  */
-public class BlockOpaqueCosmetic extends Block implements BlockCustomName {
+public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
 
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
-    public BlockOpaqueCosmetic() {
+    public BlockOpaqueCosmeticRock() {
         super(Material.rock, MapColor.ironColor);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 3);
@@ -45,7 +46,9 @@ public class BlockOpaqueCosmetic extends Block implements BlockCustomName {
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        list.add(new ItemStack(item, 1, 0));
+        for (BlockType bt : BlockType.values()) {
+            list.add(new ItemStack(item, 1, bt.ordinal()));
+        }
     }
 
     @Override
@@ -72,7 +75,7 @@ public class BlockOpaqueCosmetic extends Block implements BlockCustomName {
 
     public static enum BlockType implements IStringSerializable {
 
-        TEST;
+        NONE;
 
         @Override
         public String getName() {

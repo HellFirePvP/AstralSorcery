@@ -1,9 +1,5 @@
 package hellfirepvp.astralsorcery.common.event;
 
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

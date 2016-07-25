@@ -41,11 +41,11 @@ public class RegistryItems {
 
     //Items associated to blocks/itemblocks
     private static void registerBlockItems() {
-        RegistryBlocks.defaultItemBlocksToRegister.forEach(hellfirepvp.astralsorcery.common.registry.RegistryItems::registerDefaultItemBlock);
+        RegistryBlocks.defaultItemBlocksToRegister.forEach(RegistryItems::registerDefaultItemBlock);
 
         registerItem(new ItemBlockCustomName(BlocksAS.customOre));
         registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
-        registerItem(new ItemBlockCustomName(BlocksAS.opaqueCosmetic));
+        registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {

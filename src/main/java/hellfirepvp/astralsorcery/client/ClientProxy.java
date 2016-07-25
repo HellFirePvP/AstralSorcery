@@ -7,6 +7,8 @@ import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
+import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
+import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
@@ -15,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -41,7 +45,13 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit() {
+        TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping
+
+        ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
+
         super.preInit();
+
+        registerEntityRenderers();
     }
 
     @Override
@@ -50,6 +60,12 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(new SkyboxRenderEventHandler());
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
+
+        registerDisplayInformationInit();
+
+        registerTileRenderers();
+
+        registerItemRenderers();
     }
 
     @Override
@@ -73,6 +89,10 @@ public class ClientProxy extends CommonProxy {
         return null;
     }
 
+    private void registerItemRenderers() {
+        //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
+    }
+
     private void registerTileRenderers() {
         registerTESR(TileAltar.class, new TESRAltar());
     }
@@ -81,13 +101,11 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(tile, renderer);
     }
 
-    @Override
     public void registerEntityRenderers() {
         //RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
     }
 
-    @Override
     public void registerDisplayInformationInit() {
         for (RenderInfoItem modelEntry : itemRegister) {
             if (modelEntry.variant) {
@@ -101,8 +119,6 @@ public class ClientProxy extends CommonProxy {
         for (RenderInfoBlock modelEntry : blockRegister) {
             MeshRegisterHelper.registerBlock(modelEntry.block, modelEntry.metadata, AstralSorcery.MODID + ":" + modelEntry.name);
         }
-
-        registerTileRenderers();
     }
 
     @Override
@@ -116,7 +132,7 @@ public class ClientProxy extends CommonProxy {
             }
             return;
         }
-        List<ItemStack> list = new ArrayList<ItemStack>();
+        List<ItemStack> list = new ArrayList<>();
         item.getSubItems(item, CommonProxy.creativeTabAstralSorcery, list);
         if (list.size() > 0) {
             for (ItemStack i : list) {

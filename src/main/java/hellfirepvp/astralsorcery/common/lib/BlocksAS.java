@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockOpaqueCosmetic;
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 
 /**
@@ -15,6 +15,6 @@ public class BlocksAS {
 
     public static BlockCustomOre customOre;
     public static BlockStoneMachine stoneMachine;
-    public static BlockOpaqueCosmetic opaqueCosmetic;
+    public static BlockMarble blockMarble;
 
 }

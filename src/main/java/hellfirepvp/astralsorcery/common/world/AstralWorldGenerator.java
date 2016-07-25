@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
@@ -23,11 +24,34 @@ import java.util.Random;
  */
 public class AstralWorldGenerator implements IWorldGenerator {
 
+    private WorldGenMinable minable;
+
+    public AstralWorldGenerator init() {
+        if(Config.marbleAmount > 0) {
+            minable = new WorldGenMinable(
+                    BlocksAS.blockMarble.getDefaultState(),
+                    Config.marbleVeinSize);
+        }
+        return this;
+    }
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (world.provider.getDimension() != 0) return;
 
+        int oX = chunkX * 16;
+        int oZ = chunkZ * 16;
+
         genCrystals(random, chunkX, chunkZ, world);
+        if(minable != null) {
+            for (int i = 0; i < Config.marbleAmount; i++) {
+                int rX = oX + random.nextInt(16);
+                int rY = 50 + random.nextInt(10);
+                int rZ = oZ + random.nextInt(16);
+                BlockPos pos = new BlockPos(rX, rY, rZ);
+                minable.generate(world, random, pos);
+            }
+        }
     }
 
     private void genCrystals(Random random, int chunkX, int chunkZ, World world) {

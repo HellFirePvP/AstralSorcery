@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockOpaqueCosmetic;
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
 import net.minecraft.block.Block;
@@ -32,9 +32,12 @@ public class RegistryBlocks {
 
     //Blocks
     private static void registerBlocks() {
+        //WorldGen&Related
         customOre = registerBlock(new BlockCustomOre());
+        blockMarble = registerBlock(new BlockMarble());
+
+        //Machines&Related
         stoneMachine = registerBlock(new BlockStoneMachine());
-        opaqueCosmetic = registerBlock(new BlockOpaqueCosmetic());
     }
 
     //Tiles

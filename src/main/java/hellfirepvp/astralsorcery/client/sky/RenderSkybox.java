@@ -48,6 +48,7 @@ public class RenderSkybox extends IRenderHandler {
             }
         }*/
 
+        //defaultSky.render(partialTicks, world, mc);
         astralSky.render(partialTicks, world, mc);
     }
 

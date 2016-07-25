@@ -58,10 +58,10 @@ public class Face {
                     offsetV = -offsetV;
                 }
 
-                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z).tex(textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV);
+                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z).tex(textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV).endVertex();
                 //tessellator.addVertexWithUV(vertices[i].x, vertices[i].y, vertices[i].z, textureCoordinates[i].u + offsetU, textureCoordinates[i].v + offsetV);
             } else {
-                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z);
+                vb.pos(vertices[i].x, vertices[i].y, vertices[i].z).endVertex();
                 //tessellator.addVertex(vertices[i].x, vertices[i].y, vertices[i].z);
             }
 

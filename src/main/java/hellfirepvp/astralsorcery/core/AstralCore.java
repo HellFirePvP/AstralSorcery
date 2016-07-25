@@ -47,4 +47,5 @@ public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
     public String getAccessTransformerClass() {
         return "hellfirepvp.astralsorcery.core.AstralTransformer";
     }
+
 }

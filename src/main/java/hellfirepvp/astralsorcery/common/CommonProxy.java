@@ -4,12 +4,14 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.event.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,15 +50,17 @@ public class CommonProxy implements IGuiHandler {
         RegistryItems.init();
         RegistryEntities.init();
 
-        registerEntityRenderers();
+        GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
 
-        GameRegistry.registerWorldGenerator(new AstralWorldGenerator(), 0);
+        registerOreDictEntries();
+    }
+
+    private void registerOreDictEntries() {
+        OreDictionary.registerOre("blockMarble", BlocksAS.blockMarble);
     }
 
     public void init() {
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
-
-        registerDisplayInformationInit();
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
@@ -64,19 +69,12 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit() {
+        RegistryStructures.init();
     }
 
-    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {
-    }
+    public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
 
-    public void registerFromSubItems(Item item, String name) {
-    }
-
-    public void registerDisplayInformationInit() {
-    }
-
-    public void registerEntityRenderers() {
-    }
+    public void registerFromSubItems(Item item, String name) {}
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

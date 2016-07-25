@@ -70,8 +70,9 @@ public class BlockCustomOre extends Block implements BlockCustomName {
         int size = (Block.RANDOM.nextInt(ItemRockCrystalBase.CrystalProperties.MAX_SIZE)
                 + Block.RANDOM.nextInt(ItemRockCrystalBase.CrystalProperties.MAX_SIZE)) / 2;
         int purity = (Block.RANDOM.nextInt(101) + Block.RANDOM.nextInt(101)) / 2;
+
         ItemRockCrystalBase.CrystalProperties prop =
-                new ItemRockCrystalBase.CrystalProperties(size, purity, Block.RANDOM.nextInt(41));
+                new ItemRockCrystalBase.CrystalProperties(size, purity, Block.RANDOM.nextInt(31));
         ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);
         ItemRockCrystalBase.applyCrystalProperties(crystal, prop);
         drops.add(crystal);
