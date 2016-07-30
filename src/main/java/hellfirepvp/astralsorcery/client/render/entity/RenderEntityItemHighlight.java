@@ -107,7 +107,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
             if (ageField != null) {
                 try {
                     ageField.set(ei, entity.getAge());
-                } catch (IllegalAccessException e) {}
+                } catch (IllegalAccessException ignored) {}
             }
             ei.hoverStart = entity.hoverStart;
 

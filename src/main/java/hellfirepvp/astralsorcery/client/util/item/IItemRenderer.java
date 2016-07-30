@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: DummyVanillaBakedModel
+ * Class: IItemRenderer
  * Created by HellFirePvP
  * Date: 23.07.2016 / 19:17
  */

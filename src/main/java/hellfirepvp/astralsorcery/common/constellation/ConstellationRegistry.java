@@ -27,7 +27,11 @@ public class ConstellationRegistry {
         t.addConstellation(constellation);
     }
 
-    public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp, Tier.AppearanceCondition condition) {
+    public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp) {
+        registerTier(tierNumber, renderInfo, chanceForShowingUp, null);
+    }
+
+    public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp, AppearanceCondition condition) {
         if (tiers.containsKey(tierNumber)) return;
         if (tierNumber < 0 || (tierNumber > 0 && !tiers.containsKey(tierNumber - 1))) return;
         Tier t = new Tier(tierNumber, chanceForShowingUp, renderInfo, condition);

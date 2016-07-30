@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.BlockStone;
@@ -24,12 +25,13 @@ import java.util.Random;
  */
 public class AstralWorldGenerator implements IWorldGenerator {
 
-    private WorldGenMinable minable;
+    private WorldGenMinable mineable;
 
     public AstralWorldGenerator init() {
         if(Config.marbleAmount > 0) {
-            minable = new WorldGenMinable(
-                    BlocksAS.blockMarble.getDefaultState(),
+            mineable = new WorldGenMinable(
+                    BlocksAS.blockMarble.getDefaultState().
+                            withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW),
                     Config.marbleVeinSize);
         }
         return this;
@@ -43,19 +45,19 @@ public class AstralWorldGenerator implements IWorldGenerator {
         int oZ = chunkZ * 16;
 
         genCrystals(random, chunkX, chunkZ, world);
-        if(minable != null) {
+        if(mineable != null) {
             for (int i = 0; i < Config.marbleAmount; i++) {
                 int rX = oX + random.nextInt(16);
                 int rY = 50 + random.nextInt(10);
                 int rZ = oZ + random.nextInt(16);
                 BlockPos pos = new BlockPos(rX, rY, rZ);
-                minable.generate(world, random, pos);
+                mineable.generate(world, random, pos);
             }
         }
     }
 
     private void genCrystals(Random random, int chunkX, int chunkZ, World world) {
-        if (Config.crystalDensity == 0 || random.nextInt(Config.crystalDensity) == 0) {
+        if (Config.crystalDensity <= 0 || random.nextInt(Config.crystalDensity) == 0) {
             int xPos = (chunkX << 4) + random.nextInt(16);
             int zPos = (chunkZ << 4) + random.nextInt(16);
             int yPos = 2 + random.nextInt(4);

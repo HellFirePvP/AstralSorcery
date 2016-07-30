@@ -4,7 +4,9 @@ import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -194,19 +196,31 @@ public class CelestialHandler {
         }
 
         //We only let it vanish, if the conditions are no longer met.
-        public void nextDay() {
-            if (!shouldShow())
+        private void nextDay() {
+            if (!shouldShow()) {
                 showing = false;
+            } else {
+                incCounter();
+            }
         }
 
-        public void setShowing() {
+        private void setShowing() {
             this.showing = true;
+            incCounter();
+        }
+
+        private void incCounter() {
             this.counter++;
             this.counter %= tier.getConstellations().size();
         }
 
         public boolean shouldShow() {
-            return tier.areAppearanceConditionsMet(getCurrentMoonPhase(), dayOfSolarEclipse, dayOfLunarEclipse);
+            if(tier.getConstellations().isEmpty()) return false; //Ofc. no constellation? what should we show?
+
+            List<CelestialEvent> events = new LinkedList<>();
+            if(dayOfSolarEclipse) events.add(CelestialEvent.SOLAR_ECLIPSE);
+            if(dayOfLunarEclipse) events.add(CelestialEvent.LUNAR_ECLIPSE);
+            return tier.areAppearanceConditionsMet(getCurrentMoonPhase(), events.isEmpty() ? EnumSet.noneOf(CelestialEvent.class) : EnumSet.copyOf(events));
         }
 
         public boolean isShowing() {
@@ -218,7 +232,7 @@ public class CelestialHandler {
         }
 
         public Constellation getCurrentConstellation() {
-            return tier.getConstellations().get(counter);
+            return tier.getConstellations().isEmpty() ? null : tier.getConstellations().get(counter);
         }
 
     }
@@ -227,6 +241,12 @@ public class CelestialHandler {
 
         FULL, WANING3_4, WANING1_2, WANING1_4,
         NEW, WAXING1_4, WAXING1_2, WAXING3_4
+
+    }
+
+    public static enum CelestialEvent {
+
+        SOLAR_ECLIPSE, LUNAR_ECLIPSE
 
     }
 

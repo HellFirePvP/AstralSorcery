@@ -18,6 +18,10 @@ public class AssetLoader {
     }
 
     public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
+        if(name.endsWith(suffix)) { //In case of derp.
+            name = name.substring(0, name.length() - suffix.length());
+        }
+
         builder = new StringBuilder();
         builder.append(AstralSorcery.MODID).append(':').append(location.location).append("/");
         if (subLocation != null) {
