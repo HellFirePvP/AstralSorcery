@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,9 +54,11 @@ public class DataActiveCelestials extends AbstractData {
                 activeConstellations.add(c);
             }
         }
-        for (Constellation c : activeConstellations) {
+        Iterator<Constellation> iterator = activeConstellations.iterator();
+        while (iterator.hasNext()) {
+            Constellation c = iterator.next();
             if (!constellations.contains(c)) {
-                activeConstellations.remove(c);
+                iterator.remove();
             }
         }
 
@@ -84,7 +87,7 @@ public class DataActiveCelestials extends AbstractData {
     @Override
     public void readRawFromPacket(NBTTagCompound compound) {
         if (!compound.hasKey("constellations")) {
-            this.activeConstellations = new LinkedList<Constellation>();
+            this.activeConstellations = new LinkedList<>();
             return;
         }
         this.activeConstellations.clear();

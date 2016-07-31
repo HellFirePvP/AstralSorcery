@@ -31,19 +31,44 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
         applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
         applyConstellation(stack, Constellations.orion);
         subItems.add(stack);
+
+        stack = new ItemStack(this);
+        applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        applyConstellation(stack, Constellations.orion);
+        applyTrait(stack, Constellations.phoenix);
+        subItems.add(stack);
     }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        boolean shDown = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
-        List<String> tTip = new LinkedList<String>();
-        addTooltip(stack, tTip, shDown);
+        List<String> tTip = new LinkedList<>();
+        super.addInformation(stack, playerIn, tTip, advanced);
         tooltip.addAll(tTip);
-        if (tTip.size() == 0 || tTip.size() == 1) return;
+        if (tTip.size() == 0 || tTip.size() == 1) return; //Returns if shift is not pressed.
+
         Constellation c = getConstellation(stack);
         if (c != null) {
             tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.attuned") + " " + TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
         }
+        Constellation tr = getTrait(stack);
+        if(tr != null) {
+            tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.trait") + " " + TextFormatting.BLUE + I18n.translateToLocal(tr.getName()));
+        }
+    }
+
+    public static void applyTrait(ItemStack stack, Constellation trait) {
+        if (!(stack.getItem() instanceof ItemTunedCrystal)) return;
+
+        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
+        cmp.setString("trait", trait.getName());
+    }
+
+    public static Constellation getTrait(ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemTunedCrystal)) return null;
+
+        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
+        String strCName = cmp.getString("trait");
+        return ConstellationRegistry.getConstellationByName(strCName);
     }
 
     public static void applyConstellation(ItemStack stack, Constellation constellation) {

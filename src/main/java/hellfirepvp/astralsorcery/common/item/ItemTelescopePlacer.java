@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,7 +25,7 @@ public class ItemTelescopePlacer extends Item {
         setMaxDamage(0);
         setMaxStackSize(1);
         setHasSubtypes(false);
-        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override

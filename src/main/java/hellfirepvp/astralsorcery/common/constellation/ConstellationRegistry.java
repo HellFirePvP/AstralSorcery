@@ -43,6 +43,8 @@ public class ConstellationRegistry {
     }
 
     public static Constellation getConstellationByName(String name) {
+        if(name == null) return null;
+
         for (Tier tier : tiers.values()) {
             for (Constellation c : tier.getConstellations()) {
                 if (c.getName().equals(name)) return c;

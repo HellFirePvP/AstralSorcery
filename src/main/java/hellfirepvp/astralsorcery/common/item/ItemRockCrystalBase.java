@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemNBTHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +27,7 @@ public class ItemRockCrystalBase extends Item {
         setMaxStackSize(1);
         setMaxDamage(0);
         setHasSubtypes(true);
-        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
@@ -36,6 +37,8 @@ public class ItemRockCrystalBase extends Item {
         subItems.add(stack);
     }
 
+
+    //TODO change information shown depending on progression/itemization
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         addTooltip(stack, tooltip, Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -32,15 +33,8 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class CommonProxy implements IGuiHandler {
 
-    public static CreativeTabs creativeTabAstralSorcery;
-
     public void preInit() {
-        creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
-            @Override
-            public Item getTabIconItem() {
-                return ItemsAS.constellationPaper;
-            }
-        };
+        RegistryItems.initTabs();
 
         RegistryConstellations.init();
 
@@ -50,6 +44,8 @@ public class CommonProxy implements IGuiHandler {
         RegistryItems.init();
         RegistryEntities.init();
         RegistryStructures.init();
+
+        RegistryBlocks.initRenderRegistry();
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
 
@@ -72,6 +68,12 @@ public class CommonProxy implements IGuiHandler {
     public void postInit() {
         RegistryStructures.init();
     }
+
+    public void registerVariantName(Item item, String name) {}
+
+    public void registerBlockRender(Block block, int metadata, String name) {}
+
+    public void registerItemRender(Item item, int metadata, String name) {}
 
     public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
 

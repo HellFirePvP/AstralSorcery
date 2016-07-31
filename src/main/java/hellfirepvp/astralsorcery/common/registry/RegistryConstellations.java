@@ -22,8 +22,14 @@ public class RegistryConstellations {
         ConstellationRegistry.registerTier(0, createRInfo(0.2, -0.2, 0, 5), 1.0F);
 
         //Only visible during full, new, and waning moon.
-        ConstellationRegistry.registerTier(1, createRInfo(-0.2, -0.2, -0.05, 6), 1.0F,
+        ConstellationRegistry.registerTier(1, createRInfo(-0.2, -0.2, -0.05, 5), 1.0F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
+
+        ConstellationRegistry.registerTier(2, createRInfo(0, -0.3, -0.2, 8), 1.0F);
+
+        ConstellationRegistry.registerTier(3, createRInfo(-0.4, -0.6, 0.5, 18), 1.0F);
+
+        ConstellationRegistry.registerTier(4, createRInfo(0.4, -0.5, 0.5, 19), 1.0F);
 
 
         StarLocation sl8, sl9, sl10, sl11, sl12, sl13, sl14;
@@ -236,7 +242,7 @@ public class RegistryConstellations {
 
         scutum.register("scutum", 0);
 
-        noctua = new Constellation();
+        /*noctua = new Constellation();
         sl1 = noctua.addStar(29, 1);
         sl2 = noctua.addStar(25, 14);
         sl3 = noctua.addStar(17, 12);
@@ -256,7 +262,7 @@ public class RegistryConstellations {
         noctua.addConnection(sl7, sl8);
         noctua.addConnection(sl7, sl9);
 
-        noctua.register("noctua", 0);
+        noctua.register("noctua", 0);*/
 
         rohini = new Constellation();
         sl1 = rohini.addStar(10, 1);

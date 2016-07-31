@@ -328,8 +328,8 @@ public class GuiTelescope extends GuiScreen {
                     offsetX + wPart,
                     offsetY + hPart,
                     zLevel,
-                    width - wPart * 2,
-                    height - hPart * 2,
+                    width - wPart,
+                    height - hPart,
                     2,
                     new RenderConstellation.BrightnessFunction() {
                         @Override

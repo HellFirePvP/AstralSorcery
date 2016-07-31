@@ -8,7 +8,9 @@ import hellfirepvp.astralsorcery.common.item.ItemTunedCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -24,6 +26,24 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  * Date: 07.05.2016 / 15:03
  */
 public class RegistryItems {
+
+    public static CreativeTabs creativeTabAstralSorcery,
+            creativeTabAstralSorceryPapers;
+
+    public static void initTabs() {
+        creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
+            @Override
+            public Item getTabIconItem() {
+                return Item.getItemFromBlock(BlocksAS.stoneMachine);
+            }
+        };
+        creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
+            @Override
+            public Item getTabIconItem() {
+                return ItemsAS.constellationPaper;
+            }
+        };
+    }
 
     public static void init() {
         registerItems();
@@ -46,6 +66,7 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.customOre));
         registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
+        registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {

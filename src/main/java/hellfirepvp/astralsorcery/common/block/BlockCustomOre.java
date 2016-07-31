@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 18:03
  */
-public class BlockCustomOre extends Block implements BlockCustomName {
+public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
 
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
 
@@ -38,7 +39,7 @@ public class BlockCustomOre extends Block implements BlockCustomName {
         setHarvestLevel("pickaxe", 3);
         setResistance(25.0F);
         setStepSound(SoundType.STONE);
-        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
@@ -108,6 +109,20 @@ public class BlockCustomOre extends Block implements BlockCustomName {
     public String getIdentifierForMeta(int meta) {
         OreType ot = getStateFromMeta(meta).getValue(ORE_TYPE);
         return ot == null ? "null" : ot.getName();
+    }
+
+    @Override
+    public List<IBlockState> getValidStates() {
+        List<IBlockState> ret = new LinkedList<>();
+        for (OreType type : OreType.values()) {
+            ret.add(getDefaultState().withProperty(ORE_TYPE, type));
+        }
+        return ret;
+    }
+
+    @Override
+    public String getStateName(IBlockState state) {
+        return state.getValue(ORE_TYPE).getName();
     }
 
     public static enum OreType implements IStringSerializable {

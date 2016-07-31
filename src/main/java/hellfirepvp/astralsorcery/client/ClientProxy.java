@@ -9,11 +9,16 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
+import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
+import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -90,6 +95,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemRenderers() {
+        ItemRendererFilteredTESR stoneMachineRender = new ItemRendererFilteredTESR();
+        for (BlockStoneMachine.MachineType type : BlockStoneMachine.MachineType.values()) {
+            if(type.ordinal() >= 0 && type.ordinal() <= 4) {
+                stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
+            }
+        }
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.stoneMachine), stoneMachineRender);
         //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
     }
 
@@ -133,7 +145,8 @@ public class ClientProxy extends CommonProxy {
             return;
         }
         List<ItemStack> list = new ArrayList<>();
-        item.getSubItems(item, CommonProxy.creativeTabAstralSorcery, list);
+        item.getSubItems(item, RegistryItems.creativeTabAstralSorcery, list);
+        item.getSubItems(item, RegistryItems.creativeTabAstralSorceryPapers, list);
         if (list.size() > 0) {
             for (ItemStack i : list) {
                 registerItemRender(item, i.getItemDamage(), name);

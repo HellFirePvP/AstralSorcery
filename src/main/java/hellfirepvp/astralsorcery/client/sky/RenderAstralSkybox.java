@@ -345,10 +345,10 @@ public class RenderAstralSkybox extends IRenderHandler {
         //Used for debug purposes. define x,y,z,size at will to produce favorable outcomes..
         //y<0 is used to render on moon-side of the skybox.
         /*double x, y, z;
-        x = -0.2;
-        y = -0.2;
-        z = -0.05;
-        double size = 6;
+        x = 0.4;
+        y = -0.5;
+        z = 0.5;
+        double size = 19;
 
         double fx = x * 100.0D;
         double fy = y * 100.0D;
@@ -370,7 +370,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         //Minecraft.getMinecraft().renderEngine.bindTexture(TEST);
-        AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1").bind();
+        TEX_STAR_1.bind();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         for (int j = 0; j < 4; ++j) {
             double d18 = (double) ((j & 2) - 1) * 0.5;

@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
-import scala.actors.threadpool.Arrays;
-
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 

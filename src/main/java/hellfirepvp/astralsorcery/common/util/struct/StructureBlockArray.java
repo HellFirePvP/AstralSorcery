@@ -23,12 +23,14 @@ public class StructureBlockArray extends BlockArray {
         tileCallbacks.put(pos, callback);
     }
 
-    public void placeInWorld(World world, BlockPos center) {
+    public void placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
+        Map<BlockPos, IBlockState> result = new HashMap<>();
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
             IBlockState state = info.type.getStateFromMeta(info.meta);
             world.setBlockState(at, state, 3);
+            result.put(at, state);
 
             TileEntity placed = world.getTileEntity(at);
             if(tileCallbacks.containsKey(entry.getKey())) {
@@ -38,6 +40,10 @@ public class StructureBlockArray extends BlockArray {
                 }
             }
         }
+        if(processor != null) {
+            for (Map.Entry<BlockPos, IBlockState> entry : result.entrySet())
+                processor.process(world, entry.getKey(), entry.getValue());
+        }
     }
 
     public static interface TileEntityCallback {
@@ -45,6 +51,12 @@ public class StructureBlockArray extends BlockArray {
         public boolean isApplicable(TileEntity te);
 
         public void onPlace(World world, BlockPos at, TileEntity te);
+
+    }
+
+    public static interface PastPlaceProcessor {
+
+        public void process(World world, BlockPos pos, IBlockState currentState);
 
     }
 

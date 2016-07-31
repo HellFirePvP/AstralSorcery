@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemNBTHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,7 +38,7 @@ public class ItemConstellationPaper extends Item implements IMetaItem {
         setMaxDamage(0);
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorceryPapers);
     }
 
     @Override

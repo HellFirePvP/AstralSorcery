@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -39,7 +39,7 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
         setHardness(3.0F);
         setResistance(25.0F);
         setStepSound(SoundType.STONE);
-        setCreativeTab(CommonProxy.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
@@ -54,7 +54,9 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        list.add(new ItemStack(item, 1, 0));
+        for (MachineType type : MachineType.values()) {
+            list.add(new ItemStack(this, 1, type.ordinal()));
+        }
     }
 
     @Override
@@ -104,12 +106,23 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
 
     public static enum MachineType implements IStringSerializable, IVariantTileProvider {
 
-        ALTAR() {
-            @Override
-            public TileEntity provideTileEntity(World world, IBlockState state) {
-                return new TileAltar();
-            }
-        };
+        ALTAR_1((world, state) -> new TileAltar(TileAltar.AltarLevel.DISCOVERY)),
+        ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTENUATION)),
+        ALTAR_3((world, state) -> new TileAltar(TileAltar.AltarLevel.CONSTELLATION_CRAFT)),
+        ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
+        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.ENDGAME));
+
+        //Ugly workaround to make constructors nicer
+        private final IVariantTileProvider provider;
+
+        private MachineType(IVariantTileProvider provider) {
+            this.provider = provider;
+        }
+
+        @Override
+        public TileEntity provideTileEntity(World world, IBlockState state) {
+            return provider.provideTileEntity(world, state);
+        }
 
         @Override
         public String getName() {

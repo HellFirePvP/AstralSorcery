@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -16,5 +17,6 @@ public class BlocksAS {
     public static BlockCustomOre customOre;
     public static BlockStoneMachine stoneMachine;
     public static BlockMarble blockMarble;
+    public static BlockStructural blockStructural;
 
 }

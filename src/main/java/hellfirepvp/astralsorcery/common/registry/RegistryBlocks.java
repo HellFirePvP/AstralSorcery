@@ -1,10 +1,15 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -36,8 +41,17 @@ public class RegistryBlocks {
         customOre = registerBlock(new BlockCustomOre());
         blockMarble = registerBlock(new BlockMarble());
 
+        //Mechanics
+        blockStructural = registerBlock(new BlockStructural());
+
         //Machines&Related
         stoneMachine = registerBlock(new BlockStoneMachine());
+    }
+
+    //Called after items are registered.
+    public static void initRenderRegistry() {
+        registerBlockRender(blockMarble);
+        registerBlockRender(customOre);
     }
 
     //Tiles
@@ -56,6 +70,20 @@ public class RegistryBlocks {
 
     private static <T extends Block> T registerBlock(T block) {
         return registerBlock(block, block.getClass().getSimpleName());
+    }
+
+    private static void registerBlockRender(Block block) {
+        if(block instanceof BlockVariants) {
+            for (IBlockState state : ((BlockVariants) block).getValidStates()) {
+                String unlocName = ((BlockVariants) block).getBlockName(state);
+                String name = unlocName + "_" + ((BlockVariants) block).getStateName(state);
+                AstralSorcery.proxy.registerVariantName(Item.getItemFromBlock(block), name);
+                AstralSorcery.proxy.registerBlockRender(block, block.getMetaFromState(state), name);
+            }
+        } else {
+            AstralSorcery.proxy.registerVariantName(Item.getItemFromBlock(block), block.getUnlocalizedName());
+            AstralSorcery.proxy.registerBlockRender(block, 0, block.getUnlocalizedName());
+        }
     }
 
     private static void registerTile(Class<? extends TileEntity> tile, String name) {

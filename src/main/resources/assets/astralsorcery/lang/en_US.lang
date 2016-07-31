@@ -1,4 +1,5 @@
 itemGroup.astralsorcery=Astral Sorcery
+itemGroup.astralsorcery.papers=Astral Sorcery Constellation Papers
 
 misc.moreInformation=<Hold SHIFT for more details>
 
@@ -6,6 +7,7 @@ crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Collectivity
 crystal.attuned=Tuned to
+crystal.trait=Trait of
 
 entity.astralsorcery.EntityTelescope.name=Telescope
 
@@ -15,7 +17,19 @@ item.ItemTunedCrystal.name=Attuned Rock Crystal
 item.ItemTelescopePlacer.name=Telescope
 
 tile.BlockCustomOre.crystal.name=Rock Crystal Ore
-tile.BlockStoneMachine.altar.name=Celestial Altar
+tile.BlockStoneMachine.altar_1.name=Luminous Crafting Table
+tile.BlockStoneMachine.altar_2.name=[NoName-ConstellationCraft] Altar
+tile.BlockStoneMachine.altar_3.name=Celestial Altar
+tile.BlockStoneMachine.altar_4.name=[NoName-TraitCraft] Altar
+tile.BlockStoneMachine.altar_5.name=Skybending Altar
+
+tile.BlockMarble.raw.name=Marble
+tile.BlockMarble.bricks.name=Marble Bricks
+tile.BlockMarble.pillar.name=Marble Pillar
+tile.BlockMarble.chiseled.name=Chiseled Marble
+tile.BlockMarble.arch.name=Marble Arch
+tile.BlockMarble.runed.name=Runed Marble
+tile.BlockMarble.engraved.name=Engraved Marble
 
 astralsorcery.orion=Orion
 astralsorcery.bigDipper=Big Dipper

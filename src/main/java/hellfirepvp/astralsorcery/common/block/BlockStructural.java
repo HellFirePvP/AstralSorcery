@@ -16,26 +16,23 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockOpaqueCosmetic
+ * Class: BlockStructural
  * Created by HellFirePvP
- * Date: 12.05.2016 / 16:58
+ * Date: 30.07.2016 / 21:50
  */
-public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
+public class BlockStructural extends Block implements BlockCustomName {
 
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
-    public BlockOpaqueCosmeticRock() {
-        super(Material.rock, MapColor.ironColor);
-        setHardness(2.0F);
-        setHarvestLevel("pickaxe", 3);
-        setResistance(20.0F);
+    public BlockStructural() {
+        super(Material.iron, MapColor.blackColor);
+        setBlockUnbreakable();
         setStepSound(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
