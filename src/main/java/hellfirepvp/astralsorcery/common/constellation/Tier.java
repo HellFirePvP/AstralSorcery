@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.util.Vector3;
 
 import java.awt.*;
@@ -20,22 +21,28 @@ public class Tier {
     private final RInformation renderinfo;
     private final int tierNumber;
     private final float chance;
+    private final ProgressionTier progressionNeeded;
     private final AppearanceCondition condition;
     private LinkedList<Constellation> constellations = new LinkedList<>();
 
-    public Tier(int tierNumber, float chance, RInformation renderinfo) {
-        this(tierNumber, chance, renderinfo, null);
+    public Tier(int tierNumber, ProgressionTier visibleTier, float chance, RInformation renderinfo) {
+        this(tierNumber, visibleTier, chance, renderinfo, null);
     }
 
-    public Tier(int tierNumber, float chance, RInformation renderinfo, AppearanceCondition condition) {
+    public Tier(int tierNumber, ProgressionTier visibleTier, float chance, RInformation renderinfo, AppearanceCondition condition) {
         this.tierNumber = tierNumber;
         this.renderinfo = renderinfo;
         this.chance = chance;
         this.condition = condition;
+        this.progressionNeeded = visibleTier;
     }
 
     public int tierNumber() {
         return tierNumber;
+    }
+
+    public ProgressionTier getProgressionNeeded() {
+        return progressionNeeded;
     }
 
     public void addConstellation(Constellation constellation) {

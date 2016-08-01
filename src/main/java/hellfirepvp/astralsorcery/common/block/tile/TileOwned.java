@@ -13,7 +13,13 @@ import java.util.UUID;
  */
 public class TileOwned extends TileEntitySynchronized {
 
-    private UUID ownerUUID;
+    public static UUID UUID_OWNER_WORLD = UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d2"); //LUL
+
+    protected UUID ownerUUID;
+
+    public UUID getOwnerUUID() {
+        return ownerUUID;
+    }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {

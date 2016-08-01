@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.item;
 
-import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.entity.player.EntityPlayer;

@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
 public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
-    private int tierReached = -1; //-1 == not involved in AstralSorcery, 0 -> maxTier rest.
+    private ProgressionTier tierReached = ProgressionTier.EXPLORATION;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
-        tierReached = -1;
+        tierReached = ProgressionTier.EXPLORATION;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -32,7 +33,8 @@ public class PlayerProgress {
         }
 
         if (compound.hasKey("tierReached")) {
-            tierReached = compound.getInteger("tierReached");
+            int tierOrdinal = compound.getInteger("tierReached");
+            tierReached = ProgressionTier.values()[MathHelper.clamp_int(tierOrdinal, 0, ProgressionTier.values().length - 1)];
         }
 
     }
@@ -44,22 +46,20 @@ public class PlayerProgress {
             list.appendTag(new NBTTagString(s));
         }
         cmp.setTag("constellations", list);
-        cmp.setInteger("tierReached", tierReached);
+        cmp.setInteger("tierReached", tierReached.ordinal());
 
     }
 
-    public int getTierReached() {
+    public ProgressionTier getTierReached() {
         return tierReached;
     }
 
-    public boolean isInvolved() {
-        return tierReached >= 0;
+    public void setTierReached(ProgressionTier tier) {
+        this.tierReached = tier;
     }
 
-    protected void setTierReached(int tier) {
-        if (tier > this.tierReached) {
-            this.tierReached = tier;
-        }
+    public EnumGatedKnowledge.ViewCapability getViewCapability() {
+        return getTierReached().getViewCapability();
     }
 
     public List<String> getKnownConstellations() {
@@ -76,7 +76,7 @@ public class PlayerProgress {
 
     protected void receive(PktSyncKnowledge message) {
         this.knownConstellations = message.knownConstellations;
-        this.tierReached = message.progressTier;
+        this.tierReached = ProgressionTier.values()[MathHelper.clamp_int(message.progressTier, 0, ProgressionTier.values().length - 1)];
     }
 
 }

@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,8 +33,15 @@ public class EntityTelescope extends EntityLivingBase {
 
     @Override
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
-        if (player.worldObj.isRemote) {
-            player.openGui(AstralSorcery.instance, 0, player.worldObj, getEntityId(), 0, 0);
+        if(player.isSneaking()) {
+            if(!worldObj.isRemote) {
+                setDead();
+                ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.telescopePlacer));
+            }
+        } else {
+            if (player.worldObj.isRemote) {
+                player.openGui(AstralSorcery.instance, 0, player.worldObj, getEntityId(), 0, 0);
+            }
         }
         return EnumActionResult.SUCCESS;
     }

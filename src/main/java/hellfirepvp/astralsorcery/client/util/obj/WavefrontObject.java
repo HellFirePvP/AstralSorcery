@@ -63,7 +63,7 @@ public class WavefrontObject {
         loadObjModel(inputStream);
     }
 
-    public static WavefrontObject create(ResourceLocation modelLoc) throws ModelFormatException {
+    public static WavefrontObject load(ResourceLocation modelLoc) throws ModelFormatException {
         return new WavefrontObject(modelLoc);
     }
 

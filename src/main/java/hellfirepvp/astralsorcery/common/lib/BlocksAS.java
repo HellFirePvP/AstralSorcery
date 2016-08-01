@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.block.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -16,7 +18,9 @@ public class BlocksAS {
 
     public static BlockCustomOre customOre;
     public static BlockStoneMachine stoneMachine;
+    public static BlockAltar blockAltar;
     public static BlockMarble blockMarble;
     public static BlockStructural blockStructural;
+    public static BlockCollectorCrystal collectorCrystal;
 
 }

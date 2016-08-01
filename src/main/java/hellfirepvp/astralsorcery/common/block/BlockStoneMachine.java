@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.block.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.block.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -11,16 +12,17 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,21 +32,17 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:11
  */
-public class BlockStoneMachine extends BlockContainer implements BlockCustomName {
+public class BlockStoneMachine extends BlockContainer implements BlockCustomName, BlockVariants {
 
     public static PropertyEnum<MachineType> MACHINE_TYPE = PropertyEnum.create("machine", MachineType.class);
 
     public BlockStoneMachine() {
-        super(Material.rock, MapColor.grayColor);
+        super(Material.ROCK, MapColor.GRAY);
         setHardness(3.0F);
+        setSoundType(SoundType.STONE);
         setResistance(25.0F);
-        setStepSound(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return FULL_BLOCK_AABB;
+        setDefaultState(this.blockState.getBaseState().withProperty(MACHINE_TYPE, MachineType.GRINDSTONE));
     }
 
     @Override
@@ -53,9 +51,9 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (MachineType type : MachineType.values()) {
-            list.add(new ItemStack(this, 1, type.ordinal()));
+            list.add(new ItemStack(item, 1, type.ordinal()));
         }
     }
 
@@ -70,7 +68,6 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return null;
     }
-
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
@@ -89,13 +86,18 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
     }
 
     @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL; //Default one for now....
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
@@ -104,13 +106,23 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
         return mt == null ? "null" : mt.getName();
     }
 
+    @Override
+    public List<IBlockState> getValidStates() {
+        List<IBlockState> ret = new LinkedList<>();
+        for (MachineType type : MachineType.values()) {
+            ret.add(getDefaultState().withProperty(MACHINE_TYPE, type));
+        }
+        return ret;
+    }
+
+    @Override
+    public String getStateName(IBlockState state) {
+        return state.getValue(MACHINE_TYPE).getName();
+    }
+
     public static enum MachineType implements IStringSerializable, IVariantTileProvider {
 
-        ALTAR_1((world, state) -> new TileAltar(TileAltar.AltarLevel.DISCOVERY)),
-        ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTENUATION)),
-        ALTAR_3((world, state) -> new TileAltar(TileAltar.AltarLevel.CONSTELLATION_CRAFT)),
-        ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
-        ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.ENDGAME));
+        GRINDSTONE((world, state) -> new TileGrindstone());
 
         //Ugly workaround to make constructors nicer
         private final IVariantTileProvider provider;

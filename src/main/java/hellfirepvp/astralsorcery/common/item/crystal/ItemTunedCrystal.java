@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import org.lwjgl.input.Keyboard;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,12 +27,12 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         ItemStack stack = new ItemStack(this);
-        applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
         applyConstellation(stack, Constellations.orion);
         subItems.add(stack);
 
         stack = new ItemStack(this);
-        applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
         applyConstellation(stack, Constellations.orion);
         applyTrait(stack, Constellations.phoenix);
         subItems.add(stack);

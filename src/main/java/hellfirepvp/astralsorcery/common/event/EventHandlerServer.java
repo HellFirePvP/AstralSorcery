@@ -4,11 +4,12 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -64,15 +65,11 @@ public class EventHandlerServer {
         Entity joined = event.getEntity();
         if (joined instanceof EntityItem && !(joined instanceof EntityItemHighlighted)) {
             EntityItem ei = (EntityItem) joined;
-            if (ei.getEntityItem() != null && (ei.getEntityItem().getItem() instanceof ItemConstellationPaper)) {
+            if (ei.getEntityItem() != null && (ei.getEntityItem().getItem() instanceof ItemHighlighted)) {
                 ei.setDead();
                 EntityItemHighlighted newItem = new EntityItemHighlighted(ei.worldObj, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
-                int dmg = ei.getEntityItem().getItemDamage();
-                if (dmg == 1) {
-                    newItem.applyColor(Color.GRAY);
-                } else {
-                    newItem.applyColor(Color.BLUE);
-                }
+                ItemHighlighted i = (ItemHighlighted) ei.getEntityItem().getItem();
+                newItem.applyColor(i.getHightlightColor(ei.getEntityItem()));
                 newItem.motionX = ei.motionX;
                 newItem.motionY = ei.motionY;
                 newItem.motionZ = ei.motionZ;

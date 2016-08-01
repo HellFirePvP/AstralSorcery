@@ -16,7 +16,6 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import java.util.List;
 
@@ -32,11 +31,10 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
     public BlockOpaqueCosmeticRock() {
-        super(Material.rock, MapColor.ironColor);
+        super(Material.ROCK, MapColor.IRON);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 3);
         setResistance(20.0F);
-        setStepSound(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

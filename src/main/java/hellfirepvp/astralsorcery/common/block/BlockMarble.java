@@ -30,16 +30,16 @@ import java.util.Random;
  */
 public class BlockMarble extends Block implements BlockCustomName, BlockVariants {
 
-    private static final int RAND_MOSS_CHANCE = 10;
+    //private static final int RAND_MOSS_CHANCE = 10;
 
     public static PropertyEnum<MarbleBlockType> MARBLE_TYPE = PropertyEnum.create("marbletype", MarbleBlockType.class);
 
     public BlockMarble() {
-        super(Material.rock, MapColor.grayColor);
+        super(Material.ROCK, MapColor.GRAY);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 2);
         setResistance(40.0F);
-        setStepSound(SoundType.STONE);
+        setSoundType(SoundType.STONE);
         //setTickRandomly(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(MARBLE_TYPE, MarbleBlockType.RAW));
@@ -86,7 +86,6 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     public boolean isFullyOpaque(IBlockState state) {
         return true;
     }
-
 
     @Override
     public String getIdentifierForMeta(int meta) {

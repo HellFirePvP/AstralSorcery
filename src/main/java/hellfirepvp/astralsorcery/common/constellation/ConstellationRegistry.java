@@ -1,11 +1,13 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,14 +29,14 @@ public class ConstellationRegistry {
         t.addConstellation(constellation);
     }
 
-    public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp) {
-        registerTier(tierNumber, renderInfo, chanceForShowingUp, null);
+    public static void registerTier(int tierNumber, ProgressionTier progressionNeeded, Tier.RInformation renderInfo, float chanceForShowingUp) {
+        registerTier(tierNumber, progressionNeeded, renderInfo, chanceForShowingUp, null);
     }
 
-    public static void registerTier(int tierNumber, Tier.RInformation renderInfo, float chanceForShowingUp, AppearanceCondition condition) {
+    public static void registerTier(int tierNumber, ProgressionTier progressionNeeded, Tier.RInformation renderInfo, float chanceForShowingUp, AppearanceCondition condition) {
         if (tiers.containsKey(tierNumber)) return;
         if (tierNumber < 0 || (tierNumber > 0 && !tiers.containsKey(tierNumber - 1))) return;
-        Tier t = new Tier(tierNumber, chanceForShowingUp, renderInfo, condition);
+        Tier t = new Tier(tierNumber, progressionNeeded, chanceForShowingUp, renderInfo, condition);
         tiers.put(tierNumber, t);
     }
 
@@ -58,19 +60,29 @@ public class ConstellationRegistry {
     }
 
     public static Collection<Tier> ascendingTiers() {
-        LinkedList<Tier> sortedTiers = new LinkedList<Tier>();
+        LinkedList<Tier> sortedTiers = new LinkedList<>();
         for (Integer tierInt : tiers.keySet()) {
             sortedTiers.addLast(tiers.get(tierInt));
         }
         return sortedTiers;
     }
 
-    public static Collection<Constellation> getAllConstellations() {
-        List<Constellation> constellations = new LinkedList<Constellation>();
+    public static List<Constellation> getAllConstellations() {
+        List<Constellation> constellations = new LinkedList<>();
         for (Tier t : ascendingTiers()) {
-            for (Constellation c : t.getConstellations()) constellations.add(c);
+            constellations.addAll(t.getConstellations().stream().collect(Collectors.toList()));
         }
         return constellations;
+    }
+
+    public static int getConstellationId(Constellation c) {
+        List<Constellation> allConstellations = getAllConstellations();
+        return allConstellations.indexOf(c);
+    }
+
+    public static Constellation getConstellationById(int id) {
+        List<Constellation> allConstellations = getAllConstellations();
+        return allConstellations.get(id);
     }
 
 }

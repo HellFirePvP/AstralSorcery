@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.block.tile.TileCollectorCrystal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -43,9 +46,11 @@ public class RegistryBlocks {
 
         //Mechanics
         blockStructural = registerBlock(new BlockStructural());
+        blockAltar = registerBlock(new BlockAltar());
 
         //Machines&Related
         stoneMachine = registerBlock(new BlockStoneMachine());
+        collectorCrystal = registerBlock(new BlockCollectorCrystal());
     }
 
     //Called after items are registered.
@@ -57,6 +62,7 @@ public class RegistryBlocks {
     //Tiles
     private static void registerTileEntities() {
         registerTile(TileAltar.class);
+        registerTile(TileCollectorCrystal.class);
     }
 
     private static void queueDefaultItemBlock(Block block) {

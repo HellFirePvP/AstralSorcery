@@ -44,7 +44,7 @@ public class BindableResource {
             resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
         } catch (Exception exc) {
             AstralSorcery.log.warn("Failed to load texture " + path);
-            resource = TextureUtil.missingTexture;
+            resource = TextureUtil.MISSING_TEXTURE;
         }
         AstralSorcery.log.info("Allocated " + path + " to " + resource.getGlTextureId());
     }

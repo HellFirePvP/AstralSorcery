@@ -1,13 +1,16 @@
-itemGroup.astralsorcery=Astral Sorcery
-itemGroup.astralsorcery.papers=Astral Sorcery Constellation Papers
+itemGroup.astralsorcery=[AS] Astral Sorcery
+itemGroup.astralsorcery.papers=[AS] Constellation Papers
 
 misc.moreInformation=<Hold SHIFT for more details>
+
+progress.missing.knowledge=It seems there is more to it than you're able to see.
 
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Collectivity
 crystal.attuned=Tuned to
 crystal.trait=Trait of
+crystal.collect.type=Collects starlight from
 
 entity.astralsorcery.EntityTelescope.name=Telescope
 
@@ -16,13 +19,13 @@ item.ItemRockCrystalBase.name=Rock Crystal
 item.ItemTunedCrystal.name=Attuned Rock Crystal
 item.ItemTelescopePlacer.name=Telescope
 
-tile.BlockCustomOre.crystal.name=Rock Crystal Ore
-tile.BlockStoneMachine.altar_1.name=Luminous Crafting Table
-tile.BlockStoneMachine.altar_2.name=[NoName-ConstellationCraft] Altar
-tile.BlockStoneMachine.altar_3.name=Celestial Altar
-tile.BlockStoneMachine.altar_4.name=[NoName-TraitCraft] Altar
-tile.BlockStoneMachine.altar_5.name=Skybending Altar
-
+tile.BlockCustomOre.rock_crystal.name=Rock Crystal Ore
+tile.BlockCollectorCrystal.name=Collector Crystal
+tile.BlockAltar.altar_1.name=Luminous Crafting Table
+tile.BlockAltar.altar_2.name=[NoName-ConstellationCraft] Altar
+tile.BlockAltar.altar_3.name=Celestial Altar
+tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
+tile.BlockAltar.altar_5.name=Skybending Altar
 tile.BlockMarble.raw.name=Marble
 tile.BlockMarble.bricks.name=Marble Bricks
 tile.BlockMarble.pillar.name=Marble Pillar
@@ -31,7 +34,28 @@ tile.BlockMarble.arch.name=Marble Arch
 tile.BlockMarble.runed.name=Runed Marble
 tile.BlockMarble.engraved.name=Engraved Marble
 
-astralsorcery.orion=Orion
-astralsorcery.bigDipper=Big Dipper
+astralsorcery.constellation.orion=Orion
+astralsorcery.constellation.bigDipper=Big Dipper
+astralsorcery.constellation.aquila=Aquila
+astralsorcery.constellation.ara=Ara
+astralsorcery.constellation.bootes=Bootes
+astralsorcery.constellation.caelum=Caelum
+astralsorcery.constellation.circinus=Circinus
+astralsorcery.constellation.fornax=Fornax
+astralsorcery.constellation.libra=Libra
+astralsorcery.constellation.horologium=Horologium
+astralsorcery.constellation.octans=Octans
+astralsorcery.constellation.phoenix=Phoenix
+astralsorcery.constellation.scutum=Scutum
+astralsorcery.constellation.rohini=Rohini
+astralsorcery.constellation.chitra=Chitra
+astralsorcery.constellation.draco=Draco
+astralsorcery.constellation.inpes=Inpes
+astralsorcery.constellation.locurba=Locurba
+astralsorcery.constellation.visso=Visso
+astralsorcery.constellation.lucerna=Lucerna
+astralsorcery.constellation.tenifium=Tenefium
+astralsorcery.constellation.fertilitas=Fertilitas
+astralsorcery.constellation.reatio=Reatio
 
 constellation.noInformation=No useful information

@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -31,9 +30,9 @@ public class BlockStructural extends Block implements BlockCustomName {
     public static PropertyEnum<BlockType> BLOCK_TYPE = PropertyEnum.create("blocktype", BlockType.class);
 
     public BlockStructural() {
-        super(Material.iron, MapColor.blackColor);
+        super(Material.IRON, MapColor.BLACK);
         setBlockUnbreakable();
-        setStepSound(SoundType.STONE);
+        setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -58,6 +57,11 @@ public class BlockStructural extends Block implements BlockCustomName {
     public int getMetaFromState(IBlockState state) {
         BlockType type = state.getValue(BLOCK_TYPE);
         return type == null ? 0 : type.ordinal();
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override

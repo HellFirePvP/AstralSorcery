@@ -63,10 +63,10 @@ public class AstralWorldGenerator implements IWorldGenerator {
             int yPos = 2 + random.nextInt(4);
             BlockPos pos = new BlockPos(xPos, yPos, zPos);
             IBlockState state = world.getBlockState(pos);
-            if (state.getBlock().equals(Blocks.stone)) {
+            if (state.getBlock().equals(Blocks.STONE)) {
                 BlockStone.EnumType stoneType = state.getValue(BlockStone.VARIANT);
                 if (stoneType != null && stoneType.equals(BlockStone.EnumType.STONE)) {
-                    IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.CRYSTAL);
+                    IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                     world.setBlockState(pos, newState);
                 }
             }

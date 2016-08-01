@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "oretype=rock_crystal": { "model":"astralsorcery:BlockCustomOre_rock_crystal" }
+    }
+}

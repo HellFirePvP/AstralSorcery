@@ -1,7 +1,8 @@
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -12,42 +13,37 @@ import hellfirepvp.astralsorcery.client.util.BindableResource;
  */
 public class AssetLoader {
 
-    private static StringBuilder builder;
-
     private AssetLoader() {
     }
 
     public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
+        return new BindableResource(buildResourceString(location, subLocation, name, suffix));
+    }
+
+    private static String buildResourceString(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         if(name.endsWith(suffix)) { //In case of derp.
             name = name.substring(0, name.length() - suffix.length());
         }
 
-        builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         builder.append(AstralSorcery.MODID).append(':').append(location.location).append("/");
         if (subLocation != null) {
             builder.append(subLocation.getLocation()).append("/");
         }
         builder.append(name).append(suffix);
-        return new BindableResource(builder.toString());
+        return builder.toString();
     }
 
     public static BindableResource loadTexture(TextureLocation location, String name) {
         return load(AssetLocation.TEXTURES, location, name, ".png");
     }
 
-    /*public static ResourceLocation loadOBJModel(ModelLocation location, String name) {
+    public static WavefrontObject loadObjModel(ModelLocation location, String name) {
+        return new WavefrontObject(new ResourceLocation(buildResourceString(AssetLocation.MODELS, location, name, ".obj")));
+    }
+
+    /*public static WavefrontObject loadOBJModel(ModelLocation location, String name) {
         return load(AssetLocation.MODELS, location, name, ".obj");
-    }*/
-
-    /*public static WorldObject loadWorldObject(String name) {
-        if(name == null) return null;
-
-        ResourceLocation location = load(AssetLocation.WORLDOBJECTS, null, name, ".BO2");
-        try {
-            InputStream stream = Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
-            return WorldObject.parseBO2(stream);
-        } catch (Exception ignored) {}
-        return null;
     }*/
 
     public static interface SubLocation {
@@ -58,7 +54,7 @@ public class AssetLoader {
 
     public static enum ModelLocation implements SubLocation {
 
-        ;
+        OBJ("obj");
 
         private final String location;
 
@@ -76,8 +72,10 @@ public class AssetLoader {
     public static enum TextureLocation implements SubLocation {
 
         ITEMS("items"),
+        BLOCKS("blocks"),
         GUI("gui"),
         MISC("misc"),
+        MODELS("models"),
         ENVIRONMENT("environment");
 
         private final String location;
@@ -95,6 +93,7 @@ public class AssetLoader {
 
     public static enum AssetLocation {
 
+        MODELS("models"),
         TEXTURES("textures");
 
         private final String location;

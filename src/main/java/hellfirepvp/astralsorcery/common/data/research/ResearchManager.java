@@ -145,8 +145,7 @@ public class ResearchManager {
                 progress.load(compound);
             }
             playerProgressServer.put(pUUID, progress);
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 
     private static File getPlayerDirectory() {

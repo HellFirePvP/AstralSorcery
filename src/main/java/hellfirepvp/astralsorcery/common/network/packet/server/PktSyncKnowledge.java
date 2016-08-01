@@ -36,7 +36,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     public void load(PlayerProgress progress) {
         this.knownConstellations = progress.getKnownConstellations();
-        this.progressTier = progress.getTierReached();
+        this.progressTier = progress.getTierReached().ordinal();
     }
 
     @Override

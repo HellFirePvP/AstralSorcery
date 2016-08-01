@@ -17,9 +17,9 @@ public abstract class OverlayTextPolicy {
     public static enum Policies {
 
         NO_OP(new SilentPolicy()),
-        WRITING(new WritingPolicy()),
-        @Deprecated
-        WRITING_WITH_GLOWEFFECT(new FancyPolicy());
+        WRITING(new WritingPolicy());
+        //@Deprecated
+        //WRITING_WITH_GLOWEFFECT(new FancyPolicy());
 
         private OverlayTextPolicy policy;
 
@@ -69,7 +69,7 @@ public abstract class OverlayTextPolicy {
         }
     }
 
-    static class FancyPolicy extends OverlayTextPolicy {
+    /*static class FancyPolicy extends OverlayTextPolicy {
 
         @Override
         public void onCharRender(OverlayText.OverlayFontRenderer overlayFontRenderer, String toRenderFully, Character c, int index, OverlayText.OverlayFontRenderer.RenderChar render, float x, float y, float z, Color color, float alpha, float width, float height, int animationTick, int maxLivingTicks) {
@@ -79,8 +79,7 @@ public abstract class OverlayTextPolicy {
             policy.onCharRender(overlayFontRenderer, toRenderFully, c, index, render, x, y, z, color, alpha, width, height, animationTick, maxLivingTicks);
 
             //Draw the effects...
-            //TODO effect stuff
         }
-    }
+    }*/
 
 }

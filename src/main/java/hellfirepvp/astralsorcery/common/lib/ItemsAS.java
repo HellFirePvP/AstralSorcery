@@ -1,9 +1,9 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
-import hellfirepvp.astralsorcery.common.item.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemTelescopePlacer;
-import hellfirepvp.astralsorcery.common.item.ItemTunedCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
 
 /**
  * This class is part of the Astral Sorcery Mod

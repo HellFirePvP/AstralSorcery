@@ -60,7 +60,7 @@ public class Constellation {
         if (mod == null) {
             this.name = "unknown." + name;
         } else {
-            this.name = mod.getModId() + "." + name;
+            this.name = mod.getModId() + ".constellation." + name;
         }
         finished = true;
     }

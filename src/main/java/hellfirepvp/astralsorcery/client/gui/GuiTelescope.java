@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
-import hellfirepvp.astralsorcery.common.util.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.common.util.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -328,8 +328,8 @@ public class GuiTelescope extends GuiScreen {
                     offsetX + wPart,
                     offsetY + hPart,
                     zLevel,
-                    width - wPart,
-                    height - hPart,
+                    width - (((int) (wPart * 1.5F))),
+                    height - (((int) (hPart * 1.5F))),
                     2,
                     new RenderConstellation.BrightnessFunction() {
                         @Override

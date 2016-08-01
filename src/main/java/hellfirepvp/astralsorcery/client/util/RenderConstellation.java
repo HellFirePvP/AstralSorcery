@@ -88,9 +88,12 @@ public class RenderConstellation {
     }
 
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Tier tier, Constellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
+        return renderConstellationIntoGUI(tier.calcRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, func, isKnown, applyStarBrightness);
+    }
+
+    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, Constellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
-        Color rC = tier.calcRenderColor();
         double ulength = ((double) width) / 32;
         double vlength = ((double) height) / 32;
 
@@ -108,7 +111,7 @@ public class RenderConstellation {
                         brightness *= (starBr * 2);
                     }
                     vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
+                    GlStateManager.color(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
                     Vector3 fromStar = new Vector3(offsetVec.getX() + sc.from.x * ulength, offsetVec.getY() + sc.from.y * vlength, offsetVec.getZ());
                     Vector3 toStar = new Vector3(offsetVec.getX() + sc.to.x * ulength, offsetVec.getY() + sc.to.y * vlength, offsetVec.getZ());
 
@@ -147,7 +150,7 @@ public class RenderConstellation {
 
             vb.begin(7, DefaultVertexFormats.POSITION_TEX);
             if (isKnown) {
-                GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
+                GlStateManager.color(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
             } else {
                 GlStateManager.color(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
             }

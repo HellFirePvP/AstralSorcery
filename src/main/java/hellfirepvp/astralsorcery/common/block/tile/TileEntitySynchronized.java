@@ -23,9 +23,10 @@ public class TileEntitySynchronized extends TileEntity {
     public void readCustomNBT(NBTTagCompound compound) {
     }
 
-    public final void writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
         writeCustomNBT(compound);
+        return compound;
     }
 
     public void writeCustomNBT(NBTTagCompound compound) {

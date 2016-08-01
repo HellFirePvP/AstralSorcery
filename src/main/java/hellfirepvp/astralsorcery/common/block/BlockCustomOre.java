@@ -1,10 +1,8 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.item.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -34,11 +32,10 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
 
     public BlockCustomOre() {
-        super(Material.rock, MapColor.lapisColor);
+        super(Material.ROCK, MapColor.LAPIS);
         setHardness(3.0F);
         setHarvestLevel("pickaxe", 3);
         setResistance(25.0F);
-        setStepSound(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -67,17 +64,19 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> drops = new ArrayList<ItemStack>();
-        int size = (Block.RANDOM.nextInt(ItemRockCrystalBase.CrystalProperties.MAX_SIZE)
-                + Block.RANDOM.nextInt(ItemRockCrystalBase.CrystalProperties.MAX_SIZE)) / 2;
-        int purity = (Block.RANDOM.nextInt(101) + Block.RANDOM.nextInt(101)) / 2;
-
-        ItemRockCrystalBase.CrystalProperties prop =
-                new ItemRockCrystalBase.CrystalProperties(size, purity, Block.RANDOM.nextInt(31));
-        ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);
-        ItemRockCrystalBase.applyCrystalProperties(crystal, prop);
-        drops.add(crystal);
+        OreType type = state.getValue(ORE_TYPE);
+        List<ItemStack> drops = new ArrayList<>();
+        switch (type) {
+            case ROCK_CRYSTAL:
+                drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                break;
+        }
         return drops;
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     public static enum OreType implements IStringSerializable {
 
-        CRYSTAL;
+        ROCK_CRYSTAL;
 
         @Override
         public String getName() {

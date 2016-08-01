@@ -77,6 +77,8 @@ public class CommandAstralSorcery extends CommandBase {
                 } else if (args.length == 3) {
                     addConstellations(server, sender, args[1], args[2]);
                 }
+            } else if (identifier.equalsIgnoreCase("progress") || identifier.equalsIgnoreCase("prog")) {
+                //TODO tomorrow: commands
             }
         }
     }
@@ -156,6 +158,8 @@ public class CommandAstralSorcery extends CommandBase {
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation§7 - lists all constellations"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName]§7 - lists all discovered constellations of the specified player if he/she is online"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName] <cName;all;reset>§7 - player specified discovers the specified constellation or all or resets all"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] - displays progress information about the player"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <step;all;reset> - set the progression"));
     }
 
     private void listConstellations(ICommandSender sender) {

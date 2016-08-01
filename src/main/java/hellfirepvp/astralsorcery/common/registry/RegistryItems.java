@@ -1,10 +1,11 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
-import hellfirepvp.astralsorcery.common.item.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemTelescopePlacer;
-import hellfirepvp.astralsorcery.common.item.ItemTunedCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -34,7 +35,7 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public Item getTabIconItem() {
-                return Item.getItemFromBlock(BlocksAS.stoneMachine);
+                return Item.getItemFromBlock(BlocksAS.blockAltar);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
@@ -67,10 +68,13 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
         registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
+        registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));
+
+        registerItem(new ItemCollectorCrystal());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {
-        registerDefaultItemBlock(block, "ItemBlock." + block.getClass().getSimpleName());
+        registerDefaultItemBlock(block, block.getUnlocalizedName());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block, String name) {

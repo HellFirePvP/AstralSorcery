@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.client.effect.text;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
-import hellfirepvp.astralsorcery.common.util.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
@@ -121,6 +121,10 @@ public final class OverlayText {
 
         private OverlayTextPolicy policy;
         private int maxLiving;
+
+        public OverlayFontRenderer() {
+            this(null, 0);
+        }
 
         public OverlayFontRenderer(OverlayTextPolicy policy, int maxLivingTicks) {
             this.policy = policy;

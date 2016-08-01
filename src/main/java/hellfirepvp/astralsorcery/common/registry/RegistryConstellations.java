@@ -1,11 +1,10 @@
 package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.common.constellation.AppearanceCondition;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
@@ -19,19 +18,54 @@ import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 public class RegistryConstellations {
 
     public static void init() {
-        ConstellationRegistry.registerTier(0, createRInfo(0.2, -0.2, 0, 5), 1.0F);
+        ConstellationRegistry.registerTier(0, ProgressionTier.EXPLORATION, createRInfo(0.2, -0.2, 0, 5), 1.0F);
 
         //Only visible during full, new, and waning moon.
-        ConstellationRegistry.registerTier(1, createRInfo(-0.2, -0.2, -0.05, 5), 1.0F,
-                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
+        ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 1.0F);
+                //AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
 
-        ConstellationRegistry.registerTier(2, createRInfo(0, -0.3, -0.2, 8), 1.0F);
+        ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 1.0F);
 
-        ConstellationRegistry.registerTier(3, createRInfo(-0.4, -0.6, 0.5, 18), 1.0F);
+        ConstellationRegistry.registerTier(3, ProgressionTier.NETWORKING, createRInfo(-0.4, -0.6, 0.5, 18), 1.0F);
 
-        ConstellationRegistry.registerTier(4, createRInfo(0.4, -0.5, 0.5, 19), 1.0F);
+        ConstellationRegistry.registerTier(4, ProgressionTier.TRAIT_CRAFT, createRInfo(0.4, -0.5, 0.5, 19), 1.0F);
 
+        rebuildConstellations();
 
+        registerConstellations();
+    }
+
+    private static void registerConstellations() {
+        bigDipper. register("bigDipper",  0);
+        orion.     register("orion",      0);
+        aquila.    register("aquila",     0);
+        ara.       register("ara",        0);
+        bootes.    register("bootes",     0);
+
+        caelum.    register("caelum",     1);
+        circinus.  register("circinus",   1);
+        fornax.    register("fornax",     1);
+        horologium.register("horologium", 1);
+        libra.     register("libra",      1);
+
+        octans.    register("octans",     2);
+        phoenix.   register("phoenix",    2);
+        scutum.    register("scutum",     2);
+        rohini.    register("rohini",     2);
+        chitra.    register("chitra",     2);
+
+        draco.     register("draco",      3);
+        inpes.     register("inpes",      3);
+        locurba.   register("locurba",    3);
+        visso.     register("visso",      3);
+
+        lucerna.   register("lucerna",    4);
+        tenifium.  register("tenifium",   4);
+        fertilitas.register("fertilitas", 4);
+        reatio.    register("reatio",     4);
+    }
+
+    private static void rebuildConstellations() {
         StarLocation sl8, sl9, sl10, sl11, sl12, sl13, sl14;
 
         bigDipper = new Constellation();
@@ -51,8 +85,6 @@ public class RegistryConstellations {
         bigDipper.addConnection(sl6, sl7);
         bigDipper.addConnection(sl7, sl4);
 
-        bigDipper.register("bigDipper", 0);
-
         orion = new Constellation();
         sl1 = orion.addStar(8, 0);
         sl2 = orion.addStar(20, 2);
@@ -69,8 +101,6 @@ public class RegistryConstellations {
         orion.addConnection(sl6, sl3);
         orion.addConnection(sl7, sl5);
 
-        orion.register("orion", 0);
-
         aquila = new Constellation();
         sl1 = aquila.addStar(8, 5);
         sl2 = aquila.addStar(4, 20);
@@ -84,8 +114,6 @@ public class RegistryConstellations {
         aquila.addConnection(sl1, sl4);
         aquila.addConnection(sl3, sl4);
         aquila.addConnection(sl4, sl5);
-
-        aquila.register("aquila", 0);
 
         ara = new Constellation();
         sl1 = ara.addStar(9, 1);
@@ -103,8 +131,6 @@ public class RegistryConstellations {
         ara.addConnection(sl5, sl6);
         ara.addConnection(sl6, sl7);
         ara.addConnection(sl7, sl1);
-
-        ara.register("ara", 0);
 
         bootes = new Constellation();
         sl1 = bootes.addStar(14, 30);
@@ -127,8 +153,6 @@ public class RegistryConstellations {
         bootes.addConnection(sl8, sl9);
         bootes.addConnection(sl9, sl2);
 
-        bootes.register("bootes", 0);
-
         caelum = new Constellation();
         sl1 = caelum.addStar(2, 3);
         sl2 = caelum.addStar(13, 6);
@@ -138,8 +162,6 @@ public class RegistryConstellations {
         caelum.addConnection(sl1, sl2);
         caelum.addConnection(sl2, sl3);
         caelum.addConnection(sl3, sl4);
-
-        caelum.register("caelum", 0);
 
         circinus = new Constellation();
         sl1 = circinus.addStar(6, 2);
@@ -151,8 +173,6 @@ public class RegistryConstellations {
         circinus.addConnection(sl2, sl3);
         circinus.addConnection(sl3, sl4);
 
-        circinus.register("circinus", 0);
-
         fornax = new Constellation();
         sl1 = fornax.addStar(3, 11);
         sl2 = fornax.addStar(13, 16);
@@ -160,8 +180,6 @@ public class RegistryConstellations {
 
         fornax.addConnection(sl1, sl2);
         fornax.addConnection(sl2, sl3);
-
-        fornax.register("fornax", 0);
 
         horologium = new Constellation();
         sl1 = horologium.addStar(1, 1);
@@ -176,8 +194,6 @@ public class RegistryConstellations {
         horologium.addConnection(sl3, sl4);
         horologium.addConnection(sl4, sl5);
         horologium.addConnection(sl5, sl6);
-
-        horologium.register("horologium", 0);
 
         libra = new Constellation();
         sl1 = libra.addStar(5, 30);
@@ -194,8 +210,6 @@ public class RegistryConstellations {
         libra.addConnection(sl5, sl6);
         libra.addConnection(sl3, sl5);
 
-        libra.register("libra", 0);
-
         octans = new Constellation();
         sl1 = octans.addStar(1, 28);
         sl2 = octans.addStar(17, 1);
@@ -206,8 +220,6 @@ public class RegistryConstellations {
         octans.addConnection(sl2, sl3);
         octans.addConnection(sl3, sl4);
         octans.addConnection(sl4, sl1);
-
-        octans.register("octans", 0);
 
         phoenix = new Constellation();
         sl1 = phoenix.addStar(1, 1);
@@ -225,8 +237,6 @@ public class RegistryConstellations {
         phoenix.addConnection(sl5, sl6);
         phoenix.addConnection(sl6, sl4);
 
-        phoenix.register("phoenix", 0);
-
         scutum = new Constellation();
         sl1 = scutum.addStar(3, 1);
         sl2 = scutum.addStar(8, 13);
@@ -239,8 +249,6 @@ public class RegistryConstellations {
         scutum.addConnection(sl3, sl4);
         scutum.addConnection(sl4, sl5);
         scutum.addConnection(sl5, sl1);
-
-        scutum.register("scutum", 0);
 
         /*noctua = new Constellation();
         sl1 = noctua.addStar(29, 1);
@@ -280,8 +288,6 @@ public class RegistryConstellations {
         rohini.addConnection(sl5, sl6);
         rohini.addConnection(sl6, sl7);
 
-        rohini.register("rohini", 0);
-
         chitra = new Constellation();
         sl1 = chitra.addStar(29, 1);
         sl2 = chitra.addStar(29, 6);
@@ -306,8 +312,6 @@ public class RegistryConstellations {
         chitra.addConnection(sl8, sl9);
         chitra.addConnection(sl9, sl10);
         chitra.addConnection(sl10, sl7);
-
-        chitra.register("chitra", 0);
 
         draco = new Constellation();
         sl1 = draco.addStar(1, 29);
@@ -340,8 +344,128 @@ public class RegistryConstellations {
         draco.addConnection(sl12, sl13);
         draco.addConnection(sl13, sl14);
 
-        draco.register("draco", 0);
+        inpes = new Constellation();
+        sl1 = inpes.addStar(2, 2);
+        sl2 = inpes.addStar(6, 6);
+        sl3 = inpes.addStar(15, 7);
+        sl4 = inpes.addStar(19, 16);
+        sl5 = inpes.addStar(3, 16);
+        sl6 = inpes.addStar(6, 24);
+        sl7 = inpes.addStar(19, 28);
 
+        inpes.addConnection(sl1, sl2);
+        inpes.addConnection(sl2, sl3);
+        inpes.addConnection(sl2, sl4);
+        inpes.addConnection(sl5, sl6);
+        inpes.addConnection(sl6, sl7);
+        inpes.addConnection(sl6, sl4);
+
+        locurba = new Constellation();
+        sl1 = locurba.addStar(4, 3);
+        sl2 = locurba.addStar(10, 9);
+        sl3 = locurba.addStar(1, 11);
+        sl4 = locurba.addStar(22, 7);
+        sl5 = locurba.addStar(25, 14);
+        sl6 = locurba.addStar(10, 20);
+        sl7 = locurba.addStar(7, 29);
+        sl8 = locurba.addStar(16, 27);
+
+        locurba.addConnection(sl1, sl2);
+        locurba.addConnection(sl2, sl3);
+        locurba.addConnection(sl3, sl1);
+        locurba.addConnection(sl2, sl4);
+        locurba.addConnection(sl4, sl5);
+        locurba.addConnection(sl5, sl6);
+        locurba.addConnection(sl6, sl2);
+        locurba.addConnection(sl6, sl7);
+        locurba.addConnection(sl7, sl8);
+        locurba.addConnection(sl8, sl6);
+
+        visso = new Constellation();
+        sl1 = visso.addStar(3, 6);
+        sl2 = visso.addStar(8, 12);
+        sl3 = visso.addStar(3, 20);
+        sl4 = visso.addStar(26, 7);
+        sl5 = visso.addStar(21, 12);
+        sl6 = visso.addStar(27, 24);
+        sl7 = visso.addStar(23, 29);
+
+        visso.addConnection(sl1, sl2);
+        visso.addConnection(sl2, sl3);
+        visso.addConnection(sl4, sl5);
+        visso.addConnection(sl5, sl6);
+        visso.addConnection(sl6, sl7);
+        visso.addConnection(sl2, sl5);
+
+        lucerna = new Constellation();
+        sl1 = lucerna.addStar(16, 17);
+        sl2 = lucerna.addStar(2, 10);
+        sl3 = lucerna.addStar(11, 6);
+        sl4 = lucerna.addStar(21, 2);
+        sl5 = lucerna.addStar(27, 16);
+        sl6 = lucerna.addStar(27, 27);
+        sl7 = lucerna.addStar(7, 26);
+
+        lucerna.addConnection(sl1, sl2);
+        lucerna.addConnection(sl1, sl3);
+        lucerna.addConnection(sl1, sl4);
+        lucerna.addConnection(sl1, sl5);
+        lucerna.addConnection(sl1, sl6);
+        lucerna.addConnection(sl1, sl7);
+
+        tenifium = new Constellation();
+        sl1 = tenifium.addStar(17, 17);
+        sl2 = tenifium.addStar(2, 7);
+        sl3 = tenifium.addStar(15, 8);
+        sl4 = tenifium.addStar(21, 2);
+        sl5 = tenifium.addStar(28, 4);
+        sl6 = tenifium.addStar(25, 15);
+        sl7 = tenifium.addStar(22, 29);
+        sl8 = tenifium.addStar(11, 23);
+        sl9 = tenifium.addStar(8, 15);
+
+        tenifium.addConnection(sl1, sl2);
+        tenifium.addConnection(sl2, sl3);
+        tenifium.addConnection(sl3, sl4);
+        tenifium.addConnection(sl4, sl5);
+        tenifium.addConnection(sl5, sl6);
+        tenifium.addConnection(sl1, sl5);
+        tenifium.addConnection(sl1, sl7);
+        tenifium.addConnection(sl7, sl8);
+        tenifium.addConnection(sl8, sl9);
+
+        fertilitas = new Constellation();
+        sl1 = fertilitas.addStar(12, 29);
+        sl2 = fertilitas.addStar(15, 14);
+        sl3 = fertilitas.addStar(8, 5);
+        sl4 = fertilitas.addStar(14, 4);
+        sl5 = fertilitas.addStar(22, 5);
+
+        fertilitas.addConnection(sl1, sl2);
+        fertilitas.addConnection(sl2, sl3);
+        fertilitas.addConnection(sl2, sl4);
+        fertilitas.addConnection(sl2, sl5);
+        fertilitas.addConnection(sl3, sl4);
+        fertilitas.addConnection(sl4, sl5);
+
+        reatio = new Constellation();
+        sl1 = reatio.addStar(18, 15);
+        sl2 = reatio.addStar(13, 3);
+        sl3 = reatio.addStar(26, 7);
+        sl4 = reatio.addStar(21, 25);
+        sl5 = reatio.addStar(8, 21);
+        sl6 = reatio.addStar(3, 8);
+
+        reatio.addConnection(sl1, sl2);
+        reatio.addConnection(sl2, sl3);
+        reatio.addConnection(sl3, sl4);
+        reatio.addConnection(sl4, sl5);
+        reatio.addConnection(sl5, sl6);
+        reatio.addConnection(sl6, sl2);
+        reatio.addConnection(sl1, sl3);
+        reatio.addConnection(sl1, sl4);
+        reatio.addConnection(sl1, sl5);
+        reatio.addConnection(sl1, sl6);
     }
 
     private static Tier.RInformation createRInfo(double x, double y, double z, double size) {
