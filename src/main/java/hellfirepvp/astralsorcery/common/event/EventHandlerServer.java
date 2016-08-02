@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
@@ -55,6 +56,9 @@ public class EventHandlerServer {
         if (event.phase != TickEvent.Phase.END) return;
         if (event.world.provider.getDimension() == 0) {
             CelestialHandler.informTick(event.world);
+            if(!event.world.isRemote) {
+                WorldCacheManager.informTick(event.world);
+            }
         }
     }
 

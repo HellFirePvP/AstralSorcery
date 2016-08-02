@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
@@ -15,6 +17,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -72,6 +75,15 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
                 break;
         }
         return drops;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        if(!worldIn.isRemote) {
+            RockCrystalBuffer buffer = WorldCacheManager.getData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+            buffer.removeOre(pos);
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

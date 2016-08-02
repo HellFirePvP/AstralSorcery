@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.world;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import net.minecraft.block.BlockStone;
@@ -104,6 +106,8 @@ public class AstralWorldGenerator implements IWorldGenerator {
                 if (stoneType != null && stoneType.equals(BlockStone.EnumType.STONE)) {
                     IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                     world.setBlockState(pos, newState);
+                    RockCrystalBuffer buf = WorldCacheManager.getData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+                    buf.addOre(pos);
                 }
             }
         }
