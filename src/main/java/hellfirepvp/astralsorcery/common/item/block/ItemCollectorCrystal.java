@@ -29,11 +29,6 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         setMaxStackSize(1);
     }
 
-    @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, playerIn, tooltip, advanced);
-    }
-
     public static void setConstellation(ItemStack stack, Constellation constellation) {
         NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
         tag.setString("constellation", constellation.getName());

@@ -13,6 +13,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
 * This class is part of the Astral Sorcery Mod
@@ -22,6 +23,8 @@ import java.util.Optional;
 * Date: 01.08.2016 / 22:21
 */
 public class CrystalProperties {
+
+    private static final Random rand = new Random();
 
     public static final int MAX_SIZE = 500;
 
@@ -61,6 +64,33 @@ public class CrystalProperties {
         compound.setInteger("size", size);
         compound.setInteger("purity", purity);
         compound.setInteger("collect", collectiveCapability);
+    }
+
+    public static CrystalProperties createStructural() {
+        int size = Math.min(CrystalProperties.MAX_SIZE, CrystalProperties.MAX_SIZE / 2 + rand.nextInt(CrystalProperties.MAX_SIZE));
+        int purity = 60 + rand.nextInt(41);
+        int collect = 45 + rand.nextInt(56);
+        return new CrystalProperties(size, purity, collect);
+    }
+
+    public static CrystalProperties createRandom() {
+        int size = (rand.nextInt(CrystalProperties.MAX_SIZE) + rand.nextInt(CrystalProperties.MAX_SIZE)) / 2;
+        int purity = ((rand.nextInt(101) + rand.nextInt(101)) + 2) / 2;
+        int collect = 5 + rand.nextInt(26);
+        return new CrystalProperties(size, purity, collect);
+    }
+
+    public float getCollectionAmt(float distribution) {
+        float sizeDistr = (((float) size) / 100F);
+        return distribution * sizeDistr * (((float) collectiveCapability) / 100F);
+    }
+
+    public float getThroughput(float distribution) {
+        return distribution * (((float) purity) / 100);
+    }
+
+    public float getDischargePerc() {
+        return (float) Math.sqrt(((float) purity) / 100F);
     }
 
     @SideOnly(Side.CLIENT)

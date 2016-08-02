@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -67,16 +68,9 @@ public class ResearchManager {
     }
 
     public static boolean discoverConstellations(Collection<Constellation> csts, EntityPlayer player) {
-        PlayerProgress progress = playerProgressServer.get(player.getUniqueID());
-        if (progress == null) {
-            loadPlayerKnowledge(player);
-        }
-        progress = playerProgressServer.get(player.getUniqueID());
-        if (progress == null) {
-            AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + player.getName());
-            AstralSorcery.log.warn("Erroneous file: " + player.getUniqueID().toString() + ".astral");
-            return false;
-        }
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
         for (Constellation c : csts) {
             progress.discoverConstellation(c.getName());
         }
@@ -86,20 +80,35 @@ public class ResearchManager {
     }
 
     public static boolean discoverConstellation(Constellation c, EntityPlayer player) {
-        PlayerProgress progress = playerProgressServer.get(player.getUniqueID());
-        if (progress == null) {
-            loadPlayerKnowledge(player);
-        }
-        progress = playerProgressServer.get(player.getUniqueID());
-        if (progress == null) {
-            AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + player.getName());
-            AstralSorcery.log.warn("Erroneous file: " + player.getUniqueID().toString() + ".astral");
-            return false;
-        }
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
         progress.discoverConstellation(c.getName());
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;
+    }
+
+    public static boolean maximizeTier(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+        progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static Optional<ProgressionTier> stepTier(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return Optional.of(null);
+        if(!progress.stepTier()) {
+            return Optional.empty();
+        }
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return Optional.of(progress.getTierReached());
     }
 
     private static void pushProgressToClientUnsafe(EntityPlayer p) {
@@ -166,5 +175,4 @@ public class ResearchManager {
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
     }
-
 }

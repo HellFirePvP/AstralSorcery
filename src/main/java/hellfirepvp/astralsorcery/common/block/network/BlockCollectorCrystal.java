@@ -1,14 +1,15 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.block.tile.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
@@ -22,9 +23,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
@@ -33,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +58,7 @@ public class BlockCollectorCrystal extends BlockContainer {
         setResistance(20F);
         setHarvestLevel("pickaxe", 3);
         setSoundType(SoundType.GLASS);
-        setLightLevel(0.7F);
+        setLightLevel(1F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -88,6 +93,20 @@ public class BlockCollectorCrystal extends BlockContainer {
         }
     }
 
+    /*@Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!worldIn.isRemote) {
+            TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+            if(te != null) {
+                playerIn.addChatMessage(new TextComponentString("PlayerMade: " + te.isPlayerMade()));
+                playerIn.addChatMessage(new TextComponentString("Constellation: " + te.getTransmittingType().getName()));
+                playerIn.addChatMessage(new TextComponentString("Can charge: " + te.canCharge()));
+                playerIn.addChatMessage(new TextComponentString("Charge: " + te.getCharge()));
+            }
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+    }*/
+
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
@@ -103,15 +122,16 @@ public class BlockCollectorCrystal extends BlockContainer {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if(placer == null || !(placer instanceof EntityPlayer)) return;
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+        if(te == null) return;
 
         Constellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c == null) c = Constellations.bigDipper;
-        te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true);
+        te.onPlace(c, CrystalProperties.getCrystalProperties(stack), 0, true);
     }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return Lists.newArrayList(ItemRockCrystalBase.createRandomBaseCrystal());
+        return Lists.newArrayList();
     }
 
     @Override
@@ -134,6 +154,7 @@ public class BlockCollectorCrystal extends BlockContainer {
         TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class);
         if(te != null) {
             ItemStack stack = new ItemStack(this);
+            CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
             ItemCollectorCrystal.setConstellation(stack, te.getTransmittingType());
             return stack;
         }
@@ -150,4 +171,15 @@ public class BlockCollectorCrystal extends BlockContainer {
         return getMetaFromState(state);
     }
 
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+        if(te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.COLLECTOR_BURST,
+                    pos.getX(), pos.getY(), pos.getZ());
+            PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
+            TileCollectorCrystal.breakDamage(worldIn, pos);
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
 }

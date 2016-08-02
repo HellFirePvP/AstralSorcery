@@ -11,6 +11,6 @@ import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
  */
 public class MultiBlockArrays {
 
-    public static StructureBlockArray structShrine;
+    public static StructureBlockArray ancientShrine;
 
 }

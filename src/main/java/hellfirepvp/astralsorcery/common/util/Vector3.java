@@ -1,5 +1,8 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.Random;
@@ -43,6 +46,14 @@ public class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Vector3(BlockPos pos) {
+        this(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public Vector3(Entity entity) {
+        this(entity.posX, entity.posY, entity.posZ);
     }
 
     public Vector3 add(Vector3 vec) {

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,6 +54,12 @@ public class Tier {
         return Collections.unmodifiableList(constellations);
     }
 
+    public Constellation getRandomConstellation(Random rand) {
+        List<Constellation> cList = getConstellations();
+        if(cList.isEmpty()) return null;
+        return cList.get(rand.nextInt(cList.size()));
+    }
+
     public RInformation getRenderInformation() {
         return renderinfo;
     }
@@ -68,7 +75,6 @@ public class Tier {
 
     public boolean areAppearanceConditionsMet(CelestialHandler.MoonPhase currentMoonPhase, EnumSet<CelestialHandler.CelestialEvent> specialEvents) {
         return condition == null || condition.shouldAppearThisNight(currentMoonPhase, specialEvents);
-
     }
 
     public static class RInformation {

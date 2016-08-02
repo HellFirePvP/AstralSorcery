@@ -27,8 +27,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<String> knownConstellations = new ArrayList<>();
     public int progressTier = 0;
 
-    public PktSyncKnowledge() {
-    }
+    public PktSyncKnowledge() {}
 
     public PktSyncKnowledge(byte state) {
         this.state = state;
@@ -45,7 +44,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int cLength = buf.readInt();
         if (cLength != -1) {
-            knownConstellations = new ArrayList<String>();
+            knownConstellations = new ArrayList<>();
             for (int i = 0; i < cLength; i++) {
                 String val = ByteBufUtils.readString(buf);
                 knownConstellations.add(val);

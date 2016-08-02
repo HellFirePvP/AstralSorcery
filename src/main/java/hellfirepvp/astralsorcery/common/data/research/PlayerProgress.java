@@ -19,11 +19,11 @@ import java.util.List;
 public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
-    private ProgressionTier tierReached = ProgressionTier.EXPLORATION;
+    private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
-        tierReached = ProgressionTier.EXPLORATION;
+        tierReached = ProgressionTier.DISCOVERY;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -52,6 +52,14 @@ public class PlayerProgress {
 
     public ProgressionTier getTierReached() {
         return tierReached;
+    }
+
+    public boolean stepTier() {
+        if(getTierReached().hasNextTier()) {
+            setTierReached(ProgressionTier.values()[getTierReached().ordinal() + 1]);
+            return true;
+        }
+        return false;
     }
 
     public void setTierReached(ProgressionTier tier) {

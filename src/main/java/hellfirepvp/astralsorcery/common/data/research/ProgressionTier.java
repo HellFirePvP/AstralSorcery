@@ -28,4 +28,8 @@ public enum ProgressionTier {
         return cap;
     }
 
+    public boolean hasNextTier() {
+        return ordinal() < ProgressionTier.values().length - 1;
+    }
+
 }

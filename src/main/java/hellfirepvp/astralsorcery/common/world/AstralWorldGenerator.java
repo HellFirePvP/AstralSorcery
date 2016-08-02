@@ -4,14 +4,17 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
@@ -25,11 +28,11 @@ import java.util.Random;
  */
 public class AstralWorldGenerator implements IWorldGenerator {
 
-    private WorldGenMinable mineable;
+    private WorldGenMinable marbleMineable;
 
     public AstralWorldGenerator init() {
         if(Config.marbleAmount > 0) {
-            mineable = new WorldGenMinable(
+            marbleMineable = new WorldGenMinable(
                     BlocksAS.blockMarble.getDefaultState().
                             withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW),
                     Config.marbleVeinSize);
@@ -41,17 +44,50 @@ public class AstralWorldGenerator implements IWorldGenerator {
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (world.provider.getDimension() != 0) return;
 
-        int oX = chunkX * 16;
-        int oZ = chunkZ * 16;
+        genResources(random, chunkX, chunkZ, world);
+        if(Config.generateShrines && random.nextInt(Config.shrineGenerationChance) == 0) {
+            genShrine(random, chunkX, chunkZ, world);
+        }
+    }
 
+    private void genShrine(Random random, int chunkX, int chunkZ, World world) {
+        int rX = (chunkX  * 16) + random.nextInt(16);
+        int rZ = (chunkZ  * 16) + random.nextInt(16);
+        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ)).getY();
+        BlockPos central = new BlockPos(rX, rY, rZ);
+        if(!isMountainBiome(world, central)) return;
+        if(!canSpawnShrineCorner(world, central.add(0, 0, 7))) return;
+        if(!canSpawnShrineCorner(world, central.add(0, 0, -7))) return;
+        if(!canSpawnShrineCorner(world, central.add( 7, 0, -7))) return;
+        if(!canSpawnShrineCorner(world, central.add(-7, 0, -7))) return;
+        MultiBlockArrays.ancientShrine.placeInWorld(world, central);
+    }
+
+    private boolean canSpawnShrineCorner(World world, BlockPos pos) {
+        int dY = world.getTopSolidOrLiquidBlock(pos).getY();
+        return Math.abs(dY - pos.getY()) <= 2 && isMountainBiome(world, pos);
+    }
+
+    private boolean isMountainBiome(World world, BlockPos pos) {
+        Biome b = world.getBiomeGenForCoords(pos);
+        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
+        if(types == null || types.length == 0) return false;
+        boolean mountain = false;
+        for (BiomeDictionary.Type t : types) {
+            if(t.equals(BiomeDictionary.Type.MOUNTAIN)) mountain = true;
+        }
+        return mountain;
+    }
+
+    private void genResources(Random random, int chunkX, int chunkZ, World world) {
         genCrystals(random, chunkX, chunkZ, world);
-        if(mineable != null) {
+        if(marbleMineable != null) {
             for (int i = 0; i < Config.marbleAmount; i++) {
-                int rX = oX + random.nextInt(16);
+                int rX = (chunkX  * 16) + random.nextInt(16);
                 int rY = 50 + random.nextInt(10);
-                int rZ = oZ + random.nextInt(16);
+                int rZ = (chunkZ  * 16) + random.nextInt(16);
                 BlockPos pos = new BlockPos(rX, rY, rZ);
-                mineable.generate(world, random, pos);
+                marbleMineable.generate(world, random, pos);
             }
         }
     }

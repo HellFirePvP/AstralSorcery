@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +24,10 @@ public class StructureBlockArray extends BlockArray {
         tileCallbacks.put(pos, callback);
     }
 
+    public void placeInWorld(World world, BlockPos center) {
+        placeInWorld(world, center, null);
+    }
+
     public void placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
         Map<BlockPos, IBlockState> result = new HashMap<>();
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
@@ -31,6 +36,10 @@ public class StructureBlockArray extends BlockArray {
             IBlockState state = info.type.getStateFromMeta(info.meta);
             world.setBlockState(at, state, 3);
             result.put(at, state);
+
+            if(state.getBlock() instanceof BlockLiquid) {
+                world.notifyBlockOfStateChange(at, state.getBlock());
+            }
 
             TileEntity placed = world.getTileEntity(at);
             if(tileCallbacks.containsKey(entry.getKey())) {

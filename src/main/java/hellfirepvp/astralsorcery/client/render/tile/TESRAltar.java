@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 /**

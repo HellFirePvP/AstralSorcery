@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.client.effect.text;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
@@ -17,7 +19,7 @@ import java.util.Map;
  * on SoulSorcery
  * OverlayText
  */
-public final class OverlayText {
+public final class OverlayText implements IComplexEffect {
 
     public OverlayFontRenderer fontRendererObj;
 
@@ -87,25 +89,24 @@ public final class OverlayText {
         }
     }
 
-    private void tick() {
+    public void tick() {
         ticksUntilRemoval--;
         animationTick++;
-
-        if (ticksUntilRemoval <= 0) {
-            EffectHandler.getInstance().unregisterTextOverlay(this);
-        }
     }
 
-    public static void tickTexts(List<OverlayText> texts) {
-        synchronized (EffectHandler.lock) {
-            for (OverlayText text : texts) text.tick();
-        }
+    @Override
+    public boolean canRemove() {
+        return ticksUntilRemoval <= 0;
     }
 
-    public static void sheduleRender(List<OverlayText> overlayTexts, ScaledResolution resolution, float partialTicks) {
-        synchronized (EffectHandler.lock) {
-            for (OverlayText text : overlayTexts) text.doRender(resolution, partialTicks);
-        }
+    @Override
+    public void render(float pTicks) {
+        doRender(new ScaledResolution(Minecraft.getMinecraft()), pTicks);
+    }
+
+    @Override
+    public RenderTarget getRenderTarget() {
+        return RenderTarget.OVERLAY_TEXT;
     }
 
     public static class OverlayFontRenderer {

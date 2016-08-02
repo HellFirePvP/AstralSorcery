@@ -1,8 +1,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.block.tile.IVariantTileProvider;
-import hellfirepvp.astralsorcery.common.block.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.block.tile.TileGrindstone;
+import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -16,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;

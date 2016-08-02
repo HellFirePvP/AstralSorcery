@@ -20,7 +20,7 @@ import java.util.Random;
  */
 public class CelestialHandler {
 
-    public static final float MIN_DISTRIBUTION_RATE = 0.3F;
+    public static final float MIN_DISTRIBUTION_RATE = 0.2F;
     private static final float DISTRIBUTION_MULTIPLIER = 1F - MIN_DISTRIBUTION_RATE;
 
     public static final int SOLAR_ECLIPSE_HALF_DUR = 2400;

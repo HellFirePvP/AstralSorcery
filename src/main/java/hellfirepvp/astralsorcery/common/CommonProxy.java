@@ -63,9 +63,7 @@ public class CommonProxy implements IGuiHandler {
         SyncDataHolder.initialize();
     }
 
-    public void postInit() {
-        RegistryStructures.init();
-    }
+    public void postInit() {}
 
     public void registerVariantName(Item item, String name) {}
 

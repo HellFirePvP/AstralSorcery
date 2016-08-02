@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -17,7 +18,13 @@ import java.util.Map;
  */
 public class BlockArray {
 
+    protected static final Random STATIC_RAND = new Random();
+
     protected Map<BlockPos, BlockInformation> pattern = new HashMap<>();
+
+    public void addBlock(int x, int y, int z, IBlockState state) {
+        addBlock(new BlockPos(x, y, z), state);
+    }
 
     public void addBlock(BlockPos offset, IBlockState state) {
         Block b = state.getBlock();
@@ -28,7 +35,7 @@ public class BlockArray {
         pattern.put(offset, new BlockInformation(b, meta));
     }
 
-    private void buildQuad(World world, IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
+    public void buildQuad(IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
         int lx, ly, lz;
         int hx, hy, hz;
         if(ox < tx) {
@@ -53,16 +60,23 @@ public class BlockArray {
             hz = oz;
         }
 
-        do {
+        for (int xx = lx; xx <= hx; xx++) {
+            for (int zz = lz; zz <= hz; zz++) {
+                for (int yy = ly; yy <= hy; yy++) {
+                    addBlock(new BlockPos(xx, yy, zz), state);
+                }
+            }
+        }
+        /*do {
             do {
                 do {
-                    world.setBlockState(new BlockPos(lx, ly, lz), state);
+                    addBlock(new BlockPos(lx, ly, lz), state);
                     ly++;
                 } while (ly < hy);
                 lz++;
             } while (lz < hz);
             lx++;
-        } while (lx < hx);
+        } while (lx < hx);*/
 
     }
 

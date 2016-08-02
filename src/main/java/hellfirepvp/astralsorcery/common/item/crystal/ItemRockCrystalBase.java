@@ -1,21 +1,25 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.Axis;
+import hellfirepvp.astralsorcery.common.util.Vector3;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,13 +30,20 @@ import java.util.Random;
  */
 public class ItemRockCrystalBase extends Item {
 
-    private static final Random rand = new Random();
-
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
         setMaxDamage(0);
         setHasSubtypes(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        if(worldIn.isRemote) {
+            EffectHandler.getInstance().texturePlane(AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1"), Axis.persisentRandomAxis()).
+                    setPosition(new Vector3(playerIn)).setMaxAge(50);
+        }
+        return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
     }
 
     @Override
@@ -49,14 +60,8 @@ public class ItemRockCrystalBase extends Item {
     }
 
     public static ItemStack createRandomBaseCrystal() {
-        int size = (rand.nextInt(CrystalProperties.MAX_SIZE)
-                + rand.nextInt(CrystalProperties.MAX_SIZE)) / 2;
-        int purity = ((rand.nextInt(101) + rand.nextInt(101)) + 2) / 2;
-
-        CrystalProperties prop =
-                new CrystalProperties(size, purity, rand.nextInt(31));
         ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);
-        CrystalProperties.applyCrystalProperties(crystal, prop);
+        CrystalProperties.applyCrystalProperties(crystal, CrystalProperties.createRandom());
         return crystal;
     }
 

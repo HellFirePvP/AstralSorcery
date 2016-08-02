@@ -1,5 +1,9 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
+
+import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -10,7 +14,7 @@ package hellfirepvp.astralsorcery.common.registry;
 public class RegistryStructures {
 
     public static void init() {
-
+        ancientShrine = new StructureAncientShrine();
     }
 
 }

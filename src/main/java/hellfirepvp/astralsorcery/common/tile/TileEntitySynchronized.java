@@ -1,8 +1,7 @@
-package hellfirepvp.astralsorcery.common.block.tile;
+package hellfirepvp.astralsorcery.common.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
@@ -20,8 +19,7 @@ public class TileEntitySynchronized extends TileEntity {
         readCustomNBT(compound);
     }
 
-    public void readCustomNBT(NBTTagCompound compound) {
-    }
+    public void readCustomNBT(NBTTagCompound compound) {}
 
     public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
@@ -29,18 +27,27 @@ public class TileEntitySynchronized extends TileEntity {
         return compound;
     }
 
-    public void writeCustomNBT(NBTTagCompound compound) {
-    }
+    public void writeCustomNBT(NBTTagCompound compound) { }
 
-    public final Packet getDescriptionPacket() {
+    @Override
+    public final SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
+        super.writeToNBT(compound);
         writeCustomNBT(compound);
         return new SPacketUpdateTileEntity(getPos(), 255, compound);
     }
 
-    public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity paket) {
-        super.onDataPacket(manager, paket);
-        readCustomNBT(paket.getNbtCompound());
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound compound = new NBTTagCompound();
+        super.writeToNBT(compound);
+        writeCustomNBT(compound);
+        return compound;
+    }
+
+    public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
+        super.onDataPacket(manager, packet);
+        readCustomNBT(packet.getNbtCompound());
     }
 
 }

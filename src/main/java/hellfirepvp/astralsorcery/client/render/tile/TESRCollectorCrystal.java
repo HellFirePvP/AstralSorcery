@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.item.IItemRenderer;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
-import hellfirepvp.astralsorcery.common.block.tile.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderHelper;
@@ -38,23 +38,26 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     @Override
     public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
-        renderTileEffects(x, y, z, partialTicks);
+        renderTileEffects(x, y, z, te.getRenderPercFilled());
 
         int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
         float perc = (256 - t) / 256F;
         perc = MathHelper.cos((float) (perc * 2 * Math.PI));
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0.05 * perc, 0);
+        RenderHelper.disableStandardItemLighting();
         renderTile(x, y, z);
+        RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();
     }
 
-    private void renderTileEffects(double x, double y, double z, float partialTicks) {
+    private void renderTileEffects(double x, double y, double z, float percFilled) {
         rand.setSeed(1553015L);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 
         int fancy_count = !FMLClientHandler.instance().getClient().gameSettings.fancyGraphics ? 25 : 50;
+        fancy_count = ((int) (((float) fancy_count) * percFilled));
 
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
