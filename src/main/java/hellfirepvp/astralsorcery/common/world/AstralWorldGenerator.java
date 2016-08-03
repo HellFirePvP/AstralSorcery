@@ -67,7 +67,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return Math.abs(dY - pos.getY()) <= 2 && isMountainBiome(world, pos);
+        return Math.abs(dY - pos.getY()) <= 3 && isMountainBiome(world, pos);
     }
 
     private boolean isMountainBiome(World world, BlockPos pos) {

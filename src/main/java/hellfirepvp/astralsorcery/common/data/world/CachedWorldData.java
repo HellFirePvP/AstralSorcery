@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.world;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
@@ -14,6 +15,15 @@ public abstract class CachedWorldData extends WorldSavedData {
 
     private final WorldCacheManager.SaveKey key;
 
+    //Because minecraft.
+    public CachedWorldData(String key) {
+        super(key);
+        this.key = WorldCacheManager.SaveKey.getByIdentifier(key);
+        if(this.key == null) {
+            AstralSorcery.log.info("Unknown data identifier: " + key + " but resulted in AstralSorcery's CachedWorldData. Ignoring key...");
+        }
+    }
+
     public CachedWorldData(WorldCacheManager.SaveKey key) {
         super(key.getIdentifier());
         this.key = key;
@@ -27,6 +37,7 @@ public abstract class CachedWorldData extends WorldSavedData {
         return key;
     }
 
+    //in O(1)
     public final  <T extends CachedWorldData> T initializeAndGet(World world) {
         String id = getSaveKey().getIdentifier();
         CachedWorldData data = (CachedWorldData) world.loadItemData(getClass(), id);

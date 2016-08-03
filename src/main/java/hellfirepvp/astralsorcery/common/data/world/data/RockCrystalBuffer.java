@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.util.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +25,11 @@ public class RockCrystalBuffer extends CachedWorldData {
     private Map<ChunkPos, List<BlockPos>> crystalPositions = new HashMap<>();
     private static final Object lock = new Object();
 
-    public RockCrystalBuffer() {
+    public RockCrystalBuffer(String key) {
+        super(key);
+    }
+
+    protected RockCrystalBuffer() {
         super(WorldCacheManager.SaveKey.ROCK_CRYSTAL);
     }
 
@@ -83,10 +88,7 @@ public class RockCrystalBuffer extends CachedWorldData {
                 NBTTagList entries = chList.getTagList("crystals", 10);
                 for (int j = 0; j < entries.tagCount(); j++) {
                     NBTTagCompound tag = entries.getCompoundTagAt(i);
-                    int x = tag.getInteger("x");
-                    int y = tag.getInteger("y");
-                    int z = tag.getInteger("z");
-                    positions.add(new BlockPos(x, y, z));
+                    positions.add(NBTUtils.readBlockPosFromNBT(tag));
                 }
                 work.put(pos, positions);
             }
@@ -108,9 +110,7 @@ public class RockCrystalBuffer extends CachedWorldData {
                 NBTTagList chList = new NBTTagList();
                 for (BlockPos exactPos : crystalPositions.get(pos)) {
                     NBTTagCompound tag = new NBTTagCompound();
-                    tag.setInteger("x", exactPos.getX());
-                    tag.setInteger("y", exactPos.getY());
-                    tag.setInteger("z", exactPos.getZ());
+                    NBTUtils.writeBlockPosToNBT(exactPos, tag);
                     chList.appendTag(tag);
                 }
                 comp.setTag("crystals", chList);

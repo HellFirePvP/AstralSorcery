@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
@@ -58,6 +59,7 @@ public class RegistryItems {
         rockCrystal = registerItem(new ItemRockCrystalBase());
         tunedCrystal = registerItem(new ItemTunedCrystal());
         telescopePlacer = registerItem(new ItemTelescopePlacer());
+        linkingTool = registerItem(new ItemLinkingTool());
     }
 
     //Items associated to blocks/itemblocks

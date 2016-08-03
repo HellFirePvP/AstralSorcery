@@ -1,4 +1,6 @@
-package hellfirepvp.astralsorcery.common.block.network;
+package hellfirepvp.astralsorcery.common.starlight;
+
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -9,8 +11,8 @@ package hellfirepvp.astralsorcery.common.block.network;
  */
 public interface IStarlightSource extends IStarlightTransmission {
 
-    default public int getAvailableCharge() {
-        return 0;
-    }
+    public Constellation getSourceType();
+
+    public int tryDrain(Constellation type, int amount);
 
 }

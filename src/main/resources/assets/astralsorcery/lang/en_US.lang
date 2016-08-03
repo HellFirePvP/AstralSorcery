@@ -2,6 +2,11 @@ itemGroup.astralsorcery=[AS] Astral Sorcery
 itemGroup.astralsorcery.papers=[AS] Constellation Papers
 
 misc.moreInformation=<Hold SHIFT for more details>
+misc.link.stop=Stopped linking!
+misc.link.start=Selected %s!
+misc.link.link=Linked %s to %s!
+misc.link.link.block=a block
+misc.link.unlink.Unlinked %s from %s!
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
@@ -18,6 +23,7 @@ item.ItemConstellationPaper.name=Constellation Paper
 item.ItemRockCrystalBase.name=Rock Crystal
 item.ItemTunedCrystal.name=Attuned Rock Crystal
 item.ItemTelescopePlacer.name=Telescope
+item.ItemLinkingTool.name=[WIP] Linking Tool
 
 tile.BlockCustomOre.rock_crystal.name=Rock Crystal Ore
 tile.BlockCollectorCrystal.name=Collector Crystal

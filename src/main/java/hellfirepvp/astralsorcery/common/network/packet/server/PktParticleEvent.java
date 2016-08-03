@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -53,6 +54,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
             AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
+    }
+
+    public BlockPos getPos() {
+        return new BlockPos(xCoord, yCoord, zCoord);
     }
 
     public static enum ParticleEventType {

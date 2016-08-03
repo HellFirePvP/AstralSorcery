@@ -9,6 +9,8 @@ import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
  */
 public class ClientGuiHandler {
 
+    @SideOnly(Side.CLIENT)
     public static Object openGui(EnumClientGui guiType, EntityPlayer player, World world, int x, int y, int z) {
         switch (guiType) {
             case TELESCOPE:

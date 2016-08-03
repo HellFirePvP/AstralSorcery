@@ -80,15 +80,18 @@ public class CrystalProperties {
         return new CrystalProperties(size, purity, collect);
     }
 
+    //Depends on size and collectivity
     public float getCollectionAmt(float distribution) {
         float sizeDistr = (((float) size) / 100F);
         return distribution * sizeDistr * (((float) collectiveCapability) / 100F);
     }
 
+    //Depends on purity alone - 1F -> all gets through, 0F -> none
     public float getThroughput(float distribution) {
         return distribution * (((float) purity) / 100);
     }
 
+    //1F -> none, 0F -> ALL
     public float getDischargePerc() {
         return (float) Math.sqrt(((float) purity) / 100F);
     }

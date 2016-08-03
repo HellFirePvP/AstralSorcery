@@ -105,8 +105,34 @@ public class CommandAstralSorcery extends CommandBase {
                 } else {
                     RegistryStructures.init(); //Reload
                 }
+            } else if(identifier.equalsIgnoreCase("maximize")) {
+                if (args.length == 2) {
+                    maxAll(server, sender, args[1]);
+                }
             }
         }
+    }
+
+    private void maxAll(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
+        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        if (prTuple == null) {
+            return;
+        }
+        PlayerProgress progress = prTuple.value;
+        EntityPlayer other = prTuple.key;
+
+        Collection<Constellation> constellations = ConstellationRegistry.getAllConstellations();
+        if (!ResearchManager.discoverConstellations(constellations, other)) {
+            sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
+            return;
+        }
+        sender.addChatMessage(new TextComponentString("§aDiscovered all Constellations!"));
+        if(!ResearchManager.maximizeTier(other)) {
+            sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
+        } else {
+            sender.addChatMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
+        }
+        sender.addChatMessage(new TextComponentString("§aSuccess!"));
     }
 
     private void buildStruct(MinecraftServer server, ICommandSender sender, String name) {
@@ -273,6 +299,7 @@ public class CommandAstralSorcery extends CommandBase {
         sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <step;all>§7 - set the progression"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery reset [playerName]§7 - resets all progression-related data for that player."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery build [structure]§7 - builds the named structure wherever the player is looking at."));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
     }
 
     private void listConstellations(ICommandSender sender) {

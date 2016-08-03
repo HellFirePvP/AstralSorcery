@@ -4,22 +4,22 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
-import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
+import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.util.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-import java.awt.*;
 import java.lang.reflect.Field;
 
 /**
@@ -51,6 +51,14 @@ public class EventHandlerServer {
         }
     }
 
+    //TODO ASM something better into forge/mc
+    /*@SubscribeEvent
+    public void onBreak(BlockEvent.PlaceEvent event) {
+        if(!event.getWorld().isRemote) {
+            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(event.getPos());
+        }
+    }*/
+
     @SubscribeEvent
     public void onTick(TickEvent.WorldTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
@@ -58,6 +66,7 @@ public class EventHandlerServer {
             CelestialHandler.informTick(event.world);
             if(!event.world.isRemote) {
                 WorldCacheManager.informTick(event.world);
+                LinkHandler.informTick();
             }
         }
     }

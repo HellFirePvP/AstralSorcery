@@ -18,7 +18,7 @@ public class Config {
     //public static boolean stopOnIllegalState = true;
     public static int crystalDensity = 5;
     public static int marbleAmount = 4, marbleVeinSize = 20;
-    public static int shrineGenerationChance = 250;
+    public static int shrineGenerationChance = 150;
     public static boolean generateShrines = true;
 
     private Config() {}
@@ -38,7 +38,7 @@ public class Config {
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk.");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
         generateShrines = latestConfig.getBoolean("generateShrines", "worldgen", true, "Set to true to enable shrine generation.");
-        shrineGenerationChance = latestConfig.getInt("shrineGenerationChance", "worldgen", 250, 1, 200000, "Defines the chance if the worldgenerator will check a position in a chunk to spawn the shrine in. (onWorldGen: random.nextInt(shrineGenerationChance) == 0 -> check if generation is possible at 1 random pos in chunk.)");
+        shrineGenerationChance = latestConfig.getInt("shrineGenerationChance", "worldgen", 150, 1, 200000, "Defines the chance if the worldgenerator will check a position in a chunk to spawn the shrine in. (onWorldGen: random.nextInt(shrineGenerationChance) == 0 -> check if generation is possible at 1 random pos in chunk.)");
     }
 
 }

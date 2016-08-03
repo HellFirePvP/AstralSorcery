@@ -48,7 +48,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 12:58
  */
-public class BlockCollectorCrystal extends BlockContainer {
+public class BlockCollectorCrystal extends BlockStarlightNetwork {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 
@@ -155,7 +155,7 @@ public class BlockCollectorCrystal extends BlockContainer {
         if(te != null) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
-            ItemCollectorCrystal.setConstellation(stack, te.getTransmittingType());
+            ItemCollectorCrystal.setConstellation(stack, te.getSourceType());
             return stack;
         }
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);

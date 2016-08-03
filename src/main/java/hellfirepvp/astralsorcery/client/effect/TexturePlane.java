@@ -116,6 +116,8 @@ public class TexturePlane implements IComplexEffect {
         GL11.glPushMatrix();
         removeOldTranslate(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
         GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), colorOverlay.getAlpha());
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         Vector3 axis = this.axis.getAxis();
         float deg;
         if(ticksPerFullRot >= 0) {
@@ -131,6 +133,7 @@ public class TexturePlane implements IComplexEffect {
         currRenderAroundAxis(Math.toRadians(360F - deg), axis.clone().multiply(-1));
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
     }
 

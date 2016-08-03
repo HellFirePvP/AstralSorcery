@@ -2,6 +2,8 @@ package hellfirepvp.astralsorcery.common.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -54,6 +56,10 @@ public class Vector3 {
 
     public Vector3(Entity entity) {
         this(entity.posX, entity.posY, entity.posZ);
+    }
+
+    public Vector3(Vec3d vec) {
+        this(vec.xCoord, vec.yCoord, vec.zCoord);
     }
 
     public Vector3 add(Vector3 vec) {
@@ -296,6 +302,14 @@ public class Vector3 {
         double difY = origin.y - this.y;
         double difZ = origin.z - this.z;
         return (difX * difX + difY * difY + difZ * difZ) <= (radius * radius);
+    }
+
+    public Vec3d toVec3d() {
+        return new Vec3d(x, y, z);
+    }
+
+    public BlockPos toBlockPos() {
+        return new BlockPos(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z));
     }
 
     public Vector3 vectorFromHereTo(Vector3 target) {
