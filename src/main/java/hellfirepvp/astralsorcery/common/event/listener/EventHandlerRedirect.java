@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.event;
+package hellfirepvp.astralsorcery.common.event.listener;
 
 /**
  * This class is part of the Astral Sorcery Mod

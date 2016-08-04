@@ -29,7 +29,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     private boolean nextReachable = false;
     private BlockPos nextPos = null;
-    private double dstToNext = 0;
+    private double dstToNextSq = 0;
     private RaytraceAssist assistNext = null;
 
     private BlockPos thisPos;
@@ -50,7 +50,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         if(to.equals(nextPos)) { //cleanup
             this.nextPos = null;
             this.assistNext = null;
-            this.dstToNext = 0;
+            this.dstToNextSq = 0;
             this.nextReachable = false;
         }
     }
@@ -68,15 +68,15 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         } else {
             this.nextReachable = oldRayState;
         }
-        this.dstToNext = pos.getDistance(thisPos.getX(), thisPos.getY(), thisPos.getZ());
+        this.dstToNextSq = pos.distanceSq(thisPos.getX(), thisPos.getY(), thisPos.getZ());
     }
 
     @Override
     public void notifyBlockChange(World world, BlockPos at) {
         if(nextPos == null) return;
-        double dstStart = thisPos.getDistance(at.getX(), at.getY(), at.getZ());
-        double dstEnd = nextPos.getDistance(at.getX(), at.getY(), at.getZ());
-        if(dstStart > dstToNext || dstEnd > dstToNext) return; //out of range
+        double dstStart = thisPos.distanceSq(at.getX(), at.getY(), at.getZ());
+        double dstEnd = nextPos.distanceSq(at.getX(), at.getY(), at.getZ());
+        if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return; //out of range
         this.nextReachable = assistNext.isClear();
     }
 

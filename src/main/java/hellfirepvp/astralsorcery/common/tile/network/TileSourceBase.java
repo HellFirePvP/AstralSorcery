@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
-import hellfirepvp.astralsorcery.common.util.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
 import hellfirepvp.astralsorcery.common.util.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

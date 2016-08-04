@@ -1,0 +1,31 @@
+package hellfirepvp.astralsorcery.common.auxiliary.tick;
+
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.EnumSet;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: ITickHandler
+ * Created by HellFirePvP
+ * Date: 04.08.2016 / 11:21
+ */
+public interface ITickHandler {
+
+    public void tick(TickEvent.Type type, Object... context);
+
+    /**
+     * WORLD, context: worldObj
+     * SERVER, context:
+     * CLIENT, context:
+     * RENDER, context: pTicks
+     * PLAYER, context: player
+     */
+    public EnumSet<TickEvent.Type> getHandledTypes();
+
+    public boolean canFire(TickEvent.Phase phase);
+
+    public String getName();
+
+}

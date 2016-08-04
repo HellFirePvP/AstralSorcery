@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class LightNetworkBuffer extends CachedWorldData {
 
     private Map<ChunkPos, ChunkNetworkData> chunkSortedData = new HashMap<>();
+    //private List<BlockPos, > TODO here.
 
     //specifically "highlighted" for removal.
     private List<ChunkPos> queueRemoval = new LinkedList<>();
@@ -54,6 +56,10 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     @Override
     public void updateTick() {
+        cleanupQueuedChunks();
+    }
+
+    private void cleanupQueuedChunks() {
         for (ChunkPos pos : queueRemoval) {
             ChunkNetworkData data = getChunkData(pos);
             if(data != null && data.isEmpty()) {
@@ -72,12 +78,39 @@ public class LightNetworkBuffer extends CachedWorldData {
         chunkSortedData.put(pos, new ChunkNetworkData());
     }
 
-    //TODO save/load!
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {}
+    public void readFromNBT(NBTTagCompound nbt) {
+        chunkSortedData.clear();
+
+        if(nbt.hasKey("chunkSortedData")) {
+            NBTTagList list = nbt.getTagList("chunkSortedData", 10);
+            for (int i = 0; i < list.tagCount(); i++) {
+                NBTTagCompound posTag = list.getCompoundTagAt(i);
+                int chX = posTag.getInteger("chX");
+                int chZ = posTag.getInteger("chZ");
+                ChunkPos pos = new ChunkPos(chX, chZ);
+                ChunkNetworkData data = ChunkNetworkData.loadFromNBT(posTag.getCompoundTag("netData"));
+                chunkSortedData.put(pos, data);
+            }
+        }
+    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        cleanupQueuedChunks();
+
+        NBTTagList list = new NBTTagList();
+        for (ChunkPos pos : chunkSortedData.keySet()) {
+            ChunkNetworkData data = chunkSortedData.get(pos);
+            NBTTagCompound posTag = new NBTTagCompound();
+            posTag.setInteger("chX", pos.chunkXPos);
+            posTag.setInteger("chZ", pos.chunkZPos);
+            NBTTagCompound netData = new NBTTagCompound();
+            data.writeToNBT(netData);
+            posTag.setTag("netData", netData);
+            list.appendTag(posTag);
+        }
+        nbt.setTag("chunkSortedData", list);
         return nbt;
     }
 
@@ -90,6 +123,8 @@ public class LightNetworkBuffer extends CachedWorldData {
             data = getChunkData(chPos);
         }
         data.addSourceTile(pos, source);
+
+        markDirty();
     }
 
     public void addTransmission(IStarlightTransmission transmission, BlockPos pos) {
@@ -100,6 +135,8 @@ public class LightNetworkBuffer extends CachedWorldData {
             data = getChunkData(chPos);
         }
         data.addTransmissionTile(pos, transmission);
+
+        markDirty();
     }
 
     public void removeSource(IStarlightSource source, BlockPos pos) {
@@ -109,6 +146,8 @@ public class LightNetworkBuffer extends CachedWorldData {
         data.removeSourceTile(pos);
 
         checkIntegrity(chPos);
+
+        markDirty();
     }
 
     public void removeTransmission(IStarlightTransmission transmission, BlockPos pos) {
@@ -118,6 +157,8 @@ public class LightNetworkBuffer extends CachedWorldData {
         data.removeTransmissionTile(pos);
 
         checkIntegrity(chPos);
+
+        markDirty();
     }
 
     private void checkIntegrity(ChunkPos chPos) {
@@ -135,6 +176,16 @@ public class LightNetworkBuffer extends CachedWorldData {
         private Map<BlockPos, IStarlightSource> sourceTiles = new HashMap<>();
 
         private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
+
+        //TODO do read write
+        private static ChunkNetworkData loadFromNBT(NBTTagCompound tag) {
+            ChunkNetworkData data = new ChunkNetworkData();
+            return data;
+        }
+
+        private void writeToNBT(NBTTagCompound tag) {
+
+        }
 
         @Nullable
         public IPrismTransmissionNode getTransmissionNode(BlockPos at) {

@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.common.tile.network;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
-import hellfirepvp.astralsorcery.common.util.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
 import hellfirepvp.astralsorcery.common.util.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

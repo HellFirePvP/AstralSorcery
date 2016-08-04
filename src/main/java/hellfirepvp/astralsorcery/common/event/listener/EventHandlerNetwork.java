@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.event;
+package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;

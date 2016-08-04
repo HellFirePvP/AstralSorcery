@@ -122,11 +122,11 @@ public class TileCollectorCrystal extends TileSourceBase implements IStarlightSo
     //TODO do. eventually. at some point. maybe.
     @SideOnly(Side.CLIENT)
     public static void breakParticles(PktParticleEvent event) {
-        System.out.println("info particle event at " + event.getPos());
+
     }
 
     public static void breakDamage(World world, BlockPos pos) {
-        System.out.println("info particle event at " + pos);
+
     }
 
     @Override

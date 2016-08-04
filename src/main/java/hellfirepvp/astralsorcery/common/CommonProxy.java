@@ -1,9 +1,13 @@
 package hellfirepvp.astralsorcery.common;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
+import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
-import hellfirepvp.astralsorcery.common.event.EventHandlerNetwork;
-import hellfirepvp.astralsorcery.common.event.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
@@ -59,8 +63,20 @@ public class CommonProxy implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
+        MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
+
+        registerTickHandlers();
 
         SyncDataHolder.initialize();
+    }
+
+    private void registerTickHandlers() {
+        TickManager manager = TickManager.getInstance();
+
+        manager.register(new CelestialHandler.CelestialTickHandler());
+        manager.register(new WorldCacheManager()); //Only used as instance for tick handling
+        manager.register(new LinkHandler()); //Only used as instance for tick handling
+
     }
 
     public void postInit() {}

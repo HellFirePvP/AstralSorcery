@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ public class CelestialHandler {
     public static int prevLunarEclipseTick = 0;
     public static int lunarEclipseTick = 0;
 
-    public static void informTick(World world) {
+    private static void informTick(World world) {
         if (world.provider.getDimension() != 0) return;
 
         if (!seedInit) {
@@ -233,6 +235,30 @@ public class CelestialHandler {
 
         public Constellation getCurrentConstellation() {
             return tier.getConstellations().isEmpty() ? null : tier.getConstellations().get(counter);
+        }
+
+    }
+
+    public static class CelestialTickHandler implements ITickHandler {
+
+        @Override
+        public void tick(TickEvent.Type type, Object... context) {
+            CelestialHandler.informTick((World) context[0]);
+        }
+
+        @Override
+        public EnumSet<TickEvent.Type> getHandledTypes() {
+            return EnumSet.of(TickEvent.Type.WORLD);
+        }
+
+        @Override
+        public boolean canFire(TickEvent.Phase phase) {
+            return phase == TickEvent.Phase.END;
+        }
+
+        @Override
+        public String getName() {
+            return "CelestialHandler";
         }
 
     }

@@ -53,9 +53,10 @@ public class WorldNetworkHandler {
         }
     }
 
-    public void requestStarlight(StarlightRequest request) {
+    //TODO redesign
+    /*public void requestStarlight(StarlightRequest request) {
 
-    }
+    }*/
 
     @Nullable
     public IPrismTransmissionNode getTransmissionNode(@Nullable BlockPos pos) {
@@ -142,6 +143,7 @@ public class WorldNetworkHandler {
         queryData(central, dataList);
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
+                if(xx == 0 && zz == 0) continue; //We don't collect the same chunk twice.
                 queryData(new ChunkPos(central.chunkXPos + xx, central.chunkZPos + zz), dataList);
             }
         }

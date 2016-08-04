@@ -1,5 +1,6 @@
-package hellfirepvp.astralsorcery.common.util.link;
+package hellfirepvp.astralsorcery.common.auxiliary.link;
 
+import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -7,8 +8,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,7 +23,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 18:32
  */
-public class LinkHandler {
+public class LinkHandler implements ITickHandler {
 
     private static Map<EntityPlayer, LinkSession> players = new HashMap<>();
 
@@ -94,8 +97,8 @@ public class LinkHandler {
                 break;
         }
     }
-
-    public static void informTick() {
+    @Override
+    public void tick(TickEvent.Type type, Object... context) {
         Iterator<EntityPlayer> iterator = players.keySet().iterator();
         while (iterator.hasNext()) {
             EntityPlayer pl = iterator.next();
@@ -115,6 +118,21 @@ public class LinkHandler {
                 pl.addChatMessage(new TextComponentString("§c" + I18n.translateToLocal("misc.link.stop")));
             }
         }
+    }
+
+    @Override
+    public EnumSet<TickEvent.Type> getHandledTypes() {
+        return EnumSet.of(TickEvent.Type.SERVER);
+    }
+
+    @Override
+    public boolean canFire(TickEvent.Phase phase) {
+        return phase == TickEvent.Phase.END;
+    }
+
+    @Override
+    public String getName() {
+        return "LinkHandler";
     }
 
     public static class LinkSession {

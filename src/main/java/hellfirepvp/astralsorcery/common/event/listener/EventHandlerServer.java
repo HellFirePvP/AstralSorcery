@@ -1,19 +1,19 @@
-package hellfirepvp.astralsorcery.common.event;
+package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
+import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
+import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.util.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -51,24 +51,10 @@ public class EventHandlerServer {
         }
     }
 
-    //TODO ASM something better into forge/mc
-    /*@SubscribeEvent
-    public void onBreak(BlockEvent.PlaceEvent event) {
-        if(!event.getWorld().isRemote) {
-            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(event.getPos());
-        }
-    }*/
-
     @SubscribeEvent
-    public void onTick(TickEvent.WorldTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        if (event.world.provider.getDimension() == 0) {
-            CelestialHandler.informTick(event.world);
-            if(!event.world.isRemote) {
-                WorldCacheManager.informTick(event.world);
-                LinkHandler.informTick();
-            }
-        }
+    public void onChange(BlockModifyEvent event) {
+        if(event.getWorld().isRemote) return;
+        WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(event.getPos());
     }
 
     @SubscribeEvent

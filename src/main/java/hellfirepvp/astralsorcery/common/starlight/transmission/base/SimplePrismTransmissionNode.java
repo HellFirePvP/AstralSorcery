@@ -139,7 +139,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     private static class PrismNext {
 
         private boolean reachable = false;
-        private double distance;
+        private double distanceSq;
         private final BlockPos pos;
         private RaytraceAssist rayAssist = null;
 
@@ -151,13 +151,13 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             } else {
                 this.reachable = oldRayState;
             }
-            this.distance = end.getDistance(start.getX(), start.getY(), start.getZ());
+            this.distanceSq = end.getDistance(start.getX(), start.getY(), start.getZ());
         }
 
         private void notifyBlockPlace(BlockPos connect, BlockPos at) {
-            double dstStart = connect.getDistance(at.getX(), at.getY(), at.getZ());
-            double dstEnd = pos.getDistance(at.getX(), at.getY(), at.getZ());
-            if(dstStart > distance || dstEnd > distance) return;
+            double dstStart = connect.distanceSq(at.getX(), at.getY(), at.getZ());
+            double dstEnd = pos.distanceSq(at.getX(), at.getY(), at.getZ());
+            if(dstStart > distanceSq || dstEnd > distanceSq) return;
             this.reachable = rayAssist.isClear();
         }
 

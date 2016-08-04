@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.util.link;
+package hellfirepvp.astralsorcery.common.auxiliary.link;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

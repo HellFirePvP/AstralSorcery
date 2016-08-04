@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.link.LinkHandler;
+import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
