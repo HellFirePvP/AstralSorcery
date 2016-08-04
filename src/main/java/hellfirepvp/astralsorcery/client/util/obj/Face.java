@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.util.obj;
 
-import hellfirepvp.astralsorcery.common.util.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.tile.network;
+package hellfirepvp.astralsorcery.common.tile.base;
 
 /**
  * This class is part of the Astral Sorcery Mod

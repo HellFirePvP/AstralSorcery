@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.util.nbt;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

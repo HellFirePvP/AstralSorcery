@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -30,21 +31,19 @@ public class RaytraceAssist {
 
     private final Vector3 start, target;
     private final BlockPos startPos, targetPos;
-    private final World world;
 
-    public RaytraceAssist(World world, BlockPos start, BlockPos target) {
-        this(world, new Vector3(start).add(CENTRALIZE), new Vector3(target).add(CENTRALIZE));
+    public RaytraceAssist(BlockPos start, BlockPos target) {
+        this(new Vector3(start).add(CENTRALIZE), new Vector3(target).add(CENTRALIZE));
     }
 
-    public RaytraceAssist(World world, Vector3 start, Vector3 target) {
+    public RaytraceAssist(Vector3 start, Vector3 target) {
         this.start = start;
         this.target = target;
-        this.world = world;
         this.startPos = start.toBlockPos();
         this.targetPos = target.toBlockPos();
     }
 
-    public boolean isClear() {
+    public boolean isClear(World world) {
         Vector3 aim = start.vectorFromHereTo(target);
         Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
         double distance = aim.length();

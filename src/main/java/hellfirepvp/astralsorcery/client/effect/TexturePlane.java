@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
-import hellfirepvp.astralsorcery.common.util.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;

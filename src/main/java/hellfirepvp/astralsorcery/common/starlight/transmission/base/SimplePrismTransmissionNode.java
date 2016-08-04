@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
-import hellfirepvp.astralsorcery.common.util.NBTUtils;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -61,7 +63,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     @Override
     public void notifyBlockChange(World world, BlockPos at) {
         for (PrismNext next : nextNodes.values()) {
-            next.notifyBlockPlace(thisPos, at);
+            next.notifyBlockPlace(world, thisPos, at);
         }
     }
 
@@ -90,12 +92,12 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     }
 
     @Override
-    public IPrismTransmissionNode provideEmptyNBTReadInstance() {
-        return new SimplePrismTransmissionNode(null);
+    public TransmissionClassRegistry.TransmissionProvider getProvider() {
+        return new Provider();
     }
 
     @Override
-    public void readFromNBT(World world, NBTTagCompound compound) {
+    public void readFromNBT(NBTTagCompound compound) {
         this.thisPos = NBTUtils.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
 
@@ -109,12 +111,12 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             NBTTagCompound tag = nextList.getCompoundTagAt(i);
             BlockPos next = NBTUtils.readBlockPosFromNBT(tag);
             boolean oldState = tag.getBoolean("rayState");
-            addLink(world, next, false, oldState); //Rebuild link.
+            addLink(null, next, false, oldState); //Rebuild link.
         }
     }
 
     @Override
-    public void writeToNBT(World world, NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         NBTUtils.writeBlockPosToNBT(thisPos, compound);
 
         NBTTagList sources = new NBTTagList();
@@ -123,7 +125,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             NBTUtils.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
-        compound.setTag("sources", compound);
+        compound.setTag("sources", sources);
 
         NBTTagList nextList = new NBTTagList();
         for (BlockPos next : nextNodes.keySet()) {
@@ -145,20 +147,34 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
         private PrismNext(World world, BlockPos start, BlockPos end, boolean doRayTest, boolean oldRayState) {
             this.pos = end;
-            this.rayAssist = new RaytraceAssist(world, start, end);
+            this.rayAssist = new RaytraceAssist(start, end);
             if(doRayTest) {
-                this.reachable = rayAssist.isClear();
+                this.reachable = rayAssist.isClear(world);
             } else {
                 this.reachable = oldRayState;
             }
             this.distanceSq = end.getDistance(start.getX(), start.getY(), start.getZ());
         }
 
-        private void notifyBlockPlace(BlockPos connect, BlockPos at) {
+        private void notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
             double dstStart = connect.distanceSq(at.getX(), at.getY(), at.getZ());
             double dstEnd = pos.distanceSq(at.getX(), at.getY(), at.getZ());
             if(dstStart > distanceSq || dstEnd > distanceSq) return;
-            this.reachable = rayAssist.isClear();
+            this.reachable = rayAssist.isClear(world);
+        }
+
+    }
+
+    public static class Provider implements TransmissionClassRegistry.TransmissionProvider {
+
+        @Override
+        public IPrismTransmissionNode provideEmptyNode() {
+            return new SimplePrismTransmissionNode(null);
+        }
+
+        @Override
+        public String getIdentifier() {
+            return AstralSorcery.MODID + ":SimplePrismTransmissionNode";
         }
 
     }

@@ -108,13 +108,14 @@ public class CelestialHandler {
 
     private static void scheduleDayProgression(int loop) {
         for (int i = 0; i < loop; i++) {
-            scheduleDayProgression(false);
+            scheduleDayProgression();
         }
 
         ((DataActiveCelestials) SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS)).updateIterations(constellationIterations.values());
+        computeDistribution();
     }
 
-    private static void scheduleDayProgression(boolean sendUpdates) {
+    private static void scheduleDayProgression() {
         for (Tier tier : constellationIterations.keySet()) {
             constellationIterations.get(tier).nextDay();
         }
@@ -133,14 +134,9 @@ public class CelestialHandler {
                 ti.setShowing();
             }
         }
-
-        if (sendUpdates) {
-            ((DataActiveCelestials) SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS)).updateIterations(constellationIterations.values());
-        }
-
-        computeDistribution();
     }
 
+    //Between 1F and MIN_DISTRIBUTION_RATE for showing all the way down to not even close to showing up.
     public static Float getCurrentDistribution(Constellation c) {
         if (starlightDistribution == null) return 0F;
         return starlightDistribution.getDistributionCharge(c);

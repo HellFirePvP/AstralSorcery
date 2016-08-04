@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.Sync;
-import hellfirepvp.astralsorcery.common.util.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;

@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.tile.network.TileNetwork;
+import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

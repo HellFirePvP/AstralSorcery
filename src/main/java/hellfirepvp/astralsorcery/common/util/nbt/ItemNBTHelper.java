@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.util.nbt;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.entity.Entity;

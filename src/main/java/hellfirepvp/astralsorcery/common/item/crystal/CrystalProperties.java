@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.util.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -27,6 +27,7 @@ public class CrystalProperties {
     private static final Random rand = new Random();
 
     public static final int MAX_SIZE = 500;
+    private static final CrystalProperties MAXED_PROPERTIES = new CrystalProperties(MAX_SIZE, 100, 100);
 
     private int size; //(theoretically) 0 to 500
     private int purity; //0 to 100 where 100 being completely pure.
@@ -80,20 +81,8 @@ public class CrystalProperties {
         return new CrystalProperties(size, purity, collect);
     }
 
-    //Depends on size and collectivity
-    public float getCollectionAmt(float distribution) {
-        float sizeDistr = (((float) size) / 100F);
-        return distribution * sizeDistr * (((float) collectiveCapability) / 100F);
-    }
-
-    //Depends on purity alone - 1F -> all gets through, 0F -> none
-    public float getThroughput(float distribution) {
-        return distribution * (((float) purity) / 100);
-    }
-
-    //1F -> none, 0F -> ALL
-    public float getDischargePerc() {
-        return (float) Math.sqrt(((float) purity) / 100F);
+    public static CrystalProperties getMaxProperties() {
+        return MAXED_PROPERTIES;
     }
 
     @SideOnly(Side.CLIENT)

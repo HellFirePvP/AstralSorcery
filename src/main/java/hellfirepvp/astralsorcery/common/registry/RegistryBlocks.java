@@ -10,6 +10,8 @@ import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -64,6 +66,9 @@ public class RegistryBlocks {
     private static void registerTileEntities() {
         registerTile(TileAltar.class);
         registerTile(TileCollectorCrystal.class);
+
+        registerTile(TileCrystalLens.class);
+        registerTile(TileCrystalPrismLens.class);
     }
 
     private static void queueDefaultItemBlock(Block block) {

@@ -15,7 +15,10 @@ import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
-import hellfirepvp.astralsorcery.common.starlight.transmission.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,7 +50,10 @@ public class CommonProxy implements IGuiHandler {
         RegistryItems.init();
         RegistryEntities.init();
         RegistryStructures.init();
+
         SourceClassRegistry.setupRegistry();
+        TransmissionClassRegistry.setupRegistry();
+        //StarlightNetworkRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
 
@@ -66,6 +72,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
+        MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
 
         registerTickHandlers();
 

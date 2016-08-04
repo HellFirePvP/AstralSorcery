@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.util.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.awt.*;
 import java.util.Collections;

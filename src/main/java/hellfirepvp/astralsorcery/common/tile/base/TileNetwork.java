@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.tile.network;
+package hellfirepvp.astralsorcery.common.tile.base;
 
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 

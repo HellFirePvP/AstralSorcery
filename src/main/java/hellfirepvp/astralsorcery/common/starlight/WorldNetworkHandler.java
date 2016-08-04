@@ -53,11 +53,6 @@ public class WorldNetworkHandler {
         }
     }
 
-    //TODO redesign
-    /*public void requestStarlight(StarlightRequest request) {
-
-    }*/
-
     @Nullable
     public IPrismTransmissionNode getTransmissionNode(@Nullable BlockPos pos) {
         if(pos == null) return null;

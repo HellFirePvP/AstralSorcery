@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,6 +20,12 @@ public interface IPrismTransmissionNode {
 
     //Get the exact position of this Node
     public BlockPos getPos();
+
+    //Get his node's transmission properties to calculate transmission loss and so on
+    //Arbitrarily this returns a max. sized Property by default...
+    default public CrystalProperties getTransmissionProperties() {
+        return CrystalProperties.getMaxProperties();
+    }
 
     //Fired to notify THIS that the link to "to" is no longer valid
     //The node at "to" should have THIS as a valid source.
@@ -44,14 +52,13 @@ public interface IPrismTransmissionNode {
     //Get a list of all sources that do provide energy to this transmission node
     public List<BlockPos> getSources();
 
-    //Get an empty instance for a transmission node here.
-    //No operation will be performed, readFromNBT will be called instantly
-    public IPrismTransmissionNode provideEmptyNBTReadInstance();
+    //Get the provider of the node. Used to recreate the class at NBT read.
+    public TransmissionClassRegistry.TransmissionProvider getProvider();
 
     //Should recreate the exact state from when it was written.
-    public void readFromNBT(World world, NBTTagCompound compound);
+    public void readFromNBT(NBTTagCompound compound);
 
     //Should save all data that's needed to recreate the state accordingly.
-    public void writeToNBT(World world, NBTTagCompound compound);
+    public void writeToNBT(NBTTagCompound compound);
 
 }

@@ -8,18 +8,17 @@ import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -96,7 +95,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                 }
             }
 
-            source.onUpdate(world, pos);
+            //source.onUpdate(world, pos);
         }
 
     }
@@ -377,17 +376,46 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     public static class ChunkSectionNetworkData {
 
-        //TODO do read write
         private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
 
         private static ChunkSectionNetworkData loadFromNBT(NBTTagCompound tag) {
             ChunkSectionNetworkData netData = new ChunkSectionNetworkData();
+            if(tag.hasKey("nodeList")) {
+                NBTTagList listNodes = tag.getTagList("nodeList", 10);
+                for (int i = 0; i < listNodes.tagCount(); i++) {
+                    NBTTagCompound nodeComp = listNodes.getCompoundTagAt(i);
+                    BlockPos pos = NBTUtils.readBlockPosFromNBT(nodeComp);
 
+                    NBTTagCompound prismComp = nodeComp.getCompoundTag("nodeTag");
+                    String nodeIdentifier = prismComp.getString("transmissionNodeIdentifier");
+                    TransmissionClassRegistry.TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
+                    if(provider == null) {
+                        AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
+                        continue;
+                    }
+                    IPrismTransmissionNode node = provider.provideEmptyNode();
+                    node.readFromNBT(prismComp);
+                    netData.nodes.put(pos, node);
+                }
+            }
             return netData;
         }
 
         private void writeToNBT(NBTTagCompound tag) {
+            NBTTagList listNodes = new NBTTagList();
+            for (Map.Entry<BlockPos, IPrismTransmissionNode> node : nodes.entrySet()) {
+                NBTTagCompound nodeComp = new NBTTagCompound();
+                NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
 
+                NBTTagCompound prismComp = new NBTTagCompound();
+                IPrismTransmissionNode prismNode = node.getValue();
+                prismNode.writeToNBT(prismComp);
+                prismComp.setString("transmissionNodeIdentifier", prismNode.getProvider().getIdentifier());
+
+                nodeComp.setTag("nodeTag", prismComp);
+                listNodes.appendTag(nodeComp);
+            }
+            tag.setTag("nodeList", listNodes);
         }
 
         public boolean isEmpty() {

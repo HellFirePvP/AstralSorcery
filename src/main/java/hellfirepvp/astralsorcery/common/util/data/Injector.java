@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.util.data;
 
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 

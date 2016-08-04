@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.util.data;
 
 /**
  * This class is part of the Astral Sorcery Mod
