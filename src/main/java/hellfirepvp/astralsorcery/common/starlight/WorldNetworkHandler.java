@@ -41,10 +41,10 @@ public class WorldNetworkHandler {
     }
 
     public void informBlockChange(BlockPos at) {
-        List<LightNetworkBuffer.ChunkNetworkData> relatedData = getAffectedChunks(at);
+        List<LightNetworkBuffer.ChunkSectionNetworkData> relatedData = getAffectedChunkSections(at);
         if(relatedData.isEmpty()) return; //lucky. nothing to do.
 
-        for (LightNetworkBuffer.ChunkNetworkData data : relatedData) {
+        for (LightNetworkBuffer.ChunkSectionNetworkData data : relatedData) {
             if(data == null) continue;
             Collection<IPrismTransmissionNode> transmissionNodes = data.getAllTransmissionNodes();
             for (IPrismTransmissionNode node : transmissionNodes) {
@@ -61,9 +61,9 @@ public class WorldNetworkHandler {
     @Nullable
     public IPrismTransmissionNode getTransmissionNode(@Nullable BlockPos pos) {
         if(pos == null) return null;
-        LightNetworkBuffer.ChunkNetworkData data = getNetworkData(pos);
-        if(data != null) {
-            return data.getTransmissionNode(pos);
+        LightNetworkBuffer.ChunkSectionNetworkData section = getNetworkData(pos);
+        if(section != null) {
+            return section.getTransmissionNode(pos);
         }
         return null;
     }
@@ -121,8 +121,8 @@ public class WorldNetworkHandler {
             return;
         }
         BlockPos thisPos = tr.getPos();
-        List<LightNetworkBuffer.ChunkNetworkData> dataList = getAffectedChunks(tr.getPos());
-        for (LightNetworkBuffer.ChunkNetworkData data : dataList) {
+        List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = getAffectedChunkSections(tr.getPos());
+        for (LightNetworkBuffer.ChunkSectionNetworkData data : dataList) {
             if(data == null) continue;
             for (IPrismTransmissionNode otherNode : data.getAllTransmissionNodes()) {
                 List<NodeConnection<IPrismTransmissionNode>> nodeConnections = otherNode.queryNext(this);
@@ -137,27 +137,28 @@ public class WorldNetworkHandler {
 
     //Collects a 3x3 field of chunkData, centered around the given pos.
     //Might be empty, if there's no network nearby.
-    private List<LightNetworkBuffer.ChunkNetworkData> getAffectedChunks(BlockPos centralPos) {
-        List<LightNetworkBuffer.ChunkNetworkData> dataList = new LinkedList<>();
+    private List<LightNetworkBuffer.ChunkSectionNetworkData> getAffectedChunkSections(BlockPos centralPos) {
+        List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = new LinkedList<>();
         ChunkPos central = new ChunkPos(centralPos);
-        queryData(central, dataList);
+        int posYLevel = (centralPos.getY() & 255) >> 4;
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
-                if(xx == 0 && zz == 0) continue; //We don't collect the same chunk twice.
-                queryData(new ChunkPos(central.chunkXPos + xx, central.chunkZPos + zz), dataList);
+                for (int yy = -1; yy <= 1; yy++) {
+                    queryData(new ChunkPos(central.chunkXPos + xx, central.chunkZPos + zz), posYLevel + yy, dataList);
+                }
             }
         }
         return dataList;
     }
 
-    private void queryData(ChunkPos pos, List<LightNetworkBuffer.ChunkNetworkData> out) {
-        LightNetworkBuffer.ChunkNetworkData data = buffer.getChunkData(pos);
+    private void queryData(ChunkPos pos, int yLevel, List<LightNetworkBuffer.ChunkSectionNetworkData> out) {
+        LightNetworkBuffer.ChunkSectionNetworkData data = buffer.getSectionData(pos, yLevel);
         if(data != null && !data.isEmpty()) out.add(data);
     }
 
     @Nullable
-    private LightNetworkBuffer.ChunkNetworkData getNetworkData(BlockPos at) {
-        LightNetworkBuffer.ChunkNetworkData data = buffer.getChunkData(new ChunkPos(at));
+    private LightNetworkBuffer.ChunkSectionNetworkData getNetworkData(BlockPos at) {
+        LightNetworkBuffer.ChunkSectionNetworkData data = buffer.getSectionData(at);
         if(data != null && !data.isEmpty()) return data;
         return null;
     }

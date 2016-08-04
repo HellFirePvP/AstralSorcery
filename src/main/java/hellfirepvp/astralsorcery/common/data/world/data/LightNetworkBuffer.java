@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +71,20 @@ public class LightNetworkBuffer extends CachedWorldData {
     }
 
     @Nullable
-    public ChunkNetworkData getChunkData(ChunkPos pos) {
+    private ChunkNetworkData getChunkData(ChunkPos pos) {
         return chunkSortedData.get(pos);
+    }
+
+    @Nullable
+    public ChunkSectionNetworkData getSectionData(BlockPos pos) {
+        return getSectionData(new ChunkPos(pos), (pos.getY() & 255) >> 4);
+    }
+
+    @Nullable
+    public ChunkSectionNetworkData getSectionData(ChunkPos chPos, int yLevel) {
+        ChunkNetworkData data = chunkSortedData.get(chPos);
+        if(data == null) return null;
+        return data.getSection(yLevel);
     }
 
     public void createNewChunkData(@Nonnull ChunkPos pos) {
@@ -164,6 +177,9 @@ public class LightNetworkBuffer extends CachedWorldData {
     private void checkIntegrity(ChunkPos chPos) {
         ChunkNetworkData data = getChunkData(chPos);
         if(data == null) return;
+
+        data.checkIntegrity(); //Integrity of sections
+
         if(data.isEmpty()) {
             queueRemoval.add(chPos);
         }
@@ -172,19 +188,136 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     public static class ChunkNetworkData {
 
-        private Map<BlockPos, IStarlightTransmission> transmissionTiles = new HashMap<>();
-        private Map<BlockPos, IStarlightSource> sourceTiles = new HashMap<>();
+        private Map<Integer, ChunkSectionNetworkData> sections = new HashMap<>();
 
-        private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
+        //private Map<BlockPos, IStarlightTransmission> transmissionTiles = new HashMap<>();
+        //private Map<BlockPos, IStarlightSource> sourceTiles = new HashMap<>();
 
-        //TODO do read write
         private static ChunkNetworkData loadFromNBT(NBTTagCompound tag) {
             ChunkNetworkData data = new ChunkNetworkData();
+            if(tag.hasKey("sectionList")) {
+                NBTTagList list = tag.getTagList("sectionList", 10);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    NBTTagCompound section = list.getCompoundTagAt(i);
+                    int yLevel = section.getInteger("yLevel");
+                    NBTTagCompound sectionData = section.getCompoundTag("sectionData");
+                    ChunkSectionNetworkData networkData = ChunkSectionNetworkData.loadFromNBT(sectionData);
+                    data.sections.put(yLevel, networkData);
+                }
+            }
             return data;
         }
 
         private void writeToNBT(NBTTagCompound tag) {
+            NBTTagList sectionList = new NBTTagList();
+            for (Integer yLevel : sections.keySet()) {
+                ChunkSectionNetworkData sectionData = sections.get(yLevel);
+                NBTTagCompound sectionTag = new NBTTagCompound();
+                sectionData.writeToNBT(sectionTag);
 
+                NBTTagCompound section = new NBTTagCompound();
+                section.setInteger("yLevel", yLevel);
+                section.setTag("sectionData", sectionTag);
+                sectionList.appendTag(section);
+            }
+            tag.setTag("sectionList", sectionList);
+        }
+
+        //Also allows for passing invalid yLevels outside of 0 to 15
+        @Nullable
+        public ChunkSectionNetworkData getSection(int yLevel) {
+            return sections.get(yLevel);
+        }
+
+        /*@Nullable
+        public IPrismTransmissionNode getTransmissionNode(BlockPos at) {
+            int yLevel = (at.getY() & 255) >> 4;
+            ChunkSectionNetworkData sectionData = sections.get(yLevel);
+            if(sectionData == null) return null;
+            return sectionData.getTransmissionNode(at);
+        }
+
+        public Collection<IPrismTransmissionNode> getAllTransmissionNodesNear(BlockPos at) {
+            int yLevel = (at.getY() & 255) >> 4;
+            List<IPrismTransmissionNode> nodes = new LinkedList<>();
+            ChunkSectionNetworkData section = getSection(yLevel - 1);
+            if(section != null) nodes.addAll(section.getAllTransmissionNodes());
+            section = getSection(yLevel);
+            if(section != null) nodes.addAll(section.getAllTransmissionNodes());
+            section = getSection(yLevel + 1);
+            if(section != null) nodes.addAll(section.getAllTransmissionNodes());
+            return Collections.unmodifiableCollection(nodes);
+        }*/
+
+        public void checkIntegrity() {
+            Iterator<Integer> iterator = sections.keySet().iterator();
+            while (iterator.hasNext()) {
+                Integer yLevel = iterator.next();
+                ChunkSectionNetworkData data = sections.get(yLevel);
+                if(data.isEmpty()) iterator.remove();
+            }
+        }
+
+        public boolean isEmpty() {
+            return sections.isEmpty(); //No section -> no data
+        }
+
+        private ChunkSectionNetworkData getOrCreateSection(int yLevel) {
+            ChunkSectionNetworkData section = getSection(yLevel);
+            if(section == null) {
+                section = new ChunkSectionNetworkData();
+                sections.put(yLevel, section);
+            }
+            return section;
+        }
+
+        private void removeSourceTile(BlockPos pos) {
+            int yLevel = (pos.getY() & 255) >> 4;
+            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            section.removeSourceTile(pos);
+        }
+
+        private void removeTransmissionTile(BlockPos pos) {
+            int yLevel = (pos.getY() & 255) >> 4;
+            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            section.removeTransmissionTile(pos);
+        }
+
+        private void addSourceTile(BlockPos pos, IStarlightSource source) {
+            int yLevel = (pos.getY() & 255) >> 4;
+            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            section.addSourceTile(pos, source);
+        }
+
+        private void addTransmissionTile(BlockPos pos, IStarlightTransmission transmission) {
+            int yLevel = (pos.getY() & 255) >> 4;
+            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            section.addTransmissionTile(pos, transmission);
+        }
+
+    }
+
+    public static class ChunkSectionNetworkData {
+
+        //TODO do read write
+        private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
+
+        private static ChunkSectionNetworkData loadFromNBT(NBTTagCompound tag) {
+            ChunkSectionNetworkData netData = new ChunkSectionNetworkData();
+
+            return netData;
+        }
+
+        private void writeToNBT(NBTTagCompound tag) {
+
+        }
+
+        public boolean isEmpty() {
+            return nodes.isEmpty();
+        }
+
+        public Collection<IPrismTransmissionNode> getAllTransmissionNodes() {
+            return Collections.unmodifiableCollection(nodes.values());
         }
 
         @Nullable
@@ -192,21 +325,13 @@ public class LightNetworkBuffer extends CachedWorldData {
             return nodes.get(at);
         }
 
-        public Collection<IPrismTransmissionNode> getAllTransmissionNodes() {
-            return Collections.unmodifiableCollection(nodes.values());
-        }
-
-        public boolean isEmpty() {
-            return nodes.isEmpty(); //If that one is empty, none of the others have entries.
-        }
-
         private void removeSourceTile(BlockPos pos) {
-            sourceTiles.remove(pos);
+            //sourceTiles.remove(pos);
             removeNode(pos);
         }
 
         private void removeTransmissionTile(BlockPos pos) {
-            transmissionTiles.remove(pos);
+            //transmissionTiles.remove(pos);
             removeNode(pos);
         }
 
@@ -215,12 +340,13 @@ public class LightNetworkBuffer extends CachedWorldData {
         }
 
         private void addSourceTile(BlockPos pos, IStarlightSource source) {
-            sourceTiles.put(pos, source);
+            //sourceTiles.put(pos, source);
             addNode(pos, source);
         }
 
         private void addTransmissionTile(BlockPos pos, IStarlightTransmission transmission) {
-            transmissionTiles.put(pos, transmission);
+            //transmissionTiles.put(pos, transmission);
+            addNode(pos, transmission);
         }
 
         private void addNode(BlockPos pos, IStarlightTransmission transmission) {
