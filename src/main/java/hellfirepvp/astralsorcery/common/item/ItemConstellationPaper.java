@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -144,17 +145,14 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     public static Constellation getConstellation(ItemStack stack) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return null;
-        String name = ItemNBTHelper.getPersistentData(stack).getString("constellation");
-        if (name == null || name.isEmpty()) return null;
-        return ConstellationRegistry.getConstellationByName(name);
+        return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return;
-        String name = constellation.getName();
-        if (name == null) return;
-        ItemNBTHelper.getPersistentData(stack).setString("constellation", name);
+        NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
+        constellation.writeToNBT(tag);
     }
 
 }

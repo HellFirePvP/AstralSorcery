@@ -38,7 +38,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     @Override
     public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
-        renderTileEffects(x, y, z, te.getRenderPercFilled());
+        renderTileEffects(x, y, z, 1F);//TODO redo? te.getRenderPercFilled());
 
         int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
         float perc = (256 - t) / 256F;

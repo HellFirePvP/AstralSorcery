@@ -30,15 +30,11 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {
-        NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
-        tag.setString("constellation", constellation.getName());
+        constellation.writeToNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
     public static Constellation getConstellation(ItemStack stack) {
-        NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
-        if(!tag.hasKey("constellation")) return null;
-        String cStr = tag.getString("constellation");
-        return ConstellationRegistry.getConstellationByName(cStr);
+        return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
 }

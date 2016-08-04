@@ -370,7 +370,7 @@ public class StructureAncientShrine extends StructureBlockArray {
             public void onPlace(World world, BlockPos at, TileEntity te) {
                     if(te instanceof TileCollectorCrystal) {
                     ((TileCollectorCrystal) te).onPlace(ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),
-                            CrystalProperties.createStructural(), TileCollectorCrystal.STRUCTURE_BUFFER_SIZE, false);
+                            CrystalProperties.createStructural(), false);
                 }
             }
         });

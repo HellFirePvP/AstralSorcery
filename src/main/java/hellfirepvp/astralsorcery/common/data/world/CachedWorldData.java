@@ -31,7 +31,7 @@ public abstract class CachedWorldData extends WorldSavedData {
 
     public abstract <T extends CachedWorldData> T constructNewData();
 
-    public abstract void updateTick();
+    public abstract void updateTick(World world);
 
     public final WorldCacheManager.SaveKey getSaveKey() {
         return key;

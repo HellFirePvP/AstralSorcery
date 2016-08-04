@@ -16,7 +16,16 @@ public abstract class TileNetworkSkybound extends TileNetwork {
         super.update();
 
         if((ticksExisted & 15) == 0) {
-            doesSeeSky = worldObj.canSeeSky(getPos());
+            updateSkyState(worldObj.canSeeSky(getPos()));
         }
     }
+
+    protected void updateSkyState(boolean seesSky) {
+        this.doesSeeSky = seesSky;
+    }
+
+    public boolean doesSeeSky() {
+        return doesSeeSky;
+    }
+
 }

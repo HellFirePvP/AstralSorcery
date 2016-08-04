@@ -59,10 +59,13 @@ public class LinkHandler implements ITickHandler {
                 tile.onSelect(playerIn);
                 break;
             case TRY_LINK:
+                TileEntity te = worldIn.getTileEntity(pos);
+                if(te != null && te instanceof ILinkableTile) {
+                    if(!((ILinkableTile) te).doesAcceptLinks()) return;
+                }
                 if(tile.tryLink(playerIn, pos)) {
                     tile.onLinkCreate(playerIn, pos);
                     String linkedTo = I18n.translateToLocal("misc.link.link.block");
-                    TileEntity te = worldIn.getTileEntity(pos);
                     if(te != null && te instanceof ILinkableTile) {
                         String unloc = ((ILinkableTile) te).getUnlocalizedDisplayName();
                         if(unloc != null) {
@@ -78,7 +81,7 @@ public class LinkHandler implements ITickHandler {
             case TRY_UNLINK:
                 if(tile.tryUnlink(playerIn, pos)) {
                     String linkedTo = I18n.translateToLocal("misc.link.link.block");
-                    TileEntity te = worldIn.getTileEntity(pos);
+                    te = worldIn.getTileEntity(pos);
                     if(te != null && te instanceof ILinkableTile) {
                         String unloc = ((ILinkableTile) te).getUnlocalizedDisplayName();
                         if(unloc != null) {

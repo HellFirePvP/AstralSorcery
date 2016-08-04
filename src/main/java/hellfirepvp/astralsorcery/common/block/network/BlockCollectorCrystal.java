@@ -126,7 +126,7 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
 
         Constellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c == null) c = Constellations.bigDipper;
-        te.onPlace(c, CrystalProperties.getCrystalProperties(stack), 0, true);
+        te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
         if(te != null) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
-            ItemCollectorCrystal.setConstellation(stack, te.getSourceType());
+            ItemCollectorCrystal.setConstellation(stack, te.getConstellation());
             return stack;
         }
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);

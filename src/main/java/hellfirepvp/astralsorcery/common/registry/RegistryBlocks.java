@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;

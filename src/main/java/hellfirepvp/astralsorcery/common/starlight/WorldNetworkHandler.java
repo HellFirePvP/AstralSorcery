@@ -71,13 +71,13 @@ public class WorldNetworkHandler {
     public void removeSource(IStarlightSource source) {
         removeThisSourceFromNext(source);
 
-        buffer.removeSource(source, source.getPos());
+        buffer.removeSource(source.getPos());
     }
 
     public void removeTransmission(IStarlightTransmission transmission) {
         removeThisSourceFromNext(transmission);
 
-        buffer.removeTransmission(transmission, transmission.getPos());
+        buffer.removeTransmission(transmission.getPos());
     }
 
     public void addNewSourceTile(IStarlightSource source) {

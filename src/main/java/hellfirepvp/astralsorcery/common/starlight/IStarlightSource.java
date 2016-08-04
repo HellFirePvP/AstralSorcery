@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.starlight;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -11,8 +13,17 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
  */
 public interface IStarlightSource extends IStarlightTransmission {
 
-    public Constellation getSourceType();
+    public IIndependentStarlightSource provideNewSourceNode();
 
-    public int tryDrain(Constellation type, int amount);
+    public ITransmissionSource provideSourceNode(BlockPos at);
+
+    public boolean updateStarlightSource();
+
+    public void markUpdated();
+
+    @Override
+    default public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
+        return provideSourceNode(at);
+    }
 
 }

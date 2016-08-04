@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
+import hellfirepvp.astralsorcery.common.starlight.transmission.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,6 +47,7 @@ public class CommonProxy implements IGuiHandler {
         RegistryItems.init();
         RegistryEntities.init();
         RegistryStructures.init();
+        SourceClassRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
 

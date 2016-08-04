@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,7 +40,7 @@ public class RockCrystalBuffer extends CachedWorldData {
     }
 
     @Override
-    public void updateTick() {}
+    public void updateTick(World world) {}
 
     public void addOre(BlockPos pos) {
         ChunkPos ch = new ChunkPos(pos);

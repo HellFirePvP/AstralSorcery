@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.tile.network;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
@@ -10,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,11 +26,6 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
     @Override
     public void update() {
         super.update();
-    }
-
-    @Override
-    public boolean canConduct(@Nonnull Constellation type) {
-        return true;
     }
 
     @Override

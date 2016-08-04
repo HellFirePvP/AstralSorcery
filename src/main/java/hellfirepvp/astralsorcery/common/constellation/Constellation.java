@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -89,6 +90,14 @@ public class Constellation {
         if (!finished) return null;
         if (unmodifiableConnections != null) return unmodifiableConnections;
         return (unmodifiableConnections = Collections.unmodifiableList(connections));
+    }
+
+    public void writeToNBT(NBTTagCompound compound) {
+        compound.setString("constellationName", getName());
+    }
+
+    public static Constellation readFromNBT(NBTTagCompound compound) {
+        return ConstellationRegistry.getConstellationByName(compound.getString("constellationName"));
     }
 
 }

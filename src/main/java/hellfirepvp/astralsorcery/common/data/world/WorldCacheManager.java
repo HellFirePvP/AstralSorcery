@@ -33,7 +33,7 @@ public class WorldCacheManager implements ITickHandler {
         if(world.isRemote) return;
 
         for (SaveKey key : SaveKey.values()) {
-            key.getDummyObject().initializeAndGet(world).updateTick();
+            key.getDummyObject().initializeAndGet(world).updateTick(world);
         }
     }
 

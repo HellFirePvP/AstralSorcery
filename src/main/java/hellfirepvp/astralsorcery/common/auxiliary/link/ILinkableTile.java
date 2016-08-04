@@ -36,6 +36,18 @@ public interface ILinkableTile {
     public String getUnlocalizedDisplayName();
 
     /**
+     * Defines if this Tile does accept other tiles linking to it.
+     *
+     * True to allow other tiles to create links to this tile
+     * False to deny any tile to link to this tile.
+     *
+     * Returns true by default.
+     */
+    default public boolean doesAcceptLinks() {
+        return true;
+    }
+
+    /**
      * Informs of a successful link creation, however it is handled.
      * Can only happen after tryLink() returned true to mark a successful link creation.
      *

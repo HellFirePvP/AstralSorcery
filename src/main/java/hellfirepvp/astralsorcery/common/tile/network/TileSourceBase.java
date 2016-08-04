@@ -1,17 +1,14 @@
 package hellfirepvp.astralsorcery.common.tile.network;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.util.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ import java.util.List;
  */
 public abstract class TileSourceBase extends TileNetworkSkybound implements IStarlightSource, ILinkableTile {
 
-    private Constellation sourceType = null;
+    private boolean needsUpdate = false;
     private List<BlockPos> positions = new LinkedList<>();
 
     @Override
@@ -33,12 +30,12 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
     }
 
     @Override
-    public Constellation getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(Constellation sourceType) {
-        this.sourceType = sourceType;
+    protected void updateSkyState(boolean seesSky) {
+        boolean oldState = doesSeeSky();
+        super.updateSkyState(seesSky);
+        if(oldState != doesSeeSky()) {
+            needsUpdate = true;
+        }
     }
 
     @Override
@@ -51,16 +48,6 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound tag = list.getCompoundTagAt(i);
                 positions.add(NBTUtils.readBlockPosFromNBT(tag));
-            }
-        }
-
-        if(compound.hasKey("constellation")) {
-            String type = compound.getString("constellation");
-            Constellation c = ConstellationRegistry.getConstellationByName(type);
-            if(c != null) {
-                setSourceType(c);
-            } else {
-                AstralSorcery.log.warn("Deserialized starlight source without constellation?");
             }
         }
     }
@@ -76,24 +63,29 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
             list.appendTag(tag);
         }
         compound.setTag("linked", list);
-        if(getSourceType() != null) {
-            compound.setString("constellation", getSourceType().getName());
-        }
     }
 
-    //TODO ugh. do.
     @Override
     public void onLinkCreate(EntityPlayer player, BlockPos other) {
-
+        TransmissionNetworkHelper.createTransmissionLink(this, other);
     }
 
     @Override
     public boolean tryLink(EntityPlayer player, BlockPos other) {
-        return false;
+        return TransmissionNetworkHelper.canCreateTransmissionLink(this, other);
     }
 
     @Override
     public boolean tryUnlink(EntityPlayer player, BlockPos other) {
+        if(TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
+            TransmissionNetworkHelper.removeTransmissionLink(this, other);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doesAcceptLinks() {
         return false;
     }
 
@@ -103,8 +95,13 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
     }
 
     @Override
-    public boolean canConduct(@Nonnull Constellation type) {
-        return sourceType != null && type.equals(sourceType);
+    public void markUpdated() {
+        this.needsUpdate = false;
+    }
+
+    @Override
+    public boolean updateStarlightSource() {
+        return needsUpdate;
     }
 
 }

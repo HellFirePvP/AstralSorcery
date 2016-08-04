@@ -73,16 +73,13 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
     public static void applyConstellation(ItemStack stack, Constellation constellation) {
         if (!(stack.getItem() instanceof ItemTunedCrystal)) return;
 
-        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
-        cmp.setString("constellation", constellation.getName());
+        constellation.writeToNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
     public static Constellation getConstellation(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystal)) return null;
 
-        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
-        String strCName = cmp.getString("constellation");
-        return ConstellationRegistry.getConstellationByName(strCName);
+        return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
 }
