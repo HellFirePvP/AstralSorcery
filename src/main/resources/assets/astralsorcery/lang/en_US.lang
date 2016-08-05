@@ -6,7 +6,7 @@ misc.link.stop=Stopped linking!
 misc.link.start=Selected %s!
 misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
-misc.link.unlink.Unlinked %s from %s!
+misc.link.unlink=Unlinked %s from %s!
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
@@ -32,6 +32,7 @@ tile.BlockAltar.altar_2.name=[NoName-ConstellationCraft] Altar
 tile.BlockAltar.altar_3.name=Celestial Altar
 tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
 tile.BlockAltar.altar_5.name=Skybending Altar
+tile.BlockAltar.general.name=Altar
 tile.BlockMarble.raw.name=Marble
 tile.BlockMarble.bricks.name=Marble Bricks
 tile.BlockMarble.pillar.name=Marble Pillar

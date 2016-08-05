@@ -20,7 +20,7 @@ public interface IIndependentStarlightSource {
     //public void onUpdate(World world, BlockPos pos);
 
     //As the purpose of the source, this should produce the starlight - called once every tick
-    public double produceStarlightTick(World world, BlockPos pos);
+    public float produceStarlightTick(World world, BlockPos pos);
 
     public Constellation getStarlightType();
 

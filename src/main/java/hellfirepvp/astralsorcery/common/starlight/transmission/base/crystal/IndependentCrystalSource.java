@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
@@ -8,6 +9,7 @@ import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleIndependentSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetworkSkybound;
+import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -18,25 +20,24 @@ import javax.annotation.Nonnull;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SimpleIndependentSource
+ * Class: IndependentCrystalSource
  * Created by HellFirePvP
  * Date: 04.08.2016 / 15:01
  */
-public class SimpleIndependentCrystalSource extends SimpleIndependentSource {
+public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private CrystalProperties crystalProperties;
     private boolean doesSeeSky;
 
-    public SimpleIndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky) {
+    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
     }
 
-    //TODO produce.
     @Override
-    public double produceStarlightTick(World world, BlockPos pos) {
-        return 0;
+    public float produceStarlightTick(World world, BlockPos pos) {
+        return CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType()));
     }
 
     @Override
@@ -72,12 +73,12 @@ public class SimpleIndependentCrystalSource extends SimpleIndependentSource {
 
         @Override
         public IIndependentStarlightSource provideEmptySource() {
-            return new SimpleIndependentCrystalSource(null, null, false);
+            return new IndependentCrystalSource(null, null, false);
         }
 
         @Override
         public String getIdentifier() {
-            return AstralSorcery.MODID + ":SimpleIndependentCrystalSource";
+            return AstralSorcery.MODID + ":IndependentCrystalSource";
         }
 
     }

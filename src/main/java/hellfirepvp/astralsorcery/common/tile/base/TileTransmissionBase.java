@@ -24,11 +24,6 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
     private List<BlockPos> positions = new LinkedList<>();
 
     @Override
-    public void update() {
-        super.update();
-    }
-
-    @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         positions.clear();
@@ -57,18 +52,29 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
 
     @Override
     public void onLinkCreate(EntityPlayer player, BlockPos other) {
-        TransmissionNetworkHelper.createTransmissionLink(this, other);
+        if(other.equals(getPos())) return;
+
+        if(TransmissionNetworkHelper.createTransmissionLink(this, other)) {
+            if(!this.positions.contains(other)) {
+                this.positions.add(other);
+                markDirty();
+            }
+        }
     }
 
     @Override
     public boolean tryLink(EntityPlayer player, BlockPos other) {
-        return TransmissionNetworkHelper.canCreateTransmissionLink(this, other);
+        return !other.equals(getPos()) && TransmissionNetworkHelper.canCreateTransmissionLink(this, other);
     }
 
     @Override
     public boolean tryUnlink(EntityPlayer player, BlockPos other) {
+        if(other.equals(getPos())) return false;
+
         if(TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
             TransmissionNetworkHelper.removeTransmissionLink(this, other);
+            this.positions.remove(other);
+            markDirty();
             return true;
         }
         return false;

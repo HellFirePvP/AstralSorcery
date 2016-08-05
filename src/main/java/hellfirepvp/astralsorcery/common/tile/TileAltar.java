@@ -1,6 +1,12 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -9,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:18
  */
-public class TileAltar extends TileOwned {
+public class TileAltar extends TileReceiverBase {
 
     private AltarLevel level = AltarLevel.DISCOVERY;
     private int experience = 0;
@@ -34,6 +40,17 @@ public class TileAltar extends TileOwned {
 
         compound.setInteger("level", level.ordinal());
         compound.setInteger("exp", experience);
+    }
+
+    @Nullable
+    @Override
+    public String getUnlocalizedDisplayName() {
+        return "tile.BlockAltar.general.name";
+    }
+
+    @Override
+    public ITransmissionReceiver provideEndpoint(BlockPos at) {
+        return new SimpleTransmissionReceiver(at);
     }
 
     public static enum AltarLevel {

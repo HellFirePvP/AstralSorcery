@@ -8,6 +8,8 @@ import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -21,24 +23,36 @@ public class TransmissionNetworkHelper {
 
     public static boolean hasTransmissionLink(IStarlightTransmission tr, BlockPos end) {
         IPrismTransmissionNode node = tr.getNode();
-        return node != null && node.getSources().contains(end);
+        if(node == null) return false;
+        WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(tr.getWorld());
+        List<NodeConnection<IPrismTransmissionNode>> nextNodes = node.queryNext(handler);
+        for (NodeConnection<IPrismTransmissionNode> nextNode : nextNodes) {
+            if(nextNode.getTo().equals(end)) return true;
+        }
+        return false;
     }
 
     public static boolean canCreateTransmissionLink(IStarlightTransmission tr, BlockPos end) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) return false;
+        WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(tr.getWorld());
+        List<NodeConnection<IPrismTransmissionNode>> nextNodes = node.queryNext(handler);
+        for (NodeConnection<IPrismTransmissionNode> nextNode : nextNodes) {
+            if(nextNode.getTo().equals(end)) return false;
+        }
 
         double dst = tr.getPos().getDistance(end.getX(), end.getY(), end.getZ());
         return dst <= MAX_TRANSMISSION_DIST;
     }
 
-    public static void createTransmissionLink(IStarlightTransmission tr, BlockPos next) {
+    public static boolean createTransmissionLink(IStarlightTransmission tr, BlockPos next) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
             AstralSorcery.log.info("Trying to create transmission link on non-existing transmission tile! Not creating link!");
-            return;
+            return false;
         }
         createLink(node, tr, next);
+        return true;
     }
 
     public static void removeTransmissionLink(IStarlightTransmission tr, BlockPos next) {
@@ -74,10 +88,6 @@ public class TransmissionNetworkHelper {
             nextNode.notifySourceLink(world, from);
         }
         thisNode.notifyLink(world, to);
-    }
-
-    public static void notifyBlockChange(World world, BlockPos pos) {
-        WorldNetworkHandler.getNetworkHandler(world).informBlockChange(pos);
     }
 
     public static void informNetworkTilePlacement(TileNetwork tileNetwork) {

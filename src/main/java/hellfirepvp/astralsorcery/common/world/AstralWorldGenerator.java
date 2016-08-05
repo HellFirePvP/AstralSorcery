@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -47,7 +48,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         if (world.provider.getDimension() != 0) return;
 
         genResources(random, chunkX, chunkZ, world);
-        if(Config.generateShrines && random.nextInt(Config.shrineGenerationChance) == 0) {
+        if(Config.generateShrines && random.nextInt(Config.shrineGenerationChance) == 0 && world.getWorldType() != WorldType.FLAT) {
             genShrine(random, chunkX, chunkZ, world);
         }
     }

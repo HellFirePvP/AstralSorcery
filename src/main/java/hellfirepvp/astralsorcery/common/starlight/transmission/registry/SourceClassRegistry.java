@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.registry;
 
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.SimpleIndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ public class SourceClassRegistry {
     }
 
     public static void setupRegistry() {
-        register(new SimpleIndependentCrystalSource.Provider());
+        register(new IndependentCrystalSource.Provider());
     }
 
     public static interface SourceProvider {

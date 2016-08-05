@@ -1,16 +1,16 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,8 +23,7 @@ import java.util.Map;
 public class StarlightTransmissionHandler implements ITickHandler {
 
     private static final StarlightTransmissionHandler instance = new StarlightTransmissionHandler();
-
-    private Map<Integer, List<StarlightTransmissionTicket>> worldTicketMap = new HashMap<>();
+    private Map<Integer, TransmissionWorldHandler> worldHandlers = new HashMap<>();
 
     private StarlightTransmissionHandler() {}
 
@@ -36,33 +35,25 @@ public class StarlightTransmissionHandler implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
         if(world.isRemote) return;
-
-        List<StarlightTransmissionTicket> tickets = worldTicketMap.get(world.provider.getDimension());
-        if(tickets == null) {
-            tickets = new LinkedList<>();
-            worldTicketMap.put(world.provider.getDimension(), tickets);
+        int dimId = world.provider.getDimension();
+        TransmissionWorldHandler handle = worldHandlers.get(dimId);
+        if(handle == null) {
+            handle = new TransmissionWorldHandler(world);
+            worldHandlers.put(dimId, handle);
         }
-        WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(world);
-
-        for (StarlightTransmissionTicket ticket : tickets) {
-
-        }
-
+        handle.tick();
     }
 
-    /*public static List<IPrismTransmissionNode> getNextNodes(IPrismTransmissionNode node, WorldNetworkHandler handler) {
+    public void informWorldUnload(World world) {
+        int dimId = world.provider.getDimension();
+        this.worldHandlers.get(dimId).clear();
+        this.worldHandlers.remove(dimId); //LUL
+    }
 
-    }*/
-
-    public static class StarlightTransmissionTicket {
-
-        private final Constellation type;
-        private final double starlightAmount;
-
-        public StarlightTransmissionTicket(Constellation type, double starlightAmount) {
-            this.type = type;
-            this.starlightAmount = starlightAmount;
-        }
+    @Nullable
+    public TransmissionWorldHandler getWorldHandler(World world) {
+        if(world == null) return null;
+        return worldHandlers.get(world.provider.getDimension());
     }
 
     @Override

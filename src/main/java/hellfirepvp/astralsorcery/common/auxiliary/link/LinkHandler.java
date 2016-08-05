@@ -28,7 +28,7 @@ public class LinkHandler implements ITickHandler {
     private static Map<EntityPlayer, LinkSession> players = new HashMap<>();
 
     @Nonnull
-    public static RightClickResult onRightclick(EntityPlayer clicked, World world, BlockPos pos, boolean sneak) {
+    public static RightClickResult onRightClick(EntityPlayer clicked, World world, BlockPos pos, boolean sneak) {
         if(!players.containsKey(clicked)) {
             TileEntity te = world.getTileEntity(pos);
             if(te == null || !(te instanceof ILinkableTile)) {

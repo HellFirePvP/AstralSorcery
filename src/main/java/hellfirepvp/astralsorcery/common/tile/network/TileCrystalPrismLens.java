@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.tile.network;
 
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.SimpleCrystalPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -23,6 +23,6 @@ public class TileCrystalPrismLens extends TileCrystalLens {
 
     @Override
     public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
-        return new SimpleCrystalPrismTransmissionNode(at, getCrystalProperties());
+        return new CrystalPrismTransmissionNode(at, getCrystalProperties());
     }
 }

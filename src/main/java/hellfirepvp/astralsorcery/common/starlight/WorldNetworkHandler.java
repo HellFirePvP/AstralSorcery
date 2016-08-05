@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -61,6 +62,15 @@ public class WorldNetworkHandler {
             return section.getTransmissionNode(pos);
         }
         return null;
+    }
+
+    @Nullable
+    public IIndependentStarlightSource getSourceAt(BlockPos pos) {
+        return buffer.getSource(pos);
+    }
+
+    public Collection<Tuple<BlockPos, IIndependentStarlightSource>> getAllSources() {
+        return buffer.getAllSources();
     }
 
     public void removeSource(IStarlightSource source) {

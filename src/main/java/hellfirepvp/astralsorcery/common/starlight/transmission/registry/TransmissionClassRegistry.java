@@ -3,9 +3,10 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.registry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.SimpleCrystalPrismTransmissionNode;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.SimpleCrystalTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -36,8 +37,11 @@ public class TransmissionClassRegistry {
         register(new SimpleTransmissionNode.Provider());
         register(new SimplePrismTransmissionNode.Provider());
         register(new SimpleTransmissionSourceNode.Provider());
-        register(new SimpleCrystalTransmissionNode.Provider());
-        register(new SimpleCrystalPrismTransmissionNode.Provider());
+        register(new SimpleTransmissionReceiver.Provider());
+
+        register(new CrystalTransmissionNode.Provider());
+        register(new CrystalPrismTransmissionNode.Provider());
+
     }
 
     public static interface TransmissionProvider {

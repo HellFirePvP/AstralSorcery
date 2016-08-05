@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -13,20 +13,20 @@ import javax.annotation.Nonnull;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SimpleCrystalPrismTransmissionNode
+ * Class: CrystalTransmissionNode
  * Created by HellFirePvP
- * Date: 05.08.2016 / 00:07
+ * Date: 05.08.2016 / 00:06
  */
-public class SimpleCrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
+public class CrystalTransmissionNode extends SimpleTransmissionNode {
 
     private CrystalProperties properties;
 
-    public SimpleCrystalPrismTransmissionNode(@Nonnull BlockPos thisPos, CrystalProperties properties) {
+    public CrystalTransmissionNode(@Nonnull BlockPos thisPos, CrystalProperties properties) {
         super(thisPos);
         this.properties = properties;
     }
 
-    public SimpleCrystalPrismTransmissionNode(@Nonnull BlockPos thisPos) {
+    public CrystalTransmissionNode(@Nonnull BlockPos thisPos) {
         super(thisPos);
     }
 
@@ -39,7 +39,6 @@ public class SimpleCrystalPrismTransmissionNode extends SimplePrismTransmissionN
     public TransmissionClassRegistry.TransmissionProvider getProvider() {
         return new Provider();
     }
-
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -59,12 +58,12 @@ public class SimpleCrystalPrismTransmissionNode extends SimplePrismTransmissionN
 
         @Override
         public IPrismTransmissionNode provideEmptyNode() {
-            return new SimpleCrystalPrismTransmissionNode(null);
+            return new CrystalTransmissionNode(null);
         }
 
         @Override
         public String getIdentifier() {
-            return AstralSorcery.MODID + ":SimpleCrystalPrismTransmissionNode";
+            return AstralSorcery.MODID + ":CrystalTransmissionNode";
         }
 
     }

@@ -6,12 +6,14 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -41,6 +43,7 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     private Map<ChunkPos, ChunkNetworkData> chunkSortedData = new HashMap<>();
     private Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
+    private Collection<Tuple<BlockPos, IIndependentStarlightSource>> cachedSourceTuples = null;
 
     //specifically "highlighted" for removal.
     private List<ChunkPos> queueRemoval = new LinkedList<>();
@@ -127,13 +130,31 @@ public class LightNetworkBuffer extends CachedWorldData {
         return data.getSection(yLevel);
     }
 
+    @Nullable
+    public IIndependentStarlightSource getSource(BlockPos at) {
+        return starlightSources.get(at);
+    }
+
+    public Collection<Tuple<BlockPos, IIndependentStarlightSource>> getAllSources() {
+        if(cachedSourceTuples == null) {
+            Collection<Tuple<BlockPos, IIndependentStarlightSource>> cache = new LinkedList<>();
+            for (Map.Entry<BlockPos, IIndependentStarlightSource> entry : starlightSources.entrySet()) {
+                cache.add(new Tuple<>(entry.getKey(), entry.getValue()));
+            }
+            this.cachedSourceTuples = Collections.unmodifiableCollection(cache);
+        }
+        return cachedSourceTuples;
+    }
+
     public void createNewChunkData(@Nonnull ChunkPos pos) {
         chunkSortedData.put(pos, new ChunkNetworkData());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
+        starlightSources.clear();
         chunkSortedData.clear();
+        cachedSourceTuples = null;
 
         if(nbt.hasKey("chunkSortedData")) {
             NBTTagList list = nbt.getTagList("chunkSortedData", 10);
@@ -273,6 +294,8 @@ public class LightNetworkBuffer extends CachedWorldData {
     }
 
     private void addIndependentSource(BlockPos pos, IStarlightSource source) {
+        this.cachedSourceTuples = null;
+
         IPrismTransmissionNode node = source.getNode();
         if(node instanceof ITransmissionSource) {
             this.starlightSources.put(pos, ((ITransmissionSource) node).provideNewIndependentSource(source));
@@ -281,6 +304,7 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     private void removeIndependentSource(BlockPos pos) {
         this.starlightSources.remove(pos);
+        this.cachedSourceTuples = null;
     }
 
     public static class ChunkNetworkData {
@@ -350,13 +374,15 @@ public class LightNetworkBuffer extends CachedWorldData {
 
         private void removeSourceTile(BlockPos pos) {
             int yLevel = (pos.getY() & 255) >> 4;
-            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            ChunkSectionNetworkData section = getSection(yLevel);
+            if(section == null) return; //Uhm
             section.removeSourceTile(pos);
         }
 
         private void removeTransmissionTile(BlockPos pos) {
             int yLevel = (pos.getY() & 255) >> 4;
-            ChunkSectionNetworkData section = getOrCreateSection(yLevel);
+            ChunkSectionNetworkData section = getSection(yLevel);
+            if(section == null) return; //Guess we don't remove anything then?
             section.removeTransmissionTile(pos);
         }
 

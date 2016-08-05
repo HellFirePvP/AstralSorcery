@@ -5,7 +5,7 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.SimpleIndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -81,7 +81,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @Override
     public IIndependentStarlightSource provideNewSourceNode() {
-        return new SimpleIndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky);
+        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky);
     }
 
     @Override

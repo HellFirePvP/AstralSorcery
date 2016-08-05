@@ -14,6 +14,21 @@ import net.minecraft.world.World;
  */
 public interface IBlockStarlightRecipient {
 
-    public void receiveStarlight(World world, BlockPos pos, IBlockState state, Constellation starlightType, double amount);
+    /**
+     * Called when this block receives starlight from the network broadcast
+     * This is only called if the chunk it is in is also loaded!
+     *
+     * For a Chunk independent implementation check the tile entities and ITransmissionReceiver
+     * as well as its implementations
+     *
+     * Note that this is only fired if this block is a block linked to an endpoint of a network
+     * and if this block is not a transmission node.
+     *
+     * @param world the world this block instance is in
+     * @param pos the position
+     * @param starlightType the constellation type of the starlight received
+     * @param amount the amount received
+     */
+    public void receiveStarlight(World world, BlockPos pos, Constellation starlightType, double amount);
 
 }

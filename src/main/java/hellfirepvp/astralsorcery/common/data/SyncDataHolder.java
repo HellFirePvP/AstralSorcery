@@ -19,6 +19,7 @@ import java.util.Map;
 public class SyncDataHolder {
 
     public static final String DATA_CONSTELLATIONS = "AstralConstellations";
+    public static final String DATA_LIGHT_CONNECTIONS = "StarlightNetworkConnections";
 
     private static Map<String, AbstractData> serverData = new HashMap<>();
     private static Map<String, AbstractData> clientData = new HashMap<>();
@@ -72,7 +73,7 @@ public class SyncDataHolder {
 
     public static void doNecessaryUpdates() {
         if (dirtyData.isEmpty()) return;
-        Map<String, AbstractData> pktData = new HashMap<String, AbstractData>();
+        Map<String, AbstractData> pktData = new HashMap<>();
         for (String s : dirtyData) {
             AbstractData d = getDataServer(s);
             if (d.needsUpdate()) {

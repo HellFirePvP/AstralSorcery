@@ -165,6 +165,21 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimplePrismTransmissionNode that = (SimplePrismTransmissionNode) o;
+        return !(thisPos != null ? !thisPos.equals(that.thisPos) : that.thisPos != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return thisPos != null ? thisPos.hashCode() : 0;
+    }
+
     public static class Provider implements TransmissionClassRegistry.TransmissionProvider {
 
         @Override

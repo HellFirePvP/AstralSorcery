@@ -29,7 +29,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            LinkHandler.RightClickResult result = LinkHandler.onRightclick(playerIn, worldIn, pos, playerIn.isSneaking());
+            LinkHandler.RightClickResult result = LinkHandler.onRightClick(playerIn, worldIn, pos, playerIn.isSneaking());
             LinkHandler.propagateClick(result, playerIn, worldIn, pos);
         }
         return EnumActionResult.SUCCESS; //We don't pass it onwards.
