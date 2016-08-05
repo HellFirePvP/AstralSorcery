@@ -1,5 +1,7 @@
-package hellfirepvp.astralsorcery.common.block;
+package hellfirepvp.astralsorcery.common.block.network;
 
+import hellfirepvp.astralsorcery.common.block.BlockCustomName;
+import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -30,7 +32,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 20:52
  */
-public class BlockAltar extends BlockContainer implements BlockCustomName, BlockVariants {
+public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants {
 
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
 

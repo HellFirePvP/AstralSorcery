@@ -74,12 +74,14 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     }
 
     @Override
-    public void notifyBlockChange(World world, BlockPos at) {
-        if(nextPos == null) return;
+    public boolean notifyBlockChange(World world, BlockPos at) {
+        if(nextPos == null) return false;
         double dstStart = thisPos.distanceSq(at.getX(), at.getY(), at.getZ());
         double dstEnd = nextPos.distanceSq(at.getX(), at.getY(), at.getZ());
-        if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return; //out of range
+        if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return false; //out of range
+        boolean oldState = this.nextReachable;
         this.nextReachable = assistNext.isClear(world);
+        return this.nextReachable != oldState;
     }
 
     @Override
@@ -135,7 +137,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
             NBTUtils.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
-        compound.setTag("sources", compound);
+        compound.setTag("sources", sources);
 
         if(nextPos != null) {
             NBTTagCompound pos = new NBTTagCompound();

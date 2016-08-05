@@ -85,6 +85,7 @@ public class CommonProxy implements IGuiHandler {
         TickManager manager = TickManager.getInstance();
 
         manager.register(new CelestialHandler.CelestialTickHandler());
+        manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(new WorldCacheManager()); //Only used as instance for tick handling
         manager.register(new LinkHandler()); //Only used as instance for tick handling
 

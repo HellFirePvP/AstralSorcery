@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.starlight;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -44,12 +46,17 @@ public class WorldNetworkHandler {
     public void informBlockChange(BlockPos at) {
         List<LightNetworkBuffer.ChunkSectionNetworkData> relatedData = getAffectedChunkSections(at);
         if(relatedData.isEmpty()) return; //lucky. nothing to do.
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
 
         for (LightNetworkBuffer.ChunkSectionNetworkData data : relatedData) {
             if(data == null) continue;
             Collection<IPrismTransmissionNode> transmissionNodes = data.getAllTransmissionNodes();
             for (IPrismTransmissionNode node : transmissionNodes) {
-                node.notifyBlockChange(getWorld(), at);
+                if(node.notifyBlockChange(getWorld(), at)) {
+                    if(handle != null) {
+                        handle.notifyTransmissionNodeChange(node);
+                    }
+                }
             }
         }
     }
@@ -75,12 +82,14 @@ public class WorldNetworkHandler {
 
     public void removeSource(IStarlightSource source) {
         removeThisSourceFromNext(source);
+        removeThisNextFromSources(source);
 
         buffer.removeSource(source.getPos());
     }
 
     public void removeTransmission(IStarlightTransmission transmission) {
         removeThisSourceFromNext(transmission);
+        removeThisNextFromSources(transmission);
 
         buffer.removeTransmission(transmission.getPos());
     }
@@ -97,8 +106,28 @@ public class WorldNetworkHandler {
         linkNextToThisSources(transmission);
     }
 
+    //For all sources of this "tr" inform the transmission system that the connection might've changed.
+    private void removeThisNextFromSources(IStarlightTransmission tr) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
+        if(handle == null) return;
+
+        IPrismTransmissionNode node = tr.getNode();
+        if(node == null) {
+            AstralSorcery.log.warn("Can't find Transmission node for removal-queued Transmission tile!");
+            AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
+            return;
+        }
+
+        for (BlockPos pos : node.getSources()) {
+            IPrismTransmissionNode sourceNode = getTransmissionNode(pos);
+            if(sourceNode != null) {
+                handle.notifyTransmissionNodeChange(sourceNode);
+            }
+        }
+    }
+
     //What it does: For all "next"'s of this "tr" inform them that "tr" has been removed and
-    //Remove "tr" from their sources.
+    //thus remove "tr" from their sources.
     private void removeThisSourceFromNext(IStarlightTransmission tr) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
@@ -106,11 +135,19 @@ public class WorldNetworkHandler {
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
+        if(handle != null) {
+            handle.notifyTransmissionNodeChange(node);
+        }
+
         BlockPos thisPos = tr.getPos();
         List<NodeConnection<IPrismTransmissionNode>> nodeConnections = node.queryNext(this);
         for (NodeConnection<IPrismTransmissionNode> connection : nodeConnections) {
             if(connection.getNode() != null) {
                 connection.getNode().notifySourceUnlink(getWorld(), thisPos);
+                if(handle != null) {
+                    handle.notifyTransmissionNodeChange(connection.getNode());
+                }
             }
         }
     }
@@ -126,6 +163,7 @@ public class WorldNetworkHandler {
             return;
         }
         BlockPos thisPos = tr.getPos();
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
         List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = getAffectedChunkSections(tr.getPos());
         for (LightNetworkBuffer.ChunkSectionNetworkData data : dataList) {
             if(data == null) continue;
@@ -134,6 +172,9 @@ public class WorldNetworkHandler {
                 for (NodeConnection<IPrismTransmissionNode> connection : nodeConnections) {
                     if(connection.getTo().equals(thisPos)) {
                         node.notifySourceLink(getWorld(), otherNode.getPos());
+                        if(handle != null) {
+                            handle.notifyTransmissionNodeChange(otherNode);
+                        }
                     }
                 }
             }

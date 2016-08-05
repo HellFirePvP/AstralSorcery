@@ -61,10 +61,12 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     }
 
     @Override
-    public void notifyBlockChange(World world, BlockPos at) {
+    public boolean notifyBlockChange(World world, BlockPos at) {
+        boolean anyChange = false;
         for (PrismNext next : nextNodes.values()) {
-            next.notifyBlockPlace(world, thisPos, at);
+            if(next.notifyBlockPlace(world, thisPos, at)) anyChange = true;
         }
+        return anyChange;
     }
 
     @Override
@@ -153,14 +155,16 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             } else {
                 this.reachable = oldRayState;
             }
-            this.distanceSq = end.getDistance(start.getX(), start.getY(), start.getZ());
+            this.distanceSq = end.distanceSq(start.getX(), start.getY(), start.getZ());
         }
 
-        private void notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
+        private boolean notifyBlockPlace(World world, BlockPos connect, BlockPos at) {
             double dstStart = connect.distanceSq(at.getX(), at.getY(), at.getZ());
             double dstEnd = pos.distanceSq(at.getX(), at.getY(), at.getZ());
-            if(dstStart > distanceSq || dstEnd > distanceSq) return;
+            if(dstStart > distanceSq || dstEnd > distanceSq) return false;
+            boolean oldState = this.reachable;
             this.reachable = rayAssist.isClear(world);
+            return this.reachable != oldState;
         }
 
     }

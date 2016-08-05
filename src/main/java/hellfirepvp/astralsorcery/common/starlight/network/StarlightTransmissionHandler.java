@@ -35,6 +35,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
         if(world.isRemote) return;
+
         int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
         if(handle == null) {
@@ -46,7 +47,10 @@ public class StarlightTransmissionHandler implements ITickHandler {
 
     public void informWorldUnload(World world) {
         int dimId = world.provider.getDimension();
-        this.worldHandlers.get(dimId).clear();
+        TransmissionWorldHandler handle = worldHandlers.get(dimId);
+        if(handle != null) {
+            handle.clear();
+        }
         this.worldHandlers.remove(dimId); //LUL
     }
 

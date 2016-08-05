@@ -44,7 +44,7 @@ public class TileAltar extends TileReceiverBase {
 
     @Nullable
     @Override
-    public String getUnlocalizedDisplayName() {
+    public String getUnLocalizedDisplayName() {
         return "tile.BlockAltar.general.name";
     }
 

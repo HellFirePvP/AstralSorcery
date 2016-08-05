@@ -6,7 +6,8 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
-import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
@@ -69,6 +70,8 @@ public class LightNetworkBuffer extends CachedWorldData {
     public void updateTick(World world) {
         cleanupQueuedChunks();
 
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+
         Iterator<Map.Entry<BlockPos, IIndependentStarlightSource>> iterator = starlightSources.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<BlockPos, IIndependentStarlightSource> entry = iterator.next();
@@ -80,9 +83,12 @@ public class LightNetworkBuffer extends CachedWorldData {
                 TileEntity te = world.getTileEntity(pos); //Safe to do now.
                 if (te != null) {
                     if (te instanceof IStarlightSource) {
-                        if(((IStarlightSource) te).updateStarlightSource()) {
+                        if(((IStarlightSource) te).needToUpdateStarlightSource()) {
                             source.informTileStateChange((IStarlightSource) te);
                             ((IStarlightSource) te).markUpdated();
+                            if(handle != null) {
+                                handle.breakSourceNetwork(source);
+                            }
                         }
                     } else {
                         AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");

@@ -29,11 +29,11 @@ public interface ILinkableTile {
     public BlockPos getPos();
 
     /**
-     * The unlocalized displayname for this tile.
+     * The unLocalized displayname for this tile.
      * Can be null if no message should be displayed.
      */
     @Nullable
-    public String getUnlocalizedDisplayName();
+    public String getUnLocalizedDisplayName();
 
     /**
      * Defines if this Tile does accept other tiles linking to it.

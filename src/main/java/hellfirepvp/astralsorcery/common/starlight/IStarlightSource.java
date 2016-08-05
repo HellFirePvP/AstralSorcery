@@ -17,7 +17,7 @@ public interface IStarlightSource extends IStarlightTransmission {
 
     public ITransmissionSource provideSourceNode(BlockPos at);
 
-    public boolean updateStarlightSource();
+    public boolean needToUpdateStarlightSource();
 
     public void markUpdated();
 

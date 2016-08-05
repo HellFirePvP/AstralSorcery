@@ -120,6 +120,7 @@ public class DataActiveCelestials extends AbstractData {
         public DataActiveCelestials provideNewInstance() {
             return new DataActiveCelestials();
         }
+
     }
 
 }

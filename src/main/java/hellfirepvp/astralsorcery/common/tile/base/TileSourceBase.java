@@ -106,7 +106,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
     }
 
     @Override
-    public boolean updateStarlightSource() {
+    public boolean needToUpdateStarlightSource() {
         return needsUpdate;
     }
 

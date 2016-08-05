@@ -51,7 +51,9 @@ public class SimpleTransmissionReceiver implements ITransmissionReceiver {
     }
 
     @Override
-    public void notifyBlockChange(World world, BlockPos changed) {}
+    public boolean notifyBlockChange(World world, BlockPos changed) {
+        return false;
+    }
 
     @Override
     public List<BlockPos> getSources() {
@@ -79,7 +81,7 @@ public class SimpleTransmissionReceiver implements ITransmissionReceiver {
             NBTUtils.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
-        compound.setTag("sources", compound);
+        compound.setTag("sources", sources);
     }
 
     @Override
@@ -97,7 +99,9 @@ public class SimpleTransmissionReceiver implements ITransmissionReceiver {
     }
 
     @Override
-    public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {}
+    public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
+        System.out.println("Received " + amount + " of " + type.getName());
+    }
 
     public static class Provider implements TransmissionClassRegistry.TransmissionProvider {
 

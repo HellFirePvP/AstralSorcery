@@ -75,7 +75,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @Nullable
     @Override
-    public String getUnlocalizedDisplayName() {
+    public String getUnLocalizedDisplayName() {
         return "tile.BlockCollectorCrystal.name";
     }
 

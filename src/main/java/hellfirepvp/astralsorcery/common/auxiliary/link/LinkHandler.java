@@ -52,7 +52,7 @@ public class LinkHandler implements ITickHandler {
         ILinkableTile tile = result.getInteracted();
         switch (result.getType()) {
             case SELECT:
-                String name = tile.getUnlocalizedDisplayName();
+                String name = tile.getUnLocalizedDisplayName();
                 if(name != null) {
                     playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.start", I18n.translateToLocal(name))));
                 }
@@ -67,12 +67,12 @@ public class LinkHandler implements ITickHandler {
                     tile.onLinkCreate(playerIn, pos);
                     String linkedTo = I18n.translateToLocal("misc.link.link.block");
                     if(te != null && te instanceof ILinkableTile) {
-                        String unloc = ((ILinkableTile) te).getUnlocalizedDisplayName();
+                        String unloc = ((ILinkableTile) te).getUnLocalizedDisplayName();
                         if(unloc != null) {
                             linkedTo = I18n.translateToLocal(unloc);
                         }
                     }
-                    String linkedFrom = tile.getUnlocalizedDisplayName();
+                    String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
                         playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.link", I18n.translateToLocal(linkedFrom), linkedTo)));
                     }
@@ -83,12 +83,12 @@ public class LinkHandler implements ITickHandler {
                     String linkedTo = I18n.translateToLocal("misc.link.link.block");
                     te = worldIn.getTileEntity(pos);
                     if(te != null && te instanceof ILinkableTile) {
-                        String unloc = ((ILinkableTile) te).getUnlocalizedDisplayName();
+                        String unloc = ((ILinkableTile) te).getUnLocalizedDisplayName();
                         if(unloc != null) {
                             linkedTo = I18n.translateToLocal(unloc);
                         }
                     }
-                    String linkedFrom = tile.getUnlocalizedDisplayName();
+                    String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
                         playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.unlink", I18n.translateToLocal(linkedFrom), linkedTo)));
                     }

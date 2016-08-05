@@ -4,6 +4,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -71,10 +73,17 @@ public class TransmissionNetworkHelper {
     }
 
     private static void removeLink(IPrismTransmissionNode thisNode, IPrismTransmissionNode nextNode, World world, BlockPos from, BlockPos to) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
         if(nextNode != null) {
             nextNode.notifySourceUnlink(world, from);
+            if(handle != null) {
+                handle.notifyTransmissionNodeChange(nextNode);
+            }
         }
         thisNode.notifyUnlink(world, to);
+        if(handle != null) {
+            handle.notifyTransmissionNodeChange(thisNode);
+        }
     }
 
     private static void createLink(IPrismTransmissionNode transmissionNode, IStarlightTransmission transmission, BlockPos to) {
@@ -84,10 +93,17 @@ public class TransmissionNetworkHelper {
     }
 
     private static void createLink(IPrismTransmissionNode thisNode, IPrismTransmissionNode nextNode, World world, BlockPos from, BlockPos to) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
         if(nextNode != null) {
             nextNode.notifySourceLink(world, from);
+            if(handle != null) {
+                handle.notifyTransmissionNodeChange(nextNode);
+            }
         }
         thisNode.notifyLink(world, to);
+        if(handle != null) {
+            handle.notifyTransmissionNodeChange(thisNode);
+        }
     }
 
     public static void informNetworkTilePlacement(TileNetwork tileNetwork) {
@@ -97,7 +113,7 @@ public class TransmissionNetworkHelper {
         } else if(tileNetwork instanceof IStarlightTransmission) {
             handler.addTransmissionTile((IStarlightTransmission) tileNetwork);
         } else {
-            AstralSorcery.log.warn("Placed a network tile that's not transmission or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Placed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         }
     }
 
@@ -108,7 +124,7 @@ public class TransmissionNetworkHelper {
         } else if(tileNetwork instanceof IStarlightTransmission) {
             handler.removeTransmission((IStarlightTransmission) tileNetwork);
         } else {
-            AstralSorcery.log.warn("Removed a network tile that's not transmission or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
+            AstralSorcery.log.warn("Removed a network tile that's not transmission/receiver or source! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         }
     }
 

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -36,6 +37,8 @@ public class TransmissionWorldHandler {
     private Map<IIndependentStarlightSource, List<ChunkPos>> activeChunkMap = new HashMap<>();
 
     private Map<IIndependentStarlightSource, TransmissionChain> cachedSourceChain = new HashMap<>(); //The distribution source chain.
+
+    private Map<BlockPos, List<IIndependentStarlightSource>> posToSourceMap = new HashMap<>();
 
     private final World world;
 
@@ -102,10 +105,36 @@ public class TransmissionWorldHandler {
         if(!activeChunks.isEmpty()) {
             activeChunkMap.put(source, activeChunks);
         }
+        for (BlockPos pos : chain.getLossMultipliers().keySet()) {
+            List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
+            if(sources == null) {
+                sources = new LinkedList<>();
+                posToSourceMap.put(pos, sources);
+            }
+            sources.add(source);
+        }
+        List<IIndependentStarlightSource> sources = posToSourceMap.get(sourcePos);
+        if(sources == null) {
+            sources = new LinkedList<>();
+            posToSourceMap.put(sourcePos, sources);
+        }
+        sources.add(source);
+    }
+
+    //Fired if the node's state related to the network changes.
+    //Break all networks associated with that node to trigger recalculations as needed.
+    public void notifyTransmissionNodeChange(IPrismTransmissionNode node) {
+        BlockPos pos = node.getPos();
+        List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
+        if(sources != null) {
+            for (IIndependentStarlightSource source : sources) {
+                breakSourceNetwork(source);
+            }
+        }
     }
 
     //Remove a source from the network to trigger recalculation!
-    public void breakSourceNetwork(IIndependentStarlightSource source, BlockPos pos) {
+    public void breakSourceNetwork(IIndependentStarlightSource source) {
         TransmissionChain knownChain = cachedSourceChain.get(source);
         if(knownChain != null) {
             for (ChunkPos chPos : knownChain.getInvolvedChunks()) {
@@ -114,6 +143,15 @@ public class TransmissionWorldHandler {
                     sources.remove(source);
                     if(sources.isEmpty()) {
                         involvedSourceMap.remove(chPos);
+                    }
+                }
+            }
+            for (BlockPos pos : knownChain.getLossMultipliers().keySet()) {
+                List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
+                if(sources != null) {
+                    sources.remove(source);
+                    if(sources.isEmpty()) {
+                        posToSourceMap.remove(pos);
                     }
                 }
             }

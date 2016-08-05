@@ -26,7 +26,7 @@ public class RaytraceAssist {
     //-1 is wildcard
     private static final Map<Block, List<Integer>> passable = new HashMap<>();
 
-    private static final double STEP_WIDTH = 0.3;
+    private static final double STEP_WIDTH = 0.15;
     private static final Vector3 CENTRALIZE = new Vector3(0.5, 0.5, 0.5);
 
     private final Vector3 start, target;
@@ -51,13 +51,17 @@ public class RaytraceAssist {
         for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
             Vector3 stepVec = prevVec.clone().add(stepAim);
             RayTraceResult rtr = world.rayTraceBlocks(prevVec.toVec3d(), stepVec.toVec3d());
+
             if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
                 BlockPos hit = rtr.getBlockPos();
-                if(isStartEnd(hit)) continue;
-                IBlockState state = world.getBlockState(hit);
-                if(isAllowed(state)) continue;
-                return false;
+                if(!isStartEnd(hit)) {
+                    IBlockState state = world.getBlockState(hit);
+                    if(!isAllowed(state)) {
+                        return false;
+                    }
+                }
             }
+            prevVec = stepVec;
         }
         return true;
     }

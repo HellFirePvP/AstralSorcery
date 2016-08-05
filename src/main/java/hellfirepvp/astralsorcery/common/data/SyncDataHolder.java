@@ -87,6 +87,7 @@ public class SyncDataHolder {
 
     public static void initialize() {
         register(new DataActiveCelestials.Provider(DATA_CONSTELLATIONS));
+        register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
     }
 
 }

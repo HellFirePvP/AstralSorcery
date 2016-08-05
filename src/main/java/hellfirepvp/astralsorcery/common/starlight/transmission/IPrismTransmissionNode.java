@@ -44,7 +44,8 @@ public interface IPrismTransmissionNode {
     public void notifySourceUnlink(World world, BlockPos source);
 
     //Fired to check if a line from THIS to a NEXT is still valid after blockchanges
-    public void notifyBlockChange(World world, BlockPos changed);
+    //Return true, if and only if the state of this node in regards to the network has changed at all.
+    public boolean notifyBlockChange(World world, BlockPos changed);
 
     //Try get the next node. might not contain a valid transmission node.
     public List<NodeConnection<IPrismTransmissionNode>> queryNext(WorldNetworkHandler handler);
