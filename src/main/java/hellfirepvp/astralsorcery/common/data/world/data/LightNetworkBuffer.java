@@ -46,7 +46,6 @@ public class LightNetworkBuffer extends CachedWorldData {
     private Map<BlockPos, IIndependentStarlightSource> starlightSources = new HashMap<>();
     private Collection<Tuple<BlockPos, IIndependentStarlightSource>> cachedSourceTuples = null;
 
-    //specifically "highlighted" for removal.
     private List<ChunkPos> queueRemoval = new LinkedList<>();
 
     protected LightNetworkBuffer() {

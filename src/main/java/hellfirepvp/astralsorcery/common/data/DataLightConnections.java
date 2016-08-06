@@ -1,6 +1,9 @@
 package hellfirepvp.astralsorcery.common.data;
 
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChain;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -16,6 +19,15 @@ public class DataLightConnections extends AbstractData {
     @Override
     public boolean needsUpdate() {
         return changed;
+    }
+
+
+    public void updateNewConnectionsThreaded(List<TransmissionChain.LightConnection> newlyAddedConnections) {
+
+    }
+
+    public void removeOldConnectionsThreaded(List<TransmissionChain.LightConnection> invalidConnections) {
+
     }
 
     @Override
@@ -35,6 +47,7 @@ public class DataLightConnections extends AbstractData {
 
     @Override
     public void handleIncomingData(AbstractData serverData) {
+        if(!(serverData instanceof DataLightConnections)) return;
 
     }
 

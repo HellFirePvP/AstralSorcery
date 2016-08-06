@@ -36,7 +36,7 @@ public class DataActiveCelestials extends AbstractData {
     }
 
     public void updateIterations(Collection<CelestialHandler.TierIteration> iterations) {
-        List<Constellation> list = new LinkedList<Constellation>();
+        List<Constellation> list = new LinkedList<>();
         for (CelestialHandler.TierIteration ti : iterations) {
             if (ti.isShowing()) {
                 Constellation c = ti.getCurrentConstellation();

@@ -24,7 +24,7 @@ public class SyncDataHolder {
     private static Map<String, AbstractData> serverData = new HashMap<>();
     private static Map<String, AbstractData> clientData = new HashMap<>();
 
-    private static List<String> dirtyData = new ArrayList<String>();
+    private static List<String> dirtyData = new ArrayList<>();
     private static byte providerCounter = 0;
 
     public static void register(AbstractData.AbstractDataProvider<? extends AbstractData> provider) {

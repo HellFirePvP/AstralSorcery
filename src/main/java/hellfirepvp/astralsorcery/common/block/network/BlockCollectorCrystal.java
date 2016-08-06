@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.util.MiscEffectUtil;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
@@ -17,9 +18,11 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -60,6 +63,20 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
         setSoundType(SoundType.GLASS);
         setLightLevel(1F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    //TODO do
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        //MiscEffectUtil.doBlockBreakParticles(world, pos, Blocks.QUARTZ_BLOCK.getDefaultState(), manager);
+        return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
+        return true;
     }
 
     @Override

@@ -21,6 +21,9 @@ public class Config {
     public static int shrineGenerationChance = 150;
     public static boolean generateShrines = true;
 
+    //Also has a squared field to provide slightly faster rendering.
+    public static int maxEffectRenderDistance = 32, maxEffectRenderDistanceSq;
+
     private Config() {}
 
     public static void load(File file) {
@@ -32,6 +35,9 @@ public class Config {
 
     private static void loadData() {
         //stopOnIllegalState = latestConfig.getBoolean("stopOnIllegalState", "general", Boolean.TRUE, "If this is set to 'true' the server or client will exit the game with a crash in case it encounters a state that might lead to severe issues but doesn't actually crash the server/client. If this is set to 'false' it will only print a warning in the console.");
+
+        maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 32, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
+        maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
 
         //rand(crystalDensity) == 0 chance per chunk.
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 5, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");

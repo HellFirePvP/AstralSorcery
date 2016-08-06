@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 05.08.2016 / 13:59
  */
-public class SimpleTransmissionReceiver implements ITransmissionReceiver {
+public abstract class SimpleTransmissionReceiver implements ITransmissionReceiver {
 
     private BlockPos thisPos;
 
@@ -93,27 +93,4 @@ public class SimpleTransmissionReceiver implements ITransmissionReceiver {
         return !(thisPos != null ? !thisPos.equals(that.thisPos) : that.thisPos != null);
     }
 
-    @Override
-    public TransmissionClassRegistry.TransmissionProvider getProvider() {
-        return new Provider();
-    }
-
-    @Override
-    public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
-        System.out.println("Received " + amount + " of " + type.getName());
-    }
-
-    public static class Provider implements TransmissionClassRegistry.TransmissionProvider {
-
-        @Override
-        public IPrismTransmissionNode provideEmptyNode() {
-            return new SimpleTransmissionReceiver(null);
-        }
-
-        @Override
-        public String getIdentifier() {
-            return AstralSorcery.MODID + ":SimpleTransmissionReceiver";
-        }
-
-    }
 }

@@ -1,6 +1,9 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import hellfirepvp.astralsorcery.common.data.DataLightConnections;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
@@ -36,7 +39,18 @@ public class TransmissionChain {
         this.handler = netHandler;
     }
 
-    public static TransmissionChain buildFromSource(WorldNetworkHandler netHandler, BlockPos at) {
+    public static void threadedBuildTransmissionChain(TransmissionWorldHandler handle, IIndependentStarlightSource source, WorldNetworkHandler netHandler, BlockPos sourcePos) {
+        Thread tr = new Thread(() -> {
+            TransmissionChain chain = buildFromSource(netHandler, sourcePos);
+            handle.threadTransmissionChainCallback(chain, source, netHandler, sourcePos);
+            DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+            connections.updateNewConnectionsThreaded(chain.getFoundConnections());
+        });
+        tr.setName("TrChainCalculationThread");
+        tr.start();
+    }
+
+    private static TransmissionChain buildFromSource(WorldNetworkHandler netHandler, BlockPos at) {
         TransmissionChain chain = new TransmissionChain(netHandler);
 
         IPrismTransmissionNode node = netHandler.getTransmissionNode(at);
@@ -99,10 +113,8 @@ public class TransmissionChain {
 
     //For rendering purposes.
     private void addIfNonExistentConnection(BlockPos start, BlockPos end) {
-        for (LightConnection con : foundConnections) {
-            if(con.isSimilar(start, end)) return;
-        }
-        foundConnections.add(new LightConnection(start, end));
+        LightConnection newCon = new LightConnection(start, end);
+        if(!foundConnections.contains(newCon)) foundConnections.add(newCon);
     }
 
     public List<ChunkPos> getInvolvedChunks() {
@@ -127,17 +139,28 @@ public class TransmissionChain {
 
     public static class LightConnection {
 
-        private final BlockPos pos1, pos2;
+        private final BlockPos start, end;
 
-        public LightConnection(BlockPos pos1, BlockPos pos2) {
-            this.pos1 = pos1;
-            this.pos2 = pos2;
+        public LightConnection(BlockPos start, BlockPos end) {
+            this.start = start;
+            this.end = end;
         }
 
-        public boolean isSimilar(BlockPos pos, BlockPos otherPos) {
-            return (pos.equals(pos1) && otherPos.equals(pos2)) || (pos.equals(pos2) && otherPos.equals(pos1));
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            LightConnection that = (LightConnection) o;
+            return !(end != null ? !end.equals(that.end) : that.end != null) && !(start != null ? !start.equals(that.start) : that.start != null);
+
         }
 
+        @Override
+        public int hashCode() {
+            int result = start != null ? start.hashCode() : 0;
+            result = 31 * result + (end != null ? end.hashCode() : 0);
+            return result;
+        }
     }
 
 }

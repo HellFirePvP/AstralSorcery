@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -111,10 +112,12 @@ public class TexturePlane implements IComplexEffect {
 
     @Override
     public void render(float partialTicks) {
-        if(Minecraft.getMinecraft().getRenderViewEntity() == null) return;
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) return;
+        if(rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > Config.maxEffectRenderDistanceSq) return;
 
         GL11.glPushMatrix();
-        removeOldTranslate(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+        removeOldTranslate(rView, partialTicks);
         GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), colorOverlay.getAlpha());
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -130,7 +133,7 @@ public class TexturePlane implements IComplexEffect {
         }
 
         currRenderAroundAxis(Math.toRadians(deg), axis);
-        currRenderAroundAxis(Math.toRadians(360F - deg), axis.clone().multiply(-1));
+        currRenderAroundAxis(Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDisable(GL11.GL_BLEND);

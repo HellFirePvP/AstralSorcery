@@ -89,11 +89,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemRenderers() {
-        ItemRendererFilteredTESR stoneMachineRender = new ItemRendererFilteredTESR();
+        /*ItemRendererFilteredTESR stoneMachineRender = new ItemRendererFilteredTESR();
         for (BlockAltar.AltarType type : BlockAltar.AltarType.values()) {
             stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
-        }
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), stoneMachineRender);
+        }*/
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), new TESRAltar());
         ItemRenderRegistry.register(ItemsAS.telescopePlacer, new RenderItemTelescope());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
 

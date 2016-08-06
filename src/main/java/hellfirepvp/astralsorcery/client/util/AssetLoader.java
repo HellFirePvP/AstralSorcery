@@ -13,8 +13,11 @@ import net.minecraft.util.ResourceLocation;
  */
 public class AssetLoader {
 
-    private AssetLoader() {
-    }
+    private AssetLoader() {}
+
+    /*public static ResourceLocation loadMinecraftTextureResource(AssetLocation location, SubLocation subLocation, String name) {
+        return new ResourceLocation(buildResourceString(location, subLocation, name, ".png"));
+    }*/
 
     public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         return new BindableResource(buildResourceString(location, subLocation, name, suffix));
@@ -41,10 +44,6 @@ public class AssetLoader {
     public static WavefrontObject loadObjModel(ModelLocation location, String name) {
         return new WavefrontObject(new ResourceLocation(buildResourceString(AssetLocation.MODELS, location, name, ".obj")));
     }
-
-    /*public static WavefrontObject loadOBJModel(ModelLocation location, String name) {
-        return load(AssetLocation.MODELS, location, name, ".obj");
-    }*/
 
     public static interface SubLocation {
 
