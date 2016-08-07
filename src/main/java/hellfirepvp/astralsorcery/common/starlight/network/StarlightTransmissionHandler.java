@@ -49,7 +49,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
         int dimId = world.provider.getDimension();
         TransmissionWorldHandler handle = worldHandlers.get(dimId);
         if(handle != null) {
-            handle.clear();
+            handle.clear(world.provider.getDimension());
         }
         this.worldHandlers.remove(dimId); //LUL
     }

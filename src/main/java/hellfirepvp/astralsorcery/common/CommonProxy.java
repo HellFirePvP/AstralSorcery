@@ -76,14 +76,13 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
 
-        registerTickHandlers();
+        TickManager manager = TickManager.getInstance();
+        registerTickHandlers(manager);
 
         SyncDataHolder.initialize();
     }
 
-    private void registerTickHandlers() {
-        TickManager manager = TickManager.getInstance();
-
+    protected void registerTickHandlers(TickManager manager) {
         manager.register(new CelestialHandler.CelestialTickHandler());
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(new WorldCacheManager()); //Only used as instance for tick handling

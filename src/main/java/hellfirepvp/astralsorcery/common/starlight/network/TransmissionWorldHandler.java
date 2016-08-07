@@ -176,7 +176,7 @@ public class TransmissionWorldHandler {
                 }
                 Thread tr = new Thread(() -> {
                     DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-                    connections.removeOldConnectionsThreaded(knownChain.getFoundConnections());
+                    connections.removeOldConnectionsThreaded(world.provider.getDimension(), knownChain.getFoundConnections());
                 });
                 tr.start();
             }
@@ -226,12 +226,14 @@ public class TransmissionWorldHandler {
     }
 
     //Free memory before removing the object
-    public void clear() {
+    public void clear(int dimId) {
         synchronized (accessLock) {
             this.activeChunkMap.clear();
             this.cachedSourceChain.clear();
             this.involvedSourceMap.clear();
             this.posToSourceMap.clear();
+            DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+            connections.clearDimensionPositions(dimId);
         }
     }
 

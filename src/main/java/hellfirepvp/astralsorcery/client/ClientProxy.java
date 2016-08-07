@@ -2,18 +2,21 @@ package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.item.RenderItemTelescope;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
+import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -22,6 +25,8 @@ import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -97,12 +102,24 @@ public class ClientProxy extends CommonProxy {
         ItemRenderRegistry.register(ItemsAS.telescopePlacer, new RenderItemTelescope());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
 
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRNoOp<TileCrystalLens>());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lensPrism), new TESRNoOp<TileCrystalPrismLens>());
+
         //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
+    }
+
+    @Override
+    protected void registerTickHandlers(TickManager manager) {
+        super.registerTickHandlers(manager);
+        manager.register(new ClientLightbeamHandler());
     }
 
     private void registerTileRenderers() {
         registerTESR(TileAltar.class, new TESRAltar());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
+
+        registerTESR(TileCrystalLens.class, new TESRNoOp<TileCrystalLens>());
+        registerTESR(TileCrystalPrismLens.class, new TESRNoOp<TileCrystalPrismLens>());
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {

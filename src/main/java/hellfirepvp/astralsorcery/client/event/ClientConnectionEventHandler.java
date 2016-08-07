@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.common.data.DataLightConnections;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -16,6 +18,7 @@ public class ClientConnectionEventHandler {
     @SubscribeEvent
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         EffectHandler.cleanUp();
+        ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
     }
 
 }

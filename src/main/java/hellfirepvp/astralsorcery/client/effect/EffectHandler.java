@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -71,6 +73,18 @@ public final class EffectHandler {
         TexturePlane plane = new TexturePlane(texture, rotationAxis);
         register(plane);
         return plane;
+    }
+
+    public EffectLightbeam lightbeam(Vector3 from, Vector3 to, double beamRadSize) {
+        EffectLightbeam beam = new EffectLightbeam(from, to, beamRadSize);
+        register(beam);
+        return beam;
+    }
+
+    public EffectLightbeam lightbeam(Vector3 from, Vector3 to, double fromBeamSize, double toBeamSize) {
+        EffectLightbeam beam = new EffectLightbeam(from, to, fromBeamSize, toBeamSize);
+        register(beam);
+        return beam;
     }
 
     private void register(final IComplexEffect effect) {

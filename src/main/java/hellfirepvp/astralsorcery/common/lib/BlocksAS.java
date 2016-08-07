@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.block.BlockTest;
+import hellfirepvp.astralsorcery.common.block.BlockTest2;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
@@ -22,5 +24,8 @@ public class BlocksAS {
     public static BlockMarble blockMarble;
     public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
+
+    public static BlockTest lens;
+    public static BlockTest2 lensPrism;
 
 }

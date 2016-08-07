@@ -134,7 +134,7 @@ public class RenderConstellation {
             }
         }
 
-        Map<StarLocation, Rectangle> starRectangles = new HashMap<StarLocation, Rectangle>();
+        Map<StarLocation, Rectangle> starRectangles = new HashMap<>();
 
         RenderAstralSkybox.TEX_STAR_1.bind();
         for (StarLocation sl : c.getStars()) {

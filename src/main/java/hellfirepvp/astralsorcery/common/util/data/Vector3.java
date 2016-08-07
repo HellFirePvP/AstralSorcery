@@ -69,6 +69,13 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 add(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
     public Vector3 addX(double x) {
         this.x += x;
         return this;

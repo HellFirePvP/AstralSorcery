@@ -41,6 +41,9 @@ tile.BlockMarble.arch.name=Marble Arch
 tile.BlockMarble.runed.name=Runed Marble
 tile.BlockMarble.engraved.name=Engraved Marble
 
+tile.BlockTest2.name=PrismLens [WIP]
+tile.BlockTest.name=Lens [WIP]
+
 astralsorcery.constellation.orion=Orion
 astralsorcery.constellation.bigDipper=Big Dipper
 astralsorcery.constellation.aquila=Aquila

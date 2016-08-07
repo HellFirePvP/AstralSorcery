@@ -44,7 +44,7 @@ public class TransmissionChain {
             TransmissionChain chain = buildFromSource(netHandler, sourcePos);
             handle.threadTransmissionChainCallback(chain, source, netHandler, sourcePos);
             DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
-            connections.updateNewConnectionsThreaded(chain.getFoundConnections());
+            connections.updateNewConnectionsThreaded(netHandler.getWorld().provider.getDimension(), chain.getFoundConnections());
         });
         tr.setName("TrChainCalculationThread");
         tr.start();
@@ -144,6 +144,14 @@ public class TransmissionChain {
         public LightConnection(BlockPos start, BlockPos end) {
             this.start = start;
             this.end = end;
+        }
+
+        public BlockPos getStart() {
+            return start;
+        }
+
+        public BlockPos getEnd() {
+            return end;
         }
 
         @Override

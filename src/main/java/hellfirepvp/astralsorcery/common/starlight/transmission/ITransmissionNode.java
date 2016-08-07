@@ -18,7 +18,10 @@ public interface ITransmissionNode extends IPrismTransmissionNode {
 
     default public List<NodeConnection<IPrismTransmissionNode>> queryNext(WorldNetworkHandler handler) {
         List<NodeConnection<IPrismTransmissionNode>> nodes = new LinkedList<>();
-        nodes.add(queryNextNode(handler));
+        NodeConnection<IPrismTransmissionNode> next = queryNextNode(handler);
+        if(next != null) {
+            nodes.add(next);
+        }
         return nodes;
     }
 

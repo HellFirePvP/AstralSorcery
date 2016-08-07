@@ -96,6 +96,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public NodeConnection<IPrismTransmissionNode> queryNextNode(WorldNetworkHandler handler) {
+        if(nextPos == null) return null;
         return new NodeConnection<>(handler.getTransmissionNode(nextPos), nextPos, nextReachable);
     }
 

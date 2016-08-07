@@ -1,18 +1,11 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.Axis;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,14 +27,14 @@ public class ItemRockCrystalBase extends Item {
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    @Override
+    /*@Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if(worldIn.isRemote) {
             EffectHandler.getInstance().texturePlane(AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1"), Axis.persisentRandomAxis()).
                     setPosition(new Vector3(playerIn)).setMaxAge(50);
         }
         return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
-    }
+    }*/
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
