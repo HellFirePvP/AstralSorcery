@@ -24,6 +24,10 @@ public interface IIndependentStarlightSource {
 
     public Constellation getStarlightType();
 
+    default public boolean providesAutoLink() {
+        return false;
+    }
+
     //Update the state of the independent tile. for example if "doesSeeSky" has changed or something.
     public void informTileStateChange(IStarlightSource sourceTile);
 

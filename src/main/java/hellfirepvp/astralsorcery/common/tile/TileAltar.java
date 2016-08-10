@@ -34,7 +34,7 @@ public class TileAltar extends TileReceiverBase {
     }
 
     private void receiveStarlight(Constellation type, double amount) {
-        
+        //System.out.println("received " + type.getName() + " amount: " + amount);
     }
 
     public AltarLevel getAltarLevel() {

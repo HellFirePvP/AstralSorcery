@@ -48,13 +48,15 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     }
 
     @Override
-    public void notifyUnlink(World world, BlockPos to) {
+    public boolean notifyUnlink(World world, BlockPos to) {
         if(to.equals(nextPos)) { //cleanup
             this.nextPos = null;
             this.assistNext = null;
             this.dstToNextSq = 0;
             this.nextReachable = false;
+            return true;
         }
+        return false;
     }
 
     @Override

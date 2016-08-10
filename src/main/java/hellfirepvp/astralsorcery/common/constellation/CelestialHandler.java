@@ -171,6 +171,8 @@ public class CelestialHandler {
                 Constellation c = constellations.get(i);
                 if (i != cIndex) {
                     float distance = Math.abs(cIndex - i);
+                    float otherDst = Math.abs(cIndex - (i + constellations.size()));
+                    if(otherDst < distance) distance = otherDst;
                     float perc = 1F - (distance / maxDst);
                     distribution.put(c, MIN_DISTRIBUTION_RATE + (perc * DISTRIBUTION_MULTIPLIER));
                 } else {

@@ -29,6 +29,11 @@ public class BlockTest2 extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }

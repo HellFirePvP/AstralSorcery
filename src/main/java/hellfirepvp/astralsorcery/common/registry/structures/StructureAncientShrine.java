@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry.structures;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -37,37 +38,37 @@ public class StructureAncientShrine extends StructureBlockArray {
         IBlockState mEngraved = m.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.ENGRAVED);
         IBlockState air = Blocks.AIR.getDefaultState();
 
-        buildQuad(mRaw, -7, 0, -7, 7, 0, 7);
-        buildQuad(air, -7, 1, -7, 7, 11, 7);
+        addBlockCube(mRaw, -7, 0, -7, 7, 0, 7);
+        addBlockCube(air, -7, 1, -7, 7, 11, 7);
 
-        buildQuad(mRaw, -9, 0, -9, -5, 0, -5);
-        buildQuad(mRaw,  9, 0,  9,  5, 0,  5);
-        buildQuad(mRaw, -9, 0,  9, -5, 0,  5);
-        buildQuad(mRaw,  9, 0, -9,  5, 0, -5);
-        buildQuad(air,  -9, 1, -9, -5, 6, -5);
-        buildQuad(air,   9, 1,  9,  5, 6,  5);
-        buildQuad(air,  -9, 1,  9, -5, 6,  5);
-        buildQuad(air,   9, 1, -9,  5, 6, -5);
+        addBlockCube(mRaw, -9, 0, -9, -5, 0, -5);
+        addBlockCube(mRaw, 9, 0, 9, 5, 0, 5);
+        addBlockCube(mRaw, -9, 0, 9, -5, 0, 5);
+        addBlockCube(mRaw, 9, 0, -9, 5, 0, -5);
+        addBlockCube(air, -9, 1, -9, -5, 6, -5);
+        addBlockCube(air, 9, 1, 9, 5, 6, 5);
+        addBlockCube(air, -9, 1, 9, -5, 6, 5);
+        addBlockCube(air, 9, 1, -9, 5, 6, -5);
 
-        buildQuad(mRaw, -6, -1, -6, 6, -7, 6);
-        buildQuad(air,  -4, -1, -4, 4, -5, 4);
+        addBlockCube(mRaw, -6, -1, -6, 6, -7, 6);
+        addBlockCube(air, -4, -1, -4, 4, -5, 4);
 
-        buildQuad(mBrick, -6, 1, -6,  6, 1,  6);
-        buildQuad(mBrick, -8, 1, -8, -6, 1, -6);
-        buildQuad(mBrick, -8, 1,  8, -6, 1,  6);
-        buildQuad(mBrick,  8, 1, -8,  6, 1, -6);
-        buildQuad(mBrick,  8, 1,  8,  6, 1,  6);
+        addBlockCube(mBrick, -6, 1, -6, 6, 1, 6);
+        addBlockCube(mBrick, -8, 1, -8, -6, 1, -6);
+        addBlockCube(mBrick, -8, 1, 8, -6, 1, 6);
+        addBlockCube(mBrick, 8, 1, -8, 6, 1, -6);
+        addBlockCube(mBrick, 8, 1, 8, 6, 1, 6);
 
-        buildQuad(air, -2, 1, -2,  2, 1,  2);
+        addBlockCube(air, -2, 1, -2, 2, 1, 2);
 
-        buildQuad(air, -3, 1,  1, -3, 1, -1);
-        buildQuad(air,  3, 1,  1,  3, 1, -1);
-        buildQuad(air,  1, 1, -3, -1, 1, -3);
-        buildQuad(air,  1, 1,  3, -1, 1,  3);
+        addBlockCube(air, -3, 1, 1, -3, 1, -1);
+        addBlockCube(air, 3, 1, 1, 3, 1, -1);
+        addBlockCube(air, 1, 1, -3, -1, 1, -3);
+        addBlockCube(air, 1, 1, 3, -1, 1, 3);
 
-        buildQuad(air, -1, -6, -1, 1, -6, 1);
+        addBlockCube(air, -1, -6, -1, 1, -6, 1);
 
-        buildQuad(mBrick, -2, 10, -2, 2, 10, 2);
+        addBlockCube(mBrick, -2, 10, -2, 2, 10, 2);
 
         addBlock( 0, 0,  0, Blocks.SEA_LANTERN.getDefaultState());
         addBlock( 1, 0,  0, mChisel);
@@ -369,7 +370,8 @@ public class StructureAncientShrine extends StructureBlockArray {
             @Override
             public void onPlace(World world, BlockPos at, TileEntity te) {
                     if(te instanceof TileCollectorCrystal) {
-                    ((TileCollectorCrystal) te).onPlace(ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),
+                    ((TileCollectorCrystal) te).onPlace(
+                            ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),
                             CrystalProperties.createStructural(), false);
                 }
             }

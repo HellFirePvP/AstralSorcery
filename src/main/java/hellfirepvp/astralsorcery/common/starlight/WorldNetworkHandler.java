@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -55,6 +56,61 @@ public class WorldNetworkHandler {
                 if(node.notifyBlockChange(getWorld(), at)) {
                     if(handle != null) {
                         handle.notifyTransmissionNodeChange(node);
+                    }
+                }
+            }
+        }
+    }
+
+    public void informTablePlacement(BlockPos at) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+        for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
+            if(!source.value.providesAutoLink()) continue;
+
+            if(source.key.distanceSq(at) <= 256) {
+                IPrismTransmissionNode node = getTransmissionNode(source.key);
+                if(node == null) {
+                    AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    continue;
+                }
+                if(!(node instanceof ITransmissionSource)) {
+                    AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    continue;
+                }
+                ITransmissionSource sourceNode = (ITransmissionSource) node;
+                if(sourceNode.getPos().getY() <= at.getY()) continue;
+                sourceNode.notifyLink(getWorld(), at);
+
+                if(handle != null) {
+                    handle.notifyTransmissionNodeChange(sourceNode);
+                }
+            }
+        }
+    }
+
+    public void informTableRemoval(BlockPos at) {
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+        for (Tuple<BlockPos, IIndependentStarlightSource> source : getAllSources()) {
+            if(!source.value.providesAutoLink()) continue;
+
+            if(source.key.distanceSq(at) <= 256) {
+                IPrismTransmissionNode node = getTransmissionNode(source.key);
+                if(node == null) {
+                    AstralSorcery.log.warn("Didn't find a TransmissionNode at a position that's supposed to be a source!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    continue;
+                }
+                if(!(node instanceof ITransmissionSource)) {
+                    AstralSorcery.log.warn("Found TransmissionNode that isn't a source at a source position!");
+                    AstralSorcery.log.warn("Details: Dim=" + getWorld().provider.getDimension() + " at " + source.key);
+                    continue;
+                }
+                ITransmissionSource sourceNode = (ITransmissionSource) node;
+                if(sourceNode.notifyUnlink(getWorld(), at)) {
+                    if(handle != null) {
+                        handle.notifyTransmissionNodeChange(sourceNode);
                     }
                 }
             }

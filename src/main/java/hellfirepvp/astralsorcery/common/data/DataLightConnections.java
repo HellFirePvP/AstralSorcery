@@ -146,8 +146,8 @@ public class DataLightConnections extends AbstractData {
             for (BlockPos pos : dat.keySet()) {
                 for (BlockPos end : dat.get(pos)) {
                     NBTTagCompound cmp = new NBTTagCompound();
-                    cmp.setByteArray("sta", NBTUtils.packBlockPos(pos));
-                    cmp.setByteArray("end", NBTUtils.packBlockPos(end));
+                    cmp.setLong("sta", pos.toLong());
+                    cmp.setLong("end", end.toLong());
                     cmp.setBoolean("s", true);
                     dataList.appendTag(cmp);
                 }
@@ -174,8 +174,8 @@ public class DataLightConnections extends AbstractData {
                         }
 
                         NBTTagCompound cmp = new NBTTagCompound();
-                        cmp.setByteArray("sta", NBTUtils.packBlockPos(tpl.key.getStart()));
-                        cmp.setByteArray("end", NBTUtils.packBlockPos(tpl.key.getEnd()));
+                        cmp.setLong("sta", tpl.key.getStart().toLong());
+                        cmp.setLong("end", tpl.key.getEnd().toLong());
                         cmp.setBoolean("s", tpl.value);
                         list.appendTag(cmp);
                     }
@@ -211,8 +211,8 @@ public class DataLightConnections extends AbstractData {
                     break;
                 }
 
-                BlockPos start = NBTUtils.unpackBlockPos(connection.getByteArray("sta"));
-                BlockPos end = NBTUtils.unpackBlockPos(connection.getByteArray("end"));
+                BlockPos start = BlockPos.fromLong(connection.getLong("sta"));
+                BlockPos end = BlockPos.fromLong(connection.getLong("end"));
                 boolean set = connection.getBoolean("s");
                 List<BlockPos> to = connectionMap.get(start);
                 if(set) {

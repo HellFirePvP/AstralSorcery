@@ -22,6 +22,7 @@ import java.util.List;
 public abstract class TileSourceBase extends TileNetworkSkybound implements IStarlightSource, ILinkableTile {
 
     private boolean needsUpdate = false;
+    private boolean linked = false;
     private List<BlockPos> positions = new LinkedList<>();
 
     @Override
@@ -31,6 +32,10 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
         if(oldState != doesSeeSky()) {
             needsUpdate = true;
         }
+    }
+
+    public boolean hasBeenLinked() {
+        return linked;
     }
 
     @Override
@@ -45,6 +50,8 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
                 positions.add(NBTUtils.readBlockPosFromNBT(tag));
             }
         }
+
+        this.linked = compound.getBoolean("wasLinkedBefore");
     }
 
     @Override
@@ -58,6 +65,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
             list.appendTag(tag);
         }
         compound.setTag("linked", list);
+        compound.setBoolean("wasLinkedBefore", linked);
     }
 
     @Override
@@ -68,6 +76,11 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
             if(!this.positions.contains(other)) {
                 this.positions.add(other);
                 markDirty();
+            }
+
+            if(!hasBeenLinked()) {
+                this.linked = true;
+                this.needsUpdate = true;
             }
         }
     }

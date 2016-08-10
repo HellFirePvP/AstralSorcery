@@ -19,7 +19,7 @@ public class AssetLoader {
         return new ResourceLocation(buildResourceString(location, subLocation, name, ".png"));
     }*/
 
-    public static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
+    protected static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         return new BindableResource(buildResourceString(location, subLocation, name, suffix));
     }
 
@@ -37,7 +37,7 @@ public class AssetLoader {
         return builder.toString();
     }
 
-    public static BindableResource loadTexture(TextureLocation location, String name) {
+    protected static BindableResource loadTexture(TextureLocation location, String name) {
         return load(AssetLocation.TEXTURES, location, name, ".png");
     }
 

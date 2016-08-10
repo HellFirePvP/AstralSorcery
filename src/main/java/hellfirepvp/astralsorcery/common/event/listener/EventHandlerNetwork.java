@@ -20,8 +20,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
  */
 public class EventHandlerNetwork {
 
-    public static int serverTick = 0;
-
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
@@ -38,14 +36,6 @@ public class EventHandlerNetwork {
         EntityPlayer player = e.player;
 
         ResearchManager.logoutResetClient(player);
-    }
-
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        serverTick++;
-
-        SyncDataHolder.doNecessaryUpdates();
     }
 
 }

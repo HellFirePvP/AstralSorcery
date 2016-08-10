@@ -61,6 +61,7 @@ public class TransmissionWorldHandler {
             synchronized (accessLock) {
                 if(!cachedSourceChain.containsKey(source)) {
                     if(!sourcePosBuilding.contains(at)) {
+                        sourcePosBuilding.add(at);
                         buildSourceNetworkThreaded(source, handler, at);
                     }
                 }
@@ -73,6 +74,7 @@ public class TransmissionWorldHandler {
                 TransmissionChain chain = cachedSourceChain.get(source);
                 double starlight = source.produceStarlightTick(world, at);
                 Constellation type = source.getStarlightType();
+
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {
                     BlockPos pos = rec.getPos();

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
+import hellfirepvp.astralsorcery.common.ritual.RitualComponentRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
@@ -52,9 +53,12 @@ public class CommonProxy implements IGuiHandler {
         RegistryEntities.init();
         RegistryStructures.init();
 
+        //Transmission registry
         SourceClassRegistry.setupRegistry();
         TransmissionClassRegistry.setupRegistry();
         //StarlightNetworkRegistry.setupRegistry();
+
+        RitualComponentRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
 
@@ -87,7 +91,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(new WorldCacheManager()); //Only used as instance for tick handling
         manager.register(new LinkHandler()); //Only used as instance for tick handling
-
+        manager.register(SyncDataHolder.getTickInstance());
     }
 
     public void postInit() {}

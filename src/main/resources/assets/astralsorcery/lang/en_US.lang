@@ -17,6 +17,18 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
+constraint.symmetry=Symmetry
+constraint.asymmetry=Asymmetry
+constraint.horizontal=Horizontal
+constraint.vertical=Vertical
+constraint.maxsize.4=Size 4
+constraint.maxsize.5=Size 5
+constraint.maxsize.6=Size 6
+constraint.maxsize.7=Size 7
+constraint.maxsize.8=Size 8
+constraint.mindst.2=Distance 2
+constraint.mindst.3=Distance 3
+
 entity.astralsorcery.EntityTelescope.name=Telescope
 
 item.ItemConstellationPaper.name=Constellation Paper
@@ -28,10 +40,10 @@ item.ItemLinkingTool.name=[WIP] Linking Tool
 tile.BlockCustomOre.rock_crystal.name=Rock Crystal Ore
 tile.BlockCollectorCrystal.name=Collector Crystal
 tile.BlockAltar.altar_1.name=Luminous Crafting Table
-tile.BlockAltar.altar_2.name=[NoName-ConstellationCraft] Altar
-tile.BlockAltar.altar_3.name=Celestial Altar
+tile.BlockAltar.altar_2.name=[NoName-Attenuation] Altar
+tile.BlockAltar.altar_3.name=[NoName-ConstellationCraft] Altar
 tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
-tile.BlockAltar.altar_5.name=Skybending Altar
+tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=Altar
 tile.BlockMarble.raw.name=Marble
 tile.BlockMarble.bricks.name=Marble Bricks

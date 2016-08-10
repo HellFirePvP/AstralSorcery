@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -21,7 +22,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class EffectLightbeam implements IComplexEffect {
 
-    private static final BindableResource beamTex = AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "lightbeam");
+    private static final BindableResource beamTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "lightbeam");
     private final Vector3 from, to, aim, aimPerp;
     private final double fromSize, toSize;
     private int maxAge = 30;

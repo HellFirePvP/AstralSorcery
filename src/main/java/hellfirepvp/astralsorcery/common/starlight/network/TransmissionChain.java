@@ -28,7 +28,7 @@ public class TransmissionChain {
 
     private List<ChunkPos> involvedChunks = new LinkedList<>();
     private List<LightConnection> foundConnections = new LinkedList<>();
-    private Map<BlockPos, Float> lossMultipliers = new HashMap<>();
+    private Map<BlockPos, Float> remainMultiplierMap = new HashMap<>();
 
     private List<BlockPos> uncheckedEndpointsBlock = new LinkedList<>(); //Might be IBlockSLRecipient or just a normal block.
     private List<ITransmissionReceiver> endpointsNodes = new LinkedList<>(); //Safe to assume those are endpoints
@@ -59,6 +59,8 @@ public class TransmissionChain {
         }
 
         chain.calculateInvolvedChunks();
+        for (BlockPos pos : chain.remainMultiplierMap.keySet()) {
+        }
         return chain;
     }
 
@@ -66,9 +68,9 @@ public class TransmissionChain {
         if(lossMultiplier <= 0.001F) return; //No. we don't transfer a part less than 0.1% of the starlight.
 
         CrystalProperties properties = node.getTransmissionProperties();
-        lossMultiplier *= CrystalCalculations.getThroughputMultiplier(properties, lossMultiplier);
+        float lossPerc = CrystalCalculations.getThroughputMultiplier(properties);
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
-        float nextLoss = lossMultiplier / ((float) next.size());
+        float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
         prevPath.push(node.getPos());
 
         for (NodeConnection<IPrismTransmissionNode> nextNode : next) {
@@ -78,11 +80,11 @@ public class TransmissionChain {
                 addIfNonExistentConnection(node.getPos(), nextPos);
                 if(!prevPath.contains(nextPos)) { //Saves us from cycles. cyclic starlight transmission to a cyclic node means 100% loss.
 
-                    Float currentLoss = lossMultipliers.get(nextPos);
+                    Float currentLoss = remainMultiplierMap.get(nextPos);
                     if (currentLoss != null) {
-                        lossMultipliers.put(nextPos, currentLoss + nextLoss); //This never exceeds 1F
+                        remainMultiplierMap.put(nextPos, currentLoss + nextLoss); //This never exceeds 1F
                     } else {
-                        lossMultipliers.put(nextPos, nextLoss);
+                        remainMultiplierMap.put(nextPos, nextLoss);
                     }
 
                     if(trNode != null) {
@@ -105,7 +107,7 @@ public class TransmissionChain {
 
     //After calculating everything...
     private void calculateInvolvedChunks() {
-        for (BlockPos nodePos : lossMultipliers.keySet()) {
+        for (BlockPos nodePos : remainMultiplierMap.keySet()) {
             ChunkPos ch = new ChunkPos(nodePos);
             if(!involvedChunks.contains(ch)) involvedChunks.add(ch);
         }
@@ -122,7 +124,7 @@ public class TransmissionChain {
     }
 
     public Map<BlockPos, Float> getLossMultipliers() {
-        return lossMultipliers;
+        return remainMultiplierMap;
     }
 
     public List<LightConnection> getFoundConnections() {

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
@@ -42,12 +43,12 @@ public class RenderAstralSkybox extends IRenderHandler {
     private static final ResourceLocation MC_DEF_SUN_PNG = new ResourceLocation("textures/environment/sun.png");
     private static final ResourceLocation MC_DEF_MOON_PHASES_PNG = new ResourceLocation("textures/environment/moon_phases.png");
 
-    public static final BindableResource TEX_STAR_1 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
-    public static final BindableResource TEX_STAR_2 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
-    public static final BindableResource TEX_STAR_3 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
-    public static final BindableResource TEX_STAR_4 = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+    public static final BindableResource TEX_STAR_1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+    public static final BindableResource TEX_STAR_2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
+    public static final BindableResource TEX_STAR_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
+    public static final BindableResource TEX_STAR_4 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
-    public static final BindableResource TEX_CONNECTION = AssetLoader.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
+    public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
 
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -

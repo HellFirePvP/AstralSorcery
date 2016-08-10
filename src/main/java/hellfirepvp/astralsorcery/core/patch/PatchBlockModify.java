@@ -40,7 +40,9 @@ public class PatchBlockModify extends ClassPatch {
                         mn.instructions.insertBefore(prev, new InsnNode(Opcodes.DUP));
                         mn.instructions.insertBefore(prev, new VarInsnNode(Opcodes.ALOAD, 0)); //Chunk
                         mn.instructions.insertBefore(prev, new VarInsnNode(Opcodes.ALOAD, 1)); //Pos
-                        mn.instructions.insertBefore(prev, new MethodInsnNode(Opcodes.INVOKESPECIAL, "hellfirepvp/astralsorcery/common/event/BlockModifyEvent", "<init>", "(Lnet/minecraft/world/chunk/Chunk;Lnet/minecraft/util/math/BlockPos;)V", false));
+                        mn.instructions.insertBefore(prev, new VarInsnNode(Opcodes.ALOAD, 8)); //OldState
+                        mn.instructions.insertBefore(prev, new VarInsnNode(Opcodes.ALOAD, 2)); //NewState
+                        mn.instructions.insertBefore(prev, new MethodInsnNode(Opcodes.INVOKESPECIAL, "hellfirepvp/astralsorcery/common/event/BlockModifyEvent", "<init>", "(Lnet/minecraft/world/chunk/Chunk;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/block/state/IBlockState;)V", false));
                         mn.instructions.insertBefore(prev, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraftforge/fml/common/eventhandler/EventBus", "post", "(Lnet/minecraftforge/fml/common/eventhandler/Event;)Z", false));
                         mn.instructions.insertBefore(prev, new InsnNode(Opcodes.POP));
                         break;

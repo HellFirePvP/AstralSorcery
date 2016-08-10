@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
@@ -45,7 +46,7 @@ import java.util.Random;
  */
 public class GuiTelescope extends GuiScreen {
 
-    private static final BindableResource textureGrid = AssetLoader.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
+    private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
 
     public static final int guiHeight = 245;
     public static final int guiWidth = 500;

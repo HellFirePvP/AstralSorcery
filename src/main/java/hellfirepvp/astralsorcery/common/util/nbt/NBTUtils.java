@@ -1,7 +1,5 @@
 package hellfirepvp.astralsorcery.common.util.nbt;
 
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Shorts;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -27,7 +25,7 @@ public class NBTUtils {
         return new BlockPos(x, y, z);
     }
 
-    public static byte[] packBlockPos(BlockPos pos) {
+    /*public static long packBlockPos(BlockPos pos) {
         byte[] posArray = new byte[10]; //4 * 2 + 2 (y)
         System.arraycopy(Ints.toByteArray(pos.getX()), 0, posArray, 0, 4);
         System.arraycopy(Shorts.toByteArray((short) (pos.getY() & 255)), 0, posArray, 4, 2);
@@ -41,6 +39,6 @@ public class NBTUtils {
                 Ints.fromBytes(packed[0], packed[1], packed[2], packed[3]),
                 Shorts.fromBytes(packed[4], packed[5]),
                 Ints.fromBytes(packed[6], packed[7], packed[8], packed[9]));
-    }
+    }*/
 
 }

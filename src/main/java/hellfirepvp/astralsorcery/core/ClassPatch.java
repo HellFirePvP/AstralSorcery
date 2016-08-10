@@ -8,6 +8,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 /**
@@ -37,6 +39,19 @@ public abstract class ClassPatch {
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         node.accept(writer);
         bytes = writer.toByteArray();
+
+        try {
+            File f = new File("C:/ASTestClasses/" + getClass().getSimpleName() + ".class");
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+            FileOutputStream out = new FileOutputStream(f);
+            out.write(bytes);
+            out.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return bytes;
     }
 

@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleIndependentSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetworkSkybound;
+import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,12 +28,13 @@ import javax.annotation.Nonnull;
 public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private CrystalProperties crystalProperties;
-    private boolean doesSeeSky;
+    private boolean doesSeeSky, hasBeenLinkedBefore;
 
     public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
+        this.hasBeenLinkedBefore = false;
     }
 
     @Override
@@ -41,10 +43,18 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     }
 
     @Override
+    public boolean providesAutoLink() {
+        return !hasBeenLinkedBefore;
+    }
+
+    @Override
     public void informTileStateChange(IStarlightSource sourceTile) {
         TileNetworkSkybound tns = MiscUtils.getTileAt(sourceTile.getWorld(), sourceTile.getPos(), TileNetworkSkybound.class);
         if(tns != null) {
             this.doesSeeSky = tns.doesSeeSky();
+        }
+        if(tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
+            this.hasBeenLinkedBefore = true;
         }
     }
 
@@ -59,6 +69,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         this.crystalProperties = CrystalProperties.readFromNBT(compound);
         this.doesSeeSky = compound.getBoolean("seesSky");
+        this.hasBeenLinkedBefore = compound.getBoolean("linkedBefore");
     }
 
     @Override
@@ -67,6 +78,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         crystalProperties.writeToNBT(compound);
         compound.setBoolean("seesSky", doesSeeSky);
+        compound.setBoolean("linkedBefore", hasBeenLinkedBefore);
     }
 
     public static class Provider implements SourceClassRegistry.SourceProvider {

@@ -1,10 +1,13 @@
 package hellfirepvp.astralsorcery.common.data;
 
+import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +19,9 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 01:11
  */
-public class SyncDataHolder {
+public class SyncDataHolder implements ITickHandler {
+
+    public static final SyncDataHolder tickInstance = new SyncDataHolder();
 
     public static final String DATA_CONSTELLATIONS = "AstralConstellations";
     public static final String DATA_LIGHT_CONNECTIONS = "StarlightNetworkConnections";
@@ -26,6 +31,12 @@ public class SyncDataHolder {
 
     private static List<String> dirtyData = new ArrayList<>();
     private static byte providerCounter = 0;
+
+    private SyncDataHolder() {}
+
+    public static SyncDataHolder getTickInstance() {
+        return tickInstance;
+    }
 
     public static void register(AbstractData.AbstractDataProvider<? extends AbstractData> provider) {
         AbstractData.Registry.register(provider);
@@ -71,7 +82,13 @@ public class SyncDataHolder {
         }
     }
 
-    public static void doNecessaryUpdates() {
+    public static void initialize() {
+        register(new DataActiveCelestials.Provider(DATA_CONSTELLATIONS));
+        register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
+    }
+
+    @Override
+    public void tick(TickEvent.Type type, Object... context) {
         if (dirtyData.isEmpty()) return;
         Map<String, AbstractData> pktData = new HashMap<>();
         for (String s : dirtyData) {
@@ -85,9 +102,18 @@ public class SyncDataHolder {
         PacketChannel.CHANNEL.sendToAll(dataSync);
     }
 
-    public static void initialize() {
-        register(new DataActiveCelestials.Provider(DATA_CONSTELLATIONS));
-        register(new DataLightConnections.Provider(DATA_LIGHT_CONNECTIONS));
+    @Override
+    public EnumSet<TickEvent.Type> getHandledTypes() {
+        return EnumSet.of(TickEvent.Type.SERVER);
     }
 
+    @Override
+    public boolean canFire(TickEvent.Phase phase) {
+        return phase == TickEvent.Phase.END;
+    }
+
+    @Override
+    public String getName() {
+        return "Sync Data Holder";
+    }
 }

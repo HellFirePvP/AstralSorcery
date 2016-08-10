@@ -29,7 +29,7 @@ public interface IPrismTransmissionNode {
 
     //Fired to notify THIS that the link to "to" is no longer valid
     //The node at "to" should have THIS as a valid source.
-    public void notifyUnlink(World world, BlockPos to);
+    public boolean notifyUnlink(World world, BlockPos to);
 
     //Fired to notify THIS to add a link to "to"
     //The node at "to" should have THIS as a valid source.

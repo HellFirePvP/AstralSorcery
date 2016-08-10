@@ -19,8 +19,8 @@ public class CrystalCalculations {
     }
 
     //Depends on purity alone - 1F -> all gets through, 0F -> none
-    public static float getThroughputMultiplier(CrystalProperties properties, float distribution) {
-        return (float) (distribution * Math.sqrt((((float) properties.getPurity()) / 100)));
+    public static float getThroughputMultiplier(CrystalProperties properties) {
+        return (float) Math.sqrt((((float) properties.getPurity()) / 100));
     }
 
     //Between 3 and 9-ish

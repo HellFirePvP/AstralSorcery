@@ -11,9 +11,12 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,7 +57,18 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         if(event.getWorld().isRemote) return;
-        WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(event.getPos());
+        BlockPos at = event.getPos();
+        WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
+        if(event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
+            if(!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+            }
+        }
+        if(event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
+            if(!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+            }
+        }
     }
 
     @SubscribeEvent

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.event;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,11 +22,14 @@ public class BlockModifyEvent extends Event {
     private final Chunk chunk;
     private final World world;
     private final BlockPos at;
+    private final IBlockState oldState, newState;
 
-    public BlockModifyEvent(Chunk chunk, BlockPos at) {
+    public BlockModifyEvent(Chunk chunk, BlockPos at, IBlockState oldState, IBlockState newState) {
         this.at = at;
         this.chunk = chunk;
         this.world = chunk.getWorld();
+        this.oldState = oldState;
+        this.newState = newState;
     }
 
     public BlockPos getPos() {
@@ -45,8 +49,20 @@ public class BlockModifyEvent extends Event {
         return world.getTileEntity(getPos());
     }
 
-    public IBlockState getState() {
-        return world.getBlockState(getPos());
+    public IBlockState getOldState() {
+        return oldState;
+    }
+
+    public IBlockState getNewState() {
+        return newState;
+    }
+
+    public Block getOldBlock() {
+        return oldState.getBlock();
+    }
+
+    public Block getNewBlock() {
+        return newState.getBlock();
     }
 
 }

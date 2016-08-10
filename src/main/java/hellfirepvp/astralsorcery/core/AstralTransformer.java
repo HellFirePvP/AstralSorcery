@@ -30,9 +30,9 @@ public class AstralTransformer extends AccessTransformer {
     private Map<String, List<ClassPatch>> availablePatches = new HashMap<>();
 
     public AstralTransformer() throws IOException {
-        System.out.println("[AstralTransformer] Loading patches...");
+        FMLLog.info("[AstralTransformer] Loading patches...");
         int loaded = loadClassPatches();
-        System.out.println("[AstralTransformer] Initialized! Loaded " + loaded + " class patches!");
+        FMLLog.info("[AstralTransformer] Initialized! Loaded " + loaded + " class patches!");
     }
 
     private int loadClassPatches() throws IOException {

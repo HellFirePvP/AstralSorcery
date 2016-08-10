@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class GuiConstellationPaper extends GuiScreen {
 
-    private static final BindableResource textureScroll = AssetLoader.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
+    private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
     private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
 
     public static final int guiHeight = 300;

@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +12,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +42,25 @@ public class MiscUtils {
 
     public static boolean isChunkLoaded(World world, ChunkPos pos) {
         return world.getChunkProvider().getLoadedChunk(pos.chunkXPos, pos.chunkZPos) != null;
+    }
+
+    public static List<BlockPos> searchAreaFor(World world, BlockPos center, Block blockToSearch, int metaToSearch, int radius) {
+        List<BlockPos> found = new LinkedList<>();
+        for (int xx = -radius; xx <= radius; xx++) {
+            for (int yy = -radius; yy <= radius; yy++) {
+                for (int zz = -radius; zz <= radius; zz++) {
+                    BlockPos pos = center.add(xx, yy, zz);
+                    if(isChunkLoaded(world, new ChunkPos(pos))) {
+                        IBlockState state = world.getBlockState(pos);
+                        Block b = state.getBlock();
+                        if(b.equals(blockToSearch) && b.getMetaFromState(state) == metaToSearch) {
+                            found.add(pos);
+                        }
+                    }
+                }
+            }
+        }
+        return found;
     }
 
 }

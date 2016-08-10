@@ -26,7 +26,9 @@ public interface ITransmissionReceiver extends IPrismTransmissionNode {
     default public void notifyLink(World world, BlockPos to) {}
 
     @Override
-    default public void notifyUnlink(World world, BlockPos to) {}
+    default public boolean notifyUnlink(World world, BlockPos to) {
+        return false;
+    }
 
     public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount);
 

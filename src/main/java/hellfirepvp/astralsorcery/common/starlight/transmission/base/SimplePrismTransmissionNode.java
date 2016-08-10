@@ -46,8 +46,8 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     }
 
     @Override
-    public void notifyUnlink(World world, BlockPos to) {
-        nextNodes.remove(to);
+    public boolean notifyUnlink(World world, BlockPos to) {
+        return nextNodes.remove(to) != null;
     }
 
     @Override

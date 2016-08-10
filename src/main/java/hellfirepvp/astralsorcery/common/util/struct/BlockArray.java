@@ -35,7 +35,7 @@ public class BlockArray {
         pattern.put(offset, new BlockInformation(b, meta));
     }
 
-    public void buildQuad(IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
+    public void addBlockCube(IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
         int lx, ly, lz;
         int hx, hy, hz;
         if(ox < tx) {
@@ -67,17 +67,6 @@ public class BlockArray {
                 }
             }
         }
-        /*do {
-            do {
-                do {
-                    addBlock(new BlockPos(lx, ly, lz), state);
-                    ly++;
-                } while (ly < hy);
-                lz++;
-            } while (lz < hz);
-            lx++;
-        } while (lx < hx);*/
-
     }
 
     protected static class BlockInformation {

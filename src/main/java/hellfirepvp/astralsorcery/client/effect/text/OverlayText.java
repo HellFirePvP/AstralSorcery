@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.effect.text;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import net.minecraft.client.Minecraft;
@@ -113,7 +114,7 @@ public final class OverlayText implements IComplexEffect {
 
         //Very much hardcoded stuff down there, but it works :P
         private static final int SPACE_CHAR_SIZE = 72;
-        private static final BindableResource fontTexture = AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont");
+        private static final BindableResource fontTexture = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont");
         private static final float uPixelWidth = 2371F;
         private static final float vPixelHeight = 158F;
         private static final Map<Character, RenderChar> loadedCharacters = new HashMap<Character, RenderChar>();
