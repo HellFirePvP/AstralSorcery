@@ -36,7 +36,7 @@ import java.util.Optional;
  */
 public class CommandAstralSorcery extends CommandBase {
 
-    private List<String> cmdAliases = new ArrayList<String>();
+    private List<String> cmdAliases = new ArrayList<>();
 
     public CommandAstralSorcery() {
         this.cmdAliases.add("astralsorcery");

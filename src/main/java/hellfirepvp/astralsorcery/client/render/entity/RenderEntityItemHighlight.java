@@ -32,7 +32,7 @@ import java.util.Random;
  */
 public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
-    private static final Field ageField = ReflectionHelper.findField(EntityItem.class, "age", "field_70292_b");
+    //private static final Field ageField = ReflectionHelper.findField(EntityItem.class, "age", "field_70292_b");
 
     private static final Random rand = new Random();
     private final RenderEntityItem renderItem;
@@ -105,11 +105,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
         ItemStack stack = entity.getEntityItem();
         if (stack != null) {
             EntityItem ei = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, stack);
-            if (ageField != null) {
-                try {
-                    ageField.set(ei, entity.getAge());
-                } catch (IllegalAccessException ignored) {}
-            }
+            ei.age = entity.getAge();
             ei.hoverStart = entity.hoverStart;
 
             renderItem.doRender(ei, x, y, z, entityYaw, partialTicks);

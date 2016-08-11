@@ -230,6 +230,9 @@ public class DataLightConnections extends AbstractData {
                     }
                 }
             }
+            if(connectionMap.isEmpty()) {
+                clientPosBuffer.remove(dimId);
+            }
         }
     }
 

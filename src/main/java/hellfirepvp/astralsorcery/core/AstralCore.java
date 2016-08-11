@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.core;
 
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
     public AstralCore() {
-        System.out.println("[AstralCore] Initialized.");
+        FMLLog.info("[AstralCore] Initialized.");
     }
 
     @Override

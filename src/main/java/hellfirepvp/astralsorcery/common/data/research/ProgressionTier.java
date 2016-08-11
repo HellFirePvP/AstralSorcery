@@ -32,4 +32,8 @@ public enum ProgressionTier {
         return ordinal() < ProgressionTier.values().length - 1;
     }
 
+    public boolean isThisLaterOrEqual(ProgressionTier other) {
+        return ordinal() >= other.ordinal();
+    }
+
 }

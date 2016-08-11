@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -24,7 +25,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public static final byte STATE_WIPE = 1;
 
     private byte state;
-    public List<String> knownConstellations = new ArrayList<>();
+    public List<String> knownConstellations = null;
+    public List<ResearchProgression> researchProgression = null;
     public int progressTier = 0;
 
     public PktSyncKnowledge() {}
@@ -35,6 +37,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     public void load(PlayerProgress progress) {
         this.knownConstellations = progress.getKnownConstellations();
+        this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
     }
 
@@ -44,12 +47,21 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int cLength = buf.readInt();
         if (cLength != -1) {
-            knownConstellations = new ArrayList<>();
+            knownConstellations = new ArrayList<>(cLength);
             for (int i = 0; i < cLength; i++) {
                 String val = ByteBufUtils.readString(buf);
                 knownConstellations.add(val);
             }
         }
+
+        int rLength = buf.readInt();
+        if (rLength != -1) {
+            researchProgression = new ArrayList<>(rLength);
+            for (int i = 0; i < rLength; i++) {
+                researchProgression.add(ResearchProgression.getById(buf.readInt()));
+            }
+        }
+
         this.progressTier = buf.readInt();
     }
 
@@ -61,6 +73,15 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeInt(knownConstellations.size());
             for (String dat : knownConstellations) {
                 ByteBufUtils.writeString(buf, dat);
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
+        if (researchProgression != null) {
+            buf.writeInt(researchProgression.size());
+            for (ResearchProgression progression : researchProgression) {
+                buf.writeInt(progression.getProgressId());
             }
         } else {
             buf.writeInt(-1);

@@ -28,7 +28,9 @@ public class DataActiveCelestials extends AbstractData {
 
     @Override
     public boolean needsUpdate() {
-        return gotUpdated;
+        boolean ch = gotUpdated;
+        gotUpdated = false;
+        return ch;
     }
 
     public List<Constellation> getActiveConstellations() {

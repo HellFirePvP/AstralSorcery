@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -30,10 +31,12 @@ public class ResearchManager {
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
+    @Nullable
     public static PlayerProgress getProgress(EntityPlayer player) {
         return getProgress(player.getUniqueID());
     }
 
+    @Nullable
     public static PlayerProgress getProgress(UUID uuid) {
         PlayerProgress progress = playerProgressServer.get(uuid);
         if (progress == null) {
@@ -111,6 +114,28 @@ public class ResearchManager {
         return Optional.of(progress.getTierReached());
     }
 
+    protected static boolean forceUnsafeResearchStep(EntityPlayer player, ResearchProgression progression) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+        progress.forceGainResearch(progression);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean forceMaximizeResearch(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+        for (ResearchProgression progression : ResearchProgression.values()) {
+            progress.forceGainResearch(progression);
+        }
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
     private static void pushProgressToClientUnsafe(EntityPlayer p) {
         PlayerProgress progress = playerProgressServer.get(p.getUniqueID());
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_ADD);
@@ -135,8 +160,7 @@ public class ResearchManager {
             NBTTagCompound cmp = new NBTTagCompound();
             playerProgressServer.get(pUUID).store(cmp);
             CompressedStreamTools.write(cmp, playerFile);
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 
     public static void loadPlayerKnowledge(EntityPlayer p) {

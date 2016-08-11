@@ -1,8 +1,12 @@
 package hellfirepvp.astralsorcery.client.event;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -17,8 +21,11 @@ public class ClientConnectionEventHandler {
 
     @SubscribeEvent
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        AstralSorcery.log.info("Disconnected from server. Cleaning client cache.");
         EffectHandler.cleanUp();
+        ResearchManager.clientProgress = new PlayerProgress();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
+        ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();
     }
 
 }

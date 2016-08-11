@@ -30,11 +30,11 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     private CrystalProperties crystalProperties;
     private boolean doesSeeSky, hasBeenLinkedBefore;
 
-    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky) {
+    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
-        this.hasBeenLinkedBefore = false;
+        this.hasBeenLinkedBefore = hasBeenLinkedBefore;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         @Override
         public IIndependentStarlightSource provideEmptySource() {
-            return new IndependentCrystalSource(null, null, false);
+            return new IndependentCrystalSource(null, null, false, false);
         }
 
         @Override

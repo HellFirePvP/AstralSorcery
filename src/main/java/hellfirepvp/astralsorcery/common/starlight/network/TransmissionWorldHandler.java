@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
@@ -91,6 +92,8 @@ public class TransmissionWorldHandler {
                             if (multiplier != null) {
                                 ((IBlockStarlightRecipient) b).receiveStarlight(world, endPointPos, type, starlight * multiplier);
                             }
+                        } else {
+                            chain.updatePosAsResolved(world, endPointPos);
                         }
                     }
                 }
@@ -181,6 +184,11 @@ public class TransmissionWorldHandler {
                     connections.removeOldConnectionsThreaded(world.provider.getDimension(), knownChain.getFoundConnections());
                 });
                 tr.start();
+                Thread t = new Thread(() -> {
+                    DataLightBlockEndpoints connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
+                    connections.removeEndpoints(world.provider.getDimension(), knownChain.getResolvedNormalBlockPositions());
+                });
+                t.start();
             }
             activeChunkMap.remove(source);
             cachedSourceChain.remove(source);
@@ -236,6 +244,8 @@ public class TransmissionWorldHandler {
             this.posToSourceMap.clear();
             DataLightConnections connections = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
             connections.clearDimensionPositions(dimId);
+            DataLightBlockEndpoints endpoints = SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS);
+            endpoints.clearDimensionEndpoints(dimId);
         }
     }
 

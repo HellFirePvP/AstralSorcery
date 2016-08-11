@@ -81,7 +81,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @Override
     public IIndependentStarlightSource provideNewSourceNode() {
-        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky);
+        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade);
     }
 
     @Override
