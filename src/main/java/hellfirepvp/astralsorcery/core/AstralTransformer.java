@@ -37,7 +37,7 @@ public class AstralTransformer extends AccessTransformer {
 
     private int loadClassPatches() throws IOException {
         ImmutableSet<ClassPath.ClassInfo> classes =
-                ClassPath.from(Thread.currentThread().getContextClassLoader()).getTopLevelClasses(PATCH_PACKAGE);
+                ClassPath.from(Thread.currentThread().getContextClassLoader()).getTopLevelClassesRecursive(PATCH_PACKAGE);
         List<Class> patchClasses = new LinkedList<>();
         for (ClassPath.ClassInfo info : classes) {
             if(info.getName().startsWith(PATCH_PACKAGE)) {
@@ -68,8 +68,13 @@ public class AstralTransformer extends AccessTransformer {
             List<ClassPatch> patches = availablePatches.get(transformedName);
             if(patches != null && !patches.isEmpty()) {
                 FMLLog.info("[AstralTransformer] Transforming " + name + " : " + transformedName + " with " + patches.size() + " patches!");
-                for (ClassPatch patch : patches) {
-                    bytes = patch.transform(bytes);
+                try {
+                    for (ClassPatch patch : patches) {
+                        bytes = patch.transform(bytes);
+                        FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
+                    }
+                } catch (Exception exc) {
+                    throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + name + " - " + transformedName + ") - Rethrowing exception!");
                 }
             }
             availablePatches.remove(transformedName);

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemTelescopePlacer;
@@ -20,5 +21,6 @@ public class ItemsAS {
     public static ItemTunedCrystal tunedCrystal;
     public static ItemTelescopePlacer telescopePlacer;
     public static ItemLinkingTool linkingTool;
+    public static ItemJournal journal;
 
 }

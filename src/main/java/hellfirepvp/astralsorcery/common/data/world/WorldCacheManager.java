@@ -5,9 +5,14 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import it.unimi.dsi.fastutil.Hash;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -22,18 +27,138 @@ import java.util.Map;
  */
 public class WorldCacheManager implements ITickHandler {
 
-    //initializeAndGet is in O(1) - i admit, that's not obvious.
-    public static <T extends CachedWorldData> T getData(World world, SaveKey key) {
-        return key.getDummyObject().initializeAndGet(world);
+    private static WorldCacheManager instance = new WorldCacheManager();
+    private static Map<Integer, Map<SaveKey, CachedWorldData>> cachedData = new HashMap<>();
+    private static File saveDir;
+
+    private WorldCacheManager() {}
+
+    public static WorldCacheManager getInstance() {
+        return instance;
+    }
+
+    public static <T extends CachedWorldData> T getOrLoadData(World world, SaveKey key) {
+        CachedWorldData data = getFromCache(world, key);
+        if(data != null) return (T) data;
+        try {
+            return (T) loadAndCache(world, key);
+        } catch (IOException e) {
+            AstralSorcery.log.warn("Unable to load WorldData!");
+            AstralSorcery.log.warn("Affected data: Dim=" + world.provider.getDimension() + " key=" + key.identifier);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private synchronized static File getDataFile(World world, String key) {
+        if(world.isRemote)
+            throw new IllegalArgumentException("Tried to access data structure on clientside. This is a severe implementation error!");
+        if(saveDir == null) {
+            saveDir = new File(world.getSaveHandler().getWorldDirectory(), "AstralSorceryData");
+            if(!saveDir.exists()) {
+                saveDir.mkdirs();
+            } else {
+                ensureFolder(saveDir);
+            }
+        }
+        File worldDir = new File(saveDir, "DIM_" + world.provider.getDimension());
+        if(!worldDir.exists()) {
+            worldDir.mkdirs();
+        } else {
+            ensureFolder(worldDir);
+        }
+        return new File(worldDir, key + ".dat");
+    }
+
+    private static void ensureFolder(File f) {
+        if(!f.isDirectory()) {
+            AstralSorcery.log.warn("AstralSorcery dataFile exists, but is a file instead of a folder! Please ensure that this is a folder/delete the file!");
+            AstralSorcery.log.warn("Encountered illegal state. Crashing to prevent further, harder to resolve errors!");
+            throw new IllegalStateException("Affected file: " + f.getAbsolutePath());
+        }
+    }
+
+    @Nullable
+    private static CachedWorldData getFromCache(World world, SaveKey key) {
+        if(!cachedData.containsKey(world.provider.getDimension())) return null;
+        Map<SaveKey, CachedWorldData> dataMap = cachedData.get(world.provider.getDimension());
+        return dataMap.get(key);
+    }
+
+    private static CachedWorldData loadAndCache(World world, SaveKey key) throws IOException {
+        CachedWorldData data = getFromCache(world, key);
+        if(data != null) return data;
+
+        int dimId = world.provider.getDimension();
+        CachedWorldData loaded = loadDataFromFile(world, key);
+        if(!cachedData.containsKey(dimId)) {
+            cachedData.put(dimId, new HashMap<>());
+        }
+        Map<SaveKey, CachedWorldData> dataMap = cachedData.get(dimId);
+        if(dataMap.containsKey(key)) {
+            AstralSorcery.log.warn("Duplicate loading of the same WorldData! Discarding old data.");
+            AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
+            dataMap.remove(key);
+        }
+        dataMap.put(key, loaded);
+        return loaded;
+    }
+
+    private static CachedWorldData loadDataFromFile(World world, SaveKey key) throws IOException {
+        File f = getDataFile(world, key.identifier);
+        if (!f.exists()) {
+            return key.getNewInstance();
+        }
+        CachedWorldData data = key.getNewInstance();
+        NBTTagCompound cmp = CompressedStreamTools.read(f);
+        data.readFromNBT(cmp);
+        return data;
+    }
+
+    private static void saveDataToFile(World world, CachedWorldData data) throws IOException {
+        File f = getDataFile(world, data.getSaveKey().identifier);
+        if (!f.exists()) {
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+        }
+        NBTTagCompound tag = new NBTTagCompound();
+        data.writeToNBT(tag);
+        CompressedStreamTools.write(tag, f);
     }
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World world = (World) context[0];
         if(world.isRemote) return;
+        int dimId = world.provider.getDimension();
+        Map<SaveKey, CachedWorldData> dataMap = cachedData.get(dimId);
+        if(dataMap == null) return;
 
         for (SaveKey key : SaveKey.values()) {
-            key.getDummyObject().initializeAndGet(world).updateTick(world);
+            if(dataMap.containsKey(key)) {
+                dataMap.get(key).updateTick(world);
+            }
+        }
+    }
+
+    public void doSave(World world) {
+        int dimId = world.provider.getDimension();
+        Map<SaveKey, CachedWorldData> worldCache = cachedData.get(dimId);
+        if(worldCache == null) return;
+        for (SaveKey key : SaveKey.values()) {
+            if(worldCache.containsKey(key)) {
+                CachedWorldData data = worldCache.get(key);
+                if(data.needsSaving()) {
+                    try {
+                        saveDataToFile(world, data);
+                    } catch (IOException e) {
+                        AstralSorcery.log.warn("Unable to save WorldData!");
+                        AstralSorcery.log.warn("Affected data: Dim=" + dimId + " key=" + key.identifier);
+                        AstralSorcery.log.warn("Printing StackTrace details...");
+                        e.printStackTrace();
+                    }
+                    data.clearDirtyFlag();
+                }
+            }
         }
     }
 
@@ -54,46 +179,29 @@ public class WorldCacheManager implements ITickHandler {
 
     public static enum SaveKey {
 
-        ROCK_CRYSTAL("astralsorcery:rcrystals", RockCrystalBuffer.class),
-        LIGHT_NETWORK("astralsorcery:lightnetwork", LightNetworkBuffer.class);
+        ROCK_CRYSTAL("rcrystals", RockCrystalBuffer::new),
+        LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new);
 
         private final String identifier;
-        private final Class<? extends CachedWorldData> clazz;
-        private CachedWorldData dummyObject;
+        private final DataProvider<CachedWorldData> instanceProvider;
 
-        private static Map<String, SaveKey> keyMap = new HashMap<>();
-
-        private SaveKey(String identifier, Class<? extends CachedWorldData> clazz) {
+        private SaveKey(String identifier, DataProvider<CachedWorldData> provider) {
             this.identifier = identifier;
-            this.clazz = clazz;
+            this.instanceProvider = provider;
         }
 
-        public CachedWorldData getDummyObject() {
-            if(dummyObject == null) {
-                try {
-                    Constructor<? extends CachedWorldData> ctor = clazz.getDeclaredConstructor();
-                    ctor.setAccessible(true);
-                    dummyObject = ctor.newInstance();
-                } catch (Exception e) {
-                    AstralSorcery.log.info("Couldn't initialize WorldData for " + identifier);
-                    return null;
-                }
-            }
-            return dummyObject;
+        public CachedWorldData getNewInstance() {
+            return instanceProvider.provideDataInstance();
         }
 
         public String getIdentifier() {
             return identifier;
         }
 
-        public static SaveKey getByIdentifier(String identifier) {
-            return keyMap.get(identifier);
-        }
+        private static interface DataProvider<T extends CachedWorldData> {
 
-        static {
-            for (SaveKey key : values()) {
-                keyMap.put(key.identifier, key);
-            }
+            public T provideDataInstance();
+
         }
 
     }

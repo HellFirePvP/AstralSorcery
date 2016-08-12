@@ -323,6 +323,10 @@ public class Vector3 {
         return new Vector3(target.x - x, target.y - y, target.z - z);
     }
 
+    public Vector3 vectorFromHereTo(double tX, double tY, double tZ) {
+        return new Vector3(tX - x, tY - y, tZ - z);
+    }
+
     public double getX() {
         return this.x;
     }

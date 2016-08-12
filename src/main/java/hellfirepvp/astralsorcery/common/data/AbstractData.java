@@ -31,8 +31,6 @@ public abstract class AbstractData {
         return providerId;
     }
 
-    public abstract boolean needsUpdate();
-
     public abstract void writeAllDataToPacket(NBTTagCompound compound);
 
     public abstract void writeToPacket(NBTTagCompound compound);

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,6 +36,12 @@ public class BindableResource {
 
     public ITextureObject getResource() {
         return resource;
+    }
+
+    public void invalidateAndReload() {
+        if(resource != null)
+            GL11.glDeleteTextures(resource.getGlTextureId());
+        resource = null;
     }
 
     public void allocateGlId() {

@@ -24,8 +24,6 @@ public class DataLightConnections extends AbstractData {
 
     private final Object lock = new Object();
 
-    private boolean changed = false;
-
     private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new HashMap<>();
     private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
 
@@ -33,13 +31,6 @@ public class DataLightConnections extends AbstractData {
     private Map<Integer, LinkedList<Tuple<TransmissionChain.LightConnection, Boolean>>> serverChangeBuffer = new HashMap<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
-
-    @Override
-    public boolean needsUpdate() {
-        boolean ch = changed;
-        changed = false;
-        return ch;
-    }
 
     public void updateNewConnectionsThreaded(int dimensionId, List<TransmissionChain.LightConnection> newlyAddedConnections) {
         Map<BlockPos, List<BlockPos>> posBufferDim = serverPosBuffer.get(dimensionId);
@@ -58,8 +49,7 @@ public class DataLightConnections extends AbstractData {
             if(!endpoints.contains(end)) endpoints.add(end);
         }
         notifyConnectionAdd(dimensionId, newlyAddedConnections);
-        if(!changed && newlyAddedConnections.size() > 0) {
-            changed = true;
+        if(newlyAddedConnections.size() > 0) {
             markDirty();
         }
     }
@@ -77,8 +67,7 @@ public class DataLightConnections extends AbstractData {
             }
         }
         notifyConnectionRemoval(dimensionId, invalidConnections);
-        if(!changed && invalidConnections.size() > 0) {
-            changed = true;
+        if(invalidConnections.size() > 0) {
             markDirty();
         }
     }
@@ -86,7 +75,6 @@ public class DataLightConnections extends AbstractData {
     public void clearDimensionPositions(int dimId) {
         if(serverPosBuffer.remove(dimId) != null) {
             setDimClearFlag(dimId);
-            changed = true;
             markDirty();
         }
     }

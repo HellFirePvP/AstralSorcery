@@ -130,6 +130,11 @@ public class CommandAstralSorcery extends CommandBase {
         } else {
             sender.addChatMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
         }
+        if(!ResearchManager.forceMaximizeResearch(other)) {
+            sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
+        } else {
+            sender.addChatMessage(new TextComponentString("§aMaximized ResearchProgression for " + otherPlayerName + " !"));
+        }
         sender.addChatMessage(new TextComponentString("§aSuccess!"));
     }
 

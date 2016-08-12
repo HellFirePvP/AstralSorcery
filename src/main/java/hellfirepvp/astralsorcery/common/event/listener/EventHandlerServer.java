@@ -1,11 +1,16 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -43,6 +48,11 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
+    public void onSave(WorldEvent.Save event) {
+        WorldCacheManager.getInstance().doSave(event.getWorld());
+    }
+
+    @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         if(event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
@@ -57,9 +67,15 @@ public class EventHandlerServer {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
             }
         }
+        if(event.getOldBlock().equals(BlocksAS.customOre)) {
+            IBlockState oldState = event.getOldState();
+            if(oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
+                ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(event.getWorld(), WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(event.getPos());
+            }
+        }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onJoin(EntityJoinWorldEvent event) {
         if (event.getWorld().isRemote) return;
 
@@ -81,6 +97,6 @@ public class EventHandlerServer {
                 event.setCanceled(true);
             }
         }
-    }
+    }*/
 
 }

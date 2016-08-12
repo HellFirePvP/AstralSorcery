@@ -107,7 +107,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
                 if (stoneType != null && stoneType.equals(BlockStone.EnumType.STONE)) {
                     IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                     world.setBlockState(pos, newState);
-                    RockCrystalBuffer buf = WorldCacheManager.getData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+                    RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
                     buf.addOre(pos);
                 }
             }

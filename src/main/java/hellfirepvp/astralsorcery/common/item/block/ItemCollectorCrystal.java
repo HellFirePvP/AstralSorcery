@@ -1,10 +1,13 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,6 +21,16 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     public ItemCollectorCrystal() {
         super(BlocksAS.collectorCrystal);
         setMaxStackSize(1);
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        return new EntityItemHighlighted(world, location.posX, location.posY, location.posZ, itemstack);
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {

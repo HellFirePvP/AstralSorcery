@@ -17,6 +17,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,16 +85,19 @@ public class TransmissionWorldHandler {
                         rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, starlight * multiplier);
                     }
                 }
-                for (BlockPos endPointPos : chain.getUncheckedEndpointsBlock()) {
-                    if(MiscUtils.isChunkLoaded(world, new ChunkPos(endPointPos))) {
+                Iterator<BlockPos> iterator = chain.getUncheckedEndpointsBlock().iterator();
+                while (iterator.hasNext()) {
+                    BlockPos endPointPos = iterator.next();
+                    if (MiscUtils.isChunkLoaded(world, new ChunkPos(endPointPos))) {
                         Block b = world.getBlockState(endPointPos).getBlock();
-                        if(b instanceof IBlockStarlightRecipient) {
+                        if (b instanceof IBlockStarlightRecipient) {
                             Float multiplier = lossMultipliers.get(endPointPos);
                             if (multiplier != null) {
                                 ((IBlockStarlightRecipient) b).receiveStarlight(world, endPointPos, type, starlight * multiplier);
                             }
                         } else {
                             chain.updatePosAsResolved(world, endPointPos);
+                            iterator.remove();
                         }
                     }
                 }

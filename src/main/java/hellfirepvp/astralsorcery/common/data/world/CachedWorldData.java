@@ -1,8 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.world;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -11,25 +9,26 @@ import net.minecraft.world.WorldSavedData;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 23:21
  */
-public abstract class CachedWorldData extends WorldSavedData {
+public abstract class CachedWorldData implements IWorldRelatedData {
 
+    private boolean dirty = false;
     private final WorldCacheManager.SaveKey key;
 
-    //Because minecraft.
-    public CachedWorldData(String key) {
-        super(key);
-        this.key = WorldCacheManager.SaveKey.getByIdentifier(key);
-        if(this.key == null) {
-            AstralSorcery.log.info("Unknown data identifier: " + key + " but resulted in AstralSorcery's CachedWorldData. Ignoring key...");
-        }
-    }
-
     public CachedWorldData(WorldCacheManager.SaveKey key) {
-        super(key.getIdentifier());
         this.key = key;
     }
 
-    public abstract <T extends CachedWorldData> T constructNewData();
+    public final void markDirty() {
+        this.dirty = true;
+    }
+
+    public final boolean needsSaving() {
+        return this.dirty;
+    }
+
+    public final void clearDirtyFlag() {
+        this.dirty = false;
+    }
 
     public abstract void updateTick(World world);
 
@@ -37,7 +36,7 @@ public abstract class CachedWorldData extends WorldSavedData {
         return key;
     }
 
-    //in O(1)
+    /*
     public final <T extends CachedWorldData> T initializeAndGet(World world) {
         String id = getSaveKey().getIdentifier();
         CachedWorldData data = (CachedWorldData) world.getPerWorldStorage().getOrLoadData(getClass(), id);
@@ -46,6 +45,6 @@ public abstract class CachedWorldData extends WorldSavedData {
             world.getPerWorldStorage().setData(id, data);
         }
         return (T) data;
-    }
+    }*/
 
 }

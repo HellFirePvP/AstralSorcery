@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -40,6 +41,8 @@ public class ClientGuiHandler {
                 } else {
                     return new GuiConstellationPaper(c);
                 }
+            case JOURNAL:
+                return new GuiJournalProgression();
             default:
                 return null;
         }
@@ -48,7 +51,8 @@ public class ClientGuiHandler {
     public static enum EnumClientGui {
 
         TELESCOPE,
-        CONSTELLATION_PAPER
+        CONSTELLATION_PAPER,
+        JOURNAL
 
     }
 

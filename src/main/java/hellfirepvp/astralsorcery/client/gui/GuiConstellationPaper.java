@@ -29,19 +29,16 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 01:08
  */
-public class GuiConstellationPaper extends GuiScreen {
+public class GuiConstellationPaper extends GuiWHScreen {
 
     private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
     private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
-
-    public static final int guiHeight = 300;
-    public static final int guiWidth = 250;
-    private int guiLeft, guiTop;
 
     private final Constellation constellation;
     private List<CelestialHandler.MoonPhase> phases = new LinkedList<>();
 
     public GuiConstellationPaper(Constellation c) {
+        super(300, 250);
         this.constellation = c;
         testPhases();
     }
@@ -52,18 +49,6 @@ public class GuiConstellationPaper extends GuiScreen {
             if(t.areAppearanceConditionsMet(ph, EnumSet.noneOf(CelestialHandler.CelestialEvent.class)))
                 phases.add(ph);
         }
-    }
-
-    @Override
-    public void initGui() {
-        super.initGui();
-
-        initComponents();
-    }
-
-    private void initComponents() {
-        guiLeft = width / 2 - guiWidth / 2;
-        guiTop = height / 2 - guiHeight / 2;
     }
 
     @Override
@@ -131,20 +116,8 @@ public class GuiConstellationPaper extends GuiScreen {
     private void drawScroll() {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        textureScroll.bind();
-        drawRect(guiLeft, guiTop, guiWidth, guiHeight);
+        drawWHRect(textureScroll);
         GL11.glDisable(GL11.GL_BLEND);
-    }
-
-    private void drawRect(int offsetX, int offsetY, int width, int height) {
-        Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX, offsetY + height, zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY, zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX, offsetY, zLevel).tex(0, 0).endVertex();
-        tes.draw();
     }
 
 }

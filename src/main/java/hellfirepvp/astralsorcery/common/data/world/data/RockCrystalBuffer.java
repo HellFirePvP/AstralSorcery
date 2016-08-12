@@ -26,17 +26,8 @@ public class RockCrystalBuffer extends CachedWorldData {
     private Map<ChunkPos, List<BlockPos>> crystalPositions = new HashMap<>();
     private static final Object lock = new Object();
 
-    public RockCrystalBuffer(String key) {
-        super(key);
-    }
-
-    protected RockCrystalBuffer() {
+    public RockCrystalBuffer() {
         super(WorldCacheManager.SaveKey.ROCK_CRYSTAL);
-    }
-
-    @Override
-    public RockCrystalBuffer constructNewData() {
-        return new RockCrystalBuffer();
     }
 
     @Override
@@ -101,7 +92,7 @@ public class RockCrystalBuffer extends CachedWorldData {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public void writeToNBT(NBTTagCompound nbt) {
         NBTTagList listCrystals = new NBTTagList();
         synchronized (lock) {
             for (ChunkPos pos : crystalPositions.keySet()) {
@@ -119,7 +110,6 @@ public class RockCrystalBuffer extends CachedWorldData {
             }
         }
         nbt.setTag("crystalList", listCrystals);
-        return nbt;
     }
 
 }

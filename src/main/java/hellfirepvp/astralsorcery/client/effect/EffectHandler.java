@@ -25,6 +25,8 @@ import java.util.Map;
  */
 public final class EffectHandler {
 
+    private static int clientEffectTick = 0;
+
     public static final EffectHandler instance = new EffectHandler();
 
     public static final Map<IComplexEffect.RenderTarget, List<IComplexEffect>> complexEffects = new HashMap<>();
@@ -104,6 +106,8 @@ public final class EffectHandler {
     }*/
 
     public void tick() {
+        clientEffectTick++;
+
         synchronized (complexEffects) {
             for (IComplexEffect.RenderTarget target : complexEffects.keySet()) {
                 Iterator<IComplexEffect> iterator = complexEffects.get(target).iterator();
@@ -116,6 +120,10 @@ public final class EffectHandler {
                 }
             }
         }
+    }
+
+    public static int getClientEffectTick() {
+        return clientEffectTick;
     }
 
     static {

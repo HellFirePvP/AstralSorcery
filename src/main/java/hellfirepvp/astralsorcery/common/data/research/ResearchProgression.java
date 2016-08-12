@@ -3,7 +3,6 @@ package hellfirepvp.astralsorcery.common.data.research;
 import net.minecraft.entity.player.EntityPlayer;
 import scala.actors.threadpool.Arrays;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,10 +18,11 @@ import java.util.Map;
  */
 public enum ResearchProgression {
 
-    ;
+    TEST_PROGRESS(0, ProgressionTier.DISCOVERY);
 
     private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();
+    private List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
 
     private static final Map<Integer, ResearchProgression> BY_ID = new HashMap<>();
@@ -35,6 +35,14 @@ public enum ResearchProgression {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
         this.progressId = id;
+    }
+
+    void addResearchToGroup(ResearchNode res) {
+        this.researchNodes.add(res);
+    }
+
+    public List<ResearchNode> getResearchNodes() {
+        return researchNodes;
     }
 
     public boolean tryStepTo(EntityPlayer player) {

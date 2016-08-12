@@ -10,9 +10,13 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 09.08.2016 / 11:00
  */
-public class AssetLibrary {
+public class AssetLibrary/* implements IResourceManagerReloadListener */{
+
+    //public static AssetLibrary resReloadInstance = new AssetLibrary();
 
     private static Map<AssetLoader.SubLocation, Map<String, BindableResource>> loadedTextures = new HashMap<>();
+
+    private AssetLibrary() {}
 
     public static BindableResource loadTexture(AssetLoader.TextureLocation location, String name) {
         if(name.endsWith(".png")) {
@@ -29,5 +33,15 @@ public class AssetLibrary {
         resources.put(name, res);
         return res;
     }
+
+    /*@Override
+    public void onResourceManagerReload(IResourceManager resourceManager) {
+        AstralSorcery.log.info("[AstralSorcery] Refreshing and Invalidating Resources");
+        for (Map<String, BindableResource> map : loadedTextures.values()) {
+            for (BindableResource res : map.values()) {
+                res.invalidateAndReload(); //Massively unloading all textures.
+            }
+        }
+    }*/
 
 }

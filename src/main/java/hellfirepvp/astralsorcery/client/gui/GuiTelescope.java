@@ -44,13 +44,9 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 23:51
  */
-public class GuiTelescope extends GuiScreen {
+public class GuiTelescope extends GuiWHScreen {
 
     private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
-
-    public static final int guiHeight = 245;
-    public static final int guiWidth = 500;
-    private int guiLeft, guiTop;
 
     private final EntityPlayer owningPlayer;
     private final EntityTelescope guiOwner;
@@ -58,25 +54,14 @@ public class GuiTelescope extends GuiScreen {
     private CellRenderInformation currentInformation = null;
 
     public GuiTelescope(EntityPlayer player, EntityTelescope e) {
+        super(245, 500);
         this.owningPlayer = player;
         this.guiOwner = e;
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
-
-        initComponents();
-    }
-
-    private void initComponents() {
-        guiLeft = width / 2 - guiWidth / 2;
-        guiTop = height / 2 - guiHeight / 2;
-    }
-
-    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawGrid();
+        drawWHRect(textureGrid);
 
         zLevel -= 5;
         drawCellsWithEffects(partialTicks);
@@ -371,7 +356,7 @@ public class GuiTelescope extends GuiScreen {
     }
 
     private int currentLinesCell = -1;
-    private List<Line> drawnLines = new LinkedList<Line>();
+    private List<Line> drawnLines = new LinkedList<>();
 
     private int currentDrawCell = -1;
     private Point start, end;
@@ -514,22 +499,6 @@ public class GuiTelescope extends GuiScreen {
         currentDrawCell = -1;
         start = null;
         end = null;
-    }
-
-    private void drawGrid() {
-        textureGrid.bind();
-        drawRect(guiLeft, guiTop, guiWidth, guiHeight);
-    }
-
-    private void drawRect(int offsetX, int offsetY, int width, int height) {
-        Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(offsetX, offsetY + height, zLevel).tex(0, 1).endVertex();
-        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
-        vb.pos(offsetX + width, offsetY, zLevel).tex(1, 0).endVertex();
-        vb.pos(offsetX, offsetY, zLevel).tex(0, 0).endVertex();
-        tes.draw();
     }
 
     @Override

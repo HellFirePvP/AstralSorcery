@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
+import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.ritual.RitualComponentRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceCl
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
@@ -63,6 +65,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryBlocks.initRenderRegistry();
         RegistryRecipes.init();
+        RegistryResearch.init();
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
 
@@ -91,7 +94,7 @@ public class CommonProxy implements IGuiHandler {
     protected void registerTickHandlers(TickManager manager) {
         manager.register(new CelestialHandler.CelestialTickHandler());
         manager.register(StarlightTransmissionHandler.getInstance());
-        manager.register(new WorldCacheManager()); //Only used as instance for tick handling
+        manager.register(WorldCacheManager.getInstance());
         manager.register(new LinkHandler()); //Only used as instance for tick handling
         manager.register(SyncDataHolder.getTickInstance());
     }
@@ -107,6 +110,12 @@ public class CommonProxy implements IGuiHandler {
     public <T extends Item> void registerItemRender(T item, int metadata, String name, boolean variant) {}
 
     public void registerFromSubItems(Item item, String name) {}
+
+    public void scheduleClientside(Runnable r, int tickDelay) {}
+
+    public void scheduleClientside(Runnable r) {
+        scheduleClientside(r, 0);
+    }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

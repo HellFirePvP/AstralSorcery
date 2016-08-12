@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -72,7 +73,7 @@ public class PlayerProgress {
     }
 
     public List<ResearchProgression> getResearchProgression() {
-        return Collections.unmodifiableList(researchProgression);
+        return Lists.newLinkedList(researchProgression);
     }
 
     public ProgressionTier getTierReached() {

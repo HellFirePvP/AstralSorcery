@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +20,6 @@ import java.util.Map;
  */
 public class DataLightBlockEndpoints extends AbstractData {
 
-    private boolean changed = false;
-
     private Map<Integer, List<BlockPos>> clientPositions = new HashMap<>();
     private Map<Integer, List<BlockPos>> serverPositions = new HashMap<>();
 
@@ -31,13 +28,6 @@ public class DataLightBlockEndpoints extends AbstractData {
     private final Object lock = new Object();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
-
-    @Override
-    public boolean needsUpdate() {
-        boolean ch = changed;
-        changed = false;
-        return ch;
-    }
 
     public void updateNewEndpoint(int dimId, BlockPos pos) {
         synchronized (lock) {
@@ -55,7 +45,6 @@ public class DataLightBlockEndpoints extends AbstractData {
             }
             posBuffer.add(pos);
         }
-        changed = true;
         markDirty();
     }
 
@@ -77,7 +66,6 @@ public class DataLightBlockEndpoints extends AbstractData {
             }
             posBuffer.addAll(newPositions);
         }
-        changed = true;
         markDirty();
     }
 
@@ -99,7 +87,6 @@ public class DataLightBlockEndpoints extends AbstractData {
             }
             posBuffer.removeAll(positions);
         }
-        changed = true;
         markDirty();
     }
 
@@ -110,7 +97,6 @@ public class DataLightBlockEndpoints extends AbstractData {
             serverChangeBuffer.put(dimId, new LinkedList<>());
             serverChangeBuffer.get(dimId).add(new Tuple<>(null, false));
         }
-        changed = true;
         markDirty();
     }
 

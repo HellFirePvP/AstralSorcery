@@ -3,17 +3,17 @@ package hellfirepvp.astralsorcery.common.crafting;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiCrafting;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,8 +44,12 @@ public class ShapedLightProximityRecipe extends ShapedOreRecipe {
         ContainerWorkbench workbench = (ContainerWorkbench) c;
         BlockPos pos = workbench.pos;
         if(pos == null) return false;
-        //TODO client pos isn't correct...
         if(worldIn.isRemote) {
+            GuiScreen sc = Minecraft.getMinecraft().currentScreen;
+            if(sc == null || !(sc instanceof GuiCrafting)) return false;
+            c = ((GuiCrafting) sc).inventorySlots;
+            if(c == null || !(c instanceof ContainerWorkbench)) return false;
+            pos = ((ContainerWorkbench) c).pos;
             if(!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).doesPositionReceiveStarlightClient(worldIn, pos)) return false;
         } else {
             if(!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).doesPositionReceiveStarlightServer(worldIn, pos)) return false;

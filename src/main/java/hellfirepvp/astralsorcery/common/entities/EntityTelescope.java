@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientGuiHandler;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,7 +41,7 @@ public class EntityTelescope extends EntityLivingBase {
             }
         } else {
             if (player.worldObj.isRemote) {
-                player.openGui(AstralSorcery.instance, 0, player.worldObj, getEntityId(), 0, 0);
+                player.openGui(AstralSorcery.instance, ClientGuiHandler.EnumClientGui.TELESCOPE.ordinal(), player.worldObj, getEntityId(), 0, 0);
             }
         }
         return EnumActionResult.SUCCESS;

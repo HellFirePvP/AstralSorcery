@@ -48,21 +48,12 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     private List<ChunkPos> queueRemoval = new LinkedList<>();
 
-    protected LightNetworkBuffer() {
+    public LightNetworkBuffer() {
         super(WorldCacheManager.SaveKey.LIGHT_NETWORK);
-    }
-
-    public LightNetworkBuffer(String key) {
-        super(key);
     }
 
     public WorldNetworkHandler getNetworkHandler(World world) {
         return new WorldNetworkHandler(this, world);
-    }
-
-    @Override
-    public LightNetworkBuffer constructNewData() {
-        return new LightNetworkBuffer();
     }
 
     @Override
@@ -168,7 +159,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                 int chX = posTag.getInteger("chX");
                 int chZ = posTag.getInteger("chZ");
                 ChunkPos pos = new ChunkPos(chX, chZ);
-                ChunkNetworkData data = ChunkNetworkData.loadFromNBT(posTag.getCompoundTag("netData"));
+                ChunkNetworkData data = ChunkNetworkData.loadFromNBT(posTag.getTagList("netData", 10));
                 chunkSortedData.put(pos, data);
             }
         }
@@ -192,7 +183,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                         continue;
                     }
                     NBTTagCompound comp = sourcePos.getCompoundTag("source");
-                    String identifier = comp.getString("sourceTypeIdentifier");
+                    String identifier = comp.getString("sTypeId");
                     SourceClassRegistry.SourceProvider provider = SourceClassRegistry.getProvider(identifier);
                     if(provider == null) {
                         AstralSorcery.log.warn("Couldn't load source tile at " + at + " - invalid identifier: " + identifier);
@@ -207,7 +198,7 @@ public class LightNetworkBuffer extends CachedWorldData {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public void writeToNBT(NBTTagCompound nbt) {
         cleanupQueuedChunks();
 
         NBTTagList list = new NBTTagList();
@@ -216,7 +207,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             NBTTagCompound posTag = new NBTTagCompound();
             posTag.setInteger("chX", pos.chunkXPos);
             posTag.setInteger("chZ", pos.chunkZPos);
-            NBTTagCompound netData = new NBTTagCompound();
+            NBTTagList netData = new NBTTagList();
             data.writeToNBT(netData);
             posTag.setTag("netData", netData);
             list.appendTag(posTag);
@@ -230,12 +221,11 @@ public class LightNetworkBuffer extends CachedWorldData {
             NBTTagCompound source = new NBTTagCompound();
             IIndependentStarlightSource sourceNode = starlightSources.get(pos);
             sourceNode.writeToNBT(source);
-            source.setString("sourceTypeIdentifier", sourceNode.getProvider().getIdentifier());
+            source.setString("sTypeId", sourceNode.getProvider().getIdentifier());
             sourceTag.setTag("source", source);
             sourceList.appendTag(sourceTag);
         }
         nbt.setTag("sources", sourceList);
-        return nbt;
     }
 
     //Network changing
@@ -319,9 +309,9 @@ public class LightNetworkBuffer extends CachedWorldData {
         //private Map<BlockPos, IStarlightTransmission> transmissionTiles = new HashMap<>();
         //private Map<BlockPos, IStarlightSource> sourceTiles = new HashMap<>();
 
-        private static ChunkNetworkData loadFromNBT(NBTTagCompound tag) {
+        private static ChunkNetworkData loadFromNBT(NBTTagList netData) {
             ChunkNetworkData data = new ChunkNetworkData();
-            if(tag.hasKey("sectionList")) {
+            /*if(tag.hasKey("sectionList")) {
                 NBTTagList list = tag.getTagList("sectionList", 10);
                 for (int i = 0; i < list.tagCount(); i++) {
                     NBTTagCompound section = list.getCompoundTagAt(i);
@@ -330,23 +320,28 @@ public class LightNetworkBuffer extends CachedWorldData {
                     ChunkSectionNetworkData networkData = ChunkSectionNetworkData.loadFromNBT(sectionData);
                     data.sections.put(yLevel, networkData);
                 }
+            }*/
+            for (int i = 0; i < netData.tagCount(); i++) {
+                NBTTagCompound section = netData.getCompoundTagAt(i);
+                int yLevel = section.getInteger("yLevel");
+                NBTTagList sectionData = section.getTagList("sectionData", 10);
+                ChunkSectionNetworkData networkData = ChunkSectionNetworkData.loadFromNBT(sectionData);
+                data.sections.put(yLevel, networkData);
             }
             return data;
         }
 
-        private void writeToNBT(NBTTagCompound tag) {
-            NBTTagList sectionList = new NBTTagList();
+        private void writeToNBT(NBTTagList netData) {
             for (Integer yLevel : sections.keySet()) {
                 ChunkSectionNetworkData sectionData = sections.get(yLevel);
-                NBTTagCompound sectionTag = new NBTTagCompound();
+                NBTTagList sectionTag = new NBTTagList();
                 sectionData.writeToNBT(sectionTag);
 
                 NBTTagCompound section = new NBTTagCompound();
                 section.setInteger("yLevel", yLevel);
                 section.setTag("sectionData", sectionTag);
-                sectionList.appendTag(section);
+                netData.appendTag(section);
             }
-            tag.setTag("sectionList", sectionList);
         }
 
         //Also allows for passing invalid yLevels outside of 0 to 15
@@ -409,16 +404,16 @@ public class LightNetworkBuffer extends CachedWorldData {
 
         private Map<BlockPos, IPrismTransmissionNode> nodes = new HashMap<>();
 
-        private static ChunkSectionNetworkData loadFromNBT(NBTTagCompound tag) {
+        private static ChunkSectionNetworkData loadFromNBT(NBTTagList sectionData) {
             ChunkSectionNetworkData netData = new ChunkSectionNetworkData();
-            if(tag.hasKey("nodeList")) {
+            /*if(tag.hasKey("nodeList")) {
                 NBTTagList listNodes = tag.getTagList("nodeList", 10);
                 for (int i = 0; i < listNodes.tagCount(); i++) {
                     NBTTagCompound nodeComp = listNodes.getCompoundTagAt(i);
                     BlockPos pos = NBTUtils.readBlockPosFromNBT(nodeComp);
 
                     NBTTagCompound prismComp = nodeComp.getCompoundTag("nodeTag");
-                    String nodeIdentifier = prismComp.getString("transmissionNodeIdentifier");
+                    String nodeIdentifier = prismComp.getString("trNodeId");
                     TransmissionClassRegistry.TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
                     if(provider == null) {
                         AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
@@ -428,12 +423,26 @@ public class LightNetworkBuffer extends CachedWorldData {
                     node.readFromNBT(prismComp);
                     netData.nodes.put(pos, node);
                 }
+            }*/
+            for (int i = 0; i < sectionData.tagCount(); i++) {
+                NBTTagCompound nodeComp = sectionData.getCompoundTagAt(i);
+                BlockPos pos = NBTUtils.readBlockPosFromNBT(nodeComp);
+
+                NBTTagCompound prismComp = nodeComp.getCompoundTag("nodeTag");
+                String nodeIdentifier = prismComp.getString("trNodeId");
+                TransmissionClassRegistry.TransmissionProvider provider = TransmissionClassRegistry.getProvider(nodeIdentifier);
+                if(provider == null) {
+                    AstralSorcery.log.warn("Couldn't load node tile at " + pos + " - invalid identifier: " + nodeIdentifier);
+                    continue;
+                }
+                IPrismTransmissionNode node = provider.provideEmptyNode();
+                node.readFromNBT(prismComp);
+                netData.nodes.put(pos, node);
             }
             return netData;
         }
 
-        private void writeToNBT(NBTTagCompound tag) {
-            NBTTagList listNodes = new NBTTagList();
+        private void writeToNBT(NBTTagList sectionData) {
             for (Map.Entry<BlockPos, IPrismTransmissionNode> node : nodes.entrySet()) {
                 NBTTagCompound nodeComp = new NBTTagCompound();
                 NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
@@ -441,12 +450,11 @@ public class LightNetworkBuffer extends CachedWorldData {
                 NBTTagCompound prismComp = new NBTTagCompound();
                 IPrismTransmissionNode prismNode = node.getValue();
                 prismNode.writeToNBT(prismComp);
-                prismComp.setString("transmissionNodeIdentifier", prismNode.getProvider().getIdentifier());
+                prismComp.setString("trNodeId", prismNode.getProvider().getIdentifier());
 
                 nodeComp.setTag("nodeTag", prismComp);
-                listNodes.appendTag(nodeComp);
+                sectionData.appendTag(nodeComp);
             }
-            tag.setTag("nodeList", listNodes);
         }
 
         public boolean isEmpty() {

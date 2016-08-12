@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
@@ -31,6 +32,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktSyncKnowledge.class, PktSyncKnowledge.class, id++, Side.CLIENT); //Knowledge data sync
         CHANNEL.registerMessage(PktSyncData.class, PktSyncData.class, id++, Side.CLIENT); //General dataholder sync
         CHANNEL.registerMessage(PktParticleEvent.class, PktParticleEvent.class, id++, Side.CLIENT); //Generic particle event
+        CHANNEL.registerMessage(PktCraftingTableFix.class, PktCraftingTableFix.class, id++, Side.CLIENT); //Sends a crafting table GUI-open packet that has a gui with proper data.
 
         //Constellation discovery (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.

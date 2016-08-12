@@ -10,6 +10,8 @@ import hellfirepvp.astralsorcery.client.render.item.RenderItemTelescope;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
@@ -28,10 +30,12 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,8 +59,15 @@ import java.util.List;
  */
 public class ClientProxy extends CommonProxy {
 
+    private final ClientScheduler scheduler = new ClientScheduler();
+
     @Override
     public void preInit() {
+        /*try {
+            ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
+        } catch (Exception exc) {
+            AstralSorcery.log.warn("AstralSorcery: Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
+        }*/
         TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping TEISR
 
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
@@ -84,6 +95,9 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit() {
         super.postInit();
+
+        //Preloading heavy textures
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG").allocateGlId();
     }
 
     @Override
@@ -112,6 +126,12 @@ public class ClientProxy extends CommonProxy {
     protected void registerTickHandlers(TickManager manager) {
         super.registerTickHandlers(manager);
         manager.register(new ClientLightbeamHandler());
+        manager.register(scheduler);
+    }
+
+    @Override
+    public void scheduleClientside(Runnable r, int tickDelay) {
+        scheduler.addRunnable(r, tickDelay);
     }
 
     private void registerTileRenderers() {

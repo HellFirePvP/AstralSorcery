@@ -95,9 +95,7 @@ public class SyncDataHolder implements ITickHandler {
         Map<String, AbstractData> pktData = new HashMap<>();
         for (String s : dirtyData) {
             AbstractData d = getDataServer(s);
-            if (d.needsUpdate()) {
-                pktData.put(s, d);
-            }
+            pktData.put(s, d);
         }
         dirtyData.clear();
         PktSyncData dataSync = new PktSyncData(pktData, false);

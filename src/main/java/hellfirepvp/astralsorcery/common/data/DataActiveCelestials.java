@@ -22,16 +22,7 @@ import java.util.List;
  */
 public class DataActiveCelestials extends AbstractData {
 
-    private boolean gotUpdated = false;
-
     private List<Constellation> activeConstellations = new LinkedList<>();
-
-    @Override
-    public boolean needsUpdate() {
-        boolean ch = gotUpdated;
-        gotUpdated = false;
-        return ch;
-    }
 
     public List<Constellation> getActiveConstellations() {
         return activeConstellations;
@@ -64,7 +55,6 @@ public class DataActiveCelestials extends AbstractData {
             }
         }
 
-        gotUpdated = true;
         markDirty();
     }
 

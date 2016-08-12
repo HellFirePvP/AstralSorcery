@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -60,6 +61,7 @@ public class RegistryItems {
         tunedCrystal = registerItem(new ItemTunedCrystal());
         telescopePlacer = registerItem(new ItemTelescopePlacer());
         linkingTool = registerItem(new ItemLinkingTool());
+        journal = registerItem(new ItemJournal());
     }
 
     //Items associated to blocks/itemblocks

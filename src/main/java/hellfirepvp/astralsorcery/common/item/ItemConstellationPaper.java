@@ -1,12 +1,14 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientGuiHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
@@ -60,6 +62,16 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        return new EntityItemHighlighted(world, location.posX, location.posY, location.posZ, itemstack);
+    }
+
+    @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         Constellation c = getConstellation(stack);
         if (c != null) {
@@ -72,7 +84,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if(worldIn.isRemote && getConstellation(itemStackIn) != null) {
-            playerIn.openGui(AstralSorcery.instance, 1, worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
+            playerIn.openGui(AstralSorcery.instance, ClientGuiHandler.EnumClientGui.CONSTELLATION_PAPER.ordinal(), worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
     }

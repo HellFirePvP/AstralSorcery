@@ -78,15 +78,6 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if(!worldIn.isRemote) {
-            RockCrystalBuffer buffer = WorldCacheManager.getData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
-            buffer.removeOre(pos);
-        }
-        super.breakBlock(worldIn, pos, state);
-    }
-
-    @Override
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
     }

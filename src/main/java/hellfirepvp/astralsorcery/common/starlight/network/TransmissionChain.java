@@ -19,6 +19,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,13 +74,17 @@ public class TransmissionChain {
     }
 
     private void resolveLoadedEndpoints(World world) {
-        for (BlockPos pos : uncheckedEndpointsBlock) {
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
+        Iterator<BlockPos> iterator = uncheckedEndpointsBlock.iterator();
+        while (iterator.hasNext()) {
+            BlockPos pos = iterator.next();
+            if (MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) {
                 IBlockState state = world.getBlockState(pos);
                 Block b = state.getBlock();
-                if(b instanceof IBlockStarlightRecipient) continue;
-                if(!resolvedNormalBlockPositions.contains(pos))
+                if (b instanceof IBlockStarlightRecipient) continue;
+                if (!resolvedNormalBlockPositions.contains(pos)) {
                     resolvedNormalBlockPositions.add(pos);
+                }
+                iterator.remove();
             }
         }
     }

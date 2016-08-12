@@ -40,7 +40,7 @@ public class WorldNetworkHandler {
     }
 
     public static WorldNetworkHandler getNetworkHandler(World world) {
-        LightNetworkBuffer buffer = WorldCacheManager.getData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK);
+        LightNetworkBuffer buffer = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK);
         return buffer.getNetworkHandler(world);
     }
 
