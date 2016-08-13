@@ -1,24 +1,17 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,22 +24,29 @@ public class GuiProgressionRenderer {
 
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG");
     private static final BindableResource textureResOVL = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay");
-    private static final BindableResource frameBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameBlank");
-    private static final BindableResource frameWooden = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameWooden");
+    private static final BindableResource black = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
-    private BGSizeHandler sizeHandler;
+    private GalaxySizeHandler sizeHandler;
 
-    public GuiRenderBoundingBox renderBox;
-    private int renderOffsetX, renderOffsetY;
-    private int renderWidth, renderHeight;
-    private int leftOffset, topOffset;
-    private int prevMouseX, prevMouseY;
+    //Rendering relevant properties. Those coords represent _unscaled_ exact positions.
+    public GuiRenderBoundingBox realRenderBox;
+    private int realCoordLowerX, realCoordLowerY;
+    private int realRenderWidth, realRenderHeight;
+
+    private ScalingPoint mousePointScaled;
+    private ScalingPoint previousMousePointScaled;
+
     private boolean hasPrevOffset = false;
 
-    private Map<Vector3, ResearchNode> rectMapNodes = new HashMap<>();
+    //private Map<Vector3, ResearchNode> rectMapNodes = new HashMap<>();
 
     public GuiProgressionRenderer(int guiHeight, int guiWidth) {
-        this.sizeHandler = new BGSizeHandler(guiHeight, guiWidth);
+        this.sizeHandler = new GalaxySizeHandler(guiHeight, guiWidth);
+        this.mousePointScaled = ScalingPoint.createPoint(
+                this.sizeHandler.adjustX(this.sizeHandler.getMidX()),
+                this.sizeHandler.adjustY(this.sizeHandler.getMidY()),
+                this.sizeHandler.getScalingFactor(),
+                false);
     }
 
     public void refreshSize() {
@@ -54,296 +54,222 @@ public class GuiProgressionRenderer {
     }
 
     public void setBox(int left, int top, int right, int bottom) {
-        this.renderBox = new GuiRenderBoundingBox(left, top, right, bottom);
-        this.renderWidth = (int) this.renderBox.getWidth();
-        this.renderHeight = (int) this.renderBox.getHeight();
+        this.realRenderBox = new GuiRenderBoundingBox(left, top, right, bottom);
+        this.realRenderWidth = (int) this.realRenderBox.getWidth();
+        this.realRenderHeight = (int) this.realRenderBox.getHeight();
     }
 
-    public void moveMouse(int changedX, int changedY) {
+    public void moveMouse(double changedX, double changedY) {
         if (hasPrevOffset) {
-            this.leftOffset = sizeHandler.adjustX(prevMouseX + changedX);
-            this.topOffset = sizeHandler.adjustY(prevMouseY + changedY);
+            mousePointScaled.updateScaledPos(
+                    sizeHandler.adjustX(previousMousePointScaled.getScaledPosX() + changedX),
+                    sizeHandler.adjustY(previousMousePointScaled.getScaledPosY() + changedY),
+                    sizeHandler.getScalingFactor());
         } else {
-            this.leftOffset = sizeHandler.adjustX(changedX);
-            this.topOffset = sizeHandler.adjustY(changedY);
+            mousePointScaled.updateScaledPos(
+                    sizeHandler.adjustX(changedX),
+                    sizeHandler.adjustY(changedY),
+                    sizeHandler.getScalingFactor());
         }
     }
 
     public void applyMovedMouseOffset() {
-        this.prevMouseX = leftOffset;
-        this.prevMouseY = topOffset;
+        this.previousMousePointScaled = ScalingPoint.createPoint(
+                mousePointScaled.getScaledPosX(),
+                mousePointScaled.getScaledPosY(),
+                sizeHandler.getScalingFactor(),
+                true);
         this.hasPrevOffset = true;
     }
 
     public void updateOffset(int guiLeft, int guiTop) {
-        this.renderOffsetX = guiLeft;
-        this.renderOffsetY = guiTop;
+        this.realCoordLowerX = guiLeft;
+        this.realCoordLowerY = guiTop;
     }
 
     public void centerMouse() {
         moveMouse(sizeHandler.getMidX(), sizeHandler.getMidY());
     }
 
-    public void drawBackgroundScreen(float zLevel) {
-        drawCurrentBackground(zLevel);
-
-        drawNodesAndConnections(zLevel);
-
-        drawCurrentBackgroundBlended(zLevel, 1.5);
-        drawCurrentBackgroundBlended(zLevel, 2.5);
-        drawCurrentBackgroundBlended(zLevel, 3.5);
+    public void updateMouseState() {
+        moveMouse(0, 0);
     }
 
-    private void drawCurrentBackground(float zLevel) {
-        GL11.glColor4f(0.2F, 0.2F, 0.2F, 1.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-        textureResBack.bind();
+    public void unfocus() {
 
-        float lowU = (((float) this.leftOffset) - sizeHandler.widthToBorder) / ((float) sizeHandler.getTotalWidth());
+    }
+
+    public void resetZoom() {
+        sizeHandler.resetZoom();
+        rescale(sizeHandler.getScalingFactor());
+    }
+
+    public void handleZoomOut() {
+        this.sizeHandler.handleZoomOut();
+        rescale(sizeHandler.getScalingFactor());
+    }
+
+    public void handleZoomIn() {
+        this.sizeHandler.handleZoomIn();
+        rescale(sizeHandler.getScalingFactor());
+    }
+
+    private void rescale(double newScale) {
+        this.mousePointScaled.rescale(newScale);
+        if(this.previousMousePointScaled != null) {
+            this.previousMousePointScaled.rescale(newScale);
+        }
+        updateMouseState();
+    }
+
+    public void drawProgressionPart(float zLevel) {
+        drawBaseBackground(zLevel);
+
+        drawClusters(zLevel);
+
+        int mouseX = Mouse.getX();
+        int mouseY = Mouse.getY();
+        //System.out.println("mouse: " + mouseX + ", " + mouseY);
+
+        drawBlendedStarfieldLayers(zLevel);
+    }
+
+    private void drawClusters(float zLevel) {
+        PlayerProgress thisProgress = ResearchManager.clientProgress;
+        for (ResearchProgression progress : thisProgress.getResearchProgression()) {
+            ClientJournalMapping.JournalCluster cluster = ClientJournalMapping.getClusterMapping(progress);
+            double lX = sizeHandler.evRelativePosX(cluster.leftMost );
+            double rX = sizeHandler.evRelativePosX(cluster.rightMost);
+            double lY = sizeHandler.evRelativePosY(cluster.upperMost );
+            double rY = sizeHandler.evRelativePosY(cluster.lowerMost);
+            //System.out.println("render at " + lX + ", " + lY + " to " + rX + ", " + rY);
+            renderCluster(cluster, lX, lY, rX, rY, zLevel);
+        }
+    }
+
+    private void renderCluster(ClientJournalMapping.JournalCluster cluster, double lowerPosX, double lowerPosY, double higherPosX, double higherPosY, float zLevel) {
+        double scaledLeft = this.mousePointScaled.getScaledPosX() - sizeHandler.widthToBorder;
+        double scaledTop =  this.mousePointScaled.getScaledPosY() - sizeHandler.heightToBorder;
+        double xAdd = lowerPosX - scaledLeft;
+        double yAdd = lowerPosY - scaledTop;
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(realCoordLowerX + xAdd, realCoordLowerY + yAdd, 0);
+
+        double width =  higherPosX - lowerPosX;
+        double height = higherPosY - lowerPosY;
+
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer vb = t.getBuffer();
+        cluster.cloudTexture.bind();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(0,     height, zLevel).tex(0, 1).endVertex();
+        vb.pos(width, height, zLevel).tex(1, 1).endVertex();
+        vb.pos(width, 0,      zLevel).tex(1, 0).endVertex();
+        vb.pos(0,     0,      zLevel).tex(0, 0).endVertex();
+        t.draw();
+        GL11.glPopMatrix();
+    }
+
+    private void drawBlendedStarfieldLayers(float zLevel) {
+        drawBlendedStarfieldOverlay(zLevel, 0.5);
+        drawBlendedStarfieldOverlay(zLevel, 1.5);
+        drawBlendedStarfieldOverlay(zLevel, 2.5);
+        drawBlendedStarfieldOverlay(zLevel, 3.5);
+    }
+
+    private void drawBaseBackground(float zLevel) {
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDisable(GL11.GL_BLEND);
+        black.bind();
+
+        /*float lowU = (((float) this.leftOffset) - sizeHandler.widthToBorder) / ((float) sizeHandler.getTotalWidth());
         float highU = lowU + (((float) renderWidth) / ((float) sizeHandler.getTotalWidth()));
         float lowV = (((float) this.topOffset) - sizeHandler.heightToBorder) / ((float) sizeHandler.getTotalHeight());
-        float highV = lowV + (((float) renderHeight) / ((float) sizeHandler.getTotalHeight()));
+        float highV = lowV + (((float) renderHeight) / ((float) sizeHandler.getTotalHeight()));*/
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(renderOffsetX,               renderOffsetY + renderHeight, zLevel).tex(lowU,  highV).endVertex();
-        vb.pos(renderOffsetX + renderWidth, renderOffsetY + renderHeight, zLevel).tex(highU, highV).endVertex();
-        vb.pos(renderOffsetX + renderWidth, renderOffsetY,                zLevel).tex(highU, lowV) .endVertex();
-        vb.pos(renderOffsetX,               renderOffsetY,                zLevel).tex(lowU,  lowV) .endVertex();
+        vb.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).tex(0, 1).endVertex();
+        vb.pos(realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).tex(1, 1).endVertex();
+        vb.pos(realCoordLowerX + realRenderWidth, realCoordLowerY,                    zLevel).tex(1, 0).endVertex();
+        vb.pos(realCoordLowerX,                   realCoordLowerY,                    zLevel).tex(0, 0).endVertex();
         Tessellator.getInstance().draw();
+
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
-    private void drawCurrentBackgroundBlended(float zLevel, double scaleFactor) {
+    private void drawBlendedStarfieldOverlay(float zLevel, double scaleFactor) {
         GL11.glColor4f(0.6F, 0.6F, 0.6F, 0.5F);
         GL11.glPushMatrix();
         GL11.glScaled(scaleFactor, scaleFactor, scaleFactor);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         textureResOVL.bind();
 
-        float lowU = (((float) this.leftOffset) - sizeHandler.widthToBorder) / ((float) sizeHandler.getTotalWidth());
-        float highU = lowU + (((float) renderWidth) / ((float) sizeHandler.getTotalWidth()));
-        float lowV = (((float) this.topOffset) - sizeHandler.heightToBorder) / ((float) sizeHandler.getTotalHeight());
-        float highV = lowV + (((float) renderHeight) / ((float) sizeHandler.getTotalHeight()));
+        double th = sizeHandler.getTotalHeight() / sizeHandler.getScalingFactor();
+        double tw = sizeHandler.getTotalWidth() / sizeHandler.getScalingFactor();
+
+        double lowU = (this.mousePointScaled.posX - sizeHandler.widthToBorder) / tw;
+        double highU = lowU + (((float) realRenderWidth) / tw);
+        double lowV = (this.mousePointScaled.posY - sizeHandler.heightToBorder) / th;
+        double highV = lowV + (((float) realRenderHeight) / th);
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(0,           renderHeight, zLevel).tex(lowU,  highV).endVertex();
-        vb.pos(renderWidth, renderHeight, zLevel).tex(highU, highV).endVertex();
-        vb.pos(renderWidth, 0,            zLevel).tex(highU, lowV) .endVertex();
-        vb.pos(0,           0,            zLevel).tex(lowU,  lowV) .endVertex();
+        vb.pos(0,               realRenderHeight, zLevel).tex(lowU,  highV).endVertex();
+        vb.pos(realRenderWidth, realRenderHeight, zLevel).tex(highU, highV).endVertex();
+        vb.pos(realRenderWidth, 0,                zLevel).tex(highU, lowV) .endVertex();
+        vb.pos(0,               0,                zLevel).tex(lowU,  lowV) .endVertex();
         Tessellator.getInstance().draw();
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glPopMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
-    private void drawNodesAndConnections(float zLevel) {
-        int left = this.leftOffset - sizeHandler.widthToBorder;
-        int top = this.topOffset - sizeHandler.heightToBorder;
-        GuiRenderBoundingBox renderBox = new GuiRenderBoundingBox(left, top, left + renderWidth, top + renderHeight);
-        PlayerProgress thisProgress = ResearchManager.clientProgress;
-        Map<ResearchNode, int[]> display = new HashMap<>();
-        for (ResearchProgression progress : thisProgress.getResearchProgression()) {
-            for (ResearchNode node : progress.getResearchNodes()) {
-                int absX = node.renderPosX;
-                int absZ = node.renderPosZ;
-                int lX = sizeHandler.evRelativePosX(absX, false);
-                int rX = sizeHandler.evRelativePosX(absX, true);
-                int lZ = sizeHandler.evRelativePosY(absZ, false);
-                int rZ = sizeHandler.evRelativePosY(absZ, true);
-                int[] positions = new int[] { lX, lZ, rX, rZ };
-                //Use || for "Render as long as there is 1 point of the graphic inside the screen"
-                //Use && for "Render only if its fully inside the screen"
-                if (renderBox.isInBox(lX, lZ) ||
-                        renderBox.isInBox(rX, rZ)) {
+    public static class ScalingPoint {
 
-                    display.put(node, positions);
-                }
-                renderConnectionLines(node, positions, zLevel);
+        private double posX, posY;
+        private double scaledX, scaledY;
+
+        private ScalingPoint() {}
+
+        public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
+            ScalingPoint sp = new ScalingPoint();
+            if(arePositionsScaled) {
+                sp.updateScaledPos(posX, posY, scale);
+            } else {
+                sp.updatePos(posX, posY, scale);
             }
+            return sp;
         }
 
-        rectMapNodes.clear();
-        for (Map.Entry<ResearchNode, int[]> nodeEntry : display.entrySet()) {
-            renderNodeToGUI(nodeEntry.getKey(), nodeEntry.getValue(), zLevel);
-        }
-    }
-
-    private void renderNodeToGUI(ResearchNode node, int[] position, float zLevel) {
-        int left = (this.leftOffset - sizeHandler.widthToBorder);
-        int top = (this.topOffset - sizeHandler.heightToBorder);
-        int xAdd = position[0] - left;
-        int yAdd = position[1] - top;
-
-        GL11.glPushMatrix();
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_BLEND);
-
-        /*if (state == RenderState.HALF && item.researchable()) {
-            GL11.glColor4f(0.1F, 0.1F, 0.1F, 0.5F);
-        } else {
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        }*/
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        rectMapNodes.put(new Vector3(renderOffsetX + xAdd, renderOffsetY + yAdd, 0), node);
-
-        if(node.isSpecial()) {
-            frameWooden.bind();
-        } else {
-            frameBlank.bind();
+        public void updatePos(double posX, double posY, double scale) {
+            this.posX = posX;
+            this.posY = posY;
+            this.scaledX = scale * this.posX;
+            this.scaledY = scale * this.posY;
         }
 
-        drawResearchItemBackground(xAdd, yAdd, zLevel);
-        GL11.glPopMatrix();
-
-        GL11.glPushMatrix();
-        GL11.glTranslated(renderOffsetX + xAdd + 1, renderOffsetY + yAdd + 1, 0);
-
-        RenderItem ri = Minecraft.getMinecraft().getRenderItem();
-        Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
-        switch (node.getRenderType()) {
-            case ITEMSTACK:
-                RenderHelper.enableGUIStandardItemLighting();
-                GL11.glPushMatrix();
-                GL11.glTranslated(2, 2, 2);
-                GL11.glScaled(0.75, 0.75, 0.75);
-                float oldZ = ri.zLevel;
-                ri.zLevel = zLevel - 5;
-                ri.renderItemIntoGUI(node.getRenderItemStack(), 0, 0);
-                ri.zLevel = oldZ;
-                GL11.glPopMatrix();
-                RenderHelper.disableStandardItemLighting();
-                break;
-            case TEXTURE:
-                node.getTexture().bind();
-                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-                vb.pos(0,                          BGSizeHandler.W_H_NODE - 1, zLevel).tex(0, 1).endVertex();
-                vb.pos(BGSizeHandler.W_H_NODE - 1, BGSizeHandler.W_H_NODE - 1, zLevel).tex(1, 1).endVertex();
-                vb.pos(BGSizeHandler.W_H_NODE - 1, 0,                          zLevel).tex(1, 0).endVertex();
-                vb.pos(0,                          0,                          zLevel).tex(0, 0).endVertex();
-                t.draw(); //TODO test some time.
-                break;
-        }
-        GL11.glPopMatrix();
-    }
-
-    private void drawResearchItemBackground(int xAdd, int yAdd, float zLevel) {
-        Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(renderOffsetX + xAdd,                          renderOffsetY + yAdd + BGSizeHandler.W_H_NODE, zLevel).tex(0, 1).endVertex();
-        vb.pos(renderOffsetX + xAdd + BGSizeHandler.W_H_NODE, renderOffsetY + yAdd + BGSizeHandler.W_H_NODE, zLevel).tex(1, 1).endVertex();
-        vb.pos(renderOffsetX + xAdd + BGSizeHandler.W_H_NODE, renderOffsetY + yAdd,                          zLevel).tex(1, 0).endVertex();
-        vb.pos(renderOffsetX + xAdd,                          renderOffsetY + yAdd,                          zLevel).tex(0, 0).endVertex();
-        t.draw();
-    }
-
-    private void renderConnectionLines(ResearchNode node, int[] positions, float zLevel) {
-        int xAdd = (positions[0] - (this.leftOffset - sizeHandler.widthToBorder)) + BGSizeHandler.W_H_NODE / 2;
-        int yAdd = (positions[1] - (this.topOffset - sizeHandler.heightToBorder)) + BGSizeHandler.W_H_NODE / 2;
-        for (ResearchNode other : node.getConnectionsTo()) {
-            renderConnection(other, xAdd, yAdd, zLevel);
-        }
-    }
-
-    private void renderConnection(ResearchNode to, int fromX, int fromY, float zLevel) {
-        int targetXOffset = (sizeHandler.evRelativePosX(to.renderPosX, false) - (this.leftOffset - sizeHandler.widthToBorder)) + (BGSizeHandler.W_H_NODE / 2);
-        int targetYOffset = (sizeHandler.evRelativePosY(to.renderPosZ, false) - (this.topOffset - sizeHandler.heightToBorder)) + (BGSizeHandler.W_H_NODE / 2);
-        drawConnection(fromX, fromY, targetXOffset, targetYOffset, zLevel);
-    }
-
-    private void drawConnection(int originX, int originY, int targetX, int targetY, float zLevel) {
-        double nodeWidth = (BGSizeHandler.W_H_NODE / 2) - 1;
-
-        GuiRenderBoundingBox originBox = new GuiRenderBoundingBox(originX - nodeWidth, originY - nodeWidth,
-                originX + nodeWidth, originY + nodeWidth);
-
-        GuiRenderBoundingBox targetBox = new GuiRenderBoundingBox(targetX - nodeWidth, targetY - nodeWidth,
-                targetX + nodeWidth, targetY + nodeWidth);
-
-        GL11.glPushMatrix();
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glLineWidth(3.0F);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-
-        long clientTicks = EffectHandler.getClientEffectTick();
-
-        Vector3 origin = new Vector3(originX, originY, 0);
-        Vector3 line = origin.vectorFromHereTo(targetX, targetY, 0);
-        int segments = (int) Math.ceil(line.length() / 1); //1 = max line segment length
-        int activeSegment = (int) (clientTicks % segments);
-        Vector3 segmentIter = line.divide(segments);
-        for (int i = segments; i >= 0; i--) {
-            double lx = origin.getX();
-            double ly = origin.getY();
-            origin.add(segmentIter);
-
-            float brightness = 0.4F;
-            brightness += (0.6F * evaluateBrightness(i, activeSegment));
-
-            if(originBox.isInBox(lx, ly) || targetBox.isInBox(lx, ly)) continue;
-            if(originBox.isInBox(origin.getX(), origin.getY()) || targetBox.isInBox(origin.getX(), origin.getY())) continue;
-
-            drawLinePart(lx, ly, origin.getX(), origin.getY(), zLevel, brightness);
+        public void updateScaledPos(double scaledX, double scaledY, double scale) {
+            this.scaledX = scaledX;
+            this.scaledY = scaledY;
+            this.posX = this.scaledX / scale;
+            this.posY = this.scaledY / scale;
         }
 
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
-        GL11.glLineWidth(2.0F);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-        GL11.glPopMatrix();
-    }
-
-    private void drawLinePart(double lx, double ly, double hx, double hy, double zLevel, float brightness) {
-        lx += renderOffsetX;
-        ly += renderOffsetY;
-        hx += renderOffsetX;
-        hy += renderOffsetY;
-        GL11.glColor4f(brightness, brightness, brightness, 0.5F);
-        Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
-        vb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
-        vb.pos(lx, ly, zLevel).endVertex();
-        vb.pos(hx, hy, zLevel).endVertex();
-        t.draw();
-    }
-
-    //TODO how about no?
-    private float evaluateBrightness(int segment, int activeSegment) {
-        if (segment == activeSegment) return 1.0F;
-        switch (Math.abs(activeSegment - segment)) {
-            case 0:
-                return 1.0F; //Already done though
-            case 1:
-                return 0.9F;
-            case 2:
-                return 0.8F;
-            case 3:
-                return 0.7F;
-            case 4:
-                return 0.6F;
-            case 5:
-                return 0.5F;
-            case 6:
-                return 0.4F;
-            case 7:
-                return 0.3F;
-            case 8:
-                return 0.2F;
-            case 9:
-                return 0.1F;
+        public double getScaledPosX() {
+            return scaledX;
         }
-        return 0.0F;
+
+        public double getScaledPosY() {
+            return scaledY;
+        }
+
+        public void rescale(double newScale) {
+            this.scaledX = this.posX * newScale;
+            this.scaledY = this.posY * newScale;
+        }
     }
 
 }

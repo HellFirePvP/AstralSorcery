@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
@@ -98,6 +99,9 @@ public class ClientProxy extends CommonProxy {
 
         //Preloading heavy textures
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1").allocateGlId();
+
+        ClientJournalMapping.init();
     }
 
     @Override
