@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 public class GalaxySizeHandler extends SizeHandler {
 
-    public GalaxySizeHandler(int height, int width) {
+    public GalaxySizeHandler(double offsetX, double offsetY, int height, int width) {
         super(height, width);
     }
 

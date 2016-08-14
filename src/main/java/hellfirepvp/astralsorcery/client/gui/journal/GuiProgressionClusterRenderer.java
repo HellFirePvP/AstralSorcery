@@ -4,9 +4,6 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
-import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -33,66 +30,122 @@ public class GuiProgressionClusterRenderer {
     private static final BindableResource frameBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameBlank");
     private static final BindableResource frameWooden = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameWooden");
 
-    private ClientJournalMapping.JournalCluster cluster;
-    private ResearchProgression progressionPart;
-    private PartSizeHandler sizeHandler;
+    private GuiJournalProgression parentGui;
+    private PartSizeHandler partSizeHandler;
+    private ResearchProgression progression;
+    private ScalingPoint mousePointScaled;
+    private ScalingPoint previousMousePointScaled;
 
-    public GuiProgressionClusterRenderer(ResearchProgression part, int guiHeight, int guiWidth) {
-        this.cluster = ClientJournalMapping.getClusterMapping(part);
-        this.progressionPart = part;
-        this.sizeHandler = new PartSizeHandler(part, guiHeight, guiWidth);
+    private int renderOffsetX, renderOffsetY;
+    private boolean hasPrevOffset = false;
+
+    private float renderLoopBrFactor = 1F;
+
+    public GuiProgressionClusterRenderer(GuiJournalProgression gui, ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
+        this.parentGui = gui;
+        this.progression = progression;
+        this.partSizeHandler = new PartSizeHandler(progression, guiHeight, guiWidth);
+        this.partSizeHandler.setMaxScale(1.0D);
+        this.partSizeHandler.setMinScale(0.1D);
+        this.partSizeHandler.setScaleSpeed(0.9D / 20D);
+        this.partSizeHandler.updateSize();
+        this.partSizeHandler.forceScaleTo(0.1D);
+
+        this.mousePointScaled = ScalingPoint.createPoint(
+                this.partSizeHandler.clampX(this.partSizeHandler.getMidX()),
+                this.partSizeHandler.clampY(this.partSizeHandler.getMidY()),
+                this.partSizeHandler.getScalingFactor(),
+                false);
+        this.renderOffsetX = guiLeft;
+        this.renderOffsetY = guiTop;
     }
 
-    /*private void drawNodesAndConnections(float zLevel) {
-        int left = this.leftOffset - sizeHandler.widthToBorder;
-        int top = this.topOffset - sizeHandler.heightToBorder;
-        GuiRenderBoundingBox renderBox = new GuiRenderBoundingBox(left, top, left + renderWidth, top + renderHeight);
-        PlayerProgress thisProgress = ResearchManager.clientProgress;
-        Map<ResearchNode, int[]> display = new HashMap<>();
-        for (ResearchProgression progress : thisProgress.getResearchProgression()) {
-            for (ResearchNode node : progress.getResearchNodes()) {
-                int absX = node.renderPosX;
-                int absZ = node.renderPosZ;
-                int lX = sizeHandler.evRelativePosX(absX, false);
-                int rX = sizeHandler.evRelativePosX(absX, true);
-                int lZ = sizeHandler.evRelativePosY(absZ, false);
-                int rZ = sizeHandler.evRelativePosY(absZ, true);
-                int[] positions = new int[] { lX, lZ, rX, rZ };
-                //Use || for "Render as long as there is 1 point of the graphic inside the screen"
-                //Use && for "Render only if its fully inside the screen"
-                if (renderBox.isInBox(lX, lZ) ||
-                        renderBox.isInBox(rX, rZ)) {
-
-                    display.put(node, positions);
-                }
-                renderConnectionLines(node, positions, zLevel);
-            }
-        }
-
-        //rectMapNodes.clear();
-        for (Map.Entry<ResearchNode, int[]> nodeEntry : display.entrySet()) {
-            renderNodeToGUI(nodeEntry.getKey(), nodeEntry.getValue(), zLevel);
+    public void moveMouse(double changedX, double changedY) {
+        if (hasPrevOffset) {
+            mousePointScaled.updateScaledPos(
+                    partSizeHandler.clampX(previousMousePointScaled.getScaledPosX() + changedX),
+                    partSizeHandler.clampY(previousMousePointScaled.getScaledPosY() + changedY),
+                    partSizeHandler.getScalingFactor());
+        } else {
+            mousePointScaled.updateScaledPos(
+                    partSizeHandler.clampX(changedX),
+                    partSizeHandler.clampY(changedY),
+                    partSizeHandler.getScalingFactor());
         }
     }
 
-    private void renderNodeToGUI(ResearchNode node, int[] position, float zLevel) {
-        int left = (this.leftOffset - sizeHandler.widthToBorder);
-        int top = (this.topOffset - sizeHandler.heightToBorder);
-        int xAdd = position[0] - left;
-        int yAdd = position[1] - top;
+    public void applyMovedMouseOffset() {
+        this.previousMousePointScaled = ScalingPoint.createPoint(
+                mousePointScaled.getScaledPosX(),
+                mousePointScaled.getScaledPosY(),
+                partSizeHandler.getScalingFactor(),
+                true);
+        this.hasPrevOffset = true;
+    }
+
+    public void handleZoomOut() {
+        this.partSizeHandler.handleZoomOut();
+        rescale(partSizeHandler.getScalingFactor());
+    }
+
+    public void handleZoomIn() {
+        this.partSizeHandler.handleZoomIn();
+        rescale(partSizeHandler.getScalingFactor());
+    }
+
+    public double getScaleMouseX() {
+        return mousePointScaled.getScaledPosX();
+    }
+
+    public double getScaleMouseY() {
+        return mousePointScaled.getScaledPosY();
+    }
+
+    private void rescale(double newScale) {
+        this.mousePointScaled.rescale(newScale);
+        if(this.previousMousePointScaled != null) {
+            this.previousMousePointScaled.rescale(newScale);
+        }
+        moveMouse(0, 0);
+    }
+
+    public void drawClusterScreen(float zLevel) {
+        drawNodesAndConnections(zLevel);
+    }
+
+    private void drawNodesAndConnections(float zLevel) {
+        renderLoopBrFactor = (float) Math.sqrt(partSizeHandler.getScalingFactor()); //Clamped between 0.1F and 1F
+
+        Map<ResearchNode, double[]> displayPositions = new HashMap<>();
+        for (ResearchNode node : progression.getResearchNodes()) {
+            int absX = node.renderPosX;
+            int absZ = node.renderPosZ;
+            double lX = partSizeHandler.evRelativePosX(absX);
+            double lZ = partSizeHandler.evRelativePosY(absZ);
+
+            renderConnectionLines(node, lX, lZ, zLevel);
+
+            displayPositions.put(node, new double[] { lX, lZ });
+        }
+        for (ResearchNode node : displayPositions.keySet()) {
+            double[] pos = displayPositions.get(node);
+            renderNodeToGUI(node, pos[0], pos[1], zLevel);
+        }
+    }
+
+    private void renderNodeToGUI(ResearchNode node, double lowerPosX, double lowerPosY, float zLevel) {
+        double scaledLeft = this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder;
+        double scaledTop =  this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder;
+        double xAdd = lowerPosX - scaledLeft;
+        double yAdd = lowerPosY - scaledTop;
+        double offsetX = renderOffsetX + xAdd;
+        double offsetY = renderOffsetY + yAdd;
 
         GL11.glPushMatrix();
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_BLEND);
 
-        /*if (state == RenderState.HALF && item.researchable()) {
-            GL11.glColor4f(0.1F, 0.1F, 0.1F, 0.5F);
-        } else {
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        //rectMapNodes.put(new Vector3(renderOffsetX + xAdd, renderOffsetY + yAdd, 0), node);
 
         if(node.isSpecial()) {
             frameWooden.bind();
@@ -100,11 +153,11 @@ public class GuiProgressionClusterRenderer {
             frameBlank.bind();
         }
 
-        drawResearchItemBackground(xAdd, yAdd, zLevel);
+        drawResearchItemBackground(partSizeHandler.getZoomedWHNode(), xAdd, yAdd, zLevel);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
-        GL11.glTranslated(renderOffsetX + xAdd + 1, renderOffsetY + yAdd + 1, 0);
+        GL11.glTranslated(offsetX, offsetY, 0);
 
         RenderItem ri = Minecraft.getMinecraft().getRenderItem();
         Tessellator t = Tessellator.getInstance();
@@ -113,51 +166,48 @@ public class GuiProgressionClusterRenderer {
             case ITEMSTACK:
                 RenderHelper.enableGUIStandardItemLighting();
                 GL11.glPushMatrix();
-                GL11.glTranslated(2, 2, 2);
+                GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
+                GL11.glTranslated(3, 3, 3);
                 GL11.glScaled(0.75, 0.75, 0.75);
+                GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
                 float oldZ = ri.zLevel;
                 ri.zLevel = zLevel - 5;
                 ri.renderItemIntoGUI(node.getRenderItemStack(), 0, 0);
                 ri.zLevel = oldZ;
+                GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glPopMatrix();
                 RenderHelper.disableStandardItemLighting();
                 break;
             case TEXTURE:
+                GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
                 node.getTexture().bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-                vb.pos(0,                          SizeHandler.W_H_NODE - 1, zLevel).tex(0, 1).endVertex();
-                vb.pos(SizeHandler.W_H_NODE - 1, SizeHandler.W_H_NODE - 1, zLevel).tex(1, 1).endVertex();
-                vb.pos(SizeHandler.W_H_NODE - 1, 0,                          zLevel).tex(1, 0).endVertex();
-                vb.pos(0,                          0,                          zLevel).tex(0, 0).endVertex();
+                vb.pos(0,                                     partSizeHandler.getZoomedWHNode() - 1, zLevel).tex(0, 1).endVertex();
+                vb.pos(partSizeHandler.getZoomedWHNode() - 1, partSizeHandler.getZoomedWHNode() - 1, zLevel).tex(1, 1).endVertex();
+                vb.pos(partSizeHandler.getZoomedWHNode() - 1, 0,                                     zLevel).tex(1, 0).endVertex();
+                vb.pos(0,                                     0,                                     zLevel).tex(0, 0).endVertex();
                 t.draw();
+                GL11.glColor4f(1F, 1F, 1F, 1F);
                 break;
         }
         GL11.glPopMatrix();
     }
 
-    private void renderConnectionLines(ResearchNode node, int[] positions, float zLevel) {
-        int xAdd = (positions[0] - (this.leftOffset - sizeHandler.widthToBorder)) + SizeHandler.W_H_NODE / 2;
-        int yAdd = (positions[1] - (this.topOffset - sizeHandler.heightToBorder)) + SizeHandler.W_H_NODE / 2;
+    private void renderConnectionLines(ResearchNode node, double lowerPosX, double lowerPosY, float zLevel) {
+        double xAdd = (lowerPosX - (this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder)) + partSizeHandler.getZoomedWHNode() / 2;
+        double yAdd = (lowerPosY - (this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder)) + partSizeHandler.getZoomedWHNode() / 2;
         for (ResearchNode other : node.getConnectionsTo()) {
             renderConnection(other, xAdd, yAdd, zLevel);
         }
     }
 
-    private void renderConnection(ResearchNode to, int fromX, int fromY, float zLevel) {
-        int targetXOffset = (sizeHandler.evRelativePosX(to.renderPosX, false) - (this.leftOffset - sizeHandler.widthToBorder)) + (SizeHandler.W_H_NODE / 2);
-        int targetYOffset = (sizeHandler.evRelativePosY(to.renderPosZ, false) - (this.topOffset - sizeHandler.heightToBorder)) + (SizeHandler.W_H_NODE / 2);
+    private void renderConnection(ResearchNode to, double fromX, double fromY, float zLevel) {
+        double targetXOffset = (partSizeHandler.evRelativePosX(to.renderPosX) - (this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder)) +  (partSizeHandler.getZoomedWHNode() / 2);
+        double targetYOffset = (partSizeHandler.evRelativePosY(to.renderPosZ) - (this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder)) + (partSizeHandler.getZoomedWHNode() / 2);
         drawConnection(fromX, fromY, targetXOffset, targetYOffset, zLevel);
     }
 
-    private void drawConnection(int originX, int originY, int targetX, int targetY, float zLevel) {
-        double nodeWidth = (SizeHandler.W_H_NODE / 2) - 1;
-
-        GuiRenderBoundingBox originBox = new GuiRenderBoundingBox(originX - nodeWidth, originY - nodeWidth,
-                originX + nodeWidth, originY + nodeWidth);
-
-        GuiRenderBoundingBox targetBox = new GuiRenderBoundingBox(targetX - nodeWidth, targetY - nodeWidth,
-                targetX + nodeWidth, targetY + nodeWidth);
-
+    private void drawConnection(double originX, double originY, double targetX, double targetY, float zLevel) {
         GL11.glPushMatrix();
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -182,9 +232,6 @@ public class GuiProgressionClusterRenderer {
             float brightness = 0.4F;
             brightness += (0.6F * evaluateBrightness(i, activeSegment));
 
-            if(originBox.isInBox(lx, ly) || targetBox.isInBox(lx, ly)) continue;
-            if(originBox.isInBox(origin.getX(), origin.getY()) || targetBox.isInBox(origin.getX(), origin.getY())) continue;
-
             drawLinePart(lx, ly, origin.getX(), origin.getY(), zLevel, brightness);
         }
 
@@ -202,7 +249,8 @@ public class GuiProgressionClusterRenderer {
         ly += renderOffsetY;
         hx += renderOffsetX;
         hy += renderOffsetY;
-        GL11.glColor4f(brightness, brightness, brightness, 0.5F);
+        brightness *= renderLoopBrFactor;
+        GL11.glColor4f(brightness, brightness, brightness, 0.5F * renderLoopBrFactor);
         Tessellator t = Tessellator.getInstance();
         VertexBuffer vb = t.getBuffer();
         vb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
@@ -239,15 +287,16 @@ public class GuiProgressionClusterRenderer {
         return 0.0F;
     }
 
-    private void drawResearchItemBackground(int xAdd, int yAdd, float zLevel) {
+    private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
+        GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
         Tessellator t = Tessellator.getInstance();
         VertexBuffer vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(renderOffsetX + xAdd,                        renderOffsetY + yAdd + SizeHandler.W_H_NODE, zLevel).tex(0, 1).endVertex();
-        vb.pos(renderOffsetX + xAdd + SizeHandler.W_H_NODE, renderOffsetY + yAdd + SizeHandler.W_H_NODE, zLevel).tex(1, 1).endVertex();
-        vb.pos(renderOffsetX + xAdd + SizeHandler.W_H_NODE, renderOffsetY + yAdd,                        zLevel).tex(1, 0).endVertex();
-        vb.pos(renderOffsetX + xAdd,                        renderOffsetY + yAdd,                        zLevel).tex(0, 0).endVertex();
+        vb.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd + zoomedWH, zLevel).tex(0, 1).endVertex();
+        vb.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd + zoomedWH, zLevel).tex(1, 1).endVertex();
+        vb.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd,            zLevel).tex(1, 0).endVertex();
+        vb.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd,            zLevel).tex(0, 0).endVertex();
         t.draw();
-    }*/
-
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+    }
 }

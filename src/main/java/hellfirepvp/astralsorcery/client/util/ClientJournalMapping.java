@@ -19,7 +19,7 @@ public class ClientJournalMapping {
 
     public static void init() {
         BindableResource cloud1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1");
-        map.put(ResearchProgression.TEST_PROGRESS, new JournalCluster(cloud1, -2, -2, -1, -1));
+        map.put(ResearchProgression.TEST_PROGRESS, new JournalCluster(cloud1, cloud1, -2, -2, 0, -1));
     }
 
     public static JournalCluster getClusterMapping(ResearchProgression progression) {
@@ -28,7 +28,7 @@ public class ClientJournalMapping {
 
     public static class JournalCluster {
 
-        public final BindableResource cloudTexture;
+        public final BindableResource cloudTexture, clusterBackgroundTexture;
         public final Point boundary1, boundary2;
         public final int leftMost, rightMost, upperMost, lowerMost;
 
@@ -39,8 +39,9 @@ public class ClientJournalMapping {
          *
          *  A wrong definition doesn't affect size detection, but rendering.
          */
-        public JournalCluster(BindableResource cloudTexture, int leftMost, int upperMost, int rightMost, int lowerMost) {
+        public JournalCluster(BindableResource cloudTexture, BindableResource clusterBackgroundTexture, int leftMost, int upperMost, int rightMost, int lowerMost) {
             this.cloudTexture = cloudTexture;
+            this.clusterBackgroundTexture = clusterBackgroundTexture;
             this.leftMost = leftMost;
             this.upperMost = upperMost;
             this.rightMost = rightMost;

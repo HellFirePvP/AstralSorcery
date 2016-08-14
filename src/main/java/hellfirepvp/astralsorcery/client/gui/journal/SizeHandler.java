@@ -1,13 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
-import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import net.minecraft.client.Minecraft;
-
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Arrays;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,10 +25,25 @@ public abstract class SizeHandler {
     private double totalHeight;
 
     private double scalingFactor = 1.0D;
+    private double maxScale = 10.0D;
+    private double minScale = 1.0D;
+    private double scaleSpeed = 0.2D;
 
     public SizeHandler(int height, int width) {
         this.heightToBorder = height / 2;
         this.widthToBorder = width / 2;
+    }
+
+    public void setMaxScale(double maxScale) {
+        this.maxScale = maxScale;
+    }
+
+    public void setScaleSpeed(double scaleSpeed) {
+        this.scaleSpeed = scaleSpeed;
+    }
+
+    public void setMinScale(double minScale) {
+        this.minScale = minScale;
     }
 
     public void updateSize() {
@@ -108,13 +116,17 @@ public abstract class SizeHandler {
     }
 
     public void handleZoomIn() {
-        if(scalingFactor >= 5.0) return;
-        scalingFactor = Math.min(5.0, scalingFactor + 0.2);
+        if(scalingFactor >= maxScale) return;
+        scalingFactor = Math.min(maxScale, scalingFactor + scaleSpeed);
     }
 
     public void handleZoomOut() {
-        if(scalingFactor <= 1.0) return;
-        scalingFactor = Math.max(1.0, scalingFactor - 0.2);
+        if(scalingFactor <= minScale) return;
+        scalingFactor = Math.max(minScale, scalingFactor - scaleSpeed);
+    }
+
+    public void forceScaleTo(double scale) {
+        this.scalingFactor = scale;
     }
 
     public void resetZoom() {
@@ -123,7 +135,7 @@ public abstract class SizeHandler {
 
     //ensures that the cursor pos never gets too close to a border. (X)
     //scaled or not, widthToBorder and heightToBorder are defined by the real GUI size!
-    public double adjustX(double centerX) {
+    public double clampX(double centerX) {
         if((centerX + widthToBorder) > getTotalWidth()) {
             centerX = getTotalWidth() - widthToBorder;
         }
@@ -134,7 +146,7 @@ public abstract class SizeHandler {
     }
 
     //ensures that the cursor pos never gets too close to a border. (Y)
-    public double adjustY(double centerY) {
+    public double clampY(double centerY) {
         if((centerY + heightToBorder) > getTotalHeight()) {
             centerY = getTotalHeight() - heightToBorder;
         }
@@ -152,22 +164,6 @@ public abstract class SizeHandler {
 
     public double evRelativePosY(int relativeY) {
         return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
-    }
-
-    private double sizeXLocationForRelative(int relativeX) {
-        if(relativeX < 0) { //Moving left
-            return getMidX() - (Math.abs(relativeX) * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
-        } else { //Moving right
-            return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
-        }
-    }
-
-    private double sizeYLocationForRelative(int relativeY) {
-        if(relativeY < 0) { //Moving up
-            return getMidY() - (Math.abs(relativeY) * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
-        } else { //Moving down
-            return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
-        }
     }
 
 }

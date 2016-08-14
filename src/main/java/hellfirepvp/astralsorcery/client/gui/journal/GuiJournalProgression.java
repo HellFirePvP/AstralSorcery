@@ -39,7 +39,7 @@ public class GuiJournalProgression extends GuiWHScreen {
 
         if(currentInstance == null) {
             currentInstance = this;
-            progressionRenderer = new GuiProgressionRenderer(guiHeight - 10, guiWidth - 10);
+            progressionRenderer = new GuiProgressionRenderer(currentInstance, guiHeight - 10, guiWidth - 10);
             progressionRenderer.centerMouse();
         }
         progressionRenderer.updateOffset(guiLeft + 10, guiTop + 10);
@@ -97,7 +97,7 @@ public class GuiJournalProgression extends GuiWHScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        System.out.println("click at: " + mouseX + ", " + mouseY);
+        //System.out.println("click at: " + mouseX + ", " + mouseY);
     }
 
     @Override
