@@ -7,7 +7,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,7 +17,7 @@ import java.util.Arrays;
  */
 public class GalaxySizeHandler extends SizeHandler {
 
-    public GalaxySizeHandler(double offsetX, double offsetY, int height, int width) {
+    public GalaxySizeHandler(int height, int width) {
         super(height, width);
     }
 

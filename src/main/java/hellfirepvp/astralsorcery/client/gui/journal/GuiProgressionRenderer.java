@@ -33,7 +33,7 @@ public class GuiProgressionRenderer {
 
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG");
     private static final BindableResource textureResOVL = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay");
-    private static final BindableResource black = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    //private static final BindableResource black = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     private GalaxySizeHandler sizeHandler;
     private GuiJournalProgression parentGui;
@@ -54,7 +54,7 @@ public class GuiProgressionRenderer {
 
     public GuiProgressionRenderer(GuiJournalProgression gui, int guiHeight, int guiWidth) {
         this.parentGui = gui;
-        this.sizeHandler = new GalaxySizeHandler(0, 0, guiHeight, guiWidth);
+        this.sizeHandler = new GalaxySizeHandler(guiHeight, guiWidth);
         this.mousePointScaled = ScalingPoint.createPoint(
                 this.sizeHandler.clampX(this.sizeHandler.getMidX()),
                 this.sizeHandler.clampY(this.sizeHandler.getMidY()),
@@ -122,7 +122,7 @@ public class GuiProgressionRenderer {
 
     public void focus(@Nonnull ResearchProgression researchCluster) {
         this.focusedCluster = researchCluster;
-        this.clusterRenderer = new GuiProgressionClusterRenderer(parentGui, researchCluster, realRenderHeight, realRenderWidth, realCoordLowerX, realCoordLowerY);
+        this.clusterRenderer = new GuiProgressionClusterRenderer(researchCluster, realRenderHeight, realRenderWidth, realCoordLowerX, realCoordLowerY);
     }
 
     public void resetZoom() {

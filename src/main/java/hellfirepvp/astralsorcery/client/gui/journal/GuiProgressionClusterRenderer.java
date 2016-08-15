@@ -30,19 +30,18 @@ public class GuiProgressionClusterRenderer {
     private static final BindableResource frameBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameBlank");
     private static final BindableResource frameWooden = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "frameWooden");
 
-    private GuiJournalProgression parentGui;
     private PartSizeHandler partSizeHandler;
     private ResearchProgression progression;
     private ScalingPoint mousePointScaled;
     private ScalingPoint previousMousePointScaled;
 
     private int renderOffsetX, renderOffsetY;
+    private int renderGuiHeight, renderGuiWidth;
     private boolean hasPrevOffset = false;
 
     private float renderLoopBrFactor = 1F;
 
-    public GuiProgressionClusterRenderer(GuiJournalProgression gui, ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
-        this.parentGui = gui;
+    public GuiProgressionClusterRenderer(ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
         this.progression = progression;
         this.partSizeHandler = new PartSizeHandler(progression, guiHeight, guiWidth);
         this.partSizeHandler.setMaxScale(1.0D);
@@ -58,6 +57,8 @@ public class GuiProgressionClusterRenderer {
                 false);
         this.renderOffsetX = guiLeft;
         this.renderOffsetY = guiTop;
+        this.renderGuiHeight = guiHeight;
+        this.renderGuiWidth = guiWidth;
     }
 
     public void moveMouse(double changedX, double changedY) {
@@ -116,14 +117,20 @@ public class GuiProgressionClusterRenderer {
     private void drawNodesAndConnections(float zLevel) {
         renderLoopBrFactor = (float) Math.sqrt(partSizeHandler.getScalingFactor()); //Clamped between 0.1F and 1F
 
+        double midX = renderGuiWidth  / 2;
+        double midY = renderGuiHeight / 2;
+        double tW = partSizeHandler.getTotalWidth() / 2;
+        double tH = partSizeHandler.getTotalHeight() / 2;
+        if (tW > midX) midX = tW;
+        if (tH > midY) midY = tH;
         Map<ResearchNode, double[]> displayPositions = new HashMap<>();
         for (ResearchNode node : progression.getResearchNodes()) {
             int absX = node.renderPosX;
             int absZ = node.renderPosZ;
-            double lX = partSizeHandler.evRelativePosX(absX);
-            double lZ = partSizeHandler.evRelativePosY(absZ);
+            double lX = midX + (absX * (partSizeHandler.getZoomedWHNode() + partSizeHandler.getZoomedSpaceBetweenNodes()));
+            double lZ = midY + (absZ * (partSizeHandler.getZoomedWHNode() + partSizeHandler.getZoomedSpaceBetweenNodes()));
 
-            renderConnectionLines(node, lX, lZ, zLevel);
+            renderConnectionLines(node, lX, lZ, midX, midY, zLevel);
 
             displayPositions.put(node, new double[] { lX, lZ });
         }
@@ -193,17 +200,19 @@ public class GuiProgressionClusterRenderer {
         GL11.glPopMatrix();
     }
 
-    private void renderConnectionLines(ResearchNode node, double lowerPosX, double lowerPosY, float zLevel) {
+    private void renderConnectionLines(ResearchNode node, double lowerPosX, double lowerPosY, double midX, double midY, float zLevel) {
         double xAdd = (lowerPosX - (this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder)) + partSizeHandler.getZoomedWHNode() / 2;
         double yAdd = (lowerPosY - (this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder)) + partSizeHandler.getZoomedWHNode() / 2;
         for (ResearchNode other : node.getConnectionsTo()) {
-            renderConnection(other, xAdd, yAdd, zLevel);
+            renderConnection(other, xAdd, yAdd, midX, midY, zLevel);
         }
     }
 
-    private void renderConnection(ResearchNode to, double fromX, double fromY, float zLevel) {
-        double targetXOffset = (partSizeHandler.evRelativePosX(to.renderPosX) - (this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder)) +  (partSizeHandler.getZoomedWHNode() / 2);
-        double targetYOffset = (partSizeHandler.evRelativePosY(to.renderPosZ) - (this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder)) + (partSizeHandler.getZoomedWHNode() / 2);
+    private void renderConnection(ResearchNode to, double fromX, double fromY, double midX, double midY, float zLevel) {
+        double relToX = midX + (to.renderPosX * (partSizeHandler.getZoomedWHNode() + partSizeHandler.getZoomedSpaceBetweenNodes()));
+        double relToY = midY + (to.renderPosZ * (partSizeHandler.getZoomedWHNode() + partSizeHandler.getZoomedSpaceBetweenNodes()));
+        double targetXOffset = (relToX - (this.mousePointScaled.getScaledPosX() - partSizeHandler.widthToBorder)) +  (partSizeHandler.getZoomedWHNode() / 2);
+        double targetYOffset = (relToY - (this.mousePointScaled.getScaledPosY() - partSizeHandler.heightToBorder)) + (partSizeHandler.getZoomedWHNode() / 2);
         drawConnection(fromX, fromY, targetXOffset, targetYOffset, zLevel);
     }
 
