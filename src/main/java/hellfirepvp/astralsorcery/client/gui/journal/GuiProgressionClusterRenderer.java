@@ -13,8 +13,10 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +43,8 @@ public class GuiProgressionClusterRenderer {
 
     private float renderLoopBrFactor = 1F;
 
+    private Map<Rectangle, ResearchNode> clickableNodes = new HashMap<>();
+
     public GuiProgressionClusterRenderer(ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
         this.progression = progression;
         this.partSizeHandler = new PartSizeHandler(progression, guiHeight, guiWidth);
@@ -59,6 +63,29 @@ public class GuiProgressionClusterRenderer {
         this.renderOffsetY = guiTop;
         this.renderGuiHeight = guiHeight;
         this.renderGuiWidth = guiWidth;
+    }
+
+    public void propagateClick(Point p) {
+        Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
+        if(frame.contains(p)) {
+            for (Rectangle r : clickableNodes.keySet()) {
+                if(r.contains(p)) {
+                    ResearchNode clicked = clickableNodes.get(r);
+                    //TODO open Research GUI.
+                }
+            }
+        }
+    }
+
+    public void drawMouseHighlight(float zLevel, Point mousePoint) {
+        Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
+        if(frame.contains(mousePoint)) {
+            for (Rectangle r : clickableNodes.keySet()) {
+                if(r.contains(mousePoint)) {
+                    //TODO hover tooltips
+                }
+            }
+        }
     }
 
     public void moveMouse(double changedX, double changedY) {
@@ -111,6 +138,8 @@ public class GuiProgressionClusterRenderer {
     }
 
     public void drawClusterScreen(float zLevel) {
+        clickableNodes.clear();
+
         drawNodesAndConnections(zLevel);
     }
 
@@ -119,10 +148,6 @@ public class GuiProgressionClusterRenderer {
 
         double midX = renderGuiWidth  / 2;
         double midY = renderGuiHeight / 2;
-        double tW = partSizeHandler.getTotalWidth() / 2;
-        double tH = partSizeHandler.getTotalHeight() / 2;
-        if (tW > midX) midX = tW;
-        if (tH > midY) midY = tH;
         Map<ResearchNode, double[]> displayPositions = new HashMap<>();
         for (ResearchNode node : progression.getResearchNodes()) {
             int absX = node.renderPosX;
@@ -160,7 +185,13 @@ public class GuiProgressionClusterRenderer {
             frameBlank.bind();
         }
 
-        drawResearchItemBackground(partSizeHandler.getZoomedWHNode(), xAdd, yAdd, zLevel);
+        double zoomedWH = partSizeHandler.getZoomedWHNode();
+
+        if(partSizeHandler.getScalingFactor() >= 0.7) {
+            clickableNodes.put(new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(zoomedWH), MathHelper.floor_double(zoomedWH)), node);
+        }
+
+        drawResearchItemBackground(zoomedWH, xAdd, yAdd, zLevel);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
@@ -189,10 +220,10 @@ public class GuiProgressionClusterRenderer {
                 GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
                 node.getTexture().bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-                vb.pos(0,                                     partSizeHandler.getZoomedWHNode() - 1, zLevel).tex(0, 1).endVertex();
-                vb.pos(partSizeHandler.getZoomedWHNode() - 1, partSizeHandler.getZoomedWHNode() - 1, zLevel).tex(1, 1).endVertex();
-                vb.pos(partSizeHandler.getZoomedWHNode() - 1, 0,                                     zLevel).tex(1, 0).endVertex();
-                vb.pos(0,                                     0,                                     zLevel).tex(0, 0).endVertex();
+                vb.pos(0,            zoomedWH - 1, zLevel).tex(0, 1).endVertex();
+                vb.pos(zoomedWH - 1, zoomedWH - 1, zLevel).tex(1, 1).endVertex();
+                vb.pos(zoomedWH - 1, 0,            zLevel).tex(1, 0).endVertex();
+                vb.pos(0,            0,            zLevel).tex(0, 0).endVertex();
                 t.draw();
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 break;
@@ -268,32 +299,10 @@ public class GuiProgressionClusterRenderer {
         t.draw();
     }
 
-    //TODO how about no?
     private float evaluateBrightness(int segment, int activeSegment) {
         if (segment == activeSegment) return 1.0F;
-        switch (Math.abs(activeSegment - segment)) {
-            case 0:
-                return 1.0F; //Already done though
-            case 1:
-                return 0.9F;
-            case 2:
-                return 0.8F;
-            case 3:
-                return 0.7F;
-            case 4:
-                return 0.6F;
-            case 5:
-                return 0.5F;
-            case 6:
-                return 0.4F;
-            case 7:
-                return 0.3F;
-            case 8:
-                return 0.2F;
-            case 9:
-                return 0.1F;
-        }
-        return 0.0F;
+        float res = ((float) (10 - Math.abs(activeSegment - segment))) / 10F;
+        return Math.max(0, res);
     }
 
     private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
@@ -308,4 +317,5 @@ public class GuiProgressionClusterRenderer {
         t.draw();
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
+
 }

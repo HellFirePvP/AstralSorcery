@@ -38,6 +38,7 @@ public class BindableResource {
         return resource;
     }
 
+    @Deprecated
     public void invalidateAndReload() {
         if(resource != null)
             GL11.glDeleteTextures(resource.getGlTextureId());
@@ -50,10 +51,11 @@ public class BindableResource {
         try {
             resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Failed to load texture " + path);
+            AstralSorcery.log.warn("[AstralSorcery] Failed to load texture " + path);
             resource = TextureUtil.MISSING_TEXTURE;
+            return;
         }
-        AstralSorcery.log.info("Allocated " + path + " to " + resource.getGlTextureId());
+        AstralSorcery.log.info("[AstralSorcery] Allocated " + path + " to " + resource.getGlTextureId());
     }
 
     public void bind() {

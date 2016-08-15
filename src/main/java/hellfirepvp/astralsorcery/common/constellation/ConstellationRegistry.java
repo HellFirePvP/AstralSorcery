@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.constellation;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class ConstellationRegistry {
         return tiers.get(tierNumber);
     }
 
+    @Nullable
     public static Constellation getConstellationByName(String name) {
         if(name == null) return null;
 
@@ -53,6 +55,15 @@ public class ConstellationRegistry {
             }
         }
         return null;
+    }
+
+    public static List<Constellation> resolve(List<String> constellationsAsStrings) {
+        List<Constellation> resolved = new LinkedList<>();
+        for (String s : constellationsAsStrings) {
+            Constellation c = getConstellationByName(s);
+            if(c != null) resolved.add(c);
+        }
+        return resolved;
     }
 
     public static int getHighestTierNumber() {

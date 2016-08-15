@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
@@ -125,6 +126,19 @@ public class GuiProgressionRenderer {
         this.clusterRenderer = new GuiProgressionClusterRenderer(researchCluster, realRenderHeight, realRenderWidth, realCoordLowerX, realCoordLowerY);
     }
 
+    //Nothing to actually click here, we redirect if we can.
+    public void propagateClick(Point p) {
+        if(clusterRenderer != null) {
+            clusterRenderer.propagateClick(p);
+        }
+    }
+
+    public void drawMouseHighlight(float zLevel, Point mousePoint) {
+        if(clusterRenderer != null) {
+            clusterRenderer.drawMouseHighlight(zLevel, mousePoint);
+        }
+    }
+
     public void resetZoom() {
         sizeHandler.resetZoom();
         rescale(sizeHandler.getScalingFactor());
@@ -220,9 +234,7 @@ public class GuiProgressionRenderer {
 
     @Nullable
     private ResearchProgression tryFocusCluster() {
-        int guiMouseX = Mouse.getEventX() * parentGui.width / parentGui.mc.displayWidth;
-        int guiMouseY = parentGui.height - Mouse.getEventY() * parentGui.height / parentGui.mc.displayHeight - 1;
-        Point mousePoint = new Point(guiMouseX, guiMouseY);
+        Point mousePoint = parentGui.getCurrentMousePoint();
 
         for (Rectangle r : this.clusterRectMap.keySet()) {
             if(r.contains(mousePoint)) {
@@ -357,7 +369,7 @@ public class GuiProgressionRenderer {
     }
 
     private void drawBlendedStarfieldOverlay(float zLevel, double scalePosX, double scalePosY, double scaleFactor) {
-        GL11.glColor4f(0.6F, 0.6F, 0.6F, 0.5F);
+        GL11.glColor4f(0.8F, 0.8F, 0.8F, 0.4F);
         GL11.glPushMatrix();
         GL11.glScaled(scaleFactor, scaleFactor, scaleFactor);
         textureResOVL.bind();

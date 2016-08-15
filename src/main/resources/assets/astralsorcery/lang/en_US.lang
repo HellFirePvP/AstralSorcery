@@ -8,6 +8,9 @@ misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 
+gui.journal.bm.knowledge.name=Knowledge
+gui.journal.bm.constellations.name=Constellations
+
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
 crystal.size=Size

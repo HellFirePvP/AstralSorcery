@@ -1,13 +1,21 @@
-package hellfirepvp.astralsorcery.client.gui.journal;
+package hellfirepvp.astralsorcery.client.gui;
 
-import hellfirepvp.astralsorcery.client.gui.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -17,11 +25,9 @@ import java.io.IOException;
  * Created by HellFirePvP
  * Date: 11.08.2016 / 18:38
  */
-public class GuiJournalProgression extends GuiWHScreen {
+public class GuiJournalProgression extends GuiScreenJournal {
 
     public static GuiJournalProgression currentInstance = null;
-
-    private static final BindableResource textureResShell = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace");
 
     private static GuiProgressionRenderer progressionRenderer;
 
@@ -29,7 +35,7 @@ public class GuiJournalProgression extends GuiWHScreen {
     private boolean dragging = false;
 
     public GuiJournalProgression() {
-        super(270, 420);
+        super(0);
     }
 
     @Override
@@ -84,24 +90,31 @@ public class GuiJournalProgression extends GuiWHScreen {
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((guiLeft + 20) * res.getScaleFactor(), (guiTop + 20) * res.getScaleFactor(), (guiWidth - 40) * res.getScaleFactor(), (guiHeight - 40) * res.getScaleFactor());
         progressionRenderer.drawProgressionPart(zLevel);
-
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        zLevel += 100;
-        drawWHRect(textureResShell);
-        zLevel -= 100;
+
+        drawDefault(textureResShell);
+
+        zLevel += 150;
+        drawMouseHighlight(zLevel, getCurrentMousePoint());
+        zLevel -= 150;
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
 
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        //System.out.println("click at: " + mouseX + ", " + mouseY);
+    private void drawMouseHighlight(float zLevel, Point mousePoint) {
+        progressionRenderer.drawMouseHighlight(zLevel, mousePoint);
     }
 
     @Override
-    public boolean doesGuiPauseGame() {
-        return false;
+    public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseButton != 0) return;
+        Point p = new Point(mouseX, mouseY);
+        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            return;
+        }
+        progressionRenderer.propagateClick(p);
     }
 
 }
