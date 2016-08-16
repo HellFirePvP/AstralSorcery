@@ -58,7 +58,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ofr.font_size_multiplicator = 0.2F;
+        ofr.font_size_multiplicator = 0.08F;
         drawScroll();
 
         drawHeader();
@@ -72,7 +72,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         String locName = I18n.translateToLocal(constellation.getName()).toUpperCase();
         int length = ofr.getStringWidth(locName);
         int offsetLeft = width / 2 - length / 2;
-        int offsetTop = guiTop + 25;
+        int offsetTop = guiTop + 20;
         GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.8F);
         ofr.drawString(locName, offsetLeft, offsetTop, null, 0F, 0);
         GL11.glColor4f(1, 1, 1, 1);

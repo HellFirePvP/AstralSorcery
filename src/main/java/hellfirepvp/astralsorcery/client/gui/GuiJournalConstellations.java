@@ -1,24 +1,12 @@
 package hellfirepvp.astralsorcery.client.gui;
 
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.util.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.event.world.WorldEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -27,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Random;
+
+import static hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster.drawConstellationRect;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,15 +28,26 @@ import java.util.Map;
  */
 public class GuiJournalConstellations extends GuiScreenJournal {
 
+    private static final Map<Integer, Point> tierOffsetMap = new HashMap<>();
+
+    private final Random rand = new Random();
+    private final long staticSeed;
+
     private List<Constellation> unmapped;
     private List<Tier> discoveredCompleteTiers;
 
     private Map<Rectangle, Tier> rectTierRenderMap = new HashMap<>();
+    private Rectangle rectUnmapped = null;
 
     private GuiJournalConstellations(List<Constellation> constellations, List<Tier> tiers) {
         super(1);
         this.unmapped = constellations;
         this.discoveredCompleteTiers = tiers;
+        this.staticSeed = 0xF095561C419B8123L ^ System.currentTimeMillis();
+    }
+
+    private void resetRandom() {
+        this.rand.setSeed(staticSeed);
     }
 
     public static GuiScreenJournal getConstellationScreen() {
@@ -76,9 +78,9 @@ public class GuiJournalConstellations extends GuiScreenJournal {
             tiersFound.add(t);
         }
         if(tiersFound.isEmpty()) {
-            return new GuiJournalConstellationCluster(1, false, unmapped);
+            return new GuiJournalConstellationCluster(1, false, "gui.journal.c.unmapped", unmapped);
         } else if(tiersFound.size() == 1) {
-            return new GuiJournalConstellationCluster(1, true, tierMapped.get(tiersFound.get(0)));
+            return new GuiJournalConstellationCluster(1, true, tiersFound.get(0).getUnlocalizedName(), tierMapped.get(tiersFound.get(0)));
         } else {
             return new GuiJournalConstellations(unmapped, tiersFound);
         }
@@ -91,61 +93,37 @@ public class GuiJournalConstellations extends GuiScreenJournal {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        resetRandom();
+
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         drawDefault(textureResBlank);
 
         rectTierRenderMap.clear();
+        rectUnmapped = null;
+
+        Point mouse = getCurrentMousePoint();
+
         zLevel += 250;
-        drawTierGroups();
+        drawTierGroups(mouse);
         zLevel -= 250;
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
 
-    private void drawTierGroups() {
-        double width = 78;
-        double height = 108;
-        double offsetX = guiLeft + 15;
-        double offsetY = guiTop +  15;
-        drawCRect(Constellations.bigDipper,    offsetX,              offsetY              );
-        drawCRect(Constellations.tenifium,   offsetX + width + 20, offsetY              );
-        drawCRect(Constellations.ara,        offsetX,              offsetY + height + 20);
-        drawCRect(Constellations.fertilitas, offsetX + width + 20, offsetY + height + 20);
-    }
-
-    private void drawCRect(Constellation display, double offsetX, double offsetY) {
-        GL11.glEnable(GL11.GL_BLEND);
-
-        Color c = Color.DARK_GRAY;
-        float r = c.getRed()   / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue()  / 255F;
-
-        GL11.glColor4f(r, g, b, 1F);
-
-        RenderConstellation.renderConstellationIntoGUI(c, display,
-                MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), zLevel,
-                80, 80, 2F, new RenderConstellation.BrightnessFunction() {
-            @Override
-            public float getBrightness() {
-                return 0.15F;
-            }
-        }, true, false);
-
-        GL11.glColor4f(r, g, b, 0.7F);
-
-        String trName = I18n.translateToLocal(display.getName()).toUpperCase();
-        OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
-        fontRenderer.font_size_multiplicator = 0.11F;
-        float yOffset = ((float) offsetY) + 85F;
-        float fullLength = 40 - (((float) fontRenderer.getStringWidth(trName)) / 2F);
-
-        fontRenderer.zLevel = zLevel;
-        fontRenderer.drawString(trName, (float) offsetX + fullLength, yOffset, null, 1F, 0);
-
-        GL11.glColor4f(1F, 1F, 1F, 1F);
+    private void drawTierGroups(Point mouse) {
+        int startIndex = 0;
+        if(!unmapped.isEmpty()) {
+            Point p = tierOffsetMap.get(startIndex);
+            startIndex++;
+            rectUnmapped = drawConstellationRect(unmapped.get(rand.nextInt(unmapped.size())), guiLeft + p.x, guiTop + p.y, zLevel, mouse, "gui.journal.c.unmapped");
+        }
+        for (int i = 0; i < discoveredCompleteTiers.size(); i++) {
+            Tier t = discoveredCompleteTiers.get(i);
+            Point at = tierOffsetMap.get(startIndex + i);
+            rectTierRenderMap.put(drawConstellationRect(t.getRandomConstellation(rand), guiLeft + at.x, guiTop + at.y, zLevel, mouse, t.getUnlocalizedName()), t);
+        }
     }
 
     @Override
@@ -154,7 +132,28 @@ public class GuiJournalConstellations extends GuiScreenJournal {
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.currentInstance == null ? new GuiJournalProgression() : GuiJournalProgression.currentInstance);
+            return;
         }
+        if(rectUnmapped != null && rectUnmapped.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(-1, false, "gui.journal.c.unmapped", unmapped));
+            return;
+        }
+        for (Rectangle r : rectTierRenderMap.keySet()) {
+            if(r.contains(p)) {
+                Tier t = rectTierRenderMap.get(r);
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(-1, true, t.getUnlocalizedName(), t.getConstellations()));
+                return;
+            }
+        }
+    }
+
+    static {
+        tierOffsetMap.put(0, new Point( 30,  20));
+        tierOffsetMap.put(1, new Point( 20, 150));
+        tierOffsetMap.put(2, new Point(120, 100));
+        tierOffsetMap.put(3, new Point(310,  20));
+        tierOffsetMap.put(4, new Point(220, 100));
+        tierOffsetMap.put(5, new Point(310, 140));
     }
 
 }

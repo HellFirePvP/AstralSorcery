@@ -1,0 +1,125 @@
+package hellfirepvp.astralsorcery.client.gui;
+
+import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.util.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.Tier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.translation.I18n;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.EnumSet;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: GuiJournalConstellationDetails
+ * Created by HellFirePvP
+ * Date: 16.08.2016 / 19:09
+ */
+public class GuiJournalConstellationDetails extends GuiScreenJournal {
+
+    private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
+    private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
+
+    private Constellation constellation;
+    private GuiJournalConstellationCluster origin;
+    private boolean detailed;
+
+    private Rectangle rectBack;
+    private List<CelestialHandler.MoonPhase> phases = new LinkedList<>();
+
+    public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, Constellation c, boolean detailed) {
+        super(-1);
+        this.origin = origin;
+        this.constellation = c;
+        this.detailed = detailed;
+        testPhases();
+    }
+
+    private void testPhases() {
+        Tier t = constellation.queryTier();
+        for (CelestialHandler.MoonPhase ph : CelestialHandler.MoonPhase.values()) {
+            if(t.areAppearanceConditionsMet(ph, EnumSet.noneOf(CelestialHandler.CelestialEvent.class)))
+                phases.add(ph);
+        }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        drawDefault(textureResBlank);
+        zLevel += 150;
+        drawBackArrow();
+        drawConstellation();
+        //TODO details
+        zLevel -= 150;
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+    }
+
+    private void drawConstellation() {
+        float br = 0.3F;
+        GL11.glColor4f(br, br, br, 0.8F);
+        String name = I18n.translateToLocal(constellation.getName()).toUpperCase();
+        fontRenderer.zLevel = zLevel;
+        fontRenderer.font_size_multiplicator = 0.08F;
+        int width = fontRenderer.getStringWidth(name);
+        float offsetX = 110 - (width / 2);
+        fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, null, 0.7F, 0);
+        GL11.glEnable(GL11.GL_BLEND);
+        RenderConstellation.renderConstellationIntoGUI(new Color(0x555555), constellation, guiLeft + 15, guiTop + 60, zLevel, 190, 190, 3F, new RenderConstellation.BrightnessFunction() {
+            @Override
+            public float getBrightness() {
+                return 0.5F;
+            }
+        }, true, false);
+    }
+
+    private void drawBackArrow() {
+        Point mouse = getCurrentMousePoint();
+        int width = 30;
+        int height = 15;
+        rectBack = new Rectangle(guiLeft + 197, guiTop + 242, width, height);
+        GL11.glPushMatrix();
+        GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+        if(rectBack.contains(mouse)) {
+            GL11.glScaled(1.1, 1.1, 1.1);
+        }
+        GL11.glColor4f(1F, 1F, 1F, 0.8F);
+        GL11.glTranslated(-(width / 2), -(height / 2), 0);
+        texArrowLeft.bind();
+        drawTexturedRectAtCurrentPos(width, height);
+        GL11.glPopMatrix();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if(mouseButton != 0) return;
+        Point p = new Point(mouseX, mouseY);
+        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.currentInstance == null ? new GuiJournalProgression() : GuiJournalProgression.currentInstance);
+            return;
+        }
+        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            return;
+        }
+        if(rectBack != null && rectBack.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(origin);
+        }
+    }
+
+}

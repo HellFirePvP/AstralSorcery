@@ -69,6 +69,26 @@ public class Tier {
         return new Color(Color.HSBtoRGB((230F + (50F * perc)) / 360F, 0.8F, 0.8F - (0.3F * perc)));
     }
 
+    public String chanceAsRarityUnlocName() {
+        String unloc = "tier.chance.";
+        if(chance <= 0.1) {
+            unloc += "rare";
+        } else if(chance <= 0.25) {
+            unloc += "scarce";
+        } else if(chance <= 0.5) {
+            unloc += "uncommon";
+        } else if(chance < 1) {
+            unloc += "common";
+        } else {
+            unloc += "always";
+        }
+        return unloc;
+    }
+
+    public String getUnlocalizedName() {
+        return "tier." + tierNumber;
+    }
+
     public float getShowupChance() {
         return chance;
     }

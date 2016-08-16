@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
+import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
@@ -21,6 +22,7 @@ import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
@@ -98,8 +100,10 @@ public class ClientProxy extends CommonProxy {
         super.postInit();
 
         //Preloading heavy textures
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG").allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper").allocateGlId();
+        MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
 
         ClientJournalMapping.init();
     }

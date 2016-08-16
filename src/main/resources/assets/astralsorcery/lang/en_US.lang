@@ -10,6 +10,7 @@ misc.link.unlink=Unlinked %s from %s!
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
+gui.journal.c.unmapped=Unknown
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
@@ -58,6 +59,18 @@ tile.BlockMarble.engraved.name=Engraved Marble
 
 tile.BlockTest2.name=PrismLens [WIP]
 tile.BlockTest.name=Lens [WIP]
+
+tier.0=Magis
+tier.1=Prope
+tier.2=Longe
+tier.3=Ingens
+tier.4=Infinium
+
+tier.chance.always=Guaranteed
+tier.chance.common=Likely
+tier.chance.uncommon=Sometimes
+tier.chance.scarce=Rarely
+tier.chance.rare=Very rarely
 
 astralsorcery.constellation.orion=Orion
 astralsorcery.constellation.bigDipper=Big Dipper
