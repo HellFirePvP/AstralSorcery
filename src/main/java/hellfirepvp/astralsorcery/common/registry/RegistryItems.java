@@ -74,14 +74,14 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.customSandOre));
         //registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
-        registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
+        //registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
         registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));
 
         registerItem(new ItemCollectorCrystal());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {
-        registerDefaultItemBlock(block, block.getUnlocalizedName());
+        registerDefaultItemBlock(block, block.getClass().getSimpleName());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block, String name) {

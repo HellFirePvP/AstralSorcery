@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -37,6 +38,7 @@ public class BlockCustomSandOre extends Block implements BlockCustomName, BlockV
     public BlockCustomSandOre() {
         super(Material.SAND, MapColor.YELLOW);
         setHardness(0.5F);
+        setSoundType(SoundType.SAND);
         setHarvestLevel("shovel", 1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
@@ -70,7 +72,8 @@ public class BlockCustomSandOre extends Block implements BlockCustomName, BlockV
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case AQUAMARINE:
-                int i = rand.nextInt(fortune + 2) - 1;
+                int f = fortune + 1;
+                int i = rand.nextInt(f * 2) - 1;
                 if(i < 0) {
                     i = 0;
                 }

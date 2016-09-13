@@ -1,19 +1,26 @@
 package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeRiver;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -91,6 +98,49 @@ public class AstralWorldGenerator implements IWorldGenerator {
                 int rZ = (chunkZ  * 16) + random.nextInt(16);
                 BlockPos pos = new BlockPos(rX, rY, rZ);
                 marbleMineable.generate(world, random, pos);
+            }
+        }
+        if(Config.aquamarineAmount > 0) {
+            for (int i = 0; i < Config.aquamarineAmount; i++) {
+                int rX = (chunkX  * 16) + random.nextInt(16);
+                int rY = 50 + random.nextInt(10);
+                int rZ = (chunkZ  * 16) + random.nextInt(16);
+                BlockPos pos = new BlockPos(rX, rY, rZ);
+                IBlockState stateAt = world.getBlockState(pos);
+                if(!stateAt.getBlock().equals(Blocks.SAND)) {
+                    continue;
+                }
+                Biome at = world.getBiomeGenForCoords(pos);
+                if(at != null) {
+                    BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(at);
+                    if(types != null) {
+                        boolean found = false;
+                        for (BiomeDictionary.Type t : types) {
+                            if(t != null && t.equals(BiomeDictionary.Type.RIVER)) found = true;
+                        }
+                        if(!found)
+                            continue;
+                    } else {
+                        if(!(at instanceof BiomeRiver))
+                            continue;
+                    }
+
+                    boolean foundWater = false;
+                    for (int yy = 0; yy < 2; yy++) {
+                        BlockPos check = pos.offset(EnumFacing.UP, yy);
+                        IBlockState bs = world.getBlockState(check);
+                        Block block = bs.getBlock();
+                        if(block instanceof BlockLiquid && bs.getMaterial() == Material.WATER) {
+                            foundWater = true;
+                            break;
+                        }
+                    }
+                    if(!foundWater)
+                        continue;
+
+                    world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState()
+                            .withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));
+                }
             }
         }
     }

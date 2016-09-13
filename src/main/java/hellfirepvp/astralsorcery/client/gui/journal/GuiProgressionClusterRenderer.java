@@ -89,7 +89,7 @@ public class GuiProgressionClusterRenderer {
                     GL11.glTranslated(r.getX(), r.getY(), 0);
                     GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
                     String name = clickableNodes.get(r).getUnLocalizedName();
-                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), Color.BLACK.getRGB(), Color.BLUE.getRGB());
+                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), 0x505000ff, 0xf0100010);
                     GL11.glPopMatrix();
                 }
             }

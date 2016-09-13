@@ -2,16 +2,8 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.util.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 

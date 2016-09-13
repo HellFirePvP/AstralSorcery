@@ -1,4 +1,4 @@
-itemGroup.astralsorcery=[AS] Astral Sorcery
+itemGroup.astralsorcery=Astral Sorcery
 itemGroup.astralsorcery.papers=[AS] Constellation Papers
 
 misc.moreInformation=<Hold SHIFT for more details>
@@ -11,6 +11,14 @@ misc.link.unlink=Unlinked %s from %s!
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
 gui.journal.c.unmapped=Unknown
+
+achievementpage.astralsorcery.name=AstralSorcery
+achievement.astralsorcery.minerockcrystal=Such pure crystals
+achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
+achievement.astralsorcery.buildtelescope=A clear view of the sky
+achievement.astralsorcery.buildtelescope.desc=Make a telescope
+achievement.astralsorcery.seeconstellation=What a beautiful pattern
+achievement.astralsorcery.seeconstellation.desc=Discover a constellation
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
@@ -41,7 +49,7 @@ entity.astralsorcery.EntityGrindstone.name=Grindstone
 
 item.ItemCraftingComponent.aquamarine.name=Aquamarine
 item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot
-item.ItemCraftingComponent.starmetal_dust.name=Starmetal Dust
+item.ItemCraftingComponent.stardust.name=Stardust
 
 item.ItemConstellationPaper.name=Constellation Paper
 item.ItemRockCrystalBase.name=Rock Crystal

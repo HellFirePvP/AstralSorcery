@@ -69,6 +69,9 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
             case ROCK_CRYSTAL:
                 drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                 break;
+            case STARMETAL:
+                drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
+                break;
         }
         return drops;
     }

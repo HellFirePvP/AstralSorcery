@@ -17,6 +17,7 @@ public class Config {
 
     //public static boolean stopOnIllegalState = true;
     public static int crystalDensity = 5;
+    public static int aquamarineAmount = 15;
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int shrineGenerationChance = 150;
     public static boolean generateShrines = true;
@@ -44,6 +45,7 @@ public class Config {
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 5, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk.");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
+        aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 15, 0, 32, "Defines how many aquamarine ores it'll attempt to generate in per chunk");
         generateShrines = latestConfig.getBoolean("generateShrines", "worldgen", true, "Set to true to enable shrine generation.");
         shrineGenerationChance = latestConfig.getInt("shrineGenerationChance", "worldgen", 150, 1, 200000, "Defines the chance if the worldgenerator will check a position in a chunk to spawn the shrine in. (onWorldGen: random.nextInt(shrineGenerationChance) == 0 -> check if generation is possible at 1 random pos in chunk.)");
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");

@@ -2,7 +2,6 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
-import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;

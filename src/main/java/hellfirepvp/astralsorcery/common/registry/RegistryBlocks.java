@@ -51,7 +51,7 @@ public class RegistryBlocks {
         blockMarble = registerBlock(new BlockMarble());
 
         //Mechanics
-        blockStructural = registerBlock(new BlockStructural());
+        //blockStructural = registerBlock(new BlockStructural());
         blockAltar = registerBlock(new BlockAltar());
 
         lens = registerBlock(new BlockLens());

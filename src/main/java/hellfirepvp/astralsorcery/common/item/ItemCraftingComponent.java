@@ -2,6 +2,8 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
+import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
+import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -19,7 +21,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.08.2016 / 13:10
  */
-public class ItemCraftingComponent extends Item implements IGrindable {
+public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants {
 
     public ItemCraftingComponent() {
         setMaxStackSize(64);
@@ -57,18 +59,40 @@ public class ItemCraftingComponent extends Item implements IGrindable {
         switch (type) {
             case STARMETAL_INGOT:
                 if(rand.nextInt(20) == 0) {
-                    return GrindResult.itemChange(new ItemStack(this, 1, MetaType.STARMETAL_DUST.getItemMeta()));
+                    return GrindResult.itemChange(new ItemStack(this, 1, MetaType.STARDUST.getItemMeta()));
                 }
                 break;
         }
         return GrindResult.failNoOp();
     }
 
+    @Override
+    public String[] getVariants() {
+        String[] sub = new String[MetaType.values().length];
+        MetaType[] values = MetaType.values();
+        for (int i = 0; i < values.length; i++) {
+            MetaType mt = values[i];
+            sub[i] = mt.getUnlocalizedName();
+        }
+        return sub;
+    }
+
+    @Override
+    public int[] getVariantMetadatas() {
+        int[] sub = new int[MetaType.values().length];
+        MetaType[] values = MetaType.values();
+        for (int i = 0; i < values.length; i++) {
+            MetaType mt = values[i];
+            sub[i] = mt.getItemMeta();
+        }
+        return sub;
+    }
+
     public static enum MetaType {
 
         AQUAMARINE,
         STARMETAL_INGOT,
-        STARMETAL_DUST;
+        STARDUST;
 
         public String getUnlocalizedName() {
             return name().toLowerCase();

@@ -2,11 +2,13 @@ package hellfirepvp.astralsorcery.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -41,7 +43,6 @@ public class RenderingUtils {
                 sumLineHeight += 2 + (tooltipData.size() - 1) * 10;
             float z = 300F;
 
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
             drawGradientRect(pX - 3,           pY - 4,                 z, pX + esWidth + 3, pY - 3,                 color2, color2);
             drawGradientRect(pX - 3,           pY + sumLineHeight + 3, z, pX + esWidth + 3, pY + sumLineHeight + 4, color2, color2);
             drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY + sumLineHeight + 3, color2, color2);
@@ -54,9 +55,10 @@ public class RenderingUtils {
             drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY - 3 + 1,                 color, color);
             drawGradientRect(pX - 3,           pY + sumLineHeight + 2, z, pX + esWidth + 3, pY + sumLineHeight + 3,     colOp, colOp);
 
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int i = 0; i < tooltipData.size(); ++i) {
                 String var14 = tooltipData.get(i);
-                fontRenderer.drawStringWithShadow(var14, pX, pY, -1);
+                fontRenderer.drawString(var14, pX, pY, Color.WHITE.getRGB());
                 if (i == 0)
                     pY += 2;
                 pY += 10;
@@ -88,10 +90,10 @@ public class RenderingUtils {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        vb.pos(toX, y, z).color(red1, green1, blue1, alpha1).endVertex();
-        vb.pos(x,   y, z).color(red1, green1, blue1, alpha1).endVertex();
-        vb.pos(x, toY, z).color(red2, green2, blue2, alpha2).endVertex();
-        vb.pos(x, y,   z).color(red2, green2, blue2, alpha2).endVertex(); //TODO Check botania 1.8 src.
+        vb.pos(toX, y,   z).color(red1, green1, blue1, alpha1).endVertex();
+        vb.pos(x,   y,   z).color(red1, green1, blue1, alpha1).endVertex();
+        vb.pos(x,   toY, z).color(red2, green2, blue2, alpha2).endVertex();
+        vb.pos(toX, toY, z).color(red2, green2, blue2, alpha2).endVertex();
         tes.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glDisable(GL11.GL_BLEND);

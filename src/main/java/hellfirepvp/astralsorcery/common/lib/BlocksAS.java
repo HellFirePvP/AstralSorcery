@@ -24,7 +24,7 @@ public class BlocksAS {
     //public static BlockStoneMachine stoneMachine;
     public static BlockAltar blockAltar;
     public static BlockMarble blockMarble;
-    public static BlockStructural blockStructural;
+    //public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
 
     public static BlockLens lens;

@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.RecipeSorter;
 
 /**
@@ -22,12 +25,13 @@ public class RegistryRecipes {
         RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
         CraftingManager manager = CraftingManager.getInstance();
+        FurnaceRecipes furnace = FurnaceRecipes.instance();
 
+        //Testing
         manager.addRecipe(new ShapedLightProximityRecipe(ItemsAS.linkingTool, "TTT", "TAT", "TTT", 'T', Blocks.STONE, 'A', Items.APPLE));
-    }
 
-    private static void registerToCraftingManager(IRecipe recipe) {
-        CraftingManager.getInstance().addRecipe(recipe);
+        furnace.addSmeltingRecipe(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()),
+                new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARMETAL_INGOT.getItemMeta()), 2F);
     }
 
 }

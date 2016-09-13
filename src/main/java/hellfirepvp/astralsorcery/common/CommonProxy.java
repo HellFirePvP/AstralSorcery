@@ -6,10 +6,12 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
@@ -18,7 +20,6 @@ import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.ritual.RitualComponentRegistry;
-import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
@@ -26,7 +27,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
@@ -72,6 +72,7 @@ public class CommonProxy implements IGuiHandler {
         LootTableUtil.initLootTable();
 
         registerOreDictEntries();
+        RegistryAchievements.init();
     }
 
     private void registerOreDictEntries() {
@@ -83,6 +84,7 @@ public class CommonProxy implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerAchievements());
         MinecraftForge.EVENT_BUS.register(TransmissionChunkTracker.getInstance());
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());

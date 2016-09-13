@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "altartype=altar_1": { "model":"astralsorcery:BlockModel_nothing" },
+        "altartype=altar_2": { "model":"astralsorcery:BlockModel_nothing" },
+        "altartype=altar_3": { "model":"astralsorcery:BlockModel_nothing" },
+        "altartype=altar_4": { "model":"astralsorcery:BlockModel_nothing" },
+        "altartype=altar_5": { "model":"astralsorcery:BlockModel_nothing" }
+    }
+}

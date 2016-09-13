@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -77,6 +78,9 @@ public class ResearchManager {
         for (Constellation c : csts) {
             progress.discoverConstellation(c.getName());
         }
+
+        player.addStat(RegistryAchievements.achvDiscoverConstellation);
+
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;
@@ -87,6 +91,9 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.discoverConstellation(c.getName());
+
+        player.addStat(RegistryAchievements.achvDiscoverConstellation);
+
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;

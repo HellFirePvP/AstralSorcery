@@ -68,7 +68,6 @@ public class ClientProxy extends CommonProxy {
             AstralSorcery.log.warn("AstralSorcery: Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
         }*/
         TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping TEISR
-
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
 
         super.preInit();
