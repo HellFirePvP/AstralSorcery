@@ -1,9 +1,12 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -71,7 +74,7 @@ public class GuiProgressionClusterRenderer {
             for (Rectangle r : clickableNodes.keySet()) {
                 if(r.contains(p)) {
                     ResearchNode clicked = clickableNodes.get(r);
-                    //TODO open Research GUI.
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPages(GuiJournalProgression.currentInstance, clicked));
                 }
             }
         }
@@ -82,7 +85,12 @@ public class GuiProgressionClusterRenderer {
         if(frame.contains(mousePoint)) {
             for (Rectangle r : clickableNodes.keySet()) {
                 if(r.contains(mousePoint)) {
-                    //TODO hover tooltips
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(r.getX(), r.getY(), 0);
+                    GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
+                    String name = clickableNodes.get(r).getUnLocalizedName();
+                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), Color.BLACK.getRGB(), Color.BLUE.getRGB());
+                    GL11.glPopMatrix();
                 }
             }
         }

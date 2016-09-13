@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,7 @@ public class RegistryEntities {
         int modEid = 0;
 
         registerEntity(EntityTelescope.class, "EntityTelescope", modEid++, 64, 10, true);
+        registerEntity(EntityGrindstone.class, "EntityGrindstone", modEid++, 64, 10, true);
         registerEntity(EntityItemHighlighted.class, "EntityHighlighted", modEid++, 64, 20, true);
     }
 

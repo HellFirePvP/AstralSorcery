@@ -37,6 +37,11 @@ public class WorldCacheManager implements ITickHandler {
         return instance;
     }
 
+    public static void wipeCache() {
+        cachedData.clear();
+        saveDir = null;
+    }
+
     public static <T extends CachedWorldData> T getOrLoadData(World world, SaveKey key) {
         CachedWorldData data = getFromCache(world, key);
         if(data != null) return (T) data;

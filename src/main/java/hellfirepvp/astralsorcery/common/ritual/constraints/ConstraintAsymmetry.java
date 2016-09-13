@@ -47,7 +47,7 @@ public class ConstraintAsymmetry extends RitualConstraint {
     }
 
     public List<BlockPos> mirrorPos(BlockPos offsetPos) {
-        List<BlockPos> out = new ArrayList<>(8);
+        List<BlockPos> out = new ArrayList<>(7);
         out.add(new BlockPos(-offsetPos.getX(),  offsetPos.getY(),  offsetPos.getZ()));
         out.add(new BlockPos( offsetPos.getX(), -offsetPos.getY(),  offsetPos.getZ()));
         out.add(new BlockPos( offsetPos.getX(),  offsetPos.getY(), -offsetPos.getZ()));

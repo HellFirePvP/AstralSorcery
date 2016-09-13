@@ -14,6 +14,8 @@ gui.journal.c.unmapped=Unknown
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
+astralsorcery.journal.text.test=I'm gonna write this mainly to test the functionality of the text page stuff i just added.<NL>Let's see if that actually<NL>works.<NL><NL>Test double next-line..<NL><NL>test
+
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Collectivity
@@ -21,6 +23,7 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
+constraint.description=Preferences
 constraint.symmetry=Symmetry
 constraint.asymmetry=Asymmetry
 constraint.horizontal=Horizontal
@@ -34,14 +37,23 @@ constraint.mindst.2=Distance 2
 constraint.mindst.3=Distance 3
 
 entity.astralsorcery.EntityTelescope.name=Telescope
+entity.astralsorcery.EntityGrindstone.name=Grindstone
+
+item.ItemCraftingComponent.aquamarine.name=Aquamarine
+item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot
+item.ItemCraftingComponent.starmetal_dust.name=Starmetal Dust
 
 item.ItemConstellationPaper.name=Constellation Paper
 item.ItemRockCrystalBase.name=Rock Crystal
 item.ItemTunedCrystal.name=Attuned Rock Crystal
-item.ItemTelescopePlacer.name=Telescope
+item.ItemEntityPlacer.telescope.name=Telescope
+item.ItemEntityPlacer.grindstone.name=Grindstone
 item.ItemLinkingTool.name=[WIP] Linking Tool
+item.ItemJournal.name=[WIP] Journal
 
 tile.BlockCustomOre.rock_crystal.name=Rock Crystal Ore
+tile.BlockCustomOre.starmetal.name=Starmetal Ore
+tile.BlockCustomSandOre.aquamarine.name=Aquamarine Sand-Ore
 tile.BlockCollectorCrystal.name=Collector Crystal
 tile.BlockAltar.altar_1.name=Luminous Crafting Table
 tile.BlockAltar.altar_2.name=[NoName-Attenuation] Altar
@@ -56,9 +68,8 @@ tile.BlockMarble.chiseled.name=Chiseled Marble
 tile.BlockMarble.arch.name=Marble Arch
 tile.BlockMarble.runed.name=Runed Marble
 tile.BlockMarble.engraved.name=Engraved Marble
-
-tile.BlockTest2.name=PrismLens [WIP]
-tile.BlockTest.name=Lens [WIP]
+tile.BlockPrism.name=PrismLens
+tile.BlockLens.name=Lens
 
 tier.0=Magis
 tier.1=Prope
@@ -66,6 +77,7 @@ tier.2=Longe
 tier.3=Ingens
 tier.4=Infinium
 
+tier.chance=Chance:
 tier.chance.always=Guaranteed
 tier.chance.common=Likely
 tier.chance.uncommon=Sometimes
@@ -73,27 +85,52 @@ tier.chance.scarce=Rarely
 tier.chance.rare=Very rarely
 
 astralsorcery.constellation.orion=Orion
-astralsorcery.constellation.bigDipper=Big Dipper
+astralsorcery.constellation.orion.info=Hunt
 astralsorcery.constellation.aquila=Aquila
+astralsorcery.constellation.aquila.info=Travel
 astralsorcery.constellation.ara=Ara
+astralsorcery.constellation.ara.info=Celestial
 astralsorcery.constellation.bootes=Bootes
+astralsorcery.constellation.bootes.info=Herding
 astralsorcery.constellation.caelum=Caelum
+astralsorcery.constellation.caelum.info=Grinding
 astralsorcery.constellation.circinus=Circinus
+astralsorcery.constellation.circinus.info=Directing
 astralsorcery.constellation.fornax=Fornax
+astralsorcery.constellation.fornax.info=Heat
 astralsorcery.constellation.libra=Libra
+astralsorcery.constellation.libra.info=Balance
+astralsorcery.constellation.mineralis=Mineralis
+astralsorcery.constellation.mineralis.info=Mineral
 astralsorcery.constellation.horologium=Horologium
+astralsorcery.constellation.horologium.info=Time
 astralsorcery.constellation.octans=Octans
+astralsorcery.constellation.octans.info=Orientation
 astralsorcery.constellation.phoenix=Phoenix
+astralsorcery.constellation.phoenix.info=Rebirth
 astralsorcery.constellation.scutum=Scutum
+astralsorcery.constellation.scutum.info=Shielding
 astralsorcery.constellation.rohini=Rohini
+astralsorcery.constellation.rohini.info=Structural
 astralsorcery.constellation.chitra=Chitra
+astralsorcery.constellation.chitra.info=Jewel
 astralsorcery.constellation.draco=Draco
+astralsorcery.constellation.draco.info=Flight
 astralsorcery.constellation.inpes=Inpes
+astralsorcery.constellation.inpes.info=Force
 astralsorcery.constellation.locurba=Locurba
+astralsorcery.constellation.locurba.info=Dislocation
 astralsorcery.constellation.visso=Visso
+astralsorcery.constellation.visso.info=Transmission
 astralsorcery.constellation.lucerna=Lucerna
+astralsorcery.constellation.lucerna.info=Light
 astralsorcery.constellation.tenifium=Tenefium
+astralsorcery.constellation.tenifium.info=Darkness
 astralsorcery.constellation.fertilitas=Fertilitas
+astralsorcery.constellation.fertilitas.info=Fertility
 astralsorcery.constellation.reatio=Reatio
+astralsorcery.constellation.reatio.info=Resonance
+
+astralsorcery.constellation.bigDipper=Big Dipper
 
 constellation.noInformation=No useful information

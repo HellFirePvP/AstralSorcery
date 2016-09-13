@@ -128,13 +128,13 @@ public class GuiProgressionRenderer {
 
     //Nothing to actually click here, we redirect if we can.
     public void propagateClick(Point p) {
-        if(clusterRenderer != null) {
+        if(clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
             clusterRenderer.propagateClick(p);
         }
     }
 
     public void drawMouseHighlight(float zLevel, Point mousePoint) {
-        if(clusterRenderer != null) {
+        if(clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
             clusterRenderer.drawMouseHighlight(zLevel, mousePoint);
         }
     }

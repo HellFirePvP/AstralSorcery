@@ -1,12 +1,13 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.item.ItemTelescopePlacer;
+import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
@@ -56,10 +57,11 @@ public class RegistryItems {
 
     //"Normal" items
     private static void registerItems() {
+        craftingComponent = registerItem(new ItemCraftingComponent());
         constellationPaper = registerItem(new ItemConstellationPaper());
         rockCrystal = registerItem(new ItemRockCrystalBase());
         tunedCrystal = registerItem(new ItemTunedCrystal());
-        telescopePlacer = registerItem(new ItemTelescopePlacer());
+        entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
     }
@@ -69,7 +71,8 @@ public class RegistryItems {
         RegistryBlocks.defaultItemBlocksToRegister.forEach(RegistryItems::registerDefaultItemBlock);
 
         registerItem(new ItemBlockCustomName(BlocksAS.customOre));
-        registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
+        registerItem(new ItemBlockCustomName(BlocksAS.customSandOre));
+        //registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
         registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
         registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));

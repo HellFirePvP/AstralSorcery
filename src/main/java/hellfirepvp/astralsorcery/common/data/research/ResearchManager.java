@@ -190,6 +190,11 @@ public class ResearchManager {
         return pDir;
     }
 
+    public static void saveAndClearServerCache() {
+        playerProgressServer.keySet().forEach(hellfirepvp.astralsorcery.common.data.research.ResearchManager::savePlayerKnowledge);
+        playerProgressServer.clear();
+    }
+
     public static void logoutResetClient(EntityPlayer player) {
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);

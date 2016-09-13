@@ -28,6 +28,7 @@ import java.io.IOException;
 public class GuiJournalProgression extends GuiScreenJournal {
 
     public static GuiJournalProgression currentInstance = null;
+    public boolean expectReinit = false;
 
     private static GuiProgressionRenderer progressionRenderer;
 
@@ -41,6 +42,11 @@ public class GuiJournalProgression extends GuiScreenJournal {
     @Override
     public void initGui() {
         super.initGui();
+
+        if(expectReinit) {
+            expectReinit = false;
+            return; //We ASSUME, that the state is valid.
+        }
 
         if(currentInstance == null) {
             currentInstance = this;

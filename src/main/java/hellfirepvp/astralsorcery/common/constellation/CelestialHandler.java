@@ -29,7 +29,7 @@ public class CelestialHandler {
     public static final int LUNAR_ECLIPSE_HALF_DUR = 2400;
 
     public static int lastTrackedDate = -1;
-    private static Map<Tier, TierIteration> constellationIterations = new HashMap<Tier, TierIteration>();
+    private static Map<Tier, TierIteration> constellationIterations = new HashMap<>();
 
     private static long savedSeed;
     private static Random rand = null;
@@ -116,9 +116,9 @@ public class CelestialHandler {
     }
 
     private static void scheduleDayProgression() {
-        for (Tier tier : constellationIterations.keySet()) {
-            constellationIterations.get(tier).nextDay();
-        }
+        /*for (Tier tier : constellationIterations.keySet()) {
+            constellationIterations.get(tier).
+        }*/
 
         for (Tier t : ConstellationRegistry.ascendingTiers()) {
             TierIteration ti;
@@ -129,9 +129,11 @@ public class CelestialHandler {
                 ti = constellationIterations.get(t);
             }
 
-            if (ti.isShowing()) continue; //We don't need to change if the tier agrees that it doesn't need to vanish.
             if (ti.shouldShow() && rand.nextFloat() < t.getShowupChance()) {
-                ti.setShowing();
+                ti.showing = true;
+                ti.incCounter();
+            } else {
+                ti.showing = false;
             }
         }
     }
@@ -195,8 +197,7 @@ public class CelestialHandler {
             this.tier = tier;
         }
 
-        //We only let it vanish, if the conditions are no longer met.
-        private void nextDay() {
+        /*private void nextDay() {
             if (!shouldShow()) {
                 showing = false;
             } else {
@@ -207,7 +208,7 @@ public class CelestialHandler {
         private void setShowing() {
             this.showing = true;
             incCounter();
-        }
+        }*/
 
         private void incCounter() {
             this.counter++;

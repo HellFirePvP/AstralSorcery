@@ -45,7 +45,7 @@ public class TileCrystalLens extends TileTransmissionBase {
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockTest.name";
+        return "tile.BlockLens.name";
     }
 
     @Override

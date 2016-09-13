@@ -43,7 +43,7 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(MACHINE_TYPE, MachineType.GRINDSTONE));
+        //setDefaultState(this.blockState.getBaseState().withProperty(MACHINE_TYPE, MachineType.GRINDSTONE));
     }
 
     @Override
@@ -135,7 +135,7 @@ public class BlockStoneMachine extends BlockContainer implements BlockCustomName
 
     public static enum MachineType implements IStringSerializable, IVariantTileProvider {
 
-        GRINDSTONE((world, state) -> new TileGrindstone());
+        ;
 
         //Ugly workaround to make constructors nicer
         private final IVariantTileProvider provider;

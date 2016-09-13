@@ -65,13 +65,18 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
         drawDefault(textureResBlank);
+
         zLevel += 250;
         drawNavArrows();
+        fRend.zLevel = zLevel;
+        fRend.font_size_multiplicator = 0.07F;
         drawTitle();
         rectCRenderMap.clear();
         drawConstellations();
         zLevel -= 250;
+
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -95,8 +100,6 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
             GL11.glColor4f(r, g, b, 1F);
             String translated = I18n.translateToLocal(unlocTitle).toUpperCase();
-            fRend.zLevel = zLevel;
-            fRend.font_size_multiplicator = 0.07F;
             fRend.drawString(translated, guiLeft + 225, guiTop + 14, Color.DARK_GRAY, 0.7F, 0);
             GL11.glColor4f(1F, 1F, 1F, 1F);
         }
@@ -223,11 +226,11 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             return;
         }
         if(rectPrev != null && rectPrev.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId - 6, isDiscovered, unlocTitle, constellations));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId - 1, isDiscovered, unlocTitle, constellations));
             return;
         }
         if(rectNext != null && rectNext.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId + 6, isDiscovered, unlocTitle, constellations));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId + 1, isDiscovered, unlocTitle, constellations));
         }
     }
 

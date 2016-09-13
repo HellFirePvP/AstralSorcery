@@ -6,13 +6,16 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -359,6 +362,26 @@ public class StructureAncientShrine extends StructureBlockArray {
         addBlock( 0, 3,  0, mPillar);
         addBlock( 0, 4,  0, mChisel);
         addBlock( 0, 5,  0, Blocks.WATER.getDefaultState());
+
+        TileEntityCallback lootCallback = new TileEntityCallback() {
+            @Override
+            public boolean isApplicable(TileEntity te) {
+                return te != null && te instanceof TileEntityChest;
+            }
+
+            @Override
+            public void onPlace(World world, BlockPos at, TileEntity te) {
+                if(te instanceof TileEntityChest) {
+                    ((TileEntityChest) te).setLootTable(LootTableUtil.LOOT_TABLE_SHRINE, world.rand.nextLong());
+                }
+            }
+        };
+
+        addBlock( 4, -5, -4, Blocks.CHEST.getDefaultState());
+        addTileCallback(new BlockPos(4, -5, -4), lootCallback);
+
+        addBlock( -4, -5, 4, Blocks.CHEST.getDefaultState());
+        addTileCallback(new BlockPos(-4, -5, 4), lootCallback);
 
         addBlock(0, -3, 0, BlocksAS.collectorCrystal.getDefaultState());
         addTileCallback(new BlockPos(0, -3, 0), new TileEntityCallback() {

@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionH
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -68,6 +69,7 @@ public class CommonProxy implements IGuiHandler {
         RegistryResearch.init();
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
+        LootTableUtil.initLootTable();
 
         registerOreDictEntries();
     }
@@ -84,6 +86,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(TransmissionChunkTracker.getInstance());
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
+        MinecraftForge.EVENT_BUS.register(new LootTableUtil());
 
         TickManager manager = TickManager.getInstance();
         registerTickHandlers(manager);

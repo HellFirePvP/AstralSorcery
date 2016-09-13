@@ -5,10 +5,13 @@ import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint;
+import hellfirepvp.astralsorcery.common.ritual.constraints.SizeConstraint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
@@ -60,22 +63,88 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         drawDefault(textureResBlank);
+
         zLevel += 150;
         drawBackArrow();
+        fontRenderer.zLevel = zLevel;
+        fontRenderer.font_size_multiplicator = 0.08F;
         drawConstellation();
-        //TODO details
+        drawPhaseInformation();
+        if(detailed) {
+            drawExtendedInformation();
+        }
         zLevel -= 150;
+
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    private void drawExtendedInformation() {
+        fontRenderer.font_size_multiplicator = 0.08F;
+        float br = 0.3F;
+        GL11.glColor4f(br, br, br, 0.8F);
+        String info = I18n.translateToLocal(constellation.getInfoString()).toUpperCase();
+        int w = fontRenderer.getStringWidth(info);
+        float chX = 305 - (w / 2);
+        fontRenderer.drawString(info, guiLeft + chX, guiTop + 18, null, 0.7F, 0);
+
+        texArrowLeft.bind();
+        fontRenderer.font_size_multiplicator = 0.06F;
+        String pref = I18n.translateToLocal("constraint.description");
+        fontRenderer.drawString(pref, guiLeft + 228, guiTop + 60, null, 0.7F, 0);
+
+        texArrowLeft.bind();
+        fontRenderer.font_size_multiplicator = 0.05F;
+        SizeConstraint sc = constellation.getSizeConstraint();
+        String trSize = I18n.translateToLocal(sc.getUnlocalizedName());
+        fontRenderer.drawString("- " + trSize, guiLeft + 228, guiTop + 85, null, 0.7F, 0);
+
+        List<RitualConstraint> constrList = constellation.getConstraints();
+        for (int i = 0; i < constrList.size(); i++) {
+            RitualConstraint cstr = constrList.get(i);
+            String str = I18n.translateToLocal(cstr.getUnlocalizedName());
+            texArrowLeft.bind();
+            fontRenderer.font_size_multiplicator = 0.05F;
+            fontRenderer.drawString("- " + str, guiLeft + 228, guiTop + 107 + (i * 22), null, 0.7F, 0);
+        }
+    }
+
+    private void drawPhaseInformation() {
+        float br = 0.2F;
+        GL11.glColor4f(br, br, br, 0.6F);
+        GL11.glPushMatrix();
+        fontRenderer.zLevel = zLevel;
+        fontRenderer.font_size_multiplicator = 0.05F;
+        String trCh = detailed ? I18n.translateToLocal(constellation.queryTier().chanceAsRarityUnlocName()).toUpperCase() : "???";
+        String chance = I18n.translateToLocal("tier.chance").toUpperCase();
+
+        fontRenderer.drawString(chance, guiLeft + 228, guiTop + 175, null, 0.7F, 0);
+        texArrowLeft.bind(); //Nvm this here.
+
+        fontRenderer.font_size_multiplicator = 0.045F;
+        fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 196, null, 0.7F, 0);
+        GL11.glPopMatrix();
+
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        int size = 19;
+        int offsetX = 105 + (width / 2) - (phases.size() * (size + 2)) / 2;
+        int offsetY = 220 + guiTop;
+        for (int i = 0; i < phases.size(); i++) {
+            CelestialHandler.MoonPhase ph = phases.get(i);
+            MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA);
+            drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDisable(GL11.GL_BLEND);
+        }
     }
 
     private void drawConstellation() {
         float br = 0.3F;
         GL11.glColor4f(br, br, br, 0.8F);
         String name = I18n.translateToLocal(constellation.getName()).toUpperCase();
-        fontRenderer.zLevel = zLevel;
-        fontRenderer.font_size_multiplicator = 0.08F;
         int width = fontRenderer.getStringWidth(name);
         float offsetX = 110 - (width / 2);
         fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, null, 0.7F, 0);

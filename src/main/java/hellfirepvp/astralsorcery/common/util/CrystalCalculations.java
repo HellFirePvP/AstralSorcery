@@ -24,6 +24,7 @@ public class CrystalCalculations {
     }
 
     //Between 3 and 9-ish
+    //Unused atm
     public static float getThroughputCap(CrystalProperties properties) {
         float sizeDistr = (((float) properties.getSize()) / 100F) / 2;
         return (float) (3 + (Math.pow(sizeDistr, 2)));

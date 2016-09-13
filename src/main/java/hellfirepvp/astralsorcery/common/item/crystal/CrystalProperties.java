@@ -26,8 +26,9 @@ public class CrystalProperties {
 
     private static final Random rand = new Random();
 
-    public static final int MAX_SIZE = 500;
-    private static final CrystalProperties MAXED_PROPERTIES = new CrystalProperties(MAX_SIZE, 100, 100);
+    public static final int MAX_SIZE_ROCK = 500;
+    public static final int MAX_SIZE_CELESTIAL = 800;
+    private static final CrystalProperties MAXED_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100);
 
     private int size; //(theoretically) 0 to 500
     private int purity; //0 to 100 where 100 being completely pure.
@@ -68,16 +69,23 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties createStructural() {
-        int size = Math.min(CrystalProperties.MAX_SIZE, CrystalProperties.MAX_SIZE / 2 + rand.nextInt(CrystalProperties.MAX_SIZE));
+        int size = Math.min(CrystalProperties.MAX_SIZE_ROCK, CrystalProperties.MAX_SIZE_ROCK / 2 + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK));
         int purity = 60 + rand.nextInt(41);
         int collect = 45 + rand.nextInt(56);
         return new CrystalProperties(size, purity, collect);
     }
 
-    public static CrystalProperties createRandom() {
-        int size = (rand.nextInt(CrystalProperties.MAX_SIZE) + rand.nextInt(CrystalProperties.MAX_SIZE)) / 2;
-        int purity = ((rand.nextInt(101) + rand.nextInt(101)) + 2) / 2;
+    public static CrystalProperties createRandomRock() {
+        int size = (rand.nextInt(CrystalProperties.MAX_SIZE_ROCK) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK)) / 2;
+        int purity = (rand.nextInt(101) + rand.nextInt(101)) / 2;
         int collect = 5 + rand.nextInt(26);
+        return new CrystalProperties(size, purity, collect);
+    }
+
+    public static CrystalProperties createRandomCelestial() {
+        int size = (rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL) + rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL)) / 2;
+        int purity = 40 + rand.nextInt(61);
+        int collect = 50 + rand.nextInt(26);
         return new CrystalProperties(size, purity, collect);
     }
 

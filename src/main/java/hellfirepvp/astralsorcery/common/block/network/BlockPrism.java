@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.block;
+package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -21,9 +21,9 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 07.08.2016 / 22:37
  */
-public class BlockTest2 extends BlockStarlightNetwork {
+public class BlockPrism extends BlockStarlightNetwork {
 
-    public BlockTest2() {
+    public BlockPrism() {
         super(Material.ROCK, MapColor.BLACK);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

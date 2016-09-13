@@ -1,6 +1,5 @@
-package hellfirepvp.astralsorcery.common.block;
+package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
@@ -11,20 +10,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockTest
+ * Class: BlockLens
  * Created by HellFirePvP
  * Date: 07.08.2016 / 22:31
  */
-public class BlockTest extends BlockStarlightNetwork {
+public class BlockLens extends BlockStarlightNetwork {
 
-    public BlockTest() {
+    public BlockLens() {
         super(Material.ROCK, MapColor.BLACK);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

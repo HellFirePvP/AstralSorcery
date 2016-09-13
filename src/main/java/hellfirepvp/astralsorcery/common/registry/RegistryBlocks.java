@@ -1,8 +1,9 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.block.BlockTest;
-import hellfirepvp.astralsorcery.common.block.BlockTest2;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.network.BlockLens;
+import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
@@ -46,19 +47,20 @@ public class RegistryBlocks {
     private static void registerBlocks() {
         //WorldGen&Related
         customOre = registerBlock(new BlockCustomOre());
+        customSandOre = registerBlock(new BlockCustomSandOre());
         blockMarble = registerBlock(new BlockMarble());
 
         //Mechanics
         blockStructural = registerBlock(new BlockStructural());
         blockAltar = registerBlock(new BlockAltar());
 
-        lens = registerBlock(new BlockTest());
-        lensPrism = registerBlock(new BlockTest2());
+        lens = registerBlock(new BlockLens());
+        lensPrism = registerBlock(new BlockPrism());
         queueDefaultItemBlock(lens);
         queueDefaultItemBlock(lensPrism);
 
         //Machines&Related
-        stoneMachine = registerBlock(new BlockStoneMachine());
+        //stoneMachine = registerBlock(new BlockStoneMachine());
         collectorCrystal = registerBlock(new BlockCollectorCrystal());
     }
 
@@ -66,6 +68,7 @@ public class RegistryBlocks {
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(customOre);
+        registerBlockRender(customSandOre);
     }
 
     //Tiles

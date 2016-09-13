@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
+import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
 import hellfirepvp.astralsorcery.client.util.BindableResource;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -30,6 +31,7 @@ public class ResearchNode {
     private BindableResource texture;
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
+    private List<IJournalPage> pages = new LinkedList<>();
 
     private ResearchNode(RenderType type, String unlocName, int rPosX, int rPosZ) {
         this.id = counter;
@@ -63,6 +65,11 @@ public class ResearchNode {
         return connectionsTo;
     }
 
+    public ResearchNode addPage(IJournalPage page) {
+        pages.add(page);
+        return this;
+    }
+
     public ResearchNode setSpecial() {
         this.special = true;
         return this;
@@ -86,6 +93,10 @@ public class ResearchNode {
 
     public BindableResource getTexture() {
         return texture;
+    }
+
+    public List<IJournalPage> getPages() {
+        return pages;
     }
 
     public String getUnLocalizedName() {

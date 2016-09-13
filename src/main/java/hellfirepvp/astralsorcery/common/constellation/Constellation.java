@@ -2,12 +2,15 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint;
+import hellfirepvp.astralsorcery.common.ritual.constraints.SizeConstraint;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,6 +27,8 @@ public class Constellation {
     private int tier = -1;
     private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
+    private SizeConstraint sizeConstraint = RitualConstraint.SIZE_4;
+    private List<RitualConstraint> constraints = new LinkedList<>();
 
     private List<StarLocation> unmodifiableStars;
     private List<StarConnection> unmodifiableConnections;
@@ -72,8 +77,32 @@ public class Constellation {
         return ConstellationRegistry.getTier(getAssociatedTier());
     }
 
+    public void setSizeConstraint(SizeConstraint size) {
+        if(finished || size == null) return;
+
+        this.sizeConstraint = size;
+    }
+
+    public void addRitualConstraint(RitualConstraint constraint) {
+        if(finished || constraint == null || constraints.contains(constraint)) return;
+
+        constraints.add(constraint);
+    }
+
+    public SizeConstraint getSizeConstraint() {
+        return sizeConstraint;
+    }
+
+    public List<RitualConstraint> getConstraints() {
+        return constraints;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getInfoString() {
+        return name + ".info";
     }
 
     public int getAssociatedTier() {

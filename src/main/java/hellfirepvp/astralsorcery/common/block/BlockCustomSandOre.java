@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -18,23 +19,25 @@ import net.minecraft.world.IBlockAccess;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockCrystalOre
+ * Class: BlockCustomSandOre
  * Created by HellFirePvP
- * Date: 07.05.2016 / 18:03
+ * Date: 17.08.2016 / 13:07
  */
-public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
+public class BlockCustomSandOre extends Block implements BlockCustomName, BlockVariants {
+
+    private static final Random rand = new Random();
 
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
 
-    public BlockCustomOre() {
-        super(Material.ROCK, MapColor.GRAY);
-        setHardness(3.0F);
-        setHarvestLevel("pickaxe", 3);
-        setResistance(25.0F);
+    public BlockCustomSandOre() {
+        super(Material.SAND, MapColor.YELLOW);
+        setHardness(0.5F);
+        setHarvestLevel("shovel", 1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -66,8 +69,14 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
         OreType type = state.getValue(ORE_TYPE);
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
-            case ROCK_CRYSTAL:
-                drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+            case AQUAMARINE:
+                int i = rand.nextInt(fortune + 2) - 1;
+                if(i < 0) {
+                    i = 0;
+                }
+                for (int j = 0; j < (i + 1); j++) {
+                    drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()));
+                }
                 break;
         }
         return drops;
@@ -114,25 +123,18 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    protected boolean canSilkHarvest() {
-        return false;
-    }
-
-    @Override
     public String getStateName(IBlockState state) {
         return state.getValue(ORE_TYPE).getName();
     }
 
     public static enum OreType implements IStringSerializable {
 
-        ROCK_CRYSTAL,
-        STARMETAL;
+        AQUAMARINE;
 
         @Override
         public String getName() {
             return name().toLowerCase();
         }
     }
-
 
 }

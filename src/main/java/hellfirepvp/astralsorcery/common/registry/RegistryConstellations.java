@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.constellation.AppearanceCondition;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
@@ -7,6 +9,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
+import static hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,61 +24,113 @@ public class RegistryConstellations {
         ConstellationRegistry.registerTier(0, ProgressionTier.EXPLORATION, createRInfo(0.2, -0.2, 0, 5), 1.0F);
 
         //Only visible during full, new, and waning moon.
-        ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 1.0F);
-                //AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
+        ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 0.9F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
 
-        ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 1.0F);
+        ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 0.5F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WANING1_2, CelestialHandler.MoonPhase.WAXING1_2)));
 
-        ConstellationRegistry.registerTier(3, ProgressionTier.NETWORKING, createRInfo(-0.4, -0.6, 0.5, 18), 1.0F);
+        ConstellationRegistry.registerTier(3, ProgressionTier.NETWORKING, createRInfo(-0.4, -0.6, 0.5, 18), 0.25F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.WANING1_4)));
 
-        ConstellationRegistry.registerTier(4, ProgressionTier.TRAIT_CRAFT, createRInfo(0.4, -0.5, 0.5, 19), 1.0F);
+        ConstellationRegistry.registerTier(4, ProgressionTier.TRAIT_CRAFT, createRInfo(0.4, -0.5, 0.5, 19), 0.09F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WANING3_4, CelestialHandler.MoonPhase.NEW)));
 
         rebuildConstellations();
+
+        addConstellationConstraints();
 
         registerConstellations();
     }
 
     private static void registerConstellations() {
-        bigDipper. register("bigDipper",  0);
-        orion.     register("orion",      0);
-        aquila.    register("aquila",     0);
+      //bigDipper. register("bigDipper",  0);
+        fornax.    register("fornax",     0);
         ara.       register("ara",        0);
+        aquila.    register("aquila",     0);
+        octans.    register("octans",     0);
         bootes.    register("bootes",     0);
 
+        orion.     register("orion",      1);
         caelum.    register("caelum",     1);
         circinus.  register("circinus",   1);
-        fornax.    register("fornax",     1);
-        horologium.register("horologium", 1);
-        libra.     register("libra",      1);
+        fertilitas.register("fertilitas", 1);
+        scutum.    register("scutum",     1);
 
-        octans.    register("octans",     2);
-        phoenix.   register("phoenix",    2);
-        scutum.    register("scutum",     2);
         rohini.    register("rohini",     2);
-        chitra.    register("chitra",     2);
+        visso.     register("visso",      2);
+        inpes.     register("inpes",      2);
+        lucerna.   register("lucerna",    2);
+        libra.     register("libra",      2);
 
         draco.     register("draco",      3);
-        inpes.     register("inpes",      3);
+        mineralis. register("mineralis",  3);
         locurba.   register("locurba",    3);
-        visso.     register("visso",      3);
+        tenifium.  register("tenifium",   3);
 
-        lucerna.   register("lucerna",    4);
-        tenifium.  register("tenifium",   4);
-        fertilitas.register("fertilitas", 4);
+        phoenix.   register("phoenix",    4);
+        horologium.register("horologium", 4);
+        chitra.    register("chitra",     4);
         reatio.    register("reatio",     4);
     }
 
-    private static void rebuildConstellations() {
-        StarLocation sl8, sl9, sl10, sl11, sl12, sl13, sl14;
+    private static void addConstellationConstraints() {
+        fornax.setSizeConstraint(SIZE_6);
+        fornax.addRitualConstraint(HORIZONTAL);
+        ara.setSizeConstraint(SIZE_5);
+        ara.addRitualConstraint(DISTANCE_2);
+        bootes.addRitualConstraint(HORIZONTAL);
 
-        bigDipper = new Constellation();
-        StarLocation sl1 = bigDipper.addStar(1, 3);
-        StarLocation sl2 = bigDipper.addStar(10, 7);
-        StarLocation sl3 = bigDipper.addStar(13, 13);
-        StarLocation sl4 = bigDipper.addStar(15, 19);
-        StarLocation sl5 = bigDipper.addStar(12, 27);
-        StarLocation sl6 = bigDipper.addStar(25, 31);
-        StarLocation sl7 = bigDipper.addStar(31, 25);
+        orion.setSizeConstraint(SIZE_5);
+        caelum.setSizeConstraint(SIZE_6);
+        fertilitas.setSizeConstraint(SIZE_8);
+        fertilitas.addRitualConstraint(SYMMETRY);
+        fertilitas.addRitualConstraint(DISTANCE_2);
+        scutum.setSizeConstraint(SIZE_6);
+
+        rohini.setSizeConstraint(SIZE_5);
+        rohini.addRitualConstraint(HORIZONTAL);
+        visso.setSizeConstraint(SIZE_7);
+        visso.addRitualConstraint(DISTANCE_3);
+        inpes.setSizeConstraint(SIZE_6);
+        lucerna.setSizeConstraint(SIZE_8);
+        lucerna.addRitualConstraint(DISTANCE_3);
+
+        draco.setSizeConstraint(SIZE_7);
+        draco.addRitualConstraint(DISTANCE_3);
+        mineralis.setSizeConstraint(SIZE_6);
+        mineralis.addRitualConstraint(SYMMETRY);
+        locurba.setSizeConstraint(SIZE_8);
+        locurba.addRitualConstraint(DISTANCE_3);
+        locurba.addRitualConstraint(ASYMMETRY);
+        tenifium.setSizeConstraint(SIZE_5);
+        tenifium.addRitualConstraint(DISTANCE_2);
+        tenifium.addRitualConstraint(HORIZONTAL);
+
+        phoenix.setSizeConstraint(SIZE_7);
+        phoenix.addRitualConstraint(HORIZONTAL);
+        phoenix.addRitualConstraint(SYMMETRY);
+        phoenix.addRitualConstraint(DISTANCE_2);
+        horologium.setSizeConstraint(SIZE_6);
+        horologium.addRitualConstraint(ASYMMETRY);
+        horologium.addRitualConstraint(DISTANCE_2);
+        chitra.setSizeConstraint(SIZE_5);
+        chitra.addRitualConstraint(DISTANCE_2);
+        reatio.setSizeConstraint(SIZE_6);
+        reatio.addRitualConstraint(ASYMMETRY);
+    }
+
+    private static void rebuildConstellations() {
+        StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8, sl9, sl10, sl11, sl12, sl13, sl14;
+
+        /*bigDipper = new Constellation();
+        sl1 = bigDipper.addStar(1, 3);
+        sl2 = bigDipper.addStar(10, 7);
+        sl3 = bigDipper.addStar(13, 13);
+        sl4 = bigDipper.addStar(15, 19);
+        sl5 = bigDipper.addStar(12, 27);
+        sl6 = bigDipper.addStar(25, 31);
+        sl7 = bigDipper.addStar(31, 25);
 
         bigDipper.addConnection(sl1, sl2);
         bigDipper.addConnection(sl2, sl3);
@@ -83,7 +138,7 @@ public class RegistryConstellations {
         bigDipper.addConnection(sl4, sl5);
         bigDipper.addConnection(sl5, sl6);
         bigDipper.addConnection(sl6, sl7);
-        bigDipper.addConnection(sl7, sl4);
+        bigDipper.addConnection(sl7, sl4);*/
 
         orion = new Constellation();
         sl1 = orion.addStar(8, 0);
@@ -100,6 +155,23 @@ public class RegistryConstellations {
         orion.addConnection(sl2, sl5);
         orion.addConnection(sl6, sl3);
         orion.addConnection(sl7, sl5);
+
+        mineralis = new Constellation();
+        sl1 = mineralis.addStar(26, 8);
+        sl2 = mineralis.addStar(12, 1);
+        sl3 = mineralis.addStar(3, 12);
+        sl4 = mineralis.addStar(17, 15);
+        sl5 = mineralis.addStar(29, 21);
+        sl6 = mineralis.addStar(17, 26);
+        sl7 = mineralis.addStar(7, 20);
+
+        mineralis.addConnection(sl1, sl2);
+        mineralis.addConnection(sl2, sl3);
+        mineralis.addConnection(sl3, sl4);
+        mineralis.addConnection(sl4, sl5);
+        mineralis.addConnection(sl5, sl6);
+        mineralis.addConnection(sl6, sl7);
+        mineralis.addConnection(sl4, sl7);
 
         aquila = new Constellation();
         sl1 = aquila.addStar(8, 5);

@@ -1,7 +1,8 @@
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.block.BlockTest;
-import hellfirepvp.astralsorcery.common.block.BlockTest2;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.network.BlockLens;
+import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
@@ -19,13 +20,14 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 public class BlocksAS {
 
     public static BlockCustomOre customOre;
-    public static BlockStoneMachine stoneMachine;
+    public static BlockCustomSandOre customSandOre;
+    //public static BlockStoneMachine stoneMachine;
     public static BlockAltar blockAltar;
     public static BlockMarble blockMarble;
     public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
 
-    public static BlockTest lens;
-    public static BlockTest2 lensPrism;
+    public static BlockLens lens;
+    public static BlockPrism lensPrism;
 
 }

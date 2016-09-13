@@ -70,6 +70,7 @@ public class TransmissionNetworkHelper {
         WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(transmission.getWorld());
         IPrismTransmissionNode nextNode = handler.getTransmissionNode(to);
         removeLink(transmissionNode, nextNode, transmission.getWorld(), transmission.getPos(), to);
+        handler.markDirty();
     }
 
     private static void removeLink(IPrismTransmissionNode thisNode, IPrismTransmissionNode nextNode, World world, BlockPos from, BlockPos to) {
@@ -90,6 +91,7 @@ public class TransmissionNetworkHelper {
         WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(transmission.getWorld());
         IPrismTransmissionNode nextNode = handler.getTransmissionNode(to);
         createLink(transmissionNode, nextNode, transmission.getWorld(), transmission.getPos(), to);
+        handler.markDirty();
     }
 
     private static void createLink(IPrismTransmissionNode thisNode, IPrismTransmissionNode nextNode, World world, BlockPos from, BlockPos to) {

@@ -27,12 +27,12 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         ItemStack stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
         applyConstellation(stack, Constellations.orion);
         subItems.add(stack);
 
         stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
         applyConstellation(stack, Constellations.orion);
         applyTrait(stack, Constellations.phoenix);
         subItems.add(stack);

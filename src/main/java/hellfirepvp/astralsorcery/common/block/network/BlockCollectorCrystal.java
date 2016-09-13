@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.client.util.MiscEffectUtil;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
@@ -13,7 +12,6 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -22,16 +20,12 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
@@ -40,7 +34,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,7 +81,7 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         ItemStack stack = new ItemStack(itemIn);
         ItemCollectorCrystal.setConstellation(stack, Constellations.orion);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE, 100, 100));
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
         list.add(stack);
     }
 
@@ -142,7 +135,7 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
         if(te == null) return;
 
         Constellation c = ItemCollectorCrystal.getConstellation(stack);
-        if(c == null) c = Constellations.bigDipper;
+        if(c == null) c = Constellations.orion;
         te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true);
     }
 

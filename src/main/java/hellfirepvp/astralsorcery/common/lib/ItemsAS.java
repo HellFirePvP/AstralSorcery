@@ -1,10 +1,11 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.item.ItemTelescopePlacer;
+import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
 
 /**
@@ -16,10 +17,11 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
  */
 public class ItemsAS {
 
+    public static ItemCraftingComponent craftingComponent;
     public static ItemConstellationPaper constellationPaper;
     public static ItemRockCrystalBase rockCrystal;
     public static ItemTunedCrystal tunedCrystal;
-    public static ItemTelescopePlacer telescopePlacer;
+    public static ItemEntityPlacer entityPlacer;
     public static ItemLinkingTool linkingTool;
     public static ItemJournal journal;
 

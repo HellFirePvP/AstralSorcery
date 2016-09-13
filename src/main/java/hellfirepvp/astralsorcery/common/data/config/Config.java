@@ -20,6 +20,7 @@ public class Config {
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int shrineGenerationChance = 150;
     public static boolean generateShrines = true;
+    public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
@@ -45,6 +46,8 @@ public class Config {
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
         generateShrines = latestConfig.getBoolean("generateShrines", "worldgen", true, "Set to true to enable shrine generation.");
         shrineGenerationChance = latestConfig.getInt("shrineGenerationChance", "worldgen", 150, 1, 200000, "Defines the chance if the worldgenerator will check a position in a chunk to spawn the shrine in. (onWorldGen: random.nextInt(shrineGenerationChance) == 0 -> check if generation is possible at 1 random pos in chunk.)");
+        constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
+        constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
     }
 
 }

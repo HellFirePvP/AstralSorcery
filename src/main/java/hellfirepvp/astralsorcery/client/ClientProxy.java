@@ -6,7 +6,7 @@ import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
-import hellfirepvp.astralsorcery.client.render.item.RenderItemTelescope;
+import hellfirepvp.astralsorcery.client.render.item.RenderItemEntityPlacer;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
@@ -18,10 +18,8 @@ import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
-import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
-import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -33,12 +31,10 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -121,9 +117,10 @@ public class ClientProxy extends CommonProxy {
             stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
         }*/
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), new TESRAltar());
-        ItemRenderRegistry.register(ItemsAS.telescopePlacer, new RenderItemTelescope());
+        ItemRenderRegistry.register(ItemsAS.entityPlacer, new RenderItemEntityPlacer());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
 
+        //TODO no op renders.
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRNoOp<TileCrystalLens>());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lensPrism), new TESRNoOp<TileCrystalPrismLens>());
 
@@ -156,6 +153,7 @@ public class ClientProxy extends CommonProxy {
 
     public void registerEntityRenderers() {
         //RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
+        //RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new RenderEntityGrindstone.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
     }
 

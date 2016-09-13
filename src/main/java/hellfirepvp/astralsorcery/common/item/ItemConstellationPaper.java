@@ -67,8 +67,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
-    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        return new EntityItemHighlighted(world, location.posX, location.posY, location.posZ, itemstack);
+    public Entity createEntity(World world, Entity entity, ItemStack itemstack) {
+        EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
+        ei.setPickupDelay(40);
+        ei.motionX = entity.motionX;
+        ei.motionY = entity.motionY;
+        ei.motionZ = entity.motionZ;
+        return ei;
     }
 
     @Override

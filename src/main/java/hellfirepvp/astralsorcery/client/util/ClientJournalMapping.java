@@ -37,7 +37,7 @@ public class ClientJournalMapping {
          *  uppermost = most negative Y, lowermost = most positive Y
          *  leftmost =  most negative X, rightmost = most positive X
          *
-         *  A wrong definition doesn't affect size detection, but rendering.
+         *  A wrong definition doesn't affect size calculation, but rendering.
          */
         public JournalCluster(BindableResource cloudTexture, BindableResource clusterBackgroundTexture, int leftMost, int upperMost, int rightMost, int lowerMost) {
             this.cloudTexture = cloudTexture;

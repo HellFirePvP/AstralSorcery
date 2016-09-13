@@ -12,9 +12,11 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 public class Constellations {
 
     /** Actual, 'existing' constellations */
-    public static Constellation bigDipper; //Bowl? Fluid storage?
+    //public static Constellation bigDipper; //Bowl? Fluid storage? NOT included atm.
+    //public static Constellation noctua; //Owl? Nightvision? NOT included atm.
+
     public static Constellation orion; //Hunter
-    public static Constellation aquila; //HighJump? Shoot up in the air?
+    public static Constellation aquila; //Travel
     public static Constellation ara; //Altar
     public static Constellation bootes; //Herdsman? Animal farming stuff?
     public static Constellation caelum; //Chisel/Grindstone?
@@ -25,7 +27,6 @@ public class Constellations {
     public static Constellation octans; //Octant - Celestial navigation tool. gating tool?
     public static Constellation phoenix; //Revive/Death protection - endgame?
     public static Constellation scutum; //Shield/Damage reduction?
-    //public static Constellation noctua; //Owl? Nightvision? Rather not atm
     public static Constellation rohini; //Temple? gating?
     public static Constellation chitra; //Bright jewel/pearl (apparently related to birth tho)
     public static Constellation draco; //Dragon, Flight
@@ -38,6 +39,7 @@ public class Constellations {
     public static Constellation tenifium; //Endless, infinite darkness
     public static Constellation fertilitas; //Direct latin: Fertility
     public static Constellation reatio; //Resonance
+    public static Constellation mineralis; //Mineral/Ore
 
     //Nothing bout that yet.
     /*public static Constellation ss_pisces; //Fish

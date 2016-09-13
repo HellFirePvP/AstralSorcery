@@ -113,7 +113,7 @@ public final class OverlayText implements IComplexEffect {
     public static class OverlayFontRenderer {
 
         //Very much hardcoded stuff down there, but it works :P
-        private static final int SPACE_CHAR_SIZE = 72;
+        private static final int SPACE_CHAR_SIZE = 92;
         private static final BindableResource fontTexture = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont");
         private static final float uPixelWidth = 13169F;
         //private static final float uPixelWidth = 2371F;
@@ -195,7 +195,11 @@ public final class OverlayText implements IComplexEffect {
             if (c.equals(' ')) return SPACE_CHAR_SIZE * font_size_multiplicator;
             RenderChar rend = loadedCharacters.get(c);
             if (rend == null) throw new RuntimeException("Using OverlayFontRenderer with invalid chars! (Character: " + String.valueOf(c) + ")");
-            return (rend.higherX - rend.lowerX) * font_size_multiplicator;
+            if(rend.specificRenderWidth != Integer.MIN_VALUE) {
+                return rend.specificRenderWidth * font_size_multiplicator;
+            } else {
+                return (rend.higherX - rend.lowerX) * font_size_multiplicator;
+            }
         }
 
         static {
@@ -235,7 +239,7 @@ public final class OverlayText implements IComplexEffect {
             loadedCharacters.put('@',  new RenderChar(4112, 179));
             loadedCharacters.put('A',  new RenderChar(4293, 220));
             loadedCharacters.put('B',  new RenderChar(4513, 201));
-            loadedCharacters.put('C',  new RenderChar(4714, 280));
+            loadedCharacters.put('C',  new RenderChar(4714, 280, 210));
             loadedCharacters.put('D',  new RenderChar(4994, 200));
             loadedCharacters.put('E',  new RenderChar(5197, 290));
             loadedCharacters.put('F',  new RenderChar(5487, 292));
@@ -256,7 +260,7 @@ public final class OverlayText implements IComplexEffect {
             loadedCharacters.put('U',  new RenderChar(8274, 200));
             loadedCharacters.put('V',  new RenderChar(8474, 163));
             loadedCharacters.put('W',  new RenderChar(8637, 261));
-            loadedCharacters.put('X',  new RenderChar(8899, 323));
+            loadedCharacters.put('X',  new RenderChar(8899, 323, 200));
             loadedCharacters.put('Y',  new RenderChar(9222, 151));
             loadedCharacters.put('Z',  new RenderChar(9370, 329));
             loadedCharacters.put('[',  new RenderChar(9699, 92));
@@ -270,11 +274,11 @@ public final class OverlayText implements IComplexEffect {
             loadedCharacters.put('c',  new RenderChar(10587, 46));
             loadedCharacters.put('d',  new RenderChar(12841, 73));
             loadedCharacters.put('e',  new RenderChar(10799, 51));
-            loadedCharacters.put('f',  new RenderChar(10851, 175));
-            loadedCharacters.put('g',  new RenderChar(11026, 150));
+            loadedCharacters.put('f',  new RenderChar(10851, 175, 126));
+            loadedCharacters.put('g',  new RenderChar(11026, 150/*, -65*/));
             loadedCharacters.put('h',  new RenderChar(11176, 74));
             loadedCharacters.put('i',  new RenderChar(11250, 35));
-            loadedCharacters.put('j',  new RenderChar(11286, 152));
+            loadedCharacters.put('j',  new RenderChar(11286, 152/*, -40*/));
             loadedCharacters.put('k',  new RenderChar(11436, 103));
             loadedCharacters.put('l',  new RenderChar(11542, 34));
             loadedCharacters.put('m',  new RenderChar(11577, 98));
@@ -289,7 +293,7 @@ public final class OverlayText implements IComplexEffect {
             loadedCharacters.put('v',  new RenderChar(12269, 74));
             loadedCharacters.put('w',  new RenderChar(12344, 107));
             loadedCharacters.put('x',  new RenderChar(12450, 74));
-            loadedCharacters.put('y',  new RenderChar(12525, 138));
+            loadedCharacters.put('y',  new RenderChar(12525, 138/*, -75*/));
             loadedCharacters.put('z',  new RenderChar(12664, 80));
             loadedCharacters.put('{',  new RenderChar(12743, 100));
             loadedCharacters.put('}',  new RenderChar(12912, 93));
@@ -327,6 +331,12 @@ public final class OverlayText implements IComplexEffect {
 
             private int lowerX, lowerY, higherX, higherY;
             private int def_width, def_height;
+            private int specificRenderWidth = Integer.MIN_VALUE;
+
+            public RenderChar(int lowerX, int width, int specificRenderWidth) {
+                this(lowerX, 0, lowerX + width, (int) vPixelHeight);
+                this.specificRenderWidth = specificRenderWidth;
+            }
 
             public RenderChar(int lowerX, int width) {
                 this(lowerX, 0, lowerX + width, (int) vPixelHeight);

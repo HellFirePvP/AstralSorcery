@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientGuiHandler;
+import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +16,7 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 
 /**
@@ -37,21 +39,27 @@ public class EntityTelescope extends EntityLivingBase {
         if(player.isSneaking()) {
             if(!worldObj.isRemote) {
                 setDead();
-                ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.telescopePlacer));
+                if(!player.isCreative()) {
+                    ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()));
+                }
             }
         } else {
             if (player.worldObj.isRemote) {
                 player.openGui(AstralSorcery.instance, ClientGuiHandler.EnumClientGui.TELESCOPE.ordinal(), player.worldObj, getEntityId(), 0, 0);
             }
         }
+
         return EnumActionResult.SUCCESS;
     }
+
+
 
     @Override
     public Iterable<ItemStack> getArmorInventoryList() {
         return Collections.emptyList();
     }
 
+    @Nullable
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
         return null;

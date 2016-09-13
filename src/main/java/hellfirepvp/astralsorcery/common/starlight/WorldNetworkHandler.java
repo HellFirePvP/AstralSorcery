@@ -127,6 +127,10 @@ public class WorldNetworkHandler {
         return null;
     }
 
+    public void markDirty() {
+        buffer.markDirty();
+    }
+
     @Nullable
     public IIndependentStarlightSource getSourceAt(BlockPos pos) {
         return buffer.getSource(pos);
@@ -264,5 +268,4 @@ public class WorldNetworkHandler {
         if(data != null && !data.isEmpty()) return data;
         return null;
     }
-
 }
