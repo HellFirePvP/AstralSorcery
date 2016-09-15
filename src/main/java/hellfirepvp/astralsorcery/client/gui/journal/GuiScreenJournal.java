@@ -1,9 +1,9 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.gui.GuiWHScreen;
-import hellfirepvp.astralsorcery.client.util.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -26,7 +26,6 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
     public static final BindableResource textureResBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank");
     public static final BindableResource textureResShell = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace");
-
     public static final BindableResource textureBookmark = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark");
 
     protected final int bookmarkIndex;

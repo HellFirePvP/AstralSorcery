@@ -1,5 +1,8 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 
 import java.awt.*;

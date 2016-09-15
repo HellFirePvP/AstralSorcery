@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
+import net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,5 +25,7 @@ public class ItemsAS {
     public static ItemEntityPlacer entityPlacer;
     public static ItemLinkingTool linkingTool;
     public static ItemJournal journal;
+
+    public static ItemStack itemBucketLiquidStarlight;
 
 }

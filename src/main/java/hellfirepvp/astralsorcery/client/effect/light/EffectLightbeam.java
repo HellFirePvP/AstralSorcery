@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
-import hellfirepvp.astralsorcery.client.util.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -23,9 +26,10 @@ import org.lwjgl.opengl.GL11;
 public class EffectLightbeam implements IComplexEffect {
 
     private static final BindableResource beamTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "lightbeam");
+    private static final SpriteSheetResource beamSprite = beamTex.asSpriteSheet(16, 4);
     private final Vector3 from, to, aim, aimPerp;
     private final double fromSize, toSize;
-    private int maxAge = 30;
+    private int maxAge = 64;
     private int age = 0;
 
     public EffectLightbeam(Vector3 from, Vector3 to, double fromSize, double toSize) {
@@ -75,15 +79,16 @@ public class EffectLightbeam implements IComplexEffect {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_COLOR); // Add.Dark
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
         beamTex.bind();
 
         renderCurrentTextureAroundAxis(Math.toRadians(0F));
         renderCurrentTextureAroundAxis(Math.toRadians(120F));
         renderCurrentTextureAroundAxis(Math.toRadians(240F));
 
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -106,14 +111,20 @@ public class EffectLightbeam implements IComplexEffect {
         VertexBuffer buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
+        Tuple<Double, Double> uvOffset = beamSprite.getUVOffset(age);
+        double u = uvOffset.key;
+        double v = uvOffset.value;
+        double uWidth = beamSprite.getULength();
+        double vHeight = beamSprite.getVLength();
+
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 1).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).endVertex();
         vec = from.clone().add(perpFrom);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 1).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).endVertex();
         vec = to.clone().add(perpTo);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 0).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .endVertex();
         vec = to.clone().add(perpTo.clone().multiply(-1));
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 0).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .endVertex();
 
         tes.draw();
     }

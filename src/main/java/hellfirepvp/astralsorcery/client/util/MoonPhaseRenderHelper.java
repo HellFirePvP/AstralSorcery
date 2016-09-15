@@ -1,5 +1,8 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 
 import java.util.HashMap;
@@ -21,14 +24,14 @@ public class MoonPhaseRenderHelper {
     }
 
     static {
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.FULL,      AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING3_4, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning1"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING1_2, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning2"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING1_4, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning3"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.NEW,       AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_new"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING1_4, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING1_2, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2"));
-        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING3_4, AssetLoader.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.FULL,      AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning1"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning2"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WANING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning3"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.NEW,       AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_new"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING1_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING1_2, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2"));
+        moonPhaseIcons.put(CelestialHandler.MoonPhase.WAXING3_4, AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3"));
     }
 
 }

@@ -46,6 +46,7 @@ constraint.mindst.3=Distance 3
 
 entity.astralsorcery.EntityTelescope.name=Telescope
 entity.astralsorcery.EntityGrindstone.name=Grindstone
+entity.astralsorcery.EntityStardust.name=Stardust
 
 item.ItemCraftingComponent.aquamarine.name=Aquamarine
 item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot
@@ -58,6 +59,8 @@ item.ItemEntityPlacer.telescope.name=Telescope
 item.ItemEntityPlacer.grindstone.name=Grindstone
 item.ItemLinkingTool.name=[WIP] Linking Tool
 item.ItemJournal.name=[WIP] Journal
+
+fluid.astralsorcery.liquidStarlight=Liquid Starlight
 
 tile.BlockCustomOre.rock_crystal.name=Rock Crystal Ore
 tile.BlockCustomOre.starmetal.name=Starmetal Ore
@@ -78,6 +81,7 @@ tile.BlockMarble.runed.name=Runed Marble
 tile.BlockMarble.engraved.name=Engraved Marble
 tile.BlockPrism.name=PrismLens
 tile.BlockLens.name=Lens
+tile.BlockCelestialCrystals.name=Celestial Crystal Cluster
 
 tier.0=Magis
 tier.1=Prope

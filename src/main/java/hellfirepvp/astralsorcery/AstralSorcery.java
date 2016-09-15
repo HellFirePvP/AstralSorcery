@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -72,6 +73,10 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
+    }
+
+    static {
+        FluidRegistry.enableUniversalBucket();
     }
 
 }

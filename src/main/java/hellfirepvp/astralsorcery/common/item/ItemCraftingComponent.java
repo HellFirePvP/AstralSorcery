@@ -1,14 +1,17 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
+import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -34,6 +37,31 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         for (MetaType type : MetaType.values()) {
             subItems.add(new ItemStack(itemIn, 1, type.getItemMeta()));
         }
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        MetaType type = MetaType.fromMeta(stack.getItemDamage());
+        switch (type) {
+            case STARDUST:
+                return true;
+        }
+        return super.hasCustomEntity(stack);
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        MetaType type = MetaType.fromMeta(itemstack.getItemDamage());
+        switch (type) {
+            case STARDUST:
+                EntityItemStardust stardust = new EntityItemStardust(world, location.posX, location.posY, location.posZ, itemstack);
+                stardust.setPickupDelay(40);
+                stardust.motionX = location.motionX;
+                stardust.motionY = location.motionY;
+                stardust.motionZ = location.motionZ;
+                return stardust;
+        }
+        return null;
     }
 
     @Override

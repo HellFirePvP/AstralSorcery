@@ -30,6 +30,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -62,7 +63,6 @@ public class BlockCollectorCrystal extends BlockStarlightNetwork {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        //MiscEffectUtil.doBlockBreakParticles(world, pos, Blocks.QUARTZ_BLOCK.getDefaultState(), manager);
         return true;
     }
 

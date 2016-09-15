@@ -8,10 +8,11 @@ import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.item.RenderItemEntityPlacer;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
+import hellfirepvp.astralsorcery.client.render.tile.TESRCelestialCrystals;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
-import hellfirepvp.astralsorcery.client.util.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
@@ -21,7 +22,10 @@ import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
+import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -33,6 +37,7 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +46,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -72,7 +79,27 @@ public class ClientProxy extends CommonProxy {
 
         super.preInit();
 
+        registerFluidRenderers();
+
         registerEntityRenderers();
+    }
+
+    private void registerFluidRenderers() {
+        registerFluidRender(BlocksAS.fluidLiquidStarlight);
+    }
+
+    private void registerFluidRender(Fluid f) {
+        RegistryBlocks.FluidCustomModelMapper mapper = new RegistryBlocks.FluidCustomModelMapper(f);
+        Block block = f.getBlock();
+        if(block != null) {
+            Item item = Item.getItemFromBlock(block);
+            if (item != null) {
+                ModelLoader.registerItemVariants(item);
+                ModelLoader.setCustomMeshDefinition(item, mapper);
+            } else {
+                ModelLoader.setCustomStateMapper(block, mapper);
+            }
+        }
     }
 
     @Override
@@ -94,10 +121,13 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
-        //Preloading heavy textures
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper").allocateGlId();
+        //Preloading heavy/needed textures
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper") .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark").allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
 
         ClientJournalMapping.init();
@@ -118,6 +148,7 @@ public class ClientProxy extends CommonProxy {
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), new TESRAltar());
         ItemRenderRegistry.register(ItemsAS.entityPlacer, new RenderItemEntityPlacer());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
 
         //TODO no op renders.
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRNoOp<TileCrystalLens>());
@@ -141,6 +172,7 @@ public class ClientProxy extends CommonProxy {
     private void registerTileRenderers() {
         registerTESR(TileAltar.class, new TESRAltar());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
+        registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
 
         registerTESR(TileCrystalLens.class, new TESRNoOp<TileCrystalLens>());
         registerTESR(TileCrystalPrismLens.class, new TESRNoOp<TileCrystalPrismLens>());

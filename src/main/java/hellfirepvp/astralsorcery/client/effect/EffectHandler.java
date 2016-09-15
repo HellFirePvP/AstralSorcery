@@ -2,13 +2,14 @@ package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,18 +40,26 @@ public final class EffectHandler {
 
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             synchronized (complexEffects) {
                 complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT).stream().forEach((effect) -> effect.render(event.getPartialTicks()));
             }
         }
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
     }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         synchronized (complexEffects) {
             complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP).stream().forEach((effect) -> effect.render(event.getPartialTicks()));
         }
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
     }
 
     @SubscribeEvent

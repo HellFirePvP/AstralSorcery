@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "stage=0": { "model":"astralsorcery:BlockModel_nothing" },
+        "stage=1": { "model":"astralsorcery:BlockModel_nothing" },
+        "stage=2": { "model":"astralsorcery:BlockModel_nothing" },
+        "stage=3": { "model":"astralsorcery:BlockModel_nothing" },
+        "stage=4": { "model":"astralsorcery:BlockModel_nothing" }
+    }
+}

@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -9,6 +11,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
+import net.minecraftforge.fluids.Fluid;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,8 +29,11 @@ public class BlocksAS {
     public static BlockMarble blockMarble;
     //public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
-
     public static BlockLens lens;
     public static BlockPrism lensPrism;
+    public static BlockCelestialCrystals celestialCrystals;
+
+    public static Fluid fluidLiquidStarlight;
+    public static FluidBlockLiquidStarlight blockLiquidStarlight;
 
 }

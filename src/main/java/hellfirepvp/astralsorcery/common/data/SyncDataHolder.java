@@ -31,6 +31,7 @@ public class SyncDataHolder implements ITickHandler {
     private static Map<String, AbstractData> clientData = new HashMap<>();
 
     private static List<String> dirtyData = new ArrayList<>();
+    private static final Object dirtyLock = new Object();
     private static byte providerCounter = 0;
 
     private SyncDataHolder() {}
@@ -64,8 +65,10 @@ public class SyncDataHolder implements ITickHandler {
     }
 
     public static void markForUpdate(String key) {
-        if (!dirtyData.contains(key)) {
-            dirtyData.add(key);
+        synchronized (dirtyLock) {
+            if (!dirtyData.contains(key)) {
+                dirtyData.add(key);
+            }
         }
     }
 
@@ -93,11 +96,13 @@ public class SyncDataHolder implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         if (dirtyData.isEmpty()) return;
         Map<String, AbstractData> pktData = new HashMap<>();
-        for (String s : dirtyData) {
-            AbstractData d = getDataServer(s);
-            pktData.put(s, d);
+        synchronized (dirtyLock) {
+            for (String s : dirtyData) {
+                AbstractData d = getDataServer(s);
+                pktData.put(s, d);
+            }
+            dirtyData.clear();
         }
-        dirtyData.clear();
         PktSyncData dataSync = new PktSyncData(pktData, false);
         PacketChannel.CHANNEL.sendToAll(dataSync);
     }

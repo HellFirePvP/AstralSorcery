@@ -1,9 +1,7 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
-import hellfirepvp.astralsorcery.client.util.BindableResource;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;

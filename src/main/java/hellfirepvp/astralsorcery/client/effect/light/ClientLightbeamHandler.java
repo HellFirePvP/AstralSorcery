@@ -31,7 +31,7 @@ public class ClientLightbeamHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         ticksExisted++;
-        if(ticksExisted % 25 == 0) {
+        if(ticksExisted % 40 == 0) {
             ticksExisted = 0;
             Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
             if(rView != null) {
@@ -45,7 +45,7 @@ public class ClientLightbeamHandler implements ITickHandler {
                             Vector3 source = new Vector3(at).add(0.5, 0.5, 0.5);
                             for (BlockPos dst : entry.getValue()) {
                                 Vector3 to = new Vector3(dst).add(0.5, 0.5, 0.5);
-                                EffectHandler.getInstance().lightbeam(source, to, 0.18);
+                                EffectHandler.getInstance().lightbeam(to, source, 0.6);
                             }
                         }
                     }

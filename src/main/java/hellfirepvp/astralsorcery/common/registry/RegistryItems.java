@@ -76,6 +76,7 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
         //registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
         registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));
+        registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
 
         registerItem(new ItemCollectorCrystal());
     }
