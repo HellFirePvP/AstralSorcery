@@ -57,10 +57,14 @@ public interface AppearanceCondition {
             int bOrdinal = beginningPhaseIncl.ordinal();
             int cOrdinal = currentPhase.ordinal();
             if (bOrdinal > eOrdinal) {
-                int mov = CelestialHandler.MoonPhase.values().length - bOrdinal;
+                eOrdinal += CelestialHandler.MoonPhase.values().length;
+                if(cOrdinal < bOrdinal) { //Re-test
+                    cOrdinal += CelestialHandler.MoonPhase.values().length;
+                }
+                /*int mov = CelestialHandler.MoonPhase.values().length - bOrdinal;
                 bOrdinal += mov;
                 eOrdinal += mov;
-                cOrdinal += mov;
+                cOrdinal += mov;*/
             }
             return cOrdinal >= bOrdinal && cOrdinal <= eOrdinal;
         }

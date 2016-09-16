@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;

@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -14,25 +14,23 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockCollectorCrystal
+ * Class: BlockCelestialCollectorCrystal
  * Created by HellFirePvP
- * Date: 01.08.2016 / 12:58
+ * Date: 15.09.2016 / 18:53
  */
-public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
+public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
 
-    public BlockCollectorCrystal() {
-        super(Material.GLASS, MapColor.GRAY);
+    public BlockCelestialCollectorCrystal() {
+        super(Material.GLASS, MapColor.CYAN);
     }
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         ItemStack stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.orion);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.ROCK_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
+        ItemCollectorCrystal.setConstellation(stack, Constellations.ara);
+        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         list.add(stack);
     }
-
-
 
 }

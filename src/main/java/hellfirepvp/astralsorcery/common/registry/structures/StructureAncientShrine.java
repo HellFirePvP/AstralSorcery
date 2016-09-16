@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.registry.structures;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -395,7 +396,8 @@ public class StructureAncientShrine extends StructureBlockArray {
                     if(te instanceof TileCollectorCrystal) {
                     ((TileCollectorCrystal) te).onPlace(
                             ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),
-                            CrystalProperties.createStructural(), false);
+                            CrystalProperties.createStructural(), false,
+                            BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
                 }
             }
         });

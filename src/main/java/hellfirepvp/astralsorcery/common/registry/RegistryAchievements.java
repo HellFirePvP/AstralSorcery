@@ -32,6 +32,10 @@ public class RegistryAchievements {
         achvRockCrystal.setSpecial();
         achvDiscoverConstellation.setSpecial();
 
+        achvRockCrystal.registerStat();
+        achvBuildTelescope.registerStat();
+        achvDiscoverConstellation.registerStat();
+
         achievementPageAstralSorcery = new AchievementPage("Astral Sorcery",
                 achvRockCrystal, achvBuildTelescope, achvDiscoverConstellation);
 

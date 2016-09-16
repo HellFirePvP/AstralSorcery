@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
+import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -29,6 +30,7 @@ public class BlocksAS {
     public static BlockMarble blockMarble;
     //public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
+    public static BlockCelestialCollectorCrystal celestialCollectorCrystal;
     public static BlockLens lens;
     public static BlockPrism lensPrism;
     public static BlockCelestialCrystals celestialCrystals;

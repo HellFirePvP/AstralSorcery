@@ -106,6 +106,14 @@ public class CelestialHandler {
         return MoonPhase.values()[lastTrackedDate % 8];
     }
 
+    public static double calcDaytimeDistribution(World world) {
+        long dayPart = world.getWorldTime() % 24000;
+        if(dayPart < 12000) return 0D;
+        if(dayPart < 15000) return (((double) dayPart) - 12000D) / 3000D;
+        if(dayPart > 21000) return 1D - (((double) dayPart) - 21000D) / 3000D;
+        return 1D;
+    }
+
     private static void scheduleDayProgression(int loop) {
         for (int i = 0; i < loop; i++) {
             scheduleDayProgression();

@@ -3,8 +3,14 @@ package hellfirepvp.astralsorcery.common.block;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -19,6 +25,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -28,6 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,9 +47,16 @@ import java.util.List;
  */
 public class BlockCelestialCrystals extends BlockContainer implements IBlockStarlightRecipient {
 
+    private static final Random rand = new Random();
+
+    public static AxisAlignedBB bbStage0 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.3, 0.9);
+    public static AxisAlignedBB bbStage1 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.4, 0.9);
+    public static AxisAlignedBB bbStage2 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.5, 0.9);
+    public static AxisAlignedBB bbStage3 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.6, 0.9);
+    public static AxisAlignedBB bbStage4 = new AxisAlignedBB(0.1, 0.0, 0.1, 0.9, 0.7, 0.9);
+
     public static PropertyInteger STAGE = PropertyInteger.create("stage", 0, 4);
 
-    //TODO adjust hitbox
     public BlockCelestialCrystals() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(2.0F);
@@ -50,6 +66,23 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(STAGE, 0));
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        switch (state.getValue(STAGE)) {
+            case 0:
+                return bbStage0;
+            case 1:
+                return bbStage1;
+            case 2:
+                return bbStage2;
+            case 3:
+                return bbStage3;
+            case 4:
+                return bbStage4;
+        }
+        return super.getBoundingBox(state, source, pos);
     }
 
     //TODO
@@ -79,12 +112,33 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return Lists.newArrayList();
+        List<ItemStack> drops = Lists.newLinkedList();
+        drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+        int stage = state.getValue(STAGE);
+        switch (stage) {
+            case 4:
+                if(fortune > 0 || rand.nextInt(2) == 0) {
+                    drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+                }
+                drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
+                break;
+        }
+        return drops;
     }
 
     @Override
-    public void receiveStarlight(World world, BlockPos pos, Constellation starlightType, double amount) {
-
+    public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount) {
+        if(starlightType.equals(Constellations.horologium) && amount >= 3) {
+            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class);
+            if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (900 / amount)))) == 0) {
+                tile.tryGrowth(0.3);
+            }
+        } else if(starlightType.equals(Constellations.mineralis) && amount >= 2) {
+            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class);
+            if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (700 / amount)))) == 0) {
+                tile.tryGrowth(0.6);
+            }
+        }
     }
 
     @Override
@@ -108,6 +162,27 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+        BlockPos down = pos.down();
+        IBlockState downState = worldIn.getBlockState(down);
+        if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {
+            dropBlockAsItem(worldIn, pos, state, 0);
+            breakBlock(worldIn, pos, state);
+            worldIn.setBlockToAir(pos);
+        }
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -115,6 +190,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, STAGE);
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
@@ -129,6 +209,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileCelestialCrystals(state.getValue(STAGE));
+        return new TileCelestialCrystals();
     }
 }

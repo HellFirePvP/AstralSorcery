@@ -4,9 +4,11 @@ import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -20,8 +22,10 @@ public class ItemsAS {
 
     public static ItemCraftingComponent craftingComponent;
     public static ItemConstellationPaper constellationPaper;
-    public static ItemRockCrystalBase rockCrystal;
-    public static ItemTunedCrystal tunedCrystal;
+    public static ItemRockCrystalSimple rockCrystal;
+    public static ItemCelestialCrystal celestialCrystal;
+    public static ItemTunedRockCrystal tunedRockCrystal;
+    public static ItemTunedCelestialCrystal tunedCelestialCrystal;
     public static ItemEntityPlacer entityPlacer;
     public static ItemLinkingTool linkingTool;
     public static ItemJournal journal;

@@ -1,7 +1,23 @@
 package hellfirepvp.astralsorcery.common.tile;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
+import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -10,32 +26,76 @@ import net.minecraft.util.math.MathHelper;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 00:13
  */
-public class TileCelestialCrystals extends TileEntitySynchronized {
+public class TileCelestialCrystals extends TileSkybound {
+    //Just in case you wonder. i do have a reason to control growth in the TileEntity other than just in the block itself.
 
-    private int stage = 0;
-
-    public TileCelestialCrystals() {}
-
-    public TileCelestialCrystals(int stage) {
-        this.stage = stage;
-    }
+    private static final Random rand = new Random();
 
     public int getGrowth() {
-        return stage;
+        return worldObj.getBlockState(getPos()).getValue(BlockCelestialCrystals.STAGE);
     }
 
     @Override
-    public void readCustomNBT(NBTTagCompound compound) {
-        super.readCustomNBT(compound);
+    public void update() {
+        super.update();
 
-        this.stage = MathHelper.clamp_int(compound.getInteger("stage"), 0, 4);
+        if(!worldObj.isRemote) {
+            double mul = 1;
+            IBlockState downState = worldObj.getBlockState(getPos().down());
+            if(downState.getBlock() == BlocksAS.customOre &&
+                    downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
+                mul *= 0.8;
+
+                if(rand.nextInt(6000) == 0) {
+                    worldObj.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
+                }
+            }
+            tryGrowth(mul);
+        } else {
+            IBlockState downState = worldObj.getBlockState(getPos().down());
+            if(downState.getBlock() == BlocksAS.customOre &&
+                    downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
+                playStarmetalOreParticles();
+            }
+        }
     }
 
-    @Override
-    public void writeCustomNBT(NBTTagCompound compound) {
-        super.writeCustomNBT(compound);
+    //TODO
+    @SideOnly(Side.CLIENT)
+    private void playStarmetalOreParticles() {}
 
-        compound.setInteger("stage", stage);
+    @Override
+    protected void onFirstTick() {}
+
+    public void grow() {
+        IBlockState current = worldObj.getBlockState(getPos());
+        int stage = current.getValue(BlockCelestialCrystals.STAGE);
+        if(stage < 4) {
+            IBlockState next = BlocksAS.celestialCrystals.getStateFromMeta(stage + 1);
+            worldObj.setBlockState(getPos(), next);
+        }
+    }
+
+    public void tryGrowth(double mul) {
+        int r = 24000;
+        if(doesSeeSky()) {
+            double dstr = CelestialHandler.calcDaytimeDistribution(worldObj);
+            if(dstr > 0) {
+                List<Constellation> activeConstellations =
+                        ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
+                if(activeConstellations.contains(Constellations.mineralis)) {
+                    r = 4200;
+                } else {
+                    r = 9500;
+                }
+                r *= (0.5 + ((1 - dstr) * 0.5));
+            }
+        }
+        r *= Math.abs(mul);
+
+        if(worldObj.rand.nextInt(r) == 0) {
+            grow();
+        }
     }
 
 }

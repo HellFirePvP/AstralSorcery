@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -30,7 +31,8 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
     private static int dlC0 = -1, dlC1 = -1, dlC2 = -1, dlC3 = -1, dlC4 = -1;
     private static final BindableResource texCelestialCrystals = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "c_crystal_tex");
 
-    //TODO render randomly depending on position 90°
+    private static int[] rotMapping = new int[] { 45, 135, 270, 90, 315, 0, 180, 225 };
+
     @Override
     public void renderTileEntityAt(TileCelestialCrystals te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushMatrix();
@@ -38,6 +40,16 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
         GL11.glTranslated(x + 0.5, y + 0.1, z + 0.5);
         float size = 0.2F;
         GL11.glScalef(size, size, size);
+
+        int r = 0x59A51481;
+        BlockPos at = te.getPos();
+        r ^= at.getX();
+        r ^= at.getY();
+        r ^= at.getZ();
+        r = Math.abs(r);
+        r = rotMapping[r % rotMapping.length];
+        GL11.glRotated(r, 0, 1, 0);
+
         renderCelestialCrystals(te.getGrowth());
         RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();

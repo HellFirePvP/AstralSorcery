@@ -57,7 +57,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
         RenderHelper.disableStandardItemLighting();
         float f1 = entity.getAge() / 500.0F;
-        float f2 = 0.0F;
+        float f2 = 0.4F;
 
         Color effectColor = entity.getHighlightColor();
 
@@ -84,8 +84,8 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
             f4 /= 30.0F / (Math.min(entity.getAge(), 10) / 10.0F);
             vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
             vb.pos(-0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos(0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos(0.0D, fa, 1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
+            vb.pos( 0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
+            vb.pos(0.0D,         fa,  1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             vb.pos(-0.866D * f4, fa, -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             tes.draw();
         }

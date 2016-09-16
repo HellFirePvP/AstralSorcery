@@ -1,12 +1,10 @@
-package hellfirepvp.astralsorcery.common.item.crystal;
+package hellfirepvp.astralsorcery.common.item.crystal.base;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -18,25 +16,11 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemTunedCrystal
+ * Class: ItemTunedCrystalBase
  * Created by HellFirePvP
- * Date: 08.05.2016 / 22:08
+ * Date: 15.09.2016 / 19:47
  */
-public class ItemTunedCrystal extends ItemRockCrystalBase {
-
-    @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        ItemStack stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
-        applyConstellation(stack, Constellations.orion);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
-        applyConstellation(stack, Constellations.orion);
-        applyTrait(stack, Constellations.phoenix);
-        subItems.add(stack);
-    }
+public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
@@ -56,14 +40,14 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
     }
 
     public static void applyTrait(ItemStack stack, Constellation trait) {
-        if (!(stack.getItem() instanceof ItemTunedCrystal)) return;
+        if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
         cmp.setString("trait", trait.getName());
     }
 
     public static Constellation getTrait(ItemStack stack) {
-        if (!(stack.getItem() instanceof ItemTunedCrystal)) return null;
+        if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
         NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
         String strCName = cmp.getString("trait");
@@ -71,13 +55,13 @@ public class ItemTunedCrystal extends ItemRockCrystalBase {
     }
 
     public static void applyConstellation(ItemStack stack, Constellation constellation) {
-        if (!(stack.getItem() instanceof ItemTunedCrystal)) return;
+        if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
         constellation.writeToNBT(ItemNBTHelper.getPersistentData(stack));
     }
 
     public static Constellation getConstellation(ItemStack stack) {
-        if (!(stack.getItem() instanceof ItemTunedCrystal)) return null;
+        if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
         return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
     }

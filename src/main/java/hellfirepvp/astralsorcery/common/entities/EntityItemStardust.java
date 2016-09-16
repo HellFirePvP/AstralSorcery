@@ -60,7 +60,7 @@ public class EntityItemStardust extends EntityItem {
         } else {
             if(canCraft()) {
                 inertMergeTick++;
-                if(inertMergeTick >= TOTAL_MERGE_TIME) {
+                if(inertMergeTick >= TOTAL_MERGE_TIME && rand.nextInt(20) == 0) {
                     buildCelestialCrystals();
                 }
             } else {

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -28,12 +29,14 @@ import javax.annotation.Nonnull;
 public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private CrystalProperties crystalProperties;
+    private BlockCollectorCrystalBase.CollectorCrystalType type;
     private boolean doesSeeSky, hasBeenLinkedBefore;
 
-    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore) {
+    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
+        this.type = type;
         this.hasBeenLinkedBefore = hasBeenLinkedBefore;
     }
 
@@ -70,6 +73,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         this.crystalProperties = CrystalProperties.readFromNBT(compound);
         this.doesSeeSky = compound.getBoolean("seesSky");
         this.hasBeenLinkedBefore = compound.getBoolean("linkedBefore");
+        this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
     }
 
     @Override
@@ -79,13 +83,14 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         crystalProperties.writeToNBT(compound);
         compound.setBoolean("seesSky", doesSeeSky);
         compound.setBoolean("linkedBefore", hasBeenLinkedBefore);
+        compound.setInteger("collectorType", type.ordinal());
     }
 
     public static class Provider implements SourceClassRegistry.SourceProvider {
 
         @Override
         public IIndependentStarlightSource provideEmptySource() {
-            return new IndependentCrystalSource(null, null, false, false);
+            return new IndependentCrystalSource(null, null, false, false, null);
         }
 
         @Override

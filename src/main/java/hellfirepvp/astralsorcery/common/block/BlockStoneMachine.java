@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;

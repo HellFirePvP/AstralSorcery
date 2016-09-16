@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
@@ -8,6 +9,8 @@ import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,8 +21,8 @@ import net.minecraft.world.World;
  */
 public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHighlighted {
 
-    public ItemCollectorCrystal() {
-        super(BlocksAS.collectorCrystal);
+    public ItemCollectorCrystal(BlockCollectorCrystalBase collectorCrystalBase) {
+        super(collectorCrystalBase);
         setMaxStackSize(1);
     }
 
@@ -31,11 +34,23 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     @Override
     public Entity createEntity(World world, Entity entity, ItemStack itemstack) {
         EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
+        BlockCollectorCrystalBase.CollectorCrystalType type = getType(itemstack);
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            ei.applyColor(Color.BLUE);
+        }
         ei.setPickupDelay(40);
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
         return ei;
+    }
+
+    public static void setType(ItemStack stack, BlockCollectorCrystalBase.CollectorCrystalType type) {
+        ItemNBTHelper.getPersistentData(stack).setInteger("collectorType", type.ordinal());
+    }
+
+    public static BlockCollectorCrystalBase.CollectorCrystalType getType(ItemStack stack) {
+        return BlockCollectorCrystalBase.CollectorCrystalType.values()[ItemNBTHelper.getPersistentData(stack).getInteger("collectorType")];
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {

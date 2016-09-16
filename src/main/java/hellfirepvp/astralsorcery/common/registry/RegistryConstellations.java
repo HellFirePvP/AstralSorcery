@@ -21,20 +21,20 @@ import static hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstrai
 public class RegistryConstellations {
 
     public static void init() {
-        ConstellationRegistry.registerTier(0, ProgressionTier.EXPLORATION, createRInfo(0.2, -0.2, 0, 5), 1.0F);
+        ConstellationRegistry.registerTier(0, ProgressionTier.EXPLORATION, createRInfo(0.2, -0.2, 0, 5), 1.0F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WAXING1_2, CelestialHandler.MoonPhase.NEW)));
 
-        //Only visible during full, new, and waning moon.
         ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 0.9F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
 
-        ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 0.5F,
+        ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 0.9F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WANING1_2, CelestialHandler.MoonPhase.WAXING1_2)));
 
-        ConstellationRegistry.registerTier(3, ProgressionTier.NETWORKING, createRInfo(-0.4, -0.6, 0.5, 18), 0.25F,
-                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.WANING1_4)));
+        ConstellationRegistry.registerTier(3, ProgressionTier.NETWORKING, createRInfo(-0.4, -0.6, 0.5, 18), 0.8F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WAXING3_4, CelestialHandler.MoonPhase.WANING1_4)));
 
-        ConstellationRegistry.registerTier(4, ProgressionTier.TRAIT_CRAFT, createRInfo(0.4, -0.5, 0.5, 19), 0.09F,
-                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WANING3_4, CelestialHandler.MoonPhase.NEW)));
+        ConstellationRegistry.registerTier(4, ProgressionTier.TRAIT_CRAFT, createRInfo(0.4, -0.5, 0.5, 19), 0.7F,
+                AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WANING3_4, CelestialHandler.MoonPhase.WAXING1_4)));
 
         rebuildConstellations();
 
@@ -44,7 +44,7 @@ public class RegistryConstellations {
     }
 
     private static void registerConstellations() {
-      //bigDipper. register("bigDipper",  0);
+        //bigDipper. register("bigDipper",  0);
         fornax.    register("fornax",     0);
         ara.       register("ara",        0);
         aquila.    register("aquila",     0);

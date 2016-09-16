@@ -5,6 +5,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -25,10 +27,11 @@ public interface IBlockStarlightRecipient {
      * and if this block is not a transmission node.
      *
      * @param world the world this block instance is in
+     * @param rand a world-independent random for convenience
      * @param pos the position
      * @param starlightType the constellation type of the starlight received
      * @param amount the amount received
      */
-    public void receiveStarlight(World world, BlockPos pos, Constellation starlightType, double amount);
+    public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount);
 
 }

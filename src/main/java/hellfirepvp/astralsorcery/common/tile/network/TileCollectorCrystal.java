@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.tile.network;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -25,6 +26,7 @@ import javax.annotation.Nullable;
  */
 public class TileCollectorCrystal extends TileSourceBase {
 
+    private BlockCollectorCrystalBase.CollectorCrystalType type;
     private CrystalProperties usedCrystalProperties;
     private boolean playerMade;
     private Constellation associatedType;
@@ -41,11 +43,12 @@ public class TileCollectorCrystal extends TileSourceBase {
         return associatedType;
     }
 
-    public void onPlace(Constellation constellation, CrystalProperties properties, boolean player) {
+    public void onPlace(Constellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.playerMade = player;
         //this.charge = charge;
         this.usedCrystalProperties = properties;
+        this.type = type;
         markDirty();
     }
 
@@ -55,6 +58,10 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     public static void breakDamage(World world, BlockPos pos) {}
 
+    public BlockCollectorCrystalBase.CollectorCrystalType getType() {
+        return type;
+    }
+
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
@@ -62,6 +69,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.playerMade = compound.getBoolean("player");
         this.associatedType = Constellation.readFromNBT(compound);
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
+        this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
     }
 
     @Override
@@ -71,6 +79,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         compound.setBoolean("player", playerMade);
         associatedType.writeToNBT(compound);
         usedCrystalProperties.writeToNBT(compound);
+        compound.setInteger("collectorType", type.ordinal());
     }
 
     @Nullable
@@ -81,7 +90,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @Override
     public IIndependentStarlightSource provideNewSourceNode() {
-        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade);
+        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade, type);
     }
 
     @Override

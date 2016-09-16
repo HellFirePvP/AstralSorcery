@@ -6,9 +6,11 @@ import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -59,8 +61,13 @@ public class RegistryItems {
     private static void registerItems() {
         craftingComponent = registerItem(new ItemCraftingComponent());
         constellationPaper = registerItem(new ItemConstellationPaper());
-        rockCrystal = registerItem(new ItemRockCrystalBase());
-        tunedCrystal = registerItem(new ItemTunedCrystal());
+
+        rockCrystal = registerItem(new ItemRockCrystalSimple());
+        tunedRockCrystal = registerItem(new ItemTunedRockCrystal());
+
+        celestialCrystal = registerItem(new ItemCelestialCrystal());
+        tunedCelestialCrystal = registerItem(new ItemTunedCelestialCrystal());
+
         entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
@@ -78,7 +85,8 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));
         registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
 
-        registerItem(new ItemCollectorCrystal());
+        registerItem(new ItemCollectorCrystal(BlocksAS.collectorCrystal));
+        registerItem(new ItemCollectorCrystal(BlocksAS.celestialCollectorCrystal));
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {
@@ -108,7 +116,6 @@ public class RegistryItems {
         return registerItem(modId, item, item.getClass().getSimpleName());
     }
 
-    FIXME unstable test before using again.
 
     private static <T extends IForgeRegistryEntry> T registerItem(String modId, T item, String name) {
         try {

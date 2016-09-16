@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,6 +31,8 @@ import java.util.Map;
  * Date: 05.08.2016 / 11:02
  */
 public class TransmissionWorldHandler {
+
+    private static final Random rand = new Random();
 
     //If a source looses all chunks/all chunks in its network get unloaded it doesn't need to broadcast starlight anymore
     //This map exists to associate a certain chunkPosition to the involved networks in it.
@@ -93,7 +96,7 @@ public class TransmissionWorldHandler {
                         if (b instanceof IBlockStarlightRecipient) {
                             Float multiplier = lossMultipliers.get(endPointPos);
                             if (multiplier != null) {
-                                ((IBlockStarlightRecipient) b).receiveStarlight(world, endPointPos, type, starlight * multiplier);
+                                ((IBlockStarlightRecipient) b).receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
                             }
                         } else {
                             chain.updatePosAsResolved(world, endPointPos);

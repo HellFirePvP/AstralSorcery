@@ -5,6 +5,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.item.IItemRenderer;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
@@ -34,12 +36,21 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     private static final WavefrontObject objCrystal = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "crystal_big");
     private static final BindableResource texWhite = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_white");
+    private static final BindableResource texBlue = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_blue");
 
     private static int dlCrystal = -1;
 
     @Override
     public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
-        renderTileEffects(x, y, z, 1F);
+        BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
+        switch (type) {
+            case ROCK_CRYSTAL:
+                renderTileEffects(x, y, z, 1F, Color.WHITE);
+                break;
+            case CELESTIAL_CRYSTAL:
+                renderTileEffects(x, y, z, 1F, Color.BLUE);
+                break;
+        }
 
         int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
         float perc = (256 - t) / 256F;
@@ -47,12 +58,19 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0.03 * perc, 0);
         RenderHelper.disableStandardItemLighting();
-        renderTile(x, y, z);
+        switch (type) {
+            case ROCK_CRYSTAL:
+                renderTile(x, y, z, texWhite);
+                break;
+            case CELESTIAL_CRYSTAL:
+                renderTile(x, y, z, texBlue);
+                break;
+        }
         RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();
     }
 
-    private void renderTileEffects(double x, double y, double z, float percFilled) {
+    private void renderTileEffects(double x, double y, double z, float percFilled, Color effectColor) {
         rand.setSeed(1553015L);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
@@ -65,9 +83,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
         RenderHelper.disableStandardItemLighting();
         float f1 = Minecraft.getMinecraft().theWorld.getWorldTime() / 400.0F;
-        float f2 = 0.8F;
-
-        Color effectColor = Color.WHITE;
+        float f2 = 0.4F;
 
         Random random = new Random(245L);
 
@@ -110,11 +126,11 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         GL11.glPopMatrix();
     }
 
-    private void renderTile(double x, double y, double z) {
+    private void renderTile(double x, double y, double z, BindableResource tex) {
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         GL11.glScalef(0.13F, 0.13F, 0.13F);
-        texWhite.bind();
+        tex.bind();
         if(dlCrystal == -1) {
             dlCrystal = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(dlCrystal, GL11.GL_COMPILE);
@@ -129,7 +145,15 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     @Override
     public void render(ItemStack stack) {
         RenderHelper.disableStandardItemLighting();
-        renderTile(0, 0, 0);
+        BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
+        switch (type) {
+            case ROCK_CRYSTAL:
+                renderTile(0, 0, 0, texWhite);
+                break;
+            case CELESTIAL_CRYSTAL:
+                renderTile(0, 0, 0, texBlue);
+                break;
+        }
         RenderHelper.enableStandardItemLighting();
     }
 
