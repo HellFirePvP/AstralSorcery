@@ -68,6 +68,6 @@ public class BlockLens extends BlockStarlightNetwork {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileCrystalLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class);
         if(te == null) return;
-        te.onPlace(CrystalProperties.getMaxProperties());
+        te.onPlace(CrystalProperties.getMaxRockProperties());
     }
 }

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import io.netty.buffer.ByteBuf;

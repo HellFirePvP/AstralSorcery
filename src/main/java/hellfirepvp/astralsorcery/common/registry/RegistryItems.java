@@ -3,7 +3,10 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
-import hellfirepvp.astralsorcery.common.item.ItemLinkingTool;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
+import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
@@ -19,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
@@ -33,10 +37,12 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  */
 public class RegistryItems {
 
+    public static Item.ToolMaterial crystalToolMaterial;
+
     public static CreativeTabs creativeTabAstralSorcery,
             creativeTabAstralSorceryPapers;
 
-    public static void initTabs() {
+    public static void setupDefaults() {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public Item getTabIconItem() {
@@ -49,6 +55,9 @@ public class RegistryItems {
                 return ItemsAS.constellationPaper;
             }
         };
+
+        crystalToolMaterial = EnumHelper.addToolMaterial("CRYSTAL", 3, 1000, 12.0F, 3.5F, 32);
+        crystalToolMaterial.customCraftingMaterial = null;
     }
 
     public static void init() {
@@ -71,6 +80,10 @@ public class RegistryItems {
         entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
+
+        crystalPickaxe = registerItem(new ItemCrystalPickaxe());
+        crystalShovel = registerItem(new ItemCrystalShovel());
+        crystalAxe = registerItem(new ItemCrystalAxe());
     }
 
     //Items associated to blocks/itemblocks

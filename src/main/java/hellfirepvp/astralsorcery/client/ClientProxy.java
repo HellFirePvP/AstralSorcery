@@ -5,7 +5,10 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
+import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityGrindstone;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityTelescope;
 import hellfirepvp.astralsorcery.client.render.item.RenderItemEntityPlacer;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCelestialCrystals;
@@ -22,7 +25,9 @@ import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
+import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
@@ -129,9 +134,12 @@ public class ClientProxy extends CommonProxy {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")   .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")   .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")   .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
 
         ClientJournalMapping.init();
+        OBJModelLibrary.init();
     }
 
     @Override
@@ -185,8 +193,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerEntityRenderers() {
-        //RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
-        //RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new RenderEntityGrindstone.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new RenderEntityGrindstone.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
     }
 

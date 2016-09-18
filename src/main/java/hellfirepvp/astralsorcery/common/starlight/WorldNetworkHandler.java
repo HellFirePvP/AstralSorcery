@@ -173,6 +173,7 @@ public class WorldNetworkHandler {
 
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
+            new Throwable().printStackTrace();
             AstralSorcery.log.warn("Can't find Transmission node for removal-queued Transmission tile!");
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;

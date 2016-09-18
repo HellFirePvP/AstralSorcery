@@ -2,6 +2,9 @@ package hellfirepvp.astralsorcery.common.item.base;
 
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +23,13 @@ public interface IGrindable {
 
     @Nonnull
     public GrindResult grind(EntityGrindstone grindstone, ItemStack stack, Random rand);
+
+    @SideOnly(Side.CLIENT)
+    default public void applyClientGrindstoneTransforms() {
+        GL11.glTranslated(0.3, 0.8, -0.3);
+        GL11.glRotated(65, 1, 0, 0);
+        GL11.glRotated(140, 0, 1, 0);
+    }
 
     public static class GrindResult {
 

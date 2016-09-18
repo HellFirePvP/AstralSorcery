@@ -4,11 +4,14 @@ import com.google.common.base.Optional;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,11 +19,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -57,8 +65,8 @@ public class EntityGrindstone extends EntityLivingBase {
         if(hand == EnumHand.OFF_HAND) {
             return EnumActionResult.SUCCESS;
         }
+        ItemStack grind = getGrindItem();
         if(!worldObj.isRemote) {
-            ItemStack grind = getGrindItem();
             if(grind != null) {
                 if(player.isSneaking()) {
                     ItemUtils.dropItem(worldObj, posX, posY + 1.3F, posZ, grind);
@@ -77,6 +85,7 @@ public class EntityGrindstone extends EntityLivingBase {
                                 break;
                             case FAIL_BREAK_ITEM:
                                 setGrindItem(null);
+                                worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
                                 break;
                         }
                     }
@@ -94,6 +103,7 @@ public class EntityGrindstone extends EntityLivingBase {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
                             setGrindItem(toSet);
+                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
 
                             if(!player.isCreative()) {
                                 stack.stackSize--;
@@ -102,8 +112,31 @@ public class EntityGrindstone extends EntityLivingBase {
                     }
                 }
             }
+        } else {
+            if(grind != null && !player.isSneaking()) {
+                Item i = grind.getItem();
+                if(i instanceof IGrindable) {
+                    if(((IGrindable) i).canGrind(this, grind)) {
+                        for (int j = 0; j < 15; j++) {
+                            worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.7, posZ,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
+                        }
+                    }
+                }
+            }
         }
         return EnumActionResult.PASS;
+    }
+
+    @Override
+    public void onDeath(DamageSource cause) {
+        ItemStack grind = getGrindItem();
+        if(grind != null) {
+            ItemUtils.dropItem(worldObj, posX, posY + 1.3F, posZ, grind);
+        }
+        super.onDeath(cause);
     }
 
     @Override

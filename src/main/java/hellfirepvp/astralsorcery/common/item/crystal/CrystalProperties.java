@@ -28,13 +28,12 @@ public class CrystalProperties {
 
     public static final int MAX_SIZE_ROCK = 500;
     public static final int MAX_SIZE_CELESTIAL = 800;
-    private static final CrystalProperties MAXED_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100);
+    private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100);
+    private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100);
 
-    private int size; //(theoretically) 0 to 500
-    private int purity; //0 to 100 where 100 being completely pure.
-    private int collectiveCapability; //0 to 100 where 100 being best collection rate.
-
-    CrystalProperties() {}
+    protected int size; //(theoretically) 0 to X
+    protected int purity; //0 to 100 where 100 being completely pure.
+    protected int collectiveCapability; //0 to 100 where 100 being best collection rate.
 
     public CrystalProperties(int size, int purity, int collectiveCapability) {
         this.size = size;
@@ -55,7 +54,7 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties readFromNBT(NBTTagCompound compound) {
-        CrystalProperties prop = new CrystalProperties();
+        CrystalProperties prop = new CrystalProperties(0, 0, 0);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
@@ -89,8 +88,12 @@ public class CrystalProperties {
         return new CrystalProperties(size, purity, collect);
     }
 
-    public static CrystalProperties getMaxProperties() {
-        return MAXED_PROPERTIES;
+    public static CrystalProperties getMaxRockProperties() {
+        return MAXED_ROCK_PROPERTIES;
+    }
+
+    public static CrystalProperties getMaxCelestialProperties() {
+        return MAXED_CELESTIAL_PROPERTIES;
     }
 
     @SideOnly(Side.CLIENT)

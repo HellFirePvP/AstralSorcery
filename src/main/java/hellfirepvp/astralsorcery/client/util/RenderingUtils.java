@@ -1,11 +1,14 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -99,6 +102,51 @@ public class RenderingUtils {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+    }
+
+    public static void renderFacingFullQuad(double px, double py, double pz, float partialTicks, float scale/*, float angle*/) {
+        renderFacingQuad(px, py, pz, partialTicks, scale, 0, 0, 1, 1);
+    }
+
+    public static void renderFacingQuad(double px, double py, double pz, float partialTicks, float scale/*, float angle*/, double u, double v, double uLength, double vLength) {
+        float arX =  ActiveRenderInfo.getRotationX();
+        float arZ =  ActiveRenderInfo.getRotationZ();
+        float arYZ = ActiveRenderInfo.getRotationYZ();
+        float arXY = ActiveRenderInfo.getRotationXY();
+        float arXZ = ActiveRenderInfo.getRotationXZ();
+
+        Entity e = Minecraft.getMinecraft().getRenderViewEntity();
+        if(e == null) {
+            e = Minecraft.getMinecraft().thePlayer;
+        }
+        double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
+        double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
+        double iPZ = e.prevPosZ + (e.posZ - e.prevPosZ) * partialTicks;
+
+        GL11.glTranslated(-iPX, -iPY, -iPZ);
+
+        Vector3 v1 = new Vector3(-arX * scale - arYZ * scale, -arXZ * scale, -arZ * scale - arXY * scale);
+        Vector3 v2 = new Vector3(-arX * scale + arYZ * scale,  arXZ * scale, -arZ * scale + arXY * scale);
+        Vector3 v3 = new Vector3( arX * scale + arYZ * scale,  arXZ * scale,  arZ * scale + arXY * scale);
+        Vector3 v4 = new Vector3( arX * scale - arYZ * scale, -arXZ * scale,  arZ * scale - arXY * scale);
+        /*if (angle != 0.0F) {
+            Vector3 pvec = new Vector3(iPX, iPY, iPZ);
+            Vector3 tvec = new Vector3(px, py, pz);
+            Vector3 qvec = pvec.subtract(tvec).normalize();
+            Vector3.Quat q = Vector3.Quat.aroundAxis(qvec, angle);
+            q.rotate(v1);
+            q.rotate(v2);
+            q.rotate(v3);
+            q.rotate(v4);
+        }*/
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer vb = t.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(px + v1.getX(), py + v1.getY(), pz + v1.getZ()).tex(u,           v + vLength).endVertex();
+        vb.pos(px + v2.getX(), py + v2.getY(), pz + v2.getZ()).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(px + v3.getX(), py + v3.getY(), pz + v3.getZ()).tex(u + uLength, v          ).endVertex();
+        vb.pos(px + v4.getX(), py + v4.getY(), pz + v4.getZ()).tex(u,           v          ).endVertex();
+        t.draw();
     }
 
 }

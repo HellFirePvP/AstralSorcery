@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;

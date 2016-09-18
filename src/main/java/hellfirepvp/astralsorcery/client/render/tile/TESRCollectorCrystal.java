@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -34,7 +35,6 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     private static final Random rand = new Random();
 
-    private static final WavefrontObject objCrystal = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "crystal_big");
     private static final BindableResource texWhite = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_white");
     private static final BindableResource texBlue = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "crystal_big_blue");
 
@@ -134,7 +134,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         if(dlCrystal == -1) {
             dlCrystal = GLAllocation.generateDisplayLists(1);
             GL11.glNewList(dlCrystal, GL11.GL_COMPILE);
-            objCrystal.renderAll(true);
+            OBJModelLibrary.bigCrystal.renderAll(true);
             GL11.glEndList();
         }
         GL11.glCallList(dlCrystal);

@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util.item;
 
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,7 +22,9 @@ public class AstralTEISR extends TileEntityItemStackRenderer {
     @Override
     public void renderByItem(ItemStack itemStackIn) {
         if(ItemRenderRegistry.shouldHandleItemRendering(itemStackIn)) {
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             ItemRenderRegistry.renderItemStack(itemStackIn);
+            GL11.glPopAttrib();
             return;
         }
 

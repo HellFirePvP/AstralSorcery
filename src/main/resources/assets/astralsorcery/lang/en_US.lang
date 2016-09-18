@@ -59,8 +59,11 @@ item.ItemTunedCelestialCrystal.name=Attuned Celestial Crystal
 item.ItemCelestialCrystal.name=Celestial Crystal
 item.ItemEntityPlacer.telescope.name=Telescope
 item.ItemEntityPlacer.grindstone.name=Grindstone
-item.ItemLinkingTool.name=[WIP] Linking Tool
-item.ItemJournal.name=[WIP] Journal
+item.ItemLinkingTool.name=Linking Tool
+item.ItemJournal.name=Journal
+item.ItemCrystalPickaxe.name=Crystal Pickaxe
+item.ItemCrystalShovel.name=Crystal Shovel
+item.ItemCrystalAxe.name=Crystal Axe
 
 fluid.astralsorcery.liquidStarlight=Liquid Starlight
 

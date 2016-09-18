@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockStarlightNetwork;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -69,7 +68,7 @@ public class BlockPrism extends BlockStarlightNetwork {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileCrystalPrismLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class);
         if(te == null) return;
-        te.onPlace(CrystalProperties.getMaxProperties());
+        te.onPlace(CrystalProperties.getMaxRockProperties());
     }
 
 }

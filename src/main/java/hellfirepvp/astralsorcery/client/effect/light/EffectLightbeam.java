@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class EffectLightbeam implements IComplexEffect {
 
-    private static final BindableResource beamTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "lightbeam");
+    private static final BindableResource beamTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
     private static final SpriteSheetResource beamSprite = beamTex.asSpriteSheet(16, 4);
     private final Vector3 from, to, aim, aimPerp;
     private final double fromSize, toSize;

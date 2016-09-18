@@ -46,7 +46,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class CommonProxy implements IGuiHandler {
 
     public void preInit() {
-        RegistryItems.initTabs();
+        RegistryItems.setupDefaults();
 
         RegistryConstellations.init();
 

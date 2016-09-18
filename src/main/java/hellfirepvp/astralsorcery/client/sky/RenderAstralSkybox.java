@@ -64,7 +64,9 @@ public class RenderAstralSkybox extends IRenderHandler {
         //Avg 0,36-0,5ms rendering time.
 
         //long n = System.nanoTime();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         renderSky(partialTicks);
+        GL11.glPopAttrib();
         //AstralSorcery.log.info(System.nanoTime() - n);
     }
 

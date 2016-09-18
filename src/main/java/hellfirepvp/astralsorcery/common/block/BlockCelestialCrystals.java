@@ -106,6 +106,17 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        boolean replaceable = super.canPlaceBlockAt(worldIn, pos);
+        if(replaceable) {
+            BlockPos down = pos.down();
+            if(!worldIn.isSideSolid(down, EnumFacing.UP))
+                replaceable = false;
+        }
+        return replaceable;
+    }
+
+    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
     }

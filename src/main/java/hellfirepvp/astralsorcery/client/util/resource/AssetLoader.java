@@ -75,6 +75,7 @@ public class AssetLoader {
         GUI("gui"),
         MISC("misc"),
         MODELS("models"),
+        EFFECT("effect"),
         ENVIRONMENT("environment");
 
         private final String location;

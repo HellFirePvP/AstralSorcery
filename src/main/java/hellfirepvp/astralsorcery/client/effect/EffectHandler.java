@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -40,26 +41,30 @@ public final class EffectHandler {
 
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             synchronized (complexEffects) {
-                complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT).stream().forEach((effect) -> effect.render(event.getPartialTicks()));
+                for (IComplexEffect effect : complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT)) {
+                    GL11.glPushMatrix();
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    effect.render(event.getPartialTicks());
+                    GL11.glPopAttrib();
+                    GL11.glPopMatrix();
+                }
             }
         }
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
     }
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
-        GL11.glPushMatrix();
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         synchronized (complexEffects) {
-            complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP).stream().forEach((effect) -> effect.render(event.getPartialTicks()));
+            for (IComplexEffect effect : complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP)) {
+                GL11.glPushMatrix();
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                effect.render(event.getPartialTicks());
+                GL11.glPopAttrib();
+                GL11.glPopMatrix();
+            }
         }
-        GL11.glPopAttrib();
-        GL11.glPopMatrix();
     }
 
     @SubscribeEvent
@@ -67,6 +72,11 @@ public final class EffectHandler {
         if (event.phase != TickEvent.Phase.END) return;
 
         tick();
+    }
+
+    public EntityComplexFX registerFX(EntityComplexFX entityComplexFX) {
+        register(entityComplexFX);
+        return entityComplexFX;
     }
 
     public OverlayText overlayText(String message, int tickTimeout, OverlayText.OverlayTextProperties properties) {

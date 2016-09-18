@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.util.item.IItemRenderer;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -23,11 +24,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelestialCrystals> implements IItemRenderer {
 
-    public static final WavefrontObject crystal0 = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "c_crystal0");
-    public static final WavefrontObject crystal1 = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "c_crystal1");
-    public static final WavefrontObject crystal2 = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "c_crystal2");
-    public static final WavefrontObject crystal3 = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "c_crystal3");
-    public static final WavefrontObject crystal4 = AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, "c_crystal4");
     private static int dlC0 = -1, dlC1 = -1, dlC2 = -1, dlC3 = -1, dlC4 = -1;
     private static final BindableResource texCelestialCrystals = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "c_crystal_tex");
 
@@ -63,27 +59,27 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
         switch (stage) {
             case 0:
                 dlSelected = dlC0;
-                obj = crystal0;
+                obj = OBJModelLibrary.crystalsStage0;
                 break;
             case 1:
                 dlSelected = dlC1;
-                obj = crystal1;
+                obj = OBJModelLibrary.crystalsStage1;
                 break;
             case 2:
                 dlSelected = dlC2;
-                obj = crystal2;
+                obj = OBJModelLibrary.crystalsStage2;
                 break;
             case 3:
                 dlSelected = dlC3;
-                obj = crystal3;
+                obj = OBJModelLibrary.crystalsStage3;
                 break;
             case 4:
                 dlSelected = dlC4;
-                obj = crystal4;
+                obj = OBJModelLibrary.crystalsStage4;
                 break;
             default:
                 dlSelected = dlC0;
-                obj = crystal0;
+                obj = OBJModelLibrary.crystalsStage0;
                 break;
         }
         if(dlSelected == -1) {
