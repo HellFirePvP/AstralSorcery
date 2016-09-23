@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -65,6 +66,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
     public static enum ParticleEventType {
 
         COLLECTOR_BURST(TileCollectorCrystal::breakParticles),
+        CELESTIAL_CRYSTAL_BURST(TileCelestialCrystals::breakParticles),
         CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles);
 
         private final EventAction action;

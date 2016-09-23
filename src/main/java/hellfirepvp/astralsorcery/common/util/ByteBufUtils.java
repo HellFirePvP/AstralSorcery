@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.util;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +37,19 @@ public class ByteBufUtils {
         byte[] strBytes = new byte[length];
         buf.readBytes(strBytes, 0, length);
         return new String(strBytes);
+    }
+
+    public static void writePos(ByteBuf buf, BlockPos pos) {
+        buf.writeInt(pos.getX());
+        buf.writeInt(pos.getY());
+        buf.writeInt(pos.getZ());
+    }
+
+    public static BlockPos readPos(ByteBuf buf) {
+        int x = buf.readInt();
+        int y = buf.readInt();
+        int z = buf.readInt();
+        return new BlockPos(x, y, z);
     }
 
 }

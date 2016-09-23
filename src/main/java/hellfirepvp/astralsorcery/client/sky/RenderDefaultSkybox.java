@@ -204,7 +204,11 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
         renderDefaultSkybox(partialTicks);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private static void renderDefaultSkybox(float partialTicks) {

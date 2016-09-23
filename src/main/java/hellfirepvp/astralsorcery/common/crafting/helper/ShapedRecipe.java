@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ShapedRecipes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 10.08.2016 / 15:21
  */
-public class ShapedRecipe extends AbstractRecipe {
+public class ShapedRecipe extends AbstractCacheableRecipe {
 
     private ShapeMap crafingShape = new ShapeMap();
 
@@ -48,6 +49,11 @@ public class ShapedRecipe extends AbstractRecipe {
 
     @Override
     public void register() {
+        CraftingManager.getInstance().addRecipe(make());
+    }
+
+    @Override
+    public ShapedRecipes make() {
         Counter c = new Counter();
         c.count = 0;
         Map<ItemStack, Character> shapeCharacters = new HashMap<>();
@@ -61,7 +67,7 @@ public class ShapedRecipe extends AbstractRecipe {
         recipeObjArray[2] = lowerRow;
         int arrayPointer = 3;
         addToArray(shapeCharacters, recipeObjArray, arrayPointer);
-        CraftingManager.getInstance().addRecipe(getOutput(), recipeObjArray);
+        return RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray);
     }
 
     private void addToArray(Map<ItemStack, Character> shapeCharacters, Object[] recipeObjArray, int arrayPointer) {

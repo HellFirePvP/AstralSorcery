@@ -1,14 +1,21 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -22,6 +29,29 @@ import java.util.List;
  * Date: 29.08.2016 / 16:51
  */
 public class RenderingUtils {
+
+    private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
+
+    public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
+        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+
+        for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 4; ++k) {
+                for (int l = 0; l < 4; ++l) {
+                    double d0 = (double) pos.getX() + ((double)j + 0.5D) / 4.0D;
+                    double d1 = (double) pos.getY() + ((double)k + 0.5D) / 4.0D;
+                    double d2 = (double) pos.getZ() + ((double)l + 0.5D) / 4.0D;
+                    Particle digging = diggingFactory.getEntityFX(0, Minecraft.getMinecraft().theWorld,
+                            d0, d1, d2,
+                            d0 - (double)pos.getX() - 0.5D,
+                            d1 - (double)pos.getY() - 0.5D,
+                            d2 - (double)pos.getZ() - 0.5D,
+                            BlockMarble.getStateId(state));
+                    pm.addEffect(digging);
+                }
+            }
+        }
+    }
 
     public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         renderTooltip(x, y, tooltipData, color, color2, Minecraft.getMinecraft().fontRendererObj);

@@ -4,6 +4,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
+import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
@@ -24,11 +26,16 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionH
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -66,6 +73,7 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryBlocks.initRenderRegistry();
         RegistryRecipes.init();
+        AltarRecipeRegistry.registerRecipes();
         RegistryResearch.init();
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
@@ -123,7 +131,22 @@ public class CommonProxy implements IGuiHandler {
     }
 
     @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        if(id < 0 || id >= EnumGuiId.values().length) return null; //Out of range.
+        EnumGuiId guiType = EnumGuiId.values()[id];
+
+        TileEntity t = null;
+        if(guiType.getTileClass() != null) {
+            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass());
+            if(t == null) {
+                return null;
+            }
+        }
+
+        switch (guiType) {
+            case ALTAR_DISCOVERY:
+                return new ContainerAltarDiscovery(player.inventory, (TileAltar) t);
+        }
         return null;
     }
 
@@ -131,4 +154,31 @@ public class CommonProxy implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         return null;
     }
+
+    public void openGui(EnumGuiId guiId, EntityPlayer player, World world, int x, int y, int z) {
+        player.openGui(AstralSorcery.instance, guiId.ordinal(), world, x, y, z);
+    }
+
+    public static enum EnumGuiId {
+
+        TELESCOPE,
+        CONSTELLATION_PAPER,
+        ALTAR_DISCOVERY(TileAltar.class),
+        JOURNAL;
+
+        private final Class<? extends TileEntity> tileClass;
+
+        private EnumGuiId() {
+            this(null);
+        }
+
+        private EnumGuiId(Class<? extends TileEntity> tileClass) {
+            this.tileClass = tileClass;
+        }
+
+        public Class<? extends TileEntity> getTileClass() {
+            return tileClass;
+        }
+    }
+
 }

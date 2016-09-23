@@ -25,7 +25,7 @@ import java.util.List;
 public class MiscUtils {
 
     @Nullable
-    public static <T extends TileEntity> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+    public static <T> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
         TileEntity te = world.getTileEntity(pos);
         if(te == null) return null;
         if(tileClass.isInstance(te)) return (T) te;

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -62,6 +63,16 @@ public class SyncDataHolder implements ITickHandler {
 
     public static <T extends AbstractData> T getDataClient(String key) {
         return (T) clientData.get(key);
+    }
+
+    public static <T extends AbstractData> T getData(Side side, String key) {
+        switch (side) {
+            case CLIENT:
+                return getDataClient(key);
+            case SERVER:
+                return getDataServer(key);
+        }
+        throw new IllegalArgumentException("Side not defined: " + side);
     }
 
     public static void markForUpdate(String key) {

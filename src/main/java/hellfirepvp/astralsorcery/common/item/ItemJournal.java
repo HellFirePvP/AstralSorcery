@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientGuiHandler;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,7 +29,7 @@ public class ItemJournal extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if(worldIn.isRemote) {
-            playerIn.openGui(AstralSorcery.instance, ClientGuiHandler.EnumClientGui.JOURNAL.ordinal(), worldIn, 0, 0, 0);
+            AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL, playerIn, worldIn, 0, 0, 0);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
     }

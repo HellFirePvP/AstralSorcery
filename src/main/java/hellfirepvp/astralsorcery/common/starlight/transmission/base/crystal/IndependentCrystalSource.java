@@ -42,7 +42,11 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public float produceStarlightTick(World world, BlockPos pos) {
-        return CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType()));
+        if(!doesSeeSky) {
+            return 0F;
+        }
+        double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
+        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType())));
     }
 
     @Override

@@ -26,8 +26,8 @@ public class CrystalProperties {
 
     private static final Random rand = new Random();
 
-    public static final int MAX_SIZE_ROCK = 500;
-    public static final int MAX_SIZE_CELESTIAL = 800;
+    public static final int MAX_SIZE_ROCK = 400;
+    public static final int MAX_SIZE_CELESTIAL = 900;
     private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100);
     private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100);
 

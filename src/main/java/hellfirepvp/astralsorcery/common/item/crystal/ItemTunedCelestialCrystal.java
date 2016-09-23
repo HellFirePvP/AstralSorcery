@@ -2,7 +2,9 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -19,7 +21,7 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        ItemStack stack = new ItemStack(this);
+        /*ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         applyConstellation(stack, Constellations.ara);
         subItems.add(stack);
@@ -28,7 +30,12 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         applyConstellation(stack, Constellations.ara);
         applyTrait(stack, Constellations.draco);
-        subItems.add(stack);
+        subItems.add(stack);*/
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return RegistryItems.rarityCelestial;
     }
 
 }

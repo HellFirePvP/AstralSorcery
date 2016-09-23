@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
@@ -8,6 +10,7 @@ import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -46,7 +49,7 @@ public class TileCelestialCrystals extends TileSkybound {
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 mul *= 0.8;
 
-                if(rand.nextInt(6000) == 0) {
+                if(rand.nextInt(4000) == 0) {
                     worldObj.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
                 }
             }
@@ -63,6 +66,16 @@ public class TileCelestialCrystals extends TileSkybound {
     //TODO
     @SideOnly(Side.CLIENT)
     private void playStarmetalOreParticles() {}
+
+    @SideOnly(Side.CLIENT)
+    public static void breakParticles(PktParticleEvent event) {
+        BlockPos at = event.getPos();
+        int id = 19;
+        id ^= at.getX();
+        id ^= at.getY();
+        id ^= at.getZ();
+        EffectHandler.getInstance().registerFX(new EntityFXCrystalBurst(id, at.getX() + 0.5, at.getY() + 0.2, at.getZ() + 0.5, 1.5F));
+    }
 
     @Override
     protected void onFirstTick() {}
@@ -97,5 +110,4 @@ public class TileCelestialCrystals extends TileSkybound {
             grow();
         }
     }
-
 }

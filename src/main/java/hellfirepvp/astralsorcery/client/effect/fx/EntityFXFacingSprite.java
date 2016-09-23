@@ -31,6 +31,14 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         this.scale = scale;
     }
 
+    protected float getULengthMultiplier() {
+        return 1F;
+    }
+
+    protected float getVLengthMultiplier() {
+        return 1F;
+    }
+
     protected int getAgeBasedFrame() {
         float perc = ((float) age) / ((float) maxAge);
         return MathHelper.floor_float(spriteSheet.getFrameCount() * perc);
@@ -46,7 +54,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         int frame = getAgeBasedFrame();
         Tuple<Double, Double> uv = spriteSheet.getUVOffset(frame);
         spriteSheet.getResource().bind();
-        RenderingUtils.renderFacingQuad(x, y, z, pTicks, scale, uv.key, uv.value, spriteSheet.getULength(), spriteSheet.getVLength());
+        RenderingUtils.renderFacingQuad(x, y, z, pTicks, scale, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier());
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);

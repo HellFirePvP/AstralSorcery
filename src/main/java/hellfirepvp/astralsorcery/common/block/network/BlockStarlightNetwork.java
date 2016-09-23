@@ -1,11 +1,13 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileNetwork;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,6 +33,12 @@ public abstract class BlockStarlightNetwork extends BlockContainer {
         TileNetwork teN = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class);
         if(teN != null) {
             teN.onBreak();
+        }
+
+        IInventory inv = MiscUtils.getTileAt(worldIn, pos, IInventory.class);
+        if(inv != null && !worldIn.isRemote) {
+            ItemUtils.dropInventory(inv, worldIn, pos);
+            inv.clear();
         }
 
         super.breakBlock(worldIn, pos, state);

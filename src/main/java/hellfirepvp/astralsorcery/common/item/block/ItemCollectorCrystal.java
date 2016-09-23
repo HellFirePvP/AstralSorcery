@@ -5,8 +5,10 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -43,6 +45,15 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
         return ei;
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        BlockCollectorCrystalBase.CollectorCrystalType type = getType(stack);
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            return RegistryItems.rarityCelestial;
+        }
+        return super.getRarity(stack);
     }
 
     public static void setType(ItemStack stack, BlockCollectorCrystalBase.CollectorCrystalType type) {

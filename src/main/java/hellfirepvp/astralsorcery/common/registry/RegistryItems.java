@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -20,8 +21,10 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
@@ -38,6 +41,7 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
 public class RegistryItems {
 
     public static Item.ToolMaterial crystalToolMaterial;
+    public static EnumRarity rarityCelestial;
 
     public static CreativeTabs creativeTabAstralSorcery,
             creativeTabAstralSorceryPapers;
@@ -46,7 +50,7 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public Item getTabIconItem() {
-                return Item.getItemFromBlock(BlocksAS.blockAltar);
+                return ItemsAS.entityPlacer;
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
@@ -58,6 +62,8 @@ public class RegistryItems {
 
         crystalToolMaterial = EnumHelper.addToolMaterial("CRYSTAL", 3, 1000, 12.0F, 3.5F, 32);
         crystalToolMaterial.customCraftingMaterial = null;
+
+        rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
     }
 
     public static void init() {
@@ -84,6 +90,7 @@ public class RegistryItems {
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
         crystalAxe = registerItem(new ItemCrystalAxe());
+        crystalSword = registerItem(new ItemCrystalSword());
     }
 
     //Items associated to blocks/itemblocks

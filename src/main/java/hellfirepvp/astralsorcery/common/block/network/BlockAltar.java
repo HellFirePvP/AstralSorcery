@@ -1,33 +1,40 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.client.util.MiscEffectUtil;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.BlockCustomName;
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import net.minecraft.block.BlockContainer;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +47,8 @@ import java.util.List;
  */
 public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants {
 
+    private static AxisAlignedBB boxDiscovery = FULL_BLOCK_AABB;
+
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
 
     public BlockAltar() {
@@ -47,13 +56,40 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
+        setHarvestLevel("pickaxe", 3);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(ALTAR_TYPE, AltarType.ALTAR_1));
     }
 
     @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!worldIn.isRemote) {
+            TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class);
+            if(ta != null) {
+                switch (ta.getAltarLevel()) {
+                    case DISCOVERY:
+                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_DISCOVERY, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        return true;
+                    case ATTENUATION:
+                        break;
+                    case CONSTELLATION_CRAFT:
+                        break;
+                    case TRAIT_CRAFT:
+                        break;
+                    case ENDGAME:
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        RenderingUtils.playBlockBreakParticles(pos,
+                BlocksAS.blockMarble.getDefaultState()
+                        .withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         return true;
     }
 
@@ -73,6 +109,27 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         for (AltarType type : AltarType.values()) {
             list.add(new ItemStack(item, 1, type.ordinal()));
         }
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        TileAltar ta = MiscUtils.getTileAt(source, pos, TileAltar.class);
+        if(ta != null) {
+            TileAltar.AltarLevel al = ta.getAltarLevel();
+            switch (al) {
+                case DISCOVERY:
+                    return boxDiscovery;
+                case ATTENUATION:
+                    break;
+                case CONSTELLATION_CRAFT:
+                    break;
+                case TRAIT_CRAFT:
+                    break;
+                case ENDGAME:
+                    break;
+            }
+        }
+        return super.getBoundingBox(state, source, pos);
     }
 
     @Override

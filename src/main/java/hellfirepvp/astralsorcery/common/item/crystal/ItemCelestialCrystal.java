@@ -1,7 +1,9 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -23,4 +25,8 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase {
         subItems.add(stack);
     }
 
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return RegistryItems.rarityCelestial;
+    }
 }

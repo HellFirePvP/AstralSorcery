@@ -1,12 +1,16 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -85,7 +89,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         return super.getBoundingBox(state, source, pos);
     }
 
-    //TODO
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
@@ -186,6 +189,17 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
         }
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileCelestialCrystals te = MiscUtils.getTileAt(worldIn, pos, TileCelestialCrystals.class);
+        if(te != null && !worldIn.isRemote) {
+            PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
+                    pos.getX(), pos.getY(), pos.getZ());
+            PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

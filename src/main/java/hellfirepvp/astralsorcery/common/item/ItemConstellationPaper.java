@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientGuiHandler;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
@@ -89,7 +90,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if(worldIn.isRemote && getConstellation(itemStackIn) != null) {
-            playerIn.openGui(AstralSorcery.instance, ClientGuiHandler.EnumClientGui.CONSTELLATION_PAPER.ordinal(), worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
+            AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.CONSTELLATION_PAPER, playerIn, worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
     }

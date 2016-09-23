@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
@@ -36,6 +37,7 @@ public class ItemsAS {
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;
     public static ItemCrystalAxe crystalAxe;
+    public static ItemCrystalSword crystalSword;
 
     public static ItemStack itemBucketLiquidStarlight;
 

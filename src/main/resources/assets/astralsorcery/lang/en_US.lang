@@ -26,7 +26,7 @@ astralsorcery.journal.text.test=I'm gonna write this mainly to test the function
 
 crystal.size=Size
 crystal.purity=Purity
-crystal.collectivity=Collectivity
+crystal.collectivity=Cutting
 crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
@@ -64,6 +64,13 @@ item.ItemJournal.name=Journal
 item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe
+item.ItemCrystalSword.name=Crystal Sword
+
+inventory.altar.0=Luminous Crafting Table
+inventory.altar.1=[NoName-Attenuation] Altar
+inventory.altar.2=[NoName-ConstellationCraft] Altar
+inventory.altar.3=[NoName-TraitCraft] Altar
+inventory.altar.4=[NoName-Endgame] Altar
 
 fluid.astralsorcery.liquidStarlight=Liquid Starlight
 

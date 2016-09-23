@@ -17,11 +17,15 @@ import java.util.Map;
  */
 public class ClientScheduler implements ITickHandler {
 
+    private static int clientTick = 0;
+
     private Map<Runnable, Integer> queuedRunnables = new HashMap<>();
     private final Object lock = new Object();
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
+        clientTick++;
+
         synchronized (lock) {
             Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
             while (iterator.hasNext()) {
@@ -36,6 +40,10 @@ public class ClientScheduler implements ITickHandler {
                 }
             }
         }
+    }
+
+    public static int getClientTick() {
+        return clientTick;
     }
 
     @Override

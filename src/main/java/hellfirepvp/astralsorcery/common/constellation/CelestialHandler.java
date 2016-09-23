@@ -108,9 +108,9 @@ public class CelestialHandler {
 
     public static double calcDaytimeDistribution(World world) {
         long dayPart = world.getWorldTime() % 24000;
-        if(dayPart < 12000) return 0D;
-        if(dayPart < 15000) return (((double) dayPart) - 12000D) / 3000D;
-        if(dayPart > 21000) return 1D - (((double) dayPart) - 21000D) / 3000D;
+        if(dayPart < 11000) return 0D;
+        if(dayPart < 15000) return (((double) dayPart) - 11000D) / 4000D;
+        if(dayPart > 20000) return 1D - (((double) dayPart) - 20000D) / 4000D;
         return 1D;
     }
 

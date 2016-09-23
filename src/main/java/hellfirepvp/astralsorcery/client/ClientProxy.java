@@ -13,7 +13,10 @@ import hellfirepvp.astralsorcery.client.render.item.RenderItemEntityPlacer;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCelestialCrystals;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
+import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
+import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
+import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
@@ -127,16 +130,10 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
+        AstralSorcery.log.info("[AstralSorcery] Preloading textures");
+
         //Preloading heavy/needed textures
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")   .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1")   .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper") .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")   .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")   .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark").allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam").allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")   .allocateGlId();
-        MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
+        TexturePreloader.preloadTextures();
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();
@@ -144,8 +141,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        if(id < 0 || id >= ClientGuiHandler.EnumClientGui.values().length) return null; //Out of range.
-        ClientGuiHandler.EnumClientGui guiType = ClientGuiHandler.EnumClientGui.values()[id];
+        if(id < 0 || id >= EnumGuiId.values().length) return null; //Out of range.
+        EnumGuiId guiType = EnumGuiId.values()[id];
         return ClientGuiHandler.openGui(guiType, player, world, x, y, z);
     }
 
@@ -155,14 +152,14 @@ public class ClientProxy extends CommonProxy {
             stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
         }*/
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), new TESRAltar());
+        ItemRenderRegistry.registerCameraTransforms(Item.getItemFromBlock(BlocksAS.blockAltar), TESRAltar.getTransforms());
         ItemRenderRegistry.register(ItemsAS.entityPlacer, new RenderItemEntityPlacer());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
 
-        //TODO no op renders.
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRNoOp<TileCrystalLens>());
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lensPrism), new TESRNoOp<TileCrystalPrismLens>());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRLens());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lensPrism), new TESRPrismLens());
 
         //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
     }
@@ -184,8 +181,8 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
         registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
 
-        registerTESR(TileCrystalLens.class, new TESRNoOp<TileCrystalLens>());
-        registerTESR(TileCrystalPrismLens.class, new TESRNoOp<TileCrystalPrismLens>());
+        registerTESR(TileCrystalLens.class, new TESRLens());
+        registerTESR(TileCrystalPrismLens.class, new TESRPrismLens());
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {

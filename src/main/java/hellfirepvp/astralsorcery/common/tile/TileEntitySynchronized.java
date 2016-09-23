@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -12,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:17
  */
-public class TileEntitySynchronized extends TileEntity {
+public abstract class TileEntitySynchronized extends TileEntity {
 
     public final void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
@@ -48,6 +49,12 @@ public class TileEntitySynchronized extends TileEntity {
     public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
         super.onDataPacket(manager, packet);
         readCustomNBT(packet.getNbtCompound());
+    }
+
+    public void markForUpdate() {
+        IBlockState thisState = worldObj.getBlockState(pos);
+        worldObj.notifyBlockUpdate(pos, thisState, thisState, 3);
+        markDirty();
     }
 
 }

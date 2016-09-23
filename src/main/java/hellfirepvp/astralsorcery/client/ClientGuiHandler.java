@@ -4,11 +4,18 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
+import hellfirepvp.astralsorcery.client.gui.container.GuiAltarDiscovery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,7 +30,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ClientGuiHandler {
 
     @SideOnly(Side.CLIENT)
-    public static Object openGui(EnumClientGui guiType, EntityPlayer player, World world, int x, int y, int z) {
+    public static Object openGui(CommonProxy.EnumGuiId guiType, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity t = null;
+        if(guiType.getTileClass() != null) {
+            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass());
+            if(t == null) {
+                return null;
+            }
+        }
         switch (guiType) {
             case TELESCOPE:
                 Entity e = world.getEntityByID(x); //Suggested entity id;
@@ -41,19 +55,13 @@ public class ClientGuiHandler {
                 } else {
                     return new GuiConstellationPaper(c);
                 }
+            case ALTAR_DISCOVERY:
+                return new GuiAltarDiscovery(player.inventory, (TileAltar) t);
             case JOURNAL:
                 return new GuiJournalProgression();
             default:
                 return null;
         }
-    }
-
-    public static enum EnumClientGui {
-
-        TELESCOPE,
-        CONSTELLATION_PAPER,
-        JOURNAL
-
     }
 
 }

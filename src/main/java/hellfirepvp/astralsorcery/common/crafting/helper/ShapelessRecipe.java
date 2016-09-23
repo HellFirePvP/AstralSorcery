@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ShapelessRecipes;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -12,7 +13,7 @@ import net.minecraft.item.crafting.CraftingManager;
  * Created by HellFirePvP
  * Date: 10.08.2016 / 15:21
  */
-public class ShapelessRecipe extends AbstractRecipe {
+public class ShapelessRecipe extends AbstractCacheableRecipe {
 
     private int contentCounter = 0;
     private ItemStack[] contents = new ItemStack[9]; //Max. 9
@@ -45,8 +46,13 @@ public class ShapelessRecipe extends AbstractRecipe {
 
     @Override
     public void register() {
+        CraftingManager.getInstance().addRecipe(make());
+    }
+
+    @Override
+    public ShapelessRecipes make() {
         Object[] parts = new Object[contentCounter];
         System.arraycopy(contents, 0, parts, 0, contentCounter);
-        CraftingManager.getInstance().addShapelessRecipe(getOutput(), parts);
+        return RecipeHelper.getShapessRecipe(getOutput(), parts);
     }
 }
