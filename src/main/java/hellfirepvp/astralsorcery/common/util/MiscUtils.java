@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +15,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +40,16 @@ public class MiscUtils {
         Vec3d lookVec = entity.getLookVec();
         Vec3d end = pos.addVector(lookVec.xCoord * reachDst, lookVec.yCoord * reachDst, lookVec.zCoord * reachDst);
         return entity.worldObj.rayTraceBlocks(pos, end);
+    }
+
+    public static void applyRandomOffset(Vector3 target, Random rand) {
+        applyRandomOffset(target, rand, 1F);
+    }
+
+    public static void applyRandomOffset(Vector3 target, Random rand, float multiplier) {
+        target.addX(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
+        target.addY(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
+        target.addZ(rand.nextFloat() * multiplier * (rand.nextBoolean() ? 1 : -1));
     }
 
     public static boolean isChunkLoaded(World world, ChunkPos pos) {

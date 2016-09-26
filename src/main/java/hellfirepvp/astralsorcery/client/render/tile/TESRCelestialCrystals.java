@@ -31,6 +31,7 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
 
     @Override
     public void renderTileEntityAt(TileCelestialCrystals te, double x, double y, double z, float partialTicks, int destroyStage) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 0.1, z + 0.5);
@@ -49,6 +50,7 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
         renderCelestialCrystals(te.getGrowth());
         RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void renderCelestialCrystals(int stage) {

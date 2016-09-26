@@ -3,7 +3,10 @@ package hellfirepvp.astralsorcery.client.effect;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
+import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -88,6 +91,12 @@ public final class EffectHandler {
         }
         register(text);
         return text;
+    }
+
+    public TextureSpritePlane textureSpritePlane(SpriteSheetResource sheetResource, Axis rotationAxis) {
+        TextureSpritePlane plane = new TextureSpritePlane(sheetResource, rotationAxis);
+        register(plane);
+        return plane;
     }
 
     public TexturePlane texturePlane(BindableResource texture, Axis rotationAxis) {

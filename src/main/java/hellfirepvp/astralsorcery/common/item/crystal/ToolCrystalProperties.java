@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import net.minecraft.nbt.NBTTagCompound;
+import scala.actors.threadpool.Arrays;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -19,6 +21,10 @@ public class ToolCrystalProperties extends CrystalProperties {
     }
 
     public static ToolCrystalProperties merge(CrystalProperties... properties) {
+        return merge(Arrays.asList(properties));
+    }
+
+    public static ToolCrystalProperties merge(List<CrystalProperties> properties) {
         int totalSize = 0;
         int totalPurity = 0;
         int totalCollectivity = 0;
@@ -27,7 +33,7 @@ public class ToolCrystalProperties extends CrystalProperties {
             totalPurity += c.getPurity();
             totalCollectivity += c.getCollectiveCapability();
         }
-        return new ToolCrystalProperties(totalSize, totalPurity / properties.length, totalCollectivity / properties.length);
+        return new ToolCrystalProperties(totalSize, totalPurity / properties.size(), totalCollectivity / properties.size());
     }
 
     public static ToolCrystalProperties readFromNBT(NBTTagCompound compound) {

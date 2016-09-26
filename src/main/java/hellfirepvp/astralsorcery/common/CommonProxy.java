@@ -112,7 +112,11 @@ public class CommonProxy implements IGuiHandler {
         manager.register(SyncDataHolder.getTickInstance());
     }
 
-    public void postInit() {}
+    public void postInit() {
+        AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
+
+        AltarRecipeRegistry.compileRecipes();
+    }
 
     public void registerVariantName(Item item, String name) {}
 

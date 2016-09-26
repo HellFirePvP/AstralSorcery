@@ -26,6 +26,9 @@ public class ItemUtils {
         if(world.isRemote) return null;
         EntityItem ei = new EntityItem(world, x, y, z, stack);
         world.spawnEntityInWorld(ei);
+        ei.motionX = 0;
+        ei.motionY = 0;
+        ei.motionZ = 0;
         return ei;
     }
     public static EntityItem dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {

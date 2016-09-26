@@ -19,7 +19,7 @@ group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.10.2-12.18.1.2077"
+    version = "1.10.2-12.18.1.2094"
     runDir = "run"
 
     mappings = "snapshot_20160518"

@@ -20,8 +20,6 @@ public class ActiveCraftingTask {
 
     public void tick(TileAltar altar) {
         ticksCrafting++;
-
-        recipeToCraft.onCraftServerTick(altar, ticksCrafting);
     }
 
     public int getTicksCrafting() {
@@ -34,5 +32,9 @@ public class ActiveCraftingTask {
 
     public boolean isFinished() {
         return ticksCrafting >= recipeToCraft.craftingTickTime();
+    }
+
+    public void forceTick(int tick) {
+        this.ticksCrafting = tick;
     }
 }

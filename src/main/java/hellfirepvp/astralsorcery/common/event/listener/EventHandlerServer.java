@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
+import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -14,12 +15,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -43,6 +49,22 @@ public class EventHandlerServer {
                 inj.setDimension(0);
                 w.provider = inj;
                 AstralSorcery.log.info("Injected WorldProvider into dimension 0");
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
+        ItemStack hand = event.getItemStack();
+        if(event.getHand() == EnumHand.OFF_HAND) {
+            hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
+        }
+        if(hand == null || hand.getItem() == null) return;
+        if(hand.getItem() instanceof ISpecialInteractItem) {
+            ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
+            if(i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
+                i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand);
+                event.setCanceled(true);
             }
         }
     }

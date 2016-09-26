@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import net.minecraft.entity.Entity;
@@ -21,7 +22,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 03.08.2016 / 17:16
  */
-public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingTool {
+public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingTool, ISpecialInteractItem {
 
     public ItemLinkingTool() {
         setMaxDamage(0);
@@ -29,7 +30,7 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    @Override
+    /*@Override
     public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if(!world.isRemote) {
             LinkHandler.RightClickResult result = LinkHandler.onRightClick(player, world, pos, player.isSneaking());
@@ -38,6 +39,21 @@ public class ItemLinkingTool extends Item implements LinkHandler.IItemLinkingToo
         } else {
             player.swingArm(hand);
             return EnumActionResult.PASS;
+        }
+    }*/
+
+    @Override
+    public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public void onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
+        if(!world.isRemote) {
+            LinkHandler.RightClickResult result = LinkHandler.onRightClick(entityPlayer, world, pos, entityPlayer.isSneaking());
+            LinkHandler.propagateClick(result, entityPlayer, world, pos);
+        } else {
+            entityPlayer.swingArm(hand);
         }
     }
 }

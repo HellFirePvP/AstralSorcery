@@ -7,12 +7,16 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +37,9 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:18
  */
-public class TileAltar extends TileReceiverBaseInventory {
+public class TileAltar extends TileReceiverBaseInventory implements IWandInteract {
+
+    private static final Random rand = new Random();
 
     private ActiveCraftingTask craftingTask = null;
 
@@ -83,7 +90,7 @@ public class TileAltar extends TileReceiverBaseInventory {
 
     @SideOnly(Side.CLIENT)
     private void doCraftEffects() {
-        craftingTask.getRecipeToCraft().onCraftClientTick(this, ClientScheduler.getClientTick());
+        craftingTask.getRecipeToCraft().onCraftClientTick(this, ClientScheduler.getClientTick(), rand);
     }
 
     private boolean doTryCraft(boolean needUpdate) {
@@ -95,10 +102,10 @@ public class TileAltar extends TileReceiverBaseInventory {
         }
         if(craftingTask.isFinished()) {
             finishCrafting();
-            findRecipe();
             return true;
         }
         craftingTask.tick(this);
+        craftingTask.getRecipeToCraft().onCraftServerTick(this, craftingTask.getTicksCrafting(), rand);
         return needUpdate;
     }
 
@@ -106,12 +113,21 @@ public class TileAltar extends TileReceiverBaseInventory {
         if(craftingTask == null) return; //Wtf
 
         AbstractAltarRecipe recipe = craftingTask.getRecipeToCraft();
-        ItemStack out = recipe.getOutput(inv[4]); //Central item helps defining output - probably, eventually.
+        ShapeMap current = new ShapeMap();
+        for (int i = 0; i < 9; i++) {
+            ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
+            ItemStack stack = inv[i];
+            if(stack != null) {
+                current.put(slot, ItemUtils.copyStackWithSize(stack, 1));
+            }
+        }
+        ItemStack out = recipe.getOutput(current); //Central item helps defining output - probably, eventually.
         out = ItemUtils.copyStackWithSize(out, out.stackSize);
         for (int i = 0; i < 9; i++) {
             ItemUtils.decrStackInInventory(inv, i);
         }
         for (EnumFacing dir : EnumFacing.VALUES) {
+            if(dir == EnumFacing.UP) continue;
             IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class);
             if(i != null) {
                 if(ItemUtils.tryPlaceItemInInventory(out, i)) {
@@ -122,7 +138,7 @@ public class TileAltar extends TileReceiverBaseInventory {
             }
         }
         if(out.stackSize > 0) {
-            ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, out);
+            ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out);
         }
 
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired()); //Shouldn't reach < 0 but uuugh... safety
@@ -187,7 +203,7 @@ public class TileAltar extends TileReceiverBaseInventory {
     }
 
     @Override
-    protected void onInventoryChanged() {
+    public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneaking) {
         if(!worldObj.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
@@ -240,6 +256,19 @@ public class TileAltar extends TileReceiverBaseInventory {
         this.level = AltarLevel.values()[compound.getInteger("level")];
         this.experience = compound.getInteger("exp");
         this.starlightStored = compound.getInteger("starlight");
+
+        this.craftingTask = null;
+        if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
+            int recipeId = compound.getInteger("recipeId");
+            AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipe(recipeId);
+            if(recipe == null) {
+                AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Altar at " + getPos());
+            } else {
+                int tick = compound.getInteger("recipeTick");
+                this.craftingTask = new ActiveCraftingTask(recipe);
+                this.craftingTask.forceTick(tick);
+            }
+        }
     }
 
     @Override
@@ -249,6 +278,11 @@ public class TileAltar extends TileReceiverBaseInventory {
         compound.setInteger("level", level.ordinal());
         compound.setInteger("exp", experience);
         compound.setInteger("starlight", starlightStored);
+
+        if(craftingTask != null) {
+            compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
+            compound.setInteger("recipeTick", craftingTask.getTicksCrafting());
+        }
     }
 
     @Nullable

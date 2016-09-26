@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
+import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
@@ -86,6 +87,7 @@ public class RegistryItems {
         entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
+        wand = registerItem(new ItemWand());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

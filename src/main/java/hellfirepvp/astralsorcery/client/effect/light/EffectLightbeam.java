@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -25,8 +26,6 @@ import org.lwjgl.opengl.GL11;
  */
 public class EffectLightbeam implements IComplexEffect {
 
-    private static final BindableResource beamTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
-    private static final SpriteSheetResource beamSprite = beamTex.asSpriteSheet(16, 4);
     private final Vector3 from, to, aim, aimPerp;
     private final double fromSize, toSize;
     private int maxAge = 64;
@@ -81,7 +80,7 @@ public class EffectLightbeam implements IComplexEffect {
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        beamTex.bind();
+        SpriteLibrary.spriteLightbeam.getResource().bind();
 
         renderCurrentTextureAroundAxis(Math.toRadians(0F));
         renderCurrentTextureAroundAxis(Math.toRadians(120F));
@@ -111,11 +110,11 @@ public class EffectLightbeam implements IComplexEffect {
         VertexBuffer buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-        Tuple<Double, Double> uvOffset = beamSprite.getUVOffset(age);
+        Tuple<Double, Double> uvOffset = SpriteLibrary.spriteLightbeam.getUVOffset(age);
         double u = uvOffset.key;
         double v = uvOffset.value;
-        double uWidth = beamSprite.getULength();
-        double vHeight = beamSprite.getVLength();
+        double uWidth = SpriteLibrary.spriteLightbeam.getULength();
+        double vHeight = SpriteLibrary.spriteLightbeam.getVLength();
 
         Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
         buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).endVertex();

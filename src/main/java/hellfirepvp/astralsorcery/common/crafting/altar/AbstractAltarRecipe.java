@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -8,6 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,6 +25,8 @@ public abstract class AbstractAltarRecipe {
     private final IRecipe recipe;
     private final ItemStack out;
 
+    private int uniqueRecipeId = -1;
+
     public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
         this(neededLevel, recipe.make());
     }
@@ -33,7 +37,15 @@ public abstract class AbstractAltarRecipe {
         this.out = recipe.getRecipeOutput();
     }
 
-    public ItemStack getOutput(@Nullable ItemStack centralItem) {
+    public final void updateUniqueId(int id) {
+        this.uniqueRecipeId = id;
+    }
+
+    public final int getUniqueRecipeId() {
+        return uniqueRecipeId;
+    }
+
+    public ItemStack getOutput(ShapeMap centralGridMap) {
         return out;
     }
 
@@ -77,27 +89,14 @@ public abstract class AbstractAltarRecipe {
         return 100;
     }
 
-    public void onCraftServerFinish(TileAltar altar) {}
+    public void onCraftServerFinish(TileAltar altar, Random rand) {}
 
-    public void onCraftServerTick(TileAltar altar, int tick) {}
+    public void onCraftServerTick(TileAltar altar, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick) {}
+    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
     public void onCraftTESRRender(TileAltar te, double x, double y, double z, float partialTicks) {}
-
-    public static class DiscoveryRecipe extends AbstractAltarRecipe {
-
-        public DiscoveryRecipe(AbstractCacheableRecipe recipe) {
-            super(TileAltar.AltarLevel.DISCOVERY, recipe);
-            setPassiveStarlightRequirement(800);
-        }
-
-        public DiscoveryRecipe(IRecipe recipe) {
-            super(TileAltar.AltarLevel.DISCOVERY, recipe);
-        }
-
-    }
 
 }

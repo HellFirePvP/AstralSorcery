@@ -1,5 +1,6 @@
-package hellfirepvp.astralsorcery.client.effect;
+package hellfirepvp.astralsorcery.client.effect.texture;
 
+import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.Axis;
@@ -22,6 +23,8 @@ import java.awt.*;
  */
 public class TexturePlane implements IComplexEffect {
 
+    protected double u, v, uLength, vLength;
+
     private float lastRenderDegree = 0F;
 
     private int counter = 0;
@@ -38,7 +41,7 @@ public class TexturePlane implements IComplexEffect {
     private final BindableResource texture;
     private final Axis axis;
 
-    protected TexturePlane(BindableResource texture, Axis axis) {
+    public TexturePlane(BindableResource texture, Axis axis) {
         this.texture = texture;
         this.axis = axis;
     }
@@ -116,6 +119,7 @@ public class TexturePlane implements IComplexEffect {
         if(rView == null) return;
         if(rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > Config.maxEffectRenderDistanceSq) return;
 
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         removeOldTranslate(rView, partialTicks);
         GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), colorOverlay.getAlpha());
@@ -132,12 +136,16 @@ public class TexturePlane implements IComplexEffect {
             deg = fixDegree;
         }
 
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+
         currRenderAroundAxis(Math.toRadians(deg), axis);
         currRenderAroundAxis(Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
 
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void currRenderAroundAxis(double angle, Vector3 axis) {
@@ -158,16 +166,16 @@ public class TexturePlane implements IComplexEffect {
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 1).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v + vLength).endVertex();
 
         vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 1).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v + vLength).endVertex();
 
         vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(1, 0).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v          ).endVertex();
 
         vec = renderStart.clone().normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(0, 0).endVertex();
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v          ).endVertex();
         tes.draw();
 
         //GL11.glDisable(GL11.GL_BLEND);

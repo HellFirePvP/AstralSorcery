@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.util.data;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -56,6 +57,9 @@ public class Vector3 {
 
     public Vector3(Entity entity) {
         this(entity.posX, entity.posY, entity.posZ);
+    }
+    public Vector3(TileEntity te) {
+        this(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
     }
 
     public Vector3(Vec3d vec) {

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -38,6 +39,7 @@ public class ItemsAS {
     public static ItemCrystalShovel crystalShovel;
     public static ItemCrystalAxe crystalAxe;
     public static ItemCrystalSword crystalSword;
+    public static ItemWand wand;
 
     public static ItemStack itemBucketLiquidStarlight;
 

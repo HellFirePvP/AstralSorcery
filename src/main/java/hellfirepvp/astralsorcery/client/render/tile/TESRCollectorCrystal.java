@@ -42,6 +42,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     @Override
     public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
         switch (type) {
             case ROCK_CRYSTAL:
@@ -68,6 +69,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         }
         RenderHelper.enableStandardItemLighting();
         GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void renderTileEffects(double x, double y, double z, float percFilled, Color effectColor) {

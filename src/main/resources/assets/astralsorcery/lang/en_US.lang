@@ -61,6 +61,7 @@ item.ItemEntityPlacer.telescope.name=Telescope
 item.ItemEntityPlacer.grindstone.name=Grindstone
 item.ItemLinkingTool.name=Linking Tool
 item.ItemJournal.name=Journal
+item.ItemWand.name=Astral Attunement Rod
 item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe

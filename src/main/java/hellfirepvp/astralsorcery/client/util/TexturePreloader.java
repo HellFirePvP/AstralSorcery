@@ -28,6 +28,8 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store").allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
+
+        SpriteLibrary.init(); //Loads all spritesheets
     }
 
 }
