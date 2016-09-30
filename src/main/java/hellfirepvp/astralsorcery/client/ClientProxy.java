@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRNoOp;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
+import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
 import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -34,6 +35,7 @@ import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -151,8 +153,6 @@ public class ClientProxy extends CommonProxy {
         for (BlockAltar.AltarType type : BlockAltar.AltarType.values()) {
             stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
         }*/
-        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockAltar), new TESRAltar());
-        ItemRenderRegistry.registerCameraTransforms(Item.getItemFromBlock(BlocksAS.blockAltar), TESRAltar.getTransforms());
         ItemRenderRegistry.register(ItemsAS.entityPlacer, new RenderItemEntityPlacer());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
@@ -178,6 +178,7 @@ public class ClientProxy extends CommonProxy {
 
     private void registerTileRenderers() {
         registerTESR(TileAltar.class, new TESRAltar());
+        registerTESR(TileRitualPedestal.class, new TESRRitualPedestal());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
         registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
 

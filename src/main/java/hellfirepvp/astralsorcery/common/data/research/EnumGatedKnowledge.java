@@ -9,6 +9,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 */
 public enum EnumGatedKnowledge {
 
+    WAND_TYPE(ViewCapability.BASIC),
     CRYSTAL_SIZE(ViewCapability.BASIC),
     CRYSTAL_PURITY(ViewCapability.BASIC),
     CRYSTAL_COLLECT(ViewCapability.MOST),

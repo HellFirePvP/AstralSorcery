@@ -4,14 +4,17 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.Tier;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,10 +25,10 @@ import java.util.List;
  */
 public class DataActiveCelestials extends AbstractData {
 
-    private List<Constellation> activeConstellations = new LinkedList<>();
+    private Map<Tier, Constellation> constellationTierGrouped = new HashMap<>();
 
-    public List<Constellation> getActiveConstellations() {
-        return activeConstellations;
+    public Collection<Constellation> getActiveConstellations() {
+        return constellationTierGrouped.values();
     }
 
     public void updateIterations(Collection<CelestialHandler.TierIteration> iterations) {
@@ -41,13 +44,16 @@ public class DataActiveCelestials extends AbstractData {
         updateConstellations(list);
     }
 
+    //TODO check if i fcked up here.
     private void updateConstellations(List<Constellation> constellations) {
         for (Constellation c : constellations) {
-            if (!activeConstellations.contains(c)) {
-                activeConstellations.add(c);
-            }
+            Tier t = ConstellationRegistry.getTier(c.getAssociatedTier());
+            constellationTierGrouped.put(t, c);
+            /*if (!constellationTierGrouped.values().contains(c)) {
+                constellationTierGrouped.put(t, c);
+            }*/
         }
-        Iterator<Constellation> iterator = activeConstellations.iterator();
+        Iterator<Constellation> iterator = constellationTierGrouped.values().iterator();
         while (iterator.hasNext()) {
             Constellation c = iterator.next();
             if (!constellations.contains(c)) {
@@ -61,7 +67,7 @@ public class DataActiveCelestials extends AbstractData {
     @Override
     public void writeAllDataToPacket(NBTTagCompound compound) {
         NBTTagList list = new NBTTagList();
-        for (Constellation c : activeConstellations) {
+        for (Constellation c : getActiveConstellations()) {
             list.appendTag(new NBTTagString(c.getName()));
         }
         compound.setTag("constellations", list);
@@ -70,7 +76,7 @@ public class DataActiveCelestials extends AbstractData {
     @Override
     public void writeToPacket(NBTTagCompound compound) {
         NBTTagList list = new NBTTagList();
-        for (Constellation c : activeConstellations) {
+        for (Constellation c : getActiveConstellations()) {
             list.appendTag(new NBTTagString(c.getName()));
         }
         compound.setTag("constellations", list);
@@ -79,10 +85,10 @@ public class DataActiveCelestials extends AbstractData {
     @Override
     public void readRawFromPacket(NBTTagCompound compound) {
         if (!compound.hasKey("constellations")) {
-            this.activeConstellations = new LinkedList<>();
+            this.constellationTierGrouped = new HashMap<>();
             return;
         }
-        this.activeConstellations.clear();
+        this.constellationTierGrouped.clear();
         NBTTagList list = compound.getTagList("constellations", new NBTTagString().getId());
         for (int i = 0; i < list.tagCount(); i++) {
             String str = list.getStringTagAt(i);
@@ -90,7 +96,8 @@ public class DataActiveCelestials extends AbstractData {
             if (c == null) {
                 AstralSorcery.log.info("Received unknown constellation from server: " + str);
             } else {
-                this.activeConstellations.add(c);
+                Tier t = ConstellationRegistry.getTier(c.getAssociatedTier());
+                this.constellationTierGrouped.put(t, c);
             }
         }
     }
@@ -99,7 +106,7 @@ public class DataActiveCelestials extends AbstractData {
     public void handleIncomingData(AbstractData serverData) {
         if (!(serverData instanceof DataActiveCelestials)) return;
 
-        this.activeConstellations = ((DataActiveCelestials) serverData).activeConstellations;
+        this.constellationTierGrouped = ((DataActiveCelestials) serverData).constellationTierGrouped;
     }
 
     public static class Provider extends ProviderAutoAllocate<DataActiveCelestials> {

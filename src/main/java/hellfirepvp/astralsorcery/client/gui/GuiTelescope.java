@@ -13,9 +13,12 @@ import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
+import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,12 +26,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,7 +77,7 @@ public class GuiTelescope extends GuiWHScreen {
         World world = Minecraft.getMinecraft().theWorld;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
-        List<Constellation> activeConstellations =
+        Collection<Constellation> activeConstellations =
                 ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
         Constellation[] constellations = evaluateConstellations(r, activeConstellations);
 
@@ -186,7 +191,7 @@ public class GuiTelescope extends GuiWHScreen {
         tes.draw();
     }
 
-    private Constellation[] evaluateConstellations(Random rand, List<Constellation> activeConstellations) {
+    private Constellation[] evaluateConstellations(Random rand, Collection<Constellation> activeConstellations) {
         if (activeConstellations.size() > 8) {
             throw new IllegalStateException("More than 8 constellations active? More than 8 tiers? Wtf? Did someone add tiers?");
         }
@@ -441,6 +446,18 @@ public class GuiTelescope extends GuiWHScreen {
         ConstellationInformation constellationInfo = currentInformation.starRectangleMap.get(currentLinesCell);
         Constellation c = constellationInfo.constellation;
         if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) return;
+
+        boolean has = false;
+        List<ItemStack> papers = ItemUtils.scanInventoryFor(Minecraft.getMinecraft().thePlayer.inventory, ItemsAS.constellationPaper);
+        for (ItemStack stack : papers) {
+            Constellation con = ItemConstellationPaper.getConstellation(stack);
+            if(con.equals(c)) {
+                has = true;
+                break;
+            }
+        }
+
+        if(!has) return;
 
         List<StarConnection> sc = c.getConnections();
         if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.

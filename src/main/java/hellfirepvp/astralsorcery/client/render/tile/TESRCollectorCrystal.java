@@ -5,7 +5,6 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.item.IItemRenderer;
-import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -44,36 +43,22 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
-        switch (type) {
-            case ROCK_CRYSTAL:
-                renderTileEffects(x, y, z, 1F, Color.WHITE);
-                break;
-            case CELESTIAL_CRYSTAL:
-                renderTileEffects(x, y, z, 1F, Color.BLUE);
-                break;
-        }
+        long sBase = 1553015L;
+        sBase ^= (long) te.getPos().getX();
+        sBase ^= (long) te.getPos().getY();
+        sBase ^= (long) te.getPos().getZ();
+        Color c = type.displayColor;
+        renderTileLightEffects(x, y, z, 1F, c, sBase);
 
-        int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
-        float perc = (256 - t) / 256F;
-        perc = MathHelper.cos((float) (perc * 2 * Math.PI));
         GL11.glPushMatrix();
-        GL11.glTranslated(0, 0.03 * perc, 0);
-        RenderHelper.disableStandardItemLighting();
-        switch (type) {
-            case ROCK_CRYSTAL:
-                renderTile(x, y, z, texWhite);
-                break;
-            case CELESTIAL_CRYSTAL:
-                renderTile(x, y, z, texBlue);
-                break;
-        }
-        RenderHelper.enableStandardItemLighting();
+        GL11.glTranslated(x + 0.5, y, z + 0.5);
+        renderCrystal(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL, true);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void renderTileEffects(double x, double y, double z, float percFilled, Color effectColor) {
-        rand.setSeed(1553015L);
+    public static void renderTileLightEffects(double x, double y, double z, float percFilled, Color effectColor, long s) {
+        rand.setSeed(s);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
 
@@ -87,7 +72,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         float f1 = Minecraft.getMinecraft().theWorld.getWorldTime() / 400.0F;
         float f2 = 0.4F;
 
-        Random random = new Random(245L);
+        //Random random = new Random(245L);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -97,15 +82,15 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         GL11.glDepthMask(false);
         GL11.glPushMatrix();
         for (int i = 0; i < fancy_count; i++) {
-            GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(rand.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
             vb.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-            float fa = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-            float f4 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
+            float fa = rand.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
+            float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
             fa /= 30.0F / (Math.min(20, 10) / 10.0F);
             f4 /= 30.0F / (Math.min(20, 10) / 10.0F);
             vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
@@ -128,9 +113,26 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         GL11.glPopMatrix();
     }
 
-    private void renderTile(double x, double y, double z, BindableResource tex) {
+    public static void renderCrystal(boolean isCelestial, boolean bounce) {
         GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y, z + 0.5);
+        if(bounce) {
+            int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
+            float perc = (256 - t) / 256F;
+            perc = MathHelper.cos((float) (perc * 2 * Math.PI));
+            GL11.glTranslated(0, 0.03 * perc, 0);
+        }
+        RenderHelper.disableStandardItemLighting();
+        if(isCelestial) {
+            renderTile(texBlue);
+        } else {
+            renderTile(texWhite);
+        }
+        RenderHelper.enableStandardItemLighting();
+        GL11.glPopMatrix();
+    }
+
+    private static void renderTile(BindableResource tex) {
+        GL11.glPushMatrix();
         GL11.glScalef(0.13F, 0.13F, 0.13F);
         tex.bind();
         if(dlCrystal == -1) {
@@ -146,16 +148,19 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     @Override
     public void render(ItemStack stack) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(0.5, 0, 0.5);
         RenderHelper.disableStandardItemLighting();
         BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
         switch (type) {
             case ROCK_CRYSTAL:
-                renderTile(0, 0, 0, texWhite);
+                renderTile(texWhite);
                 break;
             case CELESTIAL_CRYSTAL:
-                renderTile(0, 0, 0, texBlue);
+                renderTile(texBlue);
                 break;
         }
+        GL11.glPopMatrix();
         RenderHelper.enableStandardItemLighting();
     }
 

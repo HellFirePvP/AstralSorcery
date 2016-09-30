@@ -33,6 +33,20 @@ public class RockCrystalBuffer extends CachedWorldData {
     @Override
     public void updateTick(World world) {}
 
+    public List<BlockPos> collectPositions(ChunkPos center, int rad) {
+        List<BlockPos> out = new LinkedList<>();
+        for (int xx = -rad; xx <= rad; xx++) {
+            for (int zz = -rad; zz <= rad; zz++) {
+                ChunkPos other = new ChunkPos(center.chunkXPos + xx, center.chunkZPos + zz);
+                List<BlockPos> saved = crystalPositions.get(other);
+                if(saved != null) {
+                    out.addAll(saved);
+                }
+            }
+        }
+        return out;
+    }
+
     public void addOre(BlockPos pos) {
         ChunkPos ch = new ChunkPos(pos);
         synchronized (lock) {

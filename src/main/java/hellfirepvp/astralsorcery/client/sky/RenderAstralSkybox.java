@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -415,7 +416,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         tes.draw();
-        List<Constellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
+        Collection<Constellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
         for (Constellation c : toShow) {
             Tier tier = c.queryTier();
             if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) continue;

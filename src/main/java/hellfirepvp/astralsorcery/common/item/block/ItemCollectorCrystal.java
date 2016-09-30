@@ -37,9 +37,7 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     public Entity createEntity(World world, Entity entity, ItemStack itemstack) {
         EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
         BlockCollectorCrystalBase.CollectorCrystalType type = getType(itemstack);
-        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-            ei.applyColor(Color.BLUE);
-        }
+        ei.applyColor(type.displayColor);
         ei.setPickupDelay(40);
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;

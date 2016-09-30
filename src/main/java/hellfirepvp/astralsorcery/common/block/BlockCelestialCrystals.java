@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -188,6 +189,14 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
             dropBlockAsItem(worldIn, pos, state, 0);
             breakBlock(worldIn, pos, state);
             worldIn.setBlockToAir(pos);
+        }
+    }
+
+    @Override
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+        int stage = state.getValue(STAGE);
+        if(stage == 4 && !worldIn.isRemote) {
+            player.addStat(RegistryAchievements.achvCelestialCrystal);
         }
     }
 

@@ -15,10 +15,12 @@ import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
+import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -84,6 +86,8 @@ public class RegistryBlocks {
         //Mechanics
         //blockStructural = registerBlock(new BlockStructural());
         blockAltar = registerBlock(new BlockAltar());
+        ritualPedestal = registerBlock(new BlockRitualPedestal());
+        queueDefaultItemBlock(ritualPedestal);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -101,6 +105,7 @@ public class RegistryBlocks {
     //Called after items are registered.
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
+        registerBlockRender(blockAltar);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
     }
@@ -108,6 +113,7 @@ public class RegistryBlocks {
     //Tiles
     private static void registerTileEntities() {
         registerTile(TileAltar.class);
+        registerTile(TileRitualPedestal.class);
         registerTile(TileCollectorCrystal.class);
         registerTile(TileCelestialCrystals.class);
 

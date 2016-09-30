@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -42,6 +43,16 @@ public class ItemUtils {
         item.motionX = rand.nextFloat() * 0.7F - 0.35D;
         item.motionY = rand.nextFloat() * 0.7F - 0.35D;
         item.motionZ = rand.nextFloat() * 0.7F - 0.35D;
+    }
+
+    public static List<ItemStack> scanInventoryFor(IInventory inv, Item i) {
+        List<ItemStack> out = new LinkedList<>();
+        for (int j = 0; j < inv.getSizeInventory(); j++) {
+            ItemStack s = inv.getStackInSlot(j);
+            if(s != null && s.getItem() != null && s.getItem() == i)
+                out.add(copyStackWithSize(s, s.stackSize));
+        }
+        return out;
     }
 
     public static void dropInventory(IInventory inv, World worldIn, BlockPos pos) {

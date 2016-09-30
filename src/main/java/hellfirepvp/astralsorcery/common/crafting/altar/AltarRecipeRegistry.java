@@ -55,29 +55,6 @@ public class AltarRecipeRegistry {
         return compiledRecipeArray[id];
     }
 
-    public static void registerRecipes() {
-        registerAltarRecipe(new CrystalToolRecipe(
-                new ShapedRecipe(ItemsAS.crystalSword)
-                        .addPart(Items.STICK, ShapedRecipeSlot.LOWER_CENTER)
-                        .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.CENTER, ShapedRecipeSlot.UPPER_CENTER),
-                ShapedRecipeSlot.CENTER, ShapedRecipeSlot.UPPER_CENTER));
-        registerAltarRecipe(new CrystalToolRecipe(
-                new ShapedRecipe(ItemsAS.crystalShovel)
-                        .addPart(Items.STICK, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.CENTER)
-                        .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.UPPER_CENTER),
-                ShapedRecipeSlot.UPPER_CENTER));
-        registerAltarRecipe(new CrystalToolRecipe(
-                new ShapedRecipe(ItemsAS.crystalPickaxe)
-                        .addPart(Items.STICK, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.CENTER)
-                        .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.UPPER_RIGHT),
-                ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.UPPER_RIGHT));
-        registerAltarRecipe(new CrystalToolRecipe(
-                new ShapedRecipe(ItemsAS.crystalAxe)
-                        .addPart(Items.STICK, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.CENTER)
-                        .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT),
-                ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT));
-    }
-
     public static void registerDiscoveryRecipe(AbstractCacheableRecipe recipe) {
         registerAltarRecipe(new DiscoveryRecipe(recipe));
     }

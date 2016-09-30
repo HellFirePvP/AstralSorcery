@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,11 +55,10 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         setResistance(20F);
         setHarvestLevel("pickaxe", 3);
         setSoundType(SoundType.GLASS);
-        setLightLevel(1F);
+        setLightLevel(0.7F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    //TODO do
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
@@ -187,8 +187,14 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
     public static enum CollectorCrystalType {
 
-        ROCK_CRYSTAL,
-        CELESTIAL_CRYSTAL
+        ROCK_CRYSTAL(new Color(0xDD, 0xDD, 0xFF)),
+        CELESTIAL_CRYSTAL(new Color(0x0, 0x88, 0xFF));
+
+        public final Color displayColor;
+
+        private CollectorCrystalType(Color c) {
+            this.displayColor = c;
+        }
 
     }
 

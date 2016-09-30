@@ -21,7 +21,7 @@ import static hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstrai
 public class RegistryConstellations {
 
     public static void init() {
-        ConstellationRegistry.registerTier(0, ProgressionTier.EXPLORATION, createRInfo(0.2, -0.2, 0, 5), 1.0F,
+        ConstellationRegistry.registerTier(0, ProgressionTier.DISCOVERY, createRInfo(0.2, -0.2, 0, 5), 1.0F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WAXING1_2, CelestialHandler.MoonPhase.NEW)));
 
         ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 0.9F,

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
+import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.translation.I18n;

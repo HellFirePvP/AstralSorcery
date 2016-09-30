@@ -1,10 +1,6 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
-import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

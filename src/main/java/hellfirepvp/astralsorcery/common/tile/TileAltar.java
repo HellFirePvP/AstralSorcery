@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
@@ -10,12 +11,14 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -113,14 +117,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(craftingTask == null) return; //Wtf
 
         AbstractAltarRecipe recipe = craftingTask.getRecipeToCraft();
-        ShapeMap current = new ShapeMap();
-        for (int i = 0; i < 9; i++) {
-            ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
-            ItemStack stack = inv[i];
-            if(stack != null) {
-                current.put(slot, ItemUtils.copyStackWithSize(stack, 1));
-            }
-        }
+        ShapeMap current = copyGetCurrentCraftingGrid();
         ItemStack out = recipe.getOutput(current); //Central item helps defining output - probably, eventually.
         out = ItemUtils.copyStackWithSize(out, out.stackSize);
         for (int i = 0; i < 9; i++) {
@@ -144,8 +141,21 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired()); //Shouldn't reach < 0 but uuugh... safety
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
 
+        craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
         craftingTask = null;
         markForUpdate();
+    }
+
+    public ShapeMap copyGetCurrentCraftingGrid() {
+        ShapeMap current = new ShapeMap();
+        for (int i = 0; i < 9; i++) {
+            ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
+            ItemStack stack = inv[i];
+            if(stack != null) {
+                current.put(slot, ItemUtils.copyStackWithSize(stack, 1));
+            }
+        }
+        return current;
     }
 
     private void addExpAndTryLevel(int exp) {
@@ -156,6 +166,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 onLevelUp(level, next);
                 level = next;
                 experience = 0;
+                worldObj.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
                 markForUpdate();
             }
         } else {
@@ -163,7 +174,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
     }
 
-    private void onLevelUp(AltarLevel level, AltarLevel next) {
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return oldState.getBlock() != newSate.getBlock();
+    }
+
+    private void onLevelUp(AltarLevel current, AltarLevel next) {
 
     }
 
@@ -190,6 +206,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return craftingTask;
     }
 
+    public int getExperience() {
+        return experience;
+    }
+
     public float getAmbientStarlightPercent() {
         return ((float) starlightStored) / ((float) getMaxStarlightStorage());
     }
@@ -212,15 +232,15 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
             }
 
-            findRecipe();
+            findRecipe(player);
         }
     }
 
-    private void findRecipe() {
+    private void findRecipe(EntityPlayer crafter) {
         AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this);
         //System.out.println(recipe == null ? "didn't find recipe" : "found recipe");
         if(recipe != null) {
-            this.craftingTask = new ActiveCraftingTask(recipe);
+            this.craftingTask = new ActiveCraftingTask(recipe, crafter.getUniqueID());
             markForUpdate();
         }
     }
@@ -264,8 +284,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             if(recipe == null) {
                 AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Altar at " + getPos());
             } else {
+                UUID uuidCraft = compound.getUniqueId("crafterUUID");
                 int tick = compound.getInteger("recipeTick");
-                this.craftingTask = new ActiveCraftingTask(recipe);
+                this.craftingTask = new ActiveCraftingTask(recipe, uuidCraft);
                 this.craftingTask.forceTick(tick);
             }
         }
@@ -282,6 +303,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(craftingTask != null) {
             compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
             compound.setInteger("recipeTick", craftingTask.getTicksCrafting());
+            compound.setUniqueId("crafterUUID", craftingTask.getPlayerCraftingUUID());
         }
     }
 
@@ -299,6 +321,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Override
     public String getInventoryName() {
         return getUnLocalizedDisplayName();
+    }
+
+    public void onPlace(int exp, AltarLevel level) {
+        this.experience = exp;
+        this.level = level;
+        markForUpdate();
     }
 
     public static enum AltarLevel {
@@ -319,6 +347,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         private AltarLevel(int levelExp, boolean canLevelToByExpGain) {
             this.totalExpNeededToLevelUp = levelExp;
             this.canLevelToByExpGain = canLevelToByExpGain;
+        }
+
+        public BlockAltar.AltarType getCorrespondingAltarType() {
+            return BlockAltar.AltarType.values()[ordinal()];
         }
 
         public int getTotalExpNeededForLevel() {

@@ -18,12 +18,6 @@ import java.util.Map;
  */
 public class StructureBlockArray extends BlockArray {
 
-    private Map<BlockPos, TileEntityCallback> tileCallbacks = new HashMap<>();
-
-    public void addTileCallback(BlockPos pos, TileEntityCallback callback) {
-        tileCallbacks.put(pos, callback);
-    }
-
     public void placeInWorld(World world, BlockPos center) {
         placeInWorld(world, center, null);
     }
@@ -33,7 +27,7 @@ public class StructureBlockArray extends BlockArray {
         for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
-            IBlockState state = info.type.getStateFromMeta(info.meta);
+            IBlockState state = info.state;
             world.setBlockState(at, state, 3);
             result.put(at, state);
 
@@ -53,14 +47,6 @@ public class StructureBlockArray extends BlockArray {
             for (Map.Entry<BlockPos, IBlockState> entry : result.entrySet())
                 processor.process(world, entry.getKey(), entry.getValue());
         }
-    }
-
-    public static interface TileEntityCallback {
-
-        public boolean isApplicable(TileEntity te);
-
-        public void onPlace(World world, BlockPos at, TileEntity te);
-
     }
 
     public static interface PastPlaceProcessor {

@@ -73,7 +73,6 @@ public class CommonProxy implements IGuiHandler {
 
         RegistryBlocks.initRenderRegistry();
         RegistryRecipes.init();
-        AltarRecipeRegistry.registerRecipes();
         RegistryResearch.init();
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);

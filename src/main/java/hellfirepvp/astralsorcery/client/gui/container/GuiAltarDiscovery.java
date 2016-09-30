@@ -5,6 +5,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -44,7 +47,26 @@ public class GuiAltarDiscovery extends GuiContainer {
 
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar);
+        if(rec != null) {
+            ItemStack out = rec.getOutput(containerAltarBase.tileAltar.copyGetCurrentCraftingGrid());
+            zLevel = 10F;
+            itemRender.zLevel = 10F;
 
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glPushMatrix();
+            GL11.glTranslated(170, 35, 0);
+            GL11.glScaled(1.7, 1.7, 1.7);
+
+            itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
+            itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
+
+            GL11.glPopMatrix();
+            GL11.glPopAttrib();
+
+            zLevel = 0F;
+            itemRender.zLevel = 0F;
+        }
     }
 
     @Override

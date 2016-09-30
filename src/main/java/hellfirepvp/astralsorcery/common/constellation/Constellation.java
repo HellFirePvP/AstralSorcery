@@ -121,12 +121,24 @@ public class Constellation {
         return (unmodifiableConnections = Collections.unmodifiableList(connections));
     }
 
+    public static String getDefaultSaveKey() {
+        return "constellationName";
+    }
+
     public void writeToNBT(NBTTagCompound compound) {
-        compound.setString("constellationName", getName());
+        writeToNBT(compound, getDefaultSaveKey());
+    }
+
+    public void writeToNBT(NBTTagCompound compound, String key) {
+        compound.setString(key, getName());
     }
 
     public static Constellation readFromNBT(NBTTagCompound compound) {
-        return ConstellationRegistry.getConstellationByName(compound.getString("constellationName"));
+        return readFromNBT(compound, getDefaultSaveKey());
+    }
+
+    public static Constellation readFromNBT(NBTTagCompound compound, String key) {
+        return ConstellationRegistry.getConstellationByName(compound.getString(key));
     }
 
 }

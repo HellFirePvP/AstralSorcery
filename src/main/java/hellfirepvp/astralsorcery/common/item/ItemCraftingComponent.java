@@ -120,7 +120,8 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
 
         AQUAMARINE,
         STARMETAL_INGOT,
-        STARDUST;
+        STARDUST,
+        GLASS_LENS;
 
         public String getUnlocalizedName() {
             return name().toLowerCase();

@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -94,7 +95,7 @@ public class TileCelestialCrystals extends TileSkybound {
         if(doesSeeSky()) {
             double dstr = CelestialHandler.calcDaytimeDistribution(worldObj);
             if(dstr > 0) {
-                List<Constellation> activeConstellations =
+                Collection<Constellation> activeConstellations =
                         ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
                 if(activeConstellations.contains(Constellations.mineralis)) {
                     r = 4200;

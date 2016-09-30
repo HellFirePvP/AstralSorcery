@@ -15,8 +15,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -371,9 +374,9 @@ public class StructureAncientShrine extends StructureBlockArray {
             }
 
             @Override
-            public void onPlace(World world, BlockPos at, TileEntity te) {
+            public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
                 if(te instanceof TileEntityChest) {
-                    ((TileEntityChest) te).setLootTable(LootTableUtil.LOOT_TABLE_SHRINE, world.rand.nextLong());
+                    ((TileEntityChest) te).setLootTable(LootTableUtil.LOOT_TABLE_SHRINE, STATIC_RAND.nextLong());
                 }
             }
         };
@@ -392,7 +395,7 @@ public class StructureAncientShrine extends StructureBlockArray {
             }
 
             @Override
-            public void onPlace(World world, BlockPos at, TileEntity te) {
+            public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
                     if(te instanceof TileCollectorCrystal) {
                     ((TileCollectorCrystal) te).onPlace(
                             ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),

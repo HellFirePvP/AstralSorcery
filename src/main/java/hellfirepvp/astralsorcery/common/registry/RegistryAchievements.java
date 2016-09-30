@@ -16,28 +16,33 @@ import net.minecraftforge.common.AchievementPage;
 public class RegistryAchievements {
 
     public static Achievement achvRockCrystal;
+    public static Achievement achvCelestialCrystal;
     public static Achievement achvBuildTelescope;
     public static Achievement achvDiscoverConstellation;
 
     public static AchievementPage achievementPageAstralSorcery;
 
     public static void init() {
-        achvRockCrystal = new Achievement("achievement.as.minerockcrystal", "astralsorcery.minerockcrystal", 0, 3,
+        achvRockCrystal = new Achievement("achievement.as.minerockcrystal", "astralsorcery.minerockcrystal", -1, 3,
                 ItemsAS.rockCrystal, null);
+        achvCelestialCrystal = new Achievement("achievement.as.celestialcrystal", "astralsorcery.celestialcrystal", -2, 1,
+                ItemsAS.celestialCrystal, achvRockCrystal);
+
         achvBuildTelescope = new Achievement("achievement.as.buildtelescope", "astralsorcery.buildtelescope", 1, 1,
-                new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), achvRockCrystal);
+                new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), null);
         achvDiscoverConstellation = new Achievement("achievement.as.seeconstellation", "astralsorcery.seeconstellation", 1, -1,
                 new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), achvBuildTelescope);
 
-        achvRockCrystal.setSpecial();
+        achvCelestialCrystal.setSpecial();
         achvDiscoverConstellation.setSpecial();
 
         achvRockCrystal.registerStat();
+        achvCelestialCrystal.registerStat();
         achvBuildTelescope.registerStat();
         achvDiscoverConstellation.registerStat();
 
         achievementPageAstralSorcery = new AchievementPage("Astral Sorcery",
-                achvRockCrystal, achvBuildTelescope, achvDiscoverConstellation);
+                achvRockCrystal, achvCelestialCrystal, achvBuildTelescope, achvDiscoverConstellation);
 
         AchievementPage.registerAchievementPage(achievementPageAstralSorcery);
     }

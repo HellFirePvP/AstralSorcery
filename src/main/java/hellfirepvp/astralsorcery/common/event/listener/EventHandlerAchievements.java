@@ -21,18 +21,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandlerAchievements {
 
-    //TODO no
-    @SubscribeEvent
-    public void onCraft(PlayerEvent.ItemCraftedEvent event) {
-        ItemStack crafted = event.crafting;
-        if(crafted != null && crafted.getItem() != null) {
-            Item i = crafted.getItem();
-            if(i instanceof ItemEntityPlacer && crafted.getItemDamage() == ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()) {
-                event.player.addStat(RegistryAchievements.achvBuildTelescope);
-            }
-        }
-    }
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onBreak(BlockEvent.BreakEvent event) {
         if(event.isCanceled() || event.getState() == null)

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
+import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -74,6 +75,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(190, 6);
             GL11.glPopMatrix();
             pageOffsetY = 50;
+            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
         }
 
         int index = currentPageOffset * 2;
@@ -84,6 +86,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 20, guiTop + pageOffsetY, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
+            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
         }
         index = currentPageOffset + 1;
         if(pages.size() > index) {
@@ -93,6 +96,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
+            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
         }
 
         zLevel -= 100;

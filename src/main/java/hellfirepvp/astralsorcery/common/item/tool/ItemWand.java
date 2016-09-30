@@ -1,11 +1,16 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleFirework;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +18,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,6 +29,8 @@ import net.minecraft.world.World;
  * Date: 23.09.2016 / 12:57
  */
 public class ItemWand extends Item implements ISpecialInteractItem {
+
+    private static final ParticleFirework.Factory pFactory = new ParticleFirework.Factory();
 
     public ItemWand() {
         setMaxDamage(0);
@@ -49,6 +58,25 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     }*/
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public String getUnlocalizedName(ItemStack stack) {
+        EnumGatedKnowledge.ViewCapability cap = ResearchManager.clientProgress.getViewCapability();
+        if(EnumGatedKnowledge.WAND_TYPE.canSee(cap)) {
+            return super.getUnlocalizedName();
+        }
+        return "item.ItemWand.obf";
+    }
+
+    //TODO
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if(worldIn.isRemote) {
+            //RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+
+        }
+    }
+
+    @Override
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
         return true;
     }
@@ -59,6 +87,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         Block b = state.getBlock();
         if(b instanceof IWandInteract) {
             ((IWandInteract) b).onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
+            return;
         }
         IWandInteract wandTe = MiscUtils.getTileAt(world, pos, IWandInteract.class);
         if(wandTe != null) {

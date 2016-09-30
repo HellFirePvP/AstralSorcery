@@ -60,6 +60,7 @@ public class DataLightConnections extends AbstractData {
             for (TransmissionChain.LightConnection c : invalidConnections) {
                 BlockPos start = c.getStart();
                 List<BlockPos> ends = posBufferDim.get(start);
+                if(ends == null) continue;
                 if(ends.contains(c.getEnd())) {
                     ends.remove(c.getEnd());
                 }

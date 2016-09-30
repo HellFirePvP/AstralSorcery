@@ -104,7 +104,7 @@ public class RegistryItems {
         //registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
         //registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
-        registerItem(new ItemBlockCustomName(BlocksAS.blockAltar));
+        registerItem(new ItemBlockCustomName(BlocksAS.blockAltar).setMaxStackSize(1));
         registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
 
         registerItem(new ItemCollectorCrystal(BlocksAS.collectorCrystal));

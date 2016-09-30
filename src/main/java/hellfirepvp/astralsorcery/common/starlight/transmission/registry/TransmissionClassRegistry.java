@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class TransmissionClassRegistry {
         register(new CrystalPrismTransmissionNode.Provider());
 
         register(new TileAltar.AltarReceiverProvider());
+        register(new TileRitualPedestal.PedestalReceiverProvider());
     }
 
     public static interface TransmissionProvider {

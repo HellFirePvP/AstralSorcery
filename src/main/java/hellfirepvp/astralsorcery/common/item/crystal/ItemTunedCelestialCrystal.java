@@ -21,12 +21,12 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        /*ItemStack stack = new ItemStack(this);
+        ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.ara);
+        applyConstellation(stack, Constellations.horologium);
         subItems.add(stack);
 
-        stack = new ItemStack(this);
+        /*stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         applyConstellation(stack, Constellations.ara);
         applyTrait(stack, Constellations.draco);

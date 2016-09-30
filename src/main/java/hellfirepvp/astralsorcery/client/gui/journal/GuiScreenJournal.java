@@ -1,10 +1,12 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.gui.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -74,6 +76,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     }
 
     private Rectangle drawBookmark(double offsetX, double offsetY, double width, double height, double mouseOverWidth, float zLevel, String title, int titleRGBColor, Point mousePoint) {
+        Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
         //Reset styles, because MC fontrenderer is STUPID A F
         if(titleRGBColor == Color.WHITE.getRGB()) {
             fontRendererObj.drawString("", 0, 0, Color.BLACK.getRGB());
