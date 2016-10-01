@@ -51,7 +51,7 @@ public class StarlightTransmissionHandler implements ITickHandler {
         if(handle != null) {
             handle.clear(world.provider.getDimension());
         }
-        this.worldHandlers.remove(dimId); //LUL
+        this.worldHandlers.remove(dimId);
     }
 
     @Nullable

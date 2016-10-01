@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import net.minecraft.entity.player.EntityPlayer;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;

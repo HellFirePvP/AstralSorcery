@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -60,6 +61,16 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
                 markDirty();
             }
         }
+    }
+
+    @Override
+    public BlockPos getTrPos() {
+        return getPos();
+    }
+
+    @Override
+    public World getTrWorld() {
+        return getWorld();
     }
 
     @Override

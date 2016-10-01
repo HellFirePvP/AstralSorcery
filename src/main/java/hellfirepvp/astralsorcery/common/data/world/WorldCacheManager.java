@@ -105,6 +105,7 @@ public class WorldCacheManager implements ITickHandler {
             dataMap.remove(key);
         }
         dataMap.put(key, loaded);
+        loaded.onLoad(world);
         return loaded;
     }
 

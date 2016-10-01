@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,16 @@ import java.util.List;
  * Date: 05.08.2016 / 13:47
  */
 public abstract class TileReceiverBase extends TileNetwork implements IStarlightReceiver, ILinkableTile {
+
+    @Override
+    public BlockPos getTrPos() {
+        return getPos();
+    }
+
+    @Override
+    public World getTrWorld() {
+        return getWorld();
+    }
 
     @Override
     public void onLinkCreate(EntityPlayer player, BlockPos other) {}

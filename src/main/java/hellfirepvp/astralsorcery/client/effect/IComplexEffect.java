@@ -17,6 +17,12 @@ public interface IComplexEffect {
 
     public void tick();
 
+    //Valid layers: 0, 1, 2
+    //Lower layers are rendered first.
+    default public int getLayer() {
+        return 0;
+    }
+
     public static enum RenderTarget {
 
         OVERLAY_TEXT,

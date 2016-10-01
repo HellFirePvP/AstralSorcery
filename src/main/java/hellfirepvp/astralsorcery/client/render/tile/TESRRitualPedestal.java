@@ -1,13 +1,10 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +23,21 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
     @Override
     public void renderTileEntityAt(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage) {
+        renderCrystalStack(te, x, y, z);
+
+        renderEffects(te);
+    }
+
+    private void renderEffects(TileRitualPedestal te) {
+        int tick = te.getEffectWorkTick();
+        float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
+        if(percRunning > 1E-4) {
+            TextureSpritePlane sprite = te.getHaloEffectSprite();
+            sprite.setAlphaMultiplier(percRunning);
+        }
+    }
+
+    private void renderCrystalStack(TileRitualPedestal te, double x, double y, double z) {
         ItemStack i = te.getStackInSlot(0);
         if(i != null && i.getItem() != null) {
             Item it = i.getItem();

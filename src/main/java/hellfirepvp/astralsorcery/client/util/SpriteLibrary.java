@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 public class SpriteLibrary {
 
     public static SpriteSheetResource spriteLightbeam = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam").asSpriteSheet(16, 4);
+    public static SpriteSheetResource spriteHalo = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1").asSpriteSheet(8, 6);
 
     public static void init() {}
 

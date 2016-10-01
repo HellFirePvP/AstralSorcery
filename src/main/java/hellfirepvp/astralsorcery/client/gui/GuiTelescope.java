@@ -65,11 +65,15 @@ public class GuiTelescope extends GuiWHScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
         drawWHRect(textureGrid);
 
         zLevel -= 5;
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void drawCellsWithEffects(float partialTicks) {
@@ -291,6 +295,7 @@ public class GuiTelescope extends GuiWHScreen {
     private Optional<Map<StarLocation, Rectangle>> drawCellEffects(final Random rand, Constellation c, int offsetX, int offsetY, int width, int height, final float partialTicks) {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
         RenderAstralSkybox.TEX_STAR_1.bind();
         int starSize = 2;
@@ -334,6 +339,8 @@ public class GuiTelescope extends GuiWHScreen {
             zLevel -= 1;
         }
 
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glPopAttrib();
         GlStateManager.disableBlend();
         return Optional.ofNullable(rectangles);
     }

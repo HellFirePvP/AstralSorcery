@@ -17,13 +17,13 @@ public interface IStarlightTransmission {
 
     @Nullable
     default public IPrismTransmissionNode getNode() {
-        WorldNetworkHandler netHandler = WorldNetworkHandler.getNetworkHandler(getWorld());
-        return netHandler.getTransmissionNode(getPos());
+        WorldNetworkHandler netHandler = WorldNetworkHandler.getNetworkHandler(getTrWorld());
+        return netHandler.getTransmissionNode(getTrPos());
     }
 
-    public BlockPos getPos();
+    public BlockPos getTrPos();
 
-    public World getWorld();
+    public World getTrWorld();
 
     public IPrismTransmissionNode provideTransmissionNode(BlockPos at);
 

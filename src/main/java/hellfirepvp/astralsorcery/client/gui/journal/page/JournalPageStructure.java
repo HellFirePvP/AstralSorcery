@@ -54,7 +54,7 @@ public class JournalPageStructure implements IJournalPage {
             GL11.glPushMatrix();
             totalRenderFrame++;
 
-            Point.Double offset = renderOffset(offsetX, offsetY);
+            Point.Double offset = renderOffset(offsetX + 8, offsetY);
 
             if (Mouse.isButtonDown(0) && totalRenderFrame > 30) {
                 structRender.rotate(0.25*Mouse.getDY(), 0.25*Mouse.getDX(), 0);

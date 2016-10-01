@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -66,6 +67,16 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
         }
         compound.setTag("linked", list);
         compound.setBoolean("wasLinkedBefore", linked);
+    }
+
+    @Override
+    public BlockPos getTrPos() {
+        return getPos();
+    }
+
+    @Override
+    public World getTrWorld() {
+        return getWorld();
     }
 
     @Override

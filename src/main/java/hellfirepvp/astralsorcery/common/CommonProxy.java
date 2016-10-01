@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.ritual.RitualComponentRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -106,6 +107,7 @@ public class CommonProxy implements IGuiHandler {
     protected void registerTickHandlers(TickManager manager) {
         manager.register(new CelestialHandler.CelestialTickHandler());
         manager.register(StarlightTransmissionHandler.getInstance());
+        manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
         manager.register(new LinkHandler()); //Only used as instance for tick handling
         manager.register(SyncDataHolder.getTickInstance());

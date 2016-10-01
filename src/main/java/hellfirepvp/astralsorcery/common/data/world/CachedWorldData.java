@@ -36,6 +36,8 @@ public abstract class CachedWorldData implements IWorldRelatedData {
         return key;
     }
 
+    public void onLoad(World world) {}
+
     /*
     public final <T extends CachedWorldData> T initializeAndGet(World world) {
         String id = getSaveKey().getIdentifier();

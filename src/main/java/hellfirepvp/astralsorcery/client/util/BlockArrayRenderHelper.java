@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.RenderFallingBlock;
@@ -44,13 +45,11 @@ public class BlockArrayRenderHelper {
 
     private BlockArray blocks;
     private WorldBlockArrayRenderAccess renderAccess;
-    private int lX, lY, lZ, mX, mY, mZ;
     private double rotX, rotY, rotZ;
 
     public BlockArrayRenderHelper(BlockArray blocks) {
         this.blocks = blocks;
         this.renderAccess = new WorldBlockArrayRenderAccess(blocks);
-        refreshSize();
         resetRotation();
     }
 
@@ -66,35 +65,6 @@ public class BlockArrayRenderHelper {
         this.rotZ += z;
     }
 
-    private void refreshSize() {
-        lX = 0;
-        lY = 0;
-        lZ = 0;
-        mX = 0;
-        mY = 0;
-        mZ = 0;
-        for (BlockPos pos : blocks.getPattern().keySet()) {
-            if(pos.getX() < lX) {
-                lX = pos.getX();
-            }
-            if(pos.getX() > mX) {
-                mX = pos.getX();
-            }
-            if(pos.getY() < lY) {
-                lY = pos.getY();
-            }
-            if(pos.getY() > mY) {
-                mY = pos.getY();
-            }
-            if(pos.getZ() < lZ) {
-                lZ = pos.getZ();
-            }
-            if(pos.getZ() > mZ) {
-                mZ = pos.getZ();
-            }
-        }
-    }
-
     public void render3DGUI(double x, double y, float pTicks) {
         GuiScreen scr = Minecraft.getMinecraft().currentScreen;
         if(scr == null) return;
@@ -103,7 +73,7 @@ public class BlockArrayRenderHelper {
         GL11.glPushMatrix();
         Minecraft mc = Minecraft.getMinecraft();
         double sc = new ScaledResolution(mc).getScaleFactor();
-        GL11.glTranslated(x + 16D / sc, y + 16D / sc, 256);
+        GL11.glTranslated(x + 16D / sc, y + 16D / sc, 512);
 
         double mul = 12;
 

@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint;
@@ -8,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -54,6 +57,11 @@ public class Constellation {
             return sc;
         }
         return null;
+    }
+
+    @Nullable
+    public ConstellationEffect queryEffect() {
+        return ConstellationEffectRegistry.getEffect(this);
     }
 
     public void register(String name, int tier) {

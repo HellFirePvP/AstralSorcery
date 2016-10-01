@@ -18,6 +18,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -119,6 +120,14 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
                 te.clear();
                 te.markForUpdate();
             }
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class);
+        if(te != null && !worldIn.isRemote) {
+            te.setOwner(placer.getUniqueID());
         }
     }
 

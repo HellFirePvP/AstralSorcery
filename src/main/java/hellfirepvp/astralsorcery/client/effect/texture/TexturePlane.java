@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.texture;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.BlendingHelper;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.Axis;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 /**
@@ -27,8 +29,13 @@ public class TexturePlane implements IComplexEffect {
 
     private float lastRenderDegree = 0F;
 
+    private boolean alphaGradient = false;
+
     private int counter = 0;
     private boolean remove = false;
+    private RefreshFunction refreshFunc = null;
+
+    private BlendingHelper blendMode = BlendingHelper.DEFAULT;
 
     private Color colorOverlay = Color.WHITE;
     private int ticksPerFullRot = 100;
@@ -36,6 +43,7 @@ public class TexturePlane implements IComplexEffect {
     private int maxAge = -1;
     private Vector3 pos = new Vector3(0, 0, 0);
     private float scale = 1F;
+    private float alphaMul = 1F;
     private ScaleFunction scaleFunc;
 
     private final BindableResource texture;
@@ -82,6 +90,31 @@ public class TexturePlane implements IComplexEffect {
         return this;
     }
 
+    public TexturePlane setRefreshFunc(RefreshFunction refreshFunc) {
+        this.refreshFunc = refreshFunc;
+        return this;
+    }
+
+    public TexturePlane setBlendMode(@Nonnull BlendingHelper blendMode) {
+        this.blendMode = blendMode;
+        return this;
+    }
+
+    public TexturePlane setAlphaMultiplier(float alphaMul) {
+        this.alphaMul = alphaMul;
+        return this;
+    }
+
+    public TexturePlane setAlphaOverDistance(boolean alphaGradient) {
+        this.alphaGradient = alphaGradient;
+        return this;
+    }
+
+    public float getAlphaDistanceMultiplier(double dstSq) {
+        double maxSqDst = Config.maxEffectRenderDistanceSq;
+        return 1F - (float) (dstSq / maxSqDst);
+    }
+
     public void setDead() {
         remove = true;
     }
@@ -95,6 +128,11 @@ public class TexturePlane implements IComplexEffect {
     }
 
     @Override
+    public int getLayer() {
+        return 1;
+    }
+
+    @Override
     public RenderTarget getRenderTarget() {
         return RenderTarget.RENDERLOOP;
     }
@@ -104,6 +142,12 @@ public class TexturePlane implements IComplexEffect {
         counter++;
 
         if(maxAge >= 0 && counter >= maxAge) {
+            if(refreshFunc != null) {
+                if(refreshFunc.shouldRefresh()) {
+                    counter = 0;
+                    return;
+                }
+            }
             setDead();
         }
     }
@@ -117,14 +161,20 @@ public class TexturePlane implements IComplexEffect {
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
         if(rView == null) return;
-        if(rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) > Config.maxEffectRenderDistanceSq) return;
+        double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
+        if(dst > Config.maxEffectRenderDistanceSq) return;
+
+        float alphaGrad = colorOverlay.getAlpha() * alphaMul;
+        if(alphaGradient) {
+            alphaGrad = getAlphaDistanceMultiplier(dst) * alphaMul;
+        }
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         removeOldTranslate(rView, partialTicks);
-        GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), colorOverlay.getAlpha());
+        GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), alphaGrad);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        blendMode.apply();
         Vector3 axis = this.axis.getAxis();
         float deg;
         if(ticksPerFullRot >= 0) {
@@ -202,6 +252,12 @@ public class TexturePlane implements IComplexEffect {
     public static interface ScaleFunction {
 
         public float getScale(TexturePlane plane);
+
+    }
+
+    public static interface RefreshFunction {
+
+        public boolean shouldRefresh();
 
     }
 

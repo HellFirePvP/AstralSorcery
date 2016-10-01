@@ -1,13 +1,16 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +57,11 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
     @Override
     public List<BlockPos> getSources() {
         return sourcesToThis.stream().collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Nullable
+    public <T extends TileEntity> T getTileAtPos(World world, Class<T> tileClass) {
+        return MiscUtils.getTileAt(world, getPos(), tileClass);
     }
 
     @Override

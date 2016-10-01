@@ -144,24 +144,24 @@ public class WorldNetworkHandler {
         removeThisSourceFromNext(source);
         removeThisNextFromSources(source);
 
-        buffer.removeSource(source.getPos());
+        buffer.removeSource(source.getTrPos());
     }
 
     public void removeTransmission(IStarlightTransmission transmission) {
         removeThisSourceFromNext(transmission);
         removeThisNextFromSources(transmission);
 
-        buffer.removeTransmission(transmission.getPos());
+        buffer.removeTransmission(transmission.getTrPos());
     }
 
     public void addNewSourceTile(IStarlightSource source) {
-        buffer.addSource(source, source.getPos());
+        buffer.addSource(source, source.getTrPos());
 
         linkNextToThisSources(source);
     }
 
     public void addTransmissionTile(IStarlightTransmission transmission) {
-        buffer.addTransmission(transmission, transmission.getPos());
+        buffer.addTransmission(transmission, transmission.getTrPos());
 
         linkNextToThisSources(transmission);
     }
@@ -201,7 +201,7 @@ public class WorldNetworkHandler {
             handle.notifyTransmissionNodeChange(node);
         }
 
-        BlockPos thisPos = tr.getPos();
+        BlockPos thisPos = tr.getTrPos();
         List<NodeConnection<IPrismTransmissionNode>> nodeConnections = node.queryNext(this);
         for (NodeConnection<IPrismTransmissionNode> connection : nodeConnections) {
             if(connection.getNode() != null) {
@@ -223,9 +223,9 @@ public class WorldNetworkHandler {
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
-        BlockPos thisPos = tr.getPos();
+        BlockPos thisPos = tr.getTrPos();
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(getWorld());
-        List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = getAffectedChunkSections(tr.getPos());
+        List<LightNetworkBuffer.ChunkSectionNetworkData> dataList = getAffectedChunkSections(tr.getTrPos());
         for (LightNetworkBuffer.ChunkSectionNetworkData data : dataList) {
             if(data == null) continue;
             for (IPrismTransmissionNode otherNode : data.getAllTransmissionNodes()) {

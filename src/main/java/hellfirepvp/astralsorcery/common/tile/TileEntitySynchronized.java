@@ -22,19 +22,24 @@ public abstract class TileEntitySynchronized extends TileEntity {
 
     public void readCustomNBT(NBTTagCompound compound) {}
 
+    public void readNetNBT(NBTTagCompound compound) {}
+
     public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
         writeCustomNBT(compound);
         return compound;
     }
 
-    public void writeCustomNBT(NBTTagCompound compound) { }
+    public void writeCustomNBT(NBTTagCompound compound) {}
+
+    public void writeNetNBT(NBTTagCompound compound) {}
 
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound compound = new NBTTagCompound();
         super.writeToNBT(compound);
         writeCustomNBT(compound);
+        writeNetNBT(compound);
         return new SPacketUpdateTileEntity(getPos(), 255, compound);
     }
 
@@ -49,6 +54,7 @@ public abstract class TileEntitySynchronized extends TileEntity {
     public final void onDataPacket(NetworkManager manager, SPacketUpdateTileEntity packet) {
         super.onDataPacket(manager, packet);
         readCustomNBT(packet.getNbtCompound());
+        readNetNBT(packet.getNbtCompound());
     }
 
     public void markForUpdate() {

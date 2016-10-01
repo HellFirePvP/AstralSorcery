@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,11 +31,13 @@ import java.util.Map;
  */
 public final class EffectHandler {
 
+    public static final Random STATIC_EFFECT_RAND = new Random();
+
     private static int clientEffectTick = 0;
 
     public static final EffectHandler instance = new EffectHandler();
 
-    public static final Map<IComplexEffect.RenderTarget, List<IComplexEffect>> complexEffects = new HashMap<>();
+    public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
 
     private EffectHandler() {}
 
@@ -46,12 +49,15 @@ public final class EffectHandler {
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
             synchronized (complexEffects) {
-                for (IComplexEffect effect : complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT)) {
-                    GL11.glPushMatrix();
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    effect.render(event.getPartialTicks());
-                    GL11.glPopAttrib();
-                    GL11.glPopMatrix();
+                Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT);
+                for (int i = 0; i <= 2; i++) {
+                    for (IComplexEffect effect : layeredEffects.get(i)) {
+                        GL11.glPushMatrix();
+                        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                        effect.render(event.getPartialTicks());
+                        GL11.glPopAttrib();
+                        GL11.glPopMatrix();
+                    }
                 }
             }
         }
@@ -60,12 +66,15 @@ public final class EffectHandler {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         synchronized (complexEffects) {
-            for (IComplexEffect effect : complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP)) {
-                GL11.glPushMatrix();
-                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                effect.render(event.getPartialTicks());
-                GL11.glPopAttrib();
-                GL11.glPopMatrix();
+            Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+            for (int i = 0; i <= 2; i++) {
+                for (IComplexEffect effect : layeredEffects.get(i)) {
+                    GL11.glPushMatrix();
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    effect.render(event.getPartialTicks());
+                    GL11.glPopAttrib();
+                    GL11.glPopMatrix();
+                }
             }
         }
     }
@@ -120,7 +129,7 @@ public final class EffectHandler {
     private void register(final IComplexEffect effect) {
         new Thread(() -> {
             synchronized (complexEffects) {
-                complexEffects.get(effect.getRenderTarget()).add(effect);
+                complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
             }
         }).start();
     }
@@ -138,12 +147,15 @@ public final class EffectHandler {
 
         synchronized (complexEffects) {
             for (IComplexEffect.RenderTarget target : complexEffects.keySet()) {
-                Iterator<IComplexEffect> iterator = complexEffects.get(target).iterator();
-                while (iterator.hasNext()) {
-                    IComplexEffect effect = iterator.next();
-                    effect.tick();
-                    if(effect.canRemove()) {
-                        iterator.remove();
+                Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(target);
+                for (int i = 0; i <= 2; i++) {
+                    Iterator<IComplexEffect> iterator = layeredEffects.get(i).iterator();
+                    while (iterator.hasNext()) {
+                        IComplexEffect effect = iterator.next();
+                        effect.tick();
+                        if(effect.canRemove()) {
+                            iterator.remove();
+                        }
                     }
                 }
             }
@@ -156,14 +168,20 @@ public final class EffectHandler {
 
     static {
         for (IComplexEffect.RenderTarget target : IComplexEffect.RenderTarget.values()) {
-            complexEffects.put(target, new LinkedList<>());
+            Map<Integer, List<IComplexEffect>> layeredEffects = new HashMap<>();
+            for (int i = 0; i <= 2; i++) {
+                layeredEffects.put(i, new LinkedList<>());
+            }
+            complexEffects.put(target, layeredEffects);
         }
     }
 
     public static void cleanUp() {
         synchronized (complexEffects) {
             for (IComplexEffect.RenderTarget t : IComplexEffect.RenderTarget.values()) {
-                complexEffects.get(t).clear();
+                for (int i = 0; i <= 2; i++) {
+                    complexEffects.get(t).get(i).clear();
+                }
             }
         }
     }

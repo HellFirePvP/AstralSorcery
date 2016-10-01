@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.Formatter;
 import java.util.Locale;
@@ -64,6 +65,13 @@ public class Vector3 {
 
     public Vector3(Vec3d vec) {
         this(vec.xCoord, vec.yCoord, vec.zCoord);
+    }
+
+    public Vector3 add(Vec3i vec) {
+        this.x += vec.getX();
+        this.y += vec.getY();
+        this.z += vec.getZ();
+        return this;
     }
 
     public Vector3 add(Vector3 vec) {

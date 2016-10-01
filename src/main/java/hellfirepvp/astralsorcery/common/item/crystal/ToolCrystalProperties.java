@@ -1,9 +1,9 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import net.minecraft.nbt.NBTTagCompound;
-import scala.actors.threadpool.Arrays;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 

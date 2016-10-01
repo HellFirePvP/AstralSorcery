@@ -53,6 +53,21 @@ public interface IPrismTransmissionNode {
     //Get a list of all sources that do provide energy to this transmission node
     public List<BlockPos> getSources();
 
+    //If this returns true, the TransmissionNode will be added to the UpdateHandler,
+    //Receiving ticks each server-world-tick for the world it is in.
+    default public boolean needsUpdate() {
+        return false;
+    }
+
+    //If needsUpdate returns true and it is added to the UpdateHandler,
+    //this method will be called each server-world-tick and may be used
+    //like the TileEntity's update method.
+    default public void update(World world) {}
+
+    //Called once after reading the node from NBT
+    //Use this for post-load/place logic.
+    default void postLoad(World world) {}
+
     //Get the provider of the node. Used to recreate the class at NBT read.
     public TransmissionClassRegistry.TransmissionProvider getProvider();
 

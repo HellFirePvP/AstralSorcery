@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -96,7 +97,20 @@ public class LightNetworkBuffer extends CachedWorldData {
 
             //source.onUpdate(world, pos);
         }
+    }
 
+    @Override
+    public void onLoad(World world) {
+        for (ChunkNetworkData data : chunkSortedData.values()) {
+            for (ChunkSectionNetworkData secData : data.sections.values()) {
+                for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
+                    if(node.needsUpdate()) {
+                        StarlightUpdateHandler.getInstance().addNode(world, node);
+                    }
+                    node.postLoad(world);
+                }
+            }
+        }
     }
 
     private void cleanupQueuedChunks() {
