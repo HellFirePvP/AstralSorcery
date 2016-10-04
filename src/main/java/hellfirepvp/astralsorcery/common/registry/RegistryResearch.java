@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -24,12 +25,9 @@ public class RegistryResearch {
     public static void init() {
         ResearchNode test1 = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "UnlocName", 1, 1).setSpecial();
         ResearchNode test2 = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "UnlocName2", 3, 3).setSpecial();
-        ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 4, -2).setSpecial();
+        ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2).setSpecial();
         test1.addPage(new JournalPageText("astralsorcery.journal.text.test"));
-        BlockArray ba = new BlockArray();
-        ba.addBlockCube(BlocksAS.blockMarble.getDefaultState(), -2, 0, -2, 2, 0, 2);
-        ba.addBlock(0, 1, 0, BlocksAS.ritualPedestal.getDefaultState());
-        test1.addPage(new JournalPageStructure(ba));
+        test1.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
         test1.registerTo(ResearchProgression.TEST_PROGRESS);
         test2.registerTo(ResearchProgression.TEST_PROGRESS);
         test3.registerTo(ResearchProgression.TEST_PROGRESS);

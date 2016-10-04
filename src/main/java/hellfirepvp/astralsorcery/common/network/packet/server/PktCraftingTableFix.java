@@ -7,12 +7,9 @@ import net.minecraft.block.BlockWorkbench;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.player.inventory.LocalBlockIntercommunication;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketOpenWindow;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -20,7 +17,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Mouse;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,12 +60,7 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
     //A crafting table that knows its position. useful.
     @SideOnly(Side.CLIENT)
     private void openProperCraftingTableGui(PktCraftingTableFix message) {
-        AstralSorcery.proxy.scheduleClientside(() -> {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-            GuiCrafting gui = new GuiCrafting(player.inventory, player.worldObj, message.at);
-            Minecraft.getMinecraft().displayGuiScreen(gui);
-            player.openContainer.windowId = message.guiId;
-        });
+        AstralSorcery.proxy.scheduleClientside(new TaskOpenProperCraftingTable(message));
     }
 
     public static void sendOpenCraftingTable(EntityPlayer player, BlockPos at) {
@@ -87,4 +78,24 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
     public BlockPos getPos() {
         return at;
     }
+
+    @SideOnly(Side.CLIENT)
+    public static class TaskOpenProperCraftingTable implements Runnable {
+
+        private final PktCraftingTableFix message;
+
+        public TaskOpenProperCraftingTable(PktCraftingTableFix message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+            GuiCrafting gui = new GuiCrafting(player.inventory, player.worldObj, message.at);
+            Minecraft.getMinecraft().displayGuiScreen(gui);
+            player.openContainer.windowId = message.guiId;
+        }
+
+    }
+
 }

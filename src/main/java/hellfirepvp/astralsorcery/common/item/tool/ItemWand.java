@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemWand extends Item implements ISpecialInteractItem {
 
-    private static final ParticleFirework.Factory pFactory = new ParticleFirework.Factory();
+    //private static final ParticleFirework.Factory pFactory = new ParticleFirework.Factory();
 
     public ItemWand() {
         setMaxDamage(0);
@@ -89,7 +89,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
             ((IWandInteract) b).onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
             return;
         }
-        IWandInteract wandTe = MiscUtils.getTileAt(world, pos, IWandInteract.class);
+        IWandInteract wandTe = MiscUtils.getTileAt(world, pos, IWandInteract.class, true);
         if(wandTe != null) {
             wandTe.onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
         }

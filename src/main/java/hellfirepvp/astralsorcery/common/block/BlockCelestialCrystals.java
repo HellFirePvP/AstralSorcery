@@ -144,12 +144,12 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount) {
         if(starlightType.equals(Constellations.horologium) && amount >= 3) {
-            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class);
+            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
             if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (900 / amount)))) == 0) {
                 tile.tryGrowth(0.3);
             }
         } else if(starlightType.equals(Constellations.mineralis) && amount >= 2) {
-            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class);
+            TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
             if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (700 / amount)))) == 0) {
                 tile.tryGrowth(0.6);
             }
@@ -202,7 +202,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileCelestialCrystals te = MiscUtils.getTileAt(worldIn, pos, TileCelestialCrystals.class);
+        TileCelestialCrystals te = MiscUtils.getTileAt(worldIn, pos, TileCelestialCrystals.class, true);
         if(te != null && !worldIn.isRemote) {
             PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_BURST,
                     pos.getX(), pos.getY(), pos.getZ());

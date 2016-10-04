@@ -70,7 +70,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class);
+            TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
             if(ta != null) {
                 switch (ta.getAltarLevel()) {
                     case DISCOVERY:
@@ -123,7 +123,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        TileAltar ta = MiscUtils.getTileAt(source, pos, TileAltar.class);
+        TileAltar ta = MiscUtils.getTileAt(source, pos, TileAltar.class, true);
         if(ta != null) {
             TileAltar.AltarLevel al = ta.getAltarLevel();
             switch (al) {
@@ -170,7 +170,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         NBTTagCompound pers = ItemNBTHelper.getPersistentData(stack);
         int exp = pers.getInteger("exp");
         int lvl = pers.getInteger("lvl");
-        TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class);
+        TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
         if(ta != null) {
             ta.onPlace(exp, TileAltar.AltarLevel.values()[lvl]);
         }
@@ -209,7 +209,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IBlockState actState = world.getBlockState(pos);
         ItemStack stack = super.getPickBlock(actState, target, world, pos, player); //Waila fix. wtf. why waila. why.
-        TileAltar te = MiscUtils.getTileAt(world, pos, TileAltar.class);
+        TileAltar te = MiscUtils.getTileAt(world, pos, TileAltar.class, true);
         if(te != null) {
             int exp = te.getExperience();
             int levelOrdinal = te.getAltarLevel().ordinal();

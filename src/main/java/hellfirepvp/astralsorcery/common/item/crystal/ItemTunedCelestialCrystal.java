@@ -23,7 +23,7 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.horologium);
+        applyConstellation(stack, Constellations.draco);
         subItems.add(stack);
 
         /*stack = new ItemStack(this);

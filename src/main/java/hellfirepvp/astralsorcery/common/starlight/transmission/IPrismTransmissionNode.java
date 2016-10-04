@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -66,7 +68,14 @@ public interface IPrismTransmissionNode {
 
     //Called once after reading the node from NBT
     //Use this for post-load/place logic.
-    default void postLoad(World world) {}
+    default public void postLoad(World world) {}
+
+    //Flags the world's LightNetworkBuffer as dirty,
+    //which causes it to be recalculated and saved
+    //whenever the world saves the next time.
+    default public void markDirty(World world) {
+        WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.LIGHT_NETWORK).markDirty();
+    }
 
     //Get the provider of the node. Used to recreate the class at NBT read.
     public TransmissionClassRegistry.TransmissionProvider getProvider();

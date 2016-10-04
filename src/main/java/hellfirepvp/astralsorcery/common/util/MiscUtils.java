@@ -27,7 +27,10 @@ import java.util.Random;
 public class MiscUtils {
 
     @Nullable
-    public static <T> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+    public static <T> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
+        if(world instanceof World) {
+            if(!((World) world).isBlockLoaded(pos) && !forceChunkLoad) return null;
+        }
         TileEntity te = world.getTileEntity(pos);
         if(te == null) return null;
         if(tileClass.isInstance(te)) return (T) te;

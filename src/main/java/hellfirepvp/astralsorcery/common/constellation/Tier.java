@@ -107,9 +107,6 @@ public class Tier {
             this.incV = vecUV01;
         }
 
-        // #WeCareAboutRenderPerformance
-        // There are things in life, you just don't need to understand. That's one of them.
-        // Pass coordinates between -1 and 1, size may be between 1 and ~6 (don't ask) but try yourself if needed.
         public static RInformation createRenderInfoFor(double x, double y, double z, double rSize) {
             double modSize = 0.5 * rSize;
             double fx = x * 100.0D;

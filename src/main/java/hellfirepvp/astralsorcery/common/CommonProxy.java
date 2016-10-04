@@ -142,7 +142,7 @@ public class CommonProxy implements IGuiHandler {
 
         TileEntity t = null;
         if(guiType.getTileClass() != null) {
-            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass());
+            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass(), true);
             if(t == null) {
                 return null;
             }

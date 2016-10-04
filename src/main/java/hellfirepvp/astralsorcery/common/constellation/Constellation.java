@@ -149,4 +149,8 @@ public class Constellation {
         return ConstellationRegistry.getConstellationByName(compound.getString(key));
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

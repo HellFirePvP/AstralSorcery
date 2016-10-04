@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockRitualPedestal;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
 
 import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
@@ -15,6 +16,8 @@ public class RegistryStructures {
 
     public static void init() {
         ancientShrine = new StructureAncientShrine();
+
+        patternRitualPedestal = new MultiblockRitualPedestal();
     }
 
 }

@@ -33,7 +33,7 @@ public class ClientGuiHandler {
     public static Object openGui(CommonProxy.EnumGuiId guiType, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity t = null;
         if(guiType.getTileClass() != null) {
-            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass());
+            t = MiscUtils.getTileAt(world, new BlockPos(x, y, z), guiType.getTileClass(), true);
             if(t == null) {
                 return null;
             }

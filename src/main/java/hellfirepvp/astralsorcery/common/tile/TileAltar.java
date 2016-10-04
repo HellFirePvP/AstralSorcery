@@ -125,7 +125,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
         for (EnumFacing dir : EnumFacing.VALUES) {
             if(dir == EnumFacing.UP) continue;
-            IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class);
+            IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class, true);
             if(i != null) {
                 if(ItemUtils.tryPlaceItemInInventory(out, i)) {
                     if(out.stackSize == 0) {
@@ -384,7 +384,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
             if(isChunkLoaded) {
-                TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class);
+                TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }

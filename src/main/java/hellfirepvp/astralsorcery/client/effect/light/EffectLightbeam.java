@@ -30,6 +30,7 @@ public class EffectLightbeam implements IComplexEffect {
     private final double fromSize, toSize;
     private int maxAge = 64;
     private int age = 0;
+    private float alphaMultiplier = 1F;
 
     public EffectLightbeam(Vector3 from, Vector3 to, double fromSize, double toSize) {
         this.from = from;
@@ -51,6 +52,10 @@ public class EffectLightbeam implements IComplexEffect {
     public void setDead() {
         age = maxAge;
     }
+    public EffectLightbeam setAlphaMultiplier(float alphaMultiplier) {
+        this.alphaMultiplier = alphaMultiplier;
+        return this;
+    }
 
     @Override
     public boolean canRemove() {
@@ -71,6 +76,7 @@ public class EffectLightbeam implements IComplexEffect {
         float halfAge = maxAge / 2F;
         float tr = 1F - (Math.abs(halfAge - age) / halfAge);
         tr *= 0.6;
+        tr *= alphaMultiplier;
 
         GL11.glPushMatrix();
         removeOldTranslate(rView, pTicks);

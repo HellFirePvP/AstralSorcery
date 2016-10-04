@@ -63,6 +63,14 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     }
 
     @Override
+    public void setDamage(ItemStack stack, int damage) {
+        if(getDamage(stack) > damage) {
+            return; //We don't want mending. RIP.
+        }
+        super.setDamage(stack, damage);
+    }
+
+    @Override
     public int getMaxDamage(ItemStack stack) {
         ToolCrystalProperties properties = getToolProperties(stack);
         return properties.getMaxToolDamage();

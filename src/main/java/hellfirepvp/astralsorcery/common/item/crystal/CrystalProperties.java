@@ -157,4 +157,8 @@ public class CrystalProperties {
         return new CrystalProperties(size, purity, colCap);
     }
 
+    @Override
+    public String toString() {
+        return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + "}";
+    }
 }

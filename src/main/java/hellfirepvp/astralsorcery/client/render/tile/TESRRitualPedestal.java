@@ -1,11 +1,18 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -23,9 +30,46 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
     @Override
     public void renderTileEntityAt(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         renderCrystalStack(te, x, y, z);
 
-        renderEffects(te);
+        if(te.shouldDoAdditionalEffects()) {
+            renderEffects(te);
+
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+
+            Constellation c = te.getDisplayConstellation();
+            if(c != null) {
+                float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(te.getWorld());
+                alphaDaytime *= 0.8F;
+
+                int max = 5000;
+                int t = te.getTicksExisted() % max;
+                float halfAge = max / 2F;
+                float tr = 1F - (Math.abs(halfAge - t) / halfAge);
+                tr *= 2;
+
+                int tick = te.getEffectWorkTick();
+                float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
+
+                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+                if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+                Entity entity = rView;
+                double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
+                double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
+                double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
+                GL11.glTranslated(-tx, -ty, -tz);
+
+                float br = 0.6F * (alphaDaytime * percRunning);
+
+                RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor(), new Vector3(te).add(0.5, 0.1, 0.5), 3 + tr, 2, 0.1F + br);
+            }
+
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+            GL11.glPopMatrix();
+        }
+        GL11.glPopAttrib();
     }
 
     private void renderEffects(TileRitualPedestal te) {
@@ -33,7 +77,8 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
         float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
         if(percRunning > 1E-4) {
             TextureSpritePlane sprite = te.getHaloEffectSprite();
-            sprite.setAlphaMultiplier(percRunning);
+            float alphaMul = (float) CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+            sprite.setAlphaMultiplier(percRunning * alphaMul);
         }
     }
 

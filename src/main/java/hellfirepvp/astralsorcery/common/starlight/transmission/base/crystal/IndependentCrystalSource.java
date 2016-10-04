@@ -56,7 +56,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public void informTileStateChange(IStarlightSource sourceTile) {
-        TileNetworkSkybound tns = MiscUtils.getTileAt(sourceTile.getTrWorld(), sourceTile.getTrPos(), TileNetworkSkybound.class);
+        TileNetworkSkybound tns = MiscUtils.getTileAt(sourceTile.getTrWorld(), sourceTile.getTrPos(), TileNetworkSkybound.class, true);
         if(tns != null) {
             this.doesSeeSky = tns.doesSeeSky();
         }

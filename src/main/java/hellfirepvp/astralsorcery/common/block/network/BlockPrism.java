@@ -66,7 +66,7 @@ public class BlockPrism extends BlockStarlightNetwork {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileCrystalPrismLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class);
+        TileCrystalPrismLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
         if(te == null) return;
         te.onPlace(CrystalProperties.getMaxRockProperties());
     }

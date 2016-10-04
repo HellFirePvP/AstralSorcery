@@ -30,15 +30,14 @@ public abstract class BlockStarlightNetwork extends BlockContainer {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileNetwork teN = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class);
+        TileNetwork teN = MiscUtils.getTileAt(worldIn, pos, TileNetwork.class, true);
         if(teN != null) {
             teN.onBreak();
         }
 
-        IInventory inv = MiscUtils.getTileAt(worldIn, pos, IInventory.class);
+        IInventory inv = MiscUtils.getTileAt(worldIn, pos, IInventory.class, true);
         if(inv != null && !worldIn.isRemote) {
             ItemUtils.dropInventory(inv, worldIn, pos);
-            inv.clear();
         }
 
         super.breakBlock(worldIn, pos, state);

@@ -110,7 +110,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te != null) {
             if(te.isPlayerMade()) {
                 return 4.0F;
@@ -122,7 +122,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if(placer == null || !(placer instanceof EntityPlayer)) return;
-        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te == null) return;
 
         Constellation c = ItemCollectorCrystal.getConstellation(stack);
@@ -152,7 +152,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class);
+        TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
         if(te != null) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
@@ -175,7 +175,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class);
+        TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te != null && !worldIn.isRemote) {
             PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.COLLECTOR_BURST,
                     pos.getX(), pos.getY(), pos.getZ());

@@ -9,6 +9,8 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -45,6 +47,16 @@ public final class EffectHandler {
         return instance;
     }
 
+    public static int getDebugEffectCount() {
+        int amt = 0;
+        for (Map<Integer, List<IComplexEffect>> effects : complexEffects.values()) {
+            for (List<IComplexEffect> eff : effects.values()) {
+                amt += eff.size();
+            }
+        }
+        return amt;
+    }
+
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
@@ -60,6 +72,26 @@ public final class EffectHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onDebugText(RenderGameOverlayEvent.Text event) {
+        if(Minecraft.getMinecraft().gameSettings.showDebugInfo) {
+            event.getLeft().add("");
+            event.getLeft().add("[AstralSorcery] EffectHandler:");
+            int count = getDebugEffectCount();
+            TextFormatting format;
+            if(count >= 450) {
+                format = TextFormatting.RED;
+            } else if(count >= 300) {
+                format = TextFormatting.GOLD;
+            } else if(count >= 150) {
+                format = TextFormatting.YELLOW;
+            } else {
+                format = TextFormatting.GREEN;
+            }
+            event.getLeft().add("[AstralSorcery] > Complex effects: " + format.toString() + getDebugEffectCount());
         }
     }
 

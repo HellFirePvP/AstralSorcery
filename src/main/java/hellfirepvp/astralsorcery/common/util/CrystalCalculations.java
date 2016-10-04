@@ -11,9 +11,6 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
  */
 public class CrystalCalculations {
 
-    //Might be changed back? it is possible to get 2x ritual effect with just 1 celestial crystal tho.
-    public static float MAX_RITUAL_EFFECT = CrystalProperties.MAX_SIZE_CELESTIAL / 100;
-
     //Depends on size and collectivity
     //Can collect up to 5F at max.
     public static float getCollectionAmt(CrystalProperties properties, float distribution) {
@@ -33,15 +30,22 @@ public class CrystalCalculations {
         return (float) (3 + (Math.pow(sizeDistr, 2)));
     }
 
+    //1-4
+    public static double getMaxRitualReduction(CrystalProperties properties) {
+        double purity = Math.sqrt((((double) properties.getPurity()) / 100D));
+        double cutting = Math.sqrt((((double) properties.getCollectiveCapability()) / 100D));
+        return Math.max(1, purity * 2D + cutting * 2D);
+    }
+
     //Between 0-18
-    public static double getMaxRitualEffect(CrystalProperties properties) {
+    /*public static double getMaxRitualEffect(CrystalProperties properties) {
         double purity = Math.sqrt((((float) properties.getPurity()) / 100F));
         double size = (double) properties.getSize() / 100D;
         double cutting = Math.sqrt((((float) properties.getCollectiveCapability()) / 100F));
         double res = size * purity;
         double loss = Math.max(0, (1D - cutting) * res);
         return (res - loss) + (res - loss);
-    }
+    }*/
 
     //1F -> none, 0F -> ALL
     /*public static float getDischargePerc(CrystalProperties properties) {

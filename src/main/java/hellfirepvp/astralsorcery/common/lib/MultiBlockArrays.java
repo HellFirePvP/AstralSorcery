@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 
 /**
@@ -12,5 +13,7 @@ import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 public class MultiBlockArrays {
 
     public static StructureBlockArray ancientShrine;
+
+    public static PatternBlockArray patternRitualPedestal;
 
 }

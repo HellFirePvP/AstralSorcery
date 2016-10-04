@@ -68,6 +68,14 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     }
 
     @Override
+    public void setDamage(ItemStack stack, int damage) {
+        if(getDamage(stack) > damage) {
+            return; //We don't want mending. RIP.
+        }
+        super.setDamage(stack, damage);
+    }
+
+    @Override
     public boolean isRepairable() {
         return false;
     }

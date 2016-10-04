@@ -103,6 +103,13 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 subtract(double vX, double vY, double vZ) {
+        this.x -= vX;
+        this.y -= vY;
+        this.z -= vZ;
+        return this;
+    }
+
     public Vector3 subtract(Vector3 vec) {
         this.x -= vec.x;
         this.y -= vec.y;
