@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -29,7 +30,7 @@ public class DiscoveryRecipe extends AbstractAltarRecipe {
         this(recipe.make());
     }
 
-    public DiscoveryRecipe(IRecipe recipe) {
+    public DiscoveryRecipe(IAccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.DISCOVERY, recipe);
         setPassiveStarlightRequirement(600);
     }

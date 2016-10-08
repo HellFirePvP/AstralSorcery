@@ -76,7 +76,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     }
 
     private Rectangle drawBookmark(double offsetX, double offsetY, double width, double height, double mouseOverWidth, float zLevel, String title, int titleRGBColor, Point mousePoint) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
+        SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         //Reset styles, because MC fontrenderer is STUPID A F
         if(titleRGBColor == Color.WHITE.getRGB()) {
             fontRendererObj.drawString("", 0, 0, Color.BLACK.getRGB());

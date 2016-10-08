@@ -27,7 +27,7 @@ public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         ItemStack stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.draco);
+        ItemCollectorCrystal.setConstellation(stack, Constellations.mineralis);
         ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         list.add(stack);

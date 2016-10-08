@@ -46,4 +46,10 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
         ItemCrystalToolBase.setToolProperties(toolOut, ToolCrystalProperties.merge(prop));
         return toolOut;
     }
+
+    @Override
+    public boolean allowsForChaining() {
+        return false;
+    }
+
 }

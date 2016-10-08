@@ -85,20 +85,20 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         float br = 0.3F;
         GL11.glColor4f(br, br, br, 0.8F);
         String info = I18n.translateToLocal(constellation.getInfoString()).toUpperCase();
-        int w = fontRenderer.getStringWidth(info);
-        float chX = 305 - (w / 2);
-        fontRenderer.drawString(info, guiLeft + chX, guiTop + 18, null, 0.7F, 0);
+        double w = fontRenderer.getStringWidth(info);
+        double chX = 305 - (w / 2);
+        fontRenderer.drawString(info, guiLeft + chX, guiTop + 18, zLevel, null, 0.7F, 0);
 
-        texArrowLeft.bind();
+        /*texArrowLeft.bind();
         fontRenderer.font_size_multiplicator = 0.06F;
         String pref = I18n.translateToLocal("constraint.description");
-        fontRenderer.drawString(pref, guiLeft + 228, guiTop + 60, null, 0.7F, 0);
+        fontRenderer.drawString(pref, guiLeft + 228, guiTop + 60, zLevel, null, 0.7F, 0);
 
         texArrowLeft.bind();
         fontRenderer.font_size_multiplicator = 0.05F;
         SizeConstraint sc = constellation.getSizeConstraint();
         String trSize = I18n.translateToLocal(sc.getUnlocalizedName());
-        fontRenderer.drawString("- " + trSize, guiLeft + 228, guiTop + 85, null, 0.7F, 0);
+        fontRenderer.drawString("- " + trSize, guiLeft + 228, guiTop + 85, zLevel, null, 0.7F, 0);
 
         List<RitualConstraint> constrList = constellation.getConstraints();
         for (int i = 0; i < constrList.size(); i++) {
@@ -106,8 +106,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             String str = I18n.translateToLocal(cstr.getUnlocalizedName());
             texArrowLeft.bind();
             fontRenderer.font_size_multiplicator = 0.05F;
-            fontRenderer.drawString("- " + str, guiLeft + 228, guiTop + 107 + (i * 22), null, 0.7F, 0);
-        }
+            fontRenderer.drawString("- " + str, guiLeft + 228, guiTop + 107 + (i * 22), zLevel, null, 0.7F, 0);
+        }*/
     }
 
     private void drawPhaseInformation() {
@@ -119,11 +119,11 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         String trCh = detailed ? I18n.translateToLocal(constellation.queryTier().chanceAsRarityUnlocName()).toUpperCase() : "???";
         String chance = I18n.translateToLocal("tier.chance").toUpperCase();
 
-        fontRenderer.drawString(chance, guiLeft + 228, guiTop + 175, null, 0.7F, 0);
+        fontRenderer.drawString(chance, guiLeft + 228, guiTop + 175, zLevel, null, 0.7F, 0);
         texArrowLeft.bind(); //Nvm this here.
 
         fontRenderer.font_size_multiplicator = 0.045F;
-        fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 196, null, 0.7F, 0);
+        fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 196, zLevel, null, 0.7F, 0);
         GL11.glPopMatrix();
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -145,9 +145,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         float br = 0.3F;
         GL11.glColor4f(br, br, br, 0.8F);
         String name = I18n.translateToLocal(constellation.getName()).toUpperCase();
-        int width = fontRenderer.getStringWidth(name);
-        float offsetX = 110 - (width / 2);
-        fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, null, 0.7F, 0);
+        double width = fontRenderer.getStringWidth(name);
+        double offsetX = 110 - (width / 2);
+        fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
         GL11.glEnable(GL11.GL_BLEND);
         RenderConstellation.renderConstellationIntoGUI(new Color(0x555555), constellation, guiLeft + 15, guiTop + 60, zLevel, 190, 190, 3F, new RenderConstellation.BrightnessFunction() {
             @Override

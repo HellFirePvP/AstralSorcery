@@ -147,8 +147,8 @@ public class AstralWorldGenerator implements IWorldGenerator {
 
     private void genCrystals(Random random, int chunkX, int chunkZ, World world) {
         if (Config.crystalDensity <= 0 || random.nextInt(Config.crystalDensity) == 0) {
-            int xPos = (chunkX << 4) + random.nextInt(16);
-            int zPos = (chunkZ << 4) + random.nextInt(16);
+            int xPos = chunkX * 16 + random.nextInt(16);
+            int zPos = chunkZ * 16 + random.nextInt(16);
             int yPos = 2 + random.nextInt(4);
             BlockPos pos = new BlockPos(xPos, yPos, zPos);
             IBlockState state = world.getBlockState(pos);

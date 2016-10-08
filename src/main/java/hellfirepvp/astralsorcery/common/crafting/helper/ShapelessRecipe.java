@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapelessRecipes;
 
+import javax.annotation.Nullable;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -15,8 +17,8 @@ import net.minecraft.item.crafting.ShapelessRecipes;
  */
 public class ShapelessRecipe extends AbstractCacheableRecipe {
 
-    private int contentCounter = 0;
-    private ItemStack[] contents = new ItemStack[9]; //Max. 9
+    protected int contentCounter = 0;
+    protected ItemStack[] contents = new ItemStack[9]; //Max. 9
 
     public ShapelessRecipe(Block block) {
         this(new ItemStack(block));
@@ -50,9 +52,23 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
     }
 
     @Override
-    public ShapelessRecipes make() {
+    public AccessibleRecipeAdapater make() {
         Object[] parts = new Object[contentCounter];
         System.arraycopy(contents, 0, parts, 0, contentCounter);
-        return RecipeHelper.getShapessRecipe(getOutput(), parts);
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapessRecipe(getOutput(), parts), this);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getExpectedStack(int row, int column) {
+        int index = row * 3 + column;
+        return index >= contentCounter ? null : contents[index];
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getExpectedStack(ShapedRecipeSlot slot) {
+        int index = slot.rowMultipler * 3 + slot.columnMultiplier;
+        return index >= contentCounter ? null : contents[index];
     }
 }

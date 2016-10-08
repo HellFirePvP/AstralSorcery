@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -92,15 +93,23 @@ public class TransmissionWorldHandler {
                 while (iterator.hasNext()) {
                     BlockPos endPointPos = iterator.next();
                     if (MiscUtils.isChunkLoaded(world, new ChunkPos(endPointPos))) {
-                        Block b = world.getBlockState(endPointPos).getBlock();
+                        IBlockState endState = world.getBlockState(endPointPos);
+                        Block b = endState.getBlock();
                         if (b instanceof IBlockStarlightRecipient) {
                             Float multiplier = lossMultipliers.get(endPointPos);
                             if (multiplier != null) {
                                 ((IBlockStarlightRecipient) b).receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
                             }
                         } else {
-                            chain.updatePosAsResolved(world, endPointPos);
-                            iterator.remove();
+                            StarlightNetworkRegistry.IStarlightBlockHandler handle = StarlightNetworkRegistry.getStarlightHandler(endState);
+                            if(handle != null) {
+                                Float multiplier = lossMultipliers.get(endPointPos);
+                                if (multiplier != null) {
+                                    handle.receiveStarlight(world, rand, endPointPos, type, starlight * multiplier);
+                                }
+                            } else {
+                                chain.updatePosAsResolved(world, endPointPos);
+                            }
                         }
                     }
                 }

@@ -38,4 +38,10 @@ public class TelescopeRecipe extends DiscoveryRecipe {
         }
         super.onCraftServerFinish(altar, rand);
     }
+
+    @Override
+    public boolean allowsForChaining() {
+        return false;
+    }
+
 }

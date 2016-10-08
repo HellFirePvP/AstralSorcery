@@ -15,7 +15,6 @@ import net.minecraft.world.World;
  */
 public interface IIndependentStarlightSource {
 
-    //We don't really need that method at the moment tho.... lol..
     //Called eventhough the tile is not loaded. that's what we wanted.
     //public void onUpdate(World world, BlockPos pos);
 

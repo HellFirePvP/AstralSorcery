@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.tile.base;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightTransmission;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,6 +22,8 @@ import java.util.List;
  * Date: 03.08.2016 / 10:35
  */
 public abstract class TileTransmissionBase extends TileNetwork implements IStarlightTransmission, ILinkableTile {
+
+    private final boolean singleLink = getClass() == TileCrystalLens.class;
 
     private List<BlockPos> positions = new LinkedList<>();
 
@@ -56,9 +59,12 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
         if(other.equals(getPos())) return;
 
         if(TransmissionNetworkHelper.createTransmissionLink(this, other)) {
-            if(!this.positions.contains(other)) {
+            if(singleLink)
+                this.positions.clear();
+
+            if(singleLink || !this.positions.contains(other)) {
                 this.positions.add(other);
-                markDirty();
+                markForUpdate();
             }
         }
     }
@@ -85,7 +91,7 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
         if(TransmissionNetworkHelper.hasTransmissionLink(this, other)) {
             TransmissionNetworkHelper.removeTransmissionLink(this, other);
             this.positions.remove(other);
-            markDirty();
+            markForUpdate();
             return true;
         }
         return false;

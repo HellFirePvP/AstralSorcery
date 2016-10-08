@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public class ShapedRecipe extends AbstractCacheableRecipe {
 
-    private ShapeMap crafingShape = new ShapeMap();
+    protected ShapeMap crafingShape = new ShapeMap();
 
     public ShapedRecipe(Block output) {
         this(new ItemStack(output));
@@ -53,7 +54,7 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
     }
 
     @Override
-    public ShapedRecipes make() {
+    public AccessibleRecipeAdapater make() {
         Counter c = new Counter();
         c.count = 0;
         Map<ItemStack, Character> shapeCharacters = new HashMap<>();
@@ -67,7 +68,20 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
         recipeObjArray[2] = lowerRow;
         int arrayPointer = 3;
         addToArray(shapeCharacters, recipeObjArray, arrayPointer);
-        return RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray);
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray), this);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getExpectedStack(int row, int column) {
+        ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(row, column);
+        return slot == null ? null : crafingShape.get(slot);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getExpectedStack(ShapedRecipeSlot slot) {
+        return crafingShape.get(slot);
     }
 
     private void addToArray(Map<ItemStack, Character> shapeCharacters, Object[] recipeObjArray, int arrayPointer) {
@@ -80,11 +94,11 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
         }
     }
 
-    private String refactorRow(ShapedRecipeSlot first, ShapedRecipeSlot sencond, ShapedRecipeSlot third, Map<ItemStack, Character> characterMap, Counter craftingPointer) {
+    private String refactorRow(ShapedRecipeSlot first, ShapedRecipeSlot second, ShapedRecipeSlot third, Map<ItemStack, Character> characterMap, Counter craftingPointer) {
         StringBuilder builder = new StringBuilder();
         if(append(first, builder, craftingPointer, characterMap)) craftingPointer.count++;
-        if(append(sencond, builder, craftingPointer, characterMap)) craftingPointer.count++;
-        append(third, builder, craftingPointer, characterMap);
+        if(append(second, builder, craftingPointer, characterMap)) craftingPointer.count++;
+        if(append(third, builder, craftingPointer, characterMap)) craftingPointer.count++;
         return builder.toString();
     }
 

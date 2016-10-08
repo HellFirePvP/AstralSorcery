@@ -38,7 +38,7 @@ public class RegistryConstellations {
 
         rebuildConstellations();
 
-        addConstellationConstraints();
+        //addConstellationConstraints();
 
         registerConstellations();
     }
@@ -74,7 +74,7 @@ public class RegistryConstellations {
         reatio.    register("reatio",     4);
     }
 
-    private static void addConstellationConstraints() {
+    /*private static void addConstellationConstraints() {
         fornax.setSizeConstraint(SIZE_6);
         fornax.addRitualConstraint(HORIZONTAL);
         ara.setSizeConstraint(SIZE_5);
@@ -118,7 +118,7 @@ public class RegistryConstellations {
         chitra.addRitualConstraint(DISTANCE_2);
         reatio.setSizeConstraint(SIZE_6);
         reatio.addRitualConstraint(ASYMMETRY);
-    }
+    }*/
 
     private static void rebuildConstellations() {
         StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8, sl9, sl10, sl11, sl12, sl13, sl14;

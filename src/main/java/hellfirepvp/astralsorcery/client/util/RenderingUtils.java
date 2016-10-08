@@ -58,7 +58,7 @@ public class RenderingUtils {
     }
 
     public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2, FontRenderer fontRenderer) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
+        SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();

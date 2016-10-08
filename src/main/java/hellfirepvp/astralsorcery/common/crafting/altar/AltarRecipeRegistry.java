@@ -1,14 +1,8 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,6 +24,7 @@ public class AltarRecipeRegistry {
     private static AbstractAltarRecipe[] compiledRecipeArray = null;
 
     //NEVER call this. this should only get called once at post init to compile all recipes for fast access.
+    //After this is called, changes to recipe registry might break stuff.
     public static void compileRecipes() {
         compiledRecipeArray = null;
 
@@ -55,13 +50,16 @@ public class AltarRecipeRegistry {
         return compiledRecipeArray[id];
     }
 
-    public static void registerDiscoveryRecipe(AbstractCacheableRecipe recipe) {
-        registerAltarRecipe(new DiscoveryRecipe(recipe));
+    public static DiscoveryRecipe registerDiscoveryRecipe(AbstractCacheableRecipe recipe) {
+        DiscoveryRecipe dr = new DiscoveryRecipe(recipe);
+        registerAltarRecipe(dr);
+        return dr;
     }
 
-    public static void registerAltarRecipe(AbstractAltarRecipe recipe) {
+    public static <T extends AbstractAltarRecipe> T registerAltarRecipe(T recipe) {
         TileAltar.AltarLevel level = recipe.getNeededLevel();
         recipes.get(level).add(recipe);
+        return recipe;
     }
 
     @Nullable

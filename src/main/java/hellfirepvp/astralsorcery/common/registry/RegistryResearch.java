@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
@@ -28,6 +29,8 @@ public class RegistryResearch {
         ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2).setSpecial();
         test1.addPage(new JournalPageText("astralsorcery.journal.text.test"));
         test1.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
+        test2.addPage(new JournalPageText("astralsorcery.journal.text.test2"));
+        test2.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltar));
         test1.registerTo(ResearchProgression.TEST_PROGRESS);
         test2.registerTo(ResearchProgression.TEST_PROGRESS);
         test3.registerTo(ResearchProgression.TEST_PROGRESS);

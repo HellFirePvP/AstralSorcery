@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.text;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.ISpecialFontRenderer;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -52,10 +53,10 @@ public final class OverlayText implements IComplexEffect {
     public void doRender(ScaledResolution resolution, float partialTicks) {
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
-        int strWidth = fontRendererObj.getStringWidth(text.toUpperCase());
+        double strWidth = fontRendererObj.getStringWidth(text.toUpperCase());
         int renderY = height / 5;
-        int renderX = width / 2 - strWidth / 2;
-        fontRendererObj.drawString(text.toUpperCase(), renderX, renderY, color, alpha, animationTick);
+        double renderX = width / 2 - strWidth / 2;
+        fontRendererObj.drawString(text.toUpperCase(), renderX, renderY, 200F, color, alpha, animationTick);
     }
 
     public static class OverlayTextProperties {
@@ -108,7 +109,7 @@ public final class OverlayText implements IComplexEffect {
         return RenderTarget.OVERLAY_TEXT;
     }
 
-    public static class OverlayFontRenderer {
+    public static class OverlayFontRenderer implements ISpecialFontRenderer {
 
         //Very much hardcoded stuff down there, but it works :P
         private static final int SPACE_CHAR_SIZE = 92;
@@ -133,7 +134,12 @@ public final class OverlayText implements IComplexEffect {
             this.maxLiving = maxLivingTicks;
         }
 
-        public void drawString(String string, float x, float y, Color color, float alpha, int animationTick) {
+        @Override
+        public double drawString(String string, double x, double y, float zLevel, Color color, float alpha) {
+            return drawString(string, x, y, zLevel, color, alpha, 0);
+        }
+
+        public double drawString(String string, double x, double y, float zLevel, Color color, float alpha, int animationTick) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             boolean lightning = GL11.glGetBoolean(GL11.GL_LIGHTING);
@@ -143,15 +149,20 @@ public final class OverlayText implements IComplexEffect {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             fontTexture.bind();
+            double width = 0;
             char[] contents = string.toCharArray();
             for (int i = 0; i < contents.length; i++) {
                 Character c = contents[i];
                 if (c.equals(' ')) {
-                    x += getCharWidth(c);
+                    double w = getCharWidth(c);
+                    x += w;
+                    width += w;
                     continue;
                 }
-                renderCharAt(string, c, x, y, animationTick, color, alpha, i);
-                x += getCharWidth(c);
+                renderCharAt(string, c, (float) x, (float) y, animationTick, color, alpha, i);
+                double w = getCharWidth(c);
+                x += w;
+                width += w;
             }
             /*GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glDisable(GL11.GL_BLEND);
@@ -160,6 +171,7 @@ public final class OverlayText implements IComplexEffect {
             }*/
             GL11.glPopAttrib();
             GL11.glPopMatrix();
+            return width;
         }
 
         private void renderCharAt(String full, Character c, float x, float y, int animationTick, Color color, float alpha, int index) {
@@ -181,7 +193,8 @@ public final class OverlayText implements IComplexEffect {
             GL11.glEnd();
         }
 
-        public int getStringWidth(String string) {
+        @Override
+        public double getStringWidth(String string) {
             int width = 0;
             for (Character c : string.toCharArray()) {
                 width += getCharWidth(c);
@@ -189,7 +202,7 @@ public final class OverlayText implements IComplexEffect {
             return width;
         }
 
-        public float getCharWidth(Character c) {
+        public double getCharWidth(Character c) {
             if (c.equals(' ')) return SPACE_CHAR_SIZE * font_size_multiplicator;
             RenderChar rend = loadedCharacters.get(c);
             if (rend == null) throw new RuntimeException("Using OverlayFontRenderer with invalid chars! (Character: " + String.valueOf(c) + ")");

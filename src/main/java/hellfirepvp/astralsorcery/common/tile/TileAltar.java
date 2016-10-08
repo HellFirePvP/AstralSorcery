@@ -49,6 +49,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     private AltarLevel level = AltarLevel.DISCOVERY;
     private boolean doesSeeSky = false;
+    private boolean mbState = false;
     private int experience = 0;
     private int starlightStored = 0;
 
@@ -82,6 +83,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             needUpdate = starlightPassive(needUpdate);
             needUpdate = doTryCraft(needUpdate);
 
+            if((ticksExisted & 15) == 0) {
+                needUpdate = matchLevel(needUpdate);
+            }
+
             if(needUpdate) {
                 markForUpdate();
             }
@@ -96,6 +101,17 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private void doCraftEffects() {
         craftingTask.getRecipeToCraft().onCraftClientTick(this, ClientScheduler.getClientTick(), rand);
     }
+
+    private boolean matchLevel(boolean needUpdate) {
+        AltarLevel al = getAltarLevel();
+        boolean matches = al.getMatcher().mbAllowsForCrafting(this);
+        if(matches != mbState) {
+            mbState = matches;
+            needUpdate = true;
+        }
+        return needUpdate;
+    }
+
 
     private boolean doTryCraft(boolean needUpdate) {
         if(craftingTask == null) return needUpdate;
@@ -138,11 +154,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out);
         }
 
-        starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired()); //Shouldn't reach < 0 but uuugh... safety
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
+        starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
-        craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
-        craftingTask = null;
+        if (!recipe.allowsForChaining() || !recipe.matches(this)) {
+            craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
+            craftingTask = null;
+        }
         markForUpdate();
     }
 
@@ -162,16 +180,31 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(level != AltarLevel.ENDGAME) {
             experience += exp;
             AltarLevel next = level.tryLevelUp(this);
-            if(next.ordinal() >= level.ordinal()) {
-                onLevelUp(level, next);
-                level = next;
-                experience = 0;
-                worldObj.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
-                markForUpdate();
+            if(next.ordinal() > level.ordinal()) {
+                levelUnsafe(next);
             }
         } else {
             experience = Integer.MAX_VALUE;
         }
+        markForUpdate();
+    }
+
+    public boolean tryForceLevelUp(AltarLevel to, boolean doLevelUp) {
+        int curr = getAltarLevel().ordinal();
+        if(to.ordinal() >= curr) return false;
+        if(getAltarLevel().next() != to) return false;
+
+        if(!doLevelUp) return true;
+        levelUnsafe(getAltarLevel().next());
+        return true;
+    }
+
+    private void levelUnsafe(AltarLevel to) {
+        onLevelUp(level, to);
+        level = to;
+        experience = 0;
+        mbState = false;
+        worldObj.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
 
     @Override
@@ -210,6 +243,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return experience;
     }
 
+    public boolean getMultiblockState() {
+        return mbState;
+    }
+
     public float getAmbientStarlightPercent() {
         return ((float) starlightStored) / ((float) getMaxStarlightStorage());
     }
@@ -237,6 +274,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     private void findRecipe(EntityPlayer crafter) {
+        if(!mbState) return;
+
         AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this);
         //System.out.println(recipe == null ? "didn't find recipe" : "found recipe");
         if(recipe != null) {
@@ -276,6 +315,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.level = AltarLevel.values()[compound.getInteger("level")];
         this.experience = compound.getInteger("exp");
         this.starlightStored = compound.getInteger("starlight");
+        this.mbState = compound.getBoolean("mbState");
 
         this.craftingTask = null;
         if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
@@ -299,6 +339,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         compound.setInteger("level", level.ordinal());
         compound.setInteger("exp", experience);
         compound.setInteger("starlight", starlightStored);
+        compound.setBoolean("mbState", mbState);
 
         if(craftingTask != null) {
             compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
@@ -331,26 +372,33 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static enum AltarLevel {
 
-        DISCOVERY(100),
-        ATTENUATION(1000, false),
-        CONSTELLATION_CRAFT(4000),
-        TRAIT_CRAFT(12000),
-        ENDGAME(-1);
+        DISCOVERY(100, (ta) -> true), //Default one...
+        ATTENUATION(1000, (ta) -> true, false),
+        CONSTELLATION_CRAFT(4000, (ta) -> true, false),
+        TRAIT_CRAFT(12000, (ta) -> true, false),
+        ENDGAME(-1, (ta) -> true); //Enhanced version of traitcraft.
 
         private final int totalExpNeededToLevelUp;
+        private final IAltarMatcher matcher;
         private boolean canLevelToByExpGain = true;
 
-        private AltarLevel(int levelExp) {
+        private AltarLevel(int levelExp, IAltarMatcher matcher) {
             this.totalExpNeededToLevelUp = levelExp;
+            this.matcher = matcher;
         }
 
-        private AltarLevel(int levelExp, boolean canLevelToByExpGain) {
+        private AltarLevel(int levelExp, IAltarMatcher matcher, boolean canLevelToByExpGain) {
             this.totalExpNeededToLevelUp = levelExp;
             this.canLevelToByExpGain = canLevelToByExpGain;
+            this.matcher = matcher;
         }
 
         public BlockAltar.AltarType getCorrespondingAltarType() {
             return BlockAltar.AltarType.values()[ordinal()];
+        }
+
+        public IAltarMatcher getMatcher() {
+            return matcher;
         }
 
         public int getTotalExpNeededForLevel() {
@@ -371,6 +419,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 return next;
             }
             return this;
+        }
+
+        public AltarLevel next() {
+            if(this == ENDGAME) return this;
+            return AltarLevel.values()[ordinal() + 1];
         }
 
     }
@@ -409,6 +462,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         public String getIdentifier() {
             return AstralSorcery.MODID + ":TransmissionReceiverAltar";
         }
+
+    }
+
+    public static interface IAltarMatcher {
+
+        public boolean mbAllowsForCrafting(TileAltar ta);
 
     }
 

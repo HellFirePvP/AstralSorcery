@@ -65,9 +65,9 @@ public class GuiJournalPages extends GuiScreenJournal {
             titleFontRenderer.zLevel = zLevel;
             titleFontRenderer.font_size_multiplicator = 0.04F;
             String name = I18n.translateToLocal(unlocTitle).toUpperCase();
-            int width = titleFontRenderer.getStringWidth(name);
-            float offsetX = 105 - (width / 2);
-            titleFontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, null, 0.7F, 0);
+            double width = titleFontRenderer.getStringWidth(name);
+            double offsetX = 105 - (width / 2);
+            titleFontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
 
             texUnderline.bind();
             GL11.glPushMatrix();
@@ -75,7 +75,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(190, 6);
             GL11.glPopMatrix();
             pageOffsetY = 50;
-            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
+            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         }
 
         int index = currentPageOffset * 2;
@@ -86,7 +86,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 20, guiTop + pageOffsetY, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
-            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
+            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         }
         index = currentPageOffset + 1;
         if(pages.size() > index) {
@@ -96,7 +96,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
-            Minecraft.getMinecraft().renderEngine.bindTexture(SpecialTextureLibrary.getBlockAtlasTexture());
+            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         }
 
         zLevel -= 100;

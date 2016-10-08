@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import hellfirepvp.astralsorcery.common.tile.TileEntitySynchronized;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 

@@ -93,7 +93,7 @@ public class RockCrystalBuffer extends CachedWorldData {
                 List<BlockPos> positions = new LinkedList<>();
                 NBTTagList entries = chList.getTagList("crystals", 10);
                 for (int j = 0; j < entries.tagCount(); j++) {
-                    NBTTagCompound tag = entries.getCompoundTagAt(i);
+                    NBTTagCompound tag = entries.getCompoundTagAt(j);
                     positions.add(NBTUtils.readBlockPosFromNBT(tag));
                 }
                 work.put(pos, positions);

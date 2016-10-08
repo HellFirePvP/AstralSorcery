@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;

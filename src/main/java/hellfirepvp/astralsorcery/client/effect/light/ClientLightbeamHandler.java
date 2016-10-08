@@ -34,6 +34,7 @@ public class ClientLightbeamHandler implements ITickHandler {
         if(ticksExisted % 40 == 0) {
             ticksExisted = 0;
             Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+            if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
             if(rView != null) {
                 int dimId = rView.getEntityWorld().provider.getDimension();
                 DataLightConnections connections = SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS);

@@ -96,7 +96,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
             GL11.glColor4f(r, g, b, 1F);
             String translated = I18n.translateToLocal(unlocTitle).toUpperCase();
-            fRend.drawString(translated, guiLeft + 225, guiTop + 14, Color.DARK_GRAY, 0.7F, 0);
+            fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
             GL11.glColor4f(1F, 1F, 1F, 1F);
         }
     }
@@ -192,7 +192,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         float fullLength = (width / 2) - (((float) fontRenderer.getStringWidth(trName)) / 2F);
 
         fontRenderer.zLevel = zLevel;
-        fontRenderer.drawString(trName, fullLength, 75F, null, 1F, 0);
+        fontRenderer.drawString(trName, fullLength, 75F, zLevel, null, 1F, 0);
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glPopMatrix();

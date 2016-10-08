@@ -1,25 +1,33 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSpawnWorldParticles;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.ParticleFirework;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,8 +37,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Date: 23.09.2016 / 12:57
  */
 public class ItemWand extends Item implements ISpecialInteractItem {
-
-    //private static final ParticleFirework.Factory pFactory = new ParticleFirework.Factory();
 
     public ItemWand() {
         setMaxDamage(0);
@@ -67,12 +73,23 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         return "item.ItemWand.obf";
     }
 
-    //TODO
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(worldIn.isRemote) {
-            //RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+        if(!worldIn.isRemote && isSelected && worldIn.getTotalWorldTime() % 20 == 0 && entityIn instanceof EntityPlayerMP) {
+            //PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            //if(progress == null || !EnumGatedKnowledge.WAND_TYPE.canSee(progress.getViewCapability())) return;
 
+            RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
+            ChunkPos pos = new ChunkPos(entityIn.getPosition());
+            List<BlockPos> posList = buf.collectPositions(pos, 2);
+            for (BlockPos rPos : posList) {
+                BlockPos p = worldIn.getTopSolidOrLiquidBlock(rPos).up();
+                double dstr = CelestialHandler.calcDaytimeDistribution(worldIn);
+                if(dstr > 1E-4) {
+                    PktSpawnWorldParticles pkt = PktSpawnWorldParticles.getRockCrystalParticles(dstr, p);
+                    PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) entityIn);
+                }
+            }
         }
     }
 

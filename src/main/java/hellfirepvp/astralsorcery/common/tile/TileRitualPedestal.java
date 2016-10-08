@@ -348,10 +348,10 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private static final int MAX_MIRROR_COUNT = 5;
 
         //Steps between trials: 10 minutes, 25 minutes, 50 minutes, 2 hours, 5 hours
-        private static final int[] secToNext =    new int[] { 12_000, 30_000, 60_000, 144_000, 360_000 };
-        //private static final int[] secToNext =    new int[] { 10, 10, 6, 10, 10 };
-        private static final int[] chanceToNext = new int[] { 50,     200,    500,    1000,    2000 };
-        //private static final int[] chanceToNext = new int[] { 2,     2,    2,    2,    2 };
+        //private static final int[] secToNext =    new int[] { 12_000, 30_000, 60_000, 144_000, 360_000 };
+        private static final int[] secToNext =    new int[] { 10, 10, 6, 10, 10 };
+        //private static final int[] chanceToNext = new int[] { 50,     200,    500,    1000,    2000 };
+        private static final int[] chanceToNext = new int[] { 2,     2,    2,    2,    2 };
 
         private static final BlockPos[] possibleOffsets = new BlockPos[] {
                 new BlockPos( 4, 2,  0),

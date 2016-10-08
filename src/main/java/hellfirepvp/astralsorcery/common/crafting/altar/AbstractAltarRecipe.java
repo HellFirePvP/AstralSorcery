@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
+import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -8,6 +9,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -22,7 +24,7 @@ public abstract class AbstractAltarRecipe {
 
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
-    private final IRecipe recipe;
+    private final IAccessibleRecipe recipe;
     private final ItemStack out;
 
     private int uniqueRecipeId = -1;
@@ -31,7 +33,7 @@ public abstract class AbstractAltarRecipe {
         this(neededLevel, recipe.make());
     }
 
-    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, IRecipe recipe) {
+    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         this.neededLevel = neededLevel;
         this.recipe = recipe;
         this.out = recipe.getRecipeOutput();
@@ -45,12 +47,23 @@ public abstract class AbstractAltarRecipe {
         return uniqueRecipeId;
     }
 
+    @Nonnull
+    public ItemStack getOutputForRender() {
+        return out;
+    }
+
+    public IAccessibleRecipe getNativeRecipe() {
+        return recipe;
+    }
+
     public ItemStack getOutput(ShapeMap centralGridMap) {
         return out;
     }
 
     public boolean matches(TileAltar altar) {
         if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
+
+        if(!altar.getMultiblockState()) return false;
 
         ItemStack[] altarInv = new ItemStack[altar.getSizeInventory()];
         for (int i = 0; i < altar.getSizeInventory(); i++) {
@@ -61,16 +74,22 @@ public abstract class AbstractAltarRecipe {
         return recipe.matches(adapter, altar.getWorld());
     }
 
-    public void setPassiveStarlightRequirement(int starlightRequirement) {
+    public AbstractAltarRecipe setPassiveStarlightRequirement(int starlightRequirement) {
         this.passiveStarlightRequirement = starlightRequirement;
+        return this;
     }
 
     public int getPassiveStarlightRequired() {
         return passiveStarlightRequirement;
     }
 
-    public void setCraftExperience(int exp) {
+    public AbstractAltarRecipe setCraftExperience(int exp) {
         this.experiencePerCraft = exp;
+        return this;
+    }
+
+    public boolean allowsForChaining() {
+        return true;
     }
 
     public int getCraftExperience() {

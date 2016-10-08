@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -40,6 +41,12 @@ public class TileCrystalLens extends TileTransmissionBase {
         super.writeCustomNBT(compound);
 
         this.properties.writeToNBT(compound);
+    }
+
+    @Override
+    public void onLinkCreate(EntityPlayer player, BlockPos other) {
+        super.onLinkCreate(player, other);
+
     }
 
     @Nullable

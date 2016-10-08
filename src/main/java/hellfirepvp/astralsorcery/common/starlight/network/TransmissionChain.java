@@ -84,7 +84,7 @@ public class TransmissionChain {
                 if (!resolvedNormalBlockPositions.contains(pos)) {
                     resolvedNormalBlockPositions.add(pos);
                 }
-                iterator.remove();
+                //iterator.remove();
             }
         }
     }

@@ -66,11 +66,11 @@ public class GuiConstellationPaper extends GuiWHScreen {
 
     private void drawHeader() {
         String locName = I18n.translateToLocal(constellation.getName()).toUpperCase();
-        int length = ofr.getStringWidth(locName);
-        int offsetLeft = width / 2 - length / 2;
+        double length = ofr.getStringWidth(locName);
+        double offsetLeft = width / 2 - length / 2;
         int offsetTop = guiTop + 20;
         GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.8F);
-        ofr.drawString(locName, offsetLeft, offsetTop, null, 0F, 0);
+        ofr.drawString(locName, offsetLeft, offsetTop, zLevel, null, 0F, 0);
         GL11.glColor4f(1, 1, 1, 1);
     }
 

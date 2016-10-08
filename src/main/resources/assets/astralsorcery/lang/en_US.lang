@@ -26,25 +26,20 @@ progress.missing.knowledge=It seems there is more to it than you're able to see.
 
 astralsorcery.journal.text.test=I'm gonna write this mainly to test the functionality of the text page stuff i just added.<NL>Let's see if that actually<NL>works.<NL><NL>Test double next-line..<NL><NL>test
 
+astralsorcery.journal.recipe.amt.desc=Starlight required: %s
+astralsorcery.journal.recipe.amt.lowest=Almost nothing
+astralsorcery.journal.recipe.amt.low=Not much
+astralsorcery.journal.recipe.amt.avg=Average
+astralsorcery.journal.recipe.amt.more=Above average
+astralsorcery.journal.recipe.amt.high=Quite some
+astralsorcery.journal.recipe.amt.highest=Large amounts
+
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Cutting
 crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
-
-constraint.description=Preferences
-constraint.symmetry=Symmetry
-constraint.asymmetry=Asymmetry
-constraint.horizontal=Horizontal
-constraint.vertical=Vertical
-constraint.maxsize.4=Size 4
-constraint.maxsize.5=Size 5
-constraint.maxsize.6=Size 6
-constraint.maxsize.7=Size 7
-constraint.maxsize.8=Size 8
-constraint.mindst.2=Distance 2
-constraint.mindst.3=Distance 3
 
 entity.astralsorcery.EntityTelescope.name=Telescope
 entity.astralsorcery.EntityGrindstone.name=Grindstone
@@ -65,7 +60,7 @@ item.ItemEntityPlacer.grindstone.name=Grindstone
 item.ItemLinkingTool.name=Linking Tool
 item.ItemJournal.name=Journal
 item.ItemWand.name=Astral Attunement Rod
-item.ItemWand.obf.name=Crystal Twig
+item.ItemWand.obf.name=Resonating Wand
 item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe

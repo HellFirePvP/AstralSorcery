@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.ritual.RitualComponentRegistry;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
@@ -71,6 +72,7 @@ public class CommonProxy implements IGuiHandler {
         //StarlightNetworkRegistry.setupRegistry();
 
         RitualComponentRegistry.setupRegistry();
+        StarlightNetworkRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
         RegistryRecipes.init();

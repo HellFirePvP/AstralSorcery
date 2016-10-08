@@ -27,7 +27,7 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         ItemStack stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.orion);
+        ItemCollectorCrystal.setConstellation(stack, Constellations.horologium);
         ItemCollectorCrystal.setType(stack, CollectorCrystalType.ROCK_CRYSTAL);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
         list.add(stack);

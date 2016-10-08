@@ -30,8 +30,8 @@ public class Constellation {
     private int tier = -1;
     private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
-    private SizeConstraint sizeConstraint = RitualConstraint.SIZE_4;
-    private List<RitualConstraint> constraints = new LinkedList<>();
+    //private SizeConstraint sizeConstraint = RitualConstraint.SIZE_4;
+    //private List<RitualConstraint> constraints = new LinkedList<>();
 
     private List<StarLocation> unmodifiableStars;
     private List<StarConnection> unmodifiableConnections;
@@ -85,7 +85,7 @@ public class Constellation {
         return ConstellationRegistry.getTier(getAssociatedTier());
     }
 
-    public void setSizeConstraint(SizeConstraint size) {
+    /*public void setSizeConstraint(SizeConstraint size) {
         if(finished || size == null) return;
 
         this.sizeConstraint = size;
@@ -95,15 +95,15 @@ public class Constellation {
         if(finished || constraint == null || constraints.contains(constraint)) return;
 
         constraints.add(constraint);
-    }
+    }*/
 
-    public SizeConstraint getSizeConstraint() {
+    /*public SizeConstraint getSizeConstraint() {
         return sizeConstraint;
-    }
+    }*/
 
-    public List<RitualConstraint> getConstraints() {
+    /*public List<RitualConstraint> getConstraints() {
         return constraints;
-    }
+    }*/
 
     public String getName() {
         return name;

@@ -16,7 +16,7 @@ public class Config {
     private static Configuration latestConfig;
 
     //public static boolean stopOnIllegalState = true;
-    public static int crystalDensity = 5;
+    public static int crystalDensity = 15;
     public static int aquamarineAmount = 15;
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int shrineGenerationChance = 150;
@@ -42,7 +42,7 @@ public class Config {
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
 
         //rand(crystalDensity) == 0 chance per chunk.
-        crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 5, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");
+        crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 15, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk.");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
         aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 15, 0, 32, "Defines how many aquamarine ores it'll attempt to generate in per chunk");

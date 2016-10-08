@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.tile;
+package hellfirepvp.astralsorcery.common.tile.base;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
