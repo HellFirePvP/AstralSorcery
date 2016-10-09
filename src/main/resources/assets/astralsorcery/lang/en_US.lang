@@ -67,7 +67,7 @@ item.ItemCrystalAxe.name=Crystal Axe
 item.ItemCrystalSword.name=Crystal Sword
 
 inventory.altar.0=Luminous Crafting Table
-inventory.altar.1=[NoName-Attenuation] Altar
+inventory.altar.1=Starlight Crafting Altar
 inventory.altar.2=[NoName-ConstellationCraft] Altar
 inventory.altar.3=[NoName-TraitCraft] Altar
 inventory.altar.4=[NoName-Endgame] Altar
@@ -80,7 +80,7 @@ tile.BlockCustomSandOre.aquamarine.name=Aquamarine Sand-Ore
 tile.BlockCollectorCrystal.name=Collector Crystal
 tile.BlockCelestialCollectorCrystal.name=Celestial Collector Crystal
 tile.BlockAltar.altar_1.name=Luminous Crafting Table
-tile.BlockAltar.altar_2.name=[NoName-Attenuation] Altar
+tile.BlockAltar.altar_2.name=Starlight Crafting Altar
 tile.BlockAltar.altar_3.name=[NoName-ConstellationCraft] Altar
 tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
 tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar

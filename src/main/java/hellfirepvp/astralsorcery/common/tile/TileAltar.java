@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -135,23 +136,32 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         AbstractAltarRecipe recipe = craftingTask.getRecipeToCraft();
         ShapeMap current = copyGetCurrentCraftingGrid();
         ItemStack out = recipe.getOutput(current); //Central item helps defining output - probably, eventually.
-        out = ItemUtils.copyStackWithSize(out, out.stackSize);
-        for (int i = 0; i < 9; i++) {
-            ItemUtils.decrStackInInventory(inv, i);
+        if(out != null) {
+            out = ItemUtils.copyStackWithSize(out, out.stackSize);
         }
-        for (EnumFacing dir : EnumFacing.VALUES) {
-            if(dir == EnumFacing.UP) continue;
-            IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class, true);
-            if(i != null) {
-                if(ItemUtils.tryPlaceItemInInventory(out, i)) {
-                    if(out.stackSize == 0) {
-                        break;
+
+        for (int i = 0; i < 9; i++) {
+            ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i % 3, i / 3);
+            if(recipe.mayDecrement(this, slot)) {
+                ItemUtils.decrStackInInventory(inv, i);
+            }
+        }
+
+        if(out != null) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
+                if(dir == EnumFacing.UP) continue;
+                IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class, true);
+                if(i != null) {
+                    if(ItemUtils.tryPlaceItemInInventory(out, i)) {
+                        if(out.stackSize == 0) {
+                            break;
+                        }
                     }
                 }
             }
-        }
-        if(out.stackSize > 0) {
-            ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out);
+            if(out.stackSize > 0) {
+                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out);
+            }
         }
 
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
@@ -191,7 +201,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public boolean tryForceLevelUp(AltarLevel to, boolean doLevelUp) {
         int curr = getAltarLevel().ordinal();
-        if(to.ordinal() >= curr) return false;
+        if(curr >= to.ordinal()) return false;
         if(getAltarLevel().next() != to) return false;
 
         if(!doLevelUp) return true;
@@ -372,11 +382,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static enum AltarLevel {
 
-        DISCOVERY(100, (ta) -> true), //Default one...
-        ATTENUATION(1000, (ta) -> true, false),
-        CONSTELLATION_CRAFT(4000, (ta) -> true, false),
-        TRAIT_CRAFT(12000, (ta) -> true, false),
-        ENDGAME(-1, (ta) -> true); //Enhanced version of traitcraft.
+        DISCOVERY          (100,   (ta) -> true       ), //Default one...
+        ATTENUATION        (1000,  (ta) -> true, false),
+        CONSTELLATION_CRAFT(4000,  (ta) -> true, false),
+        TRAIT_CRAFT        (12000, (ta) -> true, false),
+        ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.
 
         private final int totalExpNeededToLevelUp;
         private final IAltarMatcher matcher;
@@ -463,6 +473,20 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             return AstralSorcery.MODID + ":TransmissionReceiverAltar";
         }
 
+    }
+
+    public static class PatternAltarMatcher implements IAltarMatcher {
+
+        private final PatternBlockArray pba;
+
+        public PatternAltarMatcher(PatternBlockArray pba) {
+            this.pba = pba;
+        }
+
+        @Override
+        public boolean mbAllowsForCrafting(TileAltar ta) {
+            return pba.matches(ta.getWorld(), ta.getPos());
+        }
     }
 
     public static interface IAltarMatcher {

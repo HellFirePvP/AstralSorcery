@@ -53,7 +53,8 @@ import java.util.List;
  */
 public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName, BlockVariants {
 
-    private static AxisAlignedBB boxDiscovery = FULL_BLOCK_AABB;
+    private static final AxisAlignedBB boxDiscovery = new AxisAlignedBB(    1D / 16D,  0D,   1D / 16D,       15D / 16D,  15D / 16D,      15D / 16D);
+    private static final AxisAlignedBB boxAttenuation = new AxisAlignedBB(-(4D / 16D), 0D, -(4D / 16D), 1D + (4D / 16D), 1D,        1D + (4D / 16D));
 
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
 
@@ -130,7 +131,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                 case DISCOVERY:
                     return boxDiscovery;
                 case ATTENUATION:
-                    break;
+                    return boxAttenuation;
                 case CONSTELLATION_CRAFT:
                     break;
                 case TRAIT_CRAFT:

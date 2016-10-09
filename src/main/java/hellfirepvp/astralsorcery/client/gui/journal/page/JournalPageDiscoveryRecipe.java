@@ -43,7 +43,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         private final DiscoveryRecipe recipe;
 
         public GuiPage(DiscoveryRecipe recipe) {
-            this.recipe = recipe;
+            this.recipe = RegistryRecipes.rAltarUpgradeAttenuation;
         }
 
         @Override

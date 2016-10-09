@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -56,6 +57,7 @@ public abstract class AbstractAltarRecipe {
         return recipe;
     }
 
+    @Nullable
     public ItemStack getOutput(ShapeMap centralGridMap) {
         return out;
     }
@@ -107,6 +109,14 @@ public abstract class AbstractAltarRecipe {
     public int craftingTickTime() {
         return 100;
     }
+
+    //Return false and the item in the slot is not consumed. only on central crafting shape.
+    public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
+        return true;
+    }
+
+    //Can be used to apply modifications to items on the shapeMap.
+    public void applyOutputModificationsServer(TileAltar ta, Random rand) {}
 
     public void onCraftServerFinish(TileAltar altar, Random rand) {}
 

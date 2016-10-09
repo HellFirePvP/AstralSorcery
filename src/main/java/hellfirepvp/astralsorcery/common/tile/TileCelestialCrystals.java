@@ -11,14 +11,22 @@ import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSpawnWorldParticles;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFirework;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -64,9 +72,25 @@ public class TileCelestialCrystals extends TileSkybound {
         }
     }
 
-    //TODO
     @SideOnly(Side.CLIENT)
-    private void playStarmetalOreParticles() {}
+    private void playStarmetalOreParticles() {
+        Color c = new Color(130, 0, 255);
+        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+        Particle p = pm.spawnEffectParticle(EnumParticleTypes.FIREWORKS_SPARK.getParticleID(),
+                pos.getX()        + rand.nextFloat(),
+                pos.down().getY() + rand.nextFloat(),
+                pos.getZ()        + rand.nextFloat(),
+                0,
+                rand.nextFloat() * 0.2,
+                0);
+
+        if(p != null && p instanceof ParticleFirework.Spark) {
+            p.field_190017_n = false;
+            p.setRBGColorF(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F);
+            p.setAlphaF(80F / 255F);
+        }
+
+    }
 
     @SideOnly(Side.CLIENT)
     public static void breakParticles(PktParticleEvent event) {

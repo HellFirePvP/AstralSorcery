@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
@@ -35,6 +36,8 @@ public class RegistryRecipes {
     //Ugh. Important machines/stuff
     public static TelescopeRecipe rTelescope;
     public static DiscoveryRecipe rAltar;
+
+    public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
 
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
@@ -74,6 +77,8 @@ public class RegistryRecipes {
 
     public static void initAltarRecipes() {
         rTelescope = registerAltarRecipe(new TelescopeRecipe());
+
+        rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
 
         /*rLinkTool = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Items.STICK,

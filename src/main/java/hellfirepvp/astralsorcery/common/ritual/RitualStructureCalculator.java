@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.ritual;
 
-import hellfirepvp.astralsorcery.common.block.IBlockRitualComponent;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint;
 import hellfirepvp.astralsorcery.common.ritual.constraints.SizeConstraint;
@@ -22,6 +21,7 @@ import java.util.Map;
  */
 public class RitualStructureCalculator {
 
+    @Deprecated
     public double getEnhancementByStructure(World world, BlockPos central, Constellation type, SizeConstraint maxSize, Collection<RitualConstraint> constraints) {
         int radSize = maxSize.getStructureSize() + 2;
         Map<BlockPos, Integer> offsetMap = new HashMap<>();
@@ -32,13 +32,13 @@ public class RitualStructureCalculator {
                     BlockPos realPos = central.add(offsetPos);
                     IBlockState offsetState = world.getBlockState(realPos);
                     Block b = offsetState.getBlock();
-                    if(b instanceof IBlockRitualComponent) {
+                    /*if(b instanceof IBlockRitualComponent) {
                         if(!((IBlockRitualComponent) b).isValidComponent(type, world, realPos)) continue;
                     } else {
                         if(!RitualComponentRegistry.isComponent(offsetState)) continue;
                     }
                     int meta = b.getMetaFromState(offsetState);
-                    offsetMap.put(offsetPos, meta);
+                    offsetMap.put(offsetPos, meta);*/
                 }
             }
         }
