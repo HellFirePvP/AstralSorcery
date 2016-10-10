@@ -1,6 +1,9 @@
 package hellfirepvp.astralsorcery.client;
 
+import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;
@@ -25,6 +28,11 @@ public class ClientScheduler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         clientTick++;
+
+        GuiScreen current = Minecraft.getMinecraft().currentScreen;
+        if(current != null && current instanceof GuiJournalProgression) {
+            ((GuiJournalProgression) current).updateTick();
+        }
 
         synchronized (lock) {
             Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();

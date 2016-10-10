@@ -51,6 +51,15 @@ public class GuiJournalPages extends GuiScreenJournal {
     }
 
     @Override
+    public void initGui() {
+        super.initGui();
+
+        origin.rescaleAndRefresh = false;
+        origin.setGuiSize(width, height);
+        origin.initGui();
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();

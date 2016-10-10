@@ -15,7 +15,8 @@ public class TexturePreloader {
 
     public static void preloadTextures() {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiCloud1")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")         .allocateGlId();
@@ -29,6 +30,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont")      .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
 
         SpriteLibrary.init(); //Loads all spritesheets

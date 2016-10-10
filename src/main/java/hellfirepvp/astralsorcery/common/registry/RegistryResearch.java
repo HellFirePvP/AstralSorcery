@@ -24,6 +24,8 @@ public class RegistryResearch {
 
     //Only non-negative numbers please :V
     public static void init() {
+        ResearchProgression.Registry resDiscovery = ResearchProgression.DISCOVERY.getRegistry();
+
         ResearchNode test1 = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "UnlocName", 1, 1).setSpecial();
         ResearchNode test2 = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "UnlocName2", 3, 3).setSpecial();
         ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2).setSpecial();
@@ -31,13 +33,20 @@ public class RegistryResearch {
         test1.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
         test2.addPage(new JournalPageText("astralsorcery.journal.text.test2"));
         test2.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltar));
-        test1.registerTo(ResearchProgression.TEST_PROGRESS);
-        test2.registerTo(ResearchProgression.TEST_PROGRESS);
-        test3.registerTo(ResearchProgression.TEST_PROGRESS);
+
+        resDiscovery.register(test1);
+        resDiscovery.register(test2);
+        resDiscovery.register(test3);
 
         test2.addConnectionTo(test1);
         test3.addConnectionTo(test2);
         test3.addConnectionTo(test1);
+
+        ResearchProgression.Registry resStarlight = ResearchProgression.STARLIGHT.getRegistry();
+
+        ResearchNode test4 = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "UnlocName3", 1, 1).setSpecial();
+
+        resStarlight.register(test4);
     }
 
 }

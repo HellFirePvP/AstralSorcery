@@ -1,18 +1,24 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.client.effect.text.OverlayTextPolicy;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.util.BlendingHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -46,8 +52,10 @@ public class GuiProgressionRenderer {
     private ScalingPoint mousePointScaled;
     private ScalingPoint previousMousePointScaled;
 
-    private ResearchProgression focusedCluster = null;
+    private ResearchProgression focusedClusterZoom = null, focusedClusterMouse = null;
     private GuiProgressionClusterRenderer clusterRenderer = null;
+
+    private OverlayText clusterText = null;
 
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
@@ -117,11 +125,11 @@ public class GuiProgressionRenderer {
     }
 
     public void unfocus() {
-        focusedCluster = null;
+        focusedClusterZoom = null;
     }
 
     public void focus(@Nonnull ResearchProgression researchCluster) {
-        this.focusedCluster = researchCluster;
+        this.focusedClusterZoom = researchCluster;
         this.clusterRenderer = new GuiProgressionClusterRenderer(researchCluster, realRenderHeight, realRenderWidth, realCoordLowerX, realCoordLowerY);
     }
 
@@ -164,18 +172,18 @@ public class GuiProgressionRenderer {
         double scale = sizeHandler.getScalingFactor();
         //double nextScale = Math.min(10.0D, scale + 0.2D);
         if(scale >= 4.0D) {
-            if(focusedCluster == null) {
+            if(focusedClusterZoom == null) {
                 ResearchProgression prog = tryFocusCluster();
                 if(prog != null) {
                     focus(prog);
                 }
             }
-            if(focusedCluster == null) {
+            if(focusedClusterZoom == null) {
                 return;
             }
             if (scale < 6.1D) { //Floating point shenanigans
                 double vDiv = (2D - (scale - 4.0D)) * 10D;
-                Rectangle2D rect = calcBoundingRectangle(focusedCluster);
+                Rectangle2D rect = calcBoundingRectangle(focusedClusterZoom);
                 Vector3 center = new Vector3(rect.getCenterX(), rect.getCenterY(), 0);
                 Vector3 mousePos = new Vector3(mousePointScaled.getScaledPosX(), mousePointScaled.getScaledPosY(), 0);
                 Vector3 dir = center.subtract(mousePos);
@@ -216,11 +224,13 @@ public class GuiProgressionRenderer {
 
         drawClusters(zLevel);
 
+        focusedClusterMouse = tryFocusCluster();
+
         double scaleX = this.mousePointScaled.getPosX();
         double scaleY = this.mousePointScaled.getPosY();
 
-        if(sizeHandler.getScalingFactor() >= 6.1D && focusedCluster != null && clusterRenderer != null) {
-            ClientJournalMapping.JournalCluster cluster = ClientJournalMapping.getClusterMapping(focusedCluster);
+        if(sizeHandler.getScalingFactor() >= 6.1D && focusedClusterZoom != null && clusterRenderer != null) {
+            ClientJournalMapping.JournalCluster cluster = ClientJournalMapping.getClusterMapping(focusedClusterZoom);
             drawClusterBackground(cluster.clusterBackgroundTexture, zLevel);
 
             clusterRenderer.drawClusterScreen(zLevel);
@@ -228,7 +238,51 @@ public class GuiProgressionRenderer {
             scaleY = clusterRenderer.getScaleMouseY();
         }
 
+        if(focusedClusterMouse != null) {
+            String name = focusedClusterMouse.getUnlocalizedName();
+            name = I18n.translateToLocal(name);
+            if(clusterText != null && !clusterText.getText().equalsIgnoreCase(name)) {
+                clusterText = null;
+            }
+
+            if(clusterText == null) {
+                clusterText = new OverlayText(name, name.length() * 10,
+                        new OverlayText.OverlayTextProperties()
+                                .setPolicy(OverlayTextPolicy.Policies.WRITING)
+                                .setColor(new Color(90, 40, 255))
+                                .setAlpha(1F));
+            }
+        } else {
+            if(clusterText != null && clusterText.canRemove()) {
+                clusterText = null;
+            }
+        }
+
+        if(clusterText != null) {
+            Point mouse = parentGui.getCurrentMousePoint();
+            GL11.glPushMatrix();
+            GL11.glTranslated(mouse.x, mouse.y - 18, 0);
+            GL11.glScaled(0.8, 0.8, 0.8);
+            clusterText.doRender(null, 0, false);
+            GL11.glPopMatrix();
+        }
+
         drawBlendedStarfieldLayers(scaleX, scaleY, zLevel);
+    }
+
+    public void updateTick() {
+        if(clusterText != null) {
+            clusterText.tick();
+
+            if(clusterText.aboutToBeRemoved() && focusedClusterMouse != null) {
+                String name = focusedClusterMouse.getUnlocalizedName();
+                name = I18n.translateToLocal(name);
+                int time = (name.length() * 10) - 20;
+                clusterText.forceTicks(time);
+            } else if(focusedClusterMouse == null && !clusterText.aboutToBeRemoved()) {
+                clusterText.scheduleDeath();
+            }
+        }
     }
 
     @Nullable
@@ -297,7 +351,7 @@ public class GuiProgressionRenderer {
         }
         GL11.glColor4f(br, br, br, br);
 
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_COLOR);
+        BlendingHelper.ADDITIVEDARK.apply();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0,     height, zLevel).tex(0, 1).endVertex();
@@ -329,7 +383,7 @@ public class GuiProgressionRenderer {
         GL11.glColor4f(br, br, br, br);
         tex.bind();
 
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_COLOR);
+        BlendingHelper.ADDITIVEDARK.apply();
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

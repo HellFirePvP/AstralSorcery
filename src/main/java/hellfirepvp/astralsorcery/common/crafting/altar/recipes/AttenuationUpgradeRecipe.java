@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -25,7 +26,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 09.10.2016 / 11:40
  */
-public class AttenuationUpgradeRecipe extends DiscoveryRecipe {
+public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe {
 
     public AttenuationUpgradeRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
@@ -39,6 +40,11 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe {
                         ShapedRecipeSlot.LEFT)
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.UPPER_CENTER));
+    }
+
+    @Override
+    public TileAltar.AltarLevel getLevelUpgradingTo() {
+        return TileAltar.AltarLevel.ATTENUATION;
     }
 
     @Nonnull
@@ -62,7 +68,7 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe {
     public void onCraftServerFinish(TileAltar altar, Random rand) {
         super.onCraftServerFinish(altar, rand);
 
-        altar.tryForceLevelUp(TileAltar.AltarLevel.ATTENUATION, true);
+        altar.tryForceLevelUp(getLevelUpgradingTo(), true);
     }
 
     @Override

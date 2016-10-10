@@ -5,10 +5,13 @@ import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -43,7 +46,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         private final DiscoveryRecipe recipe;
 
         public GuiPage(DiscoveryRecipe recipe) {
-            this.recipe = RegistryRecipes.rAltarUpgradeAttenuation;
+            this.recipe = RegistryRecipes.rWand;
         }
 
         @Override
@@ -103,6 +106,29 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 BlendingHelper.DEFAULT.apply();
                 GL11.glPopMatrix();
             }
+
+            /*if(recipe instanceof IAltarUpgradeRecipe) {
+                TileAltar.AltarLevel to = ((IAltarUpgradeRecipe) recipe).getLevelUpgradingTo();
+                BlockAltar.AltarType type = to.getCorrespondingAltarType();
+                String typeDsc = "tile.BlockAltar." + type.getName() + ".name";
+                String toDsc = I18n.translateToLocal("astralsorcery.journal.recipe.upgrade.desc");
+                String dsc = String.format(toDsc, I18n.translateToLocal(typeDsc));
+                int width = getStandardFontRenderer().getStringWidth(dsc) / 4;
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + 90 - width, offsetY + 56, 200);
+                GL11.glScaled(0.5, 0.5, 0.5);
+                GL11.glColor4f(1F, 1F, 1F, 1F);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glEnable(GL11.GL_BLEND);
+
+                SpecialTextureLibrary.refreshTextureBindState();
+                getStandardFontRenderer().drawString(dsc, 0, 0, Color.LIGHT_GRAY.getRGB(), false);
+                GL11.glDisable(GL11.GL_BLEND);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                BlendingHelper.DEFAULT.apply();
+                GL11.glPopMatrix();
+            }*/
+
             GL11.glDisable(GL11.GL_BLEND);
             RenderHelper.disableStandardItemLighting();
 

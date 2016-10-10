@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -16,6 +18,7 @@ import org.lwjgl.opengl.GL11;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 00:50
  */
+@SideOnly(Side.CLIENT)
 public class BindableResource {
 
     private ITextureObject resource = null;

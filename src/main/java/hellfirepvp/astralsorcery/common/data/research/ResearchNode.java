@@ -73,10 +73,6 @@ public class ResearchNode {
         return this;
     }
 
-    public void registerTo(ResearchProgression progression) {
-        progression.addResearchToGroup(this);
-    }
-
     public boolean isSpecial() {
         return special;
     }

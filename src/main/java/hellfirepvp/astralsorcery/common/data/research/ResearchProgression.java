@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Arrays;
@@ -18,12 +19,16 @@ import java.util.Map;
  */
 public enum ResearchProgression {
 
-    TEST_PROGRESS(0, ProgressionTier.DISCOVERY);
+    DISCOVERY(0, ProgressionTier.DISCOVERY),
+    STARLIGHT(1, ProgressionTier.BASIC_CRAFT);
+
+    //TEST_PROGRESS(0, ProgressionTier.DISCOVERY);
 
     private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();
     private List<ResearchNode> researchNodes = new LinkedList<>();
     private final ProgressionTier requiredProgress;
+    private final String unlocName;
 
     private static final Map<Integer, ResearchProgression> BY_ID = new HashMap<>();
 
@@ -35,6 +40,7 @@ public enum ResearchProgression {
         this.preConditions.addAll(preConditions);
         this.requiredProgress = requiredProgress;
         this.progressId = id;
+        this.unlocName = AstralSorcery.MODID + ".journal.cluster." + name().toLowerCase() + ".name";
     }
 
     void addResearchToGroup(ResearchNode res) {
@@ -43,6 +49,10 @@ public enum ResearchProgression {
 
     public List<ResearchNode> getResearchNodes() {
         return researchNodes;
+    }
+
+    public Registry getRegistry() {
+        return new Registry(this);
     }
 
     public boolean tryStepTo(EntityPlayer player) {
@@ -65,6 +75,10 @@ public enum ResearchProgression {
         return Collections.unmodifiableList(preConditions);
     }
 
+    public String getUnlocalizedName() {
+        return unlocName;
+    }
+
     public int getProgressId() {
         return progressId;
     }
@@ -77,6 +91,20 @@ public enum ResearchProgression {
         for (ResearchProgression progress : values()) {
             BY_ID.put(progress.progressId, progress);
         }
+    }
+
+    public static class Registry {
+
+        private final ResearchProgression prog;
+
+        public Registry(ResearchProgression prog) {
+            this.prog = prog;
+        }
+
+        public void register(ResearchNode node) {
+            prog.addResearchToGroup(node);
+        }
+
     }
 
 }

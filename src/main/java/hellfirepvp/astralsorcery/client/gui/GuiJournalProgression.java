@@ -21,6 +21,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
     public static GuiJournalProgression currentInstance = null;
     public boolean expectReinit = false;
+    public boolean rescaleAndRefresh = true;
 
     private static GuiProgressionRenderer progressionRenderer;
 
@@ -45,12 +46,19 @@ public class GuiJournalProgression extends GuiScreenJournal {
             progressionRenderer = new GuiProgressionRenderer(currentInstance, guiHeight - 10, guiWidth - 10);
             progressionRenderer.centerMouse();
         }
+
         progressionRenderer.updateOffset(guiLeft + 10, guiTop + 10);
         progressionRenderer.setBox(10, 10, guiWidth - 10, guiHeight - 10);
-        progressionRenderer.resetZoom();
-        progressionRenderer.unfocus();
-        progressionRenderer.refreshSize();
-        progressionRenderer.updateMouseState();
+
+        if(rescaleAndRefresh) {
+            progressionRenderer.resetZoom();
+            progressionRenderer.unfocus();
+            progressionRenderer.refreshSize();
+            progressionRenderer.updateMouseState();
+        } else {
+            rescaleAndRefresh = true;
+        }
+
     }
 
     @Override
@@ -102,6 +110,10 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
     private void drawMouseHighlight(float zLevel, Point mousePoint) {
         progressionRenderer.drawMouseHighlight(zLevel, mousePoint);
+    }
+
+    public void updateTick() {
+        progressionRenderer.updateTick();
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,10 @@ public final class OverlayText implements IComplexEffect {
         this.fontRendererObj = new OverlayFontRenderer(this.policy, ticksUntilRemoval);
     }
 
+    public String getText() {
+        return text;
+    }
+
     public OverlayText(String text, int ticksUntilRemoval, OverlayTextProperties properties) {
         this(text, ticksUntilRemoval);
         if (properties != null) {
@@ -50,12 +55,15 @@ public final class OverlayText implements IComplexEffect {
         }
     }
 
-    public void doRender(ScaledResolution resolution, float partialTicks) {
-        int width = resolution.getScaledWidth();
-        int height = resolution.getScaledHeight();
-        double strWidth = fontRendererObj.getStringWidth(text.toUpperCase());
-        int renderY = height / 5;
-        double renderX = width / 2 - strWidth / 2;
+    public void doRender(@Nullable ScaledResolution resolution, float partialTicks, boolean moveDefault) {
+        double renderX = 0, renderY = 0;
+        if(moveDefault && resolution != null) {
+            int width = resolution.getScaledWidth();
+            int height = resolution.getScaledHeight();
+            double strWidth = fontRendererObj.getStringWidth(text.toUpperCase());
+            renderY = height / 5;
+            renderX = width / 2 - strWidth / 2;
+        }
         fontRendererObj.drawString(text.toUpperCase(), renderX, renderY, 200F, color, alpha, animationTick);
     }
 
@@ -94,6 +102,19 @@ public final class OverlayText implements IComplexEffect {
         animationTick++;
     }
 
+    public void forceTicks(int ticks) {
+        this.ticksUntilRemoval = Math.max(20, ticksUntilRemoval);
+        this.animationTick = ticks;
+    }
+
+    public boolean aboutToBeRemoved() {
+        return ticksUntilRemoval <= 10;
+    }
+
+    public void scheduleDeath() {
+        ticksUntilRemoval = 1;
+    }
+
     @Override
     public boolean canRemove() {
         return ticksUntilRemoval <= 0;
@@ -101,7 +122,7 @@ public final class OverlayText implements IComplexEffect {
 
     @Override
     public void render(float pTicks) {
-        doRender(new ScaledResolution(Minecraft.getMinecraft()), pTicks);
+        doRender(new ScaledResolution(Minecraft.getMinecraft()), pTicks, true);
     }
 
     @Override
