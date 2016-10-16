@@ -9,9 +9,9 @@ package hellfirepvp.astralsorcery.common.data.research;
  */
 public enum ProgressionTier {
 
-    DISCOVERY, //Not involved ?
+    DISCOVERY,
     BASIC_CRAFT,
-    CRYSTAL_CRAFT,
+    ATTENUATION,
     CONSTELLATION_CRAFT,
     NETWORKING,
     TRAIT_CRAFT,

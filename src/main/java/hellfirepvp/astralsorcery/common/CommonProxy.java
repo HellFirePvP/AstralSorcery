@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -153,6 +154,8 @@ public class CommonProxy implements IGuiHandler {
         switch (guiType) {
             case ALTAR_DISCOVERY:
                 return new ContainerAltarDiscovery(player.inventory, (TileAltar) t);
+            case ALTAR_ATTENUATION:
+                return new ContainerAltarAttenuation(player.inventory, (TileAltar) t);
         }
         return null;
     }
@@ -171,6 +174,7 @@ public class CommonProxy implements IGuiHandler {
         TELESCOPE,
         CONSTELLATION_PAPER,
         ALTAR_DISCOVERY(TileAltar.class),
+        ALTAR_ATTENUATION(TileAltar.class),
         JOURNAL;
 
         private final Class<? extends TileEntity> tileClass;

@@ -78,7 +78,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_DISCOVERY, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
                     case ATTENUATION:
-                        break;
+                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_ATTENUATION, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        return true;
                     case CONSTELLATION_CRAFT:
                         break;
                     case TRAIT_CRAFT:

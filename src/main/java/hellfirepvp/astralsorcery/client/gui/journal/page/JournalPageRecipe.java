@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.client.util.BlendingHelper;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -47,7 +47,7 @@ public class JournalPageRecipe implements IJournalPage {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
-            BlendingHelper.DEFAULT.apply();
+            Blending.DEFAULT.apply();
             texGrid.bind();
             drawRect(offsetX + 15, offsetY, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 20, zLevel);
             GL11.glDisable(GL11.GL_BLEND);

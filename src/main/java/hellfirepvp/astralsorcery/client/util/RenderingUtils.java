@@ -11,6 +11,7 @@ import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -53,15 +54,11 @@ public class RenderingUtils {
         }
     }
 
-    public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
-        renderTooltip(x, y, tooltipData, color, color2, Minecraft.getMinecraft().fontRendererObj);
-    }
-
-    public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2, FontRenderer fontRenderer) {
+    public static void renderTooltip(int x, int y, List<String> tooltipData, Color color, Color colorFade, FontRenderer fontRenderer) {
         SpecialTextureLibrary.setActiveTextureToAtlasSprite();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
-            net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+            RenderHelper.disableStandardItemLighting();
 
         if (!tooltipData.isEmpty()) {
             int esWidth = 0;
@@ -77,13 +74,15 @@ public class RenderingUtils {
                 sumLineHeight += 2 + (tooltipData.size() - 1) * 10;
             float z = 300F;
 
-            drawGradientRect(pX - 3,           pY - 4,                 z, pX + esWidth + 3, pY - 3,                 color2, color2);
-            drawGradientRect(pX - 3,           pY + sumLineHeight + 3, z, pX + esWidth + 3, pY + sumLineHeight + 4, color2, color2);
-            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY + sumLineHeight + 3, color2, color2);
-            drawGradientRect(pX - 4,           pY - 3,                 z, pX - 3,           pY + sumLineHeight + 3, color2, color2);
-            drawGradientRect(pX + esWidth + 3, pY - 3,                 z, pX + esWidth + 4, pY + sumLineHeight + 3, color2, color2);
+            drawGradientRect(pX - 3,           pY - 4,                 z, pX + esWidth + 3, pY - 3,                 color, colorFade);
+            drawGradientRect(pX - 3,           pY + sumLineHeight + 3, z, pX + esWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(pX - 4,           pY - 3,                 z, pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(pX + esWidth + 3, pY - 3,                 z, pX + esWidth + 4, pY + sumLineHeight + 3, color, colorFade);
 
-            int colOp = (color & 0xFFFFFF) >> 1 | color & -16777216;
+            int rgb = color.getRGB();
+            int col = (rgb & 0x00FFFFFF) >> 1 | rgb & 0xFF000000;
+            Color colOp = new Color(col);
             drawGradientRect(pX - 3,           pY - 3 + 1,             z, pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, colOp);
             drawGradientRect(pX + esWidth + 2, pY - 3 + 1,             z, pX + esWidth + 3, pY + sumLineHeight + 3 - 1, color, colOp);
             drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY - 3 + 1,                 color, color);
@@ -101,21 +100,11 @@ public class RenderingUtils {
         }
 
         if (lighting)
-            net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+            RenderHelper.enableStandardItemLighting();
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
-    public static void drawGradientRect(int x, int y, float z, int toX, int toY, int color1, int color2) {
-        int alpha1 = color1 >> 24 & 255;
-        int red1   = color1 >> 16 & 255;
-        int green1 = color1 >> 8  & 255;
-        int blue1  = color1       & 255;
-
-        int alpha2 = color2 >> 24 & 255;
-        int red2   = color2 >> 16 & 255;
-        int green2 = color2 >> 8  & 255;
-        int blue2  = color2       & 255;
-
+    public static void drawGradientRect(int x, int y, float z, int toX, int toY, Color color, Color colorFade) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -124,10 +113,10 @@ public class RenderingUtils {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        vb.pos(toX, y,   z).color(red1, green1, blue1, alpha1).endVertex();
-        vb.pos(x,   y,   z).color(red1, green1, blue1, alpha1).endVertex();
-        vb.pos(x,   toY, z).color(red2, green2, blue2, alpha2).endVertex();
-        vb.pos(toX, toY, z).color(red2, green2, blue2, alpha2).endVertex();
+        vb.pos(toX, y,   z).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vb.pos(x,   y,   z).color(color.getRed(),     color.getGreen(),     color.getBlue(),     color.getAlpha()).endVertex();
+        vb.pos(x,   toY, z).color(colorFade.getRed(), colorFade.getGreen(), colorFade.getBlue(), colorFade.getAlpha()).endVertex();
+        vb.pos(toX, toY, z).color(colorFade.getRed(), colorFade.getGreen(), colorFade.getBlue(), colorFade.getAlpha()).endVertex();
         tes.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glDisable(GL11.GL_BLEND);

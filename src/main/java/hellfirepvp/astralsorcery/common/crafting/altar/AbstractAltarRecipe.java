@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -67,8 +68,8 @@ public abstract class AbstractAltarRecipe {
 
         if(!altar.getMultiblockState()) return false;
 
-        ItemStack[] altarInv = new ItemStack[altar.getSizeInventory()];
-        for (int i = 0; i < altar.getSizeInventory(); i++) {
+        ItemStack[] altarInv = new ItemStack[9];
+        for (int i = 0; i < 9; i++) {
             altarInv[i] = altar.getStackInSlot(i);
         }
         RecipeAdapter adapter = new RecipeAdapter(altar.getCraftingRecipeWidth(), altar.getCraftingRecipeHeight());
@@ -112,6 +113,10 @@ public abstract class AbstractAltarRecipe {
 
     //Return false and the item in the slot is not consumed. only on central crafting shape.
     public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
+        return true;
+    }
+
+    public boolean mayDecrement(TileAltar ta, AttenuationRecipe.AltarSlot slot) {
         return true;
     }
 

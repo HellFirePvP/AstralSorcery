@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class FluidBlockLiquidStarlight extends BlockFluidClassic {
 
+    //TODO proper water-ish handling?
+
     public FluidBlockLiquidStarlight() {
         super(BlocksAS.fluidLiquidStarlight, new MaterialLiquid(MapColor.SILVER));
         setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));

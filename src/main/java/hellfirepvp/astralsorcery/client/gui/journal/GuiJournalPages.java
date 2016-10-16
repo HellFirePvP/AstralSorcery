@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public class GuiJournalPages extends GuiScreenJournal {
 
+    private static GuiJournalPages openGuiInstance;
+    private static boolean saveSite = true;
     private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
 
     private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
@@ -42,7 +44,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     private int currentPageOffset = 0; //* 2 = left page.
     private Rectangle rectBack, rectNext, rectPrev;
 
-    public GuiJournalPages(GuiJournalProgression origin, ResearchNode node) {
+    GuiJournalPages(GuiJournalProgression origin, ResearchNode node) {
         super(-1);
         this.origin = origin;
         this.pages = new ArrayList<>(node.getPages().size());
@@ -57,6 +59,22 @@ public class GuiJournalPages extends GuiScreenJournal {
         origin.rescaleAndRefresh = false;
         origin.setGuiSize(width, height);
         origin.initGui();
+    }
+
+    public static GuiJournalPages getClearOpenGuiInstance() {
+        GuiJournalPages gui = openGuiInstance;
+        openGuiInstance = null;
+        return gui;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        if(saveSite) {
+            openGuiInstance = this;
+            GuiJournalProgression.getJournalInstance().rescaleAndRefresh = false;
+        } else {
+            saveSite = true;
+        }
     }
 
     @Override
@@ -175,15 +193,18 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.currentInstance == null ? new GuiJournalProgression() : GuiJournalProgression.currentInstance);
+            saveSite = false;
+            Minecraft.getMinecraft().displayGuiScreen(origin);
             return;
         }
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+            saveSite = false;
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
             return;
         }
         if(rectBack != null && rectBack.contains(p)) {
             origin.expectReinit = true;
+            saveSite = false;
             Minecraft.getMinecraft().displayGuiScreen(origin);
         }
         if(rectPrev != null && rectPrev.contains(p)) {

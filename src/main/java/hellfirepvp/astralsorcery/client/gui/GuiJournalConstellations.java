@@ -131,7 +131,7 @@ public class GuiJournalConstellations extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.currentInstance == null ? new GuiJournalProgression() : GuiJournalProgression.currentInstance);
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
             return;
         }
         if(rectUnmapped != null && rectUnmapped.contains(p)) {

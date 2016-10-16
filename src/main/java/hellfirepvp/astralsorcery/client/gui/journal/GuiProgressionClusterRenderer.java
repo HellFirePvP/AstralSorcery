@@ -68,13 +68,13 @@ public class GuiProgressionClusterRenderer {
         this.renderGuiWidth = guiWidth;
     }
 
-    public void propagateClick(Point p) {
+    public void propagateClick(GuiJournalProgression parent, Point p) {
         Rectangle frame = new Rectangle(renderOffsetX, renderOffsetY, renderGuiWidth, renderGuiHeight);
         if(frame.contains(p)) {
             for (Rectangle r : clickableNodes.keySet()) {
                 if(r.contains(p)) {
                     ResearchNode clicked = clickableNodes.get(r);
-                    Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPages(GuiJournalProgression.currentInstance, clicked));
+                    Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPages(parent, clicked));
                 }
             }
         }
@@ -89,7 +89,7 @@ public class GuiProgressionClusterRenderer {
                     GL11.glTranslated(r.getX(), r.getY(), 0);
                     GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
                     String name = clickableNodes.get(r).getUnLocalizedName();
-                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), 0x505000ff, 0xf0100010);
+                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00200055), new Color(0xf0100010), Minecraft.getMinecraft().fontRendererObj);
                     GL11.glPopMatrix();
                 }
             }
@@ -187,11 +187,12 @@ public class GuiProgressionClusterRenderer {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        if(node.isSpecial()) {
+        /*if(node.isSpecial()) {
             frameWooden.bind();
         } else {
             frameBlank.bind();
-        }
+        }*/
+        frameWooden.bind();
 
         double zoomedWH = partSizeHandler.getZoomedWHNode();
 

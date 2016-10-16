@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
+import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.Axis;

@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.entities;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -7,16 +9,22 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFirework;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -90,7 +98,31 @@ public class EntityItemStardust extends EntityItem {
 
     @SideOnly(Side.CLIENT)
     private void spawnCraftingParticles() {
+        /*Color c = new Color(130, 0, 255);
+        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+        Particle p = pm.spawnEffectParticle(EnumParticleTypes.FIREWORKS_SPARK.getParticleID(),
+                posX        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                posY        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                posZ        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
 
+        if(p != null && p instanceof ParticleFirework.Spark) {
+            p.field_190017_n = false;
+            p.setRBGColorF(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F);
+            p.setAlphaF(80F / 255F);
+        }*/
+
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                posX        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                posY        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                posZ        + rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1));
+        p.motion(rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
+                 rand.nextFloat() * 0.1  * (rand.nextBoolean() ? 1 : -1),
+                 rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+        p.gravity(0.2);
+        p.scale(0.2F);
     }
 
     @SideOnly(Side.CLIENT)

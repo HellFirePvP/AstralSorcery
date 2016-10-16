@@ -1,7 +1,9 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
@@ -74,22 +76,14 @@ public class TileCelestialCrystals extends TileSkybound {
 
     @SideOnly(Side.CLIENT)
     private void playStarmetalOreParticles() {
-        Color c = new Color(130, 0, 255);
-        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-        Particle p = pm.spawnEffectParticle(EnumParticleTypes.FIREWORKS_SPARK.getParticleID(),
-                pos.getX()        + rand.nextFloat(),
-                pos.down().getY() + rand.nextFloat(),
-                pos.getZ()        + rand.nextFloat(),
-                0,
-                rand.nextFloat() * 0.2,
-                0);
-
-        if(p != null && p instanceof ParticleFirework.Spark) {
-            p.field_190017_n = false;
-            p.setRBGColorF(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F);
-            p.setAlphaF(80F / 255F);
+        if(rand.nextInt(5) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    pos.getX()        + rand.nextFloat(),
+                    pos.down().getY() + rand.nextFloat(),
+                    pos.getZ()        + rand.nextFloat());
+            p.motion(0, rand.nextFloat() * 0.05, 0);
+            p.scale(0.2F);
         }
-
     }
 
     @SideOnly(Side.CLIENT)

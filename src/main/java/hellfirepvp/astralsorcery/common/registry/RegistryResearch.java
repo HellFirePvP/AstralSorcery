@@ -26,9 +26,9 @@ public class RegistryResearch {
     public static void init() {
         ResearchProgression.Registry resDiscovery = ResearchProgression.DISCOVERY.getRegistry();
 
-        ResearchNode test1 = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "UnlocName", 1, 1).setSpecial();
-        ResearchNode test2 = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "UnlocName2", 3, 3).setSpecial();
-        ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2).setSpecial();
+        ResearchNode test1 = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "UnlocName", 1, 1);
+        ResearchNode test2 = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "UnlocName2", 3, 3);
+        ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2);
         test1.addPage(new JournalPageText("astralsorcery.journal.text.test"));
         test1.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
         test2.addPage(new JournalPageText("astralsorcery.journal.text.test2"));
@@ -44,7 +44,7 @@ public class RegistryResearch {
 
         ResearchProgression.Registry resStarlight = ResearchProgression.STARLIGHT.getRegistry();
 
-        ResearchNode test4 = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "UnlocName3", 1, 1).setSpecial();
+        ResearchNode test4 = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "UnlocName3", 1, 1);
 
         resStarlight.register(test4);
     }

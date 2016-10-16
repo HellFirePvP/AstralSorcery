@@ -16,20 +16,14 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 21.09.2016 / 14:06
  */
-public class ContainerAltarDiscovery extends Container {
-
-    public final InventoryPlayer playerInv;
-    public final TileAltar tileAltar;
+public class ContainerAltarDiscovery extends ContainerAltarBase {
 
     public ContainerAltarDiscovery(InventoryPlayer playerInv, TileAltar tileAltar) {
-        this.playerInv = playerInv;
-        this.tileAltar = tileAltar;
-
-        bindPlayerInventory();
-        bindAltarInventory();
+        super(playerInv, tileAltar);
     }
 
-    protected void bindAltarInventory() {
+    @Override
+    void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
             addSlotToContainer(new Slot(tileAltar,     xx, 87 + xx * 22, 15));
             addSlotToContainer(new Slot(tileAltar, 3 + xx, 87 + xx * 22, 36));
@@ -37,7 +31,8 @@ public class ContainerAltarDiscovery extends Container {
         }
     }
 
-    protected void bindPlayerInventory() {
+    @Override
+    void bindPlayerInventory() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlotToContainer(new Slot(this.playerInv, j + i * 9 + 9, 21 + j * 22, 92 + i * 22));
@@ -46,17 +41,6 @@ public class ContainerAltarDiscovery extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(this.playerInv, i, 21 + i * 22, 161));
         }
-    }
-
-    @Nullable
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        return null;
-    }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
-        return true;
     }
 
 }

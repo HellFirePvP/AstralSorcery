@@ -51,7 +51,7 @@ public abstract class OverlayTextPolicy {
             float posShowAtPercent = (((float) (index + 1)) / ((float) toRenderFully.length())) * SHOW_ALL_CAP;
             float currentRenderPercent = ((float) animationTick) / ((float) maxLivingTicks);
             alpha = evaluateAlpha(toRenderFully, index, posShowAtPercent, currentRenderPercent, alpha);
-            GL11.glColor4f(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+            GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, alpha);
         }
 
         private float evaluateAlpha(String toRenderFully, int index, float posShowAtPercent, float currentRenderPercent, float alpha) {

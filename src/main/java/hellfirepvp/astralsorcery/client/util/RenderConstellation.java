@@ -1,13 +1,10 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -100,7 +97,7 @@ public class RenderConstellation {
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
-        BlendingHelper.DEFAULT.apply();
+        Blending.DEFAULT.apply();
 
         RenderAstralSkybox.TEX_CONNECTION.bind();
         for (StarConnection sc : c.getConnections()) {

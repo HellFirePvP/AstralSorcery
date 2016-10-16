@@ -9,11 +9,13 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -67,13 +69,20 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case ROCK_CRYSTAL:
-                drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                if(world != null && world instanceof World && checkSafety((World) world, pos)) {
+                    drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                }
                 break;
             case STARMETAL:
                 drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
                 break;
         }
         return drops;
+    }
+
+    private boolean checkSafety(World world, BlockPos pos) {
+        EntityPlayer player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10, false);
+        return player != null && player.getDistance(pos.getX(), pos.getY(), pos.getZ()) < 10;
     }
 
     @Override

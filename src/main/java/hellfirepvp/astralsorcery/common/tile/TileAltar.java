@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
@@ -55,11 +56,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private int starlightStored = 0;
 
     public TileAltar() {
-        super(9);
+        super(13);
     }
 
     public TileAltar(AltarLevel level) {
-        super(9);
+        super(13);
         this.level = level;
     }
 
@@ -144,6 +145,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i % 3, i / 3);
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(inv, i);
+            }
+        }
+
+        for (AttenuationRecipe.AltarSlot slot : AttenuationRecipe.AltarSlot.values()) {
+            int slotId = slot.slotId;
+            if(recipe.mayDecrement(this, slot)) {
+                ItemUtils.decrStackInInventory(inv, slotId);
             }
         }
 

@@ -1,9 +1,6 @@
 package hellfirepvp.astralsorcery.client.effect.fx;
 
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -14,16 +11,11 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
  */
 public class EntityFXBurst extends EntityFXFacingSprite {
 
-    private static final BindableResource texBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");
-    private static final SpriteSheetResource spriteBurst = texBurst.asSpriteSheet(16, 5);
-
     public EntityFXBurst(double x, double y, double z) {
-        super(spriteBurst, x, y, z);
-        setMaxAge(80);
+        super(SpriteLibrary.spriteCollectorBurst, x, y, z);
     }
     public EntityFXBurst(double x, double y, double z, float scale) {
-        super(spriteBurst, x, y, z, scale);
-        setMaxAge(80);
+        super(SpriteLibrary.spriteCollectorBurst, x, y, z, scale);
     }
 
 }

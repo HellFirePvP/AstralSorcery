@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
@@ -124,10 +125,12 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
-        AstralSorcery.log.info("[AstralSorcery] Preloading textures");
-
-        //Preloading heavy/needed textures
+        long startMs = System.currentTimeMillis();
+        AstralSorcery.log.info("[AstralSorcery] Preload textures");
         TexturePreloader.preloadTextures();
+        AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
+        SpriteLibrary.init();
+        AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();

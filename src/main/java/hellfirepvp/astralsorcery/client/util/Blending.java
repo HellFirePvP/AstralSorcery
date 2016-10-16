@@ -5,11 +5,11 @@ import org.lwjgl.opengl.GL11;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlendingHelper
+ * Class: Blending
  * Created by HellFirePvP
  * Date: 01.10.2016 / 14:06
  */
-public enum  BlendingHelper {
+public enum Blending {
 
     DEFAULT(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA),
     ALPHA(GL11.GL_ONE, GL11.GL_SRC_ALPHA),
@@ -24,7 +24,7 @@ public enum  BlendingHelper {
     public final int sfactor;
     public final int dfactor;
 
-    private BlendingHelper(int s, int d) {
+    private Blending(int s, int d) {
         sfactor = s;
         dfactor = d;
     }

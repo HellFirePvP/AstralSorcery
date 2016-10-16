@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui;
 
+import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalPages;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ import java.io.IOException;
  */
 public class GuiJournalProgression extends GuiScreenJournal {
 
-    public static GuiJournalProgression currentInstance = null;
+    private static GuiJournalProgression currentInstance = null;
     public boolean expectReinit = false;
     public boolean rescaleAndRefresh = true;
 
@@ -28,8 +29,31 @@ public class GuiJournalProgression extends GuiScreenJournal {
     private int bufX, bufY;
     private boolean dragging = false;
 
-    public GuiJournalProgression() {
+    private GuiJournalProgression() {
         super(0);
+    }
+
+    public static GuiJournalProgression getJournalInstance() {
+        if(currentInstance != null) {
+            return currentInstance;
+        }
+        return new GuiJournalProgression();
+    }
+
+    public static GuiScreenJournal getOpenJournalInstance() {
+        GuiScreenJournal gui = GuiJournalPages.getClearOpenGuiInstance();
+        if(gui == null) gui = getJournalInstance();
+        return gui;
+    }
+
+    public static void resetJournal() {
+        currentInstance = null;
+        GuiJournalPages.getClearOpenGuiInstance();
+    }
+
+    @Override
+    public void onGuiClosed() {
+        rescaleAndRefresh = false;
     }
 
     @Override
@@ -41,7 +65,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
             return; //We ASSUME, that the state is valid.
         }
 
-        if(currentInstance == null) {
+        if(currentInstance == null || progressionRenderer == null) {
             currentInstance = this;
             progressionRenderer = new GuiProgressionRenderer(currentInstance, guiHeight - 10, guiWidth - 10);
             progressionRenderer.centerMouse();
@@ -49,6 +73,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         progressionRenderer.updateOffset(guiLeft + 10, guiTop + 10);
         progressionRenderer.setBox(10, 10, guiWidth - 10, guiHeight - 10);
+        progressionRenderer.resetOverlayText();
 
         if(rescaleAndRefresh) {
             progressionRenderer.resetZoom();
@@ -121,6 +146,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+            resetJournal();
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
             return;
         }

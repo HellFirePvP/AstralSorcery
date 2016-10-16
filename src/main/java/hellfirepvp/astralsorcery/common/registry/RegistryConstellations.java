@@ -9,7 +9,6 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
-import static hellfirepvp.astralsorcery.common.ritual.constraints.RitualConstraint.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +23,7 @@ public class RegistryConstellations {
         ConstellationRegistry.registerTier(0, ProgressionTier.DISCOVERY, createRInfo(0.2, -0.2, 0, 5), 1.0F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.WAXING1_2, CelestialHandler.MoonPhase.NEW)));
 
-        ConstellationRegistry.registerTier(1, ProgressionTier.BASIC_CRAFT, createRInfo(-0.2, -0.2, -0.05, 5), 0.9F,
+        ConstellationRegistry.registerTier(1, ProgressionTier.ATTENUATION, createRInfo(-0.2, -0.2, -0.05, 5), 0.9F,
                 AppearanceCondition.buildChainedCondition(new AppearanceCondition.ConditionBetweenPhases(CelestialHandler.MoonPhase.FULL, CelestialHandler.MoonPhase.NEW)));
 
         ConstellationRegistry.registerTier(2, ProgressionTier.CONSTELLATION_CRAFT, createRInfo(0, -0.3, -0.2, 8), 0.9F,

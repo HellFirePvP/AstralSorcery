@@ -3,17 +3,15 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayTextPolicy;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
-import hellfirepvp.astralsorcery.client.util.BlendingHelper;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -136,7 +134,7 @@ public class GuiProgressionRenderer {
     //Nothing to actually click here, we redirect if we can.
     public void propagateClick(Point p) {
         if(clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
-            clusterRenderer.propagateClick(p);
+            clusterRenderer.propagateClick(parentGui, p);
         }
     }
 
@@ -270,6 +268,10 @@ public class GuiProgressionRenderer {
         drawBlendedStarfieldLayers(scaleX, scaleY, zLevel);
     }
 
+    public void resetOverlayText() {
+        clusterText = null;
+    }
+
     public void updateTick() {
         if(clusterText != null) {
             clusterText.tick();
@@ -351,7 +353,7 @@ public class GuiProgressionRenderer {
         }
         GL11.glColor4f(br, br, br, br);
 
-        BlendingHelper.ADDITIVEDARK.apply();
+        Blending.ADDITIVEDARK.apply();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0,     height, zLevel).tex(0, 1).endVertex();
@@ -383,7 +385,7 @@ public class GuiProgressionRenderer {
         GL11.glColor4f(br, br, br, br);
         tex.bind();
 
-        BlendingHelper.ADDITIVEDARK.apply();
+        Blending.ADDITIVEDARK.apply();
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

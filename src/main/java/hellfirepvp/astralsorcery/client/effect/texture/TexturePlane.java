@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.texture;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
-import hellfirepvp.astralsorcery.client.util.BlendingHelper;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.Axis;
@@ -35,7 +35,7 @@ public class TexturePlane implements IComplexEffect {
     private boolean remove = false;
     private RefreshFunction refreshFunc = null;
 
-    private BlendingHelper blendMode = BlendingHelper.DEFAULT;
+    private Blending blendMode = Blending.DEFAULT;
 
     private Color colorOverlay = Color.WHITE;
     private int ticksPerFullRot = 100;
@@ -95,7 +95,7 @@ public class TexturePlane implements IComplexEffect {
         return this;
     }
 
-    public TexturePlane setBlendMode(@Nonnull BlendingHelper blendMode) {
+    public TexturePlane setBlendMode(@Nonnull Blending blendMode) {
         this.blendMode = blendMode;
         return this;
     }

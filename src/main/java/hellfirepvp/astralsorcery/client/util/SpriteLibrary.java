@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 
 /**
@@ -13,8 +14,23 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
  */
 public class SpriteLibrary {
 
-    public static SpriteSheetResource spriteLightbeam = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam").asSpriteSheet(16, 4);
-    public static SpriteSheetResource spriteHalo = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1").asSpriteSheet(8, 6);
+    private static final BindableResource texBurst1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
+    private static final BindableResource texBurst2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
+    private static final BindableResource texBurst3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
+    private static final BindableResource texCraftBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1");
+    private static final BindableResource texCollectorBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");
+    private static final BindableResource texLightbeam = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
+    private static final BindableResource texHalo = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
+    private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
+
+    public static final SpriteSheetResource spriteStarlight = texSpriteStarlight.asSpriteSheet(4, 16);
+    public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(16, 4);
+    public static final SpriteSheetResource spriteHalo = texHalo.asSpriteSheet(8, 6);
+    public static final SpriteSheetResource spriteCelestialBurst1 = texBurst1.asSpriteSheet(40, 1);
+    public static final SpriteSheetResource spriteCelestialBurst2 = texBurst2.asSpriteSheet(40, 1);
+    public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(40, 1);
+    public static final SpriteSheetResource spriteCraftBurst = texCraftBurst.asSpriteSheet(8, 6);
+    public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(16, 5);
 
     public static void init() {}
 

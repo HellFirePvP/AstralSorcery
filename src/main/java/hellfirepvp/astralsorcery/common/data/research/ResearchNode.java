@@ -23,7 +23,7 @@ public class ResearchNode {
     private final RenderType renderType;
     public final int renderPosX, renderPosZ;
     private String unlocName;
-    private boolean special = false;
+    //private boolean special = false;
 
     private ItemStack renderItemStack;
     private BindableResource texture;
@@ -68,14 +68,14 @@ public class ResearchNode {
         return this;
     }
 
-    public ResearchNode setSpecial() {
+    /*public ResearchNode setSpecial() {
         this.special = true;
         return this;
     }
 
     public boolean isSpecial() {
         return special;
-    }
+    }*/
 
     public RenderType getRenderType() {
         return renderType;

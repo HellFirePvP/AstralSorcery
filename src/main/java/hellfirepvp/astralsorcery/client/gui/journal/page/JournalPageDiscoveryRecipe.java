@@ -1,17 +1,14 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.client.util.BlendingHelper;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
-import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -54,7 +51,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
-            BlendingHelper.DEFAULT.apply();
+            Blending.DEFAULT.apply();
             texGrid.bind();
             drawRect(offsetX + 15, offsetY, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 20, zLevel);
 
@@ -93,7 +90,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glEnable(GL11.GL_BLEND);
-                BlendingHelper.DEFAULT.apply();
+                Blending.DEFAULT.apply();
                 String displReq = getDescriptionFromStarlightAmount(recipe.getPassiveStarlightRequired());
                 displReq = I18n.translateToLocal(displReq);
                 String dsc = I18n.translateToLocal("astralsorcery.journal.recipe.amt.desc");
@@ -103,7 +100,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 getStandardFontRenderer().drawString(dsc, offsetX + 5F, offsetY + 210F, Color.LIGHT_GRAY.getRGB(), false);
                 GL11.glDisable(GL11.GL_BLEND);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                BlendingHelper.DEFAULT.apply();
+                Blending.DEFAULT.apply();
                 GL11.glPopMatrix();
             }
 

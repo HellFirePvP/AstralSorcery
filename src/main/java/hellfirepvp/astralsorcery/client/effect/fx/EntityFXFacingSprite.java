@@ -29,6 +29,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         this.y = y;
         this.z = z;
         this.scale = scale;
+        this.maxAge = spriteSheet.getFrameCount();
     }
 
     protected float getULengthMultiplier() {

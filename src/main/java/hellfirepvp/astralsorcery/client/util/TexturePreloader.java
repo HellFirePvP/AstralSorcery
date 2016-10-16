@@ -22,14 +22,17 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont")      .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
 

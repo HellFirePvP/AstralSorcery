@@ -24,7 +24,7 @@ public class ClientConnectionEventHandler {
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         AstralSorcery.log.info("[AstralSorcery] Disconnected from server. Cleaning client cache.");
         EffectHandler.cleanUp();
-        GuiJournalProgression.currentInstance = null; //Refresh journal gui
+        GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();

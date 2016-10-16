@@ -179,7 +179,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.currentInstance == null ? new GuiJournalProgression() : GuiJournalProgression.currentInstance);
+            GuiJournalProgression.resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
             return;
         }
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {

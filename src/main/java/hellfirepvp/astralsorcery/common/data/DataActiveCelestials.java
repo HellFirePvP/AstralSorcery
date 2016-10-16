@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,11 @@ public class DataActiveCelestials extends AbstractData {
 
     public Collection<Constellation> getActiveConstellations() {
         return constellationTierGrouped.values();
+    }
+
+    @Nullable
+    public Constellation getActiveConstellaionForTier(Tier t) {
+        return constellationTierGrouped.get(t);
     }
 
     public void updateIterations(Collection<CelestialHandler.TierIteration> iterations) {

@@ -36,7 +36,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         int size = compound.getInteger("invSize");
         inv = new ItemStack[size];
         NBTTagCompound tag = compound.getCompoundTag("grid");
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < size; i++) {
             if(tag.hasKey(String.valueOf(i))) {
                 inv[i] = ItemNBTHelper.getStack(tag, String.valueOf(i));
             }
