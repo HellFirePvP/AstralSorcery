@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
@@ -59,7 +61,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     @Nullable
-    public ItemStack getOutput(ShapeMap centralGridMap) {
+    public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         return out;
     }
 
@@ -67,6 +69,10 @@ public abstract class AbstractAltarRecipe {
         if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
         if(!altar.getMultiblockState()) return false;
+
+        if(this instanceof INighttimeRecipe) {
+            if(CelestialHandler.calcDaytimeDistribution(altar.getWorld()) < 0.65) return false;
+        }
 
         ItemStack[] altarInv = new ItemStack[9];
         for (int i = 0; i < 9; i++) {

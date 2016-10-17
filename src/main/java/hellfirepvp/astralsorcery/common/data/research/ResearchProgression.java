@@ -22,8 +22,6 @@ public enum ResearchProgression {
     DISCOVERY(0, ProgressionTier.DISCOVERY),
     STARLIGHT(1, ProgressionTier.BASIC_CRAFT);
 
-    //TEST_PROGRESS(0, ProgressionTier.DISCOVERY);
-
     private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();
     private List<ResearchNode> researchNodes = new LinkedList<>();

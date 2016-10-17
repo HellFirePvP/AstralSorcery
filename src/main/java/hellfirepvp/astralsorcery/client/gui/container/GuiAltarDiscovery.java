@@ -46,7 +46,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
 
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar);
+        AbstractAltarRecipe rec = findCraftableRecipe();
         if(rec != null) {
             ItemStack out = rec.getOutputForRender();
             zLevel = 10F;
@@ -70,7 +70,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
             zLevel = 0F;
             itemRender.zLevel = 0F;
 
-            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+            SpecialTextureLibrary.refreshTextureBindState();
         }
     }
 

@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,20 +45,36 @@ public abstract class ConstellationEffect {
 
     //May be executed multiple times per tick
     //Even if this effect can handle multiple effects per tick, it is still possible that this method is called.
-    public abstract void playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect);
+    public abstract boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect);
 
     //May be executed multiple times per tick
-    public abstract void playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength);
+    public abstract boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength);
 
     //Should handle multiple executions at once ('times' executions)
-    public abstract void playMainEffectMultiple(World world, BlockPos pos, int times, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect);
+    public boolean playMainEffectMultiple(World world, BlockPos pos, int times, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        boolean changed = false;
+        for (int i = 0; i < times; i++) {
+            if(playMainEffect(world, pos, 1, mayDoTraitEffect, possibleTraitEffect)) changed = true;
+        }
+        return changed;
+    }
 
-    public abstract void playTraitEffectMultiple(World world, BlockPos pos, Constellation traitType, int times);
+    public boolean playTraitEffectMultiple(World world, BlockPos pos, Constellation traitType, int times) {
+        boolean changed = false;
+        for (int i = 0; i < times; i++) {
+            if(playTraitEffect(world, pos, traitType, 1)) changed = true;
+        }
+        return changed;
+    }
 
     @Nullable
     public TileRitualPedestal getPedestal(World world, BlockPos pos) {
         return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
     }
+
+    public void readFromNBT(NBTTagCompound cmp) {}
+
+    public void writeToNBT(NBTTagCompound cmp) {}
 
     @Nullable
     public EntityPlayer getOwningPlayerInWorld(World world, BlockPos pos) {

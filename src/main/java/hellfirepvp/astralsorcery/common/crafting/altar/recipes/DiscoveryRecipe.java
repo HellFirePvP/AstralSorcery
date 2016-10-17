@@ -1,9 +1,12 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
@@ -25,6 +28,14 @@ import java.util.Random;
 * Date: 25.09.2016 / 23:58
 */
 public class DiscoveryRecipe extends AbstractAltarRecipe {
+
+    protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+        super(neededLevel, recipe);
+    }
+
+    protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
+        super(neededLevel, recipe);
+    }
 
     public DiscoveryRecipe(AbstractCacheableRecipe recipe) {
         this(recipe.make());

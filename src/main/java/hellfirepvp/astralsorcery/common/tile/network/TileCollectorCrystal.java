@@ -2,7 +2,6 @@ package hellfirepvp.astralsorcery.common.tile.network;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
-import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
@@ -57,7 +56,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @SideOnly(Side.CLIENT)
     public static void breakParticles(PktParticleEvent event) {
-        BlockPos at = event.getPos();
+        BlockPos at = event.getVec().toBlockPos();
         EffectHandler.getInstance().registerFX(new EntityFXBurst(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 3F));
     }
 

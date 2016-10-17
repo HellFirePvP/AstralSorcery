@@ -3,6 +3,9 @@ package hellfirepvp.astralsorcery.client.gui.container;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
+import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -24,6 +27,21 @@ public abstract class GuiAltarBase extends GuiContainer {
     public GuiAltarBase(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(buildContainer(playerInv, tileAltar));
         this.containerAltarBase = (ContainerAltarBase) super.inventorySlots;
+    }
+
+    public AbstractAltarRecipe findCraftableRecipe() {
+        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar);
+        if(rec != null) {
+            if(rec instanceof IGatedRecipe) {
+                if(((IGatedRecipe) rec).hasProgressionClient()) {
+                    return rec;
+                } else {
+                    return null;
+                }
+            }
+            return rec;
+        }
+        return null;
     }
 
     private static ContainerAltarBase buildContainer(InventoryPlayer playerInv, TileAltar tileAltar) {

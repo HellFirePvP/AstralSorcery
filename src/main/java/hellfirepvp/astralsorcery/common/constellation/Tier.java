@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.awt.*;
@@ -66,7 +67,7 @@ public class Tier {
 
     public Color calcRenderColor() {
         float perc = ((float) tierNumber) / ((float) ConstellationRegistry.getHighestTierNumber());
-        return new Color(Color.HSBtoRGB((230F + (50F * perc)) / 360F, 0.8F, 0.8F - (0.3F * perc)));
+        return MiscUtils.calcRandomConstellationColor(perc);
     }
 
     public String chanceAsRarityUnlocName() {

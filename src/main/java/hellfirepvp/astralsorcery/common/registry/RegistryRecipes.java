@@ -2,9 +2,9 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttenuationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
@@ -39,8 +39,10 @@ public class RegistryRecipes {
 
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
 
+    public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
+
     //CraftingComponents
-    public static DiscoveryRecipe rCCGlassLens;
+    public static DiscoveryRecipe rCCGlassLensRockCrystal, rCCGlassLensCelCrystal;
 
     //Tools
     public static CrystalToolRecipe rCToolRockPick, rCToolRockShovel, rCToolRockAxe, rCToolRockSword;
@@ -79,6 +81,9 @@ public class RegistryRecipes {
         rTelescope = registerAltarRecipe(new TelescopeRecipe());
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
+
+        rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
+        rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
 
         /*rLinkTool = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Items.STICK,
@@ -155,10 +160,15 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_RIGHT)));
         rAltar.setPassiveStarlightRequirement(10);
 
-        rCCGlassLens = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
+        rCCGlassLensRockCrystal = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
                 .addPart(Blocks.GLASS_PANE, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()), ShapedRecipeSlot.CENTER));
-        rCCGlassLens.setPassiveStarlightRequirement(200);
+                .addPart(new ItemStack(ItemsAS.rockCrystal), ShapedRecipeSlot.CENTER));
+        rCCGlassLensRockCrystal.setPassiveStarlightRequirement(200);
+
+        rCCGlassLensCelCrystal = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
+                .addPart(Blocks.GLASS_PANE, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(new ItemStack(ItemsAS.celestialCrystal), ShapedRecipeSlot.CENTER));
+        rCCGlassLensCelCrystal.setPassiveStarlightRequirement(200);
 
         rCToolRockSword = registerAltarRecipe(new CrystalToolRecipe(
                 new ShapedRecipe(ItemsAS.crystalSword)

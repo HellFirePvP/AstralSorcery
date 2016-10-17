@@ -15,5 +15,6 @@ public class MultiBlockArrays {
     public static StructureBlockArray ancientShrine;
 
     public static PatternBlockArray patternRitualPedestal;
+    public static PatternBlockArray patternAltarAttenuation;
 
 }

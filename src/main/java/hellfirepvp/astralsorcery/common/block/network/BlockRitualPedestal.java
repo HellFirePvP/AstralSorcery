@@ -115,7 +115,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
-        if(te != null && !worldIn.isRemote) {
+        if(te != null && !worldIn.isRemote && placer != null && placer instanceof EntityPlayer) {
             te.setOwner(placer.getUniqueID());
         }
     }

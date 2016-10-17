@@ -2,8 +2,11 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
+import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -58,15 +61,17 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         return null;
     }
 
-    public BlockPos getPos() {
-        return new BlockPos(xCoord, yCoord, zCoord);
+    public Vector3 getVec() {
+        return new Vector3(xCoord, yCoord, zCoord);
     }
 
     public static enum ParticleEventType {
 
         COLLECTOR_BURST(TileCollectorCrystal::breakParticles),
         CELESTIAL_CRYSTAL_BURST(TileCelestialCrystals::breakParticles),
-        CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles);
+        CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles),
+        CRAFT_FINISH_BURST(TileAltar::finishBurst),
+        WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects);
 
         private final EventAction action;
 

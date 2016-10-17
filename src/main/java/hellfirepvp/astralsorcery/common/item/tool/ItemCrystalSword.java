@@ -31,6 +31,8 @@ import java.util.Random;
  */
 public class ItemCrystalSword extends ItemSword implements IGrindable {
 
+    private static final Random rand = new Random();
+
     public ItemCrystalSword() {
         super(RegistryItems.crystalToolMaterial);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
@@ -53,8 +55,7 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        ToolCrystalProperties properties = getToolProperties(stack);
-        return properties.getMaxToolDamage();
+        return 10;
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {
@@ -69,10 +70,29 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        if(getDamage(stack) > damage) {
-            return; //We don't want mending. RIP.
+        super.setDamage(stack, 0);
+        damageProperties(stack, damage);
+    }
+
+    private void damageProperties(ItemStack stack, int damage) {
+        ToolCrystalProperties prop = getToolProperties(stack);
+        if(prop == null) {
+            stack.setItemDamage(stack.getMaxDamage());
+            return;
         }
-        super.setDamage(stack, damage);
+        for (int i = 0; i < damage; i++) {
+            double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
+            if(chance >= rand.nextFloat()) {
+                if(rand.nextInt(3) == 0) prop.damageCutting();
+                double purity = ((double) prop.getPurity()) / 100D;
+                for (int j = 0; j < 3; j++) {
+                    if(purity <= rand.nextFloat()) {
+                        if(rand.nextInt(3) == 0) prop.damageCutting();
+                    }
+                }
+            }
+        }
+        setToolProperties(stack, prop);
     }
 
     @Override
@@ -84,14 +104,12 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         Multimap<String, AttributeModifier> modifiers = HashMultimap.create();
         if(slot == EntityEquipmentSlot.MAINHAND) {
-            if (slot == EntityEquipmentSlot.MAINHAND) {
-                ToolCrystalProperties prop = getToolProperties(stack);
-                if(prop != null) {
-                    modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
-                            new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 2F + (8F * prop.getEfficiencyMultiplier()), 0));
-                    modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
-                            new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1.6D, 0));
-                }
+            ToolCrystalProperties prop = getToolProperties(stack);
+            if(prop != null) {
+                modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
+                        new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1F + (12F * prop.getEfficiencyMultiplier()), 0));
+                modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
+                        new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1D, 0));
             }
         }
         return modifiers;

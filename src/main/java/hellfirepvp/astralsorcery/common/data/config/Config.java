@@ -23,6 +23,8 @@ public class Config {
     public static boolean generateShrines = true;
     public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
+    public static boolean clientPreloadTextures = true;
+
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
 
@@ -40,6 +42,7 @@ public class Config {
 
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
+        clientPreloadTextures = latestConfig.getBoolean("preloadTextures", "rendering", true, "If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.");
 
         //rand(crystalDensity) == 0 chance per chunk.
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 15, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");

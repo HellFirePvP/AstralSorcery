@@ -19,6 +19,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 09.08.2016 / 15:34
  */
+@Deprecated
 public class RitualStructureCalculator {
 
     @Deprecated

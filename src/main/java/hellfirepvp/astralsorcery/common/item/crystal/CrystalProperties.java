@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -75,14 +76,14 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties createRandomRock() {
-        int size = (rand.nextInt(CrystalProperties.MAX_SIZE_ROCK) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK)) / 2;
+        int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_ROCK) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK)) / 2);
         int purity = (rand.nextInt(101) + rand.nextInt(101)) / 2;
         int collect = 5 + rand.nextInt(26);
         return new CrystalProperties(size, purity, collect);
     }
 
     public static CrystalProperties createRandomCelestial() {
-        int size = (rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL) + rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL)) / 2;
+        int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL) + rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL)) / 2);
         int purity = 40 + rand.nextInt(61);
         int collect = 50 + rand.nextInt(26);
         return new CrystalProperties(size, purity, collect);
@@ -136,6 +137,27 @@ public class CrystalProperties {
             }
         }
         return Optional.empty();
+    }
+    @Nullable
+    public CrystalProperties grindCopy(Random rand) {
+        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability);
+        float percGrinded = 0F;
+        while (rand.nextInt(2) == 0 && percGrinded <= 0.1F)
+            percGrinded += 0.01F;
+
+        int sizeToRemove = Math.min(3 + rand.nextInt(3), (int) (size * percGrinded));
+        double purity = ((double) this.purity) / 100D;
+        for (int j = 0; j < 2; j++) {
+            if (purity <= rand.nextFloat()) {
+                sizeToRemove += sizeToRemove;
+            }
+        }
+        int collectToAdd = Math.max(0, Math.round((100 - collectiveCapability) * percGrinded));
+        copy.size = percGrinded > 0F ? size - sizeToRemove : size;
+        copy.collectiveCapability = percGrinded > 0F ? Math.min(100, collectiveCapability + collectToAdd) : collectiveCapability;
+        if(copy.size <= 0)
+            return null;
+        return copy;
     }
 
     public static void applyCrystalProperties(ItemStack stack, CrystalProperties properties) {

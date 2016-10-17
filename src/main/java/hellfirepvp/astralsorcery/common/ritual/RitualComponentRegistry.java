@@ -18,10 +18,12 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 09.08.2016 / 15:34
  */
+@Deprecated
 public class RitualComponentRegistry {
 
     private static Map<Block, List<Integer>> registeredComponents = new HashMap<>();
 
+    @Deprecated
     public static boolean isComponent(@Nonnull IBlockState state) {
         Block b = state.getBlock();
         List<Integer> acceptedMetas = registeredComponents.get(b);
@@ -30,6 +32,7 @@ public class RitualComponentRegistry {
         return acceptedMetas.contains(b.getMetaFromState(state));
     }
 
+    @Deprecated
     public static void registerBlockAsComponent(Block b, @Nullable int... metas) {
         if(b == null || b.equals(Blocks.AIR)) return; //No.
 
@@ -44,6 +47,7 @@ public class RitualComponentRegistry {
         registeredComponents.put(b, out);
     }
 
+    @Deprecated
     public static void setupRegistry() {
 
     }

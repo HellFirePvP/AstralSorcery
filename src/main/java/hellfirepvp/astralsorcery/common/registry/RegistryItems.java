@@ -61,7 +61,7 @@ public class RegistryItems {
             }
         };
 
-        crystalToolMaterial = EnumHelper.addToolMaterial("CRYSTAL", 3, 1000, 12.0F, 3.5F, 32);
+        crystalToolMaterial = EnumHelper.addToolMaterial("CRYSTAL", 3, 1000, 20.0F, 5.5F, 32);
         crystalToolMaterial.customCraftingMaterial = null;
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");

@@ -12,11 +12,9 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
@@ -54,7 +52,7 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar);
+        AbstractAltarRecipe rec = findCraftableRecipe();
         if(rec != null) {
             ItemStack out = rec.getOutputForRender();
             zLevel = 10F;
@@ -64,8 +62,8 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
-            GL11.glTranslated(260, 80, 0);
-            GL11.glScaled(2.5, 2.5, 2.5);
+            GL11.glTranslated(250, 65, 0);
+            GL11.glScaled(3.4, 3.4, 3.4);
 
             itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
@@ -78,7 +76,7 @@ public class GuiAltarAttenuation extends GuiAltarBase {
             zLevel = 0F;
             itemRender.zLevel = 0F;
 
-            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+            SpecialTextureLibrary.refreshTextureBindState();
         }
 
         Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(ConstellationRegistry.getTier(0));
@@ -92,11 +90,12 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
                 GL11.glColor4f(1F, 1F, 1F, 1F);
 
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                 GL11.glEnable(GL11.GL_BLEND);
                 Blending.DEFAULT.apply();
 
-                RenderConstellation.renderConstellationIntoGUI(c.queryTier().calcRenderColor().darker(), c, 10, 40, zLevel, 100, 100, 2.5, new RenderConstellation.BrightnessFunction() {
+                RenderConstellation.renderConstellationIntoGUI(c, 20, 50, zLevel, 80, 80, 2, new RenderConstellation.BrightnessFunction() {
                     @Override
                     public float getBrightness() {
                         return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5)) * ((float) alpha);
@@ -105,6 +104,7 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
                 GL11.glDisable(GL11.GL_BLEND);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glEnable(GL11.GL_ALPHA_TEST);
 
                 GL11.glPopMatrix();
                 GL11.glPopAttrib();

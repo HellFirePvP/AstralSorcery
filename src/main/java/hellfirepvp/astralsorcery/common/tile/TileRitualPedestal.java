@@ -144,7 +144,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     crystal.getItem() instanceof ItemTunedCrystalBase) {
                 Constellation ch = ItemTunedCrystalBase.getConstellation(crystal);
                 if(ch != null) {
-                    ConstellationEffect ce = ConstellationEffectRegistry.getEffect(ch);
+                    ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
                         ce.playClientEffect(worldObj, getPos(), this, percRunning, shouldDoAdditionalEffects());
                     }
@@ -383,6 +383,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private CrystalProperties properties;
         private int channeled = 0;
 
+        private ConstellationEffect ce;
         private Map<BlockPos, Boolean> offsetMirrors = new HashMap<>();
 
         private double collectionChannelBuffer = 0D, collectionTraitBuffer = 0D;
@@ -398,6 +399,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             ticksTicking++;
 
             if(channeling != null && properties != null && hasMultiblock) {
+                if(ce == null) {
+                    ce = ConstellationEffectRegistry.getEffect(channeling);
+                }
                 if(ticksTicking % 20 == 0) {
                     WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
                     List<BlockPos> toNodes = getSources();
@@ -439,7 +443,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     collectionChannelBuffer += collect / 2D;
                 }
                 if(collectionChannelBuffer > 0) {
-                    ConstellationEffect ce = channeling.queryEffect();
                     doMainEffect(world, ce, trait, trait != null && collectionTraitBuffer > 0);
 
                     if(tryIncrementChannelingTimer())
@@ -452,9 +455,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
                 } else {
                     flagAsInactive(world);
+                    ce = null;
                 }
             } else {
                 flagAsInactive(world);
+                ce = null;
             }
         }
 
@@ -467,7 +472,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleTrait()) {
                 collectionTraitBuffer = Math.max(0, collectionTraitBuffer - (executeTimes * maxDrain));
-                ce.playTraitEffectMultiple(world, getPos(), trait, executeTimes);
+                if(ce.playTraitEffectMultiple(world, getPos(), trait, executeTimes)) markDirty(world);
             } else {
                 for (int i = 0; i <= executeTimes; i++) {
                     float perc;
@@ -482,7 +487,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
 
                     if(ce != null) {
-                        ce.playTraitEffect(world, getPos(), trait, perc);
+                        if(ce.playTraitEffect(world, getPos(), trait, perc)) markDirty(world);
                     }
                 }
             }
@@ -497,7 +502,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleMain()) {
                 collectionChannelBuffer = Math.max(0, collectionChannelBuffer - (executeTimes * maxDrain));
-                ce.playMainEffectMultiple(world, getPos(), executeTimes, mayDoTrait, trait);
+                if(ce.playMainEffectMultiple(world, getPos(), executeTimes, mayDoTrait, trait)) markDirty(world);
             } else {
                 for (int i = 0; i <= executeTimes; i++) {
                     float perc;
@@ -512,7 +517,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
 
                     if(ce != null) {
-                        ce.playMainEffect(world, getPos(), perc, mayDoTrait, trait);
+                        if(ce.playMainEffect(world, getPos(), perc, mayDoTrait, trait)) markDirty(world);
                     }
                 }
             }
@@ -644,6 +649,14 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             for (int i = 0; i < listPos.tagCount(); i++) {
                 offsetMirrors.put(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
             }
+
+            if(channeling != null) {
+                ce = ConstellationEffectRegistry.getEffect(channeling);
+                if(compound.hasKey("effect")) {
+                    NBTTagCompound cmp = compound.getCompoundTag("effect");
+                    ce.readFromNBT(cmp);
+                }
+            }
         }
 
         @Override
@@ -670,6 +683,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
             if(trait != null) {
                 trait.writeToNBT(compound, Constellation.getDefaultSaveKey() + "Trait");
+            }
+            if(ce != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                ce.writeToNBT(tag);
+                compound.setTag("effect", tag);
             }
         }
 

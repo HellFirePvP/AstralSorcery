@@ -59,11 +59,6 @@ public class Constellation {
         return null;
     }
 
-    @Nullable
-    public ConstellationEffect queryEffect() {
-        return ConstellationEffectRegistry.getEffect(this);
-    }
-
     public void register(String name, int tier) {
         registerModConstellation(Loader.instance().activeModContainer(), name, tier);
     }

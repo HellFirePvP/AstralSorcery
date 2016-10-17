@@ -81,18 +81,7 @@ public final class EffectHandler {
         if(Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             event.getLeft().add("");
             event.getLeft().add("[AstralSorcery] EffectHandler:");
-            int count = getDebugEffectCount();
-            TextFormatting format;
-            if(count >= 450) {
-                format = TextFormatting.RED;
-            } else if(count >= 300) {
-                format = TextFormatting.GOLD;
-            } else if(count >= 150) {
-                format = TextFormatting.YELLOW;
-            } else {
-                format = TextFormatting.GREEN;
-            }
-            event.getLeft().add("[AstralSorcery] > Complex effects: " + format.toString() + getDebugEffectCount());
+            event.getLeft().add("[AstralSorcery] > Complex effects: " + getDebugEffectCount());
         }
     }
 

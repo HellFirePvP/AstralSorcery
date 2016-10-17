@@ -26,6 +26,8 @@ import java.util.Random;
  */
 public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable {
 
+    private static final Random rand = new Random();
+
     public ItemCrystalToolBase() {
         super(0, 0, RegistryItems.crystalToolMaterial, Collections.emptySet());
     }
@@ -64,16 +66,34 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
 
     @Override
     public void setDamage(ItemStack stack, int damage) {
-        if(getDamage(stack) > damage) {
-            return; //We don't want mending. RIP.
+        super.setDamage(stack, 0);
+        damageProperties(stack, damage);
+    }
+
+    private void damageProperties(ItemStack stack, int damage) {
+        ToolCrystalProperties prop = getToolProperties(stack);
+        if(prop == null) {
+            stack.setItemDamage(stack.getMaxDamage());
+            return;
         }
-        super.setDamage(stack, damage);
+        for (int i = 0; i < damage; i++) {
+            double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
+            if(chance >= rand.nextFloat()) {
+                if(rand.nextInt(3) == 0) prop.damageCutting();
+                double purity = ((double) prop.getPurity()) / 100D;
+                for (int j = 0; j < 3; j++) {
+                    if(purity <= rand.nextFloat()) {
+                        if(rand.nextInt(3) == 0) prop.damageCutting();
+                    }
+                }
+            }
+        }
+        setToolProperties(stack, prop);
     }
 
     @Override
     public int getMaxDamage(ItemStack stack) {
-        ToolCrystalProperties properties = getToolProperties(stack);
-        return properties.getMaxToolDamage();
+        return 10;
     }
 
     @Override
@@ -90,7 +110,7 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
             return GrindResult.failBreakItem();
         }
         setToolProperties(stack, result);
-        if(stack.getItemDamage() >= stack.getMaxDamage()) {
+        if(result.getSize() <= 0) {
             return GrindResult.failBreakItem();
         }
         return GrindResult.success();

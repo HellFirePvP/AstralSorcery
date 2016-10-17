@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
 
 import java.util.LinkedList;
@@ -33,8 +34,8 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
     }
 
     @Override
-    public ItemStack getOutput(ShapeMap centralGridMap) {
-        ItemStack toolOut = super.getOutput(centralGridMap);
+    public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
+        ItemStack toolOut = super.getOutput(centralGridMap, altar);
         List<CrystalProperties> prop = new LinkedList<>();
         for (ShapedRecipeSlot slot : positions) {
             ItemStack stack = centralGridMap.get(slot);

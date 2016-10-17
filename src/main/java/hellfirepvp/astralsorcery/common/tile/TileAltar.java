@@ -2,9 +2,12 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -13,12 +16,17 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -136,7 +144,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         AbstractAltarRecipe recipe = craftingTask.getRecipeToCraft();
         ShapeMap current = copyGetCurrentCraftingGrid();
-        ItemStack out = recipe.getOutput(current); //Central item helps defining output - probably, eventually.
+        ItemStack out = recipe.getOutput(current, this); //Central item helps defining output - probably, eventually.
         if(out != null) {
             out = ItemUtils.copyStackWithSize(out, out.stackSize);
         }
@@ -176,6 +184,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
         if (!recipe.allowsForChaining() || !recipe.matches(this)) {
+            if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
+                Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
+                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY(), pos.getZ());
+                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
+            }
             craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
             craftingTask = null;
         }
@@ -295,7 +308,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!mbState) return;
 
         AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this);
-        //System.out.println(recipe == null ? "didn't find recipe" : "found recipe");
+        if(recipe instanceof IGatedRecipe) {
+            if(!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
+        }
         if(recipe != null) {
             this.craftingTask = new ActiveCraftingTask(recipe, crafter.getUniqueID());
             markForUpdate();
@@ -388,10 +403,15 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         markForUpdate();
     }
 
+    @SideOnly(Side.CLIENT)
+    public static void finishBurst(PktParticleEvent event) {
+        EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Axis.Y_AXIS).setPosition(event.getVec()).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+    }
+
     public static enum AltarLevel {
 
         DISCOVERY          (100,   (ta) -> true       ), //Default one...
-        ATTENUATION        (1000,  (ta) -> true, false),
+        ATTENUATION        (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttenuation), false),
         CONSTELLATION_CRAFT(4000,  (ta) -> true, false),
         TRAIT_CRAFT        (12000, (ta) -> true, false),
         ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.

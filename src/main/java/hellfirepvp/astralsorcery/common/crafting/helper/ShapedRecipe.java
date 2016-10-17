@@ -7,7 +7,10 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +23,10 @@ import java.util.Map;
 public class ShapedRecipe extends AbstractCacheableRecipe {
 
     protected ShapeMap crafingShape = new ShapeMap();
+
+    //If set to true, forces the exact places specified in the craftingShape map.
+    //If set to false, the pattern the recipe is made of can be placed wherever in the 3x3 main grid.
+    private boolean forceEmptySpaces = false;
 
     public ShapedRecipe(Block output) {
         this(new ItemStack(output));
@@ -48,6 +55,11 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
         return this;
     }
 
+    public ShapedRecipe forceEmptySpaces() {
+        this.forceEmptySpaces = true;
+        return this;
+    }
+
     @Override
     public void register() {
         CraftingManager.getInstance().addRecipe(make());
@@ -61,14 +73,70 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
         String upperRow = refactorRow(ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.UPPER_RIGHT, shapeCharacters, c);
         String middleRow = refactorRow(ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER, ShapedRecipeSlot.RIGHT, shapeCharacters, c);
         String lowerRow = refactorRow(ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.LOWER_RIGHT, shapeCharacters, c);
-        int arrayLength = 3 + (shapeCharacters.size() * 2); //ForEach 1 ItemStack, 1 Character.
-        Object[] recipeObjArray = new Object[arrayLength];
-        recipeObjArray[0] = upperRow;
-        recipeObjArray[1] = middleRow;
-        recipeObjArray[2] = lowerRow;
-        int arrayPointer = 3;
-        addToArray(shapeCharacters, recipeObjArray, arrayPointer);
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray), this);
+        if(forceEmptySpaces) {
+            int arrayLength = 3 + (shapeCharacters.size() * 2); //ForEach 1 ItemStack, 1 Character.
+            Object[] recipeObjArray = new Object[arrayLength];
+            recipeObjArray[0] = upperRow;
+            recipeObjArray[1] = middleRow;
+            recipeObjArray[2] = lowerRow;
+            int arrayPointer = 3;
+            addToArray(shapeCharacters, recipeObjArray, arrayPointer);
+            return new AccessibleRecipeAdapater(RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray), this);
+        } else {
+            String[] recipeTrimmed = trimRecipeStrings(upperRow, middleRow, lowerRow);
+            int point = 0;
+            if(!recipeTrimmed[0].trim().isEmpty()) point++;
+            if(!recipeTrimmed[1].trim().isEmpty()) point++;
+            if(!recipeTrimmed[2].trim().isEmpty()) point++;
+            int arrayLength = point + (shapeCharacters.size() * 2); //ForEach 1 ItemStack, 1 Character.
+            Object[] recipeObjArray = new Object[arrayLength];
+            int pointer = 0;
+            if(!recipeTrimmed[0].trim().isEmpty()) {
+                recipeObjArray[pointer] = recipeTrimmed[0];
+                pointer++;
+            }
+            if(!recipeTrimmed[1].trim().isEmpty()) {
+                recipeObjArray[pointer] = recipeTrimmed[1];
+                pointer++;
+            }
+            if(!recipeTrimmed[2].trim().isEmpty()) {
+                recipeObjArray[pointer] = recipeTrimmed[2];
+            }
+            addToArray(shapeCharacters, recipeObjArray, point);
+            ShapedRecipes sr = RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray);
+            return new AccessibleRecipeAdapater(sr, this);
+        }
+    }
+
+    private String[] trimRecipeStrings(String upperRow, String middleRow, String lowerRow) {
+        String[] out = new String[] { upperRow, middleRow, lowerRow };
+        List<Integer> cutIndices = new ArrayList<>(3);
+        for (int i = 0; i < 3; i++) {
+            boolean mayRemove = true;
+            for (int j = 0; j < 3; j++) {
+                String str = out[j];
+                if(str.charAt(i) != ' ') mayRemove = false;
+            }
+            if(mayRemove) {
+                cutIndices.add(i);
+            }
+        }
+        for (int j = 0; j < 3; j++) {
+            out[j] = new String(cut(out[j].toCharArray(), cutIndices));
+        }
+        return out;
+    }
+
+    private char[] cut(char[] in, List<Integer> toRemove) {
+        char[] out = new char[in.length - toRemove.size()];
+        int outPointer = 0;
+        for (int i = 0; i < in.length; i++) {
+            if(!toRemove.contains(i)) {
+                out[outPointer] = in[i];
+                outPointer++;
+            }
+        }
+        return out;
     }
 
     @Nullable

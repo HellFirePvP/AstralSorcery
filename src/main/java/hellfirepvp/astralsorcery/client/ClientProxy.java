@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
@@ -125,12 +126,16 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
-        long startMs = System.currentTimeMillis();
-        AstralSorcery.log.info("[AstralSorcery] Preload textures");
-        TexturePreloader.preloadTextures();
-        AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
-        SpriteLibrary.init();
-        AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
+        if(Config.clientPreloadTextures) {
+            long startMs = System.currentTimeMillis();
+            AstralSorcery.log.info("[AstralSorcery] Preload textures");
+            TexturePreloader.preloadTextures();
+            AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
+            SpriteLibrary.init();
+            AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
+        } else {
+            AstralSorcery.log.info("[AstralSorcery] Skipping preloading textures (configured).");
+        }
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();

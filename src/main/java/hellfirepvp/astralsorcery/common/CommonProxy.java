@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -72,7 +73,7 @@ public class CommonProxy implements IGuiHandler {
         TransmissionClassRegistry.setupRegistry();
         //StarlightNetworkRegistry.setupRegistry();
 
-        RitualComponentRegistry.setupRegistry();
+        //RitualComponentRegistry.setupRegistry();
         StarlightNetworkRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
@@ -81,6 +82,7 @@ public class CommonProxy implements IGuiHandler {
 
         GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
         LootTableUtil.initLootTable();
+        ConstellationEffectRegistry.init();
 
         registerOreDictEntries();
         RegistryAchievements.init();

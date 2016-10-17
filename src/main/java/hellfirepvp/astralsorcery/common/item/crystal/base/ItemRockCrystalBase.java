@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
+import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
+import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -10,7 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,13 +23,33 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 21:38
  */
-public abstract class ItemRockCrystalBase extends Item {
+public abstract class ItemRockCrystalBase extends Item implements IGrindable {
 
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
         setMaxDamage(0);
         setHasSubtypes(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public boolean canGrind(EntityGrindstone grindstone, ItemStack stack) {
+        return true;
+    }
+
+    @Nonnull
+    @Override
+    public GrindResult grind(EntityGrindstone grindstone, ItemStack stack, Random rand) {
+        CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
+        CrystalProperties result = prop.grindCopy(rand);
+        if(result == null) {
+            return GrindResult.failBreakItem();
+        }
+        CrystalProperties.applyCrystalProperties(stack, result);
+        if(result.getSize() <= 0) {
+            return GrindResult.failBreakItem();
+        }
+        return GrindResult.success();
     }
 
     @Override

@@ -1,8 +1,9 @@
-package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
+package hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -55,7 +56,7 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
 
     @Nullable
     @Override
-    public ItemStack getOutput(ShapeMap centralGridMap) {
+    public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
         return null;
     }
 

@@ -34,7 +34,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
         }
         IronOreReceiverNode node = turningIrons.get(pos);
         long diff = ms - node.lastMSrec;
-        if(diff >= 30_000) node.accCharge = 0;
+        if(diff >= 18_000) node.accCharge = 0;
         node.accCharge += amount;
         if(starlightType == Constellations.mineralis) {
             node.accCharge += amount * 6;
@@ -44,7 +44,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
         }
         node.lastMSrec = ms;
 
-        if(node.accCharge >= 30_000) {
+        if(node.accCharge >= 18_000) {
             turningIrons.remove(pos);
 
             world.setBlockState(pos, BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL));

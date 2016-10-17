@@ -1,19 +1,22 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSpawnWorldParticles;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,6 +41,8 @@ import java.util.List;
  * Date: 23.09.2016 / 12:57
  */
 public class ItemWand extends Item implements ISpecialInteractItem {
+
+    private static final Random rand = new Random();
 
     public ItemWand() {
         setMaxDamage(0);
@@ -86,11 +92,31 @@ public class ItemWand extends Item implements ISpecialInteractItem {
                 BlockPos p = worldIn.getTopSolidOrLiquidBlock(rPos).up();
                 double dstr = CelestialHandler.calcDaytimeDistribution(worldIn);
                 if(dstr > 1E-4) {
-                    PktSpawnWorldParticles pkt = PktSpawnWorldParticles.getRockCrystalParticles(dstr, p);
+                    PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.WAND_CRYSTAL_HIGHLIGHT, p.getX(), p.getY(), p.getZ());
                     PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) entityIn);
                 }
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void highlightEffects(PktParticleEvent event) {
+        BlockPos pos = event.getVec().toBlockPos();
+        double x = pos.getX() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
+        double y = pos.getY() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
+        double z = pos.getZ() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
+        double velX = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
+        double velY = rand.nextFloat() * 0.2F;
+        double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
+        double dstr = CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+        for (int i = 0; i < 10; i++) {
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(x, y, z);
+            particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+            particle.motion(velX * (0.2 + 0.8 * rand.nextFloat()), velY * (0.2 + 0.8 * rand.nextFloat()), velZ * (0.2 + 0.8 * rand.nextFloat()));
+            particle.scale(0.4F);
+            particle.enableAlphaFade().setAlphaMultiplier((float) ((150 * dstr) / 255F));
+        }
+
     }
 
     @Override
@@ -111,5 +137,4 @@ public class ItemWand extends Item implements ISpecialInteractItem {
             wandTe.onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
         }
     }
-
 }
