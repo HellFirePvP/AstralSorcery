@@ -22,6 +22,7 @@ public class SpriteLibrary {
     private static final BindableResource texLightbeam = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
     private static final BindableResource texHalo = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
+    private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
     public static final SpriteSheetResource spriteStarlight = texSpriteStarlight.asSpriteSheet(4, 16);
     public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(16, 4);
@@ -31,6 +32,7 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(40, 1);
     public static final SpriteSheetResource spriteCraftBurst = texCraftBurst.asSpriteSheet(8, 6);
     public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(16, 5);
+    public static final SpriteSheetResource spriteLiquidStarlight = texLiquidStarlight.asSpriteSheet(1, 64);
 
     public static void init() {}
 

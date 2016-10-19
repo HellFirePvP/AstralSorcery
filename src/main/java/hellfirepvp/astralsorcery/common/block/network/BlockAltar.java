@@ -89,7 +89,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override

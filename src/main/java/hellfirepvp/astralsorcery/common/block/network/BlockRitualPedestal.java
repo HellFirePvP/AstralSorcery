@@ -95,7 +95,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, in);
             pedestal.setInventorySlotContents(0, null);
         }
-        return false;
+        return true;
     }
 
     @Override

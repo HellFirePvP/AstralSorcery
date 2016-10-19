@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.effect.texture;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.Axis;
@@ -203,36 +204,12 @@ public class TexturePlane implements IComplexEffect {
     }
 
     private void currRenderAroundAxis(double angle, Vector3 axis) {
-        Vector3 renderStart = axis.clone().perpendicular().rotate(angle, axis).normalize();
-
         float scale = this.scale;
         if(scaleFunc != null) {
             scale = scaleFunc.getScale(this);
         }
-
         texture.bind();
-        Tessellator tes = Tessellator.getInstance();
-        VertexBuffer buf = tes.getBuffer();
-
-        //GL11.glEnable(GL11.GL_BLEND);
-        //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-        Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v + vLength).endVertex();
-
-        vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v + vLength).endVertex();
-
-        vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v          ).endVertex();
-
-        vec = renderStart.clone().normalize().multiply(scale).add(pos);
-        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v          ).endVertex();
-        tes.draw();
-
-        //GL11.glDisable(GL11.GL_BLEND);
+        RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, 0);
     }
 
     private void removeOldTranslate(Entity entity, float partialTicks) {

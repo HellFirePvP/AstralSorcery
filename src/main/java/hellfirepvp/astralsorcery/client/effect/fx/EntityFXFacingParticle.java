@@ -36,6 +36,13 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         this.oldZ = z;
     }
 
+    public EntityFXFacingParticle offset(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
     public EntityFXFacingParticle enableAlphaFade() {
         alphaFade = true;
         return this;

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
@@ -71,6 +72,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CELESTIAL_CRYSTAL_BURST(TileCelestialCrystals::breakParticles),
         CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles),
         CRAFT_FINISH_BURST(TileAltar::finishBurst),
+        WELL_CATALYST_BREAK(TileWell::catalystBurst),
         WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects);
 
         private final EventAction action;

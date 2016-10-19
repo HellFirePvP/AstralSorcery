@@ -176,7 +176,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
             }
             if(out.stackSize > 0) {
-                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out);
+                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
 

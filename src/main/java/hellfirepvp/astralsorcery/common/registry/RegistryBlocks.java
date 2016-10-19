@@ -16,11 +16,13 @@ import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
+import hellfirepvp.astralsorcery.common.block.network.BlockWell;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -88,6 +90,8 @@ public class RegistryBlocks {
         blockAltar = registerBlock(new BlockAltar());
         ritualPedestal = registerBlock(new BlockRitualPedestal());
         queueDefaultItemBlock(ritualPedestal);
+        blockWell = registerBlock(new BlockWell());
+        queueDefaultItemBlock(blockWell);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -116,6 +120,7 @@ public class RegistryBlocks {
         registerTile(TileRitualPedestal.class);
         registerTile(TileCollectorCrystal.class);
         registerTile(TileCelestialCrystals.class);
+        registerTile(TileWell.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

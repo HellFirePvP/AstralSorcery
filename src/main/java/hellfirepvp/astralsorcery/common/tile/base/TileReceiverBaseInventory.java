@@ -75,7 +75,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         ItemStack itemstack = ItemStackHelper.getAndSplit(inv, index, count);
         if (itemstack != null) {
             onInventoryChanged();
-            markDirty();
+            markForUpdate();
         }
         return itemstack;
     }
@@ -99,7 +99,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         }
 
         onInventoryChanged();
-        markDirty();
+        markForUpdate();
     }
 
     public abstract String getInventoryName();
@@ -116,7 +116,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         }
 
         onInventoryChanged();
-        markDirty();
+        markForUpdate();
     }
 
     protected void onInventoryChanged() {}

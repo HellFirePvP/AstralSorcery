@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -102,6 +103,40 @@ public class RenderingUtils {
         if (lighting)
             RenderHelper.enableStandardItemLighting();
         GL11.glColor4f(1F, 1F, 1F, 1F);
+    }
+
+    public static void renderAngleRotatedTexturedRect(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float partialTicks) {
+        GL11.glPushMatrix();
+        Entity e = Minecraft.getMinecraft().getRenderViewEntity();
+        if(e == null) {
+            e = Minecraft.getMinecraft().thePlayer;
+        }
+        double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
+        double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
+        double iPZ = e.prevPosZ + (e.posZ - e.prevPosZ) * partialTicks;
+        GL11.glTranslated(-iPX, -iPY, -iPZ);
+
+        Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer buf = tes.getBuffer();
+
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v + vLength).endVertex();
+
+        vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(renderOffset);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v + vLength).endVertex();
+
+        vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(renderOffset);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uLength, v          ).endVertex();
+
+        vec = renderStart.clone().normalize().multiply(scale).add(renderOffset);
+        buf.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,           v          ).endVertex();
+
+        tes.draw();
+
+        GL11.glPopMatrix();
     }
 
     public static void drawGradientRect(int x, int y, float z, int toX, int toY, Color color, Color colorFade) {

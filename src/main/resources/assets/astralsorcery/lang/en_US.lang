@@ -21,6 +21,8 @@ achievement.astralsorcery.buildtelescope=A clear view of the sky
 achievement.astralsorcery.buildtelescope.desc=Make a telescope
 achievement.astralsorcery.seeconstellation=What a beautiful pattern
 achievement.astralsorcery.seeconstellation.desc=Discover a constellation
+achievement.astralsorcery.liquidstarlight=Liquified Light
+achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 
@@ -99,6 +101,7 @@ tile.BlockMarble.engraved.name=Engraved Marble
 tile.BlockPrism.name=PrismLens
 tile.BlockLens.name=Lens
 tile.BlockCelestialCrystals.name=Celestial Crystal Cluster
+tile.BlockWell.name=Lightwell
 
 tier.0=Magis
 tier.1=Prope

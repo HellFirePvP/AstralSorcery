@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
+import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +26,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.08.2016 / 13:10
  */
-public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants {
+public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants, ItemWellCatalyst {
 
     public ItemCraftingComponent() {
         setMaxStackSize(64);
@@ -72,6 +74,26 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
             return super.getUnlocalizedName(stack) + "." + type.getUnlocalizedName();
         }
         return super.getUnlocalizedName(stack);
+    }
+
+    @Override
+    public boolean isCatalyst(@Nonnull ItemStack stack) {
+        return stack.getItemDamage() == MetaType.AQUAMARINE.getItemMeta();
+    }
+
+    @Override
+    public double collectionMultiplier(@Nonnull ItemStack stack) {
+        return 0.1666;
+    }
+
+    @Override
+    public Color getCatalystColor(@Nonnull ItemStack stack) {
+        return new Color(0x00, 0x88, 0xDD);
+    }
+
+    @Override
+    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
+        return 4;
     }
 
     @Override

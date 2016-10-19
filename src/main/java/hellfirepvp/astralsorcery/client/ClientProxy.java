@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
+import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
@@ -32,6 +33,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -181,6 +183,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileRitualPedestal.class, new TESRRitualPedestal());
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
         registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
+        registerTESR(TileWell.class, new TESRWell());
 
         registerTESR(TileCrystalLens.class, new TESRLens());
         registerTESR(TileCrystalPrismLens.class, new TESRPrismLens());

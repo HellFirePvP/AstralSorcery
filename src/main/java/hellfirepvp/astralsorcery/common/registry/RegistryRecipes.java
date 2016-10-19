@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttenuationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
@@ -36,6 +37,7 @@ public class RegistryRecipes {
     //Ugh. Important machines/stuff
     public static TelescopeRecipe rTelescope;
     public static DiscoveryRecipe rAltar;
+    public static AttenuationRecipe rLightwell;
 
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
 
@@ -84,6 +86,22 @@ public class RegistryRecipes {
 
         rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
         rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
+
+        rLightwell = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockWell)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal()),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemsAS.rockCrystal,
+                        ShapedRecipeSlot.CENTER))
+        .setItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                AttenuationRecipe.AltarSlot.values());
+        rLightwell.setPassiveStarlightRequirement(3900);
 
         /*rLinkTool = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Items.STICK,

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
+import hellfirepvp.astralsorcery.common.block.network.BlockWell;
 import net.minecraftforge.fluids.Fluid;
 
 /**
@@ -29,6 +30,7 @@ public class BlocksAS {
     //public static BlockStoneMachine stoneMachine;
     public static BlockAltar blockAltar;
     public static BlockRitualPedestal ritualPedestal;
+    public static BlockWell blockWell;
     public static BlockMarble blockMarble;
     //public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
@@ -7,6 +8,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -23,6 +26,21 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase {
         ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         subItems.add(stack);
+    }
+
+    @Override
+    public Color getCatalystColor(@Nonnull ItemStack stack) {
+        return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+    }
+
+    @Override
+    public double collectionMultiplier(@Nonnull ItemStack stack) {
+        return super.collectionMultiplier(stack) * 2;
+    }
+
+    @Override
+    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
+        return super.getShatterChanceMultiplier(stack) * 2;
     }
 
     @Override
