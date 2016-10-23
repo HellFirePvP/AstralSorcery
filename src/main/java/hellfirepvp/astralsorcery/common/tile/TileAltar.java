@@ -34,6 +34,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,15 +88,15 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             updateSkyState(worldObj.canSeeSky(getPos()));
         }
 
+        if((ticksExisted & 15) == 0) {
+            if(matchLevel(false)) markForUpdate();
+        }
+
         if(!worldObj.isRemote) {
             boolean needUpdate = false;
 
             needUpdate = starlightPassive(needUpdate);
             needUpdate = doTryCraft(needUpdate);
-
-            if((ticksExisted & 15) == 0) {
-                needUpdate = matchLevel(needUpdate);
-            }
 
             if(needUpdate) {
                 markForUpdate();
@@ -104,6 +105,26 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             if(getActiveCraftingTask() != null) {
                 doCraftEffects();
             }
+            AltarLevel lvl = getAltarLevel();
+            if(lvl == AltarLevel.CONSTELLATION_CRAFT && getMultiblockState()) {
+                doConstellationRays();
+            }
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().expand(0, 3, 0);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void doConstellationRays() {
+        if(rand.nextInt(20) == 0) {
+            Vector3 from = new Vector3(getPos()).add(0.5, 3.5, 0.5);
+            Vector3 to = new Vector3(getPos()).add(0.5, -0.1, 0.5);
+            to.add(rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1), 0, rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1));
+            EffectHandler.getInstance().lightbeam(to, from, 0.8);
         }
     }
 
@@ -129,6 +150,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!altarRecipe.matches(this)) {
             abortCrafting();
             return true;
+        }
+        if((ticksExisted % 5) == 0) {
+            if(!matchDownMultiblocks(altarRecipe.getNeededLevel())) {
+                abortCrafting();
+                return true;
+            }
         }
         if(craftingTask.isFinished()) {
             finishCrafting();
@@ -183,7 +210,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
-        if (!recipe.allowsForChaining() || !recipe.matches(this)) {
+        if (!recipe.allowsForChaining() || !recipe.matches(this) || !matchDownMultiblocks(recipe.getNeededLevel())) {
             if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
                 Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY(), pos.getZ());
@@ -295,8 +322,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!worldObj.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-                if(!altarRecipe.matches(this)) {
+                if(matchDownMultiblocks(altarRecipe.getNeededLevel()) && !altarRecipe.matches(this)) {
                     abortCrafting();
+                    return;
                 }
             }
 
@@ -304,8 +332,16 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
     }
 
+    private boolean matchDownMultiblocks(AltarLevel levelDownTo) {
+        for (int i = getAltarLevel().ordinal(); i >= levelDownTo.ordinal(); i--) {
+            AltarLevel al = AltarLevel.values()[i];
+            if(al.getMatcher().mbAllowsForCrafting(this)) return true;
+        }
+        return false;
+    }
+
     private void findRecipe(EntityPlayer crafter) {
-        if(!mbState) return;
+        if(craftingTask != null) return;
 
         AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this);
         if(recipe instanceof IGatedRecipe) {
@@ -412,7 +448,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         DISCOVERY          (100,   (ta) -> true       ), //Default one...
         ATTENUATION        (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttenuation), false),
-        CONSTELLATION_CRAFT(4000,  (ta) -> true, false),
+        CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarConstellation), false),
         TRAIT_CRAFT        (12000, (ta) -> true, false),
         ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.
 

@@ -46,6 +46,7 @@ public class TexturePlane implements IComplexEffect {
     private float scale = 1F;
     private float alphaMul = 1F;
     private ScaleFunction scaleFunc;
+    private boolean flagRemoved = true;
 
     private final BindableResource texture;
     private final Axis axis;
@@ -116,6 +117,18 @@ public class TexturePlane implements IComplexEffect {
         return 1F - (float) (dstSq / maxSqDst);
     }
 
+    public boolean isRemoved() {
+        return flagRemoved;
+    }
+
+    public void flagAsRemoved() {
+        flagRemoved = true;
+    }
+
+    public void clearRemoveFlag() {
+        flagRemoved = false;
+    }
+
     public void setDead() {
         remove = true;
     }
@@ -176,7 +189,7 @@ public class TexturePlane implements IComplexEffect {
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-        removeOldTranslate(rView, partialTicks);
+        //removeOldTranslate(rView, partialTicks);
         GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), alphaGrad);
         GL11.glEnable(GL11.GL_BLEND);
         blendMode.apply();
@@ -193,8 +206,8 @@ public class TexturePlane implements IComplexEffect {
 
         GL11.glDisable(GL11.GL_ALPHA_TEST);
 
-        currRenderAroundAxis(Math.toRadians(deg), axis);
-        currRenderAroundAxis(Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
+        currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
+        currRenderAroundAxis(partialTicks, Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -203,13 +216,13 @@ public class TexturePlane implements IComplexEffect {
         GL11.glPopAttrib();
     }
 
-    private void currRenderAroundAxis(double angle, Vector3 axis) {
+    private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
         if(scaleFunc != null) {
             scale = scaleFunc.getScale(this);
         }
         texture.bind();
-        RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, 0);
+        RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
     }
 
     private void removeOldTranslate(Entity entity, float partialTicks) {

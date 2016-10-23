@@ -1,7 +1,12 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -12,9 +17,41 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
  */
 public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
+    private static final Random rand = new Random();
+
     @Override
     public void renderTileEntityAt(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
+        switch (te.getAltarLevel()) {
+            case CONSTELLATION_CRAFT:
+                if(te.getMultiblockState()) {
+                    renderCrystalEffects(te, x, y, z, partialTicks);
+                    renderFocusLens(te, x, y, z, partialTicks);
+                    renderConstellation(te, x, y, z, partialTicks);
+                }
+                break;
+        }
+    }
 
+    private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {
+
+    }
+
+    private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {
+
+    }
+
+    private void renderCrystalEffects(TileAltar te, double x, double y, double z, float partialTicks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        long sBase = 1553015L;
+        sBase ^= (long) te.getPos().getX();
+        sBase ^= (long) te.getPos().getY();
+        sBase ^= (long) te.getPos().getZ();
+        TESRCollectorCrystal.renderTileLightEffects(x, y + 3, z, 1F, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase);
+        GL11.glPushMatrix();
+        GL11.glTranslated(x + 0.5, y + 3, z + 0.5);
+        TESRCollectorCrystal.renderCrystal(false, true);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     /*private void doAltarTileTransforms(TileAltar.AltarLevel level) {

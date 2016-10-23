@@ -14,6 +14,8 @@ public abstract class EntityComplexFX implements IComplexEffect {
     protected int age = 0;
     protected int maxAge = 40;
 
+    private boolean flagRemoved = true;
+
     public void setMaxAge(int maxAge) {
         this.maxAge = maxAge;
     }
@@ -31,6 +33,18 @@ public abstract class EntityComplexFX implements IComplexEffect {
     @Override
     public void tick() {
         age++;
+    }
+
+    public boolean isRemoved() {
+        return flagRemoved;
+    }
+
+    public void flagAsRemoved() {
+        flagRemoved = true;
+    }
+
+    public void clearRemoveFlag() {
+        flagRemoved = false;
     }
 
 }

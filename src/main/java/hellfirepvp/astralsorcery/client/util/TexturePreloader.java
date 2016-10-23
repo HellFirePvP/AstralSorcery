@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 
 /**
@@ -13,8 +14,15 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
  */
 public class TexturePreloader {
 
+    public static void preloadMandatoryTextures() {
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")    .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay").allocateGlId();
+    }
+
     public static void preloadTextures() {
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")            .allocateGlId();

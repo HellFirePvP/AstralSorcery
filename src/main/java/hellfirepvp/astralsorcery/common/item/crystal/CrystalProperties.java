@@ -69,7 +69,7 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties createStructural() {
-        int size = Math.min(CrystalProperties.MAX_SIZE_ROCK, CrystalProperties.MAX_SIZE_ROCK / 2 + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK));
+        int size = Math.min(CrystalProperties.MAX_SIZE_ROCK, (CrystalProperties.MAX_SIZE_ROCK / 2) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK / 2));
         int purity = 60 + rand.nextInt(41);
         int collect = 45 + rand.nextInt(56);
         return new CrystalProperties(size, purity, collect);

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
@@ -21,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -43,6 +45,7 @@ public class RegistryItems {
 
     public static Item.ToolMaterial crystalToolMaterial;
     public static EnumRarity rarityCelestial;
+    public static Material materialTransparentReplaceable;
 
     public static CreativeTabs creativeTabAstralSorcery,
             creativeTabAstralSorceryPapers;
@@ -65,6 +68,7 @@ public class RegistryItems {
         crystalToolMaterial.customCraftingMaterial = null;
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
+        materialTransparentReplaceable = new MaterialAirish();
     }
 
     public static void init() {
@@ -101,9 +105,8 @@ public class RegistryItems {
 
         registerItem(new ItemBlockCustomName(BlocksAS.customOre));
         registerItem(new ItemBlockCustomName(BlocksAS.customSandOre));
-        //registerItem(new ItemBlockCustomName(BlocksAS.stoneMachine));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
-        //registerItem(new ItemBlockCustomName(BlocksAS.blockStructural));
+        registerItem(new ItemBlockCustomName(BlocksAS.blockBlackMarble));
         registerItem(new ItemBlockCustomName(BlocksAS.blockAltar).setMaxStackSize(1));
         registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
 

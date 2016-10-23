@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -219,7 +220,7 @@ public class GuiProgressionClusterRenderer {
                 GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
                 float oldZ = ri.zLevel;
                 ri.zLevel = zLevel - 5;
-                ri.renderItemIntoGUI(node.getRenderItemStack(), 0, 0);
+                ri.renderItemIntoGUI(node.getRenderItemStack(ClientScheduler.getClientTick()), 0, 0);
                 ri.zLevel = oldZ;
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glPopMatrix();

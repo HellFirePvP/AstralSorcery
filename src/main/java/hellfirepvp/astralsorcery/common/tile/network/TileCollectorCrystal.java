@@ -48,7 +48,6 @@ public class TileCollectorCrystal extends TileSourceBase {
     public void onPlace(Constellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.playerMade = player;
-        //this.charge = charge;
         this.usedCrystalProperties = properties;
         this.type = type;
         markDirty();

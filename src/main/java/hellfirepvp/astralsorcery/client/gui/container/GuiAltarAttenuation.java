@@ -80,7 +80,7 @@ public class GuiAltarAttenuation extends GuiAltarBase {
         }
 
         Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(ConstellationRegistry.getTier(0));
-        if(c != null && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
+        if(c != null && containerAltarBase.tileAltar.getMultiblockState() && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
             final double alpha = CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             if(alpha > 1E-4) {
                 rand.setSeed(0x61FF25A5B7C24109L);
@@ -113,19 +113,26 @@ public class GuiAltarAttenuation extends GuiAltarBase {
     }
 
     @Override
-    public void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    public void renderGuiBackground(float partialTicks, int mouseX, int mouseY) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        float percFilled;
+        if(containerAltarBase.tileAltar.getMultiblockState()) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
+        } else {
+            GL11.glColor4f(1.0F, 0F, 0F, 1.0F);
+            percFilled = 1.0F;
+        }
 
         texBlack.bind();
         drawRect(guiLeft + 22, guiTop + 154, 304, 12);
 
-        float percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
@@ -135,6 +142,8 @@ public class GuiAltarAttenuation extends GuiAltarBase {
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         texAltarAttenuation.bind();
         drawRect(guiLeft, guiTop, xSize, ySize);

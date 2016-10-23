@@ -4,10 +4,14 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.entry.WorldStructureEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
+import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
+import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStone;
@@ -27,6 +31,8 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -39,6 +45,13 @@ import java.util.Random;
 public class AstralWorldGenerator implements IWorldGenerator {
 
     private WorldGenMinable marbleMineable;
+
+    private List<WorldGenAttributeStructure> structures = new LinkedList<>();
+
+    public void pushConfigEntries() {
+        structures.add(new StructureAncientShrine());
+        structures.add(new StructureDesertShrine());
+    }
 
     public AstralWorldGenerator init() {
         if(Config.marbleAmount > 0) {
@@ -55,38 +68,17 @@ public class AstralWorldGenerator implements IWorldGenerator {
         if (world.provider.getDimension() != 0) return;
 
         genResources(random, chunkX, chunkZ, world);
-        if(Config.generateShrines && random.nextInt(Config.shrineGenerationChance) == 0 && world.getWorldType() != WorldType.FLAT) {
-            genShrine(random, chunkX, chunkZ, world);
+
+        if(world.getWorldType() != WorldType.FLAT) {
+            for (WorldGenAttributeStructure struct : structures) {
+                if(struct.canGenerate(chunkX, chunkZ, world, random)) {
+                    BlockPos pos = struct.getGenerationPosition(chunkX, chunkZ, world, random);
+                    if(struct.fulfillsSpecificConditions(pos, world, random)) {
+                        struct.generate(pos, world, random);
+                    }
+                }
+            }
         }
-    }
-
-    private void genShrine(Random random, int chunkX, int chunkZ, World world) {
-        int rX = (chunkX  * 16) + random.nextInt(16);
-        int rZ = (chunkZ  * 16) + random.nextInt(16);
-        int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ)).getY();
-        BlockPos central = new BlockPos(rX, rY, rZ);
-        if(!isMountainBiome(world, central)) return;
-        if(!canSpawnShrineCorner(world, central.add(0, 0, 7))) return;
-        if(!canSpawnShrineCorner(world, central.add(0, 0, -7))) return;
-        if(!canSpawnShrineCorner(world, central.add( 7, 0, -7))) return;
-        if(!canSpawnShrineCorner(world, central.add(-7, 0, -7))) return;
-        MultiBlockArrays.ancientShrine.placeInWorld(world, central);
-    }
-
-    private boolean canSpawnShrineCorner(World world, BlockPos pos) {
-        int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return Math.abs(dY - pos.getY()) <= 3 && isMountainBiome(world, pos);
-    }
-
-    private boolean isMountainBiome(World world, BlockPos pos) {
-        Biome b = world.getBiomeGenForCoords(pos);
-        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
-        if(types == null || types.length == 0) return false;
-        boolean mountain = false;
-        for (BiomeDictionary.Type t : types) {
-            if(t.equals(BiomeDictionary.Type.MOUNTAIN)) mountain = true;
-        }
-        return mountain;
     }
 
     private void genResources(Random random, int chunkX, int chunkZ, World world) {
@@ -163,5 +155,4 @@ public class AstralWorldGenerator implements IWorldGenerator {
             }
         }
     }
-
 }

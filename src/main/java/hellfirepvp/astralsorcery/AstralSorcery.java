@@ -45,6 +45,8 @@ public class AstralSorcery {
     public void preInit(FMLPreInitializationEvent event) {
         event.getModMetadata().version = VERSION;
 
+        proxy.preLoadConfigEntries();
+
         Config.load(event.getSuggestedConfigurationFile());
 
         proxy.preInit();

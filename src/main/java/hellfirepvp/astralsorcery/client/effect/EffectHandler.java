@@ -152,6 +152,7 @@ public final class EffectHandler {
         new Thread(() -> {
             synchronized (complexEffects) {
                 complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
+                effect.clearRemoveFlag();
             }
         }).start();
     }
@@ -176,6 +177,7 @@ public final class EffectHandler {
                         IComplexEffect effect = iterator.next();
                         effect.tick();
                         if(effect.canRemove()) {
+                            effect.flagAsRemoved();
                             iterator.remove();
                         }
                     }

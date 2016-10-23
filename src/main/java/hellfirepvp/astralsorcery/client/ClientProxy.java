@@ -128,6 +128,9 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
+        //Needs to happen...
+        TexturePreloader.preloadMandatoryTextures();
+
         if(Config.clientPreloadTextures) {
             long startMs = System.currentTimeMillis();
             AstralSorcery.log.info("[AstralSorcery] Preload textures");

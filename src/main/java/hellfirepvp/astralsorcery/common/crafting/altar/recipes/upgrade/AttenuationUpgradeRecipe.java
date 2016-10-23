@@ -54,6 +54,11 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
         return new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal());
     }
 
+    @Override
+    public boolean matches(TileAltar altar) {
+        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar);
+    }
+
     @Nullable
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {

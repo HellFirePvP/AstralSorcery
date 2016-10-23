@@ -9,6 +9,8 @@ import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.entry.WorldStructureEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
@@ -56,6 +58,12 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class CommonProxy implements IGuiHandler {
 
+    private AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
+
+    public void preLoadConfigEntries() {
+        worldGenerator.pushConfigEntries();
+    }
+
     public void preInit() {
         RegistryItems.setupDefaults();
 
@@ -71,16 +79,14 @@ public class CommonProxy implements IGuiHandler {
         //Transmission registry
         SourceClassRegistry.setupRegistry();
         TransmissionClassRegistry.setupRegistry();
-        //StarlightNetworkRegistry.setupRegistry();
 
-        //RitualComponentRegistry.setupRegistry();
         StarlightNetworkRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
         RegistryRecipes.init();
         RegistryResearch.init();
 
-        GameRegistry.registerWorldGenerator(new AstralWorldGenerator().init(), 0);
+        GameRegistry.registerWorldGenerator(worldGenerator.init(), 50);
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
 

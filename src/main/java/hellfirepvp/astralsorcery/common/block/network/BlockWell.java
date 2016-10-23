@@ -34,6 +34,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -46,6 +48,7 @@ import java.util.List;
 public class BlockWell extends BlockStarlightNetwork {
 
     private static final AxisAlignedBB boxWell = new AxisAlignedBB(1D / 16D, 0D, 1D / 16D, 15D / 16D, 1, 15D / 16D);
+    private static List<AxisAlignedBB> collisionBoxes;
 
     public BlockWell() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -135,7 +138,9 @@ public class BlockWell extends BlockStarlightNetwork {
 
     @Override
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
-        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
+        for (AxisAlignedBB box : collisionBoxes) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
+        }
     }
 
     @Override
@@ -146,6 +151,19 @@ public class BlockWell extends BlockStarlightNetwork {
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
+    }
+
+    static {
+        List<AxisAlignedBB> boxes = new LinkedList<>();
+
+        boxes.add(new AxisAlignedBB( 1D / 16D,       0D,  1D / 16D, 15D / 16D, 5D / 16D, 15D / 16D));
+
+        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D,  1D / 16D,  2D / 16D,       1D, 15D / 16D));
+        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D,  1D / 16D, 15D / 16D,       1D,  2D / 16D));
+        boxes.add(new AxisAlignedBB(14D / 16D, 5D / 16D,  1D / 16D, 15D / 16D,       1D, 15D / 16D));
+        boxes.add(new AxisAlignedBB( 1D / 16D, 5D / 16D, 14D / 16D, 15D / 16D,       1D, 15D / 16D));
+
+        collisionBoxes = Collections.unmodifiableList(boxes);
     }
 
 }

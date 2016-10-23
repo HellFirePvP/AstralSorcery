@@ -44,6 +44,18 @@ public abstract class GuiAltarBase extends GuiContainer {
         return null;
     }
 
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected final void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        renderGuiBackground(partialTicks, mouseX, mouseY);
+    }
+
+    public abstract void renderGuiBackground(float partialTicks, int mouseX, int mouseY);
+
     private static ContainerAltarBase buildContainer(InventoryPlayer playerInv, TileAltar tileAltar) {
         switch (tileAltar.getAltarLevel()) {
             case DISCOVERY:

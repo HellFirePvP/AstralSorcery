@@ -45,6 +45,7 @@ public class JournalPageStructure implements IJournalPage {
         private long totalRenderFrame = 0;
 
         public JournalStructurePageRender(BlockArrayRenderHelper structRender) {
+            //this.structRender = new BlockArrayRenderHelper(MultiBlockArrays.patternAltarConstellation);
             this.structRender = structRender;
         }
 

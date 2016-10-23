@@ -11,6 +11,12 @@ public interface IComplexEffect {
 
     public boolean canRemove();
 
+    public boolean isRemoved();
+
+    public void flagAsRemoved();
+
+    public void clearRemoveFlag();
+
     public RenderTarget getRenderTarget();
 
     public void render(float pTicks);

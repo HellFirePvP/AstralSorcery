@@ -1,14 +1,17 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttenuationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -33,13 +36,17 @@ import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistr
 public class RegistryRecipes {
 
     public static DiscoveryRecipe rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks;
+    public static DiscoveryRecipe rBlackMarbleRaw;
 
     //Ugh. Important machines/stuff
     public static TelescopeRecipe rTelescope;
+    public static GrindstoneRecipe rGrindstone;
     public static DiscoveryRecipe rAltar;
+    public static AttenuationRecipe rRitualPedestalRock, rRitualPedestalCel;
     public static AttenuationRecipe rLightwell;
 
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
+    public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
 
     public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
 
@@ -81,8 +88,10 @@ public class RegistryRecipes {
 
     public static void initAltarRecipes() {
         rTelescope = registerAltarRecipe(new TelescopeRecipe());
+        rGrindstone = registerAltarRecipe(new GrindstoneRecipe());
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
+        rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
 
         rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
         rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
@@ -102,6 +111,48 @@ public class RegistryRecipes {
         .setItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
                 AttenuationRecipe.AltarSlot.values());
         rLightwell.setPassiveStarlightRequirement(3900);
+
+        rRitualPedestalRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.ritualPedestal)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal()),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemsAS.rockCrystal,
+                        ShapedRecipeSlot.CENTER))
+        .setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()),
+                AttenuationRecipe.AltarSlot.UPPER_LEFT,
+                AttenuationRecipe.AltarSlot.UPPER_RIGHT)
+        .setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                AttenuationRecipe.AltarSlot.LOWER_LEFT,
+                AttenuationRecipe.AltarSlot.LOWER_RIGHT);
+        rRitualPedestalRock.setPassiveStarlightRequirement(3000);
+
+        rRitualPedestalCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.ritualPedestal)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal()),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemsAS.celestialCrystal,
+                        ShapedRecipeSlot.CENTER))
+                .setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()),
+                        AttenuationRecipe.AltarSlot.UPPER_LEFT,
+                        AttenuationRecipe.AltarSlot.UPPER_RIGHT)
+                .setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                        AttenuationRecipe.AltarSlot.LOWER_LEFT,
+                        AttenuationRecipe.AltarSlot.LOWER_RIGHT);
+        rRitualPedestalCel.setPassiveStarlightRequirement(3000);
 
         /*rLinkTool = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Items.STICK,
@@ -123,6 +174,16 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_LEFT)));
 
         rWand.setPassiveStarlightRequirement(200);
+
+        rBlackMarbleRaw = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(Items.COAL,
+                        ShapedRecipeSlot.CENTER));
+        rBlackMarbleRaw.setPassiveStarlightRequirement(1);
 
         rMarbleRuned = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
                 .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),

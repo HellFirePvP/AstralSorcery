@@ -229,7 +229,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @SideOnly(Side.CLIENT)
     public TextureSpritePlane getHaloEffectSprite() {
-        if(spritePlane == null || spritePlane.canRemove()) { //Refresh.
+        if(spritePlane == null || spritePlane.canRemove() || spritePlane.isRemoved()) { //Refresh.
             spritePlane = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo, Axis.Y_AXIS);
             spritePlane.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
             spritePlane.setAlphaOverDistance(true);

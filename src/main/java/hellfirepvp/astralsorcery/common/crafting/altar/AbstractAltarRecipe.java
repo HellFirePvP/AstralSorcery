@@ -68,8 +68,6 @@ public abstract class AbstractAltarRecipe {
     public boolean matches(TileAltar altar) {
         if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
-        if(!altar.getMultiblockState()) return false;
-
         if(this instanceof INighttimeRecipe) {
             if(CelestialHandler.calcDaytimeDistribution(altar.getWorld()) < 0.65) return false;
         }

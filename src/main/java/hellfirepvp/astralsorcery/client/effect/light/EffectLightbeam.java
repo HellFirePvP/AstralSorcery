@@ -32,6 +32,8 @@ public class EffectLightbeam implements IComplexEffect {
     private int age = 0;
     private float alphaMultiplier = 1F;
 
+    private boolean flagRemoved = true;
+
     public EffectLightbeam(Vector3 from, Vector3 to, double fromSize, double toSize) {
         this.from = from;
         this.to = to;
@@ -65,6 +67,18 @@ public class EffectLightbeam implements IComplexEffect {
     @Override
     public RenderTarget getRenderTarget() {
         return RenderTarget.RENDERLOOP;
+    }
+
+    public boolean isRemoved() {
+        return flagRemoved;
+    }
+
+    public void flagAsRemoved() {
+        flagRemoved = true;
+    }
+
+    public void clearRemoveFlag() {
+        flagRemoved = false;
     }
 
     @Override

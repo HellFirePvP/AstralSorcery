@@ -25,7 +25,7 @@ public class ResearchNode {
     private String unlocName;
     //private boolean special = false;
 
-    private ItemStack renderItemStack;
+    private ItemStack[] renderItemStacks;
     private BindableResource texture;
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
@@ -42,7 +42,12 @@ public class ResearchNode {
 
     public ResearchNode(ItemStack itemStack, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
-        this.renderItemStack = itemStack;
+        this.renderItemStacks = new ItemStack[] { itemStack };
+    }
+
+    public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
+        this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
+        this.renderItemStacks = stacks;
     }
 
     public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
@@ -82,7 +87,11 @@ public class ResearchNode {
     }
 
     public ItemStack getRenderItemStack() {
-        return renderItemStack;
+        return getRenderItemStack(0);
+    }
+
+    public ItemStack getRenderItemStack(int tick) {
+        return renderItemStacks[(tick / 60) % renderItemStacks.length];
     }
 
     public BindableResource getTexture() {

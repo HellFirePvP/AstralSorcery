@@ -18,9 +18,11 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -43,7 +45,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 18.10.2016 / 12:28
  */
-public class TileWell extends TileReceiverBaseInventory implements IFluidHandler, IFluidTankProperties {
+public class TileWell extends TileReceiverBaseInventory implements IFluidHandler, IFluidTankProperties, ISidedInventory {
 
     private static final Random rand = new Random();
     private static final int MAX_CAPACITY = 2000;
@@ -61,7 +63,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
         if(!worldObj.isRemote) {
             if(worldObj.canSeeSky(getPos())) {
-                starlightBuffer += CelestialHandler.calcDaytimeDistribution(worldObj);
+                starlightBuffer += Math.max(0.0001, CelestialHandler.calcDaytimeDistribution(worldObj));
             }
 
             ItemStack stack = getStackInSlot(0);
@@ -138,11 +140,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @SideOnly(Side.CLIENT)
     public static void catalystBurst(PktParticleEvent event) {
         BlockPos at = event.getVec().toBlockPos();
-        int id = 19;
-        id ^= at.getX();
-        id ^= at.getY();
-        id ^= at.getZ();
-        EffectHandler.getInstance().registerFX(new EntityFXCrystalBurst(id, at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
+        EffectHandler.getInstance().registerFX(new EntityFXCrystalBurst(rand.nextInt(), at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
     }
 
     @Override
@@ -251,6 +249,26 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
         return fluidStack.getFluid() != null && fluidStack.getFluid() instanceof FluidLiquidStarlight;
+    }
+
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        if(side != EnumFacing.UP) {
+            return new int[] { 0 };
+        }
+        return new int[0];
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        if(getStackInSlot(0) != null || itemStackIn == null) return false;
+        Item i = itemStackIn.getItem();
+        return i instanceof ItemWellCatalyst && ((ItemWellCatalyst) i).isCatalyst(itemStackIn);
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return false;
     }
 
     public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {

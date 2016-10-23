@@ -75,19 +75,26 @@ public class GuiAltarDiscovery extends GuiAltarBase {
     }
 
     @Override
-    public void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    public void renderGuiBackground(float partialTicks, int mouseX, int mouseY) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        float percFilled;
+        if(containerAltarBase.tileAltar.getMultiblockState()) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
+        } else {
+            GL11.glColor4f(1.0F, 0F, 0F, 1.0F);
+            percFilled = 1.0F;
+        }
 
         texBlack.bind();
         drawRect(guiLeft + 22, guiTop + 77, 190, 11);
 
-        float percFilled = containerAltarBase.tileAltar.getAmbientStarlightPercent();
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
@@ -97,6 +104,8 @@ public class GuiAltarDiscovery extends GuiAltarBase {
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         texAltarDiscovery.bind();
         drawRect(guiLeft, guiTop, xSize, ySize);

@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
@@ -84,6 +86,9 @@ public class RegistryBlocks {
         customOre = registerBlock(new BlockCustomOre());
         customSandOre = registerBlock(new BlockCustomSandOre());
         blockMarble = registerBlock(new BlockMarble());
+        blockBlackMarble = registerBlock(new BlockBlackMarble());
+        blockVolatileLight = registerBlock(new BlockFlareLight());
+        queueDefaultItemBlock(blockVolatileLight);
 
         //Mechanics
         //blockStructural = registerBlock(new BlockStructural());
@@ -109,6 +114,7 @@ public class RegistryBlocks {
     //Called after items are registered.
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
+        registerBlockRender(blockBlackMarble);
         registerBlockRender(blockAltar);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);

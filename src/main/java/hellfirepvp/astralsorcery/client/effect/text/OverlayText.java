@@ -28,6 +28,7 @@ public final class OverlayText implements IComplexEffect {
     private int ticksUntilRemoval;
     private Color color = Color.WHITE;
     private float alpha = 0.5F;
+    private boolean flagRemoved = true;
 
     private OverlayTextPolicy policy = OverlayTextPolicy.Policies.NO_OP.getPolicy();
 
@@ -65,6 +66,18 @@ public final class OverlayText implements IComplexEffect {
             renderX = width / 2 - strWidth / 2;
         }
         fontRendererObj.drawString(text.toUpperCase(), renderX, renderY, 200F, color, alpha, animationTick);
+    }
+
+    public boolean isRemoved() {
+        return flagRemoved;
+    }
+
+    public void flagAsRemoved() {
+        flagRemoved = true;
+    }
+
+    public void clearRemoveFlag() {
+        flagRemoved = false;
     }
 
     public static class OverlayTextProperties {
