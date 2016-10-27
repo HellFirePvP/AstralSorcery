@@ -2,6 +2,8 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -21,7 +23,6 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -68,10 +69,13 @@ public class GuiTelescope extends GuiWHScreen {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         drawWHRect(textureGrid);
+        TextureHelper.refreshTextureBindState();
 
         zLevel -= 5;
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
+        TextureHelper.refreshTextureBindState();
+        TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -85,8 +89,8 @@ public class GuiTelescope extends GuiWHScreen {
                 ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
         Constellation[] constellations = evaluateConstellations(r, activeConstellations);
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
 
         drawGridBackground(partialTicks, canSeeSky);
 
@@ -122,7 +126,7 @@ public class GuiTelescope extends GuiWHScreen {
 
         currentInformation = new CellRenderInformation(cells, starRectangles);
 
-        GlStateManager.disableBlend();
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     private void drawDrawnLines(final Random r, final float pTicks) {
@@ -173,7 +177,7 @@ public class GuiTelescope extends GuiWHScreen {
         }
         brightness *= (starBr * 2);
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        GlStateManager.color(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
+        GL11.glColor4f(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
 
         Vector3 fromStar = new Vector3(guiLeft + start.getX(), guiTop + start.getY(), zLevel);
         Vector3 toStar = new Vector3(guiLeft + end.getX(), guiTop + end.getY(), zLevel);
@@ -212,6 +216,7 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private void drawGridBackground(float partialTicks, boolean canSeeSky) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         World renderWorld = Minecraft.getMinecraft().theWorld;
         int rgbFrom, rgbTo;
         if (canSeeSky) {
@@ -224,6 +229,7 @@ public class GuiTelescope extends GuiWHScreen {
         }
         int alphaMask = 0xFF000000; //100% opacity.
         drawGradientRect(guiLeft, guiTop, guiLeft + guiWidth, guiTop + guiHeight, alphaMask | rgbFrom, alphaMask | rgbTo);
+        GL11.glPopAttrib();
     }
 
     private boolean canTelescopeSeeSky(World renderWorld) {
@@ -293,9 +299,9 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private Optional<Map<StarLocation, Rectangle>> drawCellEffects(final Random rand, Constellation c, int offsetX, int offsetY, int width, int height, final float partialTicks) {
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
 
         RenderAstralSkybox.TEX_STAR_1.bind();
         int starSize = 2;
@@ -305,9 +311,9 @@ public class GuiTelescope extends GuiWHScreen {
             GL11.glPushMatrix();
             float brightness = RenderConstellation.stdFlicker(owningPlayer.worldObj.getWorldTime(), partialTicks, 10 + rand.nextInt(20));
             brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) * 2;
-            GlStateManager.color(brightness, brightness, brightness, brightness);
+            GL11.glColor4f(brightness, brightness, brightness, brightness);
             drawRect(offsetX + innerOffsetX - starSize, offsetY + innerOffsetY - starSize, starSize * 2, starSize * 2);
-            GlStateManager.color(1, 1, 1, 1);
+            GL11.glColor4f(1, 1, 1, 1);
             GL11.glPopMatrix();
         }
 
@@ -340,8 +346,8 @@ public class GuiTelescope extends GuiWHScreen {
         }
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glPopAttrib();
-        GlStateManager.disableBlend();
         return Optional.ofNullable(rectangles);
     }
 

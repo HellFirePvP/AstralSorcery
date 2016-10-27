@@ -1,7 +1,11 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
 
@@ -24,7 +28,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
             sBase ^= (long) te.getPos().getX();
             sBase ^= (long) te.getPos().getY();
             sBase ^= (long) te.getPos().getZ();
-            TESRCollectorCrystal.renderTileLightEffects(x, y + 0.1, z, 1F, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase);
+            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.6, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
         }
 
         GL11.glTranslated(x + 0.5, y + 0.35, z + 0.5);

@@ -116,7 +116,7 @@ public final class OverlayText implements IComplexEffect {
     }
 
     public void forceTicks(int ticks) {
-        this.ticksUntilRemoval = Math.max(20, ticksUntilRemoval);
+        this.ticksUntilRemoval = Math.max(10, ticksUntilRemoval);
         this.animationTick = ticks;
     }
 

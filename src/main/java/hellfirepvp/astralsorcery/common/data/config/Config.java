@@ -25,6 +25,7 @@ public class Config {
     public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
     public static boolean clientPreloadTextures = true;
+    public static boolean giveJournalFirst = true;
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
@@ -49,6 +50,8 @@ public class Config {
 
     private static void loadData() {
         //stopOnIllegalState = latestConfig.getBoolean("stopOnIllegalState", "general", Boolean.TRUE, "If this is set to 'true' the server or client will exit the game with a crash in case it encounters a state that might lead to severe issues but doesn't actually crash the server/client. If this is set to 'false' it will only print a warning in the console.");
+
+        giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
 
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;

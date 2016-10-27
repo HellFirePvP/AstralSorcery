@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.tile.base;
 
 import hellfirepvp.astralsorcery.common.base.IInventoryBase;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +38,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         NBTTagCompound tag = compound.getCompoundTag("grid");
         for (int i = 0; i < size; i++) {
             if(tag.hasKey(String.valueOf(i))) {
-                inv[i] = ItemNBTHelper.getStack(tag, String.valueOf(i));
+                inv[i] = NBTHelper.getStack(tag, String.valueOf(i));
             }
         }
     }
@@ -51,7 +51,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase impleme
         for (int index = 0; index < inv.length; index++) {
             ItemStack i = inv[index];
             if (i != null) {
-                ItemNBTHelper.setStack(tag, String.valueOf(index), i);
+                NBTHelper.setStack(tag, String.valueOf(index), i);
             }
         }
         compound.setTag("grid", tag);

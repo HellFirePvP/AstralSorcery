@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 public class RecipeHelper {
 
-    public static ShapelessRecipes getShapessRecipe(ItemStack stack, Object... recipeComponents) {
+    public static ShapelessRecipes getShapelessRecipe(ItemStack stack, Object... recipeComponents) {
         List<ItemStack> list = Lists.<ItemStack>newArrayList();
 
         for (Object object : recipeComponents) {

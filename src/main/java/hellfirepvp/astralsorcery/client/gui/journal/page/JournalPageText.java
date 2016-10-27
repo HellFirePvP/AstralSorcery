@@ -73,10 +73,11 @@ public class JournalPageText implements IJournalPage {
 
         @Override
         public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+            offsetY += 5;
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
-                fontRenderer.drawString(line, offsetX, offsetY + (i * 10), Color.WHITE.getRGB(), false);
+                fontRenderer.drawString(line, offsetX, offsetY + (i * 10), 0x00DDDDDD, false);
             }
             GL11.glEnable(GL11.GL_DEPTH_TEST);
         }

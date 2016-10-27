@@ -95,7 +95,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         if(Config.aquamarineAmount > 0) {
             for (int i = 0; i < Config.aquamarineAmount; i++) {
                 int rX = (chunkX  * 16) + random.nextInt(16);
-                int rY = 50 + random.nextInt(10);
+                int rY = 57 + random.nextInt(7);
                 int rZ = (chunkZ  * 16) + random.nextInt(16);
                 BlockPos pos = new BlockPos(rX, rY, rZ);
                 IBlockState stateAt = world.getBlockState(pos);
@@ -117,7 +117,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
                             continue;
                     }
 
-                    boolean foundWater = false;
+                    /*boolean foundWater = false;
                     for (int yy = 0; yy < 2; yy++) {
                         BlockPos check = pos.offset(EnumFacing.UP, yy);
                         IBlockState bs = world.getBlockState(check);
@@ -128,7 +128,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
                         }
                     }
                     if(!foundWater)
-                        continue;
+                        continue;*/
 
                     world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState()
                             .withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));

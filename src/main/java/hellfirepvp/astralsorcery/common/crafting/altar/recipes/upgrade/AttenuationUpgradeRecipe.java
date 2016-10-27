@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -27,7 +28,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 09.10.2016 / 11:40
  */
-public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe {
+public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
 
     public AttenuationUpgradeRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
@@ -67,7 +68,7 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
 
     @Override
     public int craftingTickTime() {
-        return super.craftingTickTime() * 20;
+        return super.craftingTickTime() * 4;
     }
 
     @Override

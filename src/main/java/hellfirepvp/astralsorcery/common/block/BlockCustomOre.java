@@ -1,6 +1,9 @@
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -16,10 +19,13 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,6 +35,8 @@ import java.util.List;
  * Date: 07.05.2016 / 18:03
  */
 public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
+
+    private static final Random rand = new Random();
 
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
 
@@ -82,7 +90,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     private boolean checkSafety(World world, BlockPos pos) {
         EntityPlayer player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10, false);
-        return player != null && player.getDistance(pos.getX(), pos.getY(), pos.getZ()) < 10;
+        return player != null && player.getDistanceSq(pos) < 100;
     }
 
     @Override
@@ -133,6 +141,16 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public String getStateName(IBlockState state) {
         return state.getValue(ORE_TYPE).getName();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playStarmetalOreEffects(PktParticleEvent event) {
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                event.getVec().getX() + rand.nextFloat(),
+                event.getVec().getY() - 1 + rand.nextFloat(),
+                event.getVec().getZ() + rand.nextFloat());
+        p.motion(0, rand.nextFloat() * 0.05, 0);
+        p.scale(0.2F);
     }
 
     public static enum OreType implements IStringSerializable {

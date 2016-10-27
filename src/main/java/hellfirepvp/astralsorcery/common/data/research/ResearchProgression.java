@@ -19,8 +19,11 @@ import java.util.Map;
  */
 public enum ResearchProgression {
 
+    /*DISCOVERY(0, ProgressionTier.DISCOVERY),
+    STARLIGHT(1, ProgressionTier.BASIC_CRAFT);*/
     DISCOVERY(0, ProgressionTier.DISCOVERY),
-    STARLIGHT(1, ProgressionTier.BASIC_CRAFT);
+    BASIC_CRAFT(1, ProgressionTier.BASIC_CRAFT, DISCOVERY),
+    ATTENUATION(2, ProgressionTier.ATTENUATION, BASIC_CRAFT);
 
     private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();
@@ -29,6 +32,7 @@ public enum ResearchProgression {
     private final String unlocName;
 
     private static final Map<Integer, ResearchProgression> BY_ID = new HashMap<>();
+    private static final Map<String, ResearchProgression> BY_NAME = new HashMap<>();
 
     private ResearchProgression(int id, ProgressionTier requiredProgress, ResearchProgression... preConditions) {
         this(id, requiredProgress, Arrays.asList(preConditions));
@@ -53,8 +57,8 @@ public enum ResearchProgression {
         return new Registry(this);
     }
 
-    public boolean tryStepTo(EntityPlayer player) {
-        return canStepTo(player) && ResearchManager.forceUnsafeResearchStep(player, this);
+    /*public boolean tryStepTo(EntityPlayer player, boolean force) {
+        return (force || canStepTo(player)) && ResearchManager.forceUnsafeResearchStep(player, this);
     }
 
     public boolean canStepTo(EntityPlayer player) {
@@ -63,7 +67,7 @@ public enum ResearchProgression {
         List<ResearchProgression> playerResearchProgression = progress.getResearchProgression();
         ProgressionTier playerTier = progress.getTierReached();
         return playerTier.isThisLaterOrEqual(requiredProgress) && playerResearchProgression.containsAll(preConditions);
-    }
+    }*/
 
     public ProgressionTier getRequiredProgress() {
         return requiredProgress;
@@ -85,9 +89,14 @@ public enum ResearchProgression {
         return BY_ID.get(id);
     }
 
+    public static ResearchProgression getByEnumName(String name) {
+        return BY_NAME.get(name);
+    }
+
     static {
         for (ResearchProgression progress : values()) {
             BY_ID.put(progress.progressId, progress);
+            BY_NAME.put(progress.name(), progress);
         }
     }
 

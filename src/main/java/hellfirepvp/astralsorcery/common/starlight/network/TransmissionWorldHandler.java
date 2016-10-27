@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -165,9 +166,7 @@ public class TransmissionWorldHandler {
         synchronized (accessLock) {
             List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
             if(sources != null) {
-                for (IIndependentStarlightSource source : sources) {
-                    breakSourceNetwork(source);
-                }
+                new ArrayList<>(sources).forEach(this::breakSourceNetwork);
             }
         }
     }

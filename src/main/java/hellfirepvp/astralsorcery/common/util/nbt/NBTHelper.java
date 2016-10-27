@@ -11,11 +11,11 @@ import java.util.UUID;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemNBTHelper
+ * Class: NBTHelper
  * Created by HellFirePvP
  * Date: 07.05.2016 / 02:15
  */
-public class ItemNBTHelper {
+public class NBTHelper {
 
     public static NBTTagCompound getPersistentData(Entity entity) {
         return getPersistentData(entity.getEntityData());

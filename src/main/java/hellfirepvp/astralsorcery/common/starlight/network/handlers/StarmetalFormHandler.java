@@ -4,6 +4,8 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,6 +45,9 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
             node.accCharge += amount * 2;
         }
         node.lastMSrec = ms;
+
+        PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.STARMETAL_ORE_CHARGE, pos.getX(), pos.getY(), pos.getZ());
+        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
 
         if(node.accCharge >= 18_000) {
             turningIrons.remove(pos);

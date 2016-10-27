@@ -55,11 +55,11 @@ public class ResearchNode {
         this.texture = textureResource;
     }
 
-    public ResearchNode addConnectionTo(ResearchNode node) {
+    public ResearchNode addSourceConnectionFrom(ResearchNode node) {
         this.connectionsTo.add(node);
         return this;
     }
-    public ResearchNode addConnectionsTo(Collection<ResearchNode> node) {
+    public ResearchNode addSourceConnectionsFrom(Collection<ResearchNode> node) {
         this.connectionsTo.addAll(node);
         return this;
     }
@@ -91,7 +91,7 @@ public class ResearchNode {
     }
 
     public ItemStack getRenderItemStack(int tick) {
-        return renderItemStacks[(tick / 60) % renderItemStacks.length];
+        return renderItemStacks[(tick / 40) % renderItemStacks.length];
     }
 
     public BindableResource getTexture() {

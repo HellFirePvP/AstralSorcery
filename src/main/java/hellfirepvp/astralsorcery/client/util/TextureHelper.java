@@ -8,11 +8,11 @@ import net.minecraft.util.ResourceLocation;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SpecialTextureLibrary
+ * Class: TextureHelper
  * Created by HellFirePvP
  * Date: 30.09.2016 / 16:31
  */
-public class SpecialTextureLibrary {
+public class TextureHelper {
 
     private static final ResourceLocation blackSpaceholder = new ResourceLocation(AstralSorcery.MODID, "textures/misc/black.png");
     public static ResourceLocation texFontRenderer = new ResourceLocation("textures/font/ascii.png");

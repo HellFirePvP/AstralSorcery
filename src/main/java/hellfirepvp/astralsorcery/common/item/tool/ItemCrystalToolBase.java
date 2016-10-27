@@ -5,7 +5,7 @@ import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -55,12 +55,12 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {
-        NBTTagCompound nbt = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound nbt = NBTHelper.getPersistentData(stack);
         return ToolCrystalProperties.readFromNBT(nbt);
     }
 
     public static void setToolProperties(ItemStack stack, ToolCrystalProperties properties) {
-        NBTTagCompound nbt = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound nbt = NBTHelper.getPersistentData(stack);
         properties.writeToNBT(nbt);
     }
 

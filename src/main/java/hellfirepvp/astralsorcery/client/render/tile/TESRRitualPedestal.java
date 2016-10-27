@@ -1,7 +1,10 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
@@ -95,7 +98,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
                 sBase ^= (long) te.getPos().getX();
                 sBase ^= (long) te.getPos().getY();
                 sBase ^= (long) te.getPos().getZ();
-                TESRCollectorCrystal.renderTileLightEffects(x, y + 0.5, z, 1F, c, sBase);
+                RenderingUtils.renderLightRayEffects(x + 0.5, y + 1, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
 
                 GL11.glTranslated(x + 0.5, y + 0.7, z + 0.5);
                 GL11.glScaled(0.6, 0.6, 0.6);

@@ -72,8 +72,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     @Override
     @SideOnly(Side.CLIENT)
     public String getUnlocalizedName(ItemStack stack) {
-        EnumGatedKnowledge.ViewCapability cap = ResearchManager.clientProgress.getViewCapability();
-        if(EnumGatedKnowledge.WAND_TYPE.canSee(cap)) {
+        if(EnumGatedKnowledge.WAND_TYPE.canSee(ResearchManager.clientProgress.getTierReached())) {
             return super.getUnlocalizedName();
         }
         return "item.ItemWand.obf";

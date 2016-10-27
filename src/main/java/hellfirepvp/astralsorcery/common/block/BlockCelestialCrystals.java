@@ -132,13 +132,20 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         int stage = state.getValue(STAGE);
         switch (stage) {
             case 4:
-                if(fortune > 0 || rand.nextInt(2) == 0) {
-                    drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+                if(world != null && world instanceof World && checkSafety((World) world, pos)) {
+                    if(fortune > 0 || rand.nextInt(2) == 0) {
+                        drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+                    }
+                    drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
                 }
-                drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
                 break;
         }
         return drops;
+    }
+
+    private boolean checkSafety(World world, BlockPos pos) {
+        EntityPlayer player = world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10, false);
+        return player != null && player.getDistanceSq(pos) < 100;
     }
 
     @Override

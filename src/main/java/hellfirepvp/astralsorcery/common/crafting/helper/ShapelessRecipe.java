@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.ShapelessRecipes;
 
 import javax.annotation.Nullable;
 
@@ -55,7 +54,7 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
     public AccessibleRecipeAdapater make() {
         Object[] parts = new Object[contentCounter];
         System.arraycopy(contents, 0, parts, 0, contentCounter);
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapessRecipe(getOutput(), parts), this);
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessRecipe(getOutput(), parts), this);
     }
 
     @Nullable

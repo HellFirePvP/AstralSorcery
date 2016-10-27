@@ -1,5 +1,8 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -46,7 +49,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         sBase ^= (long) te.getPos().getX();
         sBase ^= (long) te.getPos().getY();
         sBase ^= (long) te.getPos().getZ();
-        TESRCollectorCrystal.renderTileLightEffects(x, y + 3, z, 1F, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase);
+        RenderingUtils.renderLightRayEffects(x + 0.5, y + 3.5, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 3, z + 0.5);
         TESRCollectorCrystal.renderCrystal(false, true);

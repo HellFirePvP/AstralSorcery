@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -90,7 +92,8 @@ public class GuiProgressionClusterRenderer {
                     GL11.glTranslated(r.getX(), r.getY(), 0);
                     GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
                     String name = clickableNodes.get(r).getUnLocalizedName();
-                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00200055), new Color(0xf0100010), Minecraft.getMinecraft().fontRendererObj);
+                    name = I18n.translateToLocal(name);
+                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00100033), new Color(0xf0100010), Minecraft.getMinecraft().fontRendererObj);
                     GL11.glPopMatrix();
                 }
             }
@@ -202,6 +205,7 @@ public class GuiProgressionClusterRenderer {
         }
 
         drawResearchItemBackground(zoomedWH, xAdd, yAdd, zLevel);
+        TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
@@ -212,6 +216,7 @@ public class GuiProgressionClusterRenderer {
         VertexBuffer vb = t.getBuffer();
         switch (node.getRenderType()) {
             case ITEMSTACK:
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                 RenderHelper.enableGUIStandardItemLighting();
                 GL11.glPushMatrix();
                 GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
@@ -225,6 +230,7 @@ public class GuiProgressionClusterRenderer {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glPopMatrix();
                 RenderHelper.disableStandardItemLighting();
+                GL11.glPopAttrib();
                 break;
             case TEXTURE:
                 GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
@@ -236,6 +242,7 @@ public class GuiProgressionClusterRenderer {
                 vb.pos(0,            0,            zLevel).tex(0, 0).endVertex();
                 t.draw();
                 GL11.glColor4f(1F, 1F, 1F, 1F);
+                TextureHelper.refreshTextureBindState();
                 break;
         }
         GL11.glPopMatrix();

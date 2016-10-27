@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -48,69 +50,13 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         sBase ^= (long) te.getPos().getY();
         sBase ^= (long) te.getPos().getZ();
         Color c = type.displayColor;
-        renderTileLightEffects(x, y, z, 1F, c, sBase);
+        RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
 
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         renderCrystal(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL, true);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
-    }
-
-    public static void renderTileLightEffects(double x, double y, double z, float percFilled, Color effectColor, long s) {
-        rand.setSeed(s);
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
-
-        int fancy_count = !FMLClientHandler.instance().getClient().gameSettings.fancyGraphics ? 25 : 50;
-        fancy_count = ((int) (((float) fancy_count) * percFilled));
-
-        Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
-
-        RenderHelper.disableStandardItemLighting();
-        float f1 = Minecraft.getMinecraft().theWorld.getWorldTime() / 400.0F;
-        float f2 = 0.4F;
-
-        //Random random = new Random(245L);
-
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDepthMask(false);
-        GL11.glPushMatrix();
-        for (int i = 0; i < fancy_count; i++) {
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
-            vb.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-            float fa = rand.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-            float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
-            fa /= 30.0F / (Math.min(20, 10) / 10.0F);
-            f4 /= 30.0F / (Math.min(20, 10) / 10.0F);
-            vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos( 0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos( 0.0D,      fa,    1.0F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
-            tes.draw();
-        }
-        GL11.glPopMatrix();
-        GL11.glDepthMask(true);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        RenderHelper.enableStandardItemLighting();
-
-        GL11.glPopMatrix();
     }
 
     public static void renderCrystal(boolean isCelestial, boolean bounce) {

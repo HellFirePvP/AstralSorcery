@@ -1,8 +1,9 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -104,25 +105,34 @@ public class CrystalProperties {
 
     @SideOnly(Side.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended) {
-        return addPropertyTooltip(prop, tooltip, extended, ResearchManager.clientProgress.getViewCapability());
+        return addPropertyTooltip(prop, tooltip, extended, ResearchManager.clientProgress.getTierReached());
     }
 
+    /**
+     * Adds the property tooltip to the given item, depending on the properties.
+     *
+     * @return Optional boolean.
+     *
+     * Missing value = no significant information was added
+     * False = The player misses some knowledge.
+     * True = Everything has been displayed.
+     */
     @SideOnly(Side.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended, EnumGatedKnowledge.ViewCapability cap) {
+    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended, ProgressionTier tier) {
         if (prop != null) {
             if (extended) {
                 boolean missing = false;
-                if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(cap)) {
+                if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
                     tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.size") + ": " + TextFormatting.BLUE + prop.getSize());
                 } else {
                     missing = true;
                 }
-                if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(cap)) {
+                if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
                     tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.purity") + ": " + TextFormatting.BLUE + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
-                if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(cap)) {
+                if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
                     tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.collectivity") + ": " + TextFormatting.BLUE + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
@@ -138,6 +148,7 @@ public class CrystalProperties {
         }
         return Optional.empty();
     }
+
     @Nullable
     public CrystalProperties grindCopy(Random rand) {
         CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability);
@@ -161,7 +172,7 @@ public class CrystalProperties {
     }
 
     public static void applyCrystalProperties(ItemStack stack, CrystalProperties properties) {
-        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         NBTTagCompound crystalProp = new NBTTagCompound();
         crystalProp.setInteger("size", properties.getSize());
         crystalProp.setInteger("purity", properties.getPurity());
@@ -170,7 +181,7 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties getCrystalProperties(ItemStack stack) {
-        NBTTagCompound cmp = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         if (!cmp.hasKey("crystalProperties")) return null;
         NBTTagCompound prop = cmp.getCompoundTag("crystalProperties");
         Integer size = prop.getInteger("size");

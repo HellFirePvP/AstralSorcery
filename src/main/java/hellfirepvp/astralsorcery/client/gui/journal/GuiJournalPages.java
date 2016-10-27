@@ -5,7 +5,7 @@ import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
-import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -31,7 +31,7 @@ public class GuiJournalPages extends GuiScreenJournal {
 
     private static GuiJournalPages openGuiInstance;
     private static boolean saveSite = true;
-    private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
+    //private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
 
     private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
     private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
@@ -83,26 +83,39 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         drawDefault(textureResBlank);
+        TextureHelper.refreshTextureBindState();
 
         zLevel += 100;
         drawBackArrow();
         drawNavArrows();
-        int pageOffsetY = 15;
+        int pageOffsetY = 20;
         if(currentPageOffset == 0) {
-            titleFontRenderer.zLevel = zLevel;
-            titleFontRenderer.font_size_multiplicator = 0.04F;
-            String name = I18n.translateToLocal(unlocTitle).toUpperCase();
-            double width = titleFontRenderer.getStringWidth(name);
-            double offsetX = 105 - (width / 2);
-            titleFontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
+            /*texUnderline.bind();
+            GL11.glPushMatrix();
+            GL11.glTranslated(guiLeft + 20, guiTop + 15, zLevel);
+            drawTexturedRectAtCurrentPos(175, 6);
+            GL11.glPopMatrix();*/
+
+            TextureHelper.refreshTextureBindState();
+            GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            String name = I18n.translateToLocal(unlocTitle);
+            double width = fontRendererObj.getStringWidth(name);
+            GL11.glTranslated(guiLeft + 107, guiTop + 22, 0);
+            GL11.glScaled(1.3, 1.3, 1.3);
+            GL11.glTranslated(-(width / 2), 0, 0);
+            fontRendererObj.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
+            //fontRendererObj.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GL11.glPopMatrix();
 
             texUnderline.bind();
             GL11.glPushMatrix();
-            GL11.glTranslated(guiLeft + 15, guiTop + pageOffsetY + 20, zLevel);
-            drawTexturedRectAtCurrentPos(190, 6);
+            GL11.glTranslated(guiLeft + 20, guiTop + 35, zLevel);
+            drawTexturedRectAtCurrentPos(175, 6);
             GL11.glPopMatrix();
             pageOffsetY = 50;
-            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+            TextureHelper.refreshTextureBindState();
         }
 
         int index = currentPageOffset * 2;
@@ -113,9 +126,9 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 20, guiTop + pageOffsetY, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
-            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+            TextureHelper.refreshTextureBindState();
         }
-        index = currentPageOffset + 1;
+        index = index + 1;
         if(pages.size() > index) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -123,7 +136,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
-            SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+            TextureHelper.refreshTextureBindState();
         }
 
         zLevel -= 100;

@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
+    "parent": "block/cube_all",
     "textures": {
-        "layer0": "astralsorcery:misc/blank"
+        "all": "astralsorcery:misc/blank"
     }
 }

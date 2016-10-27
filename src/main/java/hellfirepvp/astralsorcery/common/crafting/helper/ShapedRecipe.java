@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,14 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
 
     @Override
     public AccessibleRecipeAdapater make() {
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapedRecipe(getOutput(), getNativeObjOutArray()), this);
+    }
+
+    public ShapedLightProximityRecipe makeLightProximityRecipe() {
+        return new ShapedLightProximityRecipe(getOutput(), getNativeObjOutArray());
+    }
+
+    private Object[] getNativeObjOutArray() {
         Counter c = new Counter();
         c.count = 0;
         Map<ItemStack, Character> shapeCharacters = new HashMap<>();
@@ -81,7 +90,7 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
             recipeObjArray[2] = lowerRow;
             int arrayPointer = 3;
             addToArray(shapeCharacters, recipeObjArray, arrayPointer);
-            return new AccessibleRecipeAdapater(RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray), this);
+            return recipeObjArray;
         } else {
             String[] recipeTrimmed = trimRecipeStrings(upperRow, middleRow, lowerRow);
             int point = 0;
@@ -103,8 +112,7 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
                 recipeObjArray[pointer] = recipeTrimmed[2];
             }
             addToArray(shapeCharacters, recipeObjArray, point);
-            ShapedRecipes sr = RecipeHelper.getShapedRecipe(getOutput(), recipeObjArray);
-            return new AccessibleRecipeAdapater(sr, this);
+            return recipeObjArray;
         }
     }
 

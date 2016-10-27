@@ -9,28 +9,26 @@ package hellfirepvp.astralsorcery.common.data.research;
 */
 public enum EnumGatedKnowledge {
 
-    WAND_TYPE(ViewCapability.BASIC),
-    CRYSTAL_SIZE(ViewCapability.BASIC),
-    CRYSTAL_PURITY(ViewCapability.BASIC),
-    CRYSTAL_COLLECT(ViewCapability.MOST),
-    COLLECTOR_TYPE(ViewCapability.MOST);
+    WAND_TYPE(ProgressionTier.ATTENUATION),
 
-    private final ViewCapability capability;
+    //Specifically rock and celestial crystal items
+    CRYSTAL_SIZE(ProgressionTier.BASIC_CRAFT),
+    CRYSTAL_PURITY(ProgressionTier.BASIC_CRAFT),
+    CRYSTAL_COLLECT(ProgressionTier.BASIC_CRAFT),
+    CRYSTAL_TUNE(ProgressionTier.ATTENUATION),
+    CRYSTAL_TRAIT(ProgressionTier.TRAIT_CRAFT),
 
-    private EnumGatedKnowledge(ViewCapability capability) {
+    COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
+    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT);
+
+    private final ProgressionTier capability;
+
+    private EnumGatedKnowledge(ProgressionTier capability) {
         this.capability = capability;
     }
 
-    public boolean canSee(ViewCapability compCapability) {
+    public boolean canSee(ProgressionTier compCapability) {
         return capability.ordinal() <= compCapability.ordinal();
     }
 
-    public static enum ViewCapability {
-
-        NONE, //Always
-        BASIC, //After BASIC_CRAFT
-        MOST, //After CONSTELLATION_CRAFT
-        ALL //After TRAIT_CRAFT
-
-    }
 }

@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -40,7 +40,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -117,7 +116,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
             ItemStack stack = new ItemStack(item, 1, type.ordinal());
-            NBTTagCompound pers = ItemNBTHelper.getPersistentData(stack);
+            NBTTagCompound pers = NBTHelper.getPersistentData(stack);
             pers.setInteger("exp", 0);
             pers.setInteger("lvl", type.ordinal());
             list.add(stack);
@@ -170,7 +169,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        NBTTagCompound pers = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound pers = NBTHelper.getPersistentData(stack);
         int exp = pers.getInteger("exp");
         int lvl = pers.getInteger("lvl");
         TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
@@ -187,7 +186,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
             ItemStack out = new ItemStack(BlocksAS.blockAltar, 1, damageDropped(state));
             int exp = ((TileAltar) te).getExperience();
             int levelOrdinal = ((TileAltar) te).getAltarLevel().ordinal();
-            NBTTagCompound tag = ItemNBTHelper.getPersistentData(out);
+            NBTTagCompound tag = NBTHelper.getPersistentData(out);
             tag.setInteger("exp", exp);
             tag.setInteger("lvl", levelOrdinal);
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, out);
@@ -216,7 +215,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         if(te != null) {
             int exp = te.getExperience();
             int levelOrdinal = te.getAltarLevel().ordinal();
-            NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
+            NBTTagCompound tag = NBTHelper.getPersistentData(stack);
             tag.setInteger("exp", exp);
             tag.setInteger("lvl", levelOrdinal);
         }

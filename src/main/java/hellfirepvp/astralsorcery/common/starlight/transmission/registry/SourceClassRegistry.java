@@ -1,7 +1,9 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.registry;
 
+import hellfirepvp.astralsorcery.common.event.StarlightNetworkEvent;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -15,6 +17,14 @@ import java.util.Map;
 * Date: 04.08.2016 / 16:33
 */
 public class SourceClassRegistry {
+
+    public static final SourceClassRegistry eventInstance = new SourceClassRegistry();
+
+    private SourceClassRegistry() {}
+
+    public void registerProvider(SourceProvider provider) {
+        register(provider);
+    }
 
     private static Map<String, SourceProvider> providerMap = new HashMap<>();
 
@@ -30,6 +40,8 @@ public class SourceClassRegistry {
 
     public static void setupRegistry() {
         register(new IndependentCrystalSource.Provider());
+
+        MinecraftForge.EVENT_BUS.post(new StarlightNetworkEvent.SourceProviderRegistry(eventInstance));
     }
 
     public static interface SourceProvider {

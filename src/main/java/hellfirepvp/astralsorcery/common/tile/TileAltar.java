@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -217,6 +218,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
             }
             craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
+            ResearchManager.informCraftingAltarCompletion(this, craftingTask);
             craftingTask = null;
         }
         markForUpdate();

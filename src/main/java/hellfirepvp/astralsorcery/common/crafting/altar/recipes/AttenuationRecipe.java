@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -63,6 +64,11 @@ public class AttenuationRecipe extends DiscoveryRecipe {
             additionalSlots.put(slot, stack.copy());
         }
         return this;
+    }
+
+    @Nullable
+    public ItemStack getItem(AltarSlot slot) {
+        return additionalSlots.get(slot);
     }
 
     @Override

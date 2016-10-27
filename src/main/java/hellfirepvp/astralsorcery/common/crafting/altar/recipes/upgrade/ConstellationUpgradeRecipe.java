@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
@@ -37,7 +38,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.10.2016 / 13:03
  */
-public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAltarUpgradeRecipe {
+public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
 
     private static Vector3[] offsetPillars = new Vector3[] {
             new Vector3( 3, 2,  3),
@@ -62,7 +63,7 @@ public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAl
                 .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()),
                         ShapedRecipeSlot.CENTER));
         setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
-                AltarSlot.LOWER_RIGHT,
+                AltarSlot.LOWER_LEFT,
                 AltarSlot.LOWER_RIGHT);
         setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
                 AltarSlot.UPPER_RIGHT,

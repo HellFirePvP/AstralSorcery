@@ -82,6 +82,7 @@ public class WorldNetworkHandler {
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
                 if(sourceNode.getPos().getY() <= at.getY()) continue;
                 sourceNode.notifyLink(getWorld(), at);
+                markDirty();
 
                 if(handle != null) {
                     handle.notifyTransmissionNodeChange(sourceNode);
@@ -109,6 +110,7 @@ public class WorldNetworkHandler {
                 }
                 ITransmissionSource sourceNode = (ITransmissionSource) node;
                 if(sourceNode.notifyUnlink(getWorld(), at)) {
+                    markDirty();
                     if(handle != null) {
                         handle.notifyTransmissionNodeChange(sourceNode);
                     }

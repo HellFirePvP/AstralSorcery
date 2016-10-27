@@ -6,9 +6,9 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -19,30 +19,30 @@ import java.awt.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: JournalPageDiscoveryRecipe
+ * Class: JournalPageAttenuationRecipe
  * Created by HellFirePvP
- * Date: 06.10.2016 / 11:35
+ * Date: 27.10.2016 / 01:10
  */
-public class JournalPageDiscoveryRecipe implements IJournalPage {
+public class JournalPageAttenuationRecipe implements IJournalPage {
 
-    private final DiscoveryRecipe recipeToRender;
+    private final AttenuationRecipe recipe;
 
-    public JournalPageDiscoveryRecipe(DiscoveryRecipe recipeToRender) {
-        this.recipeToRender = recipeToRender;
+    public JournalPageAttenuationRecipe(AttenuationRecipe recipe) {
+        this.recipe = recipe;
     }
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new GuiPage(recipeToRender);
+        return new Render(recipe);
     }
 
-    public static class GuiPage implements IGuiRenderablePage {
+    public static class Render implements IGuiRenderablePage {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc");
+        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt");
 
-        private final DiscoveryRecipe recipe;
+        private final AttenuationRecipe recipe;
 
-        public GuiPage(DiscoveryRecipe recipe) {
+        public Render(AttenuationRecipe recipe) {
             this.recipe = recipe;
         }
 
@@ -68,8 +68,8 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
 
-            double offX = offsetX + 35;
-            double offY = offsetY + 88;
+            double offX = offsetX + 49;
+            double offY = offsetY + 102;
             IAccessibleRecipe rNative = recipe.getNativeRecipe();
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
                 ItemStack expected = rNative.getExpectedStack(srs);
@@ -77,13 +77,54 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 if(expected == null) continue;
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offX + (srs.columnMultiplier * 40), offY + (srs.rowMultipler * 40), zLevel + 60);
-                GL11.glScaled(1.4, 1.4, 1.4);
+                GL11.glTranslated(offX + (srs.columnMultiplier * 30), offY + (srs.rowMultipler * 26), zLevel + 60);
+                GL11.glScaled(1.2, 1.2, 1.2);
                 drawItemStack(expected, 0, 0, 0);
                 GL11.glPopMatrix();
             }
 
             GL11.glPopMatrix();
+
+            AttenuationRecipe.AltarSlot as = AttenuationRecipe.AltarSlot.UPPER_LEFT;
+            ItemStack stack = recipe.getItem(as);
+            if(stack != null) {
+                TextureHelper.refreshTextureBindState();
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + 29, offsetY + 81, zLevel + 60);
+                GL11.glScaled(1.1, 1.1, 1.1);
+                drawItemStack(stack, 0, 0, 0);
+                GL11.glPopMatrix();
+            }
+            as = AttenuationRecipe.AltarSlot.UPPER_RIGHT;
+            stack = recipe.getItem(as);
+            if(stack != null) {
+                TextureHelper.refreshTextureBindState();
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + 133.6, offsetY + 81.7, zLevel + 60);
+                GL11.glScaled(1.1, 1.1, 1.1);
+                drawItemStack(stack, 0, 0, 0);
+                GL11.glPopMatrix();
+            }
+            as = AttenuationRecipe.AltarSlot.LOWER_LEFT;
+            stack = recipe.getItem(as);
+            if(stack != null) {
+                TextureHelper.refreshTextureBindState();
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + 29, offsetY + 177.1, zLevel + 60);
+                GL11.glScaled(1.1, 1.1, 1.1);
+                drawItemStack(stack, 0, 0, 0);
+                GL11.glPopMatrix();
+            }
+            as = AttenuationRecipe.AltarSlot.LOWER_RIGHT;
+            stack = recipe.getItem(as);
+            if(stack != null) {
+                TextureHelper.refreshTextureBindState();
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + 133.4, offsetY + 177.8, zLevel + 60);
+                GL11.glScaled(1.1, 1.1, 1.1);
+                drawItemStack(stack, 0, 0, 0);
+                GL11.glPopMatrix();
+            }
 
             if(recipe.getPassiveStarlightRequired() > 0) {
                 GL11.glPushMatrix();

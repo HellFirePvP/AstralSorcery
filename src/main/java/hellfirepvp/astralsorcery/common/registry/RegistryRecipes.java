@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -38,7 +39,13 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks;
     public static DiscoveryRecipe rBlackMarbleRaw;
 
+    //LightProximityRecipes
+    public static ShapedRecipe rLPRAltar;
+    public static ShapedRecipe rLPRWand;
+    public static ShapedRecipe rRJournal;
+
     //Ugh. Important machines/stuff
+    public static DiscoveryRecipe rJournal;
     public static TelescopeRecipe rTelescope;
     public static GrindstoneRecipe rGrindstone;
     public static DiscoveryRecipe rAltar;
@@ -51,7 +58,11 @@ public class RegistryRecipes {
     public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
 
     //CraftingComponents
-    public static DiscoveryRecipe rCCGlassLensRockCrystal, rCCGlassLensCelCrystal;
+    //public static DiscoveryRecipe rCCGlassLensRockCrystal, rCCGlassLensCelCrystal;
+    public static DiscoveryRecipe rCCGlassLens;
+
+    //Smelting
+    public static SmeltingRecipe rSmeltStarmetalOre;
 
     //Tools
     public static CrystalToolRecipe rCToolRockPick, rCToolRockShovel, rCToolRockAxe, rCToolRockSword;
@@ -69,21 +80,47 @@ public class RegistryRecipes {
         RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
         CraftingManager manager = CraftingManager.getInstance();
-        FurnaceRecipes furnace = FurnaceRecipes.instance();
 
-        manager.addRecipe(new ShapedLightProximityRecipe(BlocksAS.blockAltar,
-                "MCM", "MTM", "M M",
-                'C', ItemsAS.rockCrystal,
-                'M', new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
-                'T', Blocks.CRAFTING_TABLE));
-        manager.addRecipe(new ShapedLightProximityRecipe(ItemsAS.wand,
-                " AE", " MA", "M  ",
-                'A', new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
-                'E', Items.ENDER_PEARL,
-                'M', new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal())));
+        rLPRAltar = new ShapedRecipe(BlocksAS.blockAltar)
+                .addPart(ItemsAS.rockCrystal,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(Blocks.CRAFTING_TABLE,
+                        ShapedRecipeSlot.CENTER);
+        rLPRWand = new ShapedRecipe(ItemsAS.wand)
+                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(Items.ENDER_PEARL,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT);
+        rRJournal = new ShapedRecipe(ItemsAS.journal)
+                .addPart(ItemsAS.constellationPaper,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Items.BOOK,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER);
 
-        furnace.addSmeltingRecipe(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()),
-                new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARMETAL_INGOT.getItemMeta()), 2F);
+        rSmeltStarmetalOre = new SmeltingRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARMETAL_INGOT.getItemMeta()))
+                .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
+                .setExp(2F);
+
+        manager.addRecipe(rLPRAltar.makeLightProximityRecipe());
+        manager.addRecipe(rLPRWand.makeLightProximityRecipe());
+        manager.addRecipe(rRJournal.make());
+
+        rSmeltStarmetalOre.register();
     }
 
     public static void initAltarRecipes() {
@@ -175,6 +212,17 @@ public class RegistryRecipes {
 
         rWand.setPassiveStarlightRequirement(200);
 
+        rJournal = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.journal)
+                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(Items.BOOK,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemsAS.constellationPaper,
+                        ShapedRecipeSlot.UPPER_CENTER));
+        rJournal.setPassiveStarlightRequirement(20);
+
         rBlackMarbleRaw = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
                 .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
                         ShapedRecipeSlot.UPPER_CENTER,
@@ -239,15 +287,20 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_RIGHT)));
         rAltar.setPassiveStarlightRequirement(10);
 
-        rCCGlassLensRockCrystal = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
-                .addPart(Blocks.GLASS_PANE, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(new ItemStack(ItemsAS.rockCrystal), ShapedRecipeSlot.CENTER));
-        rCCGlassLensRockCrystal.setPassiveStarlightRequirement(200);
+        rCCGlassLens = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
+                .addPart(Blocks.GLASS_PANE,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                        ShapedRecipeSlot.CENTER));
+        rCCGlassLens.setPassiveStarlightRequirement(100);
 
-        rCCGlassLensCelCrystal = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
+        /*rCCGlassLensCelCrystal = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
                 .addPart(Blocks.GLASS_PANE, ShapedRecipeSlot.UPPER_CENTER, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT, ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(new ItemStack(ItemsAS.celestialCrystal), ShapedRecipeSlot.CENTER));
-        rCCGlassLensCelCrystal.setPassiveStarlightRequirement(200);
+        rCCGlassLensCelCrystal.setPassiveStarlightRequirement(200);*/
 
         rCToolRockSword = registerAltarRecipe(new CrystalToolRecipe(
                 new ShapedRecipe(ItemsAS.crystalSword)

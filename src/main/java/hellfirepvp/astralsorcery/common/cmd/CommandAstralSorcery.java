@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -87,6 +88,10 @@ public class CommandAstralSorcery extends CommandBase {
                 } else if (args.length == 3) {
                     addConstellations(server, sender, args[1], args[2]);
                 }
+            } else if(identifier.equalsIgnoreCase("research") || identifier.equalsIgnoreCase("res")) {
+                if(args.length == 3) {
+                    modifyResearch(server, sender, args[1], args[2]);
+                }
             } else if (identifier.equalsIgnoreCase("progress") || identifier.equalsIgnoreCase("prog")) {
                 if(args.length <= 2) {
                     showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
@@ -107,6 +112,28 @@ public class CommandAstralSorcery extends CommandBase {
                 if (args.length == 2) {
                     maxAll(server, sender, args[1]);
                 }
+            }
+        }
+    }
+
+    private void modifyResearch(MinecraftServer server, ICommandSender sender, String otherPlayerName, String research) {
+        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        if (prTuple == null) {
+            return;
+        }
+        PlayerProgress progress = prTuple.value;
+        EntityPlayer other = prTuple.key;
+
+        if(research.equalsIgnoreCase("all")) {
+            ResearchManager.forceMaximizeResearch(other);
+            sender.addChatMessage(new TextComponentString("§aSuccess!"));
+        } else {
+            ResearchProgression pr = ResearchProgression.getByEnumName(research);
+            if(pr == null) {
+                sender.addChatMessage(new TextComponentString("§cFailed! Unknown research: " + research));
+            } else {
+                ResearchManager.unsafeForceGiveResearch(other, pr);
+                sender.addChatMessage(new TextComponentString("§aSuccess!"));
             }
         }
     }
@@ -203,7 +230,7 @@ public class CommandAstralSorcery extends CommandBase {
             } else {
                 sender.addChatMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
             }
-        } else {
+        }/* else {
             Optional<ProgressionTier> did = ResearchManager.stepTier(other);
             if(!did.isPresent()) {
                 sender.addChatMessage(new TextComponentString("§cCould not step Progress for " + otherPlayerName + " ! (Is already at max)"));
@@ -214,7 +241,7 @@ public class CommandAstralSorcery extends CommandBase {
                     sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
                 }
             }
-        }
+        }*/
     }
 
     private void showProgress(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
@@ -299,7 +326,8 @@ public class CommandAstralSorcery extends CommandBase {
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName]§7 - lists all discovered constellations of the specified player if he/she is online"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName] <cName;all>§7 - player specified discovers the specified constellation or all or resets all"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName]§7 - displays progress information about the player (Enter no player to view your own)"));
-        sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <step;all>§7 - set the progression"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <all>§7 - maximize progression"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery research [playerName] <research;all>§7 - set/add Research"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery reset [playerName]§7 - resets all progression-related data for that player."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery build [structure]§7 - builds the named structure wherever the player is looking at."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));

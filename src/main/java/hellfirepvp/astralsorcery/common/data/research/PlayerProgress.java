@@ -67,9 +67,12 @@ public class PlayerProgress {
         cmp.setIntArray("research", researchArray);
     }
 
-    protected void forceGainResearch(ResearchProgression progression) {
-        if(!researchProgression.contains(progression))
+    protected boolean forceGainResearch(ResearchProgression progression) {
+        if(!researchProgression.contains(progression)) {
             researchProgression.add(progression);
+            return true;
+        }
+        return false;
     }
 
     public List<ResearchProgression> getResearchProgression() {
@@ -80,7 +83,7 @@ public class PlayerProgress {
         return tierReached;
     }
 
-    public boolean stepTier() {
+    protected boolean stepTier() {
         if(getTierReached().hasNextTier()) {
             setTierReached(ProgressionTier.values()[getTierReached().ordinal() + 1]);
             return true;
@@ -88,12 +91,8 @@ public class PlayerProgress {
         return false;
     }
 
-    public void setTierReached(ProgressionTier tier) {
+    protected void setTierReached(ProgressionTier tier) {
         this.tierReached = tier;
-    }
-
-    public EnumGatedKnowledge.ViewCapability getViewCapability() {
-        return getTierReached().getViewCapability();
     }
 
     public List<String> getKnownConstellations() {

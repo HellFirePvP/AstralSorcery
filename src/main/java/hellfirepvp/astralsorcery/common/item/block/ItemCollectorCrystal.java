@@ -4,15 +4,12 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,19 +52,19 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     }
 
     public static void setType(ItemStack stack, BlockCollectorCrystalBase.CollectorCrystalType type) {
-        ItemNBTHelper.getPersistentData(stack).setInteger("collectorType", type.ordinal());
+        NBTHelper.getPersistentData(stack).setInteger("collectorType", type.ordinal());
     }
 
     public static BlockCollectorCrystalBase.CollectorCrystalType getType(ItemStack stack) {
-        return BlockCollectorCrystalBase.CollectorCrystalType.values()[ItemNBTHelper.getPersistentData(stack).getInteger("collectorType")];
+        return BlockCollectorCrystalBase.CollectorCrystalType.values()[NBTHelper.getPersistentData(stack).getInteger("collectorType")];
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {
-        constellation.writeToNBT(ItemNBTHelper.getPersistentData(stack));
+        constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
     public static Constellation getConstellation(ItemStack stack) {
-        return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
+        return Constellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
 }

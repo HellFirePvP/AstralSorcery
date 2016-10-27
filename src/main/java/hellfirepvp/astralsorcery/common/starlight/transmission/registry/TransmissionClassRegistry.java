@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.registry;
 
+import hellfirepvp.astralsorcery.common.event.StarlightNetworkEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimplePrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionNode;
@@ -9,6 +10,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Crys
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -22,6 +25,14 @@ import java.util.Map;
  * Date: 04.08.2016 / 19:51
  */
 public class TransmissionClassRegistry {
+
+    public static final TransmissionClassRegistry eventInstance = new TransmissionClassRegistry();
+
+    private TransmissionClassRegistry() {}
+
+    public void registerProvider(TransmissionProvider provider) {
+        register(provider);
+    }
 
     private static Map<String, TransmissionProvider> providerMap = new HashMap<>();
 
@@ -47,6 +58,8 @@ public class TransmissionClassRegistry {
         register(new TileAltar.AltarReceiverProvider());
         register(new TileWell.WellReceiverProvider());
         register(new TileRitualPedestal.PedestalReceiverProvider());
+
+        MinecraftForge.EVENT_BUS.post(new StarlightNetworkEvent.TransmissionRegister(eventInstance));
     }
 
     public static interface TransmissionProvider {

@@ -1,8 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
-import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderItem;
@@ -21,9 +20,6 @@ import org.lwjgl.opengl.GL11;
  */
 public interface IGuiRenderablePage {
 
-    //static final ResourceLocation texFontHg = new ResourceLocation(AstralSorcery.MODID, "textures/gui/font_hg.png");
-    //static final FontRenderer fr = new FontRenderer(Minecraft.getMinecraft().gameSettings, texFontHg, Minecraft.getMinecraft().renderEngine, false);
-
     public void render(float offsetX, float offsetY, float pTicks, float zLevel);
 
     default public void drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel) {
@@ -41,7 +37,7 @@ public interface IGuiRenderablePage {
         ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
         ri.zLevel = zIR;
-        SpecialTextureLibrary.setActiveTextureToAtlasSprite();
+        TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }

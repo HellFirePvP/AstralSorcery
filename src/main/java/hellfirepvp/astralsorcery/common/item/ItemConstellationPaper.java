@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.ClientGuiHandler;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -12,7 +11,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.nbt.ItemNBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -159,13 +158,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     public static Constellation getConstellation(ItemStack stack) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return null;
-        return Constellation.readFromNBT(ItemNBTHelper.getPersistentData(stack));
+        return Constellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
     public static void setConstellation(ItemStack stack, Constellation constellation) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return;
-        NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
+        NBTTagCompound tag = NBTHelper.getPersistentData(stack);
         constellation.writeToNBT(tag);
     }
 

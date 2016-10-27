@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -72,6 +73,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CELESTIAL_CRYSTAL_BURST(TileCelestialCrystals::breakParticles),
         CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles),
         CRAFT_FINISH_BURST(TileAltar::finishBurst),
+        STARMETAL_ORE_CHARGE(BlockCustomOre::playStarmetalOreEffects),
         WELL_CATALYST_BREAK(TileWell::catalystBurst),
         WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects);
 

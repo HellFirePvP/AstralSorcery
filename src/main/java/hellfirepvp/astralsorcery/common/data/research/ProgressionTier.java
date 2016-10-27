@@ -18,17 +18,12 @@ public enum ProgressionTier {
     ENDGAME;
     //PAST_DIM
 
-    public EnumGatedKnowledge.ViewCapability getViewCapability() {
-        int ord = ordinal();
-        EnumGatedKnowledge.ViewCapability cap = EnumGatedKnowledge.ViewCapability.NONE;
-        if(ord >= BASIC_CRAFT.ordinal()) cap = EnumGatedKnowledge.ViewCapability.BASIC;
-        if(ord >= CONSTELLATION_CRAFT.ordinal()) cap = EnumGatedKnowledge.ViewCapability.MOST;
-        if(ord >= TRAIT_CRAFT.ordinal()) cap = EnumGatedKnowledge.ViewCapability.ALL;
-        return cap;
-    }
-
     public boolean hasNextTier() {
         return ordinal() < ProgressionTier.values().length - 1;
+    }
+
+    public ProgressionTier next() {
+        return values()[Math.min(values().length, ordinal() + 1)];
     }
 
     public boolean isThisLaterOrEqual(ProgressionTier other) {

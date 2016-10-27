@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.client.gui.container;
 
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.client.util.SpecialTextureLibrary;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -76,7 +76,7 @@ public class GuiAltarAttenuation extends GuiAltarBase {
             zLevel = 0F;
             itemRender.zLevel = 0F;
 
-            SpecialTextureLibrary.refreshTextureBindState();
+            TextureHelper.refreshTextureBindState();
         }
 
         Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(ConstellationRegistry.getTier(0));

@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.block.network;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -52,7 +54,8 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     public BlockCollectorCrystalBase(Material material, MapColor color) {
         super(material, color);
         setBlockUnbreakable();
-        setResistance(20F);
+        setResistance(200000F);
+        setHardness(4F);
         setHarvestLevel("pickaxe", 3);
         setSoundType(SoundType.GLASS);
         setLightLevel(0.7F);
@@ -84,11 +87,13 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, shift);
 
         if(shift && missing.isPresent()) {
-            EnumGatedKnowledge.ViewCapability cap = ResearchManager.clientProgress.getViewCapability();
+            ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
             Constellation c = ItemCollectorCrystal.getConstellation(stack);
             if(c != null) {
-                if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(cap) && !missing.get()) {
+                if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
                     tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.collect.type") + " " + TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
+                } else if(!missing.get()) {
+                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
                 }
             }
         }
@@ -126,7 +131,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         if(te == null) return;
 
         Constellation c = ItemCollectorCrystal.getConstellation(stack);
-        if(c == null) c = Constellations.orion;
+        if(c == null) c = Constellations.ara; //Default out
         te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
     }
 
@@ -161,6 +166,15 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
             return stack;
         }
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        PlayerProgress client = ResearchManager.clientProgress;
+        if(EnumGatedKnowledge.COLLECTOR_CRYSTAL.canSee(client.getTierReached())) {
+            return super.getUnlocalizedName();
+        }
+        return "tile.BlockCollectorCrystal.obf";
     }
 
     @Override

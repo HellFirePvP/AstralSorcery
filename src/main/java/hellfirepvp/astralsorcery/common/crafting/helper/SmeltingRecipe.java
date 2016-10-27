@@ -15,7 +15,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 public class SmeltingRecipe extends AbstractRecipe {
 
     private ItemStack smelted;
-    private float exp;
+    private float exp = 1F;
 
     public SmeltingRecipe(Block output) {
         this(new ItemStack(output));
@@ -29,15 +29,15 @@ public class SmeltingRecipe extends AbstractRecipe {
         super(output);
     }
 
-    public SmeltingRecipe setSmelted(Block block) {
-        return setSmelted(new ItemStack(block));
+    public SmeltingRecipe setInput(Block block) {
+        return setInput(new ItemStack(block));
     }
 
-    public SmeltingRecipe setSmelted(Item item) {
-        return setSmelted(new ItemStack(item));
+    public SmeltingRecipe setInput(Item item) {
+        return setInput(new ItemStack(item));
     }
 
-    public SmeltingRecipe setSmelted(ItemStack stack) {
+    public SmeltingRecipe setInput(ItemStack stack) {
         this.smelted = stack;
         return this;
     }

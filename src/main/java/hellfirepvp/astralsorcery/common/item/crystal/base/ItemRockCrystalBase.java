@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -78,7 +79,12 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
+        addCrystalPropertyToolTip(stack, tooltip);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
+        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
     }
 
     public static ItemStack createRandomBaseCrystal() {
