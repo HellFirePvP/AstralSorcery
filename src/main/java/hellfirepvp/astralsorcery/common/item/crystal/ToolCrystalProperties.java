@@ -57,7 +57,8 @@ public class ToolCrystalProperties extends CrystalProperties {
     }
 
     public float getEfficiencyMultiplier() {
-        return Math.max(0.1F, ((float) collectiveCapability) / 100F);
+        float mult = ((float) collectiveCapability) / 100F;
+        return Math.max(0.05F, mult * mult);
     }
 
 }

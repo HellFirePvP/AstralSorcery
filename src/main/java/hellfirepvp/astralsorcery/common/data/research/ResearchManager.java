@@ -265,10 +265,10 @@ public class ResearchManager {
         playerProgressServer.clear();
     }
 
-    public static void logoutResetClient(EntityPlayer player) {
+    /*public static void logoutResetClient(EntityPlayer player) {
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) player);
-    }
+    }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
         clientProgress = new PlayerProgress();

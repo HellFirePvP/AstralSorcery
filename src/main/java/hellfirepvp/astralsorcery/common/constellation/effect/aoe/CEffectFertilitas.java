@@ -1,16 +1,24 @@
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.CropTypes;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -52,7 +60,10 @@ public class CEffectFertilitas extends CEffectPositionBased {
                     positions.remove(sel);
                     changed = true;
                 } else {
-                    reg.grow(world, sel, state);
+                    if(reg.grow(world, sel, state)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_GROWTH, sel.getX(), sel.getY(), sel.getZ());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, sel, 8));
+                    }
                 }
             }
         }
@@ -65,6 +76,19 @@ public class CEffectFertilitas extends CEffectPositionBased {
     @Override
     public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
         return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playParticles(PktParticleEvent event) {
+        Vector3 at = event.getVec();
+        for (int i = 0; i < 8; i++) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    at.getX() + rand.nextFloat(),
+                    at.getY() + 0.2,
+                    at.getZ() + rand.nextFloat());
+            p.motion(0, 0.005 + rand.nextFloat() * 0.01, 0);
+            p.scale(0.2F).setColor(Color.GREEN);
+        }
     }
 
 }

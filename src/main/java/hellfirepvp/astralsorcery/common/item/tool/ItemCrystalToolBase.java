@@ -76,6 +76,9 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
             stack.setItemDamage(stack.getMaxDamage());
             return;
         }
+        if(damage < 0) {
+            return;
+        }
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {

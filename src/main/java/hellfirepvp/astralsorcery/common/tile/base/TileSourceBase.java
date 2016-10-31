@@ -27,6 +27,16 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
     private List<BlockPos> positions = new LinkedList<>();
 
     @Override
+    public World getLinkWorld() {
+        return getTrWorld();
+    }
+
+    @Override
+    public BlockPos getLinkPos() {
+        return getTrPos();
+    }
+
+    @Override
     protected void updateSkyState(boolean seesSky) {
         boolean oldState = doesSeeSky();
         super.updateSkyState(seesSky);

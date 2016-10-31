@@ -24,6 +24,16 @@ import java.util.List;
 public abstract class TileReceiverBase extends TileNetwork implements IStarlightReceiver, ILinkableTile {
 
     @Override
+    public World getLinkWorld() {
+        return getTrWorld();
+    }
+
+    @Override
+    public BlockPos getLinkPos() {
+        return getTrPos();
+    }
+
+    @Override
     public BlockPos getTrPos() {
         return getPos();
     }

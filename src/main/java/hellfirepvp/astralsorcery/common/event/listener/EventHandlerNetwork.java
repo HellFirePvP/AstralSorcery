@@ -35,7 +35,7 @@ public class EventHandlerNetwork {
     public void onLogout(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
 
-        ResearchManager.logoutResetClient(player);
+        //ResearchManager.logoutResetClient(player);
     }
 
 }

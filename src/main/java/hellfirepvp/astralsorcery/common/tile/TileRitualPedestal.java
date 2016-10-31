@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -576,11 +577,15 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         private void tryGainMirrorPos(World world) {
+            //AstralSorcery.log.info("size: " + offsetMirrors.size());
+            //AstralSorcery.log.info("collected: " + (getCollectedBackmirrors() - 1));
             if(offsetMirrors.size() < 0 || offsetMirrors.size() >= 5) return;
             int mirrors = offsetMirrors.size();
             if((getCollectedBackmirrors() - 1) < mirrors) return;
             int step = secToNext[mirrors];
+            //AstralSorcery.log.info("step: " + step + ", channeling: " + channeled);
             if(channeled > step) {
+                //AstralSorcery.log.info("try find new.");
                 if(world.rand.nextInt(chanceToNext[mirrors]) == 0) {
                     findPossibleMirror(world);
                 }

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,6 +21,8 @@ import javax.annotation.Nullable;
  * Date: 01.10.2016 / 15:47
  */
 public abstract class ConstellationEffect {
+
+    protected static final Random rand = new Random();
 
     private final Constellation constellation;
 

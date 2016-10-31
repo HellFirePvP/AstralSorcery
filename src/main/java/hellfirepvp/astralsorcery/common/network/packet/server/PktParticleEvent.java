@@ -2,12 +2,14 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -75,7 +77,11 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CRAFT_FINISH_BURST(TileAltar::finishBurst),
         STARMETAL_ORE_CHARGE(BlockCustomOre::playStarmetalOreEffects),
         WELL_CATALYST_BREAK(TileWell::catalystBurst),
-        WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects);
+        WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects),
+
+        CE_CROP_GROWTH(CEffectFertilitas::playParticles),
+
+        DEBUG(RaytraceAssist::playDebug);
 
         private final EventAction action;
 

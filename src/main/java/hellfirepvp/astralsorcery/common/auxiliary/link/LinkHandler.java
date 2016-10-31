@@ -114,7 +114,7 @@ public class LinkHandler implements ITickHandler {
             inhand = pl.getHeldItemOffhand();
             if (inhand != null && inhand.getItem() != null && inhand.getItem() instanceof IItemLinkingTool)
                 needsRemoval = false;
-            int dimId = session.selected.getWorld().provider.getDimension();
+            int dimId = session.selected.getLinkWorld().provider.getDimension();
             if(dimId != pl.dimension) needsRemoval = true;
             if (needsRemoval) {
                 iterator.remove();

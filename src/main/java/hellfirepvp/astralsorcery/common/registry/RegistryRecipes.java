@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.RecipeAdapter;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
@@ -12,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
@@ -78,6 +80,7 @@ public class RegistryRecipes {
 
     public static void initVanillaRecipes() {
         RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+        RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 
         CraftingManager manager = CraftingManager.getInstance();
 

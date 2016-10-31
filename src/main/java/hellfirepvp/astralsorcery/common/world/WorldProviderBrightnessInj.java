@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldProviderSurface;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -12,7 +13,7 @@ import net.minecraft.world.WorldProvider;
  * Created by HellFirePvP
  * Date: 14.05.2016 / 23:32
  */
-public class WorldProviderBrightnessInj extends WorldProvider {
+public class WorldProviderBrightnessInj extends WorldProviderSurface {
 
     @Override
     public float getSunBrightness(float parTicks) {
@@ -54,11 +55,6 @@ public class WorldProviderBrightnessInj extends WorldProvider {
         f1 = (float) ((double) f1 * (1.0D - (double) (worldObj.getRainStrength(parTicks) * 5.0F) / 16.0D));
         f1 = (float) ((double) f1 * (1.0D - (double) (worldObj.getThunderStrength(parTicks) * 5.0F) / 16.0D));
         return f1 * 0.8F + 0.2F;
-    }
-
-    @Override
-    public DimensionType getDimensionType() {
-        return DimensionType.OVERWORLD;
     }
 
     private float getDefaultSunBrightness(float parTicks) {

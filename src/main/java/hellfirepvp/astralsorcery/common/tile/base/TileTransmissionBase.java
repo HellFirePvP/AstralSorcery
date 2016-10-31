@@ -42,6 +42,16 @@ public abstract class TileTransmissionBase extends TileNetwork implements IStarl
     }
 
     @Override
+    public World getLinkWorld() {
+        return getTrWorld();
+    }
+
+    @Override
+    public BlockPos getLinkPos() {
+        return getTrPos();
+    }
+
+    @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 

@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -29,14 +30,14 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.08.2016 / 13:07
  */
-public class BlockCustomSandOre extends Block implements BlockCustomName, BlockVariants {
+public class BlockCustomSandOre extends BlockFalling implements BlockCustomName, BlockVariants {
 
     private static final Random rand = new Random();
 
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
 
     public BlockCustomSandOre() {
-        super(Material.SAND, MapColor.YELLOW);
+        super(Material.SAND);
         setHardness(0.5F);
         setSoundType(SoundType.SAND);
         setHarvestLevel("shovel", 1);

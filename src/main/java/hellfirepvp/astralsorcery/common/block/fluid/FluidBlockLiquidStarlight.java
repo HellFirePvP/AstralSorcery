@@ -56,6 +56,11 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
     }
 
     @Override
+    protected boolean canFlowInto(IBlockAccess world, BlockPos pos) {
+        return super.canFlowInto(world, pos);
+    }
+
+    @Override
     public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
         AxisAlignedBB box = iblockstate.getBoundingBox(world, blockpos).offset(blockpos);
         AxisAlignedBB entityBox = entity.getEntityBoundingBox();//.offset(entity.posX, entity.posY, entity.posZ);

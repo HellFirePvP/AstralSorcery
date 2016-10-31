@@ -25,6 +25,7 @@ import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -37,18 +38,27 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandlerServer {
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
         if(w.provider.getDimension() == 0) {
-            if(!(w.provider.getClass().equals(WorldProviderSurface.class)) && !(w.provider instanceof WorldProviderBrightnessInj)) {
-                FMLLog.bigWarning("AstralSorcery: Could not overwrite WorldProvider for dimension 0 - expect issues.");
-            } else {
+            AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension 0: " + w.provider.getClass().getName());
+            if(Config.overwriteWorldProviderAggressively) {
                 WorldProviderBrightnessInj inj = new WorldProviderBrightnessInj();
                 inj.registerWorld(w);
                 inj.setDimension(0);
                 w.provider = inj;
-                AstralSorcery.log.info("Injected WorldProvider into dimension 0");
+                AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (aggressively, overriding old providers.)");
+            } else {
+                if(!(w.provider.getClass().equals(WorldProviderSurface.class)) && !(w.provider instanceof WorldProviderBrightnessInj)) {
+                    FMLLog.bigWarning("[AstralSorcery] Could not overwrite WorldProvider for dimension 0 - expect visual issues. - Current provider class found: " + w.provider.getClass().getName());
+                } else {
+                    WorldProviderBrightnessInj inj = new WorldProviderBrightnessInj();
+                    inj.registerWorld(w);
+                    inj.setDimension(0);
+                    w.provider = inj;
+                    AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0");
+                }
             }
         }
     }

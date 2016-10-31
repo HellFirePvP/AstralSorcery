@@ -41,31 +41,33 @@ public enum CropTypes {
         this.seed = seed;
     }
 
-    public void grow(World world, BlockPos pos, IBlockState oldState) {
+    public boolean grow(World world, BlockPos pos, IBlockState oldState) {
         //int addStage = 1 + world.rand.nextInt(2);
-        if(doneCheck.isStateValid(oldState)) return;
+        if(doneCheck.isStateValid(oldState)) return false;
         int growth;
         switch (this) {
             case WHEAT:
                 growth = oldState.getValue(BlockCrops.AGE) + 1 + world.rand.nextInt(3);
                 if(growth > 7) growth = 7;
                 world.setBlockState(pos, oldState.withProperty(BlockCrops.AGE, growth));
-                break;
+                return true;
             case CARROT:
                 growth = oldState.getValue(BlockCarrot.AGE) + 1 + world.rand.nextInt(3);
                 if(growth > 7) growth = 7;
                 world.setBlockState(pos, oldState.withProperty(BlockCarrot.AGE, growth));
-                break;
+                return true;
             case POTATO:
                 growth = oldState.getValue(BlockPotato.AGE) + 1 + world.rand.nextInt(3);
                 if(growth > 7) growth = 7;
                 world.setBlockState(pos, oldState.withProperty(BlockPotato.AGE, growth));
-                break;
+                return true;
             case NETHERWART:
                 growth = oldState.getValue(BlockNetherWart.AGE) + 1;
                 if(growth > 3) growth = 3;
                 world.setBlockState(pos, oldState.withProperty(BlockNetherWart.AGE, growth));
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 

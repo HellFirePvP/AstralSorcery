@@ -1,5 +1,11 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -7,6 +13,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +58,8 @@ public class RaytraceAssist {
         Vector3 prevVec = start.clone();
         for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
             Vector3 stepVec = prevVec.clone().add(stepAim);
+            /*PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.DEBUG, stepVec.getX(), stepVec.getY(), stepVec.getZ());
+            PacketChannel.CHANNEL.sendToAll(ev);*/
             RayTraceResult rtr = world.rayTraceBlocks(prevVec.toVec3d(), stepVec.toVec3d());
 
             if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -95,6 +105,13 @@ public class RaytraceAssist {
         addPassable(Blocks.GLASS_PANE);
         addPassable(Blocks.STAINED_GLASS);
         addPassable(Blocks.STAINED_GLASS_PANE);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playDebug(PktParticleEvent event) {
+        Vector3 pos = event.getVec();
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+        p.gravity(0.004).scale(0.05F);
     }
 
 }

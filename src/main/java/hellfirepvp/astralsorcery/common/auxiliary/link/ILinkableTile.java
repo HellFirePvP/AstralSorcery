@@ -21,12 +21,12 @@ public interface ILinkableTile {
      * This tile's world.
      * Links can only be created in the same world as this tile is in.
      */
-    public World getWorld();
+    public World getLinkWorld();
 
     /**
      * This tile's position
      */
-    public BlockPos getPos();
+    public BlockPos getLinkPos();
 
     /**
      * The unLocalized displayname for this tile.
