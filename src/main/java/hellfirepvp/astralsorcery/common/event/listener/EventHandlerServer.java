@@ -43,11 +43,10 @@ public class EventHandlerServer {
         World w = event.getWorld();
         if(w.provider.getDimension() == 0) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension 0: " + w.provider.getClass().getName());
-            if(Config.overwriteWorldProviderAggressively) {
-                WorldProviderBrightnessInj inj = new WorldProviderBrightnessInj();
-                inj.registerWorld(w);
-                inj.setDimension(0);
-                w.provider = inj;
+            w.provider = new WorldProviderBrightnessInj(w, w.provider);
+            AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (chaining old provider.)");
+            /*if(Config.overwriteWorldProviderAggressively) {
+                w.provider = new WorldProviderBrightnessInj(w, w.provider);
                 AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (aggressively, overriding old providers.)");
             } else {
                 if(!(w.provider.getClass().equals(WorldProviderSurface.class)) && !(w.provider instanceof WorldProviderBrightnessInj)) {
@@ -59,7 +58,7 @@ public class EventHandlerServer {
                     w.provider = inj;
                     AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0");
                 }
-            }
+            }*/
         }
     }
 

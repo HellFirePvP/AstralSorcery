@@ -2,9 +2,9 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.base.CropTypes;
+import hellfirepvp.astralsorcery.common.base.WorldMeltables;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionMap;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -20,26 +20,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CEffectFertilitas
+ * Class: CEffectFornax
  * Created by HellFirePvP
- * Date: 16.10.2016 / 23:53
+ * Date: 01.11.2016 / 01:35
  */
-public class CEffectFertilitas extends CEffectPositionList {
+public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryInteger> {
 
-    public static final int MAX_SEARCH_RANGE = 16;
-    public static final int MAX_CROP_COUNT = 200;
+    public static final int MAX_SEARCH_RANGE = 12;
+    public static final int MAX_MELT_COUNT = 40;
 
-    public CEffectFertilitas() {
-        super(Constellations.fertilitas, MAX_SEARCH_RANGE, MAX_CROP_COUNT, (world, at) -> CropTypes.getCropType(world.getBlockState(at)) != null);
+    public CEffectFornax() {
+        super(Constellations.fornax, MAX_SEARCH_RANGE, MAX_MELT_COUNT, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null);
     }
 
     @Override
-    public boolean mayExecuteMultipleMain() {
-        return true;
+    public EntryInteger provideNewPositionEntry(BlockPos pos) {
+        return new EntryInteger();
     }
 
     @Override
@@ -53,18 +54,26 @@ public class CEffectFertilitas extends CEffectPositionList {
 
         boolean changed = false;
         if(doRandomOnPositions(world)) {
-            BlockPos sel = positions.get(world.rand.nextInt(positions.size()));
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
-                IBlockState state = world.getBlockState(sel);
-                CropTypes reg = CropTypes.getCropType(state);
-                if(reg == null) {
-                    positions.remove(sel);
+            int index = world.rand.nextInt(positions.size());
+            BlockPos bp = new LinkedList<>(positions.keySet()).get(index);
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(bp))) {
+                IBlockState state = world.getBlockState(bp);
+                WorldMeltables melt = WorldMeltables.getMeltable(state);
+                if(melt == null) {
+                    positions.remove(bp);
                     changed = true;
                 } else {
-                    if(reg.grow(world, sel, state)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_GROWTH, sel.getX(), sel.getY(), sel.getZ());
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, sel, 8));
+                    EntryInteger entry = positions.get(bp);
+                    entry.value++;
+                    if(world.rand.nextInt(3) == 0) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
                     }
+                    if(entry.value >= melt.getMeltDuration()) {
+                        world.setBlockState(bp, melt.getMeltResult());
+                        positions.remove(bp);
+                    }
+                    changed = true;
                 }
             }
         }
@@ -82,14 +91,12 @@ public class CEffectFertilitas extends CEffectPositionList {
     @SideOnly(Side.CLIENT)
     public static void playParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        for (int i = 0; i < 8; i++) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    at.getX() + rand.nextFloat(),
-                    at.getY() + 0.2,
-                    at.getZ() + rand.nextFloat());
-            p.motion(0, 0.005 + rand.nextFloat() * 0.01, 0);
-            p.scale(0.2F).setColor(Color.GREEN);
-        }
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                at.getX() + rand.nextFloat(),
+                at.getY() + 0.2,
+                at.getZ() + rand.nextFloat());
+        p.motion(0, 0.01 + rand.nextFloat() * 0.02, 0);
+        p.scale(0.2F).setColor(Color.RED);
     }
 
 }

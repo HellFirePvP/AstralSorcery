@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -80,6 +82,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects),
 
         CE_CROP_GROWTH(CEffectFertilitas::playParticles),
+        CE_MELT_BLOCK(CEffectFornax::playParticles),
+        CE_ACCEL_TILE(CEffectHorologium::playParticles),
 
         DEBUG(RaytraceAssist::playDebug);
 

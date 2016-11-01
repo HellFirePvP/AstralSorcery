@@ -60,6 +60,7 @@ public class RaytraceAssist {
             Vector3 stepVec = prevVec.clone().add(stepAim);
             /*PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.DEBUG, stepVec.getX(), stepVec.getY(), stepVec.getZ());
             PacketChannel.CHANNEL.sendToAll(ev);*/
+            //TODO wrong.
             RayTraceResult rtr = world.rayTraceBlocks(prevVec.toVec3d(), stepVec.toVec3d());
 
             if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {

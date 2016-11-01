@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
+package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
@@ -17,17 +17,17 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CEffectPositionBased
+ * Class: CEffectPositionList
  * Created by HellFirePvP
  * Date: 17.10.2016 / 09:33
  */
-public abstract class CEffectPositionBased extends ConstellationEffect {
+public abstract class CEffectPositionList extends ConstellationEffect {
 
     protected List<BlockPos> positions = new LinkedList<>();
     private final int searchRange, maxCount;
     private final Verifier verifier;
 
-    public CEffectPositionBased(Constellation c, int searchRange, int maxCount, Verifier verifier) {
+    public CEffectPositionList(Constellation c, int searchRange, int maxCount, Verifier verifier) {
         super(c);
         this.searchRange = searchRange;
         this.maxCount = maxCount;
