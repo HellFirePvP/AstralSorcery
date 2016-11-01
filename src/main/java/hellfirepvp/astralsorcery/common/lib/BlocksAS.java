@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.network.BlockWell;
+import hellfirepvp.astralsorcery.common.block.network.BlockWorldIlluminator;
 import net.minecraftforge.fluids.Fluid;
 
 /**
@@ -36,6 +37,7 @@ public class BlocksAS {
     public static BlockMarble blockMarble;
     public static BlockBlackMarble blockBlackMarble;
     public static BlockFlareLight blockVolatileLight;
+    public static BlockWorldIlluminator blockIlluminator;
     //public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
     public static BlockCelestialCollectorCrystal celestialCollectorCrystal;

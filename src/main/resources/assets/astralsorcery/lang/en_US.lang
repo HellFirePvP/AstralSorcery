@@ -73,6 +73,9 @@ astralsorcery.journal.ALTAR2.1.text=[WIP]<NL>Altar upgrading recipe. Advance to 
 research.WELL.name=[WIP]Lightwell
 astralsorcery.journal.WELL.1.text=[WIP]<NL>Well that collects liquid starlight. Collects more during nighttime. Needs a catalyst (Aquamarine, rock crystal, celestial crystal). Catalysts have different lifetime expectations and collection multipliers (Aquamarine < rock crystal < celestial crystal). Liquid starlight can be extracted by rightclicking with a bucket. Liquid starlight as fluid on the ground provides nightvision.
 
+research.ILLUMINATOR.name=[WIP]Cave Illuminator
+astralsorcery.journal.ILLUMINATOR.1.text=[WIP]<NL>Cave Illuminator. Once placed down, it'll try and light the caves below it. conditions for 'light' to spawn: must be dark (<8 light, <6 skylight) must not see sky. Places light from its x,z pos outwards on ylevels below it. light spawned acts like air and can be replaced, but not broken.
+
 research.ATT_SIMPLE.name=[WIP]Crystal Attunement
 astralsorcery.journal.ATT_SIMPLE.1.text=[WIP]<NL>Attunes a rock crystal to the [known] constellation (Tier1) shown on the left side of the altar. Only Tier1 is attuneable on this atlar level.
 
@@ -145,6 +148,7 @@ tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=Altar
 tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=Volatile Flare
+tile.BlockWorldIlluminator.name=Cave Illuminator
 tile.BlockBlackMarble.raw.name=Sooty Marble
 tile.BlockMarble.raw.name=Marble
 tile.BlockMarble.bricks.name=Marble Bricks
@@ -170,6 +174,8 @@ tier.chance.common=Likely
 tier.chance.uncommon=Sometimes
 tier.chance.scarce=Rarely
 tier.chance.rare=Very rarely
+
+ritual.isBeacon=PlayerBeacon
 
 astralsorcery.constellation.orion=Orion
 astralsorcery.constellation.orion.info=Hunt

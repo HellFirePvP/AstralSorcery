@@ -29,36 +29,10 @@ import net.minecraft.item.ItemStack;
  */
 public class RegistryResearch {
 
-    //Only non-negative numbers please :V
     public static void init() {
         initDiscovery();
         initCrafting();
         initAttenuation();
-
-        /*ResearchProgression.Registry resDiscovery = ResearchProgression.DISCOVERY.getRegistry();
-
-        ResearchNode test1 = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "UnlocName", 1, 1);
-        ResearchNode test2 = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "UnlocName2", 3, 3);
-        ResearchNode test3 = new ResearchNode(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()), "UnlocName2", 5, 2);
-        test1.addPage(new JournalPageText("astralsorcery.journal.text.test"));
-        test1.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
-        test2.addPage(new JournalPageText("astralsorcery.journal.text.test2"));
-        test2.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltar));
-        test2.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRAltar));
-
-        resDiscovery.register(test1);
-        resDiscovery.register(test2);
-        resDiscovery.register(test3);
-
-        test2.addConnectionTo(test1);
-        test3.addConnectionTo(test2);
-        test3.addConnectionTo(test1);
-
-        ResearchProgression.Registry resStarlight = ResearchProgression.STARLIGHT.getRegistry();
-
-        ResearchNode test4 = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "UnlocName3", 1, 1);
-
-        resStarlight.register(test4);*/
     }
 
     private static void initAttenuation() {
@@ -67,6 +41,10 @@ public class RegistryResearch {
         ResearchNode resWell = new ResearchNode(new ItemStack(BlocksAS.blockWell), "WELL", 0, 0);
         resWell.addPage(getTextPage("WELL.1"));
         resWell.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rLightwell));
+
+        ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 1, -1);
+        resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
+        resIlluminator.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rIlluminatorRock));
 
         ResearchNode resSimpleAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_SIMPLE", 0, 2);
         resSimpleAtt.addPage(getTextPage("ATT_SIMPLE.1"));
@@ -86,6 +64,7 @@ public class RegistryResearch {
         resConstellationUpgrade.addSourceConnectionFrom(resSimpleAtt);
 
         regAttenuation.register(resWell);
+        regAttenuation.register(resIlluminator);
         regAttenuation.register(resSimpleAtt);
         regAttenuation.register(resRitPedestal);
         regAttenuation.register(resConstellationUpgrade);

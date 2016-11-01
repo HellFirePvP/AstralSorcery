@@ -68,6 +68,7 @@ public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAl
         setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
                 AltarSlot.UPPER_RIGHT,
                 AltarSlot.UPPER_LEFT);
+        setPassiveStarlightRequirement(3000);
     }
 
     @Override

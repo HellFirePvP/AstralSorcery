@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,9 +29,12 @@ import javax.annotation.Nonnull;
  */
 public class IndependentCrystalSource extends SimpleIndependentSource {
 
+    public static final double MIN_DST = 16;
+
     private CrystalProperties crystalProperties;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
     private boolean doesSeeSky, hasBeenLinkedBefore;
+    private double collectionDstMultiplier = 1;
 
     public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
@@ -46,6 +50,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
             return 0F;
         }
         double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
+        perc *= collectionDstMultiplier;
         return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType())));
     }
 
@@ -66,6 +71,24 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     }
 
     @Override
+    public void threadedUpdateProximity(BlockPos thisPos, Map<BlockPos, IIndependentStarlightSource> otherSources) {
+        double minDstSq = Double.MAX_VALUE;
+        for (BlockPos other : otherSources.keySet()) {
+            if(other.equals(thisPos)) continue;
+            double dstSq = thisPos.distanceSq(other);
+            if(dstSq < minDstSq) {
+                minDstSq = dstSq;
+            }
+        }
+        double dst = Math.sqrt(minDstSq);
+        if(dst <= MIN_DST) {
+            collectionDstMultiplier = dst / MIN_DST;
+        } else {
+            collectionDstMultiplier = 1;
+        }
+    }
+
+    @Override
     public SourceClassRegistry.SourceProvider getProvider() {
         return new Provider();
     }
@@ -78,6 +101,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         this.doesSeeSky = compound.getBoolean("seesSky");
         this.hasBeenLinkedBefore = compound.getBoolean("linkedBefore");
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
+        this.collectionDstMultiplier = compound.getDouble("dstMul");
     }
 
     @Override
@@ -88,6 +112,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         compound.setBoolean("seesSky", doesSeeSky);
         compound.setBoolean("linkedBefore", hasBeenLinkedBefore);
         compound.setInteger("collectorType", type.ordinal());
+        compound.setDouble("dstMul", collectionDstMultiplier);
     }
 
     public static class Provider implements SourceClassRegistry.SourceProvider {

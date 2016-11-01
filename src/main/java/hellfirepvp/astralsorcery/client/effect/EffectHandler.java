@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
@@ -39,6 +40,7 @@ public final class EffectHandler {
     public static final EffectHandler instance = new EffectHandler();
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
+    public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
 
     private EffectHandler() {}
 
@@ -53,6 +55,7 @@ public final class EffectHandler {
                 amt += eff.size();
             }
         }
+        amt += fastRenderParticles.size();
         return amt;
     }
 
@@ -87,6 +90,7 @@ public final class EffectHandler {
     public void onRender(RenderWorldLastEvent event) {
         synchronized (complexEffects) {
             Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+            EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
             for (int i = 0; i <= 2; i++) {
                 for (IComplexEffect effect : layeredEffects.get(i)) {
                     GL11.glPushMatrix();
@@ -149,7 +153,11 @@ public final class EffectHandler {
     private void register(final IComplexEffect effect) {
         new Thread(() -> {
             synchronized (complexEffects) {
-                complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
+                if(effect instanceof EntityFXFacingParticle) {
+                    fastRenderParticles.add((EntityFXFacingParticle) effect);
+                } else {
+                    complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
+                }
                 effect.clearRemoveFlag();
             }
         }).start();
@@ -181,6 +189,15 @@ public final class EffectHandler {
                     }
                 }
             }
+            Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
+            while (iterator.hasNext()) {
+                EntityFXFacingParticle effect = iterator.next();
+                effect.tick();
+                if(effect.canRemove()) {
+                    effect.flagAsRemoved();
+                    iterator.remove();
+                }
+            }
         }
     }
 
@@ -205,6 +222,7 @@ public final class EffectHandler {
                     complexEffects.get(t).get(i).clear();
                 }
             }
+            fastRenderParticles.clear();
         }
     }
 }

@@ -25,6 +25,8 @@ import java.util.List;
  */
 public abstract class ClassPatch {
 
+    public boolean writeAsClassFile = false;
+
     private final String className;//, classNameObf;
 
     public ClassPatch(String className) {
@@ -46,16 +48,18 @@ public abstract class ClassPatch {
         node.accept(writer);
         bytes = writer.toByteArray();
 
-        try {
-            File f = new File("C:/ASTestClasses/" + getClass().getSimpleName() + ".class");
-            f.getParentFile().mkdirs();
-            f.createNewFile();
-            FileOutputStream out = new FileOutputStream(f);
-            out.write(bytes);
-            out.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        if(writeAsClassFile) {
+            try {
+                File f = new File("C:/ASTestClasses/" + getClass().getSimpleName() + ".class");
+                f.getParentFile().mkdirs();
+                f.createNewFile();
+                FileOutputStream out = new FileOutputStream(f);
+                out.write(bytes);
+                out.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return bytes;

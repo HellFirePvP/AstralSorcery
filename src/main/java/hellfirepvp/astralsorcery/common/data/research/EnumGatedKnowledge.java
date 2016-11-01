@@ -19,7 +19,9 @@ public enum EnumGatedKnowledge {
     CRYSTAL_TRAIT(ProgressionTier.TRAIT_CRAFT),
 
     COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
-    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT);
+    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT),
+
+    RITUAL_PL_BEACON(ProgressionTier.NETWORKING);
 
     private final ProgressionTier capability;
 

@@ -22,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
@@ -60,6 +61,13 @@ public class EventHandlerServer {
                 }
             }*/
         }
+    }
+
+    //TODO spawntesting/denying
+
+    @SubscribeEvent
+    public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
+
     }
 
     @SubscribeEvent

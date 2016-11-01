@@ -1,0 +1,16 @@
+Textures/Models missing: (At the moment)
+
+Proper book texture
+Proper grindstone model + texture
+Starmetal ingot item-icon
+Stardust item-icon
+replacement for TC's starfield texture
+Constellation lenses models + textures
+Cave illuminator model + texture
+
+(Future plans)
+
+'Altar relay' model + texture
+Altar lvl 4 + 5 model + texture
+Ritual pedestal-PlayerBeacon effects
+'Inventory relay' item-icon

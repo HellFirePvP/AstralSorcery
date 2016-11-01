@@ -16,21 +16,21 @@ import java.awt.*;
  */
 public class EffectHelper {
 
-    private static final BindableResource starFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar");
+    //private static final BindableResource starFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar");
     private static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic");
 
     public static EntityFXFacingParticle genericFlareParticle(double x, double y, double z) {
-        EntityFXFacingParticle p = new EntityFXFacingParticle(staticFlareTex, x, y, z);
+        EntityFXFacingParticle p = new EntityFXFacingParticle(x, y, z);
         p.enableAlphaFade().setAlphaMultiplier(0.75F).setColor(new Color(130, 0, 255)).gravity(0);
         EffectHandler.getInstance().registerFX(p);
         return p;
     }
 
-    public static EntityFXFacingParticle genericFlareStarParticle(double x, double y, double z) {
+    /*public static EntityFXFacingParticle genericFlareStarParticle(double x, double y, double z) {
         EntityFXFacingParticle p = new EntityFXFacingParticle(starFlareTex, x, y, z);
         p.enableAlphaFade().setAlphaMultiplier(0.75F).setColor(new Color(130, 0, 255)).gravity(0);
         EffectHandler.getInstance().registerFX(p);
         return p;
-    }
+    }*/
 
 }

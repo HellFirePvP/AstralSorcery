@@ -6,6 +6,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -29,6 +32,12 @@ public interface IIndependentStarlightSource {
 
     //Update the state of the independent tile. for example if "doesSeeSky" has changed or something.
     public void informTileStateChange(IStarlightSource sourceTile);
+
+    //Update (maybe) if proximity to other sources should be checked - to prevent the user from placing everything super dense.
+    //Threaded to prevent overhead, so remember to sync savely to avoid CME or other threaded stuffs.
+    //You may only do position-based logic here. Data on the sources MIGHT be invalid at this early stage of changes.
+    //Called whenever sources are changed (added/removed) from a world.
+    public void threadedUpdateProximity(BlockPos thisPos, Map<BlockPos, IIndependentStarlightSource> otherSources);
 
     public SourceClassRegistry.SourceProvider getProvider();
 

@@ -1,10 +1,17 @@
 package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.List;
+
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -13,9 +20,10 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 16.10.2016 / 16:10
  */
-public class EntityFXFacingParticle extends EntityComplexFX {
+public final class EntityFXFacingParticle extends EntityComplexFX {
 
-    private final BindableResource resource;
+    public static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic");
+
     private double x, y, z;
     private double oldX, oldY, oldZ;
     private double yGravity = 0.004;
@@ -26,8 +34,7 @@ public class EntityFXFacingParticle extends EntityComplexFX {
     private float colorRed = 1F, colorGreen = 1F, colorBlue = 1F;
     private double motionX = 0, motionY = 0, motionZ = 0;
 
-    public EntityFXFacingParticle(BindableResource resource, double x, double y, double z) {
-        this.resource = resource;
+    public EntityFXFacingParticle(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -89,6 +96,44 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         z += motionZ;
     }
 
+    public static void renderFast(float parTicks, List<EntityFXFacingParticle> particles) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glDepthMask(false);
+
+        staticFlareTex.bind();
+
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer vb = t.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+        for (EntityFXFacingParticle particle : particles) {
+            particle.renderFast(parTicks, vb);
+        }
+
+        t.draw();
+
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopAttrib();
+    }
+
+    //Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
+    //GL states have to be preinitialized.
+    public void renderFast(float pTicks, VertexBuffer vbDrawing) {
+        float alpha = 1F;
+        if(alphaFade) {
+            float halfAge = maxAge / 2F;
+            alpha = 1F - (Math.abs(halfAge - age) / halfAge);
+        }
+        alpha *= alphaMultiplier;
+        RenderingUtils.renderFacingFullQuadVB(vbDrawing, interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, colorRed, colorGreen, colorBlue, alpha);
+    }
+
     @Override
     public void render(float pTicks) {
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -102,8 +147,8 @@ public class EntityFXFacingParticle extends EntityComplexFX {
         }
         alpha *= alphaMultiplier;
         GL11.glColor4f(colorRed, colorGreen, colorBlue, alpha);
-        resource.bind();
-        RenderingUtils.renderFacingQuad(interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, 0, 1, 1);
+        staticFlareTex.bind();
+        RenderingUtils.renderFacingQuad(interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, 0, 0, 1, 1);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);

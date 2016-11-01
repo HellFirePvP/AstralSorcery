@@ -57,18 +57,15 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
             int index = world.rand.nextInt(positions.size());
             BlockPos bp = new LinkedList<>(positions.keySet()).get(index);
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(bp))) {
-                IBlockState state = world.getBlockState(bp);
-                WorldMeltables melt = WorldMeltables.getMeltable(state);
+                WorldMeltables melt = WorldMeltables.getMeltable(world, bp);
                 if(melt == null) {
                     positions.remove(bp);
                     changed = true;
                 } else {
                     EntryInteger entry = positions.get(bp);
                     entry.value++;
-                    if(world.rand.nextInt(3) == 0) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
-                    }
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
                     if(entry.value >= melt.getMeltDuration()) {
                         world.setBlockState(bp, melt.getMeltResult());
                         positions.remove(bp);

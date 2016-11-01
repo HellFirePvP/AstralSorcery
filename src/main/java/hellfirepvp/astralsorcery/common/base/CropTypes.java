@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCarrot;
 import net.minecraft.block.BlockCrops;
@@ -43,7 +44,7 @@ public enum CropTypes {
 
     public boolean grow(World world, BlockPos pos, IBlockState oldState) {
         //int addStage = 1 + world.rand.nextInt(2);
-        if(doneCheck.isStateValid(oldState)) return false;
+        if(doneCheck.isStateValid(world, pos, oldState)) return false;
         int growth;
         switch (this) {
             case WHEAT:
@@ -72,7 +73,7 @@ public enum CropTypes {
     }
 
     public boolean isGrown(World world, BlockPos pos, IBlockState state) {
-        return doneCheck.isStateValid(state);
+        return doneCheck.isStateValid(world, pos, state);
     }
 
     public List<ItemStack> tryHarvestAndReplant(World world, BlockPos pos, IBlockState state, int fortune) {

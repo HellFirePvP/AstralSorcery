@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -252,9 +253,26 @@ public class LightNetworkBuffer extends CachedWorldData {
         }
         data.addSourceTile(pos, source);
 
-        addIndependentSource(pos, source);
+        IIndependentStarlightSource newSource = addIndependentSource(pos, source);
+        if(newSource != null) {
+            Map<BlockPos, IIndependentStarlightSource> copyTr = Collections.unmodifiableMap(new HashMap<>(starlightSources));
+            Thread tr = new Thread(() -> threadedUpdateSourceProximity(copyTr));
+            tr.setName("StarlightNetwork-UpdateThread");
+            tr.start();
+        }
 
         markDirty();
+    }
+
+    private void threadedUpdateSourceProximity(Map<BlockPos, IIndependentStarlightSource> copyTr) {
+        try {
+            for (Map.Entry<BlockPos, IIndependentStarlightSource> sourceTuple : copyTr.entrySet()) {
+                sourceTuple.getValue().threadedUpdateProximity(sourceTuple.getKey(), copyTr);
+            }
+        } catch (Exception exc) {
+            AstralSorcery.log.warn("Failed to update proximity status for source nodes.");
+            exc.printStackTrace();
+        }
     }
 
     public void addTransmission(IStarlightTransmission transmission, BlockPos pos) {
@@ -276,6 +294,11 @@ public class LightNetworkBuffer extends CachedWorldData {
         data.removeSourceTile(pos);
 
         removeIndependentSource(pos);
+
+        Map<BlockPos, IIndependentStarlightSource> copyTr = Collections.unmodifiableMap(new HashMap<>(starlightSources));
+        Thread tr = new Thread(() -> threadedUpdateSourceProximity(copyTr));
+        tr.setName("StarlightNetwork-UpdateThread");
+        tr.start();
 
         checkIntegrity(chPos);
         markDirty();
@@ -302,13 +325,17 @@ public class LightNetworkBuffer extends CachedWorldData {
         }
     }
 
-    private void addIndependentSource(BlockPos pos, IStarlightSource source) {
+    @Nullable
+    private IIndependentStarlightSource addIndependentSource(BlockPos pos, IStarlightSource source) {
         this.cachedSourceTuples = null;
 
         IPrismTransmissionNode node = source.getNode();
         if(node instanceof ITransmissionSource) {
-            this.starlightSources.put(pos, ((ITransmissionSource) node).provideNewIndependentSource(source));
+            IIndependentStarlightSource sourceNode = ((ITransmissionSource) node).provideNewIndependentSource(source);
+            this.starlightSources.put(pos, sourceNode);
+            return sourceNode;
         }
+        return null;
     }
 
     private void removeIndependentSource(BlockPos pos) {

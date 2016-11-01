@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -16,29 +17,29 @@ import javax.annotation.Nullable;
  */
 public enum WorldMeltables {
 
-    COBBLE(     (state) -> state.getBlock().equals(Blocks.COBBLESTONE),     Blocks.FLOWING_LAVA.getDefaultState(),  700),
-    STONE(      (state) -> state.getBlock().equals(Blocks.STONE),           Blocks.FLOWING_LAVA.getDefaultState(),  400),
-    OBSIDIAN(   (state) -> state.getBlock().equals(Blocks.OBSIDIAN),        Blocks.FLOWING_LAVA.getDefaultState(),  300),
-    NETHERRACK( (state) -> state.getBlock().equals(Blocks.NETHERRACK),      Blocks.FLOWING_LAVA.getDefaultState(),  90),
-    NETHERBRICK((state) -> state.getBlock().equals(Blocks.NETHER_BRICK),    Blocks.FLOWING_LAVA.getDefaultState(),  140),
-    MAGMA(      (state) -> state.getBlock().equals(Blocks.field_189877_df), Blocks.FLOWING_LAVA.getDefaultState(),  2),
-    SAND(       (state) -> state.getBlock().equals(Blocks.SAND),            Blocks.GLASS.getDefaultState(),         20),
-    ICE(        (state) -> state.getBlock().equals(Blocks.ICE),             Blocks.FLOWING_WATER.getDefaultState(), 10),
-    FROSTED_ICE((state) -> state.getBlock().equals(Blocks.FROSTED_ICE),     Blocks.FLOWING_WATER.getDefaultState(), 20),
-    PACKED_ICE( (state) -> state.getBlock().equals(Blocks.PACKED_ICE),      Blocks.FLOWING_WATER.getDefaultState(), 30);
+    COBBLE(     new BlockStateCheck.Block(Blocks.COBBLESTONE),     Blocks.FLOWING_LAVA.getDefaultState(),  700),
+    STONE(      new BlockStateCheck.Block(Blocks.STONE),           Blocks.FLOWING_LAVA.getDefaultState(),  400),
+    OBSIDIAN(   new BlockStateCheck.Block(Blocks.OBSIDIAN),        Blocks.FLOWING_LAVA.getDefaultState(),  300),
+    NETHERRACK( new BlockStateCheck.Block(Blocks.NETHERRACK),      Blocks.FLOWING_LAVA.getDefaultState(),  90),
+    NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK),    Blocks.FLOWING_LAVA.getDefaultState(),  140),
+    MAGMA(      new BlockStateCheck.Block(Blocks.field_189877_df), Blocks.FLOWING_LAVA.getDefaultState(),  2),
+    SAND(       new BlockStateCheck.Block(Blocks.SAND),            Blocks.GLASS.getDefaultState(),         20),
+    ICE(        new BlockStateCheck.Block(Blocks.ICE),             Blocks.FLOWING_WATER.getDefaultState(), 10),
+    FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE),     Blocks.FLOWING_WATER.getDefaultState(), 20),
+    PACKED_ICE( new BlockStateCheck.Block(Blocks.PACKED_ICE),      Blocks.FLOWING_WATER.getDefaultState(), 30);
 
-    private final BlockCheck meltableCheck;
+    private final BlockStateCheck meltableCheck;
     private final IBlockState meltResult;
     private final int meltDuration;
 
-    private WorldMeltables(BlockCheck meltableCheck, IBlockState meltResult, int meltDuration) {
+    private WorldMeltables(BlockStateCheck meltableCheck, IBlockState meltResult, int meltDuration) {
         this.meltableCheck = meltableCheck;
         this.meltResult = meltResult;
         this.meltDuration = meltDuration;
     }
 
-    public boolean isMeltable(IBlockState worldState) {
-        return meltableCheck.isMeltableBlock(worldState);
+    public boolean isMeltable(World world, BlockPos pos, IBlockState worldState) {
+        return meltableCheck.isStateValid(world, pos, worldState);
     }
 
     public IBlockState getMeltResult() {
@@ -51,24 +52,12 @@ public enum WorldMeltables {
 
     @Nullable
     public static WorldMeltables getMeltable(World world, BlockPos pos) {
-        //System.out.println("test for " + pos);
-        //System.out.println("found block: " + world.getBlockState(pos).getBlock().getUnlocalizedName());
-        return getMeltable(world.getBlockState(pos));
-    }
-
-    @Nullable
-    public static WorldMeltables getMeltable(IBlockState state) {
+        IBlockState state = world.getBlockState(pos);
         for (WorldMeltables melt : values()) {
-            if(melt.isMeltable(state))
+            if(melt.isMeltable(world, pos, state))
                 return melt;
         }
         return null;
-    }
-
-    public static interface BlockCheck {
-
-        public boolean isMeltableBlock(IBlockState state);
-
     }
 
 }

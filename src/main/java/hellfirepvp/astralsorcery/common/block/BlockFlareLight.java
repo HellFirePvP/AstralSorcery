@@ -69,11 +69,16 @@ public class BlockFlareLight extends Block {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
-        p.offset(rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
-        p.scale(0.3F + rand.nextFloat() * 0.1F);
+        p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+        p.scale(0.4F + rand.nextFloat() * 0.1F);
         if(rand.nextBoolean()) {
             p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
-            p.offset(rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.5F + rand.nextFloat() * 0.1F);
+        }
+        if(rand.nextBoolean()) {
+            p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
+            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
             p.scale(0.3F + rand.nextFloat() * 0.1F);
         }
     }

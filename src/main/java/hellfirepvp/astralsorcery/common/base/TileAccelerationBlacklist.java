@@ -67,6 +67,8 @@ public class TileAccelerationBlacklist {
         blacklistTileClassAndSubclasses(TileSourceBase.class);
         blacklistTileClassAndSubclasses(TileRitualPedestal.class);
         blacklistTileClassAndSubclasses(TileAltar.class);
+
+        blacklistTileClassNamePrefix("appeng"); //I don't wanna run into issues that come from accelerating any network stuffs.
     }
 
 }

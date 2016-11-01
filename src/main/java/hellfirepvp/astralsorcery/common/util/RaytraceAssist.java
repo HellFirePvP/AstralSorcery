@@ -34,7 +34,7 @@ public class RaytraceAssist {
     //-1 is wildcard
     private static final Map<Block, List<Integer>> passable = new HashMap<>();
 
-    private static final double STEP_WIDTH = 0.15;
+    private static final double STEP_WIDTH = 0.05;
     private static final Vector3 CENTRALIZE = new Vector3(0.5, 0.5, 0.5);
 
     private final Vector3 start, target;
@@ -58,9 +58,15 @@ public class RaytraceAssist {
         Vector3 prevVec = start.clone();
         for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
             Vector3 stepVec = prevVec.clone().add(stepAim);
-            /*PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.DEBUG, stepVec.getX(), stepVec.getY(), stepVec.getZ());
-            PacketChannel.CHANNEL.sendToAll(ev);*/
-            //TODO wrong.
+            BlockPos at = stepVec.toBlockPos();
+            if(!isStartEnd(at) && !world.isAirBlock(at)) {
+                IBlockState state = world.getBlockState(at);
+                if(!isAllowed(state)) {
+                     return false;
+                }
+            }
+
+            /* Tried often enough. doesn't work properly for whatever reason.
             RayTraceResult rtr = world.rayTraceBlocks(prevVec.toVec3d(), stepVec.toVec3d());
 
             if(rtr != null && rtr.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -71,7 +77,8 @@ public class RaytraceAssist {
                         return false;
                     }
                 }
-            }
+            }*/
+
             prevVec = stepVec;
         }
         return true;
