@@ -11,12 +11,10 @@ import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.block.BlockStoneMachine;
-import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.network.BlockWell;
-import hellfirepvp.astralsorcery.common.block.network.BlockWorldIlluminator;
+import hellfirepvp.astralsorcery.common.block.BlockWorldIlluminator;
 import net.minecraftforge.fluids.Fluid;
 
 /**

@@ -1,12 +1,12 @@
 Textures/Models missing: (At the moment)
 
 Proper book texture
+Proper telescope gui texture
 Proper grindstone model + texture
 Starmetal ingot item-icon
 Stardust item-icon
 replacement for TC's starfield texture
 Constellation lenses models + textures
-Cave illuminator model + texture
 
 (Future plans)
 

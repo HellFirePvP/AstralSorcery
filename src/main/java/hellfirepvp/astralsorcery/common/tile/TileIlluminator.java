@@ -1,14 +1,23 @@
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesIlluminator;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.data.DirectionalLayerBlockDiscoverer;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -31,6 +40,9 @@ public class TileIlluminator extends TileSkybound {
     private boolean recalcRequested = false;
     private int ticksUntilNext = 180;
 
+    @SideOnly(Side.CLIENT)
+    private OrbitalEffectController[] orbitals = new OrbitalEffectController[5];
+
     @Override
     public void update() {
         super.update();
@@ -49,6 +61,38 @@ public class TileIlluminator extends TileSkybound {
                 }
             }
         }
+        if(worldObj.isRemote) {
+            playEffects();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playEffects() {
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                getPos().getX() + 0.5,
+                getPos().getY() + 0.5,
+                getPos().getZ() + 0.5);
+        p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
+        p.scale(0.25F).setColor(Color.WHITE);
+
+        for (int i = 0; i < 5; i++) {
+            OrbitalEffectController ctrl = orbitals[i];
+            if(ctrl == null) {
+                OrbitalPropertiesIlluminator prop = new OrbitalPropertiesIlluminator(this);
+                ctrl = EffectHandler.getInstance().orbital(prop, null);
+                ctrl.setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+                ctrl.setOrbitRadius(0.3 + rand.nextFloat() * 0.2);
+                ctrl.setOrbitAxis(Vector3.random());
+                ctrl.setTicksPerRotation(50);
+                orbitals[i] = ctrl;
+            } else {
+                if(ctrl.canRemove() && ctrl.isRemoved()) {
+                    orbitals[i] = null;
+                }
+            }
+        }
     }
 
     private boolean placeFlares() {
@@ -61,7 +105,7 @@ public class TileIlluminator extends TileSkybound {
             int index = rand.nextInt(list.size());
             BlockPos at = list.remove(index);
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
-            at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
+            at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
             if(illuminatorCheck.isStateValid(worldObj, at, worldObj.getBlockState(at))) {
                 worldObj.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
             }

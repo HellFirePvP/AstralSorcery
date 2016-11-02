@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -124,6 +126,12 @@ public final class EffectHandler {
         }
         register(text);
         return text;
+    }
+
+    public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence) {
+        OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence);
+        register(ctrl);
+        return ctrl;
     }
 
     public TextureSpritePlane textureSpritePlane(SpriteSheetResource sheetResource, Axis rotationAxis) {

@@ -22,8 +22,6 @@ public class Vector3 {
 
     private static final Random RAND = new Random();
 
-    public static final Vector3 ZERO = new Vector3(0, 0, 0);
-
     protected double x;
     protected double y;
     protected double z;
@@ -421,7 +419,7 @@ public class Vector3 {
         }
         Vector3 other = (Vector3) obj;
 
-        return (Math.abs(this.x - other.x) < 1.0E-006D) && (Math.abs(this.y - other.y) < 1.0E-006D) && (Math.abs(this.z - other.z) < 1.0E-006D) && (getClass().equals(obj.getClass()));
+        return (Math.abs(this.x - other.x) < 1.0E-004D) && (Math.abs(this.y - other.y) < 1.0E-004D) && (Math.abs(this.z - other.z) < 1.0E-004D) && (getClass().equals(obj.getClass()));
     }
 
     public int hashCode() {
