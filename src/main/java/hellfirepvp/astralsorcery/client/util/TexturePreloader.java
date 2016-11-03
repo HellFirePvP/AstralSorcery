@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -14,7 +16,23 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
  */
 public class TexturePreloader {
 
-    public static void preloadMandatoryTextures() {
+    public static void doPreloadRoutine() {
+        //Needs to happen...
+        TexturePreloader.preloadMandatoryTextures();
+
+        if(Config.clientPreloadTextures) {
+            long startMs = System.currentTimeMillis();
+            AstralSorcery.log.info("[AstralSorcery] Preload textures");
+            TexturePreloader.preloadTextures();
+            AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
+            SpriteLibrary.init();
+            AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
+        } else {
+            AstralSorcery.log.info("[AstralSorcery] Skipping preloading textures (configured).");
+        }
+    }
+
+    private static void preloadMandatoryTextures() {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")   .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")    .allocateGlId();
@@ -22,7 +40,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay").allocateGlId();
     }
 
-    public static void preloadTextures() {
+    private static void preloadTextures() {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")            .allocateGlId();

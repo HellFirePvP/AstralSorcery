@@ -83,11 +83,8 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         drawDefault(textureResBlank);
-        TextureHelper.refreshTextureBindState();
 
         zLevel += 100;
-        drawBackArrow();
-        drawNavArrows();
         int pageOffsetY = 20;
         if(currentPageOffset == 0) {
             /*texUnderline.bind();
@@ -138,7 +135,9 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
         }
-
+        drawBackArrow();
+        drawNavArrows();
+        TextureHelper.refreshTextureBindState();
         zLevel -= 100;
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -147,6 +146,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     }
 
     private void drawBackArrow() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         Point mouse = getCurrentMousePoint();
         int width = 30;
         int height = 15;
@@ -161,9 +161,11 @@ public class GuiJournalPages extends GuiScreenJournal {
         texArrowLeft.bind();
         drawTexturedRectAtCurrentPos(width, height);
         GL11.glPopMatrix();
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     private void drawNavArrows() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         Point mouse = getCurrentMousePoint();
         int cIndex = currentPageOffset * 2;
         rectNext = null;
@@ -199,6 +201,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(width, height);
             GL11.glPopMatrix();
         }
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     @Override

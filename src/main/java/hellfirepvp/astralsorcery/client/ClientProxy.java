@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -43,10 +44,12 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -76,11 +79,11 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit() {
-        /*try {
+        try {
             ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
         } catch (Exception exc) {
             AstralSorcery.log.warn("AstralSorcery: Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
-        }*/
+        }
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
 
         super.preInit();
@@ -129,19 +132,7 @@ public class ClientProxy extends CommonProxy {
 
         TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping TEISR
 
-        //Needs to happen...
-        TexturePreloader.preloadMandatoryTextures();
-
-        if(Config.clientPreloadTextures) {
-            long startMs = System.currentTimeMillis();
-            AstralSorcery.log.info("[AstralSorcery] Preload textures");
-            TexturePreloader.preloadTextures();
-            AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
-            SpriteLibrary.init();
-            AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
-        } else {
-            AstralSorcery.log.info("[AstralSorcery] Skipping preloading textures (configured).");
-        }
+        TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();

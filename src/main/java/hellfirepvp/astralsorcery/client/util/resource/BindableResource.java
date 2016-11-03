@@ -53,7 +53,7 @@ public class BindableResource {
     }
 
     public void allocateGlId() {
-        if (resource != null) return;
+        if (resource != null || AssetLibrary.reloading) return;
         resource = new SimpleTexture(new ResourceLocation(path));
         try {
             resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
@@ -68,6 +68,7 @@ public class BindableResource {
     }
 
     public void bind() {
+        if(AssetLibrary.reloading) return; //we do nothing but wait.
         if (resource == null) {
             allocateGlId();
         }
