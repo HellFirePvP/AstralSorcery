@@ -18,7 +18,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")   .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")    .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResBG")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")     .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay").allocateGlId();
     }
 

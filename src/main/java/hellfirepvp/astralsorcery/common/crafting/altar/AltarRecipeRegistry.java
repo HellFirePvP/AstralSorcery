@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -49,6 +50,12 @@ public class AltarRecipeRegistry {
     public static AbstractAltarRecipe getRecipe(int id) {
         if(id < 0 || id >= compiledRecipeArray.length) return null;
         return compiledRecipeArray[id];
+    }
+
+    public static ConstellationRecipe registerConstellationRecipe(AbstractCacheableRecipe recipe) {
+        ConstellationRecipe dr = new ConstellationRecipe(recipe);
+        registerAltarRecipe(dr);
+        return dr;
     }
 
     public static AttenuationRecipe registerAttenuationRecipe(AbstractCacheableRecipe recipe) {

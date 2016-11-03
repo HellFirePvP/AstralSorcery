@@ -30,7 +30,7 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
 
     @Override
     public int craftingTickTime() {
-        return super.craftingTickTime() * 3;
+        return (int) (super.craftingTickTime() * 1.5);
     }
 
     @Override
