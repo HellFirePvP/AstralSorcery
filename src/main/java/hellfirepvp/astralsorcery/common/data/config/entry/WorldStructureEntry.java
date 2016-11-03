@@ -23,7 +23,7 @@ public class WorldStructureEntry extends ConfigEntry {
     @Override
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean(getKey(), getConfigurationSection(), true, "Generate " + getKey());
-        generationChance = cfg.getInt(getKey() + "Chance", getConfigurationSection(), 100, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
+        generationChance = cfg.getInt(getKey() + "Chance", getConfigurationSection(), 140, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
     }
 
     public boolean shouldGenerate() {

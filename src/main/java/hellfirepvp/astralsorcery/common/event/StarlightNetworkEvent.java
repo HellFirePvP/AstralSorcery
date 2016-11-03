@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * Created by HellFirePvP
  * Date: 23.10.2016 / 22:34
  */
+//Use this in case you want to add transmission or source nodes to the starlight network system.
 public class StarlightNetworkEvent {
 
     public static class TransmissionRegister extends Event {

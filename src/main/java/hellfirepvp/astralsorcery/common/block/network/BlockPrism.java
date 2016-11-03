@@ -9,7 +9,10 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -21,6 +24,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,8 +41,22 @@ public class BlockPrism extends BlockStarlightNetwork {
         setHardness(3.0F);
         setSoundType(SoundType.GLASS);
         setResistance(12.0F);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+        ItemStack stack = new ItemStack(itemIn);
+        CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
+        list.add(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
     }
 
     @Override
@@ -53,6 +72,18 @@ public class BlockPrism extends BlockStarlightNetwork {
     @Override
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         return true;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
+        TileCrystalPrismLens lens = MiscUtils.getTileAt(world, pos, TileCrystalPrismLens.class, true);
+        if(lens != null) {
+            CrystalProperties.applyCrystalProperties(stack, lens.getCrystalProperties());
+        } else {
+            CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
+        }
+        return stack;
     }
 
     @Override
@@ -84,7 +115,7 @@ public class BlockPrism extends BlockStarlightNetwork {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileCrystalPrismLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
         if(te == null) return;
-        te.onPlace(CrystalProperties.getMaxRockProperties());
+        te.onPlace(CrystalProperties.getCrystalProperties(stack));
     }
 
 }

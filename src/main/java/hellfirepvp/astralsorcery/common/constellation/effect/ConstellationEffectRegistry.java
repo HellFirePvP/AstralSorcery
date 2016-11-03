@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 
 import javax.annotation.Nullable;
@@ -26,6 +27,7 @@ public class ConstellationEffectRegistry {
         register(Constellations.fertilitas, CEffectFertilitas::new);
         register(Constellations.fornax, CEffectFornax::new);
         register(Constellations.horologium, CEffectHorologium::new);
+        register(Constellations.mineralis, CEffectMineralis::new);
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {

@@ -63,8 +63,10 @@ public class ResearchManager {
     public static void wipeKnowledge(EntityPlayer p) {
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
-        PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
+        PktSyncKnowledge pk = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
+        PacketChannel.CHANNEL.sendTo(pk, (net.minecraft.entity.player.EntityPlayerMP) p);
     }
 
     public static void sendInitClientKnowledge(EntityPlayer p) {
@@ -158,6 +160,9 @@ public class ResearchManager {
         if(progress == null) return false;
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;
@@ -198,6 +203,9 @@ public class ResearchManager {
         for (ResearchProgression progression : ResearchProgression.values()) {
             progress.forceGainResearch(progression);
         }
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);

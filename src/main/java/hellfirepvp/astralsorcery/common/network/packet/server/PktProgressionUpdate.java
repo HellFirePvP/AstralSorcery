@@ -28,36 +28,45 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
 
     public int tier = -1;
     public boolean isProg = false;
+    public boolean isPresent =false;
 
-    public PktProgressionUpdate() {}
+    public PktProgressionUpdate() {
+        isPresent = false;
+    }
 
     public PktProgressionUpdate(ResearchProgression prog) {
         this.tier = prog.getProgressId();
+        this.isPresent = true;
     }
 
     public PktProgressionUpdate(ProgressionTier tier) {
         this.isProg = true;
         this.tier = tier.ordinal();
+        this.isPresent = true;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.tier = buf.readInt();
         this.isProg = buf.readBoolean();
+        this.isPresent = buf.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(tier);
         buf.writeBoolean(isProg);
+        buf.writeBoolean(isPresent);
     }
 
     @Override
     public IMessage onMessage(PktProgressionUpdate message, MessageContext ctx) {
-        if(message.isProg) {
-            addProgressChatMessage(message.tier);
-        } else {
-            addResearchChatMessage(message.tier);
+        if(message.isPresent) {
+            if(message.isProg) {
+                addProgressChatMessage(message.tier);
+            } else {
+                addResearchChatMessage(message.tier);
+            }
         }
         closeAndRefreshJournal();
         return null;

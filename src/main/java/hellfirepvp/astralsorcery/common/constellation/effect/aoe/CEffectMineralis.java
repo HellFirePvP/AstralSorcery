@@ -1,0 +1,74 @@
+package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
+
+import hellfirepvp.astralsorcery.common.base.OreTypes;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockStone;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: CEffectMineralis
+ * Created by HellFirePvP
+ * Date: 03.11.2016 / 01:31
+ */
+public class CEffectMineralis extends CEffectPositionList {
+
+    public CEffectMineralis() {
+        super(Constellations.mineralis, 14, 2, (world, pos) -> {
+            IBlockState state = world.getBlockState(pos);
+            return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
+        });
+    }
+
+    @Override
+    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {}
+
+    @Override
+    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        if(percStrength < 1) {
+            if(world.rand.nextFloat() > percStrength) return false;
+        }
+
+        boolean changed = false;
+
+        if(doRandomOnPositions(world)) {
+            BlockPos sel = positions.get(world.rand.nextInt(positions.size()));
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
+                if(verifier.isValid(world, sel)) {
+                    ItemStack blockStack = OreTypes.getRandomOre(rand);
+                    if(rand.nextInt(200_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
+                    if(blockStack != null) {
+                        world.setBlockState(sel, Block.getBlockFromItem(blockStack.getItem()).getStateFromMeta(blockStack.getItemDamage()));
+                    }
+                } else {
+                    positions.remove(sel);
+                }
+            }
+        }
+
+        if(super.playMainEffect(world, pos, percStrength, mayDoTraitEffect, possibleTraitEffect)) changed = true;
+
+        return changed;
+    }
+
+    @Override
+    public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
+        return false;
+    }
+
+}

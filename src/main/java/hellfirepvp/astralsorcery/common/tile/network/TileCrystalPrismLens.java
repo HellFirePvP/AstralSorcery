@@ -3,9 +3,12 @@ package hellfirepvp.astralsorcery.common.tile.network;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -27,6 +30,9 @@ public class TileCrystalPrismLens extends TileCrystalLens {
         super.update();
 
         if(worldObj.isRemote && getLinkedPositions().size() > 0) {
+            Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+            if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+            if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
             Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);

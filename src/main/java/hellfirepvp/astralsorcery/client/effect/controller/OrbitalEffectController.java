@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.client.effect.controller;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +15,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 01.11.2016 / 21:27
  */
+@SideOnly(Side.CLIENT)
 public class OrbitalEffectController extends EntityComplexFX {
 
     private final OrbitPointEffect effect;

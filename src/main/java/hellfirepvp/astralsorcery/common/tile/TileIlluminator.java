@@ -40,8 +40,7 @@ public class TileIlluminator extends TileSkybound {
     private boolean recalcRequested = false;
     private int ticksUntilNext = 180;
 
-    @SideOnly(Side.CLIENT)
-    private OrbitalEffectController[] orbitals = new OrbitalEffectController[5];
+    private Object[] orbitals = new Object[5];
 
     @Override
     public void update() {
@@ -78,7 +77,7 @@ public class TileIlluminator extends TileSkybound {
         p.scale(0.25F).setColor(Color.WHITE);
 
         for (int i = 0; i < 5; i++) {
-            OrbitalEffectController ctrl = orbitals[i];
+            OrbitalEffectController ctrl = (OrbitalEffectController) orbitals[i];
             if(ctrl == null) {
                 OrbitalPropertiesIlluminator prop = new OrbitalPropertiesIlluminator(this);
                 ctrl = EffectHandler.getInstance().orbital(prop, null);

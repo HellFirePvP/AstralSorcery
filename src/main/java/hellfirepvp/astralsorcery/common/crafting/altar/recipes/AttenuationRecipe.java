@@ -3,12 +3,8 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
-import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
-import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
-import hellfirepvp.astralsorcery.common.data.config.Sync;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -51,15 +47,15 @@ public class AttenuationRecipe extends DiscoveryRecipe {
         setPassiveStarlightRequirement(2000);
     }
 
-    public AttenuationRecipe setItem(Block b, AltarSlot... slots) {
-        return this.setItem(new ItemStack(b), slots);
+    public AttenuationRecipe setAttItem(Block b, AltarSlot... slots) {
+        return this.setAttItem(new ItemStack(b), slots);
     }
 
-    public AttenuationRecipe setItem(Item i, AltarSlot... slots) {
-        return this.setItem(new ItemStack(i), slots);
+    public AttenuationRecipe setAttItem(Item i, AltarSlot... slots) {
+        return this.setAttItem(new ItemStack(i), slots);
     }
 
-    public AttenuationRecipe setItem(ItemStack stack, AltarSlot... slots) {
+    public AttenuationRecipe setAttItem(ItemStack stack, AltarSlot... slots) {
         for (AltarSlot slot : slots) {
             additionalSlots.put(slot, stack.copy());
         }

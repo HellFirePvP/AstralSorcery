@@ -46,7 +46,18 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return Math.abs(dY - pos.getY()) <= 3 && isMountainBiome(world, pos);
+        return Math.abs(dY - pos.getY()) <= 3 && (isMountainBiome(world, pos) || isSnowyBiome(world, pos));
+    }
+
+    private boolean isSnowyBiome(World world, BlockPos pos) {
+        Biome b = world.getBiomeGenForCoords(pos);
+        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
+        if(types == null || types.length == 0) return false;
+        boolean snow = false;
+        for (BiomeDictionary.Type t : types) {
+            if(t.equals(BiomeDictionary.Type.SNOWY)) snow = true;
+        }
+        return snow;
     }
 
     private boolean isMountainBiome(World world, BlockPos pos) {

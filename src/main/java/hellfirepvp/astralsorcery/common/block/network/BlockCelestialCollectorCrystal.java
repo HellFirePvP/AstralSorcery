@@ -31,6 +31,24 @@ public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
         ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         list.add(stack);
+
+        stack = new ItemStack(itemIn);
+        ItemCollectorCrystal.setConstellation(stack, Constellations.horologium);
+        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        list.add(stack);
+
+        stack = new ItemStack(itemIn);
+        ItemCollectorCrystal.setConstellation(stack, Constellations.fertilitas);
+        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        list.add(stack);
+
+        stack = new ItemStack(itemIn);
+        ItemCollectorCrystal.setConstellation(stack, Constellations.mineralis);
+        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        list.add(stack);
     }
 
 }

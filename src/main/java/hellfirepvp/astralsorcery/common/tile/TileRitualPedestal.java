@@ -63,8 +63,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     private TransmissionReceiverRitualPedestal cachePedestal = null;
 
-    @SideOnly(Side.CLIENT)
-    private TextureSpritePlane spritePlane = null;
+    private Object spritePlane = null;
 
     private List<BlockPos> offsetMirrorPositions = new LinkedList<>();
 
@@ -231,15 +230,17 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @SideOnly(Side.CLIENT)
     public TextureSpritePlane getHaloEffectSprite() {
-        if(spritePlane == null || spritePlane.canRemove() || spritePlane.isRemoved()) { //Refresh.
-            spritePlane = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo, Axis.Y_AXIS);
-            spritePlane.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
-            spritePlane.setAlphaOverDistance(true);
-            spritePlane.setNoRotation(45);
-            spritePlane.setRefreshFunc(() -> !isInvalid() && working);
-            spritePlane.setScale(6.5F);
+        TextureSpritePlane spr = (TextureSpritePlane) spritePlane;
+        if(spr == null || spr.canRemove() || spr.isRemoved()) { //Refresh.
+            spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo, Axis.Y_AXIS);
+            spr.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
+            spr.setAlphaOverDistance(true);
+            spr.setNoRotation(45);
+            spr.setRefreshFunc(() -> !isInvalid() && working);
+            spr.setScale(6.5F);
+            spritePlane = spr;
         }
-        return spritePlane;
+        return spr;
     }
 
     @Override
@@ -254,6 +255,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(worldObj, properties, tuned, trait);
+                    recNode.setPlayerBeacon(playerBeacon);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
                     AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
@@ -262,6 +264,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(worldObj, null, null, null);
+                    recNode.setPlayerBeacon(playerBeacon);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
                     AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
@@ -345,14 +348,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     public void setPlayerBeacon(boolean beacon) {
         this.playerBeacon = beacon;
-        TransmissionReceiverRitualPedestal recNode = getUpdateCache();
-        if(recNode != null) {
-            recNode.setPlayerBeacon(beacon);
-            recNode.markDirty(worldObj);
-        } else {
-            AstralSorcery.log.warn("[AstralSorcery] Updated beacon state and tried to update receiver node state.");
-            AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
-        }
         markForUpdate();
     }
 

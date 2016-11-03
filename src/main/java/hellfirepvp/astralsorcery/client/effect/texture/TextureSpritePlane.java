@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.client.effect.texture;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -11,6 +13,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
  * Created by HellFirePvP
  * Date: 25.09.2016 / 22:52
  */
+@SideOnly(Side.CLIENT)
 public class TextureSpritePlane extends TexturePlane {
 
     private final SpriteSheetResource spriteSheet;

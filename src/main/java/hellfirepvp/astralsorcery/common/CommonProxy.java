@@ -3,10 +3,12 @@ package hellfirepvp.astralsorcery.common;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -115,6 +117,7 @@ public class CommonProxy implements IGuiHandler {
 
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
+        OreTypes.init();
     }
 
     protected void registerTickHandlers(TickManager manager) {
@@ -166,6 +169,8 @@ public class CommonProxy implements IGuiHandler {
                 return new ContainerAltarDiscovery(player.inventory, (TileAltar) t);
             case ALTAR_ATTENUATION:
                 return new ContainerAltarAttenuation(player.inventory, (TileAltar) t);
+            case ALTAR_CONSTELLATION:
+                return new ContainerAltarConstellation(player.inventory, (TileAltar) t);
         }
         return null;
     }
@@ -185,6 +190,7 @@ public class CommonProxy implements IGuiHandler {
         CONSTELLATION_PAPER,
         ALTAR_DISCOVERY(TileAltar.class),
         ALTAR_ATTENUATION(TileAltar.class),
+        ALTAR_CONSTELLATION(TileAltar.class),
         JOURNAL;
 
         private final Class<? extends TileEntity> tileClass;

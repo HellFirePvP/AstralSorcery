@@ -42,20 +42,17 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
                 pos.getX(),
                 pos.getY(),
                 pos.getZ());
-        p.motion((rand.nextFloat() * 0.001F) * (rand.nextBoolean() ? 1 : -1),
-                (rand.nextFloat() * 0.001F) * (rand.nextBoolean() ? 1 : -1),
-                (rand.nextFloat() * 0.001F) * (rand.nextBoolean() ? 1 : -1));
         p.setMaxAge(25);
-        p.scale(0.15F).gravity(0.004);
-        if(rand.nextBoolean()) {
+        p.scale(0.1F).gravity(0.004);
+        if(rand.nextInt(3) == 0) {
             p = EffectHelper.genericFlareParticle(
                     pos.getX(),
                     pos.getY(),
                     pos.getZ());
-            p.motion((rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1),
-                     (rand.nextFloat() * 0.002F) * (rand.nextBoolean() ? 1 : -1));
-            p.setMaxAge(15);
+            p.motion((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+            p.setMaxAge(35);
             p.scale(0.15F);
         }
         /*if(rand.nextBoolean()) {

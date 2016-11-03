@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -85,6 +86,8 @@ public class LightNetworkBuffer extends CachedWorldData {
                     } else {
                         AstralSorcery.log.warn("Cached source at " + pos + " but didn't find the TileEntity!");
                         AstralSorcery.log.warn("Purging cache entry and removing erroneous block!");
+                        IBlockState there = world.getBlockState(pos);
+                        AstralSorcery.log.warn("Block that gets purged: " + there.getBlock().getUnlocalizedName() + " with meta " + there.getBlock().getMetaFromState(there));
                         iterator.remove();
                         world.setBlockToAir(pos);
                         ChunkNetworkData data = getChunkData(chPos);

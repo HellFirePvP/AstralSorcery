@@ -1,12 +1,18 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -36,10 +42,25 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     }
 
     private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {
+        Constellation c = te.getFocusedConstellation();
+        if(c == null) return;
 
+        float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(te.getWorld());
+
+        int max = 5000;
+        int t = ClientScheduler.getClientTick() % max;
+        float halfAge = max / 2F;
+        float tr = 1F - (Math.abs(halfAge - t) / halfAge);
+        tr *= 2;
+
+        RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
+
+        RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 6.5 + tr, 2, 0.1F + 0.8F * alphaDaytime);
     }
 
     private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {
+        ItemStack focus = te.getFocusLensStack();
+        if(focus == null || focus.getItem() == null || !(focus.getItem() instanceof ItemFocusLens)) return;
 
     }
 

@@ -7,14 +7,20 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -28,6 +34,7 @@ import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,12 +72,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private int experience = 0;
     private int starlightStored = 0;
 
+    private ItemStack focusLensStack = null;
+
     public TileAltar() {
-        super(13);
+        super(21);
     }
 
     public TileAltar(AltarLevel level) {
-        super(13);
+        super(21);
         this.level = level;
     }
 
@@ -113,6 +122,22 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
     }
 
+    @Nullable
+    public ItemStack getFocusLensStack() {
+        return focusLensStack;
+    }
+
+    @Nullable
+    public Constellation getFocusedConstellation() {
+        int tierNumber = 0;
+        if(focusLensStack != null && focusLensStack.getItem() != null && focusLensStack.getItem() instanceof ItemFocusLens) {
+            tierNumber = focusLensStack.getItemDamage() + 1;
+        }
+        Tier tier = ConstellationRegistry.getTier(tierNumber);
+        if(tier == null) return null;
+        return ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(tier);
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
@@ -121,11 +146,17 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @SideOnly(Side.CLIENT)
     private void doConstellationRays() {
-        if(rand.nextInt(20) == 0) {
-            Vector3 from = new Vector3(getPos()).add(0.5, 3.5, 0.5);
-            Vector3 to = new Vector3(getPos()).add(0.5, -0.1, 0.5);
-            to.add(rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1), 0, rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1));
-            EffectHandler.getInstance().lightbeam(to, from, 0.8);
+        Constellation c = getFocusedConstellation();
+        if(c != null) {
+            float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(getWorld());
+            if(alphaDaytime >= 1.0E-3) {
+                if(rand.nextInt(20) == 0) {
+                    Vector3 from = new Vector3(getPos()).add(0.5, 3.5, 0.5);
+                    Vector3 to = new Vector3(getPos()).add(0.5, -0.1, 0.5);
+                    to.add(rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1), 0, rand.nextFloat() * 4 * (rand.nextBoolean() ? 1 : -1));
+                    EffectHandler.getInstance().lightbeam(to, from, 0.8);
+                }
+            }
         }
     }
 
@@ -191,6 +222,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
         }
 
+        for (ConstellationRecipe.AltarAdditionalSlot slot : ConstellationRecipe.AltarAdditionalSlot.values()) {
+            int slotId = slot.getSlotId();
+            if(recipe.mayDecrement(this, slot)) {
+                ItemUtils.decrStackInInventory(inv, slotId);
+            }
+        }
+
         if(out != null) {
             for (EnumFacing dir : EnumFacing.VALUES) {
                 if(dir == EnumFacing.UP) continue;
@@ -214,7 +252,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if (!recipe.allowsForChaining() || !recipe.matches(this) || !matchDownMultiblocks(recipe.getNeededLevel())) {
             if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
                 Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
-                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY(), pos.getZ());
+                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY() + 0.05, pos.getZ());
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(getWorld(), getPos(), 32));
             }
             craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
@@ -316,7 +354,19 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     public int getMaxStarlightStorage() {
-        return getAltarLevel().ordinal() != 0 ? 4000 : 1000;
+        switch (getAltarLevel()) {
+            case DISCOVERY:
+                return 1000;
+            case ATTENUATION:
+                return 4000;
+            case CONSTELLATION_CRAFT:
+                return 6000;
+            case TRAIT_CRAFT:
+                return 10000;
+            case ENDGAME:
+                return 12000;
+        }
+        return 1000;
     }
 
     @Override
@@ -387,6 +437,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.experience = compound.getInteger("exp");
         this.starlightStored = compound.getInteger("starlight");
         this.mbState = compound.getBoolean("mbState");
+        if(compound.hasKey("focusStack")) {
+            this.focusLensStack = NBTHelper.getStack(compound, "focusStack");
+        }
 
         this.craftingTask = null;
         if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
@@ -411,6 +464,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         compound.setInteger("exp", experience);
         compound.setInteger("starlight", starlightStored);
         compound.setBoolean("mbState", mbState);
+        if(focusLensStack != null) {
+            NBTHelper.setStack(compound, "focusStack", focusLensStack);
+        }
 
         if(craftingTask != null) {
             compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());

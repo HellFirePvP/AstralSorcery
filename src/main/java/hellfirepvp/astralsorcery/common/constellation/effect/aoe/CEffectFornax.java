@@ -92,8 +92,8 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
                 at.getX() + rand.nextFloat(),
                 at.getY() + 0.2,
                 at.getZ() + rand.nextFloat());
-        p.motion(0, 0.01 + rand.nextFloat() * 0.02, 0);
-        p.scale(0.2F).setColor(Color.RED);
+        p.motion(0, 0.016 + rand.nextFloat() * 0.02, 0);
+        p.scale(0.25F).setColor(Color.RED);
     }
 
 }

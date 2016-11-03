@@ -1,11 +1,23 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -16,6 +28,14 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
  */
 public class ConstellationRecipe extends AttenuationRecipe {
 
+    private static Vector3[] offsetPillars = new Vector3[] {
+            new Vector3( 5, 3,  5),
+            new Vector3(-5, 3,  5),
+            new Vector3( 5, 3, -5),
+            new Vector3(-5, 3, -5)
+    };
+
+    private Map<AltarAdditionalSlot, ItemStack> matchStacks = new HashMap<>();
     private Constellation skyConstellationNeeded = null;
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
@@ -35,6 +55,21 @@ public class ConstellationRecipe extends AttenuationRecipe {
         setPassiveStarlightRequirement(3700);
     }
 
+    public ConstellationRecipe setCstItem(Item i, AltarAdditionalSlot... slots) {
+        return setCstItem(new ItemStack(i), slots);
+    }
+
+    public ConstellationRecipe setCstItem(Block b, AltarAdditionalSlot... slots) {
+        return setCstItem(new ItemStack(b), slots);
+    }
+
+    public ConstellationRecipe setCstItem(ItemStack stack, AltarAdditionalSlot... slots) {
+        for (AltarAdditionalSlot slot : slots) {
+            matchStacks.put(slot, stack.copy());
+        }
+        return this;
+    }
+
     @Override
     public int craftingTickTime() {
         return 2000;
@@ -50,6 +85,49 @@ public class ConstellationRecipe extends AttenuationRecipe {
             DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             if(!cel.getActiveConstellations().contains(skyConstellationNeeded)) return false;
         }
+        for (AltarAdditionalSlot slot : matchStacks.keySet()) {
+            ItemStack altarItem = altar.getStackInSlot(slot.slotId);
+            if(!ItemUtils.stackEqualsNonNBT(altarItem, matchStacks.get(slot))) return false;
+        }
         return super.matches(altar);
     }
+
+    @Override
+    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+        super.onCraftClientTick(altar, tick, rand);
+
+        Vector3 altarVec = new Vector3(altar);
+        Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
+        for (int i = 0; i < 4; i++) {
+            Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
+            dir.multiply(rand.nextFloat()).add(thisAltar.clone());
+
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
+            particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
+        }
+    }
+
+    public static enum AltarAdditionalSlot {
+
+        UP_UP_LEFT(13),
+        UP_UP_RIGHT(14),
+        UP_LEFT_LEFT(15),
+        UP_RIGHT_RIGHT(16),
+
+        DOWN_LEFT_LEFT(17),
+        DOWN_RIGHT_RIGHT(18),
+        DOWN_DOWN_LEFT(19),
+        DOWN_DOWN_RIGHT(20);
+
+        private final int slotId;
+
+        AltarAdditionalSlot(int slotId) {
+            this.slotId = slotId;
+        }
+
+        public int getSlotId() {
+            return slotId;
+        }
+    }
+
 }

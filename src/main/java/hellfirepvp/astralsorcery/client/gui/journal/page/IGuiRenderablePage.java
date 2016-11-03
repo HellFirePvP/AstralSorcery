@@ -85,13 +85,13 @@ public interface IGuiRenderablePage {
         String ext;
         if(amtRequired <= 100) {
             ext = "lowest";
-        } else if(amtRequired <= 200) {
-            ext = "low";
         } else if(amtRequired <= 500) {
-            ext = "avg";
+            ext = "low";
         } else if(amtRequired <= 1000) {
+            ext = "avg";
+        } else if(amtRequired <= 2500) {
             ext = "more";
-        } else if(amtRequired <= 2000) {
+        } else if(amtRequired <= 4000) {
             ext = "high";
         } else {
             ext = "highest";

@@ -18,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -60,7 +62,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
     public IMessage onMessage(PktParticleEvent message, MessageContext ctx) {
         try {
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
-            type.action.trigger(message);
+            EventAction trigger = type.getTrigger(ctx.side);
+            if(trigger != null) {
+                trigger.trigger(message);
+            }
         } catch (Exception exc) {
             AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
@@ -73,24 +78,55 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     public static enum ParticleEventType {
 
-        COLLECTOR_BURST(TileCollectorCrystal::breakParticles),
-        CELESTIAL_CRYSTAL_BURST(TileCelestialCrystals::breakParticles),
-        CELESTIAL_CRYSTAL_FORM(EntityItemStardust::spawnFormationParticles),
-        CRAFT_FINISH_BURST(TileAltar::finishBurst),
-        STARMETAL_ORE_CHARGE(BlockCustomOre::playStarmetalOreEffects),
-        WELL_CATALYST_BREAK(TileWell::catalystBurst),
-        WAND_CRYSTAL_HIGHLIGHT(ItemWand::highlightEffects),
+        //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
+        COLLECTOR_BURST,
+        CELESTIAL_CRYSTAL_BURST,
+        CELESTIAL_CRYSTAL_FORM,
+        CRAFT_FINISH_BURST,
+        STARMETAL_ORE_CHARGE,
+        WELL_CATALYST_BREAK,
+        WAND_CRYSTAL_HIGHLIGHT,
 
-        CE_CROP_GROWTH(CEffectFertilitas::playParticles),
-        CE_MELT_BLOCK(CEffectFornax::playParticles),
-        CE_ACCEL_TILE(CEffectHorologium::playParticles),
+        CE_CROP_GROWTH,
+        CE_MELT_BLOCK,
+        CE_ACCEL_TILE,
 
-        DEBUG(RaytraceAssist::playDebug);
+        DEBUG;
 
-        private final EventAction action;
+        //GOD I HATE THIS PART
+        //But i can't do this in the ctor because server-client stuffs.
+        @SideOnly(Side.CLIENT)
+        private static EventAction getClientTrigger(ParticleEventType type) {
+            switch (type) {
+                case COLLECTOR_BURST:
+                    return TileCollectorCrystal::breakParticles;
+                case CELESTIAL_CRYSTAL_BURST:
+                    return TileCelestialCrystals::breakParticles;
+                case CELESTIAL_CRYSTAL_FORM:
+                    return EntityItemStardust::spawnFormationParticles;
+                case CRAFT_FINISH_BURST:
+                    return TileAltar::finishBurst;
+                case STARMETAL_ORE_CHARGE:
+                    return BlockCustomOre::playStarmetalOreEffects;
+                case WELL_CATALYST_BREAK:
+                    return TileWell::catalystBurst;
+                case WAND_CRYSTAL_HIGHLIGHT:
+                    return ItemWand::highlightEffects;
+                case CE_CROP_GROWTH:
+                    return CEffectFertilitas::playParticles;
+                case CE_MELT_BLOCK:
+                    return CEffectFornax::playParticles;
+                case CE_ACCEL_TILE:
+                    return CEffectHorologium::playParticles;
+                case DEBUG:
+                    return RaytraceAssist::playDebug;
+            }
+            return null;
+        }
 
-        private ParticleEventType(EventAction action) {
-            this.action = action;
+        public EventAction getTrigger(Side side) {
+            if(!side.isClient()) return null;
+            return getClientTrigger(this);
         }
 
     }

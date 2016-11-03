@@ -25,7 +25,7 @@ public abstract class CEffectPositionList extends ConstellationEffect {
 
     protected List<BlockPos> positions = new LinkedList<>();
     private final int searchRange, maxCount;
-    private final Verifier verifier;
+    protected final Verifier verifier;
 
     public CEffectPositionList(Constellation c, int searchRange, int maxCount, Verifier verifier) {
         super(c);

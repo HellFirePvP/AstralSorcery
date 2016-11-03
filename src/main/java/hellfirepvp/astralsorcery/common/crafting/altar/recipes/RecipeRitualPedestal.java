@@ -35,10 +35,10 @@ public class RecipeRitualPedestal extends AttenuationRecipe {
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
                         ShapedRecipeSlot.CENTER));
-        setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()),
+        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()),
                 AttenuationRecipe.AltarSlot.UPPER_LEFT,
                 AttenuationRecipe.AltarSlot.UPPER_RIGHT);
-        setItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
                 AttenuationRecipe.AltarSlot.LOWER_LEFT,
                 AttenuationRecipe.AltarSlot.LOWER_RIGHT);
         setPassiveStarlightRequirement(3000);

@@ -29,6 +29,21 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
         applyConstellation(stack, Constellations.fornax);
         subItems.add(stack);
 
+        stack = new ItemStack(this);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        applyConstellation(stack, Constellations.horologium);
+        subItems.add(stack);
+
+        stack = new ItemStack(this);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        applyConstellation(stack, Constellations.fertilitas);
+        subItems.add(stack);
+
+        stack = new ItemStack(this);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        applyConstellation(stack, Constellations.mineralis);
+        subItems.add(stack);
+
         /*stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         applyConstellation(stack, Constellations.ara);

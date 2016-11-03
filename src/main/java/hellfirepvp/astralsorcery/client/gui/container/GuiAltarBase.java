@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.gui.container;
 
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
@@ -63,7 +64,7 @@ public abstract class GuiAltarBase extends GuiContainer {
             case ATTENUATION:
                 return new ContainerAltarAttenuation(playerInv, tileAltar);
             case CONSTELLATION_CRAFT:
-                break;
+                return new ContainerAltarConstellation(playerInv, tileAltar);
             case TRAIT_CRAFT:
                 break;
             case ENDGAME:

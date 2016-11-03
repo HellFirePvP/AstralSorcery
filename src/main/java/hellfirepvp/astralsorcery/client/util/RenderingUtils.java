@@ -159,16 +159,19 @@ public class RenderingUtils {
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
+    public static void removeStandartTranslationFromTESRMatrix(float partialTicks) {
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        Entity entity = rView;
+        double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
+        double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
+        double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
+        GL11.glTranslated(-tx, -ty, -tz);
+    }
+
     public static void renderAngleRotatedTexturedRect(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float partialTicks) {
         GL11.glPushMatrix();
-        Entity e = Minecraft.getMinecraft().getRenderViewEntity();
-        if(e == null) {
-            e = Minecraft.getMinecraft().thePlayer;
-        }
-        double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
-        double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
-        double iPZ = e.prevPosZ + (e.posZ - e.prevPosZ) * partialTicks;
-        GL11.glTranslated(-iPX, -iPY, -iPZ);
+        removeStandartTranslationFromTESRMatrix(partialTicks);
 
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
         Tessellator tes = Tessellator.getInstance();

@@ -77,7 +77,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
                 if(expected == null) continue;
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offX + (srs.columnMultiplier * 29), offY + (srs.rowMultipler * 26), zLevel + 60);
+                GL11.glTranslated(offX + (srs.columnMultiplier * 28), offY + (srs.rowMultipler * 26), zLevel + 60);
                 GL11.glScaled(1.2, 1.2, 1.2);
                 drawItemStack(expected, 0, 0, 0);
                 GL11.glPopMatrix();

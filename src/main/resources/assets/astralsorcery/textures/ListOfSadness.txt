@@ -3,6 +3,7 @@ Textures/Models missing: (At the moment)
 Proper book texture
 Proper telescope gui texture
 Proper grindstone model + texture
+solar eclipse sun textures
 Starmetal ingot item-icon
 Stardust item-icon
 replacement for TC's starfield texture

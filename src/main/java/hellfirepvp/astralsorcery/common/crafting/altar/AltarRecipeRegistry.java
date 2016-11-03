@@ -71,11 +71,18 @@ public class AltarRecipeRegistry {
 
     @Nullable
     public static AbstractAltarRecipe findMatchingRecipe(TileAltar ta) {
+        TileAltar.AltarLevel lowestAllowed = TileAltar.AltarLevel.DISCOVERY;
         for (int i = ta.getAltarLevel().ordinal(); i >= 0; i--) {
             TileAltar.AltarLevel lvl = TileAltar.AltarLevel.values()[i];
+            if(lvl.getMatcher().mbAllowsForCrafting(ta)) {
+                lowestAllowed = lvl;
+                break;
+            }
+        }
+        for (int i = lowestAllowed.ordinal(); i >= 0; i--) {
+            TileAltar.AltarLevel lvl = TileAltar.AltarLevel.values()[i];
             List<AbstractAltarRecipe> validRecipes = recipes.get(lvl);
-            boolean match = lvl.getMatcher().mbAllowsForCrafting(ta);
-            if(validRecipes != null && match) {
+            if(validRecipes != null) {
                 for (AbstractAltarRecipe rec : validRecipes) {
                     if(rec.matches(ta)) {
                         return rec;

@@ -26,7 +26,7 @@ public interface IPrismTransmissionNode {
     //Get his node's transmission properties to calculate transmission loss and so on
     //Arbitrarily this returns a max. sized Property by default...
     default public CrystalProperties getTransmissionProperties() {
-        return CrystalProperties.getMaxRockProperties();
+        return CrystalProperties.getMaxCelestialProperties();
     }
 
     //Fired to notify THIS that the link to "to" is no longer valid

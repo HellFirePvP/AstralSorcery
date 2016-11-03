@@ -4,7 +4,6 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
@@ -49,7 +48,7 @@ public class SimpleCrystalAttunationRecipe extends AttenuationRecipe implements 
 
     public SimpleCrystalAttunationRecipe(ItemRockCrystalBase baseCrystal, ItemTunedCrystalBase outAttunedItem) {
         super(new ShapedRecipe(outAttunedItem).addPart(baseCrystal, ShapedRecipeSlot.CENTER).forceEmptySpaces());
-        setItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()), AltarSlot.values());
+        setAttItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()), AltarSlot.values());
         this.outBase = outAttunedItem;
     }
 

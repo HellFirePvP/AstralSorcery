@@ -11,15 +11,20 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +45,23 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
         setHardness(3.0F);
         setSoundType(SoundType.GLASS);
         setResistance(12.0F);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(RENDER_FULLY, true));
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+        ItemStack stack = new ItemStack(itemIn);
+        CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
+        list.add(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
     }
 
     @Override
@@ -76,8 +95,20 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.DOWN;
+    }
+
+    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
+        ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
+        TileCrystalLens lens = MiscUtils.getTileAt(world, pos, TileCrystalLens.class, true);
+        if(lens != null) {
+            CrystalProperties.applyCrystalProperties(stack, lens.getCrystalProperties());
+        } else {
+            CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
+        }
+        return stack;
     }
 
     @Override
@@ -94,7 +125,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileCrystalLens te = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
         if(te == null) return;
-        te.onPlace(CrystalProperties.getMaxRockProperties());
+        te.onPlace(CrystalProperties.getCrystalProperties(stack));
     }
 
     @Override

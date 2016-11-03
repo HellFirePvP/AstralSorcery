@@ -4,9 +4,10 @@ import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.RecipeAdapter;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.LensRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.PrismLensRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.RecipeRitualPedestal;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttenuationUpgradeRecipe;
@@ -25,7 +26,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
@@ -55,6 +55,9 @@ public class RegistryRecipes {
     public static RecipeRitualPedestal rRitualPedestalRock, rRitualPedestalCel;
     public static AttenuationRecipe rLightwell;
     public static AttenuationRecipe rIlluminatorRock, rIlluminatorCel;
+
+    public static LensRecipe rLensRock, rLensCel;
+    public static PrismLensRecipe rPrismRock, rPrismCel;
 
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
     public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
@@ -135,6 +138,12 @@ public class RegistryRecipes {
         rRitualPedestalRock = registerAltarRecipe(new RecipeRitualPedestal(false));
         rRitualPedestalCel = registerAltarRecipe(new RecipeRitualPedestal(true));
 
+        rLensRock = registerAltarRecipe(new LensRecipe(false));
+        rLensCel = registerAltarRecipe(new LensRecipe(true));
+
+        rPrismRock = registerAltarRecipe(new PrismLensRecipe(false));
+        rPrismCel = registerAltarRecipe(new PrismLensRecipe(true));
+
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
 
@@ -153,7 +162,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.CENTER))
-        .setItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+        .setAttItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
                 AttenuationRecipe.AltarSlot.values());
         rLightwell.setPassiveStarlightRequirement(3900);
 
@@ -169,7 +178,7 @@ public class RegistryRecipes {
                 .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
-                .setItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
+                .setAttItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
         rIlluminatorRock.setPassiveStarlightRequirement(3700);
 
         rIlluminatorCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
@@ -184,7 +193,7 @@ public class RegistryRecipes {
                 .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
-        .setItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
+        .setAttItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
         rIlluminatorCel.setPassiveStarlightRequirement(3700);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.wand)

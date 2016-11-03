@@ -48,7 +48,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
                 alphaDaytime *= 0.8F;
 
                 int max = 5000;
-                int t = te.getTicksExisted() % max;
+                int t = ClientScheduler.getClientTick() % max;
                 float halfAge = max / 2F;
                 float tr = 1F - (Math.abs(halfAge - t) / halfAge);
                 tr *= 2;
@@ -56,13 +56,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
                 int tick = te.getEffectWorkTick();
                 float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
 
-                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-                if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
-                Entity entity = rView;
-                double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
-                double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
-                double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-                GL11.glTranslated(-tx, -ty, -tz);
+                RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
 
                 float br = 0.6F * (alphaDaytime * percRunning);
 
