@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,8 +23,8 @@ import java.util.Random;
  */
 public class CelestialHandler {
 
-    public static final float MIN_DISTRIBUTION_RATE = 0.2F;
-    private static final float DISTRIBUTION_MULTIPLIER = 1F - MIN_DISTRIBUTION_RATE;
+    /*public static final float MIN_DISTRIBUTION_RATE = 0.2F;
+    private static final float DISTRIBUTION_MULTIPLIER = 1F - MIN_DISTRIBUTION_RATE;*/
 
     public static final int SOLAR_ECLIPSE_HALF_DUR = 2400;
     public static final int LUNAR_ECLIPSE_HALF_DUR = 2400;
@@ -147,9 +148,11 @@ public class CelestialHandler {
     }
 
     //Between 1F and MIN_DISTRIBUTION_RATE for showing all the way down to not even close to showing up.
-    public static Float getCurrentDistribution(Constellation c) {
+    public static Float getCurrentDistribution(Constellation c, Function<Float, Float> func) {
         if (starlightDistribution == null) return 0F;
-        return starlightDistribution.getDistributionCharge(c);
+        Float res = starlightDistribution.getDistributionCharge(c);
+        if(res == null) return null;
+        return func.apply(res);
     }
 
     private static void computeDistribution() {
@@ -184,9 +187,11 @@ public class CelestialHandler {
                     float otherDst = Math.abs(cIndex - (i + constellations.size()));
                     if(otherDst < distance) distance = otherDst;
                     float perc = 1F - (distance / maxDst);
-                    distribution.put(c, MIN_DISTRIBUTION_RATE + (perc * DISTRIBUTION_MULTIPLIER));
+
+                    //0 and 1 are only used as fragments and well. remained here for the purpose of eventually being changed back.
+                    distribution.put(c, 0 + (perc * 1));
                 } else {
-                    distribution.put(c, activeShowing ? 1F : MIN_DISTRIBUTION_RATE + (DISTRIBUTION_MULTIPLIER / 2F)); //Special case that we'd work around anyway, but just for consistency reasons..
+                    distribution.put(c, activeShowing ? 1F : 0 + (1 / 2F)); //Special case that we'd work around anyway, but just for consistency reasons..
                 }
             }
             resultDistribution.put(t, new StarlightDistribution.ConstellationDistribution(distribution));

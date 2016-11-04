@@ -55,8 +55,11 @@ public class RenderingUtils {
         }
     }
 
-
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {
+        renderLightRayEffects(x, y, z, effectColor, seed, continuousTick, dstJump, 1, countFancy, countNormal);
+    }
+
+    public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, float scale, int countFancy, int countNormal) {
         rand.setSeed(seed);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
@@ -87,8 +90,8 @@ public class RenderingUtils {
             vb.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
             float fa = rand.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
             float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
-            fa /= 30.0F / (Math.min(dstJump, 10) / 10.0F);
-            f4 /= 30.0F / (Math.min(dstJump, 10) / 10.0F);
+            fa /= 30.0F / (Math.min(dstJump, 10 * scale) / 10.0F);
+            f4 /= 30.0F / (Math.min(dstJump, 10 * scale) / 10.0F);
             vb.pos(0, 0, 0).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), (int) (255.0F * (1.0F - f2))).endVertex();
             vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             vb.pos( 0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();

@@ -76,7 +76,7 @@ public class TileIlluminator extends TileSkybound {
                 (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
         p.scale(0.25F).setColor(Color.WHITE);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < orbitals.length; i++) {
             OrbitalEffectController ctrl = (OrbitalEffectController) orbitals[i];
             if(ctrl == null) {
                 OrbitalPropertiesIlluminator prop = new OrbitalPropertiesIlluminator(this);

@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +37,8 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     private boolean doesSeeSky, hasBeenLinkedBefore;
     private double collectionDstMultiplier = 1;
 
+    private boolean enhanced = false;
+
     public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
@@ -49,9 +52,22 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         if(!doesSeeSky || world.provider.getDimension() != 0) {
             return 0F;
         }
-        double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
+        Function<Float, Float> distrFunction = getDistributionFunc();
+        double perc = distrFunction.apply((float) CelestialHandler.calcDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
-        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType())));
+        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType(), distrFunction)));
+    }
+
+    public void setEnhanced(boolean enhanced) {
+        this.enhanced = enhanced;
+    }
+
+    private Function<Float, Float> getDistributionFunc() {
+        if(enhanced) {
+            return (in) -> 0.7F + (0.15F * in);
+        } else {
+            return (in) -> 0.2F + (0.8F * in);
+        }
     }
 
     @Override
@@ -102,6 +118,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         this.hasBeenLinkedBefore = compound.getBoolean("linkedBefore");
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
         this.collectionDstMultiplier = compound.getDouble("dstMul");
+        this.enhanced = compound.getBoolean("enhanced");
     }
 
     @Override
@@ -113,6 +130,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         compound.setBoolean("linkedBefore", hasBeenLinkedBefore);
         compound.setInteger("collectorType", type.ordinal());
         compound.setDouble("dstMul", collectionDstMultiplier);
+        compound.setBoolean("enhanced", enhanced);
     }
 
     public static class Provider implements SourceClassRegistry.SourceProvider {

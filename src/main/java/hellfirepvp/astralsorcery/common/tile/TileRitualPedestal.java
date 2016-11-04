@@ -454,7 +454,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
                 if(doesSeeSky) {
                     double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
-                    double collect = perc * CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling));
+                    double collect = perc * CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
                     collectionChannelBuffer += collect / 2D;
                 }
                 if(collectionChannelBuffer > 0) {

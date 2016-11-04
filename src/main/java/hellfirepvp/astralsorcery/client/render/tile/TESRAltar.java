@@ -33,9 +33,11 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         switch (te.getAltarLevel()) {
             case CONSTELLATION_CRAFT:
                 if(te.getMultiblockState()) {
+                    GL11.glPushMatrix();
                     renderCrystalEffects(te, x, y, z, partialTicks);
                     renderFocusLens(te, x, y, z, partialTicks);
                     renderConstellation(te, x, y, z, partialTicks);
+                    GL11.glPopMatrix();
                 }
                 break;
         }

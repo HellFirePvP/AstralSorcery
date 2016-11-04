@@ -132,7 +132,7 @@ public class ClientProxy extends CommonProxy {
 
         TileEntityItemStackRenderer.instance = new AstralTEISR(TileEntityItemStackRenderer.instance); //Wrapping TEISR
 
-        TexturePreloader.doPreloadRoutine();
+        //TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
         OBJModelLibrary.init();

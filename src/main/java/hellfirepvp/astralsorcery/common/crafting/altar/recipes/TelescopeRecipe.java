@@ -25,9 +25,17 @@ public class TelescopeRecipe extends DiscoveryRecipe {
 
     public TelescopeRecipe() {
         super(new ShapedRecipe(new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()))
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()), ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(Blocks.LOG, ShapedRecipeSlot.CENTER, ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_CENTER, ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(Items.STICK, ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT));
+                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Blocks.PLANKS,
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(Items.GOLD_INGOT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(Items.STICK,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT));
     }
 
     @Override
