@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +13,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -84,6 +86,11 @@ public class EntityGrindstone extends EntityLivingBase {
                                 break;
                         }
                     }
+                    if(i instanceof ItemSword) {
+                        if(rand.nextInt(40) == 0) {
+                            SwordSharpenHelper.setSwordSharpened(grind);
+                        }
+                    }
                 }
             } else {
                 if(player.isSneaking()) {
@@ -95,6 +102,16 @@ public class EntityGrindstone extends EntityLivingBase {
                     if(stack != null) {
                         Item trySet = stack.getItem();
                         if(trySet instanceof IGrindable && ((IGrindable) trySet).canGrind(this, stack)) {
+                            ItemStack toSet = stack.copy();
+                            toSet.stackSize = 1;
+                            setGrindItem(toSet);
+                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+
+                            if(!player.isCreative()) {
+                                stack.stackSize--;
+                            }
+                        }
+                        if(trySet instanceof ItemSword && !SwordSharpenHelper.isSwordSharpened(stack)) {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
                             setGrindItem(toSet);
@@ -118,6 +135,14 @@ public class EntityGrindstone extends EntityLivingBase {
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
                         }
+                    }
+                }
+                if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
+                    for (int j = 0; j < 15; j++) {
+                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.7, posZ,
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
                     }
                 }
             }

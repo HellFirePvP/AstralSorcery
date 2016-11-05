@@ -41,7 +41,7 @@ public abstract class ClassPatch {
         try {
             patch(node);
         } catch (ASMTransformationException exc) {
-            throw new ASMTransformationException("Failed to apply ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase());
+            throw new ASMTransformationException("Failed to apply ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase(), exc);
         }
 
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -113,35 +113,35 @@ public abstract class ClassPatch {
     }
 
     @Nonnull
-    public static MethodInsnNode getFirstMethodCallAfter(MethodNode mn, String owner, String name, String sig, int startingIndex) {
+    public static MethodInsnNode getFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain instanceof MethodInsnNode) {
                 MethodInsnNode min = (MethodInsnNode)ain;
-                if (min.owner.equals(owner) && min.name.equals(name) && min.desc.equals(sig)) {
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
                     return min;
                 }
             }
         }
-        throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " name=" + name + " signature=" + sig);
+        throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " nameDeobf=" + nameDeobf + " nameObf=" + nameObf + " signature=" + sig);
     }
 
     @Nonnull
-    public static MethodInsnNode getFirstMethodCall(MethodNode mn, String owner, String name, String sig) {
-        return getNthMethodCallAfter(mn, owner, name, sig, 0, 0);
+    public static MethodInsnNode getFirstMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig) {
+        return getNthMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, 0, 0);
     }
 
     @Nonnull
-    public static MethodInsnNode getNthMethodCall(MethodNode mn, String owner, String name, String sig, int n) {
-        return getNthMethodCallAfter(mn, owner, name, sig, n, 0);
+    public static MethodInsnNode getNthMethodCall(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int n) {
+        return getNthMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, n, 0);
     }
 
     @Nonnull
-    public static MethodInsnNode getNthMethodCallAfter(MethodNode mn, String owner, String name, String sig, int n, int startingIndex) {
-        MethodInsnNode node = getFirstMethodCallAfter(mn, owner, name, sig, startingIndex);
+    public static MethodInsnNode getNthMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int n, int startingIndex) {
+        MethodInsnNode node = getFirstMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, startingIndex);
         int currentIndex = mn.instructions.indexOf(node) + 1;
         for (int i = 0; i <= (n - 1); i++) {
-            node = getFirstMethodCallAfter(mn, owner, name, sig, currentIndex);
+            node = getFirstMethodCallAfter(mn, owner, nameDeobf, nameObf, sig, currentIndex);
             currentIndex = mn.instructions.indexOf(node) + 1;
         }
         return node;

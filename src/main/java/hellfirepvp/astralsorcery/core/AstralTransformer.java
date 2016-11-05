@@ -74,7 +74,7 @@ public class AstralTransformer extends AccessTransformer {
                         FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
                     }
                 } catch (Exception exc) {
-                    throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + name + " - " + transformedName + ") - Rethrowing exception!");
+                    throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + name + " - " + transformedName + ") - Rethrowing exception!", exc);
                 }
             }
             availablePatches.remove(transformedName);

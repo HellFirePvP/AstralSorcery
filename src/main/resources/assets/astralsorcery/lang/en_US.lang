@@ -8,6 +8,8 @@ misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 
+misc.sword.sharpened=Sharpened
+
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
 gui.journal.c.unmapped=Unknown

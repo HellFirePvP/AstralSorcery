@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -46,17 +47,32 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
 
         ItemStack grind = entity.getGrindItem();
         if(grind != null) {
-            if(grind.getItem() != null && grind.getItem() instanceof IGrindable) {
-                IGrindable grindable = (IGrindable) grind.getItem();
-                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                GL11.glPushMatrix();
-                GL11.glTranslated(x, y, z);
-                grindable.applyClientGrindstoneTransforms();
-                RenderHelper.enableStandardItemLighting();
-                Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
-                RenderHelper.disableStandardItemLighting();
-                GL11.glPopMatrix();
-                GL11.glPopAttrib();
+            if(grind.getItem() != null) {
+                if(grind.getItem() instanceof IGrindable) {
+                    IGrindable grindable = (IGrindable) grind.getItem();
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(x, y, z);
+                    grindable.applyClientGrindstoneTransforms();
+                    RenderHelper.enableStandardItemLighting();
+                    Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
+                    RenderHelper.disableStandardItemLighting();
+                    GL11.glPopMatrix();
+                    GL11.glPopAttrib();
+                }
+                if(grind.getItem() instanceof ItemSword) {
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(x, y, z);
+                    GL11.glTranslated(0.3, 0.8, -0.3);
+                    GL11.glRotated(65, 1, 0, 0);
+                    GL11.glRotated(140, 0, 1, 0);
+                    RenderHelper.enableStandardItemLighting();
+                    Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
+                    RenderHelper.disableStandardItemLighting();
+                    GL11.glPopMatrix();
+                    GL11.glPopAttrib();
+                }
             }
         }
     }

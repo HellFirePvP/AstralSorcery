@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -471,6 +472,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderStars(World w, float partialTicks) {
         float rainDim = 1.0F - w.getRainStrength(partialTicks);
         float brightness = w.getStarBrightness(partialTicks) * rainDim;
+        TextureHelper.refreshTextureBindState();
 
         if (brightness > 0.0F) {
             Tessellator tes = Tessellator.getInstance();
@@ -483,6 +485,7 @@ public class RenderAstralSkybox extends IRenderHandler {
                     vb.begin(7, DefaultVertexFormats.POSITION_TEX);
                     GlStateManager.callList(list.glList);
                     tes.draw();
+                    TextureHelper.refreshTextureBindState();
                 }
             }
         }

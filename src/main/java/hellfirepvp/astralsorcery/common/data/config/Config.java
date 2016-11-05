@@ -1,9 +1,12 @@
 package hellfirepvp.astralsorcery.common.data.config;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +19,10 @@ import java.util.List;
  */
 public class Config {
 
+    //TODO remember to do a configurable itemSword-classname blacklist for sharpening.
+
     private static Configuration latestConfig;
+    public static List<PktSyncConfig.SyncTuple> savedSyncTuples = new LinkedList<>();
 
     //public static boolean stopOnIllegalState = true;
     public static int crystalDensity = 15;
@@ -29,6 +35,9 @@ public class Config {
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
+
+    @Sync
+    public static double swordSharpMultiplier = 0.1;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
 
@@ -48,10 +57,25 @@ public class Config {
         dynamicConfigEntries.add(entry);
     }
 
+    public static void rebuildClientConfig() {
+        try {
+            for (PktSyncConfig.SyncTuple tuple : savedSyncTuples) {
+                Field field = Config.class.getField(tuple.key);
+                field.set(null, tuple.value);
+            }
+            savedSyncTuples.clear();
+        } catch (Throwable exc) {
+            AstralSorcery.log.error("Failed to reapply saved client config!");
+            throw new RuntimeException(exc);
+        }
+    }
+
     private static void loadData() {
         //stopOnIllegalState = latestConfig.getBoolean("stopOnIllegalState", "general", Boolean.TRUE, "If this is set to 'true' the server or client will exit the game with a crash in case it encounters a state that might lead to severe issues but doesn't actually crash the server/client. If this is set to 'false' it will only print a warning in the console.");
 
         giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
+
+        swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
 
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;

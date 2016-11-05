@@ -35,7 +35,10 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
     @Override
     public void fromBytes(ByteBuf buf) {
         int count = buf.readByte();
-        fields = new ArrayList<>();
+        fields = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            fields.add(new SyncTuple(null, null)); //Empty init
+        }
 
         for (int i = 0; i < count; i++) {
             byte[] data = new byte[buf.readShort()];
@@ -91,13 +94,15 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
     @Override
     public IMessage onMessage(PktSyncConfig message, MessageContext ctx) {
         try {
+            Config.savedSyncTuples.clear();
             for (SyncTuple tuple : message.fields) {
                 Field field = Config.class.getField(tuple.key);
+                Config.savedSyncTuples.add(new SyncTuple(tuple.key, field.get(null)));
                 field.set(null, tuple.value);
             }
-        } catch (Throwable ignored) {
+        } catch (Throwable exc) {
             AstralSorcery.log.error("Could not apply config received from server!");
-            throw new RuntimeException(ignored);
+            throw new RuntimeException(exc);
         }
         return null;
     }
