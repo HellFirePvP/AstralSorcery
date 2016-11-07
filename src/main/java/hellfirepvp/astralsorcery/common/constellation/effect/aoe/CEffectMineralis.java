@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
 
@@ -28,8 +29,13 @@ import javax.annotation.Nullable;
  */
 public class CEffectMineralis extends CEffectPositionList {
 
+    public static boolean enabled = true;
+
+    public static int searchRange = 14;
+    public static int maxCount = 2;
+
     public CEffectMineralis() {
-        super(Constellations.mineralis, 14, 2, (world, pos) -> {
+        super(Constellations.mineralis, "mineralis", searchRange, maxCount, (world, pos) -> {
             IBlockState state = world.getBlockState(pos);
             return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
         });
@@ -40,6 +46,7 @@ public class CEffectMineralis extends CEffectPositionList {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        if(!enabled) return false;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -69,6 +76,13 @@ public class CEffectMineralis extends CEffectPositionList {
     @Override
     public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
         return false;
+    }
+
+    @Override
+    public void loadFromConfig(Configuration cfg) {
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 14, 1, 32, "Defines the radius (in blocks) in which the ritual will search for cleanStone to generate ores into.");
+        maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 2, 1, 4000, "Defines the amount of block-positions the ritual can cache at max count");
+        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
     }
 
 }

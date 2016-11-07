@@ -25,8 +25,8 @@ public abstract class CEffectPositionMap<T extends CEffectPositionMap.PositionEn
     private final int searchRange, maxCount;
     private final Verifier verifier;
 
-    public CEffectPositionMap(Constellation c, int searchRange, int maxCount, Verifier verifier) {
-        super(c);
+    public CEffectPositionMap(Constellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+        super(c, cfgName);
         this.searchRange = searchRange;
         this.maxCount = maxCount;
         this.verifier = verifier;

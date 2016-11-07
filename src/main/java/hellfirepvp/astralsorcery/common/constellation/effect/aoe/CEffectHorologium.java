@@ -21,6 +21,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,11 +37,15 @@ import java.awt.*;
  */
 public class CEffectHorologium extends CEffectPositionList {
 
-    public static final int MAX_SEARCH_RANGE = 8;
-    public static final int MAX_ACCEL_COUNT = 30;
+    //public static final int MAX_SEARCH_RANGE = 8;
+    //public static final int MAX_ACCEL_COUNT = 30;
+
+    public boolean enabled = true;
+    public static int searchRange = 8;
+    public static int maxCount = 30;
 
     public CEffectHorologium() {
-        super(Constellations.horologium, MAX_SEARCH_RANGE, MAX_ACCEL_COUNT, (world, pos) -> TileAccelerationBlacklist.canAccelerate(world.getTileEntity(pos)));
+        super(Constellations.horologium, "horologium", searchRange, maxCount, (world, pos) -> TileAccelerationBlacklist.canAccelerate(world.getTileEntity(pos)));
     }
 
     @Override
@@ -48,6 +53,7 @@ public class CEffectHorologium extends CEffectPositionList {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        if(!enabled) return false;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -105,4 +111,12 @@ public class CEffectHorologium extends CEffectPositionList {
                  (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
         p.scale(0.25F).setColor(Color.CYAN.brighter());
     }
+
+    @Override
+    public void loadFromConfig(Configuration cfg) {
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 8, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid tileEntities to accelerate");
+        maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 30, 1, 4000, "Defines the amount of tileEntities the ritual can cache and accelerate at max count");
+        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+    }
+
 }

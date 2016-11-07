@@ -27,8 +27,8 @@ public abstract class CEffectPositionList extends ConstellationEffect {
     private final int searchRange, maxCount;
     protected final Verifier verifier;
 
-    public CEffectPositionList(Constellation c, int searchRange, int maxCount, Verifier verifier) {
-        super(c);
+    public CEffectPositionList(Constellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+        super(c, cfgName);
         this.searchRange = searchRange;
         this.maxCount = maxCount;
         this.verifier = verifier;

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,14 +21,20 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 01.10.2016 / 15:47
  */
-public abstract class ConstellationEffect {
+public abstract class ConstellationEffect extends ConfigEntry {
 
     protected static final Random rand = new Random();
 
     private final Constellation constellation;
 
-    public ConstellationEffect(Constellation constellation) {
+    public ConstellationEffect(Constellation constellation, String cfgName) {
+        super(Section.RITUAL_EFFECTS, cfgName);
         this.constellation = constellation;
+    }
+
+    @Override
+    public String getConfigurationSection() {
+        return super.getConfigurationSection() + "." + getKey();
     }
 
     public Constellation getConstellation() {

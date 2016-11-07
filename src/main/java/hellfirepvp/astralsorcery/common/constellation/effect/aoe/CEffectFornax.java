@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,11 +32,17 @@ import java.util.LinkedList;
  */
 public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryInteger> {
 
-    public static final int MAX_SEARCH_RANGE = 12;
-    public static final int MAX_MELT_COUNT = 40;
+    //public static final int MAX_SEARCH_RANGE = 12;
+    //public static final int MAX_MELT_COUNT = 40;
+
+    public static boolean enabled = true;
+
+    public static int searchRange = 12;
+    public static int maxCount = 40;
+    public static double meltDurationDivisor = 1;
 
     public CEffectFornax() {
-        super(Constellations.fornax, MAX_SEARCH_RANGE, MAX_MELT_COUNT, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null);
+        super(Constellations.fornax, "fornax", searchRange, maxCount, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null);
     }
 
     @Override
@@ -48,6 +55,7 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        if(!enabled) return false;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -66,7 +74,7 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
                     entry.value++;
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
-                    if(entry.value >= melt.getMeltDuration()) {
+                    if(entry.value >= (melt.getMeltDuration() / meltDurationDivisor)) {
                         world.setBlockState(bp, melt.getMeltResult());
                         positions.remove(bp);
                     }
@@ -94,6 +102,14 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
                 at.getZ() + rand.nextFloat());
         p.motion(0, 0.016 + rand.nextFloat() * 0.02, 0);
         p.scale(0.25F).setColor(Color.RED);
+    }
+
+    @Override
+    public void loadFromConfig(Configuration cfg) {
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 12, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid blocks to start to melt.");
+        maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 40, 1, 4000, "Defines the amount of block-positions the ritual can cache and melt at max count");
+        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        meltDurationDivisor = cfg.getFloat(getKey() + "Divisor", getConfigurationSection(), 1, 0.0001F, 200F, "Defines a multiplier used to determine how long it needs to melt a block. normal duration * durationMultiplier = actual duration");
     }
 
 }

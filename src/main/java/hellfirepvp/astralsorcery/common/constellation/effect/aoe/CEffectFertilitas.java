@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,11 +31,16 @@ import java.awt.*;
  */
 public class CEffectFertilitas extends CEffectPositionList {
 
-    public static final int MAX_SEARCH_RANGE = 16;
-    public static final int MAX_CROP_COUNT = 200;
+    //public static final int MAX_SEARCH_RANGE = 16;
+    //public static final int MAX_CROP_COUNT = 200;
+
+    public static boolean enabled = true;
+
+    public static int searchRange = 16;
+    public static int maxCropCount = 200;
 
     public CEffectFertilitas() {
-        super(Constellations.fertilitas, MAX_SEARCH_RANGE, MAX_CROP_COUNT, (world, at) -> CropTypes.getCropType(world.getBlockState(at)) != null);
+        super(Constellations.fertilitas, "fertilitas", searchRange, maxCropCount, (world, at) -> CropTypes.getCropType(world.getBlockState(at)) != null);
     }
 
     @Override
@@ -47,6 +53,7 @@ public class CEffectFertilitas extends CEffectPositionList {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+        if(!enabled) return false;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -90,6 +97,13 @@ public class CEffectFertilitas extends CEffectPositionList {
             p.motion(0, 0.005 + rand.nextFloat() * 0.01, 0);
             p.scale(0.2F).setColor(Color.GREEN);
         }
+    }
+
+    @Override
+    public void loadFromConfig(Configuration cfg) {
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 16, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid crops.");
+        maxCropCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 200, 1, 4000, "Defines the amount of crops the ritual can cache at max. count");
+        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
     }
 
 }

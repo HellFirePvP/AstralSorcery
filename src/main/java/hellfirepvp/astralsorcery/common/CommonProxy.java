@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
@@ -66,6 +67,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void preLoadConfigEntries() {
         worldGenerator.pushConfigEntries();
+        ConstellationEffectRegistry.addDynamicConfigEntries();
     }
 
     public void preInit() {

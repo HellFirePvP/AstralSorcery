@@ -8,5 +8,3 @@ something with trees/treefarms?
 something that makes everything around it float
 fishing out of water.
 pushing/pulling AOE (trait teleport)
-
-ASM into EntityLivingBase -> before applyModifiers, get itemStack, slot, add stuff if necessary.
