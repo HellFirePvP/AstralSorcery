@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -69,6 +70,14 @@ public class ItemFocusLens extends Item implements IItemVariants {
         TIER3,
         TIER4,
         TIER5;
+
+        public ItemStack asStack() {
+            return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
+        }
+
+        public int getMeta() {
+            return ordinal();
+        }
 
         @Override
         public String getName() {

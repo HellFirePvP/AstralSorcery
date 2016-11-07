@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
@@ -54,7 +55,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     @Override
     public int getMetaFromState(IBlockState state) {
         OreType type = state.getValue(ORE_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type == null ? 0 : type.getMeta();
     }
 
     @Override
@@ -79,7 +80,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
                     i = 0;
                 }
                 for (int j = 0; j < (i + 1); j++) {
-                    drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()));
+                    drops.add(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
                 }
                 break;
         }
@@ -133,7 +134,21 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
 
     public static enum OreType implements IStringSerializable {
 
-        AQUAMARINE;
+        AQUAMARINE(0);
+
+        private final int meta;
+
+        private OreType(int meta) {
+            this.meta = meta;
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(BlocksAS.customSandOre, 1, meta);
+        }
+
+        public int getMeta() {
+            return meta;
+        }
 
         @Override
         public String getName() {

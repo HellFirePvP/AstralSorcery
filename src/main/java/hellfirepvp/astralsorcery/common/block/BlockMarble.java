@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -12,6 +13,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +46,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
+            if(!t.obtainableInCreative()) continue;
             list.add(new ItemStack(item, 1, t.ordinal()));
         }
     }
@@ -56,6 +60,33 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
             }
         }
     }*/
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        //return super.getActualState(state, worldIn, pos);
+        if(state.getValue(MARBLE_TYPE).isPillar()) {
+            IBlockState st = worldIn.getBlockState(pos.up());
+            boolean top = false;
+            if(st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE).isPillar()) {
+                top = true;
+            }
+            st = worldIn.getBlockState(pos.down());
+            boolean down = false;
+            if(st.getBlock() instanceof BlockMarble && st.getValue(MARBLE_TYPE).isPillar()) {
+                down = true;
+            }
+            if(top && down) {
+                return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR);
+            } else if(top) {
+                return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR_BOTTOM);
+            } else if(down) {
+                return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR_TOP);
+            } else {
+                return state.withProperty(MARBLE_TYPE, MarbleBlockType.PILLAR);
+            }
+        }
+        return super.getActualState(state, worldIn, pos);
+    }
 
     @Override
     public int damageDropped(IBlockState state) {
@@ -91,7 +122,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     @Override
     public int getMetaFromState(IBlockState state) {
         MarbleBlockType type = state.getValue(MARBLE_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type == null ? 0 : type.getMeta();
     }
 
     @Override
@@ -120,17 +151,42 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     public static enum MarbleBlockType implements IStringSerializable {
 
-        RAW,
-        BRICKS,
-        PILLAR,
-        ARCH,
-        CHISELED,
-        ENGRAVED,
-        RUNED;
+        RAW(0),
+        BRICKS(1),
+        PILLAR(2),
+        ARCH(3),
+        CHISELED(4),
+        ENGRAVED(5),
+        RUNED(6),
+
+        PILLAR_TOP(2),
+        PILLAR_BOTTOM(2);
 
         //BRICKS_MOSSY,
         //PILLAR_MOSSY,
         //CRACK_MOSSY;
+
+        private final int meta;
+
+        private MarbleBlockType(int meta) {
+            this.meta = meta;
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(BlocksAS.blockMarble, 1, meta);
+        }
+
+        public boolean isPillar() {
+            return this == PILLAR_BOTTOM || this == PILLAR || this == PILLAR_TOP;
+        }
+
+        public boolean obtainableInCreative() {
+            return this != PILLAR_TOP && this != PILLAR_BOTTOM;
+        }
+
+        public int getMeta() {
+            return meta;
+        }
 
         @Override
         public String getName() {

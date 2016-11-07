@@ -32,17 +32,16 @@ public class LensRecipe extends ConstellationRecipe {
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
                         ShapedRecipeSlot.CENTER));
 
-        ItemStack rMarble = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal());
-        setAttItem(rMarble,
+        setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AltarSlot.LOWER_LEFT,
                 AltarSlot.LOWER_RIGHT);
-        setCstItem(rMarble,
+        setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AltarAdditionalSlot.DOWN_DOWN_LEFT,
                 AltarAdditionalSlot.DOWN_DOWN_RIGHT);
         setCstItem(Blocks.LOG,

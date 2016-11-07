@@ -20,8 +20,8 @@ import net.minecraft.item.ItemStack;
 public class GrindstoneRecipe extends DiscoveryRecipe {
 
     public GrindstoneRecipe() {
-        super(new ShapedRecipe(new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()))
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
+        super(new ShapedRecipe(ItemEntityPlacer.PlacerType.GRINDSTONE.asStack())
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.CENTER)
                 .addPart(Blocks.PLANKS,
                         ShapedRecipeSlot.RIGHT,

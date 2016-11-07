@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -86,6 +87,10 @@ public class ItemEntityPlacer extends Item {
 
         public String getUnlocalizedName() {
             return name().toLowerCase();
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
         }
 
         public int getMeta() {

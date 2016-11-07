@@ -48,7 +48,7 @@ public class SimpleCrystalAttunationRecipe extends AttenuationRecipe implements 
 
     public SimpleCrystalAttunationRecipe(ItemRockCrystalBase baseCrystal, ItemTunedCrystalBase outAttunedItem) {
         super(new ShapedRecipe(outAttunedItem).addPart(baseCrystal, ShapedRecipeSlot.CENTER).forceEmptySpaces());
-        setAttItem(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()), AltarSlot.values());
+        setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AltarSlot.values());
         this.outBase = outAttunedItem;
     }
 

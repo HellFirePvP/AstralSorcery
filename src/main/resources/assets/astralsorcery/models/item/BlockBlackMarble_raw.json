@@ -1,6 +1,3 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "astralsorcery:blocks/black_marble_raw"
-    }
+    "parent": "astralsorcery:block/BlockBlackMarble_raw"
 }

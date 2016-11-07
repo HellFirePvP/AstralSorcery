@@ -128,13 +128,13 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> drops = Lists.newLinkedList();
-        drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+        drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
         int stage = state.getValue(STAGE);
         switch (stage) {
             case 4:
                 if(world != null && world instanceof World && checkSafety((World) world, pos)) {
                     if(fortune > 0 || rand.nextInt(2) == 0) {
-                        drops.add(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARDUST.getItemMeta()));
+                        drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
                     }
                     drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
                 }

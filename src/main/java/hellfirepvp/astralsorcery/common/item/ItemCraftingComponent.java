@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -37,7 +38,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         for (MetaType type : MetaType.values()) {
-            subItems.add(new ItemStack(itemIn, 1, type.getItemMeta()));
+            subItems.add(new ItemStack(itemIn, 1, type.getMeta()));
         }
     }
 
@@ -78,7 +79,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
 
     @Override
     public boolean isCatalyst(@Nonnull ItemStack stack) {
-        return stack.getItemDamage() == MetaType.AQUAMARINE.getItemMeta();
+        return stack.getItemDamage() == MetaType.AQUAMARINE.getMeta();
     }
 
     @Override
@@ -109,7 +110,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         switch (type) {
             case STARMETAL_INGOT:
                 if(rand.nextInt(20) == 0) {
-                    return GrindResult.itemChange(new ItemStack(this, 1, MetaType.STARDUST.getItemMeta()));
+                    return GrindResult.itemChange(new ItemStack(this, 1, MetaType.STARDUST.getMeta()));
                 }
                 break;
         }
@@ -133,7 +134,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         MetaType[] values = MetaType.values();
         for (int i = 0; i < values.length; i++) {
             MetaType mt = values[i];
-            sub[i] = mt.getItemMeta();
+            sub[i] = mt.getMeta();
         }
         return sub;
     }
@@ -145,11 +146,15 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         STARDUST,
         GLASS_LENS;
 
+        public ItemStack asStack() {
+            return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
+        }
+
         public String getUnlocalizedName() {
             return name().toLowerCase();
         }
 
-        public int getItemMeta() {
+        public int getMeta() {
             return ordinal();
         }
 

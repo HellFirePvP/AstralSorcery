@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
@@ -58,7 +59,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public int getMetaFromState(IBlockState state) {
         OreType type = state.getValue(ORE_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type == null ? 0 : type.getMeta();
     }
 
     @Override
@@ -155,8 +156,22 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     public static enum OreType implements IStringSerializable {
 
-        ROCK_CRYSTAL,
-        STARMETAL;
+        ROCK_CRYSTAL(0),
+        STARMETAL(1);
+
+        private final int meta;
+
+        private OreType(int meta) {
+            this.meta = meta;
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(BlocksAS.customOre, 1, meta);
+        }
+
+        public int getMeta() {
+            return meta;
+        }
 
         @Override
         public String getName() {

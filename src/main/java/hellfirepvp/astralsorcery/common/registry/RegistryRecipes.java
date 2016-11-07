@@ -104,7 +104,7 @@ public class RegistryRecipes {
                 .addPart(Blocks.CRAFTING_TABLE,
                         ShapedRecipeSlot.CENTER);
         rLPRWand = new ShapedRecipe(ItemsAS.wand)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(Items.ENDER_PEARL,
@@ -117,12 +117,12 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Items.BOOK,
                         ShapedRecipeSlot.CENTER)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER);
 
-        rSmeltStarmetalOre = new SmeltingRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.STARMETAL_INGOT.getItemMeta()))
+        rSmeltStarmetalOre = new SmeltingRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
                 .setExp(2F);
 
@@ -134,15 +134,15 @@ public class RegistryRecipes {
     }
 
     public static void initAltarRecipes() {
-        ItemStack mRuned = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal());
-        ItemStack mChisel = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal());
-        ItemStack mEngraved = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal());
-        ItemStack mBricks = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.BRICKS.ordinal());
-        ItemStack mPillar = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal());
-        ItemStack mArch = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ARCH.ordinal());
-        ItemStack mRaw = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal());
+        //ItemStack mRuned = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal());
+        //ItemStack mChisel = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal());
+        //ItemStack mEngraved = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal());
+        //ItemStack mBricks = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.BRICKS.ordinal());
+        //ItemStack mPillar = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal());
+        //ItemStack mArch = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ARCH.ordinal());
+        //ItemStack mRaw = new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal());
 
-        ItemStack aquamarine = new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta());
+        //ItemStack aquamarine = new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta());
 
         rTelescope = registerAltarRecipe(new TelescopeRecipe());
         rGrindstone = registerAltarRecipe(new GrindstoneRecipe());
@@ -166,7 +166,7 @@ public class RegistryRecipes {
                 .addPart(Blocks.LOG,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(Items.STICK,
@@ -177,7 +177,7 @@ public class RegistryRecipes {
         .setCstItem(Items.STICK,
                 ConstellationRecipe.AltarAdditionalSlot.UP_UP_LEFT,
                 ConstellationRecipe.AltarAdditionalSlot.DOWN_RIGHT_RIGHT)
-        .setCstItem(aquamarine,
+        .setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT,
                 ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkToolRock.setAttItem(Blocks.LOG, AttenuationRecipe.AltarSlot.LOWER_LEFT);
@@ -186,7 +186,7 @@ public class RegistryRecipes {
                 .addPart(Blocks.LOG,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(Items.STICK,
@@ -197,29 +197,29 @@ public class RegistryRecipes {
                 .setCstItem(Items.STICK,
                         ConstellationRecipe.AltarAdditionalSlot.UP_UP_LEFT,
                         ConstellationRecipe.AltarAdditionalSlot.DOWN_RIGHT_RIGHT)
-                .setCstItem(aquamarine,
+                .setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT,
                         ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkToolCel.setAttItem(Blocks.LOG, AttenuationRecipe.AltarSlot.LOWER_LEFT);
 
         rLightwell = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockWell)
-                .addPart(mRuned,
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(mChisel,
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.CENTER))
-        .setAttItem(aquamarine,
+        .setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttenuationRecipe.AltarSlot.values());
         rLightwell.setPassiveStarlightRequirement(3900);
 
         rIlluminatorRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
-                .addPart(mRuned,
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -227,14 +227,14 @@ public class RegistryRecipes {
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
                 .setAttItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
         rIlluminatorRock.setPassiveStarlightRequirement(3700);
 
         rIlluminatorCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
-                .addPart(mRuned,
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -242,26 +242,26 @@ public class RegistryRecipes {
                 .addPart(ItemsAS.celestialCrystal,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
         .setAttItem(Items.GLOWSTONE_DUST, AttenuationRecipe.AltarSlot.values());
         rIlluminatorCel.setPassiveStarlightRequirement(3700);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.wand)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Items.ENDER_PEARL,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT)));
 
         rWand.setPassiveStarlightRequirement(200);
 
         rJournal = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.journal)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
@@ -272,7 +272,7 @@ public class RegistryRecipes {
         rJournal.setPassiveStarlightRequirement(20);
 
         rBlackMarbleRaw = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
@@ -282,40 +282,40 @@ public class RegistryRecipes {
         rBlackMarbleRaw.setPassiveStarlightRequirement(1);
 
         rMarbleRuned = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(mChisel,
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER))
                 );
 
         rMarbleEngraved = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(mChisel,
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.CENTER)));
 
         rMarbleChiseled = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.CHISELED.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)));
 
         rMarbleArch = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.ARCH.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.UPPER_RIGHT)));
 
         rMarblePillar = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 2, BlockMarble.MarbleBlockType.PILLAR.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LEFT)));
 
         rMarbleBricks = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.BRICKS.ordinal()))
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER)));
 
@@ -329,19 +329,19 @@ public class RegistryRecipes {
         rAltar = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(BlocksAS.blockAltar)
                 .addPart(Blocks.CRAFTING_TABLE, ShapedRecipeSlot.CENTER)
                 .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(mRaw,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_RIGHT)));
         rAltar.setPassiveStarlightRequirement(10);
 
-        rCCGlassLens = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()))
+        rCCGlassLens = registerDiscoveryRecipe(new ShapedRecipe(ItemCraftingComponent.MetaType.GLASS_LENS.asStack())
                 .addPart(Blocks.GLASS_PANE,
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(aquamarine,
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.CENTER));
         rCCGlassLens.setPassiveStarlightRequirement(100);
 

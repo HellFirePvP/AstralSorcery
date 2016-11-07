@@ -47,23 +47,23 @@ public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAl
 
     public ConstellationUpgradeRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()))
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.AQUAMARINE.getItemMeta()),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()),
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER));
-        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+        setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AltarSlot.LOWER_LEFT,
                 AltarSlot.LOWER_RIGHT);
-        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+        setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                 AltarSlot.UPPER_RIGHT,
                 AltarSlot.UPPER_LEFT);
         setPassiveStarlightRequirement(3000);

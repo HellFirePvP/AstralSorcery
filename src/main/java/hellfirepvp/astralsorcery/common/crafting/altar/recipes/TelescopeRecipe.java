@@ -24,8 +24,8 @@ import java.util.Random;
 public class TelescopeRecipe extends DiscoveryRecipe {
 
     public TelescopeRecipe() {
-        super(new ShapedRecipe(new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()))
-                .addPart(new ItemStack(ItemsAS.craftingComponent, 1, ItemCraftingComponent.MetaType.GLASS_LENS.getItemMeta()),
+        super(new ShapedRecipe(ItemEntityPlacer.PlacerType.TELESCOPE.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Blocks.PLANKS,
                         ShapedRecipeSlot.CENTER,

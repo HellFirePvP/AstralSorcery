@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 02:55
  */
-@IFMLLoadingPlugin.TransformerExclusions({"makeo.gadomancy.coremod"})
+@IFMLLoadingPlugin.TransformerExclusions({"hellfirepvp.astralsorcery.core"})
 public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
     public AstralCore() {
@@ -27,7 +27,9 @@ public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
     @Override
     public String[] getASMTransformerClass() {
-        return null;
+        return new String[] {
+                "hellfirepvp.astralsorcery.core.AstralTransformer"
+        };
     }
 
     @Override
@@ -46,7 +48,7 @@ public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
     @Override
     public String getAccessTransformerClass() {
-        return "hellfirepvp.astralsorcery.core.AstralTransformer";
+        return null;
     }
 
 }

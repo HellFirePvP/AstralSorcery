@@ -23,22 +23,22 @@ public class RecipeRitualPedestal extends AttenuationRecipe {
 
     public RecipeRitualPedestal(boolean celestial) {
         super(new ShapedRecipe(BlocksAS.ritualPedestal)
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RUNED.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
                         ShapedRecipeSlot.CENTER));
-        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()),
+        setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
                 AttenuationRecipe.AltarSlot.UPPER_LEFT,
                 AttenuationRecipe.AltarSlot.UPPER_RIGHT);
-        setAttItem(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+        setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttenuationRecipe.AltarSlot.LOWER_LEFT,
                 AttenuationRecipe.AltarSlot.LOWER_RIGHT);
         setPassiveStarlightRequirement(3000);

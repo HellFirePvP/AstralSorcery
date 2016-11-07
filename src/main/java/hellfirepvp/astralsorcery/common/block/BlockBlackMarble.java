@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -78,7 +79,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     @Override
     public int getMetaFromState(IBlockState state) {
         BlackMarbleBlockType type = state.getValue(BLACK_MARBLE_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type == null ? 0 : type.getMeta();
     }
 
     @Override
@@ -107,7 +108,21 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     public static enum BlackMarbleBlockType implements IStringSerializable {
 
-        RAW;
+        RAW(0);
+
+        private final int meta;
+
+        private BlackMarbleBlockType(int meta) {
+            this.meta = meta;
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(BlocksAS.blockBlackMarble, 1, meta);
+        }
+
+        public int getMeta() {
+            return meta;
+        }
 
         @Override
         public String getName() {

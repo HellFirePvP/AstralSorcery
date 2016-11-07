@@ -32,12 +32,12 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
 
     public AttenuationUpgradeRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.PILLAR.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.CHISELED.ordinal()),
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
                 .addPart(ItemsAS.rockCrystal,

@@ -1,20 +1,16 @@
 package hellfirepvp.astralsorcery.core;
 
 import net.minecraftforge.classloading.FMLForgePlugin;
-import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
