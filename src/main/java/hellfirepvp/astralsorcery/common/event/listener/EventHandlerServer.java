@@ -11,9 +11,14 @@ import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -26,9 +31,13 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +47,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  * Date: 07.05.2016 / 01:09
  */
 public class EventHandlerServer {
+
+    public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
@@ -63,11 +74,22 @@ public class EventHandlerServer {
         }
     }
 
-    //TODO spawntesting/denying
-
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
+        if(event.getResult() == Event.Result.DENY) return; //Already denied anyway.
 
+        EntityLivingBase toTest = event.getEntityLiving();
+        Vector3 at = new Vector3(toTest);
+        boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
+        if(mayDeny) {
+            for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
+                if(!entry.getKey().getWorld().equals(toTest.getEntityWorld())) continue;
+                if(at.distance(entry.getKey()) <= entry.getValue().getValue()) {
+                    event.setResult(Event.Result.DENY);
+                    return;
+                }
+            }
+        }
     }
 
     @SubscribeEvent

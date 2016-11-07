@@ -131,6 +131,9 @@ public class CommonProxy implements IGuiHandler {
         manager.register(WorldCacheManager.getInstance());
         manager.register(new LinkHandler()); //Only used as instance for tick handling
         manager.register(SyncDataHolder.getTickInstance());
+
+        //TickTokenizedMaps
+        manager.register(EventHandlerServer.spawnDenyRegions);
     }
 
     public void postInit() {

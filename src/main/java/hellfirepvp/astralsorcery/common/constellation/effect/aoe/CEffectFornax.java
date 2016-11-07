@@ -36,6 +36,7 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
     //public static final int MAX_MELT_COUNT = 40;
 
     public static boolean enabled = true;
+    public static double potencyMultiplier = 1;
 
     public static int searchRange = 12;
     public static int maxCount = 40;
@@ -51,11 +52,9 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
     }
 
     @Override
-    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {}
-
-    @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
         if(!enabled) return false;
+        percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -110,6 +109,7 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 40, 1, 4000, "Defines the amount of block-positions the ritual can cache and melt at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         meltDurationDivisor = cfg.getFloat(getKey() + "Divisor", getConfigurationSection(), 1, 0.0001F, 200F, "Defines a multiplier used to determine how long it needs to melt a block. normal duration * durationMultiplier = actual duration");
+        potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 
 }

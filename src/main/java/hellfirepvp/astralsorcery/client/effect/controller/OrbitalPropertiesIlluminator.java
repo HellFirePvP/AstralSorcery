@@ -38,6 +38,7 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
 
     @Override
     public void doPointTickEffect(OrbitalEffectController ctrl, Vector3 pos) {
+        if(!Minecraft.isFancyGraphicsEnabled()) return;
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                 pos.getX(),
                 pos.getY(),

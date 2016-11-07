@@ -456,9 +456,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
                     double collect = perc * CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
                     collectionChannelBuffer += collect / 2D;
+                    /*if(collectionChannelBuffer <= 0) {
+                        AstralSorcery.log.info("Ended up with < 0 starlight back from gathering it from sky.");
+                        AstralSorcery.log.info("perc: " + perc + ", distr: " + CelestialHandler.calcDaytimeDistribution(world));
+                        AstralSorcery.log.info("distribution: " + CelestialHandler.getCurrentDistribution(channeling, (in) -> in));
+                        AstralSorcery.log.info("collection from properties from distr: " + CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in))));
+                    }*/
                 }
                 if(collectionChannelBuffer > 0) {
                     doMainEffect(world, ce, trait, trait != null && collectionTraitBuffer > 0);
+                    //if(collectionChannelBuffer <= 0) AstralSorcery.log.info("Ended up with < 0 starlight back from main effect.");
 
                     if(tryIncrementChannelingTimer())
                         channeled++;
@@ -508,6 +515,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
         }
 
+        //TODO occasionally returns with <0?
         private void doMainEffect(World world, ConstellationEffect ce, @Nullable Constellation trait, boolean mayDoTrait) {
             double maxDrain = 20D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
@@ -574,6 +582,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             if(channeling != null && hasMultiblock) {
                 if(channeling == type) {
                     collectionChannelBuffer += amount;
+                    /*if(collectionChannelBuffer <= 0) {
+                        AstralSorcery.log.info("Ended up with < 0 starlight back receive: amount: " + amount);
+                    }*/
                     tryGainMirrorPos(world);
                     return;
                 }

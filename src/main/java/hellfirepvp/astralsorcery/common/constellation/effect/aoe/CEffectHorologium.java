@@ -41,6 +41,8 @@ public class CEffectHorologium extends CEffectPositionList {
     //public static final int MAX_ACCEL_COUNT = 30;
 
     public boolean enabled = true;
+    public static double potencyMultiplier = 1;
+
     public static int searchRange = 8;
     public static int maxCount = 30;
 
@@ -49,11 +51,9 @@ public class CEffectHorologium extends CEffectPositionList {
     }
 
     @Override
-    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {}
-
-    @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
         if(!enabled) return false;
+        percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -117,6 +117,7 @@ public class CEffectHorologium extends CEffectPositionList {
         searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 8, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid tileEntities to accelerate");
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 30, 1, 4000, "Defines the amount of tileEntities the ritual can cache and accelerate at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 
 }

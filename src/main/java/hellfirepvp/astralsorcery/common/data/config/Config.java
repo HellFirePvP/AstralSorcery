@@ -32,6 +32,7 @@ public class Config {
 
     public static boolean clientPreloadTextures = true;
     public static boolean giveJournalFirst = true;
+    public static boolean doesMobSpawnDenyDenyEverything = false;
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
@@ -74,7 +75,7 @@ public class Config {
         //stopOnIllegalState = latestConfig.getBoolean("stopOnIllegalState", "general", Boolean.TRUE, "If this is set to 'true' the server or client will exit the game with a crash in case it encounters a state that might lead to severe issues but doesn't actually crash the server/client. If this is set to 'false' it will only print a warning in the console.");
 
         giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
-
+        doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
 
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Inde
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,22 +60,22 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @SideOnly(Side.CLIENT)
     private void playEnhancedEffects() {
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                getPos().getX() + 0.5,
-                getPos().getY() + 0.5,
-                getPos().getZ() + 0.5);
-        p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                 (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                 (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
-        p.scale(0.25F).setColor(Color.CYAN);
-
-
+        if(Minecraft.isFancyGraphicsEnabled()) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    getPos().getX() + 0.5,
+                    getPos().getY() + 0.5,
+                    getPos().getZ() + 0.5);
+            p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
+                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.25F).setColor(Color.CYAN);
+        }
 
         for (int i = 0; i < orbitals.length; i++) {
             OrbitalEffectController ctrl = (OrbitalEffectController) orbitals[i];
             if(ctrl == null) {
                 OrbitalEffectCollector prop = new OrbitalEffectCollector(this);
-                ctrl = EffectHandler.getInstance().orbital(prop, null);
+                ctrl = EffectHandler.getInstance().orbital(prop, null, null);
                 ctrl.setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
                 ctrl.setOrbitRadius(0.8 + rand.nextFloat() * 0.4);
                 ctrl.setOrbitAxis(Vector3.random());

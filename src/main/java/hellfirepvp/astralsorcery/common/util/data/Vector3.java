@@ -162,6 +162,17 @@ public class Vector3 {
         return difX * difX + difY * difY + difZ * difZ;
     }
 
+    public double distance(Vec3i o) {
+        return Math.sqrt(distanceSquared(o));
+    }
+
+    public double distanceSquared(Vec3i o) {
+        double difX = x - o.getX();
+        double difY = y - o.getY();
+        double difZ = z - o.getZ();
+        return difX * difX + difY * difY + difZ * difZ;
+    }
+
     public float angle(Vector3 other) {
         double dot = dot(other) / (length() * other.length());
 

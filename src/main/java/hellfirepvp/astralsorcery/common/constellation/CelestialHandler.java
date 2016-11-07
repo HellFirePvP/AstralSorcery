@@ -1,8 +1,10 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -151,7 +153,7 @@ public class CelestialHandler {
     public static Float getCurrentDistribution(Constellation c, Function<Float, Float> func) {
         if (starlightDistribution == null) return 0F;
         Float res = starlightDistribution.getDistributionCharge(c);
-        if(res == null) return null;
+        if(res == null) return 0F;
         return func.apply(res);
     }
 
@@ -184,9 +186,12 @@ public class CelestialHandler {
                 Constellation c = constellations.get(i);
                 if (i != cIndex) {
                     float distance = Math.abs(cIndex - i);
-                    float otherDst = Math.abs(cIndex - (i + constellations.size()));
+                    float otherDst = Math.abs((cIndex + constellations.size()) - i);
                     if(otherDst < distance) distance = otherDst;
                     float perc = 1F - (distance / maxDst);
+                    /*if(perc < 0 && c.equals(Constellations.lucerna)) {
+                        AstralSorcery.log.info("< 0 for " + c.getName());
+                    }*/
 
                     //0 and 1 are only used as fragments and well. remained here for the purpose of eventually being changed back.
                     distribution.put(c, 0 + (perc * 1));

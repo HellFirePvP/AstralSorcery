@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 public class CEffectMineralis extends CEffectPositionList {
 
     public static boolean enabled = true;
+    public static double potencyMultiplier = 1;
 
     public static int searchRange = 14;
     public static int maxCount = 2;
@@ -42,11 +43,9 @@ public class CEffectMineralis extends CEffectPositionList {
     }
 
     @Override
-    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {}
-
-    @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
         if(!enabled) return false;
+        percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
@@ -83,6 +82,7 @@ public class CEffectMineralis extends CEffectPositionList {
         searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 14, 1, 32, "Defines the radius (in blocks) in which the ritual will search for cleanStone to generate ores into.");
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 2, 1, 4000, "Defines the amount of block-positions the ritual can cache at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 
 }

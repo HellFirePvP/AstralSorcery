@@ -128,8 +128,8 @@ public final class EffectHandler {
         return text;
     }
 
-    public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence) {
-        OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence);
+    public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence, @Nullable OrbitalEffectController.OrbitTickModifier tickModifier) {
+        OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence, tickModifier);
         register(ctrl);
         return ctrl;
     }

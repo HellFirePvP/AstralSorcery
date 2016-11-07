@@ -51,7 +51,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     //Once per TE client tick
     @SideOnly(Side.CLIENT)
-    public abstract void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal,  float percEffectVisibility, boolean extendedEffects);
+    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal,  float percEffectVisibility, boolean extendedEffects) {}
 
     //May be executed multiple times per tick
     //Even if this effect can handle multiple effects per tick, it is still possible that this method is called.

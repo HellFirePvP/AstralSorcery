@@ -44,6 +44,11 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
         applyConstellation(stack, Constellations.mineralis);
         subItems.add(stack);
 
+        stack = new ItemStack(this);
+        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+        applyConstellation(stack, Constellations.lucerna);
+        subItems.add(stack);
+
         /*stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
         applyConstellation(stack, Constellations.ara);

@@ -20,13 +20,15 @@ public class OrbitalEffectController extends EntityComplexFX {
 
     private final OrbitPointEffect effect;
     private final OrbitPersistence persistence;
+    private final OrbitTickModifier tickModifier;
     private double orbitRadius = 1;
     private Vector3 orbitAxis = Vector3.RotAxis.Y_AXIS;
     private Vector3 offset = new Vector3();
 
-    public OrbitalEffectController(OrbitPointEffect effect, @Nullable OrbitPersistence persistence) {
+    public OrbitalEffectController(OrbitPointEffect effect, @Nullable OrbitPersistence persistence, @Nullable OrbitTickModifier tickModifier) {
         this.effect = effect;
         this.persistence = persistence;
+        this.tickModifier = tickModifier;
         this.maxAge = 60;
     }
 
@@ -50,6 +52,10 @@ public class OrbitalEffectController extends EntityComplexFX {
         return this;
     }
 
+    public Vector3 getOffset() {
+        return offset;
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -60,6 +66,10 @@ public class OrbitalEffectController extends EntityComplexFX {
                     age = 0;
                 }
             }
+        }
+
+        if(tickModifier != null) {
+            tickModifier.onTick(this);
         }
 
         scheduleEffects();
@@ -81,6 +91,12 @@ public class OrbitalEffectController extends EntityComplexFX {
     public static interface OrbitPersistence {
 
         public boolean canPersist(OrbitalEffectController controller);
+
+    }
+
+    public static interface OrbitTickModifier {
+
+        public void onTick(OrbitalEffectController controller);
 
     }
 
