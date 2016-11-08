@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -90,6 +91,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_CROP_GROWTH,
         CE_MELT_BLOCK,
         CE_ACCEL_TILE,
+        CE_DMG_ENTITY,
 
         DEBUG;
 
@@ -118,6 +120,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectFornax::playParticles;
                 case CE_ACCEL_TILE:
                     return CEffectHorologium::playParticles;
+                case CE_DMG_ENTITY:
+                    return CEffectOrion::playParticles;
                 case DEBUG:
                     return RaytraceAssist::playDebug;
             }

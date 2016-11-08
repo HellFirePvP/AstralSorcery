@@ -46,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -62,6 +63,8 @@ import net.minecraftforge.oredict.OreDictionary;
  * Date: 07.05.2016 / 00:23
  */
 public class CommonProxy implements IGuiHandler {
+
+    public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
 
     private AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
 

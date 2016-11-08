@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 
 import javax.annotation.Nullable;
@@ -28,10 +29,11 @@ public class ConstellationEffectRegistry {
 
     public static void init() {
         register(fertilitas, CEffectFertilitas::new);
-        register(fornax, CEffectFornax::new);
+        register(fornax,     CEffectFornax::new);
         register(horologium, CEffectHorologium::new);
-        register(mineralis, CEffectMineralis::new);
-        register(lucerna, CEffectLucerna::new);
+        register(mineralis,  CEffectMineralis::new);
+        register(lucerna,    CEffectLucerna::new);
+        register(orion,      CEffectOrion::new);
     }
 
     public static void addDynamicConfigEntries() {
@@ -40,6 +42,7 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectHorologium());
         Config.addDynamicEntry(new CEffectMineralis());
         Config.addDynamicEntry(new CEffectLucerna());
+        Config.addDynamicEntry(new CEffectOrion());
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {

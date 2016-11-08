@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Loader;
  */
 public enum Mods {
 
-    ;
+    TICONSTRUCT("tconstruct");
 
     public final String modName;
 

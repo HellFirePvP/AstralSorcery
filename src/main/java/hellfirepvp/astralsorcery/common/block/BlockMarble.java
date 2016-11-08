@@ -47,7 +47,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
             if(!t.obtainableInCreative()) continue;
-            list.add(new ItemStack(item, 1, t.ordinal()));
+            list.add(new ItemStack(item, 1, t.getMeta()));
         }
     }
 

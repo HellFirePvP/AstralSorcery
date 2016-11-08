@@ -83,6 +83,7 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         drawDefault(textureResBlank);
+        TextureHelper.refreshTextureBindState();
 
         zLevel += 100;
         int pageOffsetY = 20;

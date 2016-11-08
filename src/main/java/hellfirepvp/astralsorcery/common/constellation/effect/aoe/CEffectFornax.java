@@ -103,6 +103,8 @@ public class CEffectFornax extends CEffectPositionMap<CEffectPositionMap.EntryIn
         p.scale(0.25F).setColor(Color.RED);
     }
 
+    //TODO add failure chance option.
+
     @Override
     public void loadFromConfig(Configuration cfg) {
         searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 12, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid blocks to start to melt.");

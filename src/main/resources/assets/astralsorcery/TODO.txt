@@ -2,9 +2,7 @@ CEffects:
 
 crop harvesting
 animal herding + breeding
-genereal damage AOE (mby against non-players only?)
 something with trees/treefarms?
-"big" version of the magnum torch (also passive mobs)
 something that makes everything around it float
 fishing out of water.
 pushing/pulling AOE (trait teleport)
