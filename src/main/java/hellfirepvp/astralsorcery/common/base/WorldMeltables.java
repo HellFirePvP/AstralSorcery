@@ -1,9 +1,14 @@
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
+import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -58,6 +63,23 @@ public enum WorldMeltables {
                 return melt;
         }
         return null;
+    }
+
+    public static class ActiveMeltableEntry extends GenListEntries.CounterListEntry {
+
+        public ActiveMeltableEntry(BlockPos pos) {
+            super(pos);
+        }
+
+        public boolean isValid(World world, boolean forceLoad) {
+            if(!forceLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true;
+            return getMeltable(world) != null;
+        }
+
+        public WorldMeltables getMeltable(World world) {
+            return WorldMeltables.getMeltable(world, getPos());
+        }
+
     }
 
 }

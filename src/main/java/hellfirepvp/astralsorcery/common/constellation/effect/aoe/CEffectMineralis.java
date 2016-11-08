@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
+import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -52,8 +53,9 @@ public class CEffectMineralis extends CEffectPositionList {
 
         boolean changed = false;
 
-        if(doRandomOnPositions(world)) {
-            BlockPos sel = positions.get(world.rand.nextInt(positions.size()));
+        GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
+        if(entry != null) {
+            BlockPos sel = entry.getPos();
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
                 if(verifier.isValid(world, sel)) {
                     ItemStack blockStack = OreTypes.getRandomOre(rand);
@@ -62,12 +64,12 @@ public class CEffectMineralis extends CEffectPositionList {
                         world.setBlockState(sel, Block.getBlockFromItem(blockStack.getItem()).getStateFromMeta(blockStack.getItemDamage()));
                     }
                 } else {
-                    positions.remove(sel);
+                    removeElement(entry);
                 }
             }
         }
 
-        if(super.playMainEffect(world, pos, percStrength, mayDoTraitEffect, possibleTraitEffect)) changed = true;
+        if(findNewPosition(world, pos)) changed = true;
 
         return changed;
     }

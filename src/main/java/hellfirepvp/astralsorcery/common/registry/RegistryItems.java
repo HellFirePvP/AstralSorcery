@@ -49,7 +49,8 @@ public class RegistryItems {
     public static Material materialTransparentReplaceable;
 
     public static CreativeTabs creativeTabAstralSorcery,
-            creativeTabAstralSorceryPapers;
+            creativeTabAstralSorceryPapers,
+            creativeTabAstralSorceryTunedCrystals;
 
     public static void setupDefaults() {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
@@ -62,6 +63,12 @@ public class RegistryItems {
             @Override
             public Item getTabIconItem() {
                 return ItemsAS.constellationPaper;
+            }
+        };
+        creativeTabAstralSorceryTunedCrystals = new CreativeTabs(AstralSorcery.MODID + ".crystals") {
+            @Override
+            public Item getTabIconItem() {
+                return ItemsAS.tunedRockCrystal;
             }
         };
 

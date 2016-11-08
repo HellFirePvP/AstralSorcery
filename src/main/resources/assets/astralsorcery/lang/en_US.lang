@@ -1,5 +1,6 @@
 itemGroup.astralsorcery=Astral Sorcery
 itemGroup.astralsorcery.papers=[AS] Constellation Papers
+itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.link.stop=Stopped linking!

@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttenuationRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageLightProximityRecipe;
+import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
@@ -100,18 +101,6 @@ public class RegistryResearch {
             BlockMarble.MarbleBlockType mbt = values[i];
             stacks[i] = new ItemStack(BlocksAS.blockMarble, 1, mbt.ordinal());
         }
-        ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 2, 1);
-        resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarbleBricks));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarblePillar));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarbleChiseled));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarbleArch));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarbleRuned));
-        resMarbleTypes.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rMarbleEngraved));
-
-        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 3, 0);
-        resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
-        resSootyMarble.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rBlackMarbleRaw));
 
         ResearchNode resAltarUpgradeAttenuation = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), "ALTAR2", 4, 2);
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));
@@ -121,13 +110,13 @@ public class RegistryResearch {
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);
         regCrafting.register(resTools);
-        regCrafting.register(resMarbleTypes);
-        regCrafting.register(resSootyMarble);
+        //regCrafting.register(resMarbleTypes);
+        //regCrafting.register(resSootyMarble);
         regCrafting.register(resAltarUpgradeAttenuation);
 
         resGrindstone.addSourceConnectionFrom(resTools);
-        resAltarUpgradeAttenuation.addSourceConnectionFrom(resMarbleTypes);
-        resSootyMarble.addSourceConnectionFrom(resMarbleTypes);
+        //resAltarUpgradeAttenuation.addSourceConnectionFrom(resMarbleTypes);
+        //resSootyMarble.addSourceConnectionFrom(resMarbleTypes);
     }
 
     private static void initDiscovery() {
@@ -151,6 +140,25 @@ public class RegistryResearch {
         }, "ORES", 1, 2);
         resOres.addPage(getTextPage("ORES.1"));
 
+        ItemStack[] stacks = new ItemStack[BlockMarble.MarbleBlockType.values().length];
+        BlockMarble.MarbleBlockType[] values = BlockMarble.MarbleBlockType.values();
+        for (int i = 0; i < values.length; i++) {
+            BlockMarble.MarbleBlockType mbt = values[i];
+            stacks[i] = new ItemStack(BlocksAS.blockMarble, 1, mbt.getMeta());
+        }
+        ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 1);
+        resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleBricks));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarblePillar));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleChiseled));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleArch));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleRuned));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleEngraved));
+
+        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 3, 0);
+        resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
+        resSootyMarble.addPage(new JournalPageRecipe(RegistryRecipes.rBlackMarbleRaw));
+
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 2);
         resTable.addPage(getTextPage("ALTAR1.1"));
         resTable.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRAltar));
@@ -162,11 +170,14 @@ public class RegistryResearch {
         regDiscovery.register(resOres);
         regDiscovery.register(resConPaper);
         regDiscovery.register(resTable);
+        regDiscovery.register(resMarbleTypes);
+        regDiscovery.register(resSootyMarble);
 
         resWand.addSourceConnectionFrom(resShrines);
         resConPaper.addSourceConnectionFrom(resShrines);
         resTable.addSourceConnectionFrom(resWand);
         resWand.addSourceConnectionFrom(resOres);
+        resSootyMarble.addSourceConnectionFrom(resMarbleTypes);
     }
 
     private static JournalPageText getTextPage(String identifier) {

@@ -3,19 +3,15 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.base.CropTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
-import hellfirepvp.astralsorcery.common.base.WorldMeltables;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
-import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionMap;
+import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -59,8 +55,9 @@ public class CEffectHorologium extends CEffectPositionList {
         }
 
         boolean changed = false;
-        if(doRandomOnPositions(world)) {
-            BlockPos sel = positions.get(world.rand.nextInt(positions.size()));
+        GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
+        if(entry != null) {
+            BlockPos sel = entry.getPos();
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
                 TileEntity te = world.getTileEntity(sel);
                 if(TileAccelerationBlacklist.canAccelerate(te)) { //Does != null && instanceof ITickable check.
@@ -78,18 +75,18 @@ public class CEffectHorologium extends CEffectPositionList {
                         }
                     } catch (Exception exc) {
                         TileAccelerationBlacklist.errored(te.getClass());
-                        positions.remove(sel);
+                        removeElement(entry);
                         AstralSorcery.log.warn("Couldn't accelerate TileEntity " + te.getClass().getName() + " properly.");
                         AstralSorcery.log.warn("Temporarily blacklisting that class. Consider adding that to the blacklist if it persists?");
                         exc.printStackTrace();
                     }
                 } else {
-                    positions.remove(sel);
+                    removeElement(entry);
                 }
             }
         }
 
-        if(super.playMainEffect(world, pos, percStrength, mayDoTraitEffect, possibleTraitEffect)) changed = true;
+        if(findNewPosition(world, pos)) changed = true;
 
         return changed;
     }

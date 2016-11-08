@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -24,41 +26,13 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        ItemStack stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.fornax);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.horologium);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.fertilitas);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.mineralis);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.lucerna);
-        subItems.add(stack);
-
-        stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.orion);
-        subItems.add(stack);
-
-        /*stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        applyConstellation(stack, Constellations.ara);
-        applyTrait(stack, Constellations.draco);
-        subItems.add(stack);*/
+        ItemStack stack;
+        for (Constellation c : ConstellationRegistry.getAllConstellations()) {
+            stack = new ItemStack(this);
+            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+            applyConstellation(stack, c);
+            subItems.add(stack);
+        }
     }
 
     @Override

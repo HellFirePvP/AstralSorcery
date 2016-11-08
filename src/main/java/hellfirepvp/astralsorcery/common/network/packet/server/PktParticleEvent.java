@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -35,6 +36,14 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
     private double xCoord, yCoord, zCoord;
 
     public PktParticleEvent() {}
+
+    public PktParticleEvent(ParticleEventType type, Vec3i vec) {
+        this(type, vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    public PktParticleEvent(ParticleEventType type, Vector3 vec) {
+        this(type, vec.getX(), vec.getY(), vec.getZ());
+    }
 
     public PktParticleEvent(ParticleEventType type, double x, double y, double z) {
         this.typeOrdinal = type.ordinal();

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,10 @@ import java.util.Optional;
  * Date: 15.09.2016 / 19:47
  */
 public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
+
+    protected ItemTunedCrystalBase() {
+        setCreativeTab(RegistryItems.creativeTabAstralSorceryTunedCrystals);
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

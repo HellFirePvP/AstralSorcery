@@ -23,6 +23,7 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
     public ItemCollectorCrystal(BlockCollectorCrystalBase collectorCrystalBase) {
         super(collectorCrystalBase);
         setMaxStackSize(1);
+        setCreativeTab(RegistryItems.creativeTabAstralSorceryTunedCrystals);
     }
 
     @Override

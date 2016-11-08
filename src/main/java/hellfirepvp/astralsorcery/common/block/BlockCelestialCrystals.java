@@ -155,7 +155,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
             if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (900 / amount)))) == 0) {
                 tile.tryGrowth(0.3);
             }
-        } else if(starlightType.equals(Constellations.mineralis) && amount >= 2) {
+        }
+        if(starlightType.equals(Constellations.mineralis) && amount >= 2) {
             TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
             if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (700 / amount)))) == 0) {
                 tile.tryGrowth(0.6);

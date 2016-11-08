@@ -21,63 +21,19 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 17.10.2016 / 09:33
  */
-public abstract class CEffectPositionList extends ConstellationEffect {
-
-    protected List<BlockPos> positions = new LinkedList<>();
-    private final int searchRange, maxCount;
-    protected final Verifier verifier;
+public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
     public CEffectPositionList(Constellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
-        super(c, cfgName);
-        this.searchRange = searchRange;
-        this.maxCount = maxCount;
-        this.verifier = verifier;
+        super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
-    public boolean doRandomOnPositions(World world) {
-        return positions.size() > 0 && world.rand.nextInt((maxCount - positions.size()) / 4 + 1) == 0;
-    }
-
-    @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
-        if(maxCount > positions.size()) {
-            int offX = -searchRange + world.rand.nextInt(searchRange * 2);
-            int offY = -searchRange + world.rand.nextInt(searchRange * 2);
-            int offZ = -searchRange + world.rand.nextInt(searchRange * 2);
-            BlockPos at = pos.add(offX, offY, offZ);
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(pos)) && verifier.isValid(world, at) && !positions.contains(at)) {
-                positions.add(at);
-                return true;
-            }
+    @Nullable
+    public BlockPos getRandomPosition() {
+        GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
+        if(entry != null) {
+            return entry.getPos();
         }
-        return false;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound cmp) {
-        positions.clear();
-        NBTTagList list = cmp.getTagList("positions", 10);
-        for (int i = 0; i < list.tagCount(); i++) {
-            NBTTagCompound tag = list.getCompoundTagAt(i);
-            positions.add(NBTUtils.readBlockPosFromNBT(tag));
-        }
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound cmp) {
-        NBTTagList listPositions = new NBTTagList();
-        for (BlockPos pos : positions) {
-            NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, tag);
-            listPositions.appendTag(tag);
-        }
-        cmp.setTag("positions", listPositions);
-    }
-
-    public static interface Verifier {
-
-        public boolean isValid(World world, BlockPos pos);
-
+        return null;
     }
 
 }

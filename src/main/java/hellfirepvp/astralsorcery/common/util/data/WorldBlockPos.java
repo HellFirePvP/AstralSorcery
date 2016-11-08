@@ -1,6 +1,9 @@
 package hellfirepvp.astralsorcery.common.util.data;
 
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 /**
@@ -19,8 +22,20 @@ public class WorldBlockPos extends BlockPos {
         this.world = world;
     }
 
+    public static WorldBlockPos wrap(World world, BlockPos pos) {
+        return new WorldBlockPos(world, pos);
+    }
+
     public World getWorld() {
         return world;
+    }
+
+    public IBlockState getStateAt() {
+        return world.getBlockState(this);
+    }
+
+    public boolean isChunkLoaded() {
+        return MiscUtils.isChunkLoaded(world, new ChunkPos(this));
     }
 
     @Override

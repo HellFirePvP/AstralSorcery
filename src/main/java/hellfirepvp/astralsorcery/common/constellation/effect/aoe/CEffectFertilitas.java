@@ -2,16 +2,14 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.base.CropTypes;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -29,10 +27,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 16.10.2016 / 23:53
  */
-public class CEffectFertilitas extends CEffectPositionList {
-
-    //public static final int MAX_SEARCH_RANGE = 16;
-    //public static final int MAX_CROP_COUNT = 200;
+public class CEffectFertilitas extends CEffectPositionListGen<CropHelper.GrowablePlant> {
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
@@ -41,7 +36,7 @@ public class CEffectFertilitas extends CEffectPositionList {
     public static int maxCropCount = 200;
 
     public CEffectFertilitas() {
-        super(Constellations.fertilitas, "fertilitas", searchRange, maxCropCount, (world, at) -> CropTypes.getCropType(world.getBlockState(at)) != null);
+        super(Constellations.fertilitas, "fertilitas", searchRange, maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
     }
 
     @Override
@@ -53,26 +48,29 @@ public class CEffectFertilitas extends CEffectPositionList {
         }
 
         boolean changed = false;
-        if(doRandomOnPositions(world)) {
-            BlockPos sel = positions.get(world.rand.nextInt(positions.size()));
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
-                IBlockState state = world.getBlockState(sel);
-                CropTypes reg = CropTypes.getCropType(state);
-                if(reg == null) {
-                    positions.remove(sel);
+        CropHelper.GrowablePlant plant = getRandomElementByChance(rand);
+        if(plant != null) {
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(plant.getPos()))) {
+                if(!plant.isValid(world, true)) {
+                    removeElement(plant);
                     changed = true;
                 } else {
-                    if(reg.grow(world, sel, state)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_GROWTH, sel.getX(), sel.getY(), sel.getZ());
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, sel, 8));
+                    if(plant.tryGrow(world, rand)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_GROWTH, plant.getPos());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, plant.getPos(), 8));
                     }
                 }
             }
         }
 
-        if(super.playMainEffect(world, pos, percStrength, mayDoTraitEffect, possibleTraitEffect)) changed = true;
+        if(findNewPosition(world, pos)) changed = true;
 
         return changed;
+    }
+
+    @Override
+    public CropHelper.GrowablePlant newElement(World world, BlockPos at) {
+        return CropHelper.wrapPlant(world, at);
     }
 
     @Override
