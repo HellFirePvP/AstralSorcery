@@ -4,9 +4,9 @@
         "particle": "astralsorcery:blocks/marble_pillar_updown",
         "up": "astralsorcery:blocks/marble_pillar_updown",
         "down": "astralsorcery:blocks/marble_pillar_updown",
-        "east": "astralsorcery:blocks/marble_pillar",
-        "west": "astralsorcery:blocks/marble_pillar",
-        "north": "astralsorcery:blocks/marble_pillar",
-        "south": "astralsorcery:blocks/marble_pillar"
+        "east": "astralsorcery:blocks/marble_pillar_bottom",
+        "west": "astralsorcery:blocks/marble_pillar_bottom",
+        "north": "astralsorcery:blocks/marble_pillar_bottom",
+        "south": "astralsorcery:blocks/marble_pillar_bottom"
     }
 }
