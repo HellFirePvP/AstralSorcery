@@ -20,7 +20,7 @@ public class Constellations {
     public static Constellation ara; //Altar
     public static Constellation bootes; //Herdsman? Animal farming stuff?
     public static Constellation caelum; //Chisel/Grindstone?
-    public static Constellation circinus; //Compass? directions?
+    public static Constellation circinus; //-> Harvest -> Crop harvesting
     public static Constellation fornax; //-> Furnace -> Melting blocks in world
     public static Constellation libra; //Balance? uuh...
     public static Constellation horologium; //-> Time -> TileAcceleration

@@ -56,11 +56,11 @@ public class CropHelper {
         GrowablePlant growable = wrapPlant(world, pos);
         if(growable == null) return null; //Every plant has to be growable.
         IBlockState state = world.getBlockState(growable.getPos());
-        if(state.getBlock() instanceof IPlantable) {
-            return new HarvestableWrapper(growable);
-        }
         if(state.getBlock().equals(Blocks.REEDS) && growable instanceof GrowableReedWrapper) {
             return (GrowableReedWrapper) growable;
+        }
+        if(state.getBlock() instanceof IPlantable) {
+            return new HarvestableWrapper(pos);
         }
         return null;
     }
@@ -89,15 +89,17 @@ public class CropHelper {
 
     public static class HarvestableWrapper implements HarvestablePlant {
 
-        private final GrowablePlant plant;
+        private final BlockPos pos;
 
-        public HarvestableWrapper(GrowablePlant plant) {
-            this.plant = plant;
+        public HarvestableWrapper(BlockPos pos) {
+            this.pos = pos;
         }
 
         @Override
         public boolean canHarvest(World world) {
-            return !plant.canGrow(world);
+            IBlockState at = world.getBlockState(pos);
+            if(!(at.getBlock() instanceof IGrowable)) return false;
+            return !((IGrowable) at.getBlock()).canGrow(world, pos, at, false);
         }
 
         @Override
@@ -108,6 +110,7 @@ public class CropHelper {
                 IBlockState at = world.getBlockState(getPos());
                 if(at.getBlock() instanceof IPlantable) {
                     drops.addAll(at.getBlock().getDrops(world, pos, at, harvestFortune));
+                    world.setBlockToAir(pos);
                     world.setBlockState(pos, ((IPlantable) at.getBlock()).getPlant(world, pos));
                 }
             }
@@ -116,7 +119,7 @@ public class CropHelper {
 
         @Override
         public BlockPos getPos() {
-            return plant.getPos();
+            return pos;
         }
 
         @Override
@@ -128,18 +131,28 @@ public class CropHelper {
         @Override
         public boolean isValid(World world, boolean forceChunkLoad) {
             if(!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(getPos()))) return true; //We stall until it's loaded.
-            return wrapHarvestablePlant(world, getPos()) != null;
+            HarvestablePlant plant = wrapHarvestablePlant(world, getPos());
+            return plant != null && plant instanceof HarvestableWrapper;
         }
 
         @Override
         public boolean canGrow(World world) {
-            return plant.canGrow(world);
+            IBlockState at = world.getBlockState(pos);
+            return at.getBlock() instanceof IGrowable && ((IGrowable) at.getBlock()).canGrow(world, pos, at, false);
         }
 
         @Override
         public boolean tryGrow(World world, Random rand) {
-            return plant.tryGrow(world, rand);
+            IBlockState at = world.getBlockState(pos);
+            if(at.getBlock() instanceof IGrowable) {
+                if(((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
+                    ((IGrowable) at.getBlock()).grow(world, rand, pos, at);
+                    return true;
+                }
+            }
+            return false;
         }
+
     }
 
     public static class GrowableReedWrapper implements HarvestablePlant {
@@ -158,7 +171,7 @@ public class CropHelper {
         @Override
         public List<ItemStack> harvestDropsAndReplant(World world, Random rand, int harvestFortune) {
             List<ItemStack> drops = Lists.newLinkedList();
-            for (int i = 2; i > 0; i++) {
+            for (int i = 2; i > 0; i--) {
                 BlockPos bp = pos.up(i);
                 IBlockState at = world.getBlockState(bp);
                 if(at.getBlock().equals(Blocks.REEDS)) {

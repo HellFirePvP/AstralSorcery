@@ -34,6 +34,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
+    public static double failChance = 0;
 
     public static int searchRange = 12;
     public static int maxCount = 40;
@@ -65,7 +66,11 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
                     WorldMeltables melt = entry.getMeltable(world);
                     if(entry.counter >= (melt.getMeltDuration() / meltDurationDivisor)) {
-                        world.setBlockState(bp, melt.getMeltResult());
+                        if(failChance > 0 && rand.nextFloat() <= failChance) {
+                            world.setBlockToAir(bp);
+                        } else {
+                            world.setBlockState(bp, melt.getMeltResult());
+                        }
                         removeElement(entry);
                     }
                     changed = true;
@@ -94,13 +99,12 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
         p.scale(0.25F).setColor(Color.RED);
     }
 
-    //TODO add failure chance option.
-
     @Override
     public void loadFromConfig(Configuration cfg) {
         searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 12, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid blocks to start to melt.");
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 40, 1, 4000, "Defines the amount of block-positions the ritual can cache and melt at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        failChance = cfg.getFloat(getKey() + "FailChance", getConfigurationSection(), 0F, 0F, 1F, "Defines the chance (0% to 100% -> 0.0 to 1.0) if the block will be replaced with air instead of being properly melted into something.");
         meltDurationDivisor = cfg.getFloat(getKey() + "Divisor", getConfigurationSection(), 1, 0.0001F, 200F, "Defines a multiplier used to determine how long it needs to melt a block. normal duration * durationMultiplier = actual duration");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }

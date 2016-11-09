@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -97,7 +96,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WELL_CATALYST_BREAK,
         WAND_CRYSTAL_HIGHLIGHT,
 
-        CE_CROP_GROWTH,
+        CE_CROP_INTERACT,
         CE_MELT_BLOCK,
         CE_ACCEL_TILE,
         CE_DMG_ENTITY,
@@ -123,7 +122,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileWell::catalystBurst;
                 case WAND_CRYSTAL_HIGHLIGHT:
                     return ItemWand::highlightEffects;
-                case CE_CROP_GROWTH:
+                case CE_CROP_INTERACT:
                     return CEffectFertilitas::playParticles;
                 case CE_MELT_BLOCK:
                     return CEffectFornax::playParticles;

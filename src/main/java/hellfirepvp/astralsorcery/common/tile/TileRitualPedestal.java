@@ -357,7 +357,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         return uuid == null ? null : world.getPlayerEntityByUUID(uuid);
     }
 
-    //TODO do proper ConstellationEffect on player. (as plBeacon)
+    //TODO do proper ConstellationEffect on player. (as plBeacon) --- uhh? remove that again?
     public static class TransmissionReceiverRitualPedestal extends SimpleTransmissionReceiver {
 
         private static final int MAX_MIRROR_COUNT = 5;

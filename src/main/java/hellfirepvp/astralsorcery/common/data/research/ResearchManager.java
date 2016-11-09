@@ -35,8 +35,6 @@ import java.util.UUID;
  */
 public class ResearchManager {
 
-    //TODO update journal if research or progression changed. not if constellation changes.
-
     public static PlayerProgress clientProgress = new PlayerProgress();
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();

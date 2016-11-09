@@ -40,9 +40,9 @@ public class ItemUtils {
     }
 
     private static void applyRandomDropOffset(EntityItem item) {
-        item.motionX = rand.nextFloat() * 0.7F - 0.35D;
-        item.motionY = rand.nextFloat() * 0.7F - 0.35D;
-        item.motionZ = rand.nextFloat() * 0.7F - 0.35D;
+        item.motionX = rand.nextFloat() * 0.3F - 0.15D;
+        item.motionY = rand.nextFloat() * 0.3F - 0.15D;
+        item.motionZ = rand.nextFloat() * 0.3F - 0.15D;
     }
 
     public static List<ItemStack> scanInventoryFor(IInventory inv, Item i) {

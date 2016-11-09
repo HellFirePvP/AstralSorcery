@@ -87,14 +87,7 @@ public class TransmissionWorldHandler {
                     BlockPos pos = rec.getPos();
                     Float multiplier = lossMultipliers.get(pos);
                     if (multiplier != null) {
-
-                        //TODO remove again later
-                        double amt = starlight * multiplier;
-                        rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, amt);
-                        if(amt <= 0) {
-                            System.out.println(amt + " received at " + world.getWorldTime());
-                            System.out.println("mul: " + multiplier + ", sl: " + starlight);
-                        }
+                        rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, starlight * multiplier);
                     }
                 }
                 Iterator<BlockPos> iterator = chain.getUncheckedEndpointsBlock().iterator();
