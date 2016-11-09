@@ -70,6 +70,9 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) { return false; }
+
+    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }

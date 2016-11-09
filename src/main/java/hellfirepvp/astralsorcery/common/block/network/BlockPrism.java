@@ -65,6 +65,9 @@ public class BlockPrism extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) { return false; }
+
+    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }
@@ -93,7 +96,7 @@ public class BlockPrism extends BlockStarlightNetwork {
 
     @Override
     public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
             RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.6, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
         }
 
-        GL11.glTranslated(x + 0.5, y + 0.35, z + 0.5);
+        GL11.glTranslated(x + 0.5, y + 0.20, z + 0.5);
 
         GL11.glScaled(0.6, 0.6, 0.6);
         GL11.glEnable(GL11.GL_BLEND);
