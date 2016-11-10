@@ -4,8 +4,13 @@ import com.google.common.base.Optional;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktEntityEffect;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +31,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -40,15 +47,37 @@ import java.util.Random;
  */
 public class EntityGrindstone extends EntityLivingBase {
 
-    //TODO add rotation-animation to the grindstone.
-
     private static final Random rand = new Random();
     private static final DataParameter<Optional<ItemStack>> GRINDING = EntityDataManager.createKey(EntityGrindstone.class, DataSerializers.OPTIONAL_ITEM_STACK);
+
+    public static final int TICKS_WHEEL_ROTATION = 20;
+
+    public int tickWheelAnimation = 0, prevTickWheelAnimation = 0;
+    private boolean repeat = false; //Used for repeat after effect went off..~
 
     public EntityGrindstone(World worldIn) {
         super(worldIn);
         getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
         setSize(1.1F, 1.2F);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+
+        if(worldObj.isRemote) {
+            if(tickWheelAnimation >= 0) {
+                prevTickWheelAnimation = tickWheelAnimation;
+                tickWheelAnimation--;
+                if(tickWheelAnimation <= 0 && repeat) {
+                    tickWheelAnimation = TICKS_WHEEL_ROTATION;
+                    prevTickWheelAnimation = TICKS_WHEEL_ROTATION + 1;
+                    repeat = false;
+                }
+            } else {
+                prevTickWheelAnimation = 0;
+            }
+        }
     }
 
     @Override
@@ -143,6 +172,7 @@ public class EntityGrindstone extends EntityLivingBase {
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
                         }
+                        playWheelEffect();
                     }
                 }
                 if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
@@ -152,6 +182,7 @@ public class EntityGrindstone extends EntityLivingBase {
                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
                     }
+                    playWheelEffect();
                 }
             }
         }
@@ -165,6 +196,15 @@ public class EntityGrindstone extends EntityLivingBase {
             ItemUtils.dropItem(worldObj, posX, posY + 1.3F, posZ, grind);
         }
         super.onDeath(cause);
+    }
+
+    public void playWheelEffect() {
+        PktEntityEffect effect = new PktEntityEffect(PktEntityEffect.EntityEffectType.GRINDSTONE_WHEEL, this);
+        if(worldObj.isRemote) {
+            playWheelAnimation(effect);
+        } else {
+            PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(worldObj, getPosition(), 32));
+        }
     }
 
     @Override
@@ -227,6 +267,22 @@ public class EntityGrindstone extends EntityLivingBase {
     @Override
     public EnumHandSide getPrimaryHand() {
         return EnumHandSide.RIGHT;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playWheelAnimation(PktEntityEffect event) {
+        Entity e = event.getClientWorldEntity();
+        if(e != null && e instanceof EntityGrindstone) {
+            int ticks = ((EntityGrindstone) e).tickWheelAnimation;
+            if(ticks > 0) {
+                if(ticks * 2 <= TICKS_WHEEL_ROTATION) {
+                    ((EntityGrindstone) e).repeat = true;
+                }
+            } else {
+                ((EntityGrindstone) e).tickWheelAnimation = TICKS_WHEEL_ROTATION;
+                ((EntityGrindstone) e).repeat = false;
+            }
+        }
     }
 
 }

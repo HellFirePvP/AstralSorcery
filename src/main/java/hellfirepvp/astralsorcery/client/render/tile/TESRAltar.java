@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -100,8 +101,9 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         tr *= 2;
 
         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 6.5 + tr, 2, 0.1F + 0.8F * alphaDaytime);
+        RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor().brighter().brighter(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
     }
 
     private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {

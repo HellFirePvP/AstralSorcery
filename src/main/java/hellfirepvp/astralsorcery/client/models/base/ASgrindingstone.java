@@ -72,17 +72,20 @@ public class ASgrindingstone extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.sit1.render(f5);
-        this.wheel.render(f5);
-        this.frame1.render(f5);
-        this.mount1.render(f5);
-        this.sit2.render(f5);
-        this.frame2.render(f5);
-        this.frame4.render(f5);
-        this.frame3.render(f5);
-        this.shield.render(f5);
-        this.shape1.render(f5);
+    public void render(Entity entity, float degRotationWheel, float f1, float f2, float f3, float f4, float scale) {
+        this.wheel.rotateAngleX = degRotationWheel * 0.017453292F;
+        this.wheel.rotateAngleY = 0;
+
+        this.sit1.render(scale);
+        this.wheel.render(scale);
+        this.frame1.render(scale);
+        this.mount1.render(scale);
+        this.sit2.render(scale);
+        this.frame2.render(scale);
+        this.frame4.render(scale);
+        this.frame3.render(scale);
+        this.shield.render(scale);
+        this.shape1.render(scale);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

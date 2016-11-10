@@ -40,7 +40,7 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
         GL11.glTranslated(x, y + 2.38, z);
         GL11.glScaled(0.1, 0.1, 0.1);
         GL11.glRotated(180, 1, 0, 0);
-        doModelRender(entity);
+        doModelRender(entity, partialTicks);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
 
@@ -75,15 +75,21 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
         }
     }
 
+    private double interpolate(double oldP, double newP, float partial) {
+        return oldP + ((newP - oldP) * partial);
+    }
+
     @Override
-    public void doModelRender(T entity) {
+    public void doModelRender(T entity, float partialTicks) {
         texGrindstone.bind();
-        modelGrindstone.render(entity, 0, 0, 0, 0, 0, 1);
+        double oldDeg = (((double) entity.prevTickWheelAnimation) / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
+        double newDeg = (((double) entity.tickWheelAnimation)     / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
+        modelGrindstone.render(entity, (float) interpolate(oldDeg, newDeg, 1), 0, 0, 0, 0, 1);
     }
 
     @Override
     protected ResourceLocation getEntityTexture(T entity) {
-        return null; //LUL null.
+        return null;
     }
 
     public static class Factory extends RenderEntityModelFactory<EntityGrindstone> {

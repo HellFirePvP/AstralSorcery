@@ -34,12 +34,12 @@ public class RenderEntityTelescope<T extends EntityTelescope> extends RenderEnti
         GL11.glTranslated(x, y + 2.38, z);
         GL11.glScaled(0.1, 0.1, 0.1);
         GL11.glRotated(180, 1, 0, 0);
-        doModelRender(entity);
+        doModelRender(entity, partialTicks);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    public void doModelRender(T entity) {
+    public void doModelRender(T entity, float partialTicks) {
         texTelescope.bind();
         GL11.glDisable(GL11.GL_CULL_FACE);
         modelTelescope.render(entity, 0, 0, 0, 0, 0, 1);

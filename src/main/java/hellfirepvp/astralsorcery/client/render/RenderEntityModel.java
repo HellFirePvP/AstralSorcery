@@ -18,7 +18,7 @@ public abstract class RenderEntityModel<T extends Entity> extends Render<T> {
         super(renderManager);
     }
 
-    public abstract void doModelRender(T entity);
+    public abstract void doModelRender(T entity, float pTicks);
 
     public static abstract class RenderEntityModelFactory<T extends Entity> implements IRenderFactory<T> {
 

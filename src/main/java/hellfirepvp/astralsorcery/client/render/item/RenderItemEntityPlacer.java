@@ -47,7 +47,7 @@ public class RenderItemEntityPlacer implements IItemRenderer {
                 GL11.glTranslated(-20, -25, 0);
                 GL11.glPushMatrix();
                 GL11.glRotated(-45, 0, 1, 0);
-                renderTelescope.doModelRender(telescopeDummy);
+                renderTelescope.doModelRender(telescopeDummy, 1);
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 break;
@@ -59,7 +59,7 @@ public class RenderItemEntityPlacer implements IItemRenderer {
                 GL11.glTranslated(-10, -26, 0);
                 GL11.glPushMatrix();
                 GL11.glRotated(-45, 0, 1, 0);
-                renderGrindstone.doModelRender(grindstoneDummy);
+                renderGrindstone.doModelRender(grindstoneDummy, 1);
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 break;
