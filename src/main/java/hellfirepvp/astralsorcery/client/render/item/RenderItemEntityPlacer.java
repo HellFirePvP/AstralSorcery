@@ -54,7 +54,7 @@ public class RenderItemEntityPlacer implements IItemRenderer {
             case GRINDSTONE:
                 GL11.glPushMatrix();
                 GL11.glScaled(0.05, 0.05, 0.05);
-                GL11.glRotated(180, 0, 1, 0);
+                GL11.glRotated(200, 0, 1, 0);
                 GL11.glRotated(180, 1, 0, 0);
                 GL11.glTranslated(-10, -26, 0);
                 GL11.glPushMatrix();

@@ -1,8 +1,13 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.models.base.ASaltarT2;
+import hellfirepvp.astralsorcery.client.models.base.ASaltarT3;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
@@ -10,6 +15,7 @@ import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -28,10 +34,20 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
     private static final Random rand = new Random();
 
+    private static final ASaltarT2 modelAltar2 = new ASaltarT2();
+    private static final BindableResource texAltar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarT2");
+
+    private static final ASaltarT3 modelAltar3 = new ASaltarT3();
+    private static final BindableResource texAltar3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarT3");
+
     @Override
     public void renderTileEntityAt(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
         switch (te.getAltarLevel()) {
+            case ATTENUATION:
+                renderT2Additions(te, x, y, z);
+                break;
             case CONSTELLATION_CRAFT:
+                renderT3Additions(te, x, y, z);
                 if(te.getMultiblockState()) {
                     GL11.glPushMatrix();
                     renderCrystalEffects(te, x, y, z, partialTicks);
@@ -41,6 +57,34 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                 }
                 break;
         }
+    }
+
+    private void renderT3Additions(TileAltar te, double x, double y, double z) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
+        GL11.glRotated(180, 1, 0, 0);
+        GL11.glScaled(0.05, 0.05, 0.05);
+
+        texAltar3.bind();
+        modelAltar3.render(null, 0, 0, 0, 0, 0, 1F);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+    }
+
+    private void renderT2Additions(TileAltar te, double x, double y, double z) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
+        GL11.glRotated(180, 1, 0, 0);
+        GL11.glScaled(0.05, 0.05, 0.05);
+
+        texAltar2.bind();
+        modelAltar2.render(null, 0, 0, 0, 0, 0, 1F);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {

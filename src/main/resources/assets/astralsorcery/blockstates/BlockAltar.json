@@ -1,39 +1,40 @@
 {
-    "multipart: [
+    "forge_marker": 0,
+    "multipart": [
         {
             "when": {"render": false},
             "apply": [
-                { "model": "astralsorcery:BlockAltar1 }
+                { "model": "astralsorcery:BlockAltar1" }
             ]
         },
         {
-            "when": {"render": true, "altartype": "altar_1"},
+            "when": {"AND": [{"render": true}, {"altartype": "altar_1"}]},
             "apply": [
-                { "model": "astralsorcery:BlockAltar1 }
+                { "model": "astralsorcery:BlockAltar1" }
             ]
         },
         {
-            "when": {"render": true, "altartype": "altar_2"},
+            "when": {"AND": [{"render": true}, {"altartype": "altar_2"}]},
             "apply": [
-                { "model": "astralsorcery:BlockAltar2 }
+                { "model": "astralsorcery:BlockAltar2" }
             ]
         },
         {
-            "when": {"render": true, "altartype": "altar_3"},
+            "when": {"AND": [{"render": true}, {"altartype": "altar_3"}]},
             "apply": [
-                { "model": "astralsorcery:BlockAltar3 }
+                { "model": "astralsorcery:BlockAltar3" }
             ]
         },
         {
-            "when": {"render": true, "altartype": "altar_4"},
+            "when": {"AND": [{"render": true}, {"altartype": "altar_4"}]},
             "apply": [
-                { "model": "astralsorcery:BlockModel_nothing }
+                { "model": "astralsorcery:BlockModel_nothing" }
             ]
         },
         {
-            "when": {"render": true, "altartype": "altar_5"},
+            "when": {"AND": [{"render": true}, {"altartype": "altar_5"}]},
             "apply": [
-                { "model": "astralsorcery:BlockModel_nothing }
+                { "model": "astralsorcery:BlockModel_nothing" }
             ]
         }
     ]

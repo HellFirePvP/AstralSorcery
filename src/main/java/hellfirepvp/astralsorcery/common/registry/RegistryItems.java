@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
@@ -115,9 +116,9 @@ public class RegistryItems {
         registerItem(new ItemBlockCustomName(BlocksAS.customSandOre));
         registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
         registerItem(new ItemBlockCustomName(BlocksAS.blockBlackMarble));
-        registerItem(new ItemBlockCustomName(BlocksAS.blockAltar).setMaxStackSize(1));
         registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
         registerItem(new ItemBlockRitualPedestal());
+        registerItem(new ItemBlockAltar());
 
         registerItem(new ItemCollectorCrystal(BlocksAS.collectorCrystal));
         registerItem(new ItemCollectorCrystal(BlocksAS.celestialCollectorCrystal));
