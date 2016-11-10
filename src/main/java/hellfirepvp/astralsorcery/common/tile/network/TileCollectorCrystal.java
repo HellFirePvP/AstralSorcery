@@ -65,10 +65,10 @@ public class TileCollectorCrystal extends TileSourceBase {
                     getPos().getX() + 0.5,
                     getPos().getY() + 0.5,
                     getPos().getZ() + 0.5);
-            p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(Color.CYAN);
+            p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.25F).setColor(Color.CYAN).setMaxAge(25);
         }
 
         for (int i = 0; i < orbitals.length; i++) {

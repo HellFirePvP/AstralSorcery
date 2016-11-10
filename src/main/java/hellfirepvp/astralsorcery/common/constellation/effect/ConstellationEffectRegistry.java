@@ -1,12 +1,14 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectChitra;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectCircinus;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 
@@ -36,6 +38,8 @@ public class ConstellationEffectRegistry {
         register(lucerna,    CEffectLucerna::new);
         register(orion,      CEffectOrion::new);
         register(circinus,   CEffectCircinus::new);
+        register(octans,     CEffectOctans::new);
+        register(chitra,     CEffectChitra::new);
     }
 
     public static void addDynamicConfigEntries() {
@@ -46,6 +50,8 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectLucerna());
         Config.addDynamicEntry(new CEffectOrion());
         Config.addDynamicEntry(new CEffectCircinus());
+        Config.addDynamicEntry(new CEffectOctans());
+        Config.addDynamicEntry(new CEffectChitra());
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {

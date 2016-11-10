@@ -28,7 +28,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
             sBase ^= (long) te.getPos().getX();
             sBase ^= (long) te.getPos().getY();
             sBase ^= (long) te.getPos().getZ();
-            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.6, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
+            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.6, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 9, 50, 25);
         }
 
         GL11.glTranslated(x + 0.5, y + 0.20, z + 0.5);

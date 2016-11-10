@@ -7,9 +7,11 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
+import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -112,6 +114,11 @@ public class EventHandlerServer {
     public void onCraft(PlayerEvent.ItemCraftedEvent event) {
         if(event.player.getServer() != null) {
             ResearchManager.informCraftingGridCompletion(event.player, event.crafting);
+            if(event.crafting.getItem() instanceof ItemEntityPlacer) {
+                if(event.crafting.getItemDamage() == ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()) {
+                    event.player.addStat(RegistryAchievements.achvBuildTelescope);
+                }
+            }
         }
     }
 

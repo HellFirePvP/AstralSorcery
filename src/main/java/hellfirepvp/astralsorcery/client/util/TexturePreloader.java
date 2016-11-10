@@ -33,11 +33,14 @@ public class TexturePreloader {
     }
 
     private static void preloadMandatoryTextures() {
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")   .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")    .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay")    .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection").allocateGlId();
     }
 
     private static void preloadTextures() {

@@ -92,7 +92,7 @@ public class RegistryRecipes {
         CraftingManager manager = CraftingManager.getInstance();
 
         rLPRAltar = new ShapedRecipe(BlocksAS.blockAltar)
-                .addPart(ItemsAS.rockCrystal,
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(new ItemStack(BlocksAS.blockMarble, 1, BlockMarble.MarbleBlockType.RAW.ordinal()),
                         ShapedRecipeSlot.UPPER_LEFT,
@@ -367,8 +367,10 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER))).setPassiveStarlightRequirement(20);
 
         rAltar = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(BlocksAS.blockAltar)
-                .addPart(Blocks.CRAFTING_TABLE, ShapedRecipeSlot.CENTER)
-                .addPart(ItemsAS.rockCrystal, ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Blocks.CRAFTING_TABLE,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,

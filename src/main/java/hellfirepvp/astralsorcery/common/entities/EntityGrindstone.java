@@ -40,6 +40,8 @@ import java.util.Random;
  */
 public class EntityGrindstone extends EntityLivingBase {
 
+    //TODO add rotation-animation to the grindstone.
+
     private static final Random rand = new Random();
     private static final DataParameter<Optional<ItemStack>> GRINDING = EntityDataManager.createKey(EntityGrindstone.class, DataSerializers.OPTIONAL_ITEM_STACK);
 
@@ -47,6 +49,12 @@ public class EntityGrindstone extends EntityLivingBase {
         super(worldIn);
         getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
         setSize(1.1F, 1.2F);
+    }
+
+    @Override
+    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+        if(damageSrc.equals(DamageSource.inWall)) return;
+        super.damageEntity(damageSrc, damageAmount);
     }
 
     @Override

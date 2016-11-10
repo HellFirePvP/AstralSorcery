@@ -1,15 +1,13 @@
 package hellfirepvp.astralsorcery.client.render.entity;
 
-import hellfirepvp.astralsorcery.client.models.tcn.TCNModelTelescope;
+import hellfirepvp.astralsorcery.client.models.base.AStelescope;
 import hellfirepvp.astralsorcery.client.render.RenderEntityModel;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -21,8 +19,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class RenderEntityTelescope<T extends EntityTelescope> extends RenderEntityModel<T> {
 
-    private static final TCNModelTelescope telescopeModel = new TCNModelTelescope();
-    private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "telescope");
+    private static final AStelescope modelTelescope = new AStelescope();
+    private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/telescope");
 
     protected RenderEntityTelescope(RenderManager renderManager) {
         super(renderManager);
@@ -30,6 +28,7 @@ public class RenderEntityTelescope<T extends EntityTelescope> extends RenderEnti
 
     @Override
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        //renderOffsetAABB(entity.getEntityBoundingBox(), x - entity.lastTickPosX, y - entity.lastTickPosY, z - entity.lastTickPosZ);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y + 2.38, z);
@@ -42,7 +41,9 @@ public class RenderEntityTelescope<T extends EntityTelescope> extends RenderEnti
 
     public void doModelRender(T entity) {
         texTelescope.bind();
-        telescopeModel.render(entity, 0, 0, 0, 0, 0, 1);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        modelTelescope.render(entity, 0, 0, 0, 0, 0, 1);
+        GL11.glEnable(GL11.GL_CULL_FACE);
     }
 
     @Override

@@ -99,52 +99,53 @@ public class RenderConstellation {
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
 
+        float fRed = ((float) rC.getRed()) / 255F;
+        float fGreen = ((float) rC.getGreen()) / 255F;
+        float fBlue = ((float) rC.getBlue()) / 255F;
+
         RenderAstralSkybox.TEX_CONNECTION.bind();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         for (StarConnection sc : c.getConnections()) {
-            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             float brightness = br;
             brightness *= 0.8;
-            GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                    brightness < 0 ? 0 : brightness);
+            float fAlpha = brightness < 0 ? 0 : brightness;
 
             Vector3 offset = offsetPos.clone().addX(sc.from.x * s).addZ(sc.from.y * s);
             Vector3 dirU = new Vector3(sc.to.x, 0, sc.to.y).subtract(sc.from.x, 0, sc.from.y).multiply(s);
-            Vector3 dirV = dirU.clone().crossProduct(new Vector3(0, 1, 0)).normalize().multiply(lineBreadth * s);
+            Vector3 dirV = dirU.clone().crossProduct(new Vector3(0, 1, 0)).setY(0).normalize().multiply(lineBreadth * s);
             Vector3 offsetRender = offset.subtract(dirV.clone().divide(2));
 
             Vector3 pos = offsetRender.clone().add(dirU.clone().multiply(0)).add(dirV.clone().multiply(1));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 0).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 0).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(1)).add(dirV.clone().multiply(1));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 0).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 0).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(1)).add(dirV.clone().multiply(0));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 1).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 1).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(0)).add(dirV.clone().multiply(0));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 1).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 1).color(fRed, fGreen, fBlue, fAlpha).endVertex();
 
-            tes.draw();
         }
+        tes.draw();
 
         RenderAstralSkybox.TEX_STAR_1.bind();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         for (StarLocation sl : c.getStars()) {
-            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-            GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                    br < 0 ? 0 : br);
+            float fAlpha = br < 0 ? 0 : br;
 
-            Vector3 offsetRender = offsetPos.clone().add(sl.x * s - s, 0.01, sl.y * s - s);
+            Vector3 offsetRender = offsetPos.clone().add(sl.x * s - s, 0.005, sl.y * s - s);
             Vector3 dirU = new Vector3(s * 2, 0, 0);
             Vector3 dirV = new Vector3(0, 0, s * 2);
 
             Vector3 pos = offsetRender.clone().add(dirU.clone().multiply(0)).add(dirV.clone().multiply(1));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 0).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 0).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(1)).add(dirV.clone().multiply(1));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 0).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 0).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(1)).add(dirV.clone().multiply(0));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 1).endVertex();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(0, 1).color(fRed, fGreen, fBlue, fAlpha).endVertex();
             pos =         offsetRender.clone().add(dirU.clone().multiply(0)).add(dirV.clone().multiply(0));
-            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 1).endVertex();
-
-            tes.draw();
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(1, 1).color(fRed, fGreen, fBlue, fAlpha).endVertex();
         }
+        tes.draw();
 
         GL11.glPopMatrix();
         GL11.glPopAttrib();

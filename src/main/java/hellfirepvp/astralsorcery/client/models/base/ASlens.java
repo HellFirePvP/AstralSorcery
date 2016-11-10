@@ -1,14 +1,19 @@
-/*package model;
+package hellfirepvp.astralsorcery.client.models.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * astralsorcery_lens - wiiv
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: TCNModelGrindstone
+ * Created by wiiv
  * Created using Tabula 4.1.1
+ * Date: 18.09.2016
  */
-/*public class ASlens extends ModelBase {
+public class ASlens extends ModelBase {
+
     public ModelRenderer Base;
     public ModelRenderer frame1;
     public ModelRenderer lens;
@@ -30,24 +35,24 @@ import net.minecraft.entity.Entity;
         this.lens = new ModelRenderer(this, 0, 0);
         this.lens.setRotationPoint(0.0F, 14.0F, 0.0F);
         this.lens.addBox(-6.0F, -6.0F, -0.5F, 12, 12, 1, 0.0F);
-        this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
+        //this.setRotateAngle(lens, 0.2617993877991494F, 0.0F, 0.0F);
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.Base.render(f5);
-        this.frame1.render(f5);
-        this.frame2.render(f5);
-        this.lens.render(f5);
+    public void render(Entity entity, float modelYaw, float modelPitch, float f2, float f3, float f4, float scale) {
+        this.lens.rotateAngleX = modelPitch * 0.017453292F;
+        //this.lens.rotateAngleZ = modelPitch * 0.017453292F;
+
+        this.Base.render(scale);
+        this.frame1.render(scale);
+        this.frame2.render(scale);
+        this.lens.render(scale);
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    /*public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+
 }
-*/

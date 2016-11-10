@@ -69,7 +69,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     private boolean dirty = false;
     private boolean doesSeeSky = false, hasMultiblock = false;
-    private boolean playerBeacon = false;
 
     private int effectWorkTick = 0; //up to 63
     private boolean working = false;
@@ -255,7 +254,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(worldObj, properties, tuned, trait);
-                    recNode.setPlayerBeacon(playerBeacon);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
                     AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
@@ -264,7 +262,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(worldObj, null, null, null);
-                    recNode.setPlayerBeacon(playerBeacon);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
                     AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
@@ -288,7 +285,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         this.ownerUUID = compound.getUniqueId("owner");
         this.doesSeeSky = compound.getBoolean("seesSky");
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
-        this.playerBeacon = compound.getBoolean("playerBeacon");
 
         offsetMirrorPositions.clear();
         NBTTagList listPos = compound.getTagList("positions", 10);
@@ -305,7 +301,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         compound.setUniqueId("owner", ownerUUID);
         compound.setBoolean("hasMultiblock", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
-        compound.setBoolean("playerBeacon", playerBeacon);
 
         NBTTagList listPositions = new NBTTagList();
         for (BlockPos pos : offsetMirrorPositions) {
@@ -346,22 +341,17 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         return ownerUUID;
     }
 
-    public void setPlayerBeacon(boolean beacon) {
-        this.playerBeacon = beacon;
-        markForUpdate();
-    }
-
     @Nullable
     public EntityPlayer getOwningPlayerInWorld(World world) {
         UUID uuid = getOwnerUUID();
         return uuid == null ? null : world.getPlayerEntityByUUID(uuid);
     }
 
-    //TODO do proper ConstellationEffect on player. (as plBeacon) --- uhh? remove that again?
     public static class TransmissionReceiverRitualPedestal extends SimpleTransmissionReceiver {
 
         private static final int MAX_MIRROR_COUNT = 5;
 
+        //TODO change to higher numbers for release.
         //Steps between trials: 10 minutes, 25 minutes, 50 minutes, 2 hours, 5 hours
         //private static final int[] secToNext =    new int[] { 12_000, 30_000, 60_000, 144_000, 360_000 };
         private static final int[] secToNext =    new int[] { 10, 10, 6, 10, 10 };
@@ -393,7 +383,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
         private int ticksTicking = 0;
 
-        private boolean doesSeeSky, hasMultiblock, playerBeacon;
+        private boolean doesSeeSky, hasMultiblock;
         private Constellation channeling, trait;
         private CrystalProperties properties;
         private int channeled = 0;
@@ -670,7 +660,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             doesSeeSky = compound.getBoolean("doesSeeSky");
             hasMultiblock = compound.getBoolean("hasMultiblock");
             channeled = compound.getInteger("channeled");
-            playerBeacon = compound.getBoolean("playerBeacon");
             properties = CrystalProperties.readFromNBT(compound);
             channeling = Constellation.readFromNBT(compound, Constellation.getDefaultSaveKey() + "Normal");
             trait = Constellation.readFromNBT(compound, Constellation.getDefaultSaveKey() + "Trait");
@@ -697,7 +686,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             compound.setBoolean("doesSeeSky", doesSeeSky);
             compound.setBoolean("hasMultiblock", hasMultiblock);
             compound.setInteger("channeled", channeled);
-            compound.setBoolean("playerBeacon", playerBeacon);
 
             NBTTagList listPositions = new NBTTagList();
             for (BlockPos pos : offsetMirrors.keySet()) {
@@ -733,10 +721,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             this.channeling = bufferChanneling;
             this.trait = trait;
         }*/
-
-        public void setPlayerBeacon(boolean playerBeacon) {
-            this.playerBeacon = playerBeacon;
-        }
 
         public void updateSkyState(boolean doesSeeSky) {
             this.doesSeeSky = doesSeeSky;

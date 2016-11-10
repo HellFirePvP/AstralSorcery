@@ -18,12 +18,12 @@ public class ItemBlockRitualPedestal extends ItemBlock {
         super(BlocksAS.ritualPedestal);
     }
 
-    public static void setBeaconType(ItemStack stack, boolean isPlayerBeacon) {
+    /*public static void setBeaconType(ItemStack stack, boolean isPlayerBeacon) {
         NBTHelper.getData(stack).setBoolean("playerBeacon", isPlayerBeacon);
     }
 
     public static boolean isPlayerBeacon(ItemStack stack) {
         return NBTHelper.getData(stack).getBoolean("playerBeacon");
-    }
+    }*/
 
 }

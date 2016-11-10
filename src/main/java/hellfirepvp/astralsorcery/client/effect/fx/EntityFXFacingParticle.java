@@ -92,7 +92,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         oldY = y;
         oldZ = z;
         x += motionX;
-        y += motionY - yGravity;
+        y += (motionY - yGravity);
         z += motionZ;
     }
 

@@ -43,12 +43,4 @@ public class RecipeRitualPedestal extends AttenuationRecipe {
                 AttenuationRecipe.AltarSlot.LOWER_RIGHT);
         setPassiveStarlightRequirement(3000);
     }
-
-    @Nullable
-    @Override
-    public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        ItemStack out = super.getOutput(centralGridMap, altar);
-        ItemBlockRitualPedestal.setBeaconType(out, false);
-        return out;
-    }
 }

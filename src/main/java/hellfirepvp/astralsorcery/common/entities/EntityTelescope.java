@@ -11,6 +11,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -32,7 +33,13 @@ public class EntityTelescope extends EntityLivingBase {
     public EntityTelescope(World worldIn) {
         super(worldIn);
         getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-        setSize(0.9F, 1.5F);
+        setSize(1.4F, 3F);
+    }
+
+    @Override
+    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+        if(damageSrc.equals(DamageSource.inWall)) return;
+        super.damageEntity(damageSrc, damageAmount);
     }
 
     @Override

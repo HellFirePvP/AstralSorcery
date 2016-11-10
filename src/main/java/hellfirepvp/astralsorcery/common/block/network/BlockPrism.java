@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -36,8 +37,10 @@ import java.util.List;
  */
 public class BlockPrism extends BlockStarlightNetwork {
 
+    private static final AxisAlignedBB boxPrism = new AxisAlignedBB(3D/16D, 0, 3D/16D, 13D/16D, 14D/16D, 13D/16D);
+
     public BlockPrism() {
-        super(Material.ROCK, MapColor.BLACK);
+        super(Material.ROCK, MapColor.QUARTZ);
         setHardness(3.0F);
         setSoundType(SoundType.GLASS);
         setResistance(12.0F);
@@ -57,6 +60,11 @@ public class BlockPrism extends BlockStarlightNetwork {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
         CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return boxPrism;
     }
 
     @Override

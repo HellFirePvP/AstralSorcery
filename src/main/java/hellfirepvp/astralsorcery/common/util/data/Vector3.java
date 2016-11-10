@@ -108,6 +108,20 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 subtract(Entity e) {
+        this.x -= e.posX;
+        this.y -= e.posY;
+        this.z -= e.posZ;
+        return this;
+    }
+
+    public Vector3 subtract(Vec3i vec) {
+        this.x -= vec.getX();
+        this.y -= vec.getY();
+        this.z -= vec.getZ();
+        return this;
+    }
+
     public Vector3 subtract(Vector3 vec) {
         this.x -= vec.x;
         this.y -= vec.y;

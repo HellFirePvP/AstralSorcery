@@ -24,6 +24,6 @@ public class OBJModelLibrary {
         return AssetLoader.loadObjModel(AssetLoader.ModelLocation.OBJ, name);
     }
 
-    public static void init() {}
+    public static void init() {} //To invoke static initializer for fields
 
 }

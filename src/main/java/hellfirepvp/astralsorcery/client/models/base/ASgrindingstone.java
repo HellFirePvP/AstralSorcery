@@ -1,14 +1,19 @@
-/*package model;
+package hellfirepvp.astralsorcery.client.models.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * astralsorcery_grindingstone - wiiv
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: TCNModelGrindstone
+ * Created by wiiv
  * Created using Tabula 4.1.1
+ * Date: 18.09.2016
  */
-/*public class ASgrindingstone extends ModelBase {
+public class ASgrindingstone extends ModelBase {
+
     public ModelRenderer wheel;
     public ModelRenderer frame1;
     public ModelRenderer frame2;
@@ -80,13 +85,9 @@ import net.minecraft.entity.Entity;
         this.shape1.render(f5);
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    /*public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 }
-*/

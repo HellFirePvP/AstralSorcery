@@ -24,11 +24,11 @@ public class Constellations {
     public static Constellation fornax; //-> Furnace -> Melting blocks in world
     public static Constellation libra; //Balance? uuh...
     public static Constellation horologium; //-> Time -> TileAcceleration
-    public static Constellation octans; //Octant - Celestial navigation tool. gating tool?
+    public static Constellation octans; //-> Fishing -> Fishes fishing loot.
     public static Constellation phoenix; //Revive/Death protection - endgame?
     public static Constellation scutum; //Shield/Damage reduction?
     public static Constellation rohini; //Temple? gating?
-    public static Constellation chitra; //Bright jewel/pearl (apparently related to birth tho)
+    public static Constellation chitra; //-> Birth -> EntityAnimal mating.
     public static Constellation draco; //Dragon, Flight
 
     /** fictional constellations with specific purposes */

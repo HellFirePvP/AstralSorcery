@@ -57,20 +57,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
         ItemStack pedestal = new ItemStack(itemIn);
-        ItemBlockRitualPedestal.setBeaconType(pedestal, false);
         list.add(pedestal);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        if(ItemBlockRitualPedestal.isPlayerBeacon(stack)) {
-            if(EnumGatedKnowledge.RITUAL_PL_BEACON.canSee(ResearchManager.clientProgress.getTierReached())) {
-                tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("ritual.isBeacon"));
-            } else {
-                tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
-            }
-        }
     }
 
     @Override
@@ -147,8 +134,6 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             if(placer != null && placer instanceof EntityPlayer) {
                 te.setOwner(placer.getUniqueID());
             }
-            boolean beacon = ItemBlockRitualPedestal.isPlayerBeacon(stack);
-            te.setPlayerBeacon(beacon);
         }
     }
 

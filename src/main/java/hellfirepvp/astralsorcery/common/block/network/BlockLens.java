@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -37,6 +38,8 @@ import java.util.List;
  * Date: 07.08.2016 / 22:31
  */
 public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
+
+    private static final AxisAlignedBB boxLens = new AxisAlignedBB(2.5D/16D, 0, 2.5D/16D, 13.5D/16D, 14.5D/16D, 13.5D/16D);
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
 
@@ -62,6 +65,11 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
         CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return boxLens;
     }
 
     @Override

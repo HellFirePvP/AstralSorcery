@@ -13,6 +13,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -62,16 +63,35 @@ public class ItemEntityPlacer extends Item {
                 return EnumActionResult.PASS;
             PlacerType type = PlacerType.values()[meta];
             Entity toSpawn = type.provideEntity(worldIn);
-            toSpawn.setPositionAndRotation(
-                    positionSuggested.getX() + 0.5, positionSuggested.getY(), positionSuggested.getZ() + 0.5,
-                    0.5F, 0.5F);
-            worldIn.spawnEntityInWorld(toSpawn);
+            if(entityFits(worldIn, positionSuggested, toSpawn)) {
+                toSpawn.setPositionAndRotation(
+                        positionSuggested.getX() + 0.5, positionSuggested.getY(), positionSuggested.getZ() + 0.5,
+                        0.5F, 0.5F);
+                worldIn.spawnEntityInWorld(toSpawn);
 
-            if (!playerIn.isCreative()) {
-                stack.stackSize -= 1;
+                if (!playerIn.isCreative()) {
+                    stack.stackSize -= 1;
+                }
             }
         }
         return EnumActionResult.PASS;
+    }
+
+    private boolean entityFits(World worldIn, BlockPos pos, Entity toSpawn) {
+        BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
+        for (int xx = MathHelper.floor_double(-toSpawn.width); xx <= MathHelper.ceiling_double_int(toSpawn.width); xx++) {
+            for (int zz = MathHelper.floor_double(-toSpawn.width); zz <= MathHelper.ceiling_double_int(toSpawn.width); zz++) {
+                for (int yy = 0; yy <= MathHelper.ceiling_double_int(toSpawn.height); yy++) {
+                    mut.setPos(pos).add(xx, yy, zz);
+                    if(!worldIn.isAirBlock(mut)) {
+                        mut.release();
+                        return false;
+                    }
+                }
+            }
+        }
+        mut.release();
+        return true;
     }
 
     public static enum PlacerType {

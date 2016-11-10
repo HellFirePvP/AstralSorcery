@@ -58,6 +58,7 @@ public class CEffectFertilitas extends CEffectPositionListGen<CropHelper.Growabl
                     if(plant.tryGrow(world, rand)) {
                         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, plant.getPos());
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, plant.getPos(), 8));
+                        changed = true;
                     }
                 }
             }

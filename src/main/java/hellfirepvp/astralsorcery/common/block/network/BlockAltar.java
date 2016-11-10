@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -56,6 +57,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     private static final AxisAlignedBB boxAttenuation =   new AxisAlignedBB(-(4D / 16D), 0D, -(4D / 16D), 1D + ( 4D / 16D),        1D, 1D + ( 4D / 16D));
     private static final AxisAlignedBB boxConstellation = new AxisAlignedBB(-(3D / 16D), 0D, -(3D / 16D), 1D + ( 3D / 16D),        1D, 1D + ( 3D / 16D));
 
+    public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
     public static PropertyEnum<AltarType> ALTAR_TYPE = PropertyEnum.create("altartype", AltarType.class);
 
     public BlockAltar() {
@@ -165,7 +167,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, ALTAR_TYPE);
+        return new BlockStateContainer(this, ALTAR_TYPE, RENDER_FULLY);
     }
 
     @Override

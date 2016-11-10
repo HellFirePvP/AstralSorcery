@@ -46,7 +46,7 @@ public class OrbitalEffectCollector implements OrbitalEffectController.OrbitPers
                     pos.getX(),
                     pos.getY(),
                     pos.getZ());
-            p.setMaxAge(25);
+            p.setMaxAge(15);
             p.setColor(new Color(70, 50, 255));
             p.scale(0.15F).gravity(0.008);
         }
@@ -58,7 +58,7 @@ public class OrbitalEffectCollector implements OrbitalEffectController.OrbitPers
             p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
-            p.setMaxAge(35);
+            p.setMaxAge(25);
             p.scale(0.15F).setColor(new Color(160, 160, 255));
         }
     }

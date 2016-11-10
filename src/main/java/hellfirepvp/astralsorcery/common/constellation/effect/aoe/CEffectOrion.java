@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -32,16 +33,13 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.11.2016 / 22:30
  */
-public class CEffectOrion extends ConstellationEffect {
+public class CEffectOrion extends CEffectEntityCollect<EntityLivingBase> {
 
-    public static boolean enabled = true;
-    public static double range = 16.0D;
+    public static double potencyMultiplier = 1;
     public static float damage = 4.0F;
 
-    private static AxisAlignedBB baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-
     public CEffectOrion() {
-        super(Constellations.orion, "orion");
+        super(Constellations.orion, "orion", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
     }
 
     @Override
@@ -60,18 +58,20 @@ public class CEffectOrion extends ConstellationEffect {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
-        if(!enabled) return false;
+        percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
         float actDamageDealt = percStrength * damage;
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, baseBoundingBox.offset(pos), (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
-        EntityPlayer owner = getOwningPlayerInWorld(world, pos);
-        DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
-        for (EntityLivingBase entity : entities) {
-            if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
-                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
-                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+        List<EntityLivingBase> entities = collectEntities(world, pos);
+        if(!entities.isEmpty()) {
+            EntityPlayer owner = getOwningPlayerInWorld(world, pos);
+            DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
+            for (EntityLivingBase entity : entities) {
+                if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+                }
             }
         }
         return false;
@@ -84,11 +84,10 @@ public class CEffectOrion extends ConstellationEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
-        range = cfg.getFloat(getKey() + "DamageRange", getConfigurationSection(), 16, 2, 64, "Defines the range in which the ritual will try to find and damage mobs");
-        damage = cfg.getFloat(getKey() + "DamageDealt", getConfigurationSection(), 4.0F, 0.1F, 100F, "Defines the max. possible damage dealt per damage tick.");
+        super.loadFromConfig(cfg);
 
-        baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 1, 1).expand(range, range, range);
+        damage = cfg.getFloat(getKey() + "DamageDealt", getConfigurationSection(), 4.0F, 0.1F, 100F, "Defines the max. possible damage dealt per damage tick.");
+        potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 
     @SideOnly(Side.CLIENT)

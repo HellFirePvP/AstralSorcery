@@ -1,9 +1,7 @@
 CEffects:
 
-crop harvesting
-animal herding + breeding
+animal herding
 something with trees/treefarms?
 something that makes everything around it float
-fishing out of water.
 pushing/pulling AOE (trait teleport)
 phoenix: stop the player from dying

@@ -38,6 +38,29 @@ public class GenListEntries {
         }
     }
 
+    public static class CounterMaxListEntry extends CounterListEntry {
+
+        public int maxCount;
+
+        public CounterMaxListEntry(BlockPos at, int maxCount) {
+            super(at);
+            this.maxCount = maxCount;
+        }
+
+        @Override
+        public void readFromNBT(NBTTagCompound nbt) {
+            super.readFromNBT(nbt);
+            maxCount = nbt.getInteger("maxCounter");
+        }
+
+        @Override
+        public void writeToNBT(NBTTagCompound nbt) {
+            super.writeToNBT(nbt);
+            nbt.setInteger("maxCounter", maxCount);
+        }
+
+    }
+
     public static class SimpleBlockPosEntry implements CEffectPositionListGen.CEffectGenListEntry {
 
         private final BlockPos pos;

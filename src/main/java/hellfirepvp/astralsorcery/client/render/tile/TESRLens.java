@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.models.base.ASlens;
 import hellfirepvp.astralsorcery.client.models.tcn.TCNModelLensHandle;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -23,9 +24,8 @@ import java.util.List;
  */
 public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
 
-    private static final BindableResource texLensHandle = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "tcn_lens_handle");
-
-    private static final TCNModelLensHandle modelLensHandle = new TCNModelLensHandle();
+    private static final ASlens modelLensPart = new ASlens();
+    private static final BindableResource texLensPart = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/lens");
 
     @Override
     public void renderTileEntityAt(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -41,7 +41,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
 
             yaw = (float) Math.atan2(dir.getX(), dir.getZ());
 
-            yaw = -90F + (float) Math.toDegrees(-yaw);
+            yaw = 180F + (float) Math.toDegrees(-yaw);
             pitch = (float) Math.toDegrees(pitch);
         }
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -51,7 +51,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
 
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GL11.glTranslated(x + 0.5, y + 0.895, z + 0.5);
+        GL11.glTranslated(x + 0.5, y + 1.335, z + 0.5);
         GL11.glScaled(0.055, 0.055, 0.055);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glRotated(yaw % 360, 0, 1, 0);
@@ -61,8 +61,8 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
     }
 
     private void renderHandle(float yaw, float pitch) {
-        texLensHandle.bind();
-        modelLensHandle.render(null, yaw, pitch, 0, 0, 0, 1);
+        texLensPart.bind();
+        modelLensPart.render(null, yaw, pitch, 0, 0, 0, 1);
     }
 
 }

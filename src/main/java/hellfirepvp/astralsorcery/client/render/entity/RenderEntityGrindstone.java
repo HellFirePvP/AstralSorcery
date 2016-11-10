@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.render.entity;
 
-import hellfirepvp.astralsorcery.client.models.tcn.TCNModelGrindstone;
+import hellfirepvp.astralsorcery.client.models.base.ASgrindingstone;
 import hellfirepvp.astralsorcery.client.render.RenderEntityModel;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -8,7 +8,6 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -26,8 +25,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEntityModel<T> {
 
-    private static final TCNModelGrindstone telescopeGrindstone = new TCNModelGrindstone();
-    private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "grindstone");
+    private static final ASgrindingstone modelGrindstone = new ASgrindingstone();
+    private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindingstone");
 
     protected RenderEntityGrindstone(RenderManager renderManager) {
         super(renderManager);
@@ -35,6 +34,7 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
 
     @Override
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        //renderOffsetAABB(entity.getEntityBoundingBox(), x - entity.lastTickPosX, y - entity.lastTickPosY, z - entity.lastTickPosZ);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y + 2.38, z);
@@ -64,9 +64,7 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                     GL11.glPushMatrix();
                     GL11.glTranslated(x, y, z);
-                    GL11.glTranslated(0.3, 0.8, -0.3);
-                    GL11.glRotated(65, 1, 0, 0);
-                    GL11.glRotated(140, 0, 1, 0);
+                    IGrindable.applyDefaultGrindstoneTransforms();
                     RenderHelper.enableStandardItemLighting();
                     Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
                     RenderHelper.disableStandardItemLighting();
@@ -80,7 +78,7 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
     @Override
     public void doModelRender(T entity) {
         texGrindstone.bind();
-        telescopeGrindstone.render(entity, 0, 0, 0, 0, 0, 1);
+        modelGrindstone.render(entity, 0, 0, 0, 0, 0, 1);
     }
 
     @Override

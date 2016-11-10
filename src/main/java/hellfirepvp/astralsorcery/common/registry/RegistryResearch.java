@@ -110,13 +110,9 @@ public class RegistryResearch {
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);
         regCrafting.register(resTools);
-        //regCrafting.register(resMarbleTypes);
-        //regCrafting.register(resSootyMarble);
         regCrafting.register(resAltarUpgradeAttenuation);
 
         resGrindstone.addSourceConnectionFrom(resTools);
-        //resAltarUpgradeAttenuation.addSourceConnectionFrom(resMarbleTypes);
-        //resSootyMarble.addSourceConnectionFrom(resMarbleTypes);
     }
 
     private static void initDiscovery() {
@@ -146,7 +142,7 @@ public class RegistryResearch {
             BlockMarble.MarbleBlockType mbt = values[i];
             stacks[i] = new ItemStack(BlocksAS.blockMarble, 1, mbt.getMeta());
         }
-        ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 1);
+        ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 0);
         resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleBricks));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarblePillar));
@@ -155,7 +151,7 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleRuned));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleEngraved));
 
-        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 3, 0);
+        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 1);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
         resSootyMarble.addPage(new JournalPageRecipe(RegistryRecipes.rBlackMarbleRaw));
 

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.client.IRenderHandler;
@@ -25,7 +26,7 @@ public class RenderSkybox extends IRenderHandler {
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
-        if (!astralSky.isInitialized() && world.provider.getDimension() == 0) { //DimID == 0 should always be the case tho.
+        if (!astralSky.isInitialized() && world.provider.getDimension() == 0 && !AssetLibrary.reloading) { //DimID == 0 should always be the case tho.
             astralSky.setInitialized(world.getWorldInfo().getSeed());
         }
 
@@ -50,6 +51,10 @@ public class RenderSkybox extends IRenderHandler {
 
         //defaultSky.render(partialTicks, world, mc);
         astralSky.render(partialTicks, world, mc);
+    }
+
+    public static void resetAstralSkybox() {
+        astralSky.refreshRender();
     }
 
     static {

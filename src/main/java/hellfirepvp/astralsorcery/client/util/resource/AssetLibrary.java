@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.client.util.resource;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
+import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -54,6 +56,7 @@ public class AssetLibrary implements IResourceManagerReloadListener {
 
         AstralSorcery.log.info("[AstralSorcery] Finished reloading, rebinding textures...");
         TexturePreloader.doPreloadRoutine();
+        RenderSkybox.resetAstralSkybox();
         AstralSorcery.log.info("[AstralSorcery] Successfully reloaded and rebound library.");
     }
 

@@ -1,14 +1,19 @@
-/*package model;
+package hellfirepvp.astralsorcery.client.models.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * astralsorcery_altarT3 - wiiv
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: TCNModelGrindstone
+ * Created by wiiv
  * Created using Tabula 4.1.1
+ * Date: 18.09.2016
  */
-/*public class ASaltarT3 extends ModelBase {
+public class ASaltarT3 extends ModelBase {
+
     public ModelRenderer hovering1;
     public ModelRenderer hovering2;
     public ModelRenderer hovering3;
@@ -56,24 +61,20 @@ import net.minecraft.entity.Entity;
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.subhovering3.render(f5);
-        this.hovering2.render(f5);
-        this.subhovering4.render(f5);
-        this.hovering3.render(f5);
-        this.hovering4.render(f5);
-        this.subhovering1.render(f5);
-        this.subhovering2.render(f5);
-        this.hovering1.render(f5);
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
+        this.subhovering3.render(scale);
+        this.hovering2.render(scale);
+        this.subhovering4.render(scale);
+        this.hovering3.render(scale);
+        this.hovering4.render(scale);
+        this.subhovering1.render(scale);
+        this.subhovering2.render(scale);
+        this.hovering1.render(scale);
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    /*public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 }
-*/

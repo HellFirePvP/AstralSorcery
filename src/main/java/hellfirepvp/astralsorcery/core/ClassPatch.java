@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.core;
 
-import net.minecraftforge.classloading.FMLForgePlugin;
+import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -68,12 +68,29 @@ public abstract class ClassPatch {
     }
 
     @Nonnull
-    public MethodNode getMethod(ClassNode cn, String deobf, String obf, String sig) {
-        String name = FMLForgePlugin.RUNTIME_DEOBF ? obf : deobf;
+    public MethodNode getMethodLazy(ClassNode cn, String deobf, String obf) {
         for (MethodNode m : cn.methods) {
-            if (m.name.equals(name) && m.desc.equals(sig)) {
+            if (m.name.equals(obf) || m.name.equals(deobf)) {
                 return m;
             }
+        }
+        FMLLog.info("[AstralTransformer] Find method will fail. Printing all methods as debug...");
+        for (MethodNode found : cn.methods) {
+            FMLLog.info("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
+        }
+        throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
+    }
+
+    @Nonnull
+    public MethodNode getMethod(ClassNode cn, String deobf, String obf, String sig) {
+        for (MethodNode m : cn.methods) {
+            if ((m.name.equals(obf) || m.name.equals(deobf)) && m.desc.equals(sig)) {
+                return m;
+            }
+        }
+        FMLLog.info("[AstralTransformer] Find method will fail. Printing all methods as debug...");
+        for (MethodNode found : cn.methods) {
+            FMLLog.info("Method: mame=" + found.name + ", desc=" + found.desc + ", signature=" + found.signature);
         }
         throw new ASMTransformationException("Could not find method: " + deobf + "/" + obf);
     }

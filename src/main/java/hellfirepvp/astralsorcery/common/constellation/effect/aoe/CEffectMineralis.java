@@ -65,6 +65,7 @@ public class CEffectMineralis extends CEffectPositionList {
                     }
                 } else {
                     removeElement(entry);
+                    changed = true;
                 }
             }
         }

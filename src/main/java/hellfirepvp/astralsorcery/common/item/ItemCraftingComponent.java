@@ -147,7 +147,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         GLASS_LENS;
 
         public ItemStack asStack() {
-            return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
+            return new ItemStack(ItemsAS.craftingComponent, 1, getMeta());
         }
 
         public String getUnlocalizedName() {

@@ -26,9 +26,14 @@ public interface IGrindable {
 
     @SideOnly(Side.CLIENT)
     default public void applyClientGrindstoneTransforms() {
-        GL11.glTranslated(0.3, 0.8, -0.3);
-        GL11.glRotated(65, 1, 0, 0);
-        GL11.glRotated(140, 0, 1, 0);
+        applyDefaultGrindstoneTransforms();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void applyDefaultGrindstoneTransforms() {
+        GL11.glTranslated(-0.05, 0.9, -0.85);
+        GL11.glRotated(35, 1, 0, 0);
+        GL11.glRotated(15, 0, 0, 1);
     }
 
     public static class GrindResult {

@@ -82,6 +82,7 @@ public class CEffectHorologium extends CEffectPositionList {
                     }
                 } else {
                     removeElement(entry);
+                    changed = true;
                 }
             }
         }

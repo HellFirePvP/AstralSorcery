@@ -41,10 +41,10 @@ public class RenderItemEntityPlacer implements IItemRenderer {
         switch (type) {
             case TELESCOPE:
                 GL11.glPushMatrix();
-                GL11.glScaled(0.05, 0.05, 0.05);
+                GL11.glScaled(0.028, 0.028, 0.028);
                 GL11.glRotated(180, 0, 1, 0);
                 GL11.glRotated(180, 1, 0, 0);
-                GL11.glTranslated(-10, -25, 0);
+                GL11.glTranslated(-20, -25, 0);
                 GL11.glPushMatrix();
                 GL11.glRotated(-45, 0, 1, 0);
                 renderTelescope.doModelRender(telescopeDummy);
@@ -56,7 +56,7 @@ public class RenderItemEntityPlacer implements IItemRenderer {
                 GL11.glScaled(0.05, 0.05, 0.05);
                 GL11.glRotated(180, 0, 1, 0);
                 GL11.glRotated(180, 1, 0, 0);
-                GL11.glTranslated(-10, -25, 0);
+                GL11.glTranslated(-10, -26, 0);
                 GL11.glPushMatrix();
                 GL11.glRotated(-45, 0, 1, 0);
                 renderGrindstone.doModelRender(grindstoneDummy);
