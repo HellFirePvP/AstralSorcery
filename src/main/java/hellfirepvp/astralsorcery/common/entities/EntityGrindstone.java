@@ -122,8 +122,7 @@ public class EntityGrindstone extends EntityLivingBase {
                                 worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
                                 break;
                         }
-                    }
-                    if(i instanceof ItemSword) {
+                    } else if(i instanceof ItemSword) {
                         if(rand.nextInt(40) == 0) {
                             SwordSharpenHelper.setSwordSharpened(grind);
                         }
@@ -147,8 +146,7 @@ public class EntityGrindstone extends EntityLivingBase {
                             if(!player.isCreative()) {
                                 stack.stackSize--;
                             }
-                        }
-                        if(trySet instanceof ItemSword && !SwordSharpenHelper.isSwordSharpened(stack)) {
+                        } else if(trySet instanceof ItemSword && !SwordSharpenHelper.isSwordSharpened(stack)) {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
                             setGrindItem(toSet);
@@ -166,21 +164,20 @@ public class EntityGrindstone extends EntityLivingBase {
                 Item i = grind.getItem();
                 if(i instanceof IGrindable) {
                     if(((IGrindable) i).canGrind(this, grind)) {
-                        for (int j = 0; j < 15; j++) {
-                            worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.7, posZ,
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
-                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
+                        for (int j = 0; j < 12; j++) {
+                            worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
+                                    (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5);
                         }
                         playWheelEffect();
                     }
-                }
-                if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
-                    for (int j = 0; j < 15; j++) {
-                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.7, posZ,
-                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
-                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat(),
-                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat());
+                } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
+                    for (int j = 0; j < 12; j++) {
+                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
+                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5);
                     }
                     playWheelEffect();
                 }

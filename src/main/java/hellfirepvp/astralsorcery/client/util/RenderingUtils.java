@@ -34,25 +34,19 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
 
-    public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
-        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+    public static double interpolate(double oldP, double newP, float partialTicks) {
+        return oldP + ((newP - oldP) * partialTicks);
+    }
 
-        for (int j = 0; j < 4; ++j) {
-            for (int k = 0; k < 4; ++k) {
-                for (int l = 0; l < 4; ++l) {
-                    double d0 = (double) pos.getX() + ((double)j + 0.5D) / 4.0D;
-                    double d1 = (double) pos.getY() + ((double)k + 0.5D) / 4.0D;
-                    double d2 = (double) pos.getZ() + ((double)l + 0.5D) / 4.0D;
-                    Particle digging = diggingFactory.getEntityFX(0, Minecraft.getMinecraft().theWorld,
-                            d0, d1, d2,
-                            d0 - (double)pos.getX() - 0.5D,
-                            d1 - (double)pos.getY() - 0.5D,
-                            d2 - (double)pos.getZ() - 0.5D,
-                            BlockMarble.getStateId(state));
-                    pm.addEffect(digging);
-                }
-            }
+    public static float interpolateRotation(float prevRotation, float nextRotation, float partialTick) {
+        float rot = nextRotation - prevRotation;
+        while (rot >= 180.0F) {
+            rot -= 360.0F;
         }
+        while (rot >= 180.0F) {
+            rot -= 360.0F;
+        }
+        return prevRotation + partialTick * rot;
     }
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {

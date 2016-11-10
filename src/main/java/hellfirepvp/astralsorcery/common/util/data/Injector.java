@@ -9,12 +9,11 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 /**
- * This class is part of the Gadomancy Mod
- * Gadomancy is Open Source and distributed under the
- * GNU LESSER GENERAL PUBLIC LICENSE
- * for more read the LICENSE file
- * <p>
- * Created by makeo @ 02.12.13 18:45
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: Injector
+ * Created by makeo
+ * Date: 02.12.13 / 18:45
  */
 public class Injector {
     Class clazz;

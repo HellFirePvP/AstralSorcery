@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.client.models.base;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -13,6 +14,8 @@ import net.minecraft.entity.Entity;
  * Date: 18.09.2016
  */
 public class ASaltarT3 extends ModelBase {
+
+    private static float jmpParts = (float) (Math.PI / 8F);
 
     public ModelRenderer hovering1;
     public ModelRenderer hovering2;
@@ -61,15 +64,22 @@ public class ASaltarT3 extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
-        this.subhovering3.render(scale);
-        this.hovering2.render(scale);
-        this.subhovering4.render(scale);
-        this.hovering3.render(scale);
-        this.hovering4.render(scale);
-        this.subhovering1.render(scale);
-        this.subhovering2.render(scale);
-        this.hovering1.render(scale);
+    public void render(Entity entity, float tickVal, float f1, float f2, float f3, float f4, float scale) {
+        renderHovering(subhovering3, tickVal,                1);
+        renderHovering(subhovering1, tickVal + jmpParts,     1);
+        renderHovering(hovering4,    tickVal + jmpParts * 2, 1);
+        renderHovering(subhovering2, tickVal + jmpParts * 3, 1);
+        renderHovering(hovering1,    tickVal + jmpParts * 4, 1);
+        renderHovering(hovering2,    tickVal + jmpParts * 5, 1);
+        renderHovering(subhovering4, tickVal + jmpParts * 6, 1);
+        renderHovering(hovering3,    tickVal + jmpParts * 7, 1);
+    }
+
+    private void renderHovering(ModelRenderer model, float tickVal, float scale) {
+        double h = Math.sin(tickVal) * 0.4;
+        GL11.glTranslated(0, h, 0);
+        model.render(scale);
+        GL11.glTranslated(0, -h, 0);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

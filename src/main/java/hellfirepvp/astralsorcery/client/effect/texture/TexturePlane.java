@@ -198,7 +198,7 @@ public class TexturePlane implements IComplexEffect {
         if(ticksPerFullRot >= 0) {
             float anglePercent = ((float) (counter)) / ((float) ticksPerFullRot);
             deg = anglePercent * 360F;
-            deg = interpolateRotation(lastRenderDegree, deg, partialTicks);
+            deg = RenderingUtils.interpolateRotation(lastRenderDegree, deg, partialTicks);
             this.lastRenderDegree = deg;
         } else {
             deg = fixDegree;
@@ -230,17 +230,6 @@ public class TexturePlane implements IComplexEffect {
         double y = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double z = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
         GL11.glTranslated(-x, -y, -z);
-    }
-
-    public static float interpolateRotation(float prevRotation, float nextRotation, float partialTick) {
-        float rot = nextRotation - prevRotation;
-        while (rot >= 180.0F) {
-            rot -= 360.0F;
-        }
-        while (rot >= 180.0F) {
-            rot -= 360.0F;
-        }
-        return prevRotation + partialTick * rot;
     }
 
     public static interface ScaleFunction {

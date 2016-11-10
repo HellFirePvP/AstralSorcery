@@ -43,15 +43,22 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
     @Override
     public void renderTileEntityAt(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
+        long sBase = 7553015156732193565L;
+        sBase ^= (long) te.getPos().getX();
+        sBase ^= (long) te.getPos().getY();
+        sBase ^= (long) te.getPos().getZ();
+        float jBase = ClientScheduler.getClientTick() + partialTicks;
+        jBase /= 20F;
+
         switch (te.getAltarLevel()) {
             case ATTENUATION:
-                renderT2Additions(te, x, y, z);
+                renderT2Additions(te, x, y, z, jBase);
                 break;
             case CONSTELLATION_CRAFT:
-                renderT3Additions(te, x, y, z);
+                renderT3Additions(te, x, y, z, jBase);
                 if(te.getMultiblockState()) {
                     GL11.glPushMatrix();
-                    renderCrystalEffects(te, x, y, z, partialTicks);
+                    renderCrystalEffects(te, x, y, z, partialTicks, sBase);
                     renderFocusLens(te, x, y, z, partialTicks);
                     renderConstellation(te, x, y, z, partialTicks);
                     GL11.glPopMatrix();
@@ -60,30 +67,30 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         }
     }
 
-    private void renderT3Additions(TileAltar te, double x, double y, double z) {
+    private void renderT3Additions(TileAltar te, double x, double y, double z, float jump) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.05, 0.05, 0.05);
+        GL11.glScaled(0.06, 0.06, 0.06);
 
         texAltar3.bind();
-        modelAltar3.render(null, 0, 0, 0, 0, 0, 1F);
+        modelAltar3.render(null, jump, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void renderT2Additions(TileAltar te, double x, double y, double z) {
+    private void renderT2Additions(TileAltar te, double x, double y, double z, float jump) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.05, 0.05, 0.05);
+        GL11.glScaled(0.06, 0.06, 0.06);
 
         texAltar2.bind();
-        modelAltar2.render(null, 0, 0, 0, 0, 0, 1F);
+        modelAltar2.render(null, jump, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -112,12 +119,8 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
     }
 
-    private void renderCrystalEffects(TileAltar te, double x, double y, double z, float partialTicks) {
+    private void renderCrystalEffects(TileAltar te, double x, double y, double z, float partialTicks, long sBase) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        long sBase = 1553015L;
-        sBase ^= (long) te.getPos().getX();
-        sBase ^= (long) te.getPos().getY();
-        sBase ^= (long) te.getPos().getZ();
         RenderingUtils.renderLightRayEffects(x + 0.5, y + 3.5, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 3, z + 0.5);

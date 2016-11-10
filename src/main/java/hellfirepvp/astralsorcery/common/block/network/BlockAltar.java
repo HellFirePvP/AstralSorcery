@@ -100,7 +100,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         return state.withProperty(RENDER_FULLY, false);
     }
 
-    @Override
+    /*@Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         RenderingUtils.playBlockBreakParticles(pos,
@@ -113,7 +113,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
         return true;
-    }
+    }*/
 
     @Override
     public boolean hasTileEntity(IBlockState state) {

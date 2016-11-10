@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.render.entity;
 
 import hellfirepvp.astralsorcery.client.models.base.ASgrindingstone;
 import hellfirepvp.astralsorcery.client.render.RenderEntityModel;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -75,16 +76,12 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
         }
     }
 
-    private double interpolate(double oldP, double newP, float partial) {
-        return oldP + ((newP - oldP) * partial);
-    }
-
     @Override
     public void doModelRender(T entity, float partialTicks) {
         texGrindstone.bind();
         double oldDeg = (((double) entity.prevTickWheelAnimation) / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
         double newDeg = (((double) entity.tickWheelAnimation)     / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
-        modelGrindstone.render(entity, (float) interpolate(oldDeg, newDeg, 1), 0, 0, 0, 0, 1);
+        modelGrindstone.render(entity, (float) RenderingUtils.interpolate(oldDeg, newDeg, partialTicks), 0, 0, 0, 0, 1);
     }
 
     @Override
