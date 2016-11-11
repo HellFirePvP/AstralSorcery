@@ -164,6 +164,9 @@ tile.BlockPrism.name=PrismLens
 tile.BlockLens.name=Lens
 tile.BlockCelestialCrystals.name=Celestial Crystal Cluster
 tile.BlockWell.name=Lightwell
+tile.BlockMachine.telescope.name=Telescope
+tile.BlockMachine.grindstone.name=Grindstone
+tile.BlockStructural.telescope_struct.name=Telescope
 
 tier.0=Magis
 tier.1=Prope

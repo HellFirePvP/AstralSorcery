@@ -10,12 +10,10 @@ import hellfirepvp.astralsorcery.client.gui.container.GuiAltarDiscovery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,13 +40,14 @@ public class ClientGuiHandler {
         }
         switch (guiType) {
             case TELESCOPE:
-                Entity e = world.getEntityByID(x); //Suggested entity id;
+                /*Entity e = world.getEntityByID(x); //Suggested entity id;
                 if (e == null || !(e instanceof EntityTelescope)) {
                     AstralSorcery.log.info("Tried opening Telescope GUI without valid telescope entity?");
                     return null;
                 } else {
                     return new GuiTelescope(player, (EntityTelescope) e);
-                }
+                }*/
+                return new GuiTelescope(player, (TileTelescope) t);
             case CONSTELLATION_PAPER:
                 Constellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
                 if(c == null) {

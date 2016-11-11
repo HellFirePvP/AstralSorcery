@@ -3,10 +3,12 @@ package hellfirepvp.astralsorcery.client.gui;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
@@ -14,14 +16,16 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -54,11 +58,11 @@ public class GuiTelescope extends GuiWHScreen {
     private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
 
     private final EntityPlayer owningPlayer;
-    private final EntityTelescope guiOwner;
+    private final TileTelescope guiOwner;
 
     private CellRenderInformation currentInformation = null;
 
-    public GuiTelescope(EntityPlayer player, EntityTelescope e) {
+    public GuiTelescope(EntityPlayer player, TileTelescope e) {
         super(245, 500);
         this.owningPlayer = player;
         this.guiOwner = e;
@@ -75,7 +79,6 @@ public class GuiTelescope extends GuiWHScreen {
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
         TextureHelper.refreshTextureBindState();
-        TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -228,16 +231,19 @@ public class GuiTelescope extends GuiWHScreen {
             rgbTo = 0x000000;
         }
         int alphaMask = 0xFF000000; //100% opacity.
-        drawGradientRect(guiLeft, guiTop, guiLeft + guiWidth, guiTop + guiHeight, alphaMask | rgbFrom, alphaMask | rgbTo);
+        RenderingUtils.drawGradientRect(guiLeft, guiTop, zLevel, guiLeft + guiWidth, guiTop + guiHeight, new Color(alphaMask | rgbFrom), new Color(alphaMask | rgbTo));
         GL11.glPopAttrib();
     }
 
     private boolean canTelescopeSeeSky(World renderWorld) {
-        BlockPos pos = new BlockPos(guiOwner);
+        BlockPos pos = guiOwner.getPos();
+        IBlockState up = renderWorld.getBlockState(pos.up());
+        if(up.getBlock().equals(BlocksAS.blockStructural) && up.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.TELESCOPE_STRUCT)) pos = pos.up();
+
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
-                BlockPos highest = renderWorld.getTopSolidOrLiquidBlock(other);
+                BlockPos highest = renderWorld.getTopSolidOrLiquidBlock(new BlockPos(xx, 0, zz));
                 if (highest.getY() > other.getY()) {
                     return false;
                 }

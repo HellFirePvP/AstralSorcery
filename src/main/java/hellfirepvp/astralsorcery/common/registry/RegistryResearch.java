@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
@@ -74,13 +75,13 @@ public class RegistryResearch {
     private static void initCrafting() {
         ResearchProgression.Registry regCrafting = ResearchProgression.BASIC_CRAFT.getRegistry();
 
-        ResearchNode resTelescope = new ResearchNode(new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), "TELESCOPE", 0, 0);
+        ResearchNode resTelescope = new ResearchNode(BlockMachine.MachineType.TELESCOPE.asStack(), "TELESCOPE", 0, 0);
         resTelescope.addPage(getTextPage("TELESCOPE.1"));
         resTelescope.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCCGlassLens));
         resTelescope.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rTelescope));
         resTelescope.addPage(getTextPage("TELESCOPE.4"));
 
-        ResearchNode resGrindstone = new ResearchNode(new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()), "GRINDSTONE", 0, 2);
+        ResearchNode resGrindstone = new ResearchNode(BlockMachine.MachineType.GRINDSTONE.asStack(), "GRINDSTONE", 0, 2);
         resGrindstone.addPage(getTextPage("GRINDSTONE.1"));
         resGrindstone.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rGrindstone));
 

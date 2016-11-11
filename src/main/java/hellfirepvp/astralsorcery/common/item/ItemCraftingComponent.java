@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -98,14 +99,14 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     }
 
     @Override
-    public boolean canGrind(EntityGrindstone grindstone, ItemStack stack) {
+    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
         return type.isGrindable();
     }
 
     @Nonnull
     @Override
-    public GrindResult grind(EntityGrindstone grindstone, ItemStack stack, Random rand) {
+    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
         switch (type) {
             case STARMETAL_INGOT:

@@ -31,8 +31,8 @@ public class RenderEntityTelescope<T extends EntityTelescope> extends RenderEnti
         //renderOffsetAABB(entity.getEntityBoundingBox(), x - entity.lastTickPosX, y - entity.lastTickPosY, z - entity.lastTickPosZ);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-        GL11.glTranslated(x, y + 2.38, z);
-        GL11.glScaled(0.1, 0.1, 0.1);
+        GL11.glTranslated(x, y + 1.2, z);
+        GL11.glScaled(0.05, 0.05, 0.05);
         GL11.glRotated(180, 1, 0, 0);
         doModelRender(entity, partialTicks);
         GL11.glPopMatrix();

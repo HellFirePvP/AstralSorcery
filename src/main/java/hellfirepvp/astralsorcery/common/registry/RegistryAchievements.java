@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -36,9 +37,11 @@ public class RegistryAchievements {
                 UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, BlocksAS.fluidLiquidStarlight), achvRockCrystal);
 
         achvBuildTelescope = new Achievement("achievement.as.buildtelescope", "astralsorcery.buildtelescope", 2, 1,
-                new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), null);
+                //new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), null);
+                BlockMachine.MachineType.TELESCOPE.asStack(), null);
         achvDiscoverConstellation = new Achievement("achievement.as.seeconstellation", "astralsorcery.seeconstellation", 2, -1,
-                new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), achvBuildTelescope);
+                //new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), achvBuildTelescope);
+                BlockMachine.MachineType.TELESCOPE.asStack(), achvBuildTelescope);
 
         achvCelestialCrystal.setSpecial();
         achvLiqStarlight.setSpecial();

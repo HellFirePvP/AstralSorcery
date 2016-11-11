@@ -14,6 +14,6 @@ import javax.annotation.Nullable;
  */
 public interface IVariantTileProvider {
 
-    public TileEntity provideTileEntity(@Nullable World world, @Nullable IBlockState state);
+    public TileEntity provideTileEntity(World world, IBlockState state);
 
 }

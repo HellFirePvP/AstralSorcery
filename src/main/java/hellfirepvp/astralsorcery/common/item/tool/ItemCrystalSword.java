@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -119,13 +120,13 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     }
 
     @Override
-    public boolean canGrind(EntityGrindstone grindstone, ItemStack stack) {
+    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
         return true;
     }
 
     @Nonnull
     @Override
-    public GrindResult grind(EntityGrindstone grindstone, ItemStack stack, Random rand) {
+    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
         ToolCrystalProperties prop = getToolProperties(stack);
         ToolCrystalProperties result = prop.grindCopy(rand);
         if(result == null) {

@@ -24,15 +24,15 @@ public class SpriteLibrary {
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
     private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
-    public static final SpriteSheetResource spriteStarlight = texSpriteStarlight.asSpriteSheet(4, 16);
-    public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(16, 4);
-    public static final SpriteSheetResource spriteHalo = texHalo.asSpriteSheet(8, 6);
-    public static final SpriteSheetResource spriteCelestialBurst1 = texBurst1.asSpriteSheet(40, 1);
-    public static final SpriteSheetResource spriteCelestialBurst2 = texBurst2.asSpriteSheet(40, 1);
-    public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(40, 1);
-    public static final SpriteSheetResource spriteCraftBurst = texCraftBurst.asSpriteSheet(8, 6);
-    public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(16, 5);
-    public static final SpriteSheetResource spriteLiquidStarlight = texLiquidStarlight.asSpriteSheet(1, 64);
+    public static final SpriteSheetResource spriteStarlight = texSpriteStarlight.asSpriteSheet(16, 4);
+    public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(4, 16);
+    public static final SpriteSheetResource spriteHalo = texHalo.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteCelestialBurst1 = texBurst1.asSpriteSheet(1, 40);
+    public static final SpriteSheetResource spriteCelestialBurst2 = texBurst2.asSpriteSheet(1, 40);
+    public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(1, 40);
+    public static final SpriteSheetResource spriteCraftBurst = texCraftBurst.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(5, 16);
+    public static final SpriteSheetResource spriteLiquidStarlight = texLiquidStarlight.asSpriteSheet(64, 1);
 
     public static void init() {}
 

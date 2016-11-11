@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.common.network;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktEntityEffect;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
@@ -37,7 +37,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktCraftingTableFix.class, PktCraftingTableFix.class, id++, Side.CLIENT); //Sends a crafting table GUI-open packet that has a gui with proper data.
         CHANNEL.registerMessage(PktProgressionUpdate.class, PktProgressionUpdate.class, id++, Side.CLIENT); //Sends visual packet that player has discovered research 'X'
         //CHANNEL.registerMessage(PktSpawnWorldParticles.class, PktSpawnWorldParticles.class, id++, Side.CLIENT); //General std world-particles
-        CHANNEL.registerMessage(PktEntityEffect.class, PktEntityEffect.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktPlayEffect.class, PktPlayEffect.class, id++, Side.CLIENT);
 
         //Constellation discovery (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.

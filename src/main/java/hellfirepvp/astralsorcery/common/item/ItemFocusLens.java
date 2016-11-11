@@ -72,7 +72,8 @@ public class ItemFocusLens extends Item implements IItemVariants {
         TIER5;
 
         public ItemStack asStack() {
-            return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
+            //return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
+            return null;
         }
 
         public int getMeta() {

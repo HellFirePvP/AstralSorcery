@@ -1,52 +1,46 @@
-package hellfirepvp.astralsorcery.client.render.entity;
+package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.models.base.ASgrindingstone;
-import hellfirepvp.astralsorcery.client.render.RenderEntityModel;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderEntityGrindstone
+ * Class: TESRGrindstone
  * Created by HellFirePvP
- * Date: 13.09.2016 / 13:15
+ * Date: 10.11.2016 / 22:30
  */
-public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEntityModel<T> {
+public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
 
     private static final ASgrindingstone modelGrindstone = new ASgrindingstone();
     private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindingstone");
 
-    protected RenderEntityGrindstone(RenderManager renderManager) {
-        super(renderManager);
-    }
-
     @Override
-    public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        //renderOffsetAABB(entity.getEntityBoundingBox(), x - entity.lastTickPosX, y - entity.lastTickPosY, z - entity.lastTickPosZ);
+    public void renderTileEntityAt(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-        GL11.glTranslated(x, y + 1.6, z);
+        GL11.glTranslated(x + 0.5, y + 1.65, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.066, 0.066, 0.066);
-        doModelRender(entity, 1);
+        GL11.glScaled(0.067, 0.067, 0.067);
+        RenderHelper.disableStandardItemLighting();
+        renderModel(te, 1);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
 
-        //TODO adjust item positions again with the 'eventually' new model
-        ItemStack grind = entity.getGrindItem();
+        ItemStack grind = te.getGrindingItem();
         if(grind != null) {
             if(grind.getItem() != null) {
                 if(grind.getItem() instanceof IGrindable) {
@@ -76,25 +70,11 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
         }
     }
 
-    @Override
-    public void doModelRender(T entity, float partialTicks) {
+    private void renderModel(TileGrindstone te, float partialTicks) {
         texGrindstone.bind();
-        double oldDeg = (((double) entity.prevTickWheelAnimation) / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
-        double newDeg = (((double) entity.tickWheelAnimation)     / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
-        modelGrindstone.render(entity, (float) RenderingUtils.interpolate(oldDeg, newDeg, partialTicks), 0, 0, 0, 0, 1);
+        double oldDeg = (((double) te.prevTickWheelAnimation) / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
+        double newDeg = (((double) te.tickWheelAnimation)     / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
+        modelGrindstone.render(null, (float) RenderingUtils.interpolate(oldDeg, newDeg, partialTicks), 0, 0, 0, 0, 1);
     }
 
-    @Override
-    protected ResourceLocation getEntityTexture(T entity) {
-        return null;
-    }
-
-    public static class Factory extends RenderEntityModelFactory<EntityGrindstone> {
-
-        @Override
-        public RenderEntityModel<? super EntityGrindstone> createRenderFor(RenderManager manager) {
-            return new RenderEntityGrindstone<>(manager);
-        }
-
-    }
 }

@@ -57,7 +57,7 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public Item getTabIconItem() {
-                return ItemsAS.entityPlacer;
+                return Item.getItemFromBlock(BlocksAS.blockMachine);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
@@ -97,7 +97,7 @@ public class RegistryItems {
         celestialCrystal = registerItem(new ItemCelestialCrystal());
         tunedCelestialCrystal = registerItem(new ItemTunedCelestialCrystal());
 
-        entityPlacer = registerItem(new ItemEntityPlacer());
+        //entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
         wand = registerItem(new ItemWand());
@@ -111,17 +111,17 @@ public class RegistryItems {
     //Items associated to blocks/itemblocks
     private static void registerBlockItems() {
         RegistryBlocks.defaultItemBlocksToRegister.forEach(RegistryItems::registerDefaultItemBlock);
+        RegistryBlocks.customNameItemBlocksToRegister.forEach(RegistryItems::registerCustomNameItemBlock);
 
-        registerItem(new ItemBlockCustomName(BlocksAS.customOre));
-        registerItem(new ItemBlockCustomName(BlocksAS.customSandOre));
-        registerItem(new ItemBlockCustomName(BlocksAS.blockMarble));
-        registerItem(new ItemBlockCustomName(BlocksAS.blockBlackMarble));
-        registerItem(new ItemBlockCustomName(BlocksAS.celestialCrystals));
         registerItem(new ItemBlockRitualPedestal());
         registerItem(new ItemBlockAltar());
 
         registerItem(new ItemCollectorCrystal(BlocksAS.collectorCrystal));
         registerItem(new ItemCollectorCrystal(BlocksAS.celestialCollectorCrystal));
+    }
+
+    private static <T extends Block> void registerCustomNameItemBlock(T block) {
+        registerItem(new ItemBlockCustomName(block), block.getClass().getSimpleName());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {

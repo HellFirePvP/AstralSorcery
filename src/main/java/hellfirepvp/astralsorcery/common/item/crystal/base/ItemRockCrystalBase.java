@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -37,13 +38,13 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     }
 
     @Override
-    public boolean canGrind(EntityGrindstone grindstone, ItemStack stack) {
+    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
         return true;
     }
 
     @Nonnull
     @Override
-    public GrindResult grind(EntityGrindstone grindstone, ItemStack stack, Random rand) {
+    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
         CrystalProperties result = prop.grindCopy(rand);
         if(result == null) {

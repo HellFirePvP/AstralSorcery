@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTrack
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
@@ -196,7 +197,7 @@ public class CommonProxy implements IGuiHandler {
 
     public static enum EnumGuiId {
 
-        TELESCOPE,
+        TELESCOPE(TileTelescope.class),
         CONSTELLATION_PAPER,
         ALTAR_DISCOVERY(TileAltar.class),
         ALTAR_ATTENUATION(TileAltar.class),

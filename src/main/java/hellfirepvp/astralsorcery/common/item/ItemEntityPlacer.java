@@ -53,7 +53,7 @@ public class ItemEntityPlacer extends Item {
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (hand == null || hand == EnumHand.OFF_HAND)
-            return EnumActionResult.PASS; //LUL rekt 1.9 features
+            return EnumActionResult.PASS;
 
         if (worldIn.isRemote) return EnumActionResult.PASS;
         BlockPos positionSuggested = pos.offset(facing);
@@ -109,9 +109,9 @@ public class ItemEntityPlacer extends Item {
             return name().toLowerCase();
         }
 
-        public ItemStack asStack() {
+        /*public ItemStack asStack() {
             return new ItemStack(ItemsAS.entityPlacer, 1, getMeta());
-        }
+        }*/
 
         public int getMeta() {
             return ordinal();

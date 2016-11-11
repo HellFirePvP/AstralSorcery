@@ -5,6 +5,8 @@ import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
@@ -22,8 +24,11 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
@@ -57,6 +62,7 @@ import static hellfirepvp.astralsorcery.common.lib.BlocksAS.*;
 public class RegistryBlocks {
 
     public static List<Block> defaultItemBlocksToRegister = new LinkedList<>();
+    public static List<Block> customNameItemBlocksToRegister = new LinkedList<>();
 
     public static void init() {
         registerFluids();
@@ -82,20 +88,25 @@ public class RegistryBlocks {
     private static void registerBlocks() {
         //WorldGen&Related
         customOre = registerBlock(new BlockCustomOre());
+        queueCustomNameItemBlock(customOre);
         customSandOre = registerBlock(new BlockCustomSandOre());
+        queueCustomNameItemBlock(customSandOre);
         blockMarble = registerBlock(new BlockMarble());
+        queueCustomNameItemBlock(blockMarble);
         blockBlackMarble = registerBlock(new BlockBlackMarble());
+        queueCustomNameItemBlock(blockBlackMarble);
         blockVolatileLight = registerBlock(new BlockFlareLight());
         queueDefaultItemBlock(blockVolatileLight);
 
         //Mechanics
-        //blockStructural = registerBlock(new BlockStructural());
         blockAltar = registerBlock(new BlockAltar());
         ritualPedestal = registerBlock(new BlockRitualPedestal());
         blockWell = registerBlock(new BlockWell());
         queueDefaultItemBlock(blockWell);
         blockIlluminator = registerBlock(new BlockWorldIlluminator());
         queueDefaultItemBlock(blockIlluminator);
+        blockMachine = registerBlock(new BlockMachine());
+        queueCustomNameItemBlock(blockMachine);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -103,11 +114,15 @@ public class RegistryBlocks {
         queueDefaultItemBlock(lensPrism);
 
         celestialCrystals = registerBlock(new BlockCelestialCrystals());
+        queueCustomNameItemBlock(celestialCrystals);
 
         //Machines&Related
         //stoneMachine = registerBlock(new BlockStoneMachine());
         collectorCrystal = registerBlock(new BlockCollectorCrystal());
         celestialCollectorCrystal = registerBlock(new BlockCelestialCollectorCrystal());
+
+        blockStructural = registerBlock(new BlockStructural());
+        queueCustomNameItemBlock(blockStructural);
     }
 
     //Called after items are registered.
@@ -117,6 +132,8 @@ public class RegistryBlocks {
         registerBlockRender(blockAltar);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
+        registerBlockRender(blockStructural);
+        registerBlockRender(blockMachine);
     }
 
     //Tiles
@@ -127,9 +144,16 @@ public class RegistryBlocks {
         registerTile(TileCelestialCrystals.class);
         registerTile(TileWell.class);
         registerTile(TileIlluminator.class);
+        registerTile(TileTelescope.class);
+        registerTile(TileGrindstone.class);
+        registerTile(TileStructuralConnector.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);
+    }
+
+    private static void queueCustomNameItemBlock(Block block) {
+        customNameItemBlocksToRegister.add(block);
     }
 
     private static void queueDefaultItemBlock(Block block) {

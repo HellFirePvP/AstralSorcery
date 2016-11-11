@@ -1,35 +1,20 @@
 package hellfirepvp.astralsorcery.common.entities;
 
 import com.google.common.base.Optional;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.item.base.IGrindable;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktEntityEffect;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,7 +43,7 @@ public class EntityGrindstone extends EntityLivingBase {
     public EntityGrindstone(World worldIn) {
         super(worldIn);
         getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-        setSize(1.1F, 1.2F);
+        setSize(0.76F, 0.8F);
     }
 
     @Override
@@ -93,7 +78,7 @@ public class EntityGrindstone extends EntityLivingBase {
         dataManager.register(GRINDING, Optional.<ItemStack>absent());
     }
 
-    @Override
+    /*@Override
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand) {
         player.swingArm(hand);
         if(hand == EnumHand.OFF_HAND) {
@@ -132,7 +117,7 @@ public class EntityGrindstone extends EntityLivingBase {
                 if(player.isSneaking()) {
                     setDead();
                     if(!player.isCreative()) {
-                        ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()));
+                        //ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()));
                     }
                 } else {
                     if(stack != null) {
@@ -184,7 +169,7 @@ public class EntityGrindstone extends EntityLivingBase {
             }
         }
         return EnumActionResult.PASS;
-    }
+    }*/
 
     @Override
     public void onDeath(DamageSource cause) {
@@ -196,12 +181,12 @@ public class EntityGrindstone extends EntityLivingBase {
     }
 
     public void playWheelEffect() {
-        PktEntityEffect effect = new PktEntityEffect(PktEntityEffect.EntityEffectType.GRINDSTONE_WHEEL, this);
+        /*PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.EffectType.GRINDSTONE_WHEEL, this);
         if(worldObj.isRemote) {
             playWheelAnimation(effect);
         } else {
             PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(worldObj, getPosition(), 32));
-        }
+        }*/
     }
 
     @Override
@@ -267,8 +252,8 @@ public class EntityGrindstone extends EntityLivingBase {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void playWheelAnimation(PktEntityEffect event) {
-        Entity e = event.getClientWorldEntity();
+    public static void playWheelAnimation(PktPlayEffect event) {
+        Entity e = null;//event.getClientWorldEntity();
         if(e != null && e instanceof EntityGrindstone) {
             int ticks = ((EntityGrindstone) e).tickWheelAnimation;
             if(ticks > 0) {

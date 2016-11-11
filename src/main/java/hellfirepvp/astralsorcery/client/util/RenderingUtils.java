@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -34,7 +34,29 @@ public class RenderingUtils {
     private static final Random rand = new Random();
     private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
 
+    public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
+        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+
+        for (int j = 0; j < 4; j++) {
+            for (int k = 0; k < 4; k++) {
+                for (int l = 0; l < 4; l++) {
+                    double d0 = (double) pos.getX() + ((double) j + 0.5D) / 4D;
+                    double d1 = (double) pos.getY() + ((double) k + 0.5D) / 4D;
+                    double d2 = (double) pos.getZ() + ((double) l + 0.5D) / 4D;
+                    Particle digging = diggingFactory.getEntityFX(0, Minecraft.getMinecraft().theWorld,
+                            d0, d1, d2,
+                            d0 - (double) pos.getX() - 0.5D,
+                            d1 - (double) pos.getY() - 0.5D,
+                            d2 - (double) pos.getZ() - 0.5D,
+                            Block.getStateId(state));
+                    pm.addEffect(digging);
+                }
+            }
+        }
+    }
+
     public static double interpolate(double oldP, double newP, float partialTicks) {
+        if(oldP == newP) return oldP;
         return oldP + ((newP - oldP) * partialTicks);
     }
 

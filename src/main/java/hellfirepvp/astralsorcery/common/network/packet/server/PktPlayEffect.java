@@ -2,9 +2,11 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -20,51 +22,47 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 10.11.2016 / 12:47
  */
-public class PktEntityEffect implements IMessage, IMessageHandler<PktEntityEffect, IMessage> {
+public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, IMessage> {
 
     private byte typeOrdinal;
-    public int entityId;
+    public BlockPos pos;
 
-    public PktEntityEffect() {}
+    public PktPlayEffect() {}
 
-    public PktEntityEffect(EntityEffectType type, Entity entity) {
+    public PktPlayEffect(EffectType type, BlockPos pos) {
         this.typeOrdinal = (byte) type.ordinal();
-        this.entityId = entity.getEntityId();
+        this.pos = pos;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.typeOrdinal = buf.readByte();
-        this.entityId = buf.readInt();
+        this.pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeByte(typeOrdinal);
-        buf.writeInt(entityId);
-    }
-
-    @Nullable
-    @SideOnly(Side.CLIENT)
-    public Entity getClientWorldEntity() {
-        return Minecraft.getMinecraft().theWorld.getEntityByID(entityId);
+        buf.writeInt(pos.getX());
+        buf.writeInt(pos.getY());
+        buf.writeInt(pos.getZ());
     }
 
     @Override
-    public IMessage onMessage(PktEntityEffect message, MessageContext ctx) {
+    public IMessage onMessage(PktPlayEffect message, MessageContext ctx) {
         try {
-            EntityEffectType type = EntityEffectType.values()[message.typeOrdinal];
+            EffectType type = EffectType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
                 trigger.trigger(message);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " for entityId " + message.entityId);
+            AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());
         }
         return null;
     }
 
-    public static enum EntityEffectType {
+    public static enum EffectType {
 
         //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
         GRINDSTONE_WHEEL;
@@ -72,10 +70,10 @@ public class PktEntityEffect implements IMessage, IMessageHandler<PktEntityEffec
         //GOD I HATE THIS PART
         //But i can't do this in the ctor because server-client stuffs.
         @SideOnly(Side.CLIENT)
-        private static EventAction getClientTrigger(EntityEffectType type) {
+        private static EventAction getClientTrigger(EffectType type) {
             switch (type) {
                 case GRINDSTONE_WHEEL:
-                    return EntityGrindstone::playWheelAnimation;
+                    return TileGrindstone::playWheelAnimation;
             }
             return null;
         }
@@ -89,7 +87,7 @@ public class PktEntityEffect implements IMessage, IMessageHandler<PktEntityEffec
 
     private static interface EventAction {
 
-        public void trigger(PktEntityEffect event);
+        public void trigger(PktPlayEffect event);
 
     }
 

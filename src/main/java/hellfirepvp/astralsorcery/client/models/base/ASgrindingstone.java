@@ -73,8 +73,7 @@ public class ASgrindingstone extends ModelBase {
 
     @Override
     public void render(Entity entity, float degRotationWheel, float f1, float f2, float f3, float f4, float scale) {
-        this.wheel.rotateAngleX = degRotationWheel * 0.017453292F;
-        this.wheel.rotateAngleY = 0;
+        this.wheel.rotateAngleX = (degRotationWheel - 15) * 0.017453292F;
 
         this.sit1.render(scale);
         this.wheel.render(scale);

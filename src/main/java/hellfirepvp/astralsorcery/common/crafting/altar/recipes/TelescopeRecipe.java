@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -24,7 +25,7 @@ import java.util.Random;
 public class TelescopeRecipe extends DiscoveryRecipe {
 
     public TelescopeRecipe() {
-        super(new ShapedRecipe(ItemEntityPlacer.PlacerType.TELESCOPE.asStack())
+        super(new ShapedRecipe(BlockMachine.MachineType.TELESCOPE.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Blocks.PLANKS,

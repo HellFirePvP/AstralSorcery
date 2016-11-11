@@ -41,7 +41,7 @@ public class BindableResource {
         return resource;
     }
 
-    public SpriteSheetResource asSpriteSheet(int columns, int rows) {
+    public SpriteSheetResource asSpriteSheet(int rows, int columns) {
         return new SpriteSheetResource(this, rows, columns);
     }
 

@@ -9,37 +9,38 @@ import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityGrindstone;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityTelescope;
-import hellfirepvp.astralsorcery.client.render.item.RenderItemEntityPlacer;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCelestialCrystals;
 import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
+import hellfirepvp.astralsorcery.client.render.tile.TESRGrindstone;
 import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
+import hellfirepvp.astralsorcery.client.render.tile.TESRTelescope;
 import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
-import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
+import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
-import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -146,17 +147,18 @@ public class ClientProxy extends CommonProxy {
     }
 
     private void registerItemRenderers() {
-        /*ItemRendererFilteredTESR stoneMachineRender = new ItemRendererFilteredTESR();
-        for (BlockAltar.AltarType type : BlockAltar.AltarType.values()) {
-            stoneMachineRender.addRender(type.ordinal(), new TESRAltar(), type.provideTileEntity(null, null));
-        }*/
-        ItemRenderRegistry.register(ItemsAS.entityPlacer, new RenderItemEntityPlacer());
+        //RenderTransformsHelper.init();
+
+        ItemRendererFilteredTESR blockMachineRender = new ItemRendererFilteredTESR();
+        blockMachineRender.addRender(BlockMachine.MachineType.TELESCOPE.getMeta(), new TESRTelescope(), new TileTelescope());
+        blockMachineRender.addRender(BlockMachine.MachineType.GRINDSTONE.getMeta(), new TESRGrindstone(), new TileGrindstone());
+        ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.blockMachine), blockMachineRender);
+
+        //ItemRenderRegistry.registerCameraTransforms(Item.getItemFromBlock(BlocksAS.blockMachine), RenderTransformsHelper.BLOCK_TRANSFORMS);
+
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.collectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
-
-        //ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lens), new TESRLens());
-        //ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.lensPrism), new TESRPrismLens());
 
         //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
     }
@@ -179,6 +181,8 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileCollectorCrystal.class, new TESRCollectorCrystal());
         registerTESR(TileCelestialCrystals.class, new TESRCelestialCrystals());
         registerTESR(TileWell.class, new TESRWell());
+        registerTESR(TileGrindstone.class, new TESRGrindstone());
+        registerTESR(TileTelescope.class, new TESRTelescope());
 
         registerTESR(TileCrystalLens.class, new TESRLens());
         registerTESR(TileCrystalPrismLens.class, new TESRPrismLens());

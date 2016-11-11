@@ -24,8 +24,8 @@ public class RegistryEntities {
     private static void registerEntities() {
         int modEid = 0;
 
-        registerEntity(EntityTelescope.class, "EntityTelescope", modEid++, 64, 10, true);
-        registerEntity(EntityGrindstone.class, "EntityGrindstone", modEid++, 64, 10, true);
+        //registerEntity(EntityTelescope.class, "EntityTelescope", modEid++, 64, 10, true);
+        //registerEntity(EntityGrindstone.class, "EntityGrindstone", modEid++, 64, 10, true);
         registerEntity(EntityItemHighlighted.class, "EntityHighlighted", modEid++, 64, 20, true);
         registerEntity(EntityItemStardust.class, "EntityStardust", modEid++, 64, 20, true);
     }

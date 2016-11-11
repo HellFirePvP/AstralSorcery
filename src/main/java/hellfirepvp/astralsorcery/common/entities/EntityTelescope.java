@@ -33,7 +33,7 @@ public class EntityTelescope extends EntityLivingBase {
     public EntityTelescope(World worldIn) {
         super(worldIn);
         getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10D);
-        setSize(1.4F, 3F);
+        setSize(0.9F, 1.9F);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EntityTelescope extends EntityLivingBase {
             if(!worldObj.isRemote) {
                 setDead();
                 if(!player.isCreative()) {
-                    ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()));
+                    //ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()));
                 }
             }
         } else {

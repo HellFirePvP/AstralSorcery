@@ -4,6 +4,8 @@ import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockLens;
@@ -28,7 +30,7 @@ public class BlocksAS {
 
     public static BlockCustomOre customOre;
     public static BlockCustomSandOre customSandOre;
-    //public static BlockStoneMachine stoneMachine;
+    public static BlockMachine blockMachine;
     public static BlockAltar blockAltar;
     public static BlockRitualPedestal ritualPedestal;
     public static BlockWell blockWell;
@@ -36,7 +38,7 @@ public class BlocksAS {
     public static BlockBlackMarble blockBlackMarble;
     public static BlockFlareLight blockVolatileLight;
     public static BlockWorldIlluminator blockIlluminator;
-    //public static BlockStructural blockStructural;
+    public static BlockStructural blockStructural;
     public static BlockCollectorCrystal collectorCrystal;
     public static BlockCelestialCollectorCrystal celestialCollectorCrystal;
     public static BlockLens lens;
