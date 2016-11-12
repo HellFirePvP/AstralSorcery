@@ -25,8 +25,8 @@ import java.awt.*;
  */
 public abstract class GuiScreenJournal extends GuiWHScreen {
 
-    public static final BindableResource textureResBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank");
-    public static final BindableResource textureResShell = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace");
+    public static final BindableResource textureResBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook");
+    public static final BindableResource textureResShell = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook");
     public static final BindableResource textureBookmark = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark");
 
     protected final int bookmarkIndex;

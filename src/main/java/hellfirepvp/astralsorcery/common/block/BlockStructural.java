@@ -65,7 +65,8 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                RenderingUtils.playBlockBreakParticles(pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState());
+                BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().addDestroyEffects(world, pos.down(), manager);
+                //RenderingUtils.playBlockBreakParticles(pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState());
                 return true;
         }
         return super.addDestroyEffects(world, pos, manager);

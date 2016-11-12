@@ -29,6 +29,7 @@
 	},
 	"parent": "block/block",
 	"textures": {
+        "particle": "astralsorcery:models/grindingstone/grindingstone",
 		"texture": "astralsorcery:models/grindingstone/grindingstone"
 	},
 	"elements": [

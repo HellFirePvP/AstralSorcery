@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -13,6 +14,10 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -24,6 +29,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,6 +73,20 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
+        IBlockState state = world.getBlockState(pos);
+        switch (state.getValue(MACHINE_TYPE)) {
+            case TELESCOPE:
+                RenderingUtils.playBlockBreakParticles(pos.up(), Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+            case GRINDSTONE:
+                RenderingUtils.playBlockBreakParticles(pos, Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
+                break;
+        }
+        return false;
     }
 
     @Override

@@ -50,8 +50,11 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper")       .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")         .allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")         .allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow")     .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2")         .allocateGlId();

@@ -43,6 +43,8 @@ import java.util.List;
  */
 public class CEffectAra extends CEffectPositionList {
 
+    //TODO ask mezz to include if (!TerrainGen.saplingGrowTree(worldIn, rand, pos)) return; in his sapling things.
+
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
 
@@ -92,7 +94,7 @@ public class CEffectAra extends CEffectPositionList {
 
         GenListEntries.SimpleBlockPosEntry posEntry = getRandomElementByChance(rand);
         if(posEntry != null) {
-            TileFakeTree tft = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, posEntry.getPos(), TileFakeTree.class, false);
+            TileFakeTree tft = MiscUtils.getTileAt(world, posEntry.getPos(), TileFakeTree.class, false);
             if(tft != null && tft.getFakedState() != null) {
                 IBlockState fake = tft.getFakedState();
                 if(tryHarvest(world, pos, posEntry, fake)) { //True, if block disappeared.
@@ -102,6 +104,9 @@ public class CEffectAra extends CEffectPositionList {
                 }
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_TREE_VORTEX, posEntry.getPos());
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, posEntry.getPos(), 64));
+            } else {
+                removeElement(posEntry);
+                ret = true;
             }
         }
 

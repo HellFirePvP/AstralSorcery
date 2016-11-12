@@ -99,7 +99,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             String name = I18n.translateToLocal(unlocTitle);
             double width = fontRendererObj.getStringWidth(name);
-            GL11.glTranslated(guiLeft + 107, guiTop + 22, 0);
+            GL11.glTranslated(guiLeft + 117, guiTop + 22, 0);
             GL11.glScaled(1.3, 1.3, 1.3);
             GL11.glTranslated(-(width / 2), 0, 0);
             fontRendererObj.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
@@ -109,7 +109,7 @@ public class GuiJournalPages extends GuiScreenJournal {
 
             texUnderline.bind();
             GL11.glPushMatrix();
-            GL11.glTranslated(guiLeft + 20, guiTop + 35, zLevel);
+            GL11.glTranslated(guiLeft + 30, guiTop + 35, zLevel);
             drawTexturedRectAtCurrentPos(175, 6);
             GL11.glPopMatrix();
             pageOffsetY = 50;
@@ -121,7 +121,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 20, guiTop + pageOffsetY, partialTicks, zLevel);
+            page.render(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();

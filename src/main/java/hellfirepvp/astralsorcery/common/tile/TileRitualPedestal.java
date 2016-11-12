@@ -554,8 +554,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                         collectionChannelBuffer -= maxDrain;
                         perc = 1F;
                     } else if(consumeCompletely) {
-                        collectionChannelBuffer = 0;
                         perc = (float) ((collectionChannelBuffer) / maxDrain);
+                        collectionChannelBuffer = 0;
                     } else {
                         continue;
                     }

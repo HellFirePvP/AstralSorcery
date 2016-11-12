@@ -119,7 +119,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         ScaledResolution res = new ScaledResolution(mc);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((guiLeft + 20) * res.getScaleFactor(), (guiTop + 20) * res.getScaleFactor(), (guiWidth - 40) * res.getScaleFactor(), (guiHeight - 40) * res.getScaleFactor());
+        GL11.glScissor((guiLeft + 27) * res.getScaleFactor(), (guiTop + 27) * res.getScaleFactor(), (guiWidth - 54) * res.getScaleFactor(), (guiHeight - 54) * res.getScaleFactor());
         progressionRenderer.drawProgressionPart(zLevel);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 

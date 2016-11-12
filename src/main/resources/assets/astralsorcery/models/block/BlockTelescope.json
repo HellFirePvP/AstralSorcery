@@ -29,6 +29,7 @@
 	},
 	"parent": "block/block",
 	"textures": {
+        "particle": "astralsorcery:models/telescope/telescope",
 		"texture": "astralsorcery:models/telescope/telescope"
 	},
 	"elements": [

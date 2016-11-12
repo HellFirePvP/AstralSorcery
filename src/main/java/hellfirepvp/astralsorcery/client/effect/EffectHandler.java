@@ -46,6 +46,7 @@ public final class EffectHandler {
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
+    public static final List<EffectLightbeam> fastRenderBeams = new LinkedList<>();
 
     private EffectHandler() {}
 
@@ -96,6 +97,7 @@ public final class EffectHandler {
         synchronized (complexEffects) {
             Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
             EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
+            //EffectLightbeam.renderFast(fastRenderBeams); FIXME Translation is off
             for (int i = 0; i <= 2; i++) {
                 for (IComplexEffect effect : layeredEffects.get(i)) {
                     GL11.glPushMatrix();
@@ -169,6 +171,8 @@ public final class EffectHandler {
             synchronized (complexEffects) {
                 if(effect instanceof EntityFXFacingParticle) {
                     fastRenderParticles.add((EntityFXFacingParticle) effect);
+                //} else if(effect instanceof EffectLightbeam) {
+                //    fastRenderBeams.add((EffectLightbeam) effect);
                 } else {
                     complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
                 }

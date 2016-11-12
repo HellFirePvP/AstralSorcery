@@ -1,21 +1,19 @@
 package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -54,6 +52,7 @@ public class EffectLightbeam implements IComplexEffect {
     public void setDead() {
         age = maxAge;
     }
+
     public EffectLightbeam setAlphaMultiplier(float alphaMultiplier) {
         this.alphaMultiplier = alphaMultiplier;
         return this;
@@ -81,10 +80,53 @@ public class EffectLightbeam implements IComplexEffect {
         flagRemoved = false;
     }
 
+    public static void renderFast(List<EffectLightbeam> beams) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        SpriteLibrary.spriteLightbeam.getResource().bind();
+        //RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
+
+        Tessellator t = Tessellator.getInstance();
+        VertexBuffer vb = t.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+
+        for (EffectLightbeam beam : beams) {
+            if(rView.getDistanceSq(beam.from.getX(), beam.from.getY(), beam.from.getZ()) > Config.maxEffectRenderDistanceSq) return;
+            beam.renderFast(vb);
+        }
+
+        t.draw();
+
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+    }
+
+    private void renderFast(VertexBuffer vb) {
+        float halfAge = maxAge / 2F;
+        float tr = 1F - (Math.abs(halfAge - age) / halfAge);
+        tr *= 0.6;
+        tr *= alphaMultiplier;
+        renderBeamOnAngles(vb, SpriteLibrary.spriteLightbeam.getUVOffset(age), tr);
+    }
+
     @Override
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) return;
+        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
         if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > Config.maxEffectRenderDistanceSq) return;
 
         float halfAge = maxAge / 2F;
@@ -119,6 +161,52 @@ public class EffectLightbeam implements IComplexEffect {
         double y = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double z = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
         GL11.glTranslated(-x, -y, -z);
+    }
+
+    private void renderBeamOnAngles(VertexBuffer vb, Tuple<Double, Double> uvOffset, float br) {
+        double uWidth = SpriteLibrary.spriteLightbeam.getULength();
+        double vHeight = SpriteLibrary.spriteLightbeam.getVLength();
+        double u = uvOffset.key;
+        double v = uvOffset.value;
+
+        Vector3 perp = aimPerp.clone().normalize();
+        Vector3 perpFrom = perp.clone().multiply(fromSize);
+        Vector3 perpTo = perp.multiply(toSize);
+
+        Vector3 vec = from.clone().add(perpFrom.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
+        vec = from.clone().add(perpFrom);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
+
+        perp = aimPerp.clone().rotate(Math.toRadians(120F), aim).normalize();
+        perpFrom = perp.clone().multiply(fromSize);
+        perpTo = perp.multiply(toSize);
+
+        vec = from.clone().add(perpFrom.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
+        vec = from.clone().add(perpFrom);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
+
+        perp = aimPerp.clone().rotate(Math.toRadians(240F), aim).normalize();
+        perpFrom = perp.clone().multiply(fromSize);
+        perpTo = perp.multiply(toSize);
+
+        vec = from.clone().add(perpFrom.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v + vHeight).color(br, br, br, br).endVertex();
+        vec = from.clone().add(perpFrom);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v + vHeight).color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo);
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u + uWidth, v)          .color(br, br, br, br).endVertex();
+        vec = to.clone().add(perpTo.clone().multiply(-1));
+        vb.pos(vec.getX(), vec.getY(), vec.getZ()).tex(u,          v)          .color(br, br, br, br).endVertex();
     }
 
     private void renderCurrentTextureAroundAxis(double angle) {
