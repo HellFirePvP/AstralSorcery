@@ -29,6 +29,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -155,7 +156,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                         ItemStack grind = tgr.getGrindingItem();
                         if(grind != null) {
                             if(player.isSneaking()) {
-                                ItemUtils.dropItem(worldObj, posX + 0.5F, posY + 1.3F, posZ + 0.5F, grind);
+                                ItemUtils.dropItem(worldObj, posX + 0.5F, posY + 1F, posZ + 0.5F, grind);
 
                                 tgr.setGrindingItem(null);
                             } else {
@@ -285,6 +286,27 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    public boolean isNormalCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isTranslucent(IBlockState state) {
+        return true;
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, MACHINE_TYPE);
     }
@@ -297,6 +319,11 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override

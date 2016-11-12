@@ -108,7 +108,7 @@ public class BlockArrayRenderHelper {
         BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         VertexFormat blockFormat = DefaultVertexFormats.BLOCK;
 
-        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        TextureHelper.setActiveTextureToAtlasSprite();
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
 

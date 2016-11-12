@@ -1,6 +1,3 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "astralsorcery:misc/blank"
-    }
+    "parent": "astralsorcery:block/BlockTelescope"
 }

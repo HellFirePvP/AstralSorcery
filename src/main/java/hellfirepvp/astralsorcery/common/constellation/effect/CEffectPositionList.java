@@ -27,6 +27,10 @@ public abstract class CEffectPositionList extends CEffectPositionListGen<GenList
         super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
+    public boolean offerNewBlockPos(BlockPos pos) {
+        return offerNewElement(new GenListEntries.SimpleBlockPosEntry(pos));
+    }
+
     @Nullable
     public BlockPos getRandomPosition() {
         GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);

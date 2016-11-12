@@ -237,19 +237,21 @@ public class GuiTelescope extends GuiWHScreen {
 
     private boolean canTelescopeSeeSky(World renderWorld) {
         BlockPos pos = guiOwner.getPos();
+        /*int height = 1;
         IBlockState up = renderWorld.getBlockState(pos.up());
-        if(up.getBlock().equals(BlocksAS.blockStructural) && up.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.TELESCOPE_STRUCT)) pos = pos.up();
+        if(up.getBlock().equals(BlocksAS.blockStructural) && up.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.TELESCOPE_STRUCT)) {
+            height += 1;
+        }*/
 
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 BlockPos other = pos.add(xx, 0, zz);
-                BlockPos highest = renderWorld.getTopSolidOrLiquidBlock(new BlockPos(xx, 0, zz));
-                if (highest.getY() > other.getY()) {
+                if (!renderWorld.canSeeSky(other)) {
                     return false;
                 }
             }
         }
-        return true;
+        return renderWorld.canSeeSky(pos.up());
     }
 
     private static final float THRESHOLD_TO_START = 0.8F;

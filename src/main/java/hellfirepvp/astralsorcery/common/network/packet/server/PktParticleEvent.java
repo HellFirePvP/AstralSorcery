@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAra;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
@@ -102,6 +103,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_ACCEL_TILE,
         CE_DMG_ENTITY,
         CE_WATER_FISH,
+        CE_TREE_VORTEX,
 
         DEBUG;
 
@@ -134,6 +136,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectOrion::playParticles;
                 case CE_WATER_FISH:
                     return CEffectOctans::playParticles;
+                case CE_TREE_VORTEX:
+                    return CEffectAra::playParticles;
                 case DEBUG:
                     return RaytraceAssist::playDebug;
             }

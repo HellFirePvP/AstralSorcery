@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -107,6 +109,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(blockIlluminator);
         blockMachine = registerBlock(new BlockMachine());
         queueCustomNameItemBlock(blockMachine);
+        blockFakeTree = registerBlock(new BlockFakeTree());
+        queueDefaultItemBlock(blockFakeTree);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -147,6 +151,7 @@ public class RegistryBlocks {
         registerTile(TileTelescope.class);
         registerTile(TileGrindstone.class);
         registerTile(TileStructuralConnector.class);
+        registerTile(TileFakeTree.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

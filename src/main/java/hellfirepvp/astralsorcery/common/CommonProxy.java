@@ -41,6 +41,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -110,6 +111,8 @@ public class CommonProxy implements IGuiHandler {
 
     public void init() {
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
+
+        MinecraftForge.TERRAIN_GEN_BUS.register(TreeCaptureHelper.eventInstance);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerNetwork());
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());

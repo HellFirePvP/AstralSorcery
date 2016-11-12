@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.models.base.ASgrindingstone;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -43,6 +44,8 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
         ItemStack grind = te.getGrindingItem();
         if(grind != null) {
             if(grind.getItem() != null) {
+                TextureHelper.refreshTextureBindState();
+                TextureHelper.setActiveTextureToAtlasSprite();
                 if(grind.getItem() instanceof IGrindable) {
                     IGrindable grindable = (IGrindable) grind.getItem();
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

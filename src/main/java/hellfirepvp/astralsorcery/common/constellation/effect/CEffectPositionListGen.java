@@ -39,6 +39,10 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         this.verifier = verifier;
     }
 
+    public int getElementCount() {
+        return elements.size();
+    }
+
     //Returns only null if empty.
     @Nullable
     public T getRandomElement(Random rand) {
@@ -56,6 +60,12 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     public boolean removeElement(T element) {
         return elements.remove(element);
+    }
+
+    public boolean offerNewElement(T element) {
+        if(maxCount <= elements.size()) return false;
+        if(containsElementAt(element.getPos())) return false;
+        return elements.add(element);
     }
 
     public boolean findNewPosition(World world, BlockPos pos) {

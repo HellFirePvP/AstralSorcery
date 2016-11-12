@@ -17,7 +17,7 @@ public class Constellations {
 
     public static Constellation orion; //-> Damage -> AOE damage effect
     public static Constellation aquila; //Travel
-    public static Constellation ara; //Altar
+    public static Constellation ara; //-> Treefarm
     public static Constellation bootes; //Herdsman? Animal farming stuff?
     public static Constellation caelum; //Chisel/Grindstone?
     public static Constellation circinus; //-> Harvest -> Crop harvesting
@@ -36,7 +36,7 @@ public class Constellations {
     public static Constellation locurba; //Dislocation, Latin rules. a word mixed (per)turbare (disturb sth.) and loco (place, location)
     public static Constellation visso; //Sending/Transmission), Latin rules again. missus (to send) and vastus (huge, large) the english 'vast' also has its origins there.
     public static Constellation lucerna; //-> Light -> Huge magnum torch effect
-    public static Constellation tenifium; //Endless, infinite darkness
+    public static Constellation tenifium; //-> Vortex -> Mob pull effect
     public static Constellation fertilitas; //-> Fertility -> Crop growth
     public static Constellation reatio; //Resonance
     public static Constellation mineralis; //-> Mineral -> Ore generation

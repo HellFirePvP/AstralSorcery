@@ -224,6 +224,11 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
+    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }

@@ -167,6 +167,7 @@ tile.BlockWell.name=Lightwell
 tile.BlockMachine.telescope.name=Telescope
 tile.BlockMachine.grindstone.name=Grindstone
 tile.BlockStructural.telescope_struct.name=Telescope
+tile.BlockFakeTree.name=
 
 tier.0=Magis
 tier.1=Prope

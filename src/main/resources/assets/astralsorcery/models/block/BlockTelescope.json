@@ -1,7 +1,7 @@
 {
 	"__comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
 	"textures": {
-		"texture": "models/telescope/telescope"
+		"texture": "astralsorcery:models/telescope/telescope"
 	},
 	"elements": [
 		{

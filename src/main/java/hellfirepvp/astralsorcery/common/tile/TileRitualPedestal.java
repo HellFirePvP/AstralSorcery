@@ -11,8 +11,10 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAra;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
@@ -25,6 +27,7 @@ import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
+import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
@@ -41,6 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -160,6 +164,14 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
     }
 
+    public boolean isWorking() {
+        return working;
+    }
+
+    public boolean hasMultiblock() {
+        return hasMultiblock;
+    }
+
     private void updateMultiblockState() {
         boolean found = MultiBlockArrays.patternRitualPedestal.matches(worldObj, getPos());
         boolean update = hasMultiblock != found;
@@ -180,17 +192,22 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     public Constellation getDisplayConstellation() {
         if(offsetMirrorPositions.size() != TransmissionReceiverRitualPedestal.MAX_MIRROR_COUNT)
             return null;
+        return getRitualConstellation();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean shouldDoAdditionalEffects() {
+        return working && offsetMirrorPositions.size() > 0;
+    }
+
+    @Nullable
+    public Constellation getRitualConstellation() {
         ItemStack crystal = getStackInSlot(0);
         if(crystal != null && crystal.getItem() != null &&
                 crystal.getItem() instanceof ItemTunedCrystalBase) {
             return ItemTunedCrystalBase.getConstellation(crystal);
         }
         return null;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean shouldDoAdditionalEffects() {
-        return working && offsetMirrorPositions.size() > 0;
     }
 
     @Nullable
@@ -388,6 +405,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private CrystalProperties properties;
         private int channeled = 0;
 
+        private TreeCaptureHelper.TreeWatcher tw = null;
         private ConstellationEffect ce;
         private Map<BlockPos, Boolean> offsetMirrors = new HashMap<>();
 
@@ -406,7 +424,18 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             if(channeling != null && properties != null && hasMultiblock) {
                 if(ce == null) {
                     ce = ConstellationEffectRegistry.getEffect(channeling);
+                    if(channeling.equals(Constellations.ara)) {
+                        tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getPos(), CEffectAra.treeRange);
+                        if(CEffectAra.enabled) {
+                            TreeCaptureHelper.offerWeakWatcher(tw);
+                            ((CEffectAra) ce).refTreeWatcher = new WeakReference<>(tw);
+                        }
+                    }
                 }
+                if(channeling != Constellations.ara) {
+                    tw = null;
+                }
+
                 if(ticksTicking % 20 == 0) {
                     WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
                     List<BlockPos> toNodes = getSources();
@@ -468,10 +497,12 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 } else {
                     flagAsInactive(world);
                     ce = null;
+                    tw = null;
                 }
             } else {
                 flagAsInactive(world);
                 ce = null;
+                tw = null;
             }
         }
 
@@ -641,10 +672,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             return true;
         }
 
-        /*@Override
+        @Override
         public void postLoad(World world) {
-            updateMirrorPositions(world);
-        }*/
+            if(channeling != null && channeling.equals(Constellations.ara) && ce != null) {
+                tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getPos(), CEffectAra.treeRange);
+                if(CEffectAra.enabled) {
+                    TreeCaptureHelper.offerWeakWatcher(tw);
+                    ((CEffectAra) ce).refTreeWatcher = new WeakReference<>(tw);
+                }
+            }
+        }
 
         public void updateMirrorPositions(World world) {
             TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
