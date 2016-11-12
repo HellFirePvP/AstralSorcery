@@ -52,7 +52,7 @@ public class ASaltarT2 extends ModelBase {
     }
 
     private void renderHovering(ModelRenderer model, float tickVal, float scale) {
-        double h = Math.sin(tickVal) * 0.4;
+        double h = Math.sin(tickVal) * 0.625;
         GL11.glTranslated(0, h, 0);
         model.render(scale);
         GL11.glTranslated(0, -h, 0);
