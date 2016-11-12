@@ -61,7 +61,11 @@ public class TileFakeTree extends TileEntityTick {
     }
 
     private void cleanUp() {
-        worldObj.setBlockToAir(getPos());
+        if(fakedState != null) {
+            worldObj.setBlockState(getPos(), fakedState);
+        } else {
+            worldObj.setBlockToAir(getPos());
+        }
     }
 
     @Override

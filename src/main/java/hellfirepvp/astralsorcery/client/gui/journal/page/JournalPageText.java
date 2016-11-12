@@ -74,6 +74,7 @@ public class JournalPageText implements IJournalPage {
         @Override
         public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
             offsetY += 5;
+            GL11.glColor4f(0.86F, 0.86F, 0.86F, 1F);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);

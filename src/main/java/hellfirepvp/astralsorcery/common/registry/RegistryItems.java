@@ -57,7 +57,7 @@ public class RegistryItems {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
             public Item getTabIconItem() {
-                return Item.getItemFromBlock(BlocksAS.blockMachine);
+                return ItemsAS.journal;
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {

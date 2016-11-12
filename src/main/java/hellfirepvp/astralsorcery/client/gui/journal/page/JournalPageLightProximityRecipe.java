@@ -53,7 +53,8 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
             texGrid.bind();
-            drawRect(offsetX + 15, offsetY - 5, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 5, zLevel);
+            drawRect(offsetX + 25, offsetY, 129, 202, zLevel);
+            //drawRect(offsetX + 15, offsetY - 5, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 5, zLevel);
 
             GL11.glColor4f(1F, 1F, 1F, 1F);
             TextureHelper.refreshTextureBindState();
@@ -67,16 +68,16 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
 
-            double offX = offsetX + 35;
-            double offY = offsetY + 88;
+            double offX = offsetX + 55;
+            double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
                 ItemStack expected = recipe.getExpectedStack(srs);
                 if(expected == null) expected = recipe.getExpectedStack(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null) continue;
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offX + (srs.columnMultiplier * 40), offY + (srs.rowMultipler * 40), zLevel + 60);
-                GL11.glScaled(1.4, 1.4, 1.4);
+                GL11.glTranslated(offX + (srs.columnMultiplier * 25), offY + (srs.rowMultipler * 25), zLevel + 60);
+                GL11.glScaled(1.13, 1.13, 1.13);
                 drawItemStack(expected, 0, 0, 0);
                 GL11.glPopMatrix();
             }

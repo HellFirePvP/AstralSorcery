@@ -117,7 +117,7 @@ public class CEffectAra extends CEffectPositionList {
         if(rand.nextInt(dropsChance) == 0) {
             BlockPos at = posEntry.getPos();
             Block b = fakedState.getBlock();
-            List<ItemStack> drops = b.getDrops(world, at, fakedState, 4);
+            List<ItemStack> drops = b.getDrops(world, at, fakedState, 2);
             for (ItemStack i : drops) {
                 if(i == null || i.getItem() == null) continue;
                 ItemUtils.dropItemNaturally(world,

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
@@ -45,8 +46,8 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
     @Override
     public void initGui() {
-        this.xSize = 345;
-        this.ySize = 282;
+        this.xSize = 256;
+        this.ySize = 202;
         super.initGui();
     }
 
@@ -62,8 +63,8 @@ public class GuiAltarAttenuation extends GuiAltarBase {
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
-            GL11.glTranslated(250, 65, 0);
-            GL11.glScaled(3.4, 3.4, 3.4);
+            GL11.glTranslated(190, 35, 0);
+            GL11.glScaled(2.5, 2.5, 2.5);
 
             itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
@@ -79,36 +80,33 @@ public class GuiAltarAttenuation extends GuiAltarBase {
             TextureHelper.refreshTextureBindState();
         }
 
-        Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(ConstellationRegistry.getTier(0));
+        Constellation c = containerAltarBase.tileAltar.getFocusedConstellation();
         if(c != null && containerAltarBase.tileAltar.getMultiblockState() && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
-            final double alpha = CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
-            if(alpha > 1E-4) {
-                rand.setSeed(0x61FF25A5B7C24109L);
+            rand.setSeed(0x61FF25A5B7C24109L);
 
-                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                GL11.glPushMatrix();
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glPushMatrix();
 
-                GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
 
-                GL11.glDisable(GL11.GL_ALPHA_TEST);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glEnable(GL11.GL_BLEND);
-                Blending.DEFAULT.apply();
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.apply();
 
-                RenderConstellation.renderConstellationIntoGUI(c, 20, 50, zLevel, 80, 80, 2, new RenderConstellation.BrightnessFunction() {
-                    @Override
-                    public float getBrightness() {
-                        return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5)) * ((float) alpha);
-                    }
-                }, true, false);
+            RenderConstellation.renderConstellationIntoGUI(c, 10, 20, zLevel, 70, 70, 2, new RenderConstellation.BrightnessFunction() {
+                @Override
+                public float getBrightness() {
+                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5));
+                }
+            }, true, false);
 
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glEnable(GL11.GL_ALPHA_TEST);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-                GL11.glPopMatrix();
-                GL11.glPopAttrib();
-            }
+            GL11.glPopMatrix();
+            GL11.glPopAttrib();
         }
     }
 
@@ -131,14 +129,14 @@ public class GuiAltarAttenuation extends GuiAltarBase {
         }
 
         texBlack.bind();
-        drawRect(guiLeft + 22, guiTop + 154, 304, 12);
+        drawRect(guiLeft + 11, guiTop + 104, 232, 10);
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(guiLeft + 22, guiTop + 154, (int) (304 * percFilled), 12,
+            drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }

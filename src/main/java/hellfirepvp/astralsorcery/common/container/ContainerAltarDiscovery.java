@@ -25,9 +25,9 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
-            addSlotToContainer(new Slot(tileAltar,     xx, 87 + xx * 22, 15));
-            addSlotToContainer(new Slot(tileAltar, 3 + xx, 87 + xx * 22, 36));
-            addSlotToContainer(new Slot(tileAltar, 6 + xx, 87 + xx * 22, 58));
+            addSlotToContainer(new Slot(tileAltar,     xx, 62 + xx * 18, 11));
+            addSlotToContainer(new Slot(tileAltar, 3 + xx, 62 + xx * 18, 29));
+            addSlotToContainer(new Slot(tileAltar, 6 + xx, 62 + xx * 18, 47));
         }
     }
 
@@ -35,11 +35,11 @@ public class ContainerAltarDiscovery extends ContainerAltarBase {
     void bindPlayerInventory() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(this.playerInv, j + i * 9 + 9, 21 + j * 22, 92 + i * 22));
+                addSlotToContainer(new Slot(this.playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(this.playerInv, i, 21 + i * 22, 161));
+            addSlotToContainer(new Slot(this.playerInv, i, 8 + i * 18, 142));
         }
     }
 

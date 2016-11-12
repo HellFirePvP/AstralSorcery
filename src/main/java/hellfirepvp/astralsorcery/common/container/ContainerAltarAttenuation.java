@@ -25,25 +25,25 @@ public class ContainerAltarAttenuation extends ContainerAltarBase {
     @Override
     void bindAltarInventory() {
         for (int xx = 0; xx < 3; xx++) {
-            addSlotToContainer(new Slot(tileAltar,     xx, 141 + xx * 23, 63));
-            addSlotToContainer(new Slot(tileAltar, 3 + xx, 141 + xx * 23, 86));
-            addSlotToContainer(new Slot(tileAltar, 6 + xx, 141 + xx * 23, 108));
+            addSlotToContainer(new Slot(tileAltar,     xx, 102 + xx * 18, 29));
+            addSlotToContainer(new Slot(tileAltar, 3 + xx, 102 + xx * 18, 47));
+            addSlotToContainer(new Slot(tileAltar, 6 + xx, 102 + xx * 18, 65));
         }
-        addSlotToContainer(new Slot(tileAltar,  9, 118,  40));
-        addSlotToContainer(new Slot(tileAltar, 10, 210,  40));
-        addSlotToContainer(new Slot(tileAltar, 11, 118, 131));
-        addSlotToContainer(new Slot(tileAltar, 12, 210, 131));
+        addSlotToContainer(new Slot(tileAltar,  9, 84,  11));
+        addSlotToContainer(new Slot(tileAltar, 10, 156, 11));
+        addSlotToContainer(new Slot(tileAltar, 11, 84,  83));
+        addSlotToContainer(new Slot(tileAltar, 12, 156, 83));
     }
 
     @Override
     void bindPlayerInventory() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(this.playerInv, j + i * 9 + 9, 72 + j * 23, 176 + i * 23));
+                addSlotToContainer(new Slot(this.playerInv, j + i * 9 + 9, 48 + j * 18, 120 + i * 18));
             }
         }
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(this.playerInv, i, 72 + i * 23, 247));
+            addSlotToContainer(new Slot(this.playerInv, i, 48 + i * 18, 178));
         }
     }
 

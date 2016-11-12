@@ -7,7 +7,6 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -46,8 +45,7 @@ public class RenderConstellation {
             for (StarConnection con : c.getConnections()) {
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 float brightness = brFunc.getBrightness();
-                GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                        brightness < 0 ? 0 : brightness);
+                GL11.glColor4f(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
                 Vector3 vecA = renderOffset.clone().add(dirU.clone().multiply(con.from.x + 1)).add(dirV.clone().multiply(con.from.y + 1));
                 Vector3 vecB = renderOffset.clone().add(dirU.clone().multiply(con.to.x + 1)).add(dirV.clone().multiply(con.to.y + 1));
                 Vector3 vecCV = vecB.subtract(vecA);
@@ -68,8 +66,7 @@ public class RenderConstellation {
         for (StarLocation star : c.getStars()) {
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             float brightness = brFunc.getBrightness();
-            GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                    brightness < 0 ? 0 : brightness);
+            GL11.glColor4f(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
             int x = star.x;
             int y = star.y;
             Vector3 ofStar = renderOffset.clone().add(dirU.clone().multiply(x)).add(dirV.clone().multiply(y));
@@ -231,7 +228,7 @@ public class RenderConstellation {
                         brightness *= (starBr * 2);
                     }
                     vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    GlStateManager.color(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
+                    GL11.glColor4f(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
                     Vector3 fromStar = new Vector3(offsetVec.getX() + sc.from.x * ulength, offsetVec.getY() + sc.from.y * vlength, offsetVec.getZ());
                     Vector3 toStar = new Vector3(offsetVec.getX() + sc.to.x * ulength, offsetVec.getY() + sc.to.y * vlength, offsetVec.getZ());
 
@@ -270,9 +267,9 @@ public class RenderConstellation {
 
             vb.begin(7, DefaultVertexFormats.POSITION_TEX);
             if (isKnown) {
-                GlStateManager.color(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
+                GL11.glColor4f(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
             } else {
-                GlStateManager.color(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
+                GL11.glColor4f(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
             }
             int starX = sl.x;
             int starY = sl.y;
@@ -292,7 +289,7 @@ public class RenderConstellation {
             tes.draw();
         }
 
-        GlStateManager.color(1, 1, 1, 1);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         return starRectangles;
     }
 

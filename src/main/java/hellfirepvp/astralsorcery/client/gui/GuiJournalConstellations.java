@@ -149,8 +149,8 @@ public class GuiJournalConstellations extends GuiScreenJournal {
 
     static {
         tierOffsetMap.put(0, new Point( 30,  20));
-        tierOffsetMap.put(1, new Point( 20, 150));
-        tierOffsetMap.put(2, new Point(120, 100));
+        tierOffsetMap.put(1, new Point( 30, 140));
+        tierOffsetMap.put(2, new Point(120,  80));
         tierOffsetMap.put(3, new Point(310,  20));
         tierOffsetMap.put(4, new Point(220, 100));
         tierOffsetMap.put(5, new Point(310, 140));

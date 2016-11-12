@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.client.gui;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
@@ -30,8 +33,10 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     private static OverlayText.OverlayFontRenderer fRend = new OverlayText.OverlayFontRenderer();
 
-    private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
-    private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
+    //private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
+    //private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
+
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
 
     private static final int width = 80, height = 110;
     private static final Map<Integer, Point> offsetMap = new HashMap<>(); //we put 6 on "1" page/screen
@@ -65,7 +70,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         drawDefault(textureResBlank);
 
         zLevel += 250;
-        drawNavArrows();
+        drawNavArrows(partialTicks);
         fRend.zLevel = zLevel;
         fRend.font_size_multiplicator = 0.07F;
         drawTitle();
@@ -89,10 +94,9 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     private void drawTitle() {
         if(unlocTitle != null) {
-            Color c = Color.DARK_GRAY;
-            float r = c.getRed()   / 255F;
-            float g = c.getGreen() / 255F;
-            float b = c.getBlue()  / 255F;
+            float r = 0xDD / 255F;
+            float g = 0xDD / 255F;
+            float b = 0xDD / 255F;
 
             GL11.glColor4f(r, g, b, 1F);
             String translated = I18n.translateToLocal(unlocTitle).toUpperCase();
@@ -101,26 +105,33 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         }
     }
 
-    private void drawNavArrows() {
+    private void drawNavArrows(float partialTicks) {
         Point mouse = getCurrentMousePoint();
         int cIndex = pageId * 6;
         rectBack = null;
         rectNext = null;
         rectPrev = null;
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         if(cIndex > 0) {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 15, guiTop + 127, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0.5F;
             if(rectPrev.contains(mouse)) {
+                uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
+            } else {
+                float t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                GL11.glScaled(sin, sin, sin);
             }
-            GL11.glColor4f(1F, 1F, 1F, 0.8F);
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
-            texArrowLeft.bind();
-            drawTexturedRectAtCurrentPos(width, height);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GL11.glPopMatrix();
+            TextureHelper.refreshTextureBindState();
         }
         int nextIndex = cIndex + 6;
         if(constellations.size() >= (nextIndex + 1)) {
@@ -129,30 +140,42 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             rectNext = new Rectangle(guiLeft + 367, guiTop + 125, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0F;
             if(rectNext.contains(mouse)) {
+                uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
+            } else {
+                float t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                GL11.glScaled(sin, sin, sin);
             }
-            GL11.glColor4f(1F, 1F, 1F, 0.8F);
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
-            texArrowRight.bind();
-            drawTexturedRectAtCurrentPos(width, height);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GL11.glPopMatrix();
+            TextureHelper.refreshTextureBindState();
         }
 
         if(bookmarkIndex != 1) {
             int width = 30;
             int height = 15;
-            rectBack = new Rectangle(guiLeft + 197, guiTop + 242, width, height);
+            rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0.5F;
             if(rectBack.contains(mouse)) {
+                uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
+            } else {
+                float t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                GL11.glScaled(sin, sin, sin);
             }
-            GL11.glColor4f(1F, 1F, 1F, 0.8F);
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
-            texArrowLeft.bind();
-            drawTexturedRectAtCurrentPos(width, height);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GL11.glPopMatrix();
+            TextureHelper.refreshTextureBindState();
         }
     }
 
@@ -168,10 +191,10 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         GL11.glTranslated(-(width / 2), -(width / 2), zLevel);
 
-        Color c = Color.DARK_GRAY;
-        float r = c.getRed()   / 255F;
-        float g = c.getGreen() / 255F;
-        float b = c.getBlue()  / 255F;
+        Color c = new Color(0x00DDDDDD);
+        float r = 0xDD / 255F;
+        float g = 0xDD / 255F;
+        float b = 0xDD / 255F;
 
         GL11.glColor4f(r, g, b, 1F);
 
@@ -184,7 +207,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
                     }
                 }, true, false);
 
-        GL11.glColor4f(r, g, b, 0.7F);
+        GL11.glColor4f(r, g, b, 1F);
 
         String trName = specTitle == null ? I18n.translateToLocal(display.getName()).toUpperCase() : I18n.translateToLocal(specTitle).toUpperCase();
         OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
@@ -233,8 +256,9 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     static {
         offsetMap.put(0, new Point( 30,  20));
-        offsetMap.put(1, new Point( 20, 150));
-        offsetMap.put(2, new Point(120, 100));
+        offsetMap.put(1, new Point( 30, 140));
+        offsetMap.put(2, new Point(120,  80));
+
         offsetMap.put(3, new Point(310,  20));
         offsetMap.put(4, new Point(220, 100));
         offsetMap.put(5, new Point(310, 140));

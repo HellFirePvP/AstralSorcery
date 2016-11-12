@@ -32,8 +32,8 @@ public class GuiAltarDiscovery extends GuiAltarBase {
 
     @Override
     public void initGui() {
-        this.xSize = 232;
-        this.ySize = 190;
+        this.xSize = 176;
+        this.ySize = 166;
         super.initGui();
     }
 
@@ -49,7 +49,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
-            GL11.glTranslated(170, 35, 0);
+            GL11.glTranslated(130, 20, 0);
             GL11.glScaled(1.7, 1.7, 1.7);
 
             itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
@@ -86,14 +86,14 @@ public class GuiAltarDiscovery extends GuiAltarBase {
         }
 
         texBlack.bind();
-        drawRect(guiLeft + 22, guiTop + 77, 190, 11);
+        drawRect(guiLeft + 6, guiTop + 70, 165, 10);
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(guiLeft + 22, guiTop + 77, (int) (190 * percFilled), 11,
+            drawRect(guiLeft + 6, guiTop + 70, (int) (165 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }

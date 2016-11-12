@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -36,7 +37,9 @@ public interface IGuiRenderablePage {
         ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
         ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
+        GlStateManager.enableAlpha();
         ri.zLevel = zIR;
+        TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
@@ -70,10 +73,6 @@ public interface IGuiRenderablePage {
 
     default public FontRenderer getStandardFontRenderer() {
         return Minecraft.getMinecraft().fontRendererObj;
-    }
-
-    default public OverlayText.OverlayFontRenderer getSpecialOverlayFontRenderer() {
-        return new OverlayText.OverlayFontRenderer();
     }
 
     default public FontRenderer getStandardGalFontRenderer() {

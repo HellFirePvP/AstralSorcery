@@ -69,9 +69,16 @@ public class AttenuationRecipe extends DiscoveryRecipe {
 
     @Override
     public boolean matches(TileAltar altar) {
-        for (AltarSlot slot : additionalSlots.keySet()) {
-            ItemStack altarItem = altar.getStackInSlot(slot.slotId);
-            if(!ItemUtils.stackEqualsNonNBT(altarItem, additionalSlots.get(slot))) return false;
+        for (AltarSlot slot : AltarSlot.values()) {
+            ItemStack expected = additionalSlots.get(slot);
+            if(expected != null) {
+                ItemStack altarItem = altar.getStackInSlot(slot.slotId);
+                if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
+                    return false;
+                }
+            } else {
+                if(altar.getStackInSlot(slot.slotId) != null) return false;
+            }
         }
 
         return super.matches(altar);

@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -50,8 +51,7 @@ public class JournalPageRecipe implements IJournalPage {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
             texGrid.bind();
-            drawRect(offsetX + 15, offsetY, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 20, zLevel);
-            GL11.glDisable(GL11.GL_BLEND);
+            drawRect(offsetX + 25, offsetY, 129, 202, zLevel);
 
             GL11.glColor4f(1F, 1F, 1F, 1F);
             TextureHelper.refreshTextureBindState();
@@ -59,28 +59,31 @@ public class JournalPageRecipe implements IJournalPage {
             RenderHelper.enableGUIStandardItemLighting();
             ItemStack out = recipe.getRecipeOutput();
             GL11.glPushMatrix();
-            GL11.glTranslated(offsetX + 77, offsetY + 26, zLevel + 60);
+            GL11.glTranslated(offsetX + 78, offsetY + 25, zLevel + 60);
             GL11.glScaled(1.4, 1.4, 1.4);
             drawItemStack(out, 0, 0, 0);
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
 
-            double offX = offsetX + 35;
-            double offY = offsetY + 85;
+            double offX = offsetX + 55;
+            double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
                 ItemStack expected = recipe.getExpectedStack(srs);
                 if(expected == null) expected = recipe.getExpectedStack(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null) continue;
-                TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offX + (srs.columnMultiplier * 40), offY + (srs.rowMultipler * 40), zLevel + 60);
-                GL11.glScaled(1.4, 1.4, 1.4);
+                GL11.glTranslated(offX + (srs.columnMultiplier * 25), offY + (srs.rowMultipler * 25), zLevel + 60);
+                GL11.glScaled(1.13, 1.13, 1.13);
+                RenderHelper.enableGUIStandardItemLighting();
                 drawItemStack(expected, 0, 0, 0);
                 GL11.glPopMatrix();
+                TextureHelper.refreshTextureBindState();
             }
 
-            RenderHelper.disableStandardItemLighting();
             GL11.glPopMatrix();
+            GL11.glDisable(GL11.GL_BLEND);
+            RenderHelper.disableStandardItemLighting();
+
             GL11.glPopAttrib();
         }
 

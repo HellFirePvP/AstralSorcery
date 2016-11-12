@@ -72,7 +72,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
 
     @Override
     public int craftingTickTime() {
-        return 2000;
+        return 600;
     }
 
     public void setSkyConstellation(Constellation constellation) {
@@ -85,9 +85,16 @@ public class ConstellationRecipe extends AttenuationRecipe {
             DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             if(!cel.getActiveConstellations().contains(skyConstellationNeeded)) return false;
         }
-        for (AltarAdditionalSlot slot : matchStacks.keySet()) {
-            ItemStack altarItem = altar.getStackInSlot(slot.slotId);
-            if(!ItemUtils.stackEqualsNonNBT(altarItem, matchStacks.get(slot))) return false;
+        for (AltarAdditionalSlot slot : AltarAdditionalSlot.values()) {
+            ItemStack expected = matchStacks.get(slot);
+            if(expected != null) {
+                ItemStack altarItem = altar.getStackInSlot(slot.slotId);
+                if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
+                    return false;
+                }
+            } else {
+                if(altar.getStackInSlot(slot.slotId) != null) return false;
+            }
         }
         return super.matches(altar);
     }

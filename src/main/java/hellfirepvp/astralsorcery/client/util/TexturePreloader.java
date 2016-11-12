@@ -3,7 +3,6 @@ package hellfirepvp.astralsorcery.client.util;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 
@@ -33,14 +32,19 @@ public class TexturePreloader {
     }
 
     private static void preloadMandatoryTextures() {
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")       .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")      .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")        .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")          .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay")    .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection").allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")       .allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmarkStretched").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay")       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")        .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")   .allocateGlId();
     }
 
     private static void preloadTextures() {
@@ -50,12 +54,6 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper")       .allocateGlId();
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlank")         .allocateGlId();
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpace")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar3")         .allocateGlId();

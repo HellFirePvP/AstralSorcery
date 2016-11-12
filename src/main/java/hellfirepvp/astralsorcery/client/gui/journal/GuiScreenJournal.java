@@ -25,9 +25,10 @@ import java.awt.*;
  */
 public abstract class GuiScreenJournal extends GuiWHScreen {
 
-    public static final BindableResource textureResBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook");
-    public static final BindableResource textureResShell = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook");
-    public static final BindableResource textureBookmark = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark");
+    public static final BindableResource textureResBlank    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook");
+    public static final BindableResource textureResShell    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook");
+    public static final BindableResource textureBookmark    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark");
+    public static final BindableResource textureBookmarkStr = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmarkStretched");
 
     protected final int bookmarkIndex;
 
@@ -56,19 +57,18 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
     private void drawBookmarks(float zLevel, Point mousePoint) {
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        textureBookmark.bind();
 
-        double bookmarkWidth =  90;
+        double bookmarkWidth =  67;
         double bookmarkHeight = 15;
 
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
 
-        rectResearchBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 10), zLevel, "gui.journal.bm.knowledge.name", Color.BLACK.getRGB(), mousePoint);
+        rectResearchBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5), zLevel, "gui.journal.bm.knowledge.name", 0, mousePoint);
 
         if(!ResearchManager.clientProgress.getKnownConstellations().isEmpty()) {
             offsetY = guiTop + 40;
-            rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth+ (bookmarkIndex == 1 ? 0 : 10), zLevel, "gui.journal.bm.constellations.name", Color.BLACK.getRGB(), mousePoint);
+            rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5), zLevel, "gui.journal.bm.constellations.name", 0, mousePoint);
         }
 
         GL11.glPopMatrix();
@@ -88,6 +88,9 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
         Rectangle r = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(width), MathHelper.floor_double(height));
         if(r.contains(mousePoint)) {
+            if(mouseOverWidth > width) {
+                textureBookmarkStr.bind();
+            }
             width = mouseOverWidth;
             r = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(width), MathHelper.floor_double(height));
         }
@@ -110,6 +113,17 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glPopMatrix();
 
         return r;
+    }
+
+    protected void drawTexturedRectAtCurrentPos(double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(0,         0 + height, zLevel).tex(uFrom,          vFrom + vWidth).endVertex();
+        vb.pos(0 + width, 0 + height, zLevel).tex(uFrom + uWidth, vFrom + vWidth).endVertex();
+        vb.pos(0 + width, 0,          zLevel).tex(uFrom + uWidth, vFrom)         .endVertex();
+        vb.pos(0,         0,          zLevel).tex(uFrom,          vFrom)         .endVertex();
+        tes.draw();
     }
 
     protected void drawTexturedRectAtCurrentPos(double width, double height) {

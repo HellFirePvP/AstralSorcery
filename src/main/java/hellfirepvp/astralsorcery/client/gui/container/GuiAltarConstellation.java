@@ -45,8 +45,8 @@ public class GuiAltarConstellation extends GuiAltarBase {
 
     @Override
     public void initGui() {
-        this.xSize = 345;
-        this.ySize = 282;
+        this.xSize = 256;
+        this.ySize = 202;
         super.initGui();
     }
 
@@ -62,8 +62,8 @@ public class GuiAltarConstellation extends GuiAltarBase {
 
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
-            GL11.glTranslated(250, 65, 0);
-            GL11.glScaled(3.4, 3.4, 3.4);
+            GL11.glTranslated(190, 35, 0);
+            GL11.glScaled(2.5, 2.5, 2.5);
 
             itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
@@ -90,7 +90,7 @@ public class GuiAltarConstellation extends GuiAltarBase {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
 
-            RenderConstellation.renderConstellationIntoGUI(c, 20, 50, zLevel, 80, 80, 2, new RenderConstellation.BrightnessFunction() {
+            RenderConstellation.renderConstellationIntoGUI(c, 10, 10, zLevel, 70, 70, 2, new RenderConstellation.BrightnessFunction() {
                 @Override
                 public float getBrightness() {
                     return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5));
@@ -126,14 +126,14 @@ public class GuiAltarConstellation extends GuiAltarBase {
         }
 
         texBlack.bind();
-        drawRect(guiLeft + 22, guiTop + 154, 304, 12);
+        drawRect(guiLeft + 11, guiTop + 104, 232, 10);
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(guiLeft + 22, guiTop + 154, (int) (304 * percFilled), 12,
+            drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }

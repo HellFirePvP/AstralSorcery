@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -69,7 +70,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         double length = ofr.getStringWidth(locName);
         double offsetLeft = width / 2 - length / 2;
         int offsetTop = guiTop + 20;
-        GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.8F);
+        GL11.glColor4f(0.3F, 0.3F, 0.3F, 0.8F);
         ofr.drawString(locName, offsetLeft, offsetTop, zLevel, null, 0F, 0);
         GL11.glColor4f(1, 1, 1, 1);
     }
@@ -81,7 +82,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderConstellation.renderConstellationIntoGUI(
-                new Color(0.3F, 0.3F, 0.3F, 0F), constellation,
+                new Color(0.4F, 0.4F, 0.4F, 0.8F), constellation,
                 width / 2 - 110 / 2, guiTop + 84,
                 zLevel,
                 110, 110, 2F, new RenderConstellation.BrightnessFunction() {
@@ -94,17 +95,16 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void drawPhaseInformation() {
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
+        GL11.glColor4f(1, 1, 1, 1);
         int size = 15;
         int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
         int offsetY = guiTop + 206;
         for (int i = 0; i < phases.size(); i++) {
             CelestialHandler.MoonPhase ph = phases.get(i);
             MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA);
             drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            GL11.glDisable(GL11.GL_BLEND);
         }
     }
 

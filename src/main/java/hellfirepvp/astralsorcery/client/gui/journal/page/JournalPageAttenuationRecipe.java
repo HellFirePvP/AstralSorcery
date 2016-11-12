@@ -54,7 +54,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
             texGrid.bind();
-            drawRect(offsetX + 15, offsetY - 5, IJournalPage.DEFAULT_WIDTH - 30, IJournalPage.DEFAULT_HEIGHT - 5, zLevel);
+            drawRect(offsetX + 25, offsetY, 129, 202, zLevel);
 
             GL11.glColor4f(1F, 1F, 1F, 1F);
             TextureHelper.refreshTextureBindState();
@@ -68,8 +68,8 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
 
-            double offX = offsetX + 51;
-            double offY = offsetY + 102;
+            double offX = offsetX + 55;
+            double offY = offsetY + 103;
             IAccessibleRecipe rNative = recipe.getNativeRecipe();
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
                 ItemStack expected = rNative.getExpectedStack(srs);
@@ -77,8 +77,8 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
                 if(expected == null) continue;
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offX + (srs.columnMultiplier * 28), offY + (srs.rowMultipler * 26), zLevel + 60);
-                GL11.glScaled(1.2, 1.2, 1.2);
+                GL11.glTranslated(offX + (srs.columnMultiplier * 25), offY + (srs.rowMultipler * 25), zLevel + 60);
+                GL11.glScaled(1.13, 1.13, 1.13);
                 drawItemStack(expected, 0, 0, 0);
                 GL11.glPopMatrix();
             }
@@ -90,7 +90,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             if(stack != null) {
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offsetX + 29, offsetY + 81, zLevel + 60);
+                GL11.glTranslated(offsetX + 30, offsetY + 78, zLevel + 60);
                 GL11.glScaled(1.1, 1.1, 1.1);
                 drawItemStack(stack, 0, 0, 0);
                 GL11.glPopMatrix();
@@ -100,7 +100,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             if(stack != null) {
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offsetX + 133.6, offsetY + 81.7, zLevel + 60);
+                GL11.glTranslated(offsetX + 132, offsetY + 78, zLevel + 60);
                 GL11.glScaled(1.1, 1.1, 1.1);
                 drawItemStack(stack, 0, 0, 0);
                 GL11.glPopMatrix();
@@ -110,7 +110,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             if(stack != null) {
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offsetX + 29, offsetY + 177.1, zLevel + 60);
+                GL11.glTranslated(offsetX + 30, offsetY + 178, zLevel + 60);
                 GL11.glScaled(1.1, 1.1, 1.1);
                 drawItemStack(stack, 0, 0, 0);
                 GL11.glPopMatrix();
@@ -120,7 +120,7 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
             if(stack != null) {
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
-                GL11.glTranslated(offsetX + 133.4, offsetY + 177.8, zLevel + 60);
+                GL11.glTranslated(offsetX + 132, offsetY + 178, zLevel + 60);
                 GL11.glScaled(1.1, 1.1, 1.1);
                 drawItemStack(stack, 0, 0, 0);
                 GL11.glPopMatrix();

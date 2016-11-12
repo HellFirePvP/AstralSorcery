@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
@@ -11,6 +12,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
@@ -33,8 +35,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     private static boolean saveSite = true;
     //private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
 
-    private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
-    private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
     private static final BindableResource texUnderline = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline");
 
     private GuiJournalProgression origin;
@@ -136,8 +137,8 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
         }
-        drawBackArrow();
-        drawNavArrows();
+        drawBackArrow(partialTicks);
+        drawNavArrows(partialTicks);
         TextureHelper.refreshTextureBindState();
         zLevel -= 100;
 
@@ -146,26 +147,32 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPopAttrib();
     }
 
-    private void drawBackArrow() {
+    private void drawBackArrow(float partialTicks) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         Point mouse = getCurrentMousePoint();
         int width = 30;
         int height = 15;
-        rectBack = new Rectangle(guiLeft + 197, guiTop + 242, width, height);
+        rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
         GL11.glPushMatrix();
         GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+        float uFrom = 0F, vFrom = 0.5F;
         if(rectBack.contains(mouse)) {
+            uFrom = 0.5F;
             GL11.glScaled(1.1, 1.1, 1.1);
+        } else {
+            float t = ClientScheduler.getClientTick() + partialTicks;
+            float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+            GL11.glScaled(sin, sin, sin);
         }
         GL11.glColor4f(1F, 1F, 1F, 0.8F);
         GL11.glTranslated(-(width / 2), -(height / 2), 0);
-        texArrowLeft.bind();
-        drawTexturedRectAtCurrentPos(width, height);
+        texArrow.bind();
+        drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    private void drawNavArrows() {
+    private void drawNavArrows(float partialTicks) {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         Point mouse = getCurrentMousePoint();
         int cIndex = currentPageOffset * 2;
@@ -174,32 +181,44 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(cIndex > 0) {
             int width = 30;
             int height = 15;
-            rectPrev = new Rectangle(guiLeft + 15, guiTop + 127, width, height);
+            rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0.5F;
             if(rectPrev.contains(mouse)) {
+                uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
+            } else {
+                float t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                GL11.glScaled(sin, sin, sin);
             }
             GL11.glColor4f(1F, 1F, 1F, 0.8F);
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
-            texArrowLeft.bind();
-            drawTexturedRectAtCurrentPos(width, height);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GL11.glPopMatrix();
         }
         int nextIndex = cIndex + 2;
         if(pages.size() >= (nextIndex + 1)) {
             int width = 30;
             int height = 15;
-            rectNext = new Rectangle(guiLeft + 367, guiTop + 125, width, height);
+            rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
             GL11.glPushMatrix();
             GL11.glTranslated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0F;
             if(rectNext.contains(mouse)) {
+                uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
+            } else {
+                float t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                GL11.glScaled(sin, sin, sin);
             }
             GL11.glColor4f(1F, 1F, 1F, 0.8F);
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
-            texArrowRight.bind();
-            drawTexturedRectAtCurrentPos(width, height);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GL11.glPopMatrix();
         }
         GL11.glEnable(GL11.GL_DEPTH_TEST);
