@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectCircinus
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectInpes;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
@@ -51,6 +52,7 @@ public class ConstellationEffectRegistry {
         register(ara,        CEffectAra::new);
         register(phoenix,    CEffectPhoenix::new);
         register(bootes,     CEffectBootes::new);
+        register(inpes,      CEffectInpes::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
@@ -69,6 +71,7 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectAra());
         Config.addDynamicEntry(new CEffectPhoenix());
         Config.addDynamicEntry(new CEffectBootes());
+        Config.addDynamicEntry(new CEffectInpes());
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {
