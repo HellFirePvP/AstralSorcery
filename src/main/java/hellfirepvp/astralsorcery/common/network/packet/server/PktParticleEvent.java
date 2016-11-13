@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectPhoenix;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -97,6 +98,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         STARMETAL_ORE_CHARGE,
         WELL_CATALYST_BREAK,
         WAND_CRYSTAL_HIGHLIGHT,
+        PHOENIX_PROC,
 
         CE_CROP_INTERACT,
         CE_MELT_BLOCK,
@@ -126,6 +128,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileWell::catalystBurst;
                 case WAND_CRYSTAL_HIGHLIGHT:
                     return ItemWand::highlightEffects;
+                case PHOENIX_PROC:
+                    return CEffectPhoenix::playEntityDeathEffect;
                 case CE_CROP_INTERACT:
                     return CEffectFertilitas::playParticles;
                 case CE_MELT_BLOCK:

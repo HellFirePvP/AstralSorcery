@@ -11,7 +11,10 @@ import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -23,12 +26,17 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -39,6 +47,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,21 +68,52 @@ public class EventHandlerServer {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension 0: " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
             AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (chaining old provider.)");
-            /*if(Config.overwriteWorldProviderAggressively) {
-                w.provider = new WorldProviderBrightnessInj(w, w.provider);
-                AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (aggressively, overriding old providers.)");
-            } else {
-                if(!(w.provider.getClass().equals(WorldProviderSurface.class)) && !(w.provider instanceof WorldProviderBrightnessInj)) {
-                    FMLLog.bigWarning("[AstralSorcery] Could not overwrite WorldProvider for dimension 0 - expect visual issues. - Current provider class found: " + w.provider.getClass().getName());
-                } else {
-                    WorldProviderBrightnessInj inj = new WorldProviderBrightnessInj();
-                    inj.registerWorld(w);
-                    inj.setDimension(0);
-                    w.provider = inj;
-                    AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0");
-                }
-            }*/
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onAttack(LivingAttackEvent event) {
+
+        if(phoenixProtect((event.getEntityLiving()), event.getAmount())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onDeath(LivingDeathEvent event) {
+
+        if(phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
+            event.setCanceled(true);
+        }
+    }
+
+    private boolean phoenixProtect(EntityLivingBase entity, float damageIn) {
+        float health = entity.getHealth();
+        if (health - damageIn > 0 && Math.floor(health - Math.ceil(damageIn)) > 0) {
+            return false; //All fine.
+        }
+
+        PotionEffect pe = entity.getActivePotionEffect(RegistryPotions.potionCheatDeath);
+        if(pe != null) {
+            int level = pe.getAmplifier();
+            phoenixEffects(entity, level);
+            return true;
+        }
+        return false;
+    }
+
+    private void phoenixEffects(EntityLivingBase entity, int level) {
+        entity.heal(2 + level * 2);
+        entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION,    300, 1, false, false));
+        entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 300, 1, false, false));
+        List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
+        for (EntityLivingBase lb : others) {
+            lb.setFire(16);
+            lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - lb.posZ);
+        }
+        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity));
+        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.worldObj, entity.getPosition(), 32));
+        entity.removePotionEffect(RegistryPotions.potionCheatDeath);
     }
 
     @SubscribeEvent

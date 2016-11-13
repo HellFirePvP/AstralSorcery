@@ -11,6 +11,8 @@ misc.link.unlink=Unlinked %s from %s!
 
 misc.sword.sharpened=Sharpened
 
+effect.as.cheatdeath=Phoenix-Fire
+
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
 gui.journal.c.unmapped=Unknown

@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -64,11 +65,11 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         double offsetX = guiLeft + guiWidth - 17.25;
         double offsetY = guiTop  + 20;
 
-        rectResearchBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5), zLevel, "gui.journal.bm.knowledge.name", 0, mousePoint);
+        rectResearchBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 0 ? 0 : 5), zLevel, "gui.journal.bm.knowledge.name", 0xDDDDDDDD, mousePoint);
 
         if(!ResearchManager.clientProgress.getKnownConstellations().isEmpty()) {
             offsetY = guiTop + 40;
-            rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5), zLevel, "gui.journal.bm.constellations.name", 0, mousePoint);
+            rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5), zLevel, "gui.journal.bm.constellations.name", 0xDDDDDDDD, mousePoint);
         }
 
         GL11.glPopMatrix();
@@ -109,6 +110,8 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glScaled(0.7, 0.7, 0.7);
         fontRendererObj.drawString(I18n.translateToLocal(title), 0, 0, titleRGBColor);
         GL11.glPopMatrix();
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
         GL11.glPopMatrix();
 

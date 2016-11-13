@@ -11,12 +11,16 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectPhoenix;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectTenifium;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
@@ -44,6 +48,9 @@ public class ConstellationEffectRegistry {
         register(chitra,     CEffectChitra::new);
         register(tenifium,   CEffectTenifium::new);
         register(ara,        CEffectAra::new);
+        register(phoenix,    CEffectPhoenix::new);
+
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
 
     public static void addDynamicConfigEntries() {
@@ -58,11 +65,17 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectChitra());
         Config.addDynamicEntry(new CEffectTenifium());
         Config.addDynamicEntry(new CEffectAra());
+        Config.addDynamicEntry(new CEffectPhoenix());
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {
         providerMap.put(c, provider);
         singleRenderInstances.put(c, provider.provideEffectInstance());
+    }
+
+    public static void registerFromAPI(Constellation c, Function<Void, ConstellationEffect> providerFunc) {
+        providerMap.put(c, new APIConstellationProvider(providerFunc));
+        singleRenderInstances.put(c, providerFunc.apply(null));
     }
 
     @Nullable
@@ -83,6 +96,20 @@ public class ConstellationEffectRegistry {
 
         public ConstellationEffect provideEffectInstance();
 
+    }
+
+    public static class APIConstellationProvider implements ConstellationEffectProvider {
+
+        private final Function<Void, ConstellationEffect> providerFunc;
+
+        public APIConstellationProvider(Function<Void, ConstellationEffect> providerFunc) {
+            this.providerFunc = providerFunc;
+        }
+
+        @Override
+        public ConstellationEffect provideEffectInstance() {
+            return providerFunc.apply(null);
+        }
     }
 
 }
