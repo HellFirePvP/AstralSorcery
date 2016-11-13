@@ -1,6 +1,5 @@
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import hellfirepvp.astralsorcery.common.base.IInventoryBase;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;

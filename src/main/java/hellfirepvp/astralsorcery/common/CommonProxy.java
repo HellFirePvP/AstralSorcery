@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
@@ -126,6 +127,7 @@ public class CommonProxy implements IGuiHandler {
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
         OreTypes.init();
+        HerdableAnimal.init();
     }
 
     protected void registerTickHandlers(TickManager manager) {

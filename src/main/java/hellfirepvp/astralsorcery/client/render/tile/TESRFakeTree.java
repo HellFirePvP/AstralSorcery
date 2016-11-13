@@ -47,13 +47,6 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
         GL11.glEnable(GL11.GL_BLEND);
         Blending.ADDITIVEDARK.apply();
 
-        //Entity rD = Minecraft.getMinecraft().getRenderViewEntity();
-        //if(rD == null) rD = Minecraft.getMinecraft().thePlayer;
-        //final Entity rV = rD;
-
-        //Comparator<TranslucentBlockState> comp = (tbs1, tbs2) -> (int) Math.round(tbs1.pos.distanceSq(rV.posX, rV.posY, rV.posZ) - tbs2.pos.distanceSq(rV.posX, rV.posY, rV.posZ));
-        //blocks.sort(comp);
-
         for (TranslucentBlockState tbs : blocks) {
             GL11.glPushMatrix();
             BlockPos bp = tbs.pos;

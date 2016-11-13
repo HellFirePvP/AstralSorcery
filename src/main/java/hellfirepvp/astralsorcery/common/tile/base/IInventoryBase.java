@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.base;
+package hellfirepvp.astralsorcery.common.tile.base;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

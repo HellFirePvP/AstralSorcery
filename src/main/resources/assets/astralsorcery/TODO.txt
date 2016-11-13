@@ -1,7 +1,5 @@
 CEffects:
 
 animal herding
-something with trees/treefarms?
 something that makes everything around it float
-pushing/pulling AOE (trait teleport)
-phoenix: stop the player from dying
+pushing AOE (trait teleport)

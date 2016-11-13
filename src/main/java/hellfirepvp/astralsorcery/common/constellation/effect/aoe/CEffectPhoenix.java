@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
@@ -54,18 +55,21 @@ public class CEffectPhoenix extends CEffectEntityCollect<EntityLivingBase> {
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));
         }
-        for (int i = 0; i < 2; i++) {
+        if(!Minecraft.isFancyGraphicsEnabled() && rand.nextInt(4) == 0) return;
+        if(rand.nextBoolean()) {
+            for (int i = 0; i < 2; i++) {
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                p.motion(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                        0.005 + rand.nextFloat() * 0.01,
+                        rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+                p.scale(0.35F).setColor(PHOENIX_COLOR).setMaxAge(45);
+            }
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
             p.motion(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
-                     0.005 + rand.nextFloat() * 0.01,
-                     rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.35F).setColor(PHOENIX_COLOR).setMaxAge(45);
+                    0.005 + rand.nextFloat() * 0.01,
+                    rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.35F).setColor(Color.RED).setMaxAge(45);
         }
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        p.motion(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
-                 0.005 + rand.nextFloat() * 0.01,
-                 rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-        p.scale(0.35F).setColor(Color.RED).setMaxAge(45);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class CEffectPhoenix extends CEffectEntityCollect<EntityLivingBase> {
         }
         List<EntityLivingBase> entities = collectEntities(world, pos);
         if(!entities.isEmpty()) {
-            if(rand.nextFloat() <= applyChance) {
+            if(rand.nextFloat() < applyChance) {
                 PotionEffect toApply = new PotionEffect(RegistryPotions.potionCheatDeath, 200, 0, true, true);
                 if(applyAll) {
                     for (EntityLivingBase e : entities) {

@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAra;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectBootes;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectChitra;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectCircinus;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
@@ -49,6 +50,7 @@ public class ConstellationEffectRegistry {
         register(tenifium,   CEffectTenifium::new);
         register(ara,        CEffectAra::new);
         register(phoenix,    CEffectPhoenix::new);
+        register(bootes,     CEffectBootes::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
@@ -66,6 +68,7 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectTenifium());
         Config.addDynamicEntry(new CEffectAra());
         Config.addDynamicEntry(new CEffectPhoenix());
+        Config.addDynamicEntry(new CEffectBootes());
     }
 
     private static void register(Constellation c, ConstellationEffectProvider provider) {
