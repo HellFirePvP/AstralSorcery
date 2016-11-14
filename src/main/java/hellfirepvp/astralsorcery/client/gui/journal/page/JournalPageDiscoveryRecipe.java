@@ -113,6 +113,8 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
 
+            drawInfoStar(offsetX, offsetY, zLevel, 20, pTicks);
+
             renderStandartRecipeGrid(offsetX, offsetY, zLevel, texGrid);
 
             renderOutputOnGrid(offsetX, offsetY, zLevel);

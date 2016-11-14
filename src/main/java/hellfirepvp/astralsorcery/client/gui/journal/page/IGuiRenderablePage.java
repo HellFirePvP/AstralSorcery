@@ -1,7 +1,13 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,7 +16,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,6 +29,8 @@ import org.lwjgl.opengl.GL11;
  * Date: 30.08.2016 / 11:21
  */
 public interface IGuiRenderablePage {
+
+    static final BindableResource resStar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     public void render(float offsetX, float offsetY, float pTicks, float zLevel);
 
@@ -37,12 +48,34 @@ public interface IGuiRenderablePage {
         ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
         ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlpha(); //Because Mc item rendering..
         ri.zLevel = zIR;
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    //TODO uuuuuuh...... do?
+    default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeight, float pTicks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+
+        GL11.glTranslated(offsetX, offsetY, zLevel);
+        resStar.bind();
+        double deg = ((ClientScheduler.getClientTick() + pTicks) % 360F);
+        Vector3 offset = new Vector3(0, -widthHeight, 0);
+        //RenderingUtils.renderAngleRotatedTexturedRect(new Vector3(0, 0, 0), Vector3.RotAxis.Z_AXIS, Math.toRadians(deg), widthHeight, 0, 0, 1, 1, pTicks);
+        //Vector3 offset = new Vector3(1, 0, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        //GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
+        //GL11.glRotated(deg, 0, 0, 1);
+        //drawRect(-widthHeight / 2F, -widthHeight / 2F, widthHeight / 2F, widthHeight / 2F, zLevel);
+
+        TextureHelper.refreshTextureBindState();
+        TextureHelper.setActiveTextureToAtlasSprite();
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+        return null;
     }
 
     default public void drawRect(double offsetX, double offsetY, double width, double height, double zLevel) {
