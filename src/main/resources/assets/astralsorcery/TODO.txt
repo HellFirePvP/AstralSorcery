@@ -1,5 +1,3 @@
 CEffects:
 
-animal herding
 something that makes everything around it float
-pushing AOE (trait teleport)

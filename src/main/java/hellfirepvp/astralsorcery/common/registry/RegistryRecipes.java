@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CollectorCrystalRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.LensRecipe;
@@ -59,6 +60,7 @@ public class RegistryRecipes {
 
     public static LensRecipe rLensRock, rLensCel;
     public static PrismLensRecipe rPrismRock, rPrismCel;
+    public static CollectorCrystalRecipe rCollectRock, rCollectCel;
 
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
     public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
@@ -204,6 +206,9 @@ public class RegistryRecipes {
 
         rPrismRock = registerAltarRecipe(new PrismLensRecipe(false));
         rPrismCel = registerAltarRecipe(new PrismLensRecipe(true));
+
+        rCollectRock = registerAltarRecipe(new CollectorCrystalRecipe(false));
+        rCollectCel = registerAltarRecipe(new CollectorCrystalRecipe(true));
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());

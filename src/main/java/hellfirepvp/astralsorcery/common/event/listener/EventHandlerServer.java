@@ -209,10 +209,10 @@ public class EventHandlerServer {
         Entity joined = event.getEntity();
         if (joined instanceof EntityItem && !(joined instanceof EntityItemHighlighted)) {
             EntityItem ei = (EntityItem) joined;
-            if (ei.getEntityItem() != null && (ei.getEntityItem().getItem() instanceof ItemHighlighted)) {
+            if (ei.getEntityItem() != null && (ei.getEntityItem().getAttItem() instanceof ItemHighlighted)) {
                 ei.setDead();
                 EntityItemHighlighted newItem = new EntityItemHighlighted(ei.worldObj, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
-                ItemHighlighted i = (ItemHighlighted) ei.getEntityItem().getItem();
+                ItemHighlighted i = (ItemHighlighted) ei.getEntityItem().getAttItem();
                 newItem.applyColor(i.getHightlightColor(ei.getEntityItem()));
                 newItem.motionX = ei.motionX;
                 newItem.motionY = ei.motionY;

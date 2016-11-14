@@ -32,7 +32,7 @@ public class Constellations {
     public static Constellation draco; //Dragon, Flight TODO -> add flight thingy? uhh
 
     /** fictional constellations with specific purposes */
-    public static Constellation inpes; //Force, specifically: rapid movement, crush, charge (negative in a sense) TODO -> inverted vortex.
+    public static Constellation inpes; //-> Push? -> Inverted Vortex
     public static Constellation locurba; //Dislocation, Latin rules. a word mixed (per)turbare (disturb sth.) and loco (place, location) TODO
     public static Constellation visso; //Sending/Transmission), Latin rules again. missus (to send) and vastus (huge, large) the english 'vast' also has its origins there. TODO
     public static Constellation lucerna; //-> Light -> Huge magnum torch effect

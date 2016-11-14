@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -34,8 +35,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
                         ShapedRecipeSlot.CENTER));
@@ -47,9 +47,10 @@ public class PrismLensRecipe extends ConstellationRecipe {
                 AltarAdditionalSlot.DOWN_DOWN_LEFT,
                 AltarAdditionalSlot.DOWN_DOWN_RIGHT);
         setCstItem(Blocks.LOG,
-                AltarAdditionalSlot.DOWN_LEFT_LEFT,
-                AltarAdditionalSlot.UP_LEFT_LEFT,
                 AltarAdditionalSlot.DOWN_RIGHT_RIGHT,
+                AltarAdditionalSlot.DOWN_LEFT_LEFT);
+        setCstItem(Items.GOLD_INGOT,
+                AltarAdditionalSlot.UP_LEFT_LEFT,
                 AltarAdditionalSlot.UP_RIGHT_RIGHT);
     }
 

@@ -36,6 +36,7 @@ progress.gain.research.chat=You learned more about '%s'.
 astralsorcery.journal.cluster.discovery.name=Discovery
 astralsorcery.journal.cluster.basic_craft.name=Crafting
 astralsorcery.journal.cluster.attenuation.name=[WIP] Attenuation
+astralsorcery.journal.cluster.constellation.name=[WIP] Constellation
 
 research.SHRINES.name=Ancient Shrines
 astralsorcery.journal.SHRINES.1.text=All around the world there are seemingly ancient shrines built from marble.<NL>Some bigger ones can be found on top of high hills, some are covered in sand in deserts.<NL>They don't seem very special at first, but it's told that they harbor old treasures. Searching for them, you only ever found 1 or 2 old chests in them and a weird floating crystal.<NL>That weird crystal did strike your interest. It emits a constant, shimmering, low amount of light.

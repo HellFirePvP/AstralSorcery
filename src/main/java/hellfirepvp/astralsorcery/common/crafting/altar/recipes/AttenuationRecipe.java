@@ -63,7 +63,7 @@ public class AttenuationRecipe extends DiscoveryRecipe {
     }
 
     @Nullable
-    public ItemStack getItem(AltarSlot slot) {
+    public ItemStack getAttItem(AltarSlot slot) {
         return additionalSlots.get(slot);
     }
 

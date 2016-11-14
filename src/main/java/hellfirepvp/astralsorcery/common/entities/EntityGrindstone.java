@@ -92,7 +92,7 @@ public class EntityGrindstone extends EntityLivingBase {
 
                     setGrindItem(null);
                 } else {
-                    Item i = grind.getItem();
+                    Item i = grind.getAttItem();
                     if(i instanceof IGrindable) {
                         IGrindable.GrindResult result = ((IGrindable) i).grind(this, grind, rand);
                         switch (result.getType()) {
@@ -121,7 +121,7 @@ public class EntityGrindstone extends EntityLivingBase {
                     }
                 } else {
                     if(stack != null) {
-                        Item trySet = stack.getItem();
+                        Item trySet = stack.getAttItem();
                         if(trySet instanceof IGrindable && ((IGrindable) trySet).canGrind(this, stack)) {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
@@ -146,7 +146,7 @@ public class EntityGrindstone extends EntityLivingBase {
             }
         } else {
             if(grind != null && !player.isSneaking()) {
-                Item i = grind.getItem();
+                Item i = grind.getAttItem();
                 if(i instanceof IGrindable) {
                     if(((IGrindable) i).canGrind(this, grind)) {
                         for (int j = 0; j < 12; j++) {

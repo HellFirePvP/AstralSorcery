@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttenuationRecipe;
+import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageConstellationRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageLightProximityRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageRecipe;
@@ -14,6 +15,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -35,6 +37,60 @@ public class RegistryResearch {
         initDiscovery();
         initCrafting();
         initAttenuation();
+        initConstellation();
+    }
+
+    private static void initConstellation() {
+        ResearchProgression.Registry regConstellation = ResearchProgression.CONSTELLATION.getRegistry();
+
+        ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 1);
+        resLens.addPage(getTextPage("LENS.1"));
+        resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLensRock));
+
+        ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 2);
+        resLinkTool.addPage(getTextPage("LINKTOOL.1"));
+        resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkToolRock));
+
+        ResearchNode resStarOre = new ResearchNode(BlockCustomOre.OreType.STARMETAL.asStack(), "STARMETAL_ORE", 2, 1);
+        resStarOre.addPage(getTextPage("STARMETAL_ORE.1"));
+
+        ResearchNode resStarResult = new ResearchNode(new ItemStack[] {
+                ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                ItemCraftingComponent.MetaType.STARDUST.asStack()}, "STARMETAL_RES", 3, 2);
+        resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
+
+        ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 2, 3);
+        resPrism.addPage(getTextPage("PRISM.1"));
+        resPrism.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rPrismRock));
+
+        ResearchNode resCollCrystal = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "COLL_CRYSTAL", 4, 3);
+        resCollCrystal.addPage(getTextPage("COLL_CRYSTAL.1"));
+        resCollCrystal.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rCollectRock));
+
+        ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystals, 1, 3), "CEL_CRYSTAL_GROW", 2, 4);
+        resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.1"));
+        resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.2"));
+
+        ResearchNode resCelCrystals = new ResearchNode(new ItemStack(ItemsAS.celestialCrystal), "CEL_CRYSTALS", 1, 5);
+        resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.1"));
+        resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.2"));
+
+        resStarOre.addSourceConnectionFrom(resLinkTool);
+        resStarOre.addSourceConnectionFrom(resLens);
+        resPrism.addSourceConnectionFrom(resStarResult);
+        resStarResult.addSourceConnectionFrom(resStarOre);
+        resCollCrystal.addSourceConnectionFrom(resStarResult);
+        resCelCrystalCluster.addSourceConnectionFrom(resStarResult);
+        resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
+
+        regConstellation.register(resLens);
+        regConstellation.register(resLinkTool);
+        regConstellation.register(resStarOre);
+        regConstellation.register(resStarResult);
+        regConstellation.register(resPrism);
+        regConstellation.register(resCollCrystal);
+        regConstellation.register(resCelCrystalCluster);
+        regConstellation.register(resCelCrystals);
     }
 
     private static void initAttenuation() {

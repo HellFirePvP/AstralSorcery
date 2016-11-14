@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -68,6 +69,11 @@ public class ConstellationRecipe extends AttenuationRecipe {
             matchStacks.put(slot, stack.copy());
         }
         return this;
+    }
+
+    @Nullable
+    public ItemStack getCstItem(AltarAdditionalSlot slot) {
+        return matchStacks.get(slot);
     }
 
     @Override

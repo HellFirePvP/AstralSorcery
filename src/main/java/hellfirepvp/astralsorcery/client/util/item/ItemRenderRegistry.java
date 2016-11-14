@@ -29,7 +29,7 @@ public class ItemRenderRegistry {
 
     public static boolean shouldHandleItemRendering(ItemStack stack) {
         if(stack.getItem() == null) return false;
-        //ResourceLocation entry = stack.getItem().getRegistryName();
+        //ResourceLocation entry = stack.getAttItem().getRegistryName();
         ResourceLocation entry = getWrappedLocation(stack.getItem().getRegistryName());
         return entry != null && isRegistered(entry);
     }

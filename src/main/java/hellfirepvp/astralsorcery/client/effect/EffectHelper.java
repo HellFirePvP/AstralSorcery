@@ -21,7 +21,7 @@ public class EffectHelper {
 
     public static EntityFXFacingParticle genericFlareParticle(double x, double y, double z) {
         EntityFXFacingParticle p = new EntityFXFacingParticle(x, y, z);
-        p.enableAlphaFade().setAlphaMultiplier(0.75F).setColor(new Color(130, 0, 255)).gravity(0);
+        p.enableAlphaFade().setAlphaMultiplier(0.75F).setColor(new Color(60, 0, 255)).gravity(0);
         EffectHandler.getInstance().registerFX(p);
         return p;
     }
