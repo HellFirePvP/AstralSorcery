@@ -314,6 +314,7 @@ public class ResearchManager {
                         break;
                     case CONSTELLATION_CRAFT:
                         giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.CONSTELLATION);
                         break;
                     case TRAIT_CRAFT:
                         break;

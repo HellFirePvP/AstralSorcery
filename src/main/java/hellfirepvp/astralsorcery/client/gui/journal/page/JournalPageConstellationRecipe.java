@@ -40,6 +40,7 @@ public class JournalPageConstellationRecipe implements IJournalPage {
         public Render(ConstellationRecipe recipe) {
             super(recipe);
             this.recipe = recipe;
+            this.gridTexture = texGrid;
         }
 
         protected void renderAdditionalSlots(float offsetX, float offsetY, float zLevel, ConstellationRecipe recipe) {
@@ -70,22 +71,12 @@ public class JournalPageConstellationRecipe implements IJournalPage {
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+            super.render(offsetX, offsetY, pTicks, zLevel, mouseX, mouseY);
+
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
-
-            renderStandartRecipeGrid(offsetX, offsetY, zLevel, texGrid);
-
-            renderOutputOnGrid(offsetX, offsetY, zLevel);
-
-            renderDefaultExpectedItems(offsetX, offsetY, zLevel, recipe.getNativeRecipe());
-
-            renderStarlightRequirementString(offsetX, offsetY, zLevel, recipe.getPassiveStarlightRequired());
-
-            renderAltarSlots(offsetX, offsetY, zLevel, recipe);
-
             renderAdditionalSlots(offsetX, offsetY, zLevel, recipe);
-
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopAttrib();
         }

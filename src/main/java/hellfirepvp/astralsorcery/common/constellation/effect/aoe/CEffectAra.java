@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class CEffectAra extends CEffectPositionList {
 
-    //TODO ask mezz to include if (!TerrainGen.saplingGrowTree(worldIn, rand, pos)) return; in his sapling things.
+    //TODO do PR on forestry to add the hook to his saplings (!TerrainGen.saplingGrowTree(worldIn, rand, pos)) return;
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;

@@ -91,7 +91,38 @@ astralsorcery.journal.RIT_PEDESTAL.1.text=[WIP]<NL>Can be used to create an AOE 
 research.ALTAR3.name=[WIP]Celestial Altar
 astralsorcery.journal.ALTAR3.1.text=[WIP]<NL>Altar upgraging recipe. Advance to CosntellationCraft stage. Can only be done during nighttime. Next stage requires multiblock (See next page.)
 
+research.LENS.name=[WIP] Crystal Lens
+astralsorcery.journal.LENS.1.text=[WIP]<NL>Can be linked to 1 other point in a 16 blocks radius. Requires line of sight to the target to transmit starlight to it. Can have N inputs, 1 output. Transmission loss depends on the crystal properties of the lens. It copies the properties of the crystal used in crafting.
+
+research.LINKTOOL.name=[WIP] Linking Tool
+astralsorcery.journal.LINKTOOL.1.text=[WIP]<NL>Can be used to link 1 block of the starlight network to another or onto a block. Right-click selects something, deselect by switching the item held in your hand to another item. To link to something, right-click in select mode; un-link with shift-right-click
+
+research.STARMETAL_ORE.name=[WIP] Ore Transmutation
+astralsorcery.journal.STARMETAL_ORE.1.text=[WIP]<NL>Use lens + linking tool to link the collector crystal in one of the structures to an iron ore. Remember the collector crystal needs to see the sky to collect starlight. Also: This process might take a while.
+
+research.STARMETAL_RES.name=[WIP] Starmetal
+astralsorcery.journal.STARMETAL_RES.1.text=[WIP]<NL>Wohoo. you discovered starmetal. smelt ore into ingots, grind starmetal ingots on grindstone to get stardust.
+
+research.PRISM.name=[WIP] Crystal Prism
+astralsorcery.journal.PRISM.1.text=[WIP]<NL>Same as lens, but: N inputs, M outputs. The starlight output is evenly split across all receivers. If starlight cannot be transferred due to a broken line of sight, that starlight is voided.
+
+research.COLL_CRYSTAL.name=[WIP] Collector Crystal
+astralsorcery.journal.COLL_CRYSTAL.1.text=[WIP]<NL>You discovered how to create your own collector crystals. They will copy over the crystal properties and the constellation from the attuned crystal that was used to craft them had. Needs to see the sky to collect starlight. Starlight collected depends on time of the day, as well as the current constellations in the sky. Starlight type is the type of the constellation the crystal was attuned to.
+
+research.CEL_CRYSTAL_GROW.name=[WIP] Celestial Crystal Clusters
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=[WIP]<NL>Rock crystal + Stardust in sourceblock of liquid starlight -> Celestial crystal cluster. Takes time to grow. Can be accelerated by linking some starlight onto it. Placing it on top of starmetal ore also helps, may turn the ore back into iron ore.
+astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=[WIP]<NL>Nothing here.
+
+research.CEL_CRYSTALS.name=[WIP] Celestial Crystals
+astralsorcery.journal.CEL_CRYSTALS.1.text=[WIP]<NL>"Better version" of rock crystals. Bigger, higher overall purity, higher overall cutting. May be used in any recipe that required rock crystals before to get better results.
+astralsorcery.journal.CEL_CRYSTALS.2.text=[WIP]<NL>Nothing here.
+
+research.PED_ACCEL.name=[WIP] Ritual Pedestal Acceleration
+astralsorcery.journal.PED_ACCEL.1.text=[WIP]<NL>Link starlight of the type of the ritual onto the pedestal. Over time the crystal channeling the ritual will shatter bit by bit, sending starlight off via beams. Place a lens or prism at the position the light is emitting to and link those beams back onto the pedestal via lens or prism. The efficiency of the ritual is greatly increased whenever you do this.
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting.
+astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
+astralsorcery.journal.recipe.attunement=Attunes the crystal to: %s
 astralsorcery.journal.recipe.amt.desc=Starlight required: %s
 astralsorcery.journal.recipe.amt.lowest=Almost nothing
 astralsorcery.journal.recipe.amt.low=Not much

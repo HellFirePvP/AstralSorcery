@@ -1,8 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -17,6 +15,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -32,7 +31,7 @@ public interface IGuiRenderablePage {
 
     static final BindableResource resStar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
-    public void render(float offsetX, float offsetY, float pTicks, float zLevel);
+    public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
 
     default public void drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel) {
         drawItemStack(stack, offsetX, offsetY, zLevel, getStandardFontRenderer(), getRenderItem());
@@ -56,26 +55,44 @@ public interface IGuiRenderablePage {
         GL11.glPopAttrib();
     }
 
-    //TODO uuuuuuh...... do?
-    default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeight, float pTicks) {
+    default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+
+        float tick = ClientScheduler.getClientTick() + pTicks;
+        float deg = (tick * 2) % 360F;
+        float wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        deg = ((tick + 22.5F) * 2) % 360F;
+        wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        return new Rectangle(MathHelper.floor_float(offsetX - widthHeightBase / 2F), MathHelper.floor_float(offsetY - widthHeightBase / 2F),
+                MathHelper.floor_float(widthHeightBase), MathHelper.floor_float(widthHeightBase));
+    }
+
+    default public void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
-        GL11.glTranslated(offsetX, offsetY, zLevel);
         resStar.bind();
-        double deg = ((ClientScheduler.getClientTick() + pTicks) % 360F);
-        Vector3 offset = new Vector3(0, -widthHeight, 0);
-        //RenderingUtils.renderAngleRotatedTexturedRect(new Vector3(0, 0, 0), Vector3.RotAxis.Z_AXIS, Math.toRadians(deg), widthHeight, 0, 0, 1, 1, pTicks);
-        //Vector3 offset = new Vector3(1, 0, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
-        //GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
-        //GL11.glRotated(deg, 0, 0, 1);
-        //drawRect(-widthHeight / 2F, -widthHeight / 2F, widthHeight / 2F, widthHeight / 2F, zLevel);
+        Vector3 offset = new Vector3(-widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv01   = new Vector3(-widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv11   = new Vector3( widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv10   = new Vector3( widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel).tex(0, 0).endVertex();
+        tes.draw();
 
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
-        return null;
     }
 
     default public void drawRect(double offsetX, double offsetY, double width, double height, double zLevel) {

@@ -122,7 +122,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel);
+            page.render(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
@@ -132,7 +132,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel);
+            page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();

@@ -5,7 +5,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,15 +31,15 @@ public class JournalPageText implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new CachedTextPage(fontRendererGetter.getFontRenderer(), text);
+        return new Render(fontRendererGetter.getFontRenderer(), text);
     }
 
-    public static class CachedTextPage implements IGuiRenderablePage {
+    public static class Render implements IGuiRenderablePage {
 
         private FontRenderer fontRenderer;
         private List<String> lines;
 
-        public CachedTextPage(FontRenderer fontRenderer, String unlocText) {
+        public Render(FontRenderer fontRenderer, String unlocText) {
             this.fontRenderer = fontRenderer;
             this.lines = buildLines(unlocText);
         }
@@ -72,7 +71,7 @@ public class JournalPageText implements IJournalPage {
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             offsetY += 5;
             GL11.glColor4f(0.86F, 0.86F, 0.86F, 1F);
             GL11.glDisable(GL11.GL_DEPTH_TEST);

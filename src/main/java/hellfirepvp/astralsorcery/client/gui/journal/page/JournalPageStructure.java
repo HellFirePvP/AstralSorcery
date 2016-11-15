@@ -1,23 +1,11 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
 import hellfirepvp.astralsorcery.client.util.BlockArrayRenderHelper;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,21 +24,21 @@ public class JournalPageStructure implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new JournalStructurePageRender(new BlockArrayRenderHelper(structure));
+        return new Render(new BlockArrayRenderHelper(structure));
     }
 
-    public static class JournalStructurePageRender implements IGuiRenderablePage {
+    public static class Render implements IGuiRenderablePage {
 
         private BlockArrayRenderHelper structRender;
         private long totalRenderFrame = 0;
 
-        public JournalStructurePageRender(BlockArrayRenderHelper structRender) {
+        public Render(BlockArrayRenderHelper structRender) {
             //this.structRender = new BlockArrayRenderHelper(MultiBlockArrays.patternAltarConstellation);
             this.structRender = structRender;
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glPushMatrix();
             totalRenderFrame++;

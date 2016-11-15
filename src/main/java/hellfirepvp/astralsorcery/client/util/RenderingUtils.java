@@ -155,12 +155,12 @@ public class RenderingUtils {
             drawGradientRect(pX + esWidth + 3, pY - 3,                 z, pX + esWidth + 4, pY + sumLineHeight + 3, color, colorFade);
 
             int rgb = color.getRGB();
-            int col = (rgb & 0x00FFFFFF) >> 1 | rgb & 0xFF000000;
+            int col = (rgb & 0x00FFFFFF) | rgb & 0xFF000000;
             Color colOp = new Color(col);
             drawGradientRect(pX - 3,           pY - 3 + 1,             z, pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, colOp);
             drawGradientRect(pX + esWidth + 2, pY - 3 + 1,             z, pX + esWidth + 3, pY + sumLineHeight + 3 - 1, color, colOp);
-            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY - 3 + 1,                 color, color);
-            drawGradientRect(pX - 3,           pY + sumLineHeight + 2, z, pX + esWidth + 3, pY + sumLineHeight + 3,     colOp, colOp);
+            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY - 3 + 1,                 colOp, colOp);
+            drawGradientRect(pX - 3,           pY + sumLineHeight + 2, z, pX + esWidth + 3, pY + sumLineHeight + 3,     color, color);
 
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int i = 0; i < tooltipData.size(); ++i) {

@@ -1,0 +1,31 @@
+Current Table of contents [15th November 2016]
+
+**Note: This neglects progression and is only thought to show a rough overview of the
+current items, blocks or general concepts that have another functionality than being decorative or only there for progression
+
+**Note: Mostly neglects the things that only exist for the starlight network.
+
+[Fully Implemented]
+- Crystal Tools (Pickaxe, Axe, Shovel, Sword) [No special abilities, special durability system]
+- Grindstone [Can apply 'Sharpened' to swords; used to grind 'Size' into 'Cutting' for crystal-related things]
+- Cave Illuminator [Lights up cave system below itself]
+- Lightwell [Collects Liquid Starlight using and over time destroying catalysts]
+- Liquid Starlight [Gives nightvision when stepped into it; Combine with Stardust + Rock crystal in world to get a celestial crystal cluster]
+- Celestial crystal cluster [Grows over time; yields a celestial crystal when harvested at metadata 4]
+- Celestial crystals ['Better version' of rock crystals - May be used in any recipe that takes a rock crystal instead of said crystal]
+
+[In Progress]
+- Ritual Pedestal [Can cast AOE effect depending on constellation] (Progress: 14/24)
+- Enhanced Collector Crystals ['Better version' of celestial collector crystals; Lower overall outcome of starlight, but more average collection]
+
+[Thoughts]
+- Ritual Relay [May relay the ritual pedestal's effect to another location]
+- Self-Attunement [Grants constellation effects onto a player; Grows stronger the longer the player used the effect]
+- Inventory Relay [Any items picked up are sent to a previously defined position in the world.]
+- Lens-Types [Set lenses/prisms to have a specific type; beams sent by those may have different effects until they reach the next lens/prism]
+
+[Future Ideas/Plans]
+- 'Telescope progression' [Hand Telescope/Looking Glass -> Telescope -> Observatory]
+- Enhancement options for the ritual pedestal [Range, Speed, ... ?]
+- Shooting stars [Source for crystals? Somehow? -> Unreliable, rare]
+- Upgrade options to turn rock-collector crystals into celestial ones
