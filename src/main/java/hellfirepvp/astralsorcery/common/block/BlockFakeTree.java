@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -54,6 +55,7 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if(!Minecraft.isFancyGraphicsEnabled()) return;
         if(rand.nextInt(20) == 0) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat(),

@@ -54,9 +54,7 @@ public class RegistryResearch {
         ResearchNode resStarOre = new ResearchNode(new ItemStack(Blocks.IRON_ORE), "STARMETAL_ORE", 2, 1);
         resStarOre.addPage(getTextPage("STARMETAL_ORE.1"));
 
-        ResearchNode resStarResult = new ResearchNode(new ItemStack[] {
-                ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
-                ItemCraftingComponent.MetaType.STARDUST.asStack()}, "STARMETAL_RES", 3, 2);
+        ResearchNode resStarResult = new ResearchNode(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), "STARMETAL_RES", 3, 2);
         resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
 
         ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 2, 3);
@@ -75,8 +73,13 @@ public class RegistryResearch {
         resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.1"));
         resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.2"));
 
+        ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", -1, 3);
+        resRitualAccel.addPage(getTextPage("PED_ACCEL.1"));
+
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
+        resRitualAccel.addSourceConnectionFrom(resLens);
+        resRitualAccel.addSourceConnectionFrom(resLinkTool);
         resPrism.addSourceConnectionFrom(resStarResult);
         resStarResult.addSourceConnectionFrom(resStarOre);
         resCollCrystal.addSourceConnectionFrom(resStarResult);
@@ -91,6 +94,7 @@ public class RegistryResearch {
         regConstellation.register(resCollCrystal);
         regConstellation.register(resCelCrystalCluster);
         regConstellation.register(resCelCrystals);
+        regConstellation.register(resRitualAccel);
     }
 
     private static void initAttenuation() {
