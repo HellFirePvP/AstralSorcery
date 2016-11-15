@@ -27,3 +27,5 @@ current items, blocks or general concepts that have another functionality than b
 [Future Ideas/Plans]
 - 'Telescope progression' [Hand Telescope/Looking Glass -> Telescope -> Observatory]
 - Enhancement options for the ritual pedestal [Range, Speed, ... ?]
+- Shooting stars [Source for crystals? Somehow? -> Unreliable, rare]
+- Upgrade options to turn rock-collector crystals into celestial ones

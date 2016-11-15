@@ -51,7 +51,7 @@ public class RegistryResearch {
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
         resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkToolRock));
 
-        ResearchNode resStarOre = new ResearchNode(BlockCustomOre.OreType.STARMETAL.asStack(), "STARMETAL_ORE", 2, 1);
+        ResearchNode resStarOre = new ResearchNode(new ItemStack(Blocks.IRON_ORE), "STARMETAL_ORE", 2, 1);
         resStarOre.addPage(getTextPage("STARMETAL_ORE.1"));
 
         ResearchNode resStarResult = new ResearchNode(new ItemStack[] {
