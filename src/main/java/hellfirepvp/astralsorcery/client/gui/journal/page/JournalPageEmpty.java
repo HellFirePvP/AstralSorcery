@@ -17,7 +17,7 @@ public class JournalPageEmpty implements IJournalPage {
     public static class Render implements IGuiRenderablePage {
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {}
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
 
     }
 

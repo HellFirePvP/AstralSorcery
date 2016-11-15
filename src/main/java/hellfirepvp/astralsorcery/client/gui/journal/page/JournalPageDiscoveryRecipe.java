@@ -1,19 +1,31 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,17 +44,19 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new RecipePage(recipeToRender);
+        return new Render(recipeToRender);
     }
 
-    public static class RecipePage implements IGuiRenderablePage {
+    public static class Render implements IGuiRenderablePage {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc");
 
         private final DiscoveryRecipe recipe;
+        protected BindableResource gridTexture;
 
-        public RecipePage(DiscoveryRecipe recipe) {
+        public Render(DiscoveryRecipe recipe) {
             this.recipe = recipe;
+            this.gridTexture = texGrid;
         }
 
         protected void renderStandartRecipeGrid(float offsetX, float offsetY, float zLevel, BindableResource grid) {
@@ -84,44 +98,49 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             RenderHelper.disableStandardItemLighting();
         }
 
-        protected void renderStarlightRequirementString(float offsetX, float offsetY, float zLevel, int sLightRequirement) {
-            RenderHelper.enableGUIStandardItemLighting();
-            if(sLightRequirement > 0) {
-                GL11.glPushMatrix();
-                GL11.glTranslated(0, 0, 200);
-                GL11.glColor4f(1F, 1F, 1F, 1F);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glEnable(GL11.GL_BLEND);
-                Blending.DEFAULT.apply();
-                String displReq = getDescriptionFromStarlightAmount(sLightRequirement);
+        public void addTooltip(List<String> out) {
+            if(recipe.getPassiveStarlightRequired() > 0) {
+                String displReq = getDescriptionFromStarlightAmount(recipe.getPassiveStarlightRequired());
                 displReq = I18n.translateToLocal(displReq);
                 String dsc = I18n.translateToLocal("astralsorcery.journal.recipe.amt.desc");
-                dsc = String.format(dsc, displReq);
-
-                TextureHelper.refreshTextureBindState();
-                getStandardFontRenderer().drawString(dsc, offsetX + 5F, offsetY + 210F, 0xDDDDDDDD, false);
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                Blending.DEFAULT.apply();
-                GL11.glPopMatrix();
+                out.add(String.format(dsc, displReq));
             }
-            RenderHelper.disableStandardItemLighting();
+            if(recipe instanceof INighttimeRecipe) {
+                out.add(I18n.translateToLocal("astralsorcery.journal.recipe.nighttime"));
+            }
+            if(recipe instanceof SimpleCrystalAttunationRecipe) {
+                Tier t = ConstellationRegistry.getTier(0);
+                if(t != null) {
+                    Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(t);
+                    if(c != null && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
+                        String dsc = I18n.translateToLocal("astralsorcery.journal.recipe.attunement");
+                        out.add(String.format(dsc, I18n.translateToLocal(c.getName())));
+                    }
+                }
+            }
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
 
-            drawInfoStar(offsetX, offsetY, zLevel, 20, pTicks);
+            List<String> out = Lists.newLinkedList();
+            addTooltip(out);
+            if(!out.isEmpty()) {
+                float widthHeightStar = 15F;
+                Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
+                if(r.contains(mouseX, mouseY)) {
+                    RenderingUtils.renderTooltip((int) (offsetX), (int) (offsetY),
+                            out, new Color(0x000033), new Color(0x000044), Minecraft.getMinecraft().fontRendererObj);
+                }
+            }
 
-            renderStandartRecipeGrid(offsetX, offsetY, zLevel, texGrid);
+            renderStandartRecipeGrid(offsetX, offsetY, zLevel, gridTexture);
 
             renderOutputOnGrid(offsetX, offsetY, zLevel);
 
             renderDefaultExpectedItems(offsetX, offsetY, zLevel, recipe.getNativeRecipe());
-
-            renderStarlightRequirementString(offsetX, offsetY, zLevel, recipe.getPassiveStarlightRequired());
 
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopAttrib();

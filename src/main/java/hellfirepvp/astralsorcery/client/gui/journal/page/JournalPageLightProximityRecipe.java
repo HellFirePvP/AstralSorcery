@@ -46,7 +46,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glPushMatrix();

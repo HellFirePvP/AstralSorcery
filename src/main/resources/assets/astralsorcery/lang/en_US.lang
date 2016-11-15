@@ -92,6 +92,8 @@ research.ALTAR3.name=[WIP]Celestial Altar
 astralsorcery.journal.ALTAR3.1.text=[WIP]<NL>Altar upgraging recipe. Advance to CosntellationCraft stage. Can only be done during nighttime. Next stage requires multiblock (See next page.)
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting.
+astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
+astralsorcery.journal.recipe.attunement=Attunes the crystal to: %s
 astralsorcery.journal.recipe.amt.desc=Starlight required: %s
 astralsorcery.journal.recipe.amt.lowest=Almost nothing
 astralsorcery.journal.recipe.amt.low=Not much

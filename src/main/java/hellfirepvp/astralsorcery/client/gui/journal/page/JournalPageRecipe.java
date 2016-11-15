@@ -9,7 +9,6 @@ import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -30,21 +29,21 @@ public class JournalPageRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new GuiRender(recipe.make());
+        return new Render(recipe.make());
     }
 
-    public static class GuiRender implements IGuiRenderablePage {
+    public static class Render implements IGuiRenderablePage {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc");
 
         private final IAccessibleRecipe recipe;
 
-        public GuiRender(IAccessibleRecipe recipe) {
+        public Render(IAccessibleRecipe recipe) {
             this.recipe = recipe;
         }
 
         @Override
-        public void render(float offsetX, float offsetY, float pTicks, float zLevel) {
+        public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glPushMatrix();

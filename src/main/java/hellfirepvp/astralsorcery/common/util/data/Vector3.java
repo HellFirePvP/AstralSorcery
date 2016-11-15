@@ -278,6 +278,7 @@ public class Vector3 {
         return this;
     }
 
+    //In rad's
     public Vector3 rotate(double angle, Vector3 axis) {
         Quat.aroundAxis(axis.clone().normalize(), angle).rotate(this);
         return this;
