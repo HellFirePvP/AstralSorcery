@@ -1,9 +1,8 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
@@ -31,19 +30,19 @@ public class GuiJournalConstellations extends GuiScreenJournal {
     private static final Map<Integer, Point> tierOffsetMap = new HashMap<>();
 
     private final Random rand = new Random();
-    private final long staticSeed;
+    private final long staticSeed = 1;
 
-    private List<Constellation> unmapped;
-    private List<Tier> discoveredCompleteTiers;
+    //private List<Constellation> unmapped;
+    //private List<Tier> discoveredCompleteTiers;
 
-    private Map<Rectangle, Tier> rectTierRenderMap = new HashMap<>();
-    private Rectangle rectUnmapped = null;
+    //private Map<Rectangle, Tier> rectTierRenderMap = new HashMap<>();
+    //private Rectangle rectUnmapped = null;
 
-    private GuiJournalConstellations(List<Constellation> constellations, List<Tier> tiers) {
+    private GuiJournalConstellations(/*List<Constellation> constellations, List<Tier> tiers*/) {
         super(1);
-        this.unmapped = constellations;
-        this.discoveredCompleteTiers = tiers;
-        this.staticSeed = 0xF095561C419B8123L ^ System.currentTimeMillis();
+        //this.unmapped = constellations;
+        //this.discoveredCompleteTiers = tiers;
+        //this.staticSeed = 0xF095561C419B8123L ^ System.currentTimeMillis();
     }
 
     private void resetRandom() {
@@ -52,8 +51,8 @@ public class GuiJournalConstellations extends GuiScreenJournal {
 
     public static GuiScreenJournal getConstellationScreen() {
         PlayerProgress client = ResearchManager.clientProgress;
-        List<Constellation> constellations = ConstellationRegistry.resolve(client.getKnownConstellations());
-        Map<Tier, List<Constellation>> tierMapped = new HashMap<>();
+        List<IConstellation> constellations = ConstellationRegistry.resolve(client.getKnownConstellations());
+        /*Map<Tier, List<Constellation>> tierMapped = new HashMap<>();
         for (Constellation c : constellations) {
             Tier t = c.queryTier();
             List<Constellation> l = tierMapped.get(t);
@@ -76,14 +75,17 @@ public class GuiJournalConstellations extends GuiScreenJournal {
                 }
             }
             tiersFound.add(t);
-        }
-        if(tiersFound.isEmpty()) {
+        }*/
+
+        return new GuiJournalConstellationCluster(1, true, "no.title", constellations);
+
+        /*if(tiersFound.isEmpty()) {
             return new GuiJournalConstellationCluster(1, false, "gui.journal.c.unmapped", unmapped);
         } else if(tiersFound.size() == 1) {
             return new GuiJournalConstellationCluster(1, true, tiersFound.get(0).getUnlocalizedName(), tierMapped.get(tiersFound.get(0)));
         } else {
             return new GuiJournalConstellations(unmapped, tiersFound);
-        }
+        }*/
     }
 
     @Override
@@ -93,7 +95,7 @@ public class GuiJournalConstellations extends GuiScreenJournal {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        resetRandom();
+        /*resetRandom();
 
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -109,10 +111,10 @@ public class GuiJournalConstellations extends GuiScreenJournal {
         zLevel -= 250;
 
         GL11.glPopAttrib();
-        GL11.glPopMatrix();
+        GL11.glPopMatrix();*/
     }
 
-    private void drawTierGroups(Point mouse) {
+    /*private void drawTierGroups(Point mouse) {
         int startIndex = 0;
         if(!unmapped.isEmpty()) {
             Point p = tierOffsetMap.get(startIndex);
@@ -124,7 +126,7 @@ public class GuiJournalConstellations extends GuiScreenJournal {
             Point at = tierOffsetMap.get(startIndex + i);
             rectTierRenderMap.put(drawConstellationRect(t.getRandomConstellation(rand), guiLeft + at.x, guiTop + at.y, zLevel, mouse, t.getUnlocalizedName()), t);
         }
-    }
+    }*/
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
@@ -134,7 +136,7 @@ public class GuiJournalConstellations extends GuiScreenJournal {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
             return;
         }
-        if(rectUnmapped != null && rectUnmapped.contains(p)) {
+        /*if(rectUnmapped != null && rectUnmapped.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(-1, false, "gui.journal.c.unmapped", unmapped));
             return;
         }
@@ -144,7 +146,7 @@ public class GuiJournalConstellations extends GuiScreenJournal {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(-1, true, t.getUnlocalizedName(), t.getConstellations()));
                 return;
             }
-        }
+        }*/
     }
 
     static {

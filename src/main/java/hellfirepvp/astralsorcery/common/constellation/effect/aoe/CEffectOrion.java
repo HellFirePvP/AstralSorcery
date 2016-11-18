@@ -3,9 +3,8 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -15,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
@@ -57,7 +55,7 @@ public class CEffectOrion extends CEffectEntityCollect<EntityLivingBase> {
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
@@ -78,7 +76,7 @@ public class CEffectOrion extends CEffectEntityCollect<EntityLivingBase> {
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
+    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
         return false;
     }
 

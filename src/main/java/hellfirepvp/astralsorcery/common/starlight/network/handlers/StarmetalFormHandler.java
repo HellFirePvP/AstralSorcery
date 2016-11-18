@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.network.handlers;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -26,7 +26,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
     private static Map<BlockPos, IronOreReceiverNode> turningIrons = new HashMap<>();
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount) {
         long ms = System.currentTimeMillis();
         if(!turningIrons.containsKey(pos)) {
             IronOreReceiverNode node = new IronOreReceiverNode();

@@ -128,6 +128,10 @@ public class RenderingUtils {
         GL11.glPopMatrix();
     }
 
+    public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer) {
+        renderTooltip(x, y, tooltipData, new Color(0x000033), new Color(0x000044), fontRenderer);
+    }
+
     public static void renderTooltip(int x, int y, List<String> tooltipData, Color color, Color colorFade, FontRenderer fontRenderer) {
         TextureHelper.setActiveTextureToAtlasSprite();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);

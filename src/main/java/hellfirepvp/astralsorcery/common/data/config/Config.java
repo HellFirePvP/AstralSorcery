@@ -7,6 +7,8 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,6 +41,9 @@ public class Config {
 
     @Sync
     public static double swordSharpMultiplier = 0.1;
+
+    @Sync
+    public static Integer[] constellationSkyDimWhitelist = new Integer[0];
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
 
@@ -77,6 +82,7 @@ public class Config {
         giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
+        String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
 
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
@@ -90,9 +96,35 @@ public class Config {
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
 
+        fillWhitelistIDs(dimWhitelist);
+
         for (ConfigEntry ce : dynamicConfigEntries) {
             ce.loadFromConfig(latestConfig);
         }
+    }
+
+    public static boolean isDimensionWhitelisted(int dimId) {
+        for (Integer i : constellationSkyDimWhitelist) {
+            if(i == dimId) return true;
+        }
+        return false;
+    }
+
+    private static void fillWhitelistIDs(String[] dimWhitelist) {
+        List<Integer> out = new ArrayList<>();
+        for (String s : dimWhitelist) {
+            if(s.isEmpty()) continue;
+            try {
+                out.add(Integer.parseInt(s));
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
+            }
+        }
+        constellationSkyDimWhitelist = new Integer[out.size()];
+        for (int i = 0; i < out.size(); i++) {
+            constellationSkyDimWhitelist[i] = out.get(i);
+        }
+        Arrays.sort(constellationSkyDimWhitelist);
     }
 
 }

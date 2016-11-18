@@ -1,7 +1,8 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -60,12 +61,12 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         return BlockCollectorCrystalBase.CollectorCrystalType.values()[NBTHelper.getPersistentData(stack).getInteger("collectorType")];
     }
 
-    public static void setConstellation(ItemStack stack, Constellation constellation) {
+    public static void setConstellation(ItemStack stack, IMajorConstellation constellation) {
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static Constellation getConstellation(ItemStack stack) {
-        return Constellation.readFromNBT(NBTHelper.getPersistentData(stack));
+    public static IMajorConstellation getConstellation(ItemStack stack) {
+        return (IMajorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
 }

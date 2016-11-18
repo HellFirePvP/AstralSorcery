@@ -4,13 +4,10 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAra;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFertilitas;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectFornax;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOrion;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectPhoenix;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
+import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -101,10 +98,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         PHOENIX_PROC,
 
         CE_CROP_INTERACT,
-        CE_MELT_BLOCK,
-        CE_ACCEL_TILE,
+        //CE_MELT_BLOCK,
+        //CE_ACCEL_TILE,
         CE_DMG_ENTITY,
-        CE_WATER_FISH,
+        //CE_WATER_FISH,
         CE_TREE_VORTEX,
 
         DEBUG;
@@ -129,17 +126,17 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                 case WAND_CRYSTAL_HIGHLIGHT:
                     return ItemWand::highlightEffects;
                 case PHOENIX_PROC:
-                    return CEffectPhoenix::playEntityDeathEffect;
+                    return PotionCheatDeath::playEntityDeathEffect;
                 case CE_CROP_INTERACT:
                     return CEffectFertilitas::playParticles;
-                case CE_MELT_BLOCK:
-                    return CEffectFornax::playParticles;
-                case CE_ACCEL_TILE:
-                    return CEffectHorologium::playParticles;
+                //case CE_MELT_BLOCK:
+                //    return CEffectFornax::playParticles;
+                //case CE_ACCEL_TILE:
+                //    return CEffectHorologium::playParticles;
                 case CE_DMG_ENTITY:
                     return CEffectOrion::playParticles;
-                case CE_WATER_FISH:
-                    return CEffectOctans::playParticles;
+                //case CE_WATER_FISH:
+                //    return CEffectOctans::playParticles;
                 case CE_TREE_VORTEX:
                     return CEffectAra::playParticles;
                 case DEBUG:

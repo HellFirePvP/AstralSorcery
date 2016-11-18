@@ -1,12 +1,11 @@
 package hellfirepvp.astralsorcery.common.starlight;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -24,7 +23,7 @@ public interface IIndependentStarlightSource {
     //As the purpose of the source, this should produce the starlight - called once every tick
     public float produceStarlightTick(World world, BlockPos pos);
 
-    public Constellation getStarlightType();
+    public IMajorConstellation getStarlightType();
 
     default public boolean providesAutoLink() {
         return false;

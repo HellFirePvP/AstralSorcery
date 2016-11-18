@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -15,31 +16,32 @@ public class Constellations {
     //public static Constellation bigDipper; //Bowl? Fluid storage? NOT included atm.
     //public static Constellation noctua; //Owl? Nightvision? NOT included atm.
 
-    public static Constellation orion; //-> Damage -> AOE damage effect
-    public static Constellation aquila; //Travel TODO -> Hunter's fury effect?
-    public static Constellation ara; //-> Treefarm
-    public static Constellation bootes; //-> Herding -> Animal shedding/drops
-    public static Constellation caelum; //Chisel/Grindstone? TODO
-    public static Constellation circinus; //-> Harvest -> Crop harvesting
-    public static Constellation fornax; //-> Furnace -> Melting blocks in world
-    public static Constellation libra; //Balance? uuh... TODO
-    public static Constellation horologium; //-> Time -> TileAcceleration
-    public static Constellation octans; //-> Fishing -> Fishes fishing loot.
-    public static Constellation phoenix; //-> Revive -> PotionEffect CheatDeath
-    public static Constellation scutum; //Shield/Damage reduction? TODO -> add some astral shielding?
-    public static Constellation rohini; //Temple? gating? TODO
-    public static Constellation chitra; //-> Birth -> EntityAnimal mating.
-    public static Constellation draco; //Dragon, Flight TODO -> add flight thingy? uhh
+    public static IMinorConstellation bootes; //-> Herding -> Animal shedding/drops
+    public static IMinorConstellation caelum; //Chisel/Grindstone? TODO
+    public static IMinorConstellation circinus; //-> Harvest -> Crop harvesting
+    public static IMinorConstellation fornax; //-> Furnace -> Melting blocks in world
+    public static IMinorConstellation libra; //Balance? uuh... TODO
+    public static IMinorConstellation horologium; //-> Time -> TileAcceleration //FIXME could become main
+    public static IMinorConstellation octans; //-> Fishing -> Fishes fishing loot.
+    public static IMinorConstellation phoenix; //-> Revive -> PotionEffect CheatDeath
+    public static IMinorConstellation rohini; //Temple? gating? TODO
+    public static IMinorConstellation chitra; //-> Birth -> EntityAnimal mating.
+    public static IMinorConstellation inpes; //-> Push? -> Inverted Vortex
+    public static IMinorConstellation locurba; //Dislocation, Latin rules. a word mixed (per)turbare (disturb sth.) and loco (place, location) TODO
+    public static IMinorConstellation visso; //Sending/Transmission), Latin rules again. missus (to send) and vastus (huge, large) the english 'vast' also has its origins there. TODO
+    public static IMinorConstellation lucerna; //-> Light -> Huge magnum torch effect
+    public static IMinorConstellation tenifium; //-> Vortex -> Mob pull effect
+    public static IMinorConstellation reatio; //Resonance TODO
+    public static IMinorConstellation draco; //Dragon, Flight TODO -> add flight thingy?
 
-    /** fictional constellations with specific purposes */
-    public static Constellation inpes; //-> Push? -> Inverted Vortex
-    public static Constellation locurba; //Dislocation, Latin rules. a word mixed (per)turbare (disturb sth.) and loco (place, location) TODO
-    public static Constellation visso; //Sending/Transmission), Latin rules again. missus (to send) and vastus (huge, large) the english 'vast' also has its origins there. TODO
-    public static Constellation lucerna; //-> Light -> Huge magnum torch effect
-    public static Constellation tenifium; //-> Vortex -> Mob pull effect
-    public static Constellation fertilitas; //-> Fertility -> Crop growth
-    public static Constellation reatio; //Resonance TODO
-    public static Constellation mineralis; //-> Mineral -> Ore generation
+
+    public static IMajorConstellation orion; //-> Damage -> AOE damage effect FIXME could become main (Melee)
+    public static IMajorConstellation aquila; //Travel TODO -> Hunter's fury effect? -> FIXME could become main (Ranged)
+    public static IMajorConstellation ara; //-> Treefarm FIXME could become main (Harvest)
+    public static IMajorConstellation scutum; //Shield/Damage reduction? TODO -> add some astral shielding? -> FIXME could become main (Defence)
+
+    public static IMajorConstellation fertilitas; //-> Fertility -> Crop growth //FIXME could become main (Farmer)
+    public static IMajorConstellation mineralis; //-> Mineral -> Ore generation //FIXME could become main (Miner)
 
     //Nothing bout that yet.
     /*public static Constellation ss_pisces; //Fish

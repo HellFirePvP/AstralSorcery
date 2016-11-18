@@ -10,16 +10,18 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,14 +38,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
 
-    private Constellation constellation;
+    private IConstellation constellation;
     private GuiJournalConstellationCluster origin;
     private boolean detailed;
 
     private Rectangle rectBack;
-    private List<CelestialHandler.MoonPhase> phases = new LinkedList<>();
+    private List<MoonPhase> phases = new LinkedList<>();
 
-    public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, Constellation c, boolean detailed) {
+    public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c, boolean detailed) {
         super(-1);
         this.origin = origin;
         this.constellation = c;
@@ -52,10 +54,15 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testPhases() {
-        Tier t = constellation.queryTier();
-        for (CelestialHandler.MoonPhase ph : CelestialHandler.MoonPhase.values()) {
-            if(t.areAppearanceConditionsMet(ph, EnumSet.noneOf(CelestialHandler.CelestialEvent.class)))
-                phases.add(ph);
+        if(constellation instanceof IMajorConstellation) {
+            Collections.addAll(phases, MoonPhase.values());
+        } else if(constellation instanceof IMinorConstellation) {
+            //Why this way? To maintain phase-order.
+            for (MoonPhase ph : MoonPhase.values()) {
+                if(((IMinorConstellation) constellation).getShowupMoonPhases().contains(ph)) {
+                    phases.add(ph);
+                }
+            }
         }
     }
 
@@ -86,7 +93,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         fontRenderer.font_size_multiplicator = 0.08F;
         float br = 0.8666F;
         GL11.glColor4f(br, br, br, 0.8F);
-        String info = I18n.translateToLocal(constellation.getInfoString()).toUpperCase();
+        String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
         double w = fontRenderer.getStringWidth(info);
         double chX = 305 - (w / 2);
         fontRenderer.drawString(info, guiLeft + chX, guiTop + 18, zLevel, null, 0.7F, 0);
@@ -114,18 +121,18 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private void drawPhaseInformation() {
         GL11.glColor4f(1F, 1F, 1F, 0.6F);
-        GL11.glPushMatrix();
-        fontRenderer.zLevel = zLevel;
-        fontRenderer.font_size_multiplicator = 0.05F;
-        String trCh = detailed ? I18n.translateToLocal(constellation.queryTier().chanceAsRarityUnlocName()).toUpperCase() : "???";
-        String chance = I18n.translateToLocal("tier.chance").toUpperCase();
+        //GL11.glPushMatrix();
+        //fontRenderer.zLevel = zLevel;
+        //fontRenderer.font_size_multiplicator = 0.05F;
+        //String trCh = detailed ? I18n.format(constellation.queryTier().chanceAsRarityUnlocName()).toUpperCase() : "???";
+        //String chance = I18n.format("tier.chance").toUpperCase();
 
-        fontRenderer.drawString(chance, guiLeft + 228, guiTop + 154, zLevel, null, 0.7F, 0);
-        TextureHelper.refreshTextureBindState();
+        //fontRenderer.drawString(chance, guiLeft + 228, guiTop + 154, zLevel, null, 0.7F, 0);
+        //TextureHelper.refreshTextureBindState();
 
-        fontRenderer.font_size_multiplicator = 0.045F;
-        fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 175, zLevel, null, 0.7F, 0);
-        GL11.glPopMatrix();
+        //fontRenderer.font_size_multiplicator = 0.045F;
+        //fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 175, zLevel, null, 0.7F, 0);
+        //GL11.glPopMatrix();
 
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
@@ -134,7 +141,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         int offsetX = 105 + (width / 2) - (phases.size() * (size + 2)) / 2;
         int offsetY = 199 + guiTop;
         for (int i = 0; i < phases.size(); i++) {
-            CelestialHandler.MoonPhase ph = phases.get(i);
+            MoonPhase ph = phases.get(i);
             MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
             drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
         }
@@ -143,7 +150,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private void drawConstellation() {
         float br = 0.866F;
         GL11.glColor4f(br, br, br, 0.8F);
-        String name = I18n.translateToLocal(constellation.getName()).toUpperCase();
+        String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         double width = fontRenderer.getStringWidth(name);
         double offsetX = 110 - (width / 2);
         fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);

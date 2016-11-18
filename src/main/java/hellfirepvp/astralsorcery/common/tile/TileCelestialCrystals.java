@@ -6,15 +6,15 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -101,15 +101,18 @@ public class TileCelestialCrystals extends TileSkybound {
 
     public void tryGrowth(double mul) {
         int r = 24000;
-        if(doesSeeSky()) {
-            double dstr = CelestialHandler.calcDaytimeDistribution(worldObj);
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(worldObj);
+        if(doesSeeSky() && handle != null) {
+            double dstr = handle.getCurrentDaytimeDistribution(worldObj);
             if(dstr > 0) {
-                Collection<Constellation> activeConstellations =
-                        ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
-                if(activeConstellations.contains(Constellations.mineralis)) {
-                    r = 4200;
-                } else {
-                    r = 9500;
+                Collection<IConstellation> activeConstellations =
+                        ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(worldObj.provider.getDimension());
+                if(activeConstellations != null) {
+                    if(activeConstellations.contains(Constellations.mineralis)) {
+                        r = 4200;
+                    } else {
+                        r = 9500;
+                    }
                 }
                 r *= (0.5 + ((1 - dstr) * 0.5));
             }

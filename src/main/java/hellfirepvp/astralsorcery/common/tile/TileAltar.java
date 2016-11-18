@@ -5,10 +5,10 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
@@ -20,9 +20,9 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -72,8 +72,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private int experience = 0;
     private int starlightStored = 0;
 
-    private ItemStack focusLensStack = null;
-
     public TileAltar() {
         super(21);
     }
@@ -83,7 +81,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.level = level;
     }
 
-    private void receiveStarlight(Constellation type, double amount) {
+    private void receiveStarlight(IMajorConstellation type, double amount) {
         if(amount <= 0.001) return;
 
         starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 100D)));
@@ -123,19 +121,15 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     @Nullable
-    public ItemStack getFocusLensStack() {
-        return focusLensStack;
-    }
-
-    @Nullable
-    public Constellation getFocusedConstellation() {
-        int tierNumber = 0;
+    public IMajorConstellation getFocusedConstellation() {
+        /*int tierNumber = 0;
         if(focusLensStack != null && focusLensStack.getItem() != null && focusLensStack.getItem() instanceof ItemFocusLens) {
             tierNumber = focusLensStack.getItemDamage() + 1;
         }
         Tier tier = ConstellationRegistry.getTier(tierNumber);
         if(tier == null) return null;
-        return ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(tier);
+        return ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(tier);*/
+        return Constellations.ara; //FIXME find another solution
     }
 
     @Override
@@ -146,9 +140,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @SideOnly(Side.CLIENT)
     private void doConstellationRays() {
-        Constellation c = getFocusedConstellation();
-        if(c != null) {
-            float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(getWorld());
+        IMajorConstellation c = getFocusedConstellation();
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
+        if(c != null && handle != null) {
+            float alphaDaytime = handle.getCurrentDaytimeDistribution(getWorld());
             if(alphaDaytime >= 1.0E-3) {
                 if(rand.nextInt(20) == 0) {
                     Vector3 from = new Vector3(getPos()).add(0.5, 3.5, 0.5);
@@ -323,9 +318,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(starlightStored > 0) needUpdate = true;
         starlightStored *= getAltarLevel().ordinal() != 0 ? 0.995 : 0.95;
 
-        if(doesSeeSky()) {
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
+        if(doesSeeSky() && handle != null) {
             int collect = getAltarLevel().ordinal() != 0 ? 60 : getPos().getY() / 2;
-            double perc =  0.2 + (0.8 * CelestialHandler.calcDaytimeDistribution(worldObj));
+            double perc =  0.2 + (0.8 * handle.getCurrentDaytimeDistribution(getWorld()));
             starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (collect * perc)));
             return true;
         }
@@ -437,9 +433,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.experience = compound.getInteger("exp");
         this.starlightStored = compound.getInteger("starlight");
         this.mbState = compound.getBoolean("mbState");
-        if(compound.hasKey("focusStack")) {
-            this.focusLensStack = NBTHelper.getStack(compound, "focusStack");
-        }
 
         this.craftingTask = null;
         if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
@@ -464,9 +457,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         compound.setInteger("exp", experience);
         compound.setInteger("starlight", starlightStored);
         compound.setBoolean("mbState", mbState);
-        if(focusLensStack != null) {
-            NBTHelper.setStack(compound, "focusStack", focusLensStack);
-        }
 
         if(craftingTask != null) {
             compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
@@ -567,7 +557,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class, false);
                 if(ta != null) {

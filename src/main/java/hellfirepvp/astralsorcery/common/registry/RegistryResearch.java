@@ -108,9 +108,9 @@ public class RegistryResearch {
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
         resIlluminator.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rIlluminatorRock));
 
-        ResearchNode resSimpleAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_SIMPLE", 0, 2);
-        resSimpleAtt.addPage(getTextPage("ATT_SIMPLE.1"));
-        resSimpleAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttuneRockCrystalBasic));
+        //ResearchNode resSimpleAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_SIMPLE", 0, 2);
+        //resSimpleAtt.addPage(getTextPage("ATT_SIMPLE.1"));
+        //resSimpleAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttuneRockCrystalBasic));
 
         ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 1, 4);
         resRitPedestal.addPage(getTextPage("RIT_PEDESTAL.1"));
@@ -122,12 +122,12 @@ public class RegistryResearch {
         resConstellationUpgrade.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
-        resRitPedestal.addSourceConnectionFrom(resSimpleAtt);
-        resConstellationUpgrade.addSourceConnectionFrom(resSimpleAtt);
+        //resRitPedestal.addSourceConnectionFrom(resSimpleAtt);
+        //resConstellationUpgrade.addSourceConnectionFrom(resSimpleAtt);
 
         regAttenuation.register(resWell);
         regAttenuation.register(resIlluminator);
-        regAttenuation.register(resSimpleAtt);
+        //regAttenuation.register(resSimpleAtt);
         regAttenuation.register(resRitPedestal);
         regAttenuation.register(resConstellationUpgrade);
     }

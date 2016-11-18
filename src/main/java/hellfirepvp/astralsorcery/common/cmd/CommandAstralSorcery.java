@@ -1,10 +1,10 @@
 package hellfirepvp.astralsorcery.common.cmd;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -146,7 +146,7 @@ public class CommandAstralSorcery extends CommandBase {
         PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
-        Collection<Constellation> constellations = ConstellationRegistry.getAllConstellations();
+        Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
         if (!ResearchManager.discoverConstellations(constellations, other)) {
             sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
             return;
@@ -262,7 +262,7 @@ public class CommandAstralSorcery extends CommandBase {
         PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
         if (argument.equals("all")) {
-            Collection<Constellation> constellations = ConstellationRegistry.getAllConstellations();
+            Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
             if (!ResearchManager.discoverConstellations(constellations, other)) {
                 sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
                 return;
@@ -270,7 +270,7 @@ public class CommandAstralSorcery extends CommandBase {
             other.addChatMessage(new TextComponentString("§aDiscovered all Constellations!"));
             sender.addChatMessage(new TextComponentString("§aSuccess!"));
         } else {
-            Constellation c = ConstellationRegistry.getConstellationByName(argument);
+            IConstellation c = ConstellationRegistry.getConstellationByName(argument);
             if (c == null) {
                 sender.addChatMessage(new TextComponentString("§cUnknown constellation: " + argument));
                 return;
@@ -279,7 +279,7 @@ public class CommandAstralSorcery extends CommandBase {
                 sender.addChatMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
                 return;
             }
-            other.addChatMessage(new TextComponentString("§aDiscovered constellation " + c.getName() + "!"));
+            other.addChatMessage(new TextComponentString("§aDiscovered constellation " + c.getUnlocalizedName() + "!"));
             sender.addChatMessage(new TextComponentString("§aSuccess!"));
         }
     }
@@ -334,11 +334,13 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void listConstellations(ICommandSender sender) {
-        for (Tier tier : ConstellationRegistry.ascendingTiers()) {
-            sender.addChatMessage(new TextComponentString("§cTier: " + tier.tierNumber() + " - showupChance: " + tier.getShowupChance()));
-            for (Constellation c : tier.getConstellations()) {
-                sender.addChatMessage(new TextComponentString("§7" + c.getName()));
-            }
+        sender.addChatMessage(new TextComponentString("§cMajor Constellations:"));
+        for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
+            sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
+        }
+        sender.addChatMessage(new TextComponentString("§Minor Constellations:"));
+        for (IMinorConstellation c : ConstellationRegistry.getMinorConstellations()) {
+            sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
     }
 

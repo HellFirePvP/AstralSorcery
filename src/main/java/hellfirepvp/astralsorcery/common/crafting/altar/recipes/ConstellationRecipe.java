@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -37,7 +38,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
     };
 
     private Map<AltarAdditionalSlot, ItemStack> matchStacks = new HashMap<>();
-    private Constellation skyConstellationNeeded = null;
+    private IConstellation skyConstellationNeeded = null;
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -81,7 +82,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
         return 600;
     }
 
-    public void setSkyConstellation(Constellation constellation) {
+    public void setSkyConstellation(IConstellation constellation) {
         this.skyConstellationNeeded = constellation;
     }
 
@@ -89,7 +90,8 @@ public class ConstellationRecipe extends AttenuationRecipe {
     public boolean matches(TileAltar altar) {
         if(skyConstellationNeeded != null) {
             DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
-            if(!cel.getActiveConstellations().contains(skyConstellationNeeded)) return false;
+            Collection<IConstellation> activeConstellations = cel.getActiveConstellations(altar.getWorld().provider.getDimension());
+            if(activeConstellations == null || !activeConstellations.contains(skyConstellationNeeded)) return false;
         }
         for (AltarAdditionalSlot slot : AltarAdditionalSlot.values()) {
             ItemStack expected = matchStacks.get(slot);

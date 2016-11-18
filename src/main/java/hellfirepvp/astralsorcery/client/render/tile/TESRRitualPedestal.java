@@ -4,18 +4,15 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -42,9 +39,9 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_ALPHA_TEST);
 
-            Constellation c = te.getDisplayConstellation();
+            IConstellation c = te.getDisplayConstellation();
             if(c != null) {
-                float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(te.getWorld());
+                float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(te.getWorld());
                 alphaDaytime *= 0.8F;
 
                 int max = 5000;
@@ -60,7 +57,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
                 float br = 0.6F * (alphaDaytime * percRunning);
 
-                RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor(), new Vector3(te).add(0.5, 0.1, 0.5), 3 + tr, 2, 0.1F + br);
+                RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.1, 0.5), 3 + tr, 2, 0.1F + br);
             }
 
             GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -74,7 +71,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
         float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
         if(percRunning > 1E-4) {
             TextureSpritePlane sprite = te.getHaloEffectSprite();
-            float alphaMul = (float) CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+            float alphaMul = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
             sprite.setAlphaMultiplier(percRunning * alphaMul);
         }
     }

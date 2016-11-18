@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -64,16 +65,22 @@ public class EventHandlerServer {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
-        if(w.provider.getDimension() == 0) {
-            AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension 0: " + w.provider.getClass().getName());
+        int id = w.provider.getDimension();
+        if(Config.isDimensionWhitelisted(id)) {
+            AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
-            AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension 0 (chaining old provider.)");
+            AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");
         }
+    }
+
+    @SubscribeEvent
+    public void onUnload(WorldEvent.Unload event) {
+        World w = event.getWorld();
+        ConstellationSkyHandler.getInstance().informWorldUnload(w);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAttack(LivingAttackEvent event) {
-
         if(phoenixProtect((event.getEntityLiving()), event.getAmount())) {
             event.setCanceled(true);
         }
@@ -81,7 +88,6 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
-
         if(phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
             event.setCanceled(true);
         }

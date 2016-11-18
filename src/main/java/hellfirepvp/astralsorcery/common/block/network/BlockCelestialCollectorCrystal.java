@@ -1,5 +1,7 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -26,89 +28,13 @@ public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        ItemStack stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.fornax);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.horologium);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.fertilitas);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.mineralis);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.lucerna);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.orion);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.circinus);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.octans);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.chitra);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.tenifium);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.ara);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.phoenix);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.bootes);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
-
-        stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.inpes);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        list.add(stack);
+        for (IMajorConstellation major : ConstellationRegistry.getMajorConstellations()) {
+            ItemStack stack = new ItemStack(itemIn);
+            ItemCollectorCrystal.setConstellation(stack, major);
+            ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+            list.add(stack);
+        }
     }
 
 }

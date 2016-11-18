@@ -2,12 +2,11 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
@@ -44,7 +43,7 @@ public class CEffectMineralis extends CEffectPositionList {
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
@@ -76,7 +75,7 @@ public class CEffectMineralis extends CEffectPositionList {
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
+    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
         return false;
     }
 

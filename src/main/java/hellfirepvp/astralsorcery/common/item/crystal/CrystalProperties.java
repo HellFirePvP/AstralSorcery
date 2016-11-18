@@ -4,10 +4,10 @@ import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -123,26 +123,26 @@ public class CrystalProperties {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.size") + ": " + TextFormatting.BLUE + prop.getSize());
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + TextFormatting.BLUE + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.purity") + ": " + TextFormatting.BLUE + prop.getPurity() + "%");
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + TextFormatting.BLUE + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.collectivity") + ": " + TextFormatting.BLUE + prop.getCollectiveCapability() + "%");
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + TextFormatting.BLUE + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
                 }
                 if(missing) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
                 return Optional.of(missing);
             } else {
-                tooltip.add(TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.translateToLocal("misc.moreInformation"));
+                tooltip.add(TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.format("misc.moreInformation"));
                 return Optional.empty();
             }
         }

@@ -7,15 +7,15 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
-import net.minecraft.util.text.translation.I18n;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,20 +31,25 @@ public class GuiConstellationPaper extends GuiWHScreen {
     private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
     private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
 
-    private final Constellation constellation;
-    private List<CelestialHandler.MoonPhase> phases = new LinkedList<>();
+    private final IConstellation constellation;
+    private List<MoonPhase> phases = new LinkedList<>();
 
-    public GuiConstellationPaper(Constellation c) {
+    public GuiConstellationPaper(IConstellation c) {
         super(300, 250);
         this.constellation = c;
         testPhases();
     }
 
     private void testPhases() {
-        Tier t = constellation.queryTier();
-        for (CelestialHandler.MoonPhase ph : CelestialHandler.MoonPhase.values()) {
-            if(t.areAppearanceConditionsMet(ph, EnumSet.noneOf(CelestialHandler.CelestialEvent.class)))
-                phases.add(ph);
+        if(constellation instanceof IMajorConstellation) {
+            Collections.addAll(phases, MoonPhase.values());
+        } else if(constellation instanceof IMinorConstellation) {
+            //Why this way? To maintain phase-order.
+            for (MoonPhase ph : MoonPhase.values()) {
+                if(((IMinorConstellation) constellation).getShowupMoonPhases().contains(ph)) {
+                    phases.add(ph);
+                }
+            }
         }
     }
 
@@ -66,7 +71,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void drawHeader() {
-        String locName = I18n.translateToLocal(constellation.getName()).toUpperCase();
+        String locName = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         double length = ofr.getStringWidth(locName);
         double offsetLeft = width / 2 - length / 2;
         int offsetTop = guiTop + 20;
@@ -76,9 +81,6 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void drawConstellation(float parTicks) {
-        float h = ConstellationRegistry.getHighestTierNumber();
-        float tierN = constellation.queryTier().tierNumber();
-
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         RenderConstellation.renderConstellationIntoGUI(
@@ -88,7 +90,8 @@ public class GuiConstellationPaper extends GuiWHScreen {
                 110, 110, 2F, new RenderConstellation.BrightnessFunction() {
                     @Override
                     public float getBrightness() {
-                        return 0.8F - (0.6F * (tierN / h));
+                        //return 0.8F - (0.6F * (tierN / h));
+                        return 0.5F;
                     }
                 }, true, false);
         GL11.glDisable(GL11.GL_BLEND);
@@ -102,7 +105,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
         int offsetY = guiTop + 206;
         for (int i = 0; i < phases.size(); i++) {
-            CelestialHandler.MoonPhase ph = phases.get(i);
+            MoonPhase ph = phases.get(i);
             MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
             drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
         }

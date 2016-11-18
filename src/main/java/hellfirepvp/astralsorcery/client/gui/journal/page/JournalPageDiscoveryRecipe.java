@@ -7,21 +7,14 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
-import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -101,23 +94,23 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         public void addTooltip(List<String> out) {
             if(recipe.getPassiveStarlightRequired() > 0) {
                 String displReq = getDescriptionFromStarlightAmount(recipe.getPassiveStarlightRequired());
-                displReq = I18n.translateToLocal(displReq);
-                String dsc = I18n.translateToLocal("astralsorcery.journal.recipe.amt.desc");
+                displReq = I18n.format(displReq);
+                String dsc = I18n.format("astralsorcery.journal.recipe.amt.desc");
                 out.add(String.format(dsc, displReq));
             }
             if(recipe instanceof INighttimeRecipe) {
-                out.add(I18n.translateToLocal("astralsorcery.journal.recipe.nighttime"));
+                out.add(I18n.format("astralsorcery.journal.recipe.nighttime"));
             }
-            if(recipe instanceof SimpleCrystalAttunationRecipe) {
+            /*if(recipe instanceof SimpleCrystalAttunationRecipe) {
                 Tier t = ConstellationRegistry.getTier(0);
                 if(t != null) {
-                    Constellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(t);
-                    if(c != null && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
-                        String dsc = I18n.translateToLocal("astralsorcery.journal.recipe.attunement");
-                        out.add(String.format(dsc, I18n.translateToLocal(c.getName())));
+                    IConstellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(t);
+                    if(c != null && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                        String dsc = I18n.format("astralsorcery.journal.recipe.attunement");
+                        out.add(String.format(dsc, I18n.format(c.getUnlocalizedName())));
                     }
                 }
-            }
+            }*/
         }
 
         @Override
@@ -131,8 +124,8 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 float widthHeightStar = 15F;
                 Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
                 if(r.contains(mouseX, mouseY)) {
-                    RenderingUtils.renderTooltip((int) (offsetX), (int) (offsetY),
-                            out, new Color(0x000033), new Color(0x000044), Minecraft.getMinecraft().fontRendererObj);
+                    RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
+                            out, Minecraft.getMinecraft().fontRendererObj);
                 }
             }
 

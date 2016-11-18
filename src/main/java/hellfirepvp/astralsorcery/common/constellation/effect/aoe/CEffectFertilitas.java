@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -40,7 +40,7 @@ public class CEffectFertilitas extends CEffectPositionListGen<CropHelper.Growabl
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
@@ -75,7 +75,7 @@ public class CEffectFertilitas extends CEffectPositionListGen<CropHelper.Growabl
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength) {
+    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
         return false;
     }
 

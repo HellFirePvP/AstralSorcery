@@ -29,6 +29,7 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
             Entry<K, V> entry = iteratorEntries.next();
             entry.getValue().tick();
             if(entry.getValue().getRemainingTimeout() <= 0) {
+                entry.getValue().onTimeout();
                 iteratorEntries.remove();
             }
         }
@@ -78,6 +79,9 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
         }
 
         @Override
+        public void onTimeout() {}
+
+        @Override
         public E getValue() {
             return value;
         }
@@ -89,6 +93,7 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
 
         public void tick();
 
+        void onTimeout();
     }
 
 }

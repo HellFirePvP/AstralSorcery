@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.client.gui.journal.page;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.util.LinkedList;
@@ -45,7 +45,7 @@ public class JournalPageText implements IJournalPage {
         }
 
         private List<String> buildLines(String unlocText) {
-            String text = I18n.translateToLocal(unlocText);
+            String text = I18n.format(unlocText);
             List<String> lines = new LinkedList<>();
             for (String segment : text.split("<NL>")) {
                 StringBuilder cache = new StringBuilder();

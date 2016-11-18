@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.event;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -20,7 +20,7 @@ public class APIRegistryEvent {
     public static class ConstellationEffectRegister extends Event {
 
         //This does NOT include config generation.
-        public void registerEffect(Constellation c, Function<Void, ConstellationEffect> effectInstanceProvider) {
+        public void registerEffect(IMajorConstellation c, Function<Void, ConstellationEffect> effectInstanceProvider) {
             ConstellationEffectRegistry.registerFromAPI(c, effectInstanceProvider);
         }
 

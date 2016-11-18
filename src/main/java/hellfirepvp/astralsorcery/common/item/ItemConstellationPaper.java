@@ -2,17 +2,16 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,8 +24,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -52,12 +52,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         subItems.add(new ItemStack(this, 1));
 
-        for (Tier tier : ConstellationRegistry.ascendingTiers()) {
-            for (Constellation c : tier.getConstellations()) {
-                ItemStack cPaper = new ItemStack(this, 1);
-                setConstellation(cPaper, c);
-                subItems.add(cPaper);
-            }
+        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+            ItemStack cPaper = new ItemStack(this, 1);
+            setConstellation(cPaper, c);
+            subItems.add(cPaper);
         }
     }
 
@@ -77,12 +75,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        Constellation c = getConstellation(stack);
+        IConstellation c = getConstellation(stack);
         if (c != null) {
-            tooltip.add(TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
+            tooltip.add(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
         } else {
-            tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("constellation.noInformation"));
+            tooltip.add(TextFormatting.GRAY + I18n.format("constellation.noInformation"));
         }
     }
 
@@ -101,14 +100,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
         if (entityIn != null && entityIn instanceof EntityPlayer && (worldIn.getTotalWorldTime() & 7)  == 0) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
             if (progress != null) {
-                ProgressionTier highest = progress.getTierReached();
-                List<Constellation> constellations = new ArrayList<>();
-                for (Tier tier : ConstellationRegistry.ascendingTiers()) {
-                    if (tier.getProgressionNeeded().ordinal() > highest.ordinal()) continue;
-                    for (Constellation c : tier.getConstellations()) {
-                        if (!progress.hasConstellationDiscovered(c.getName())) {
-                            constellations.add(c);
-                        }
+                List<IConstellation> constellations = new ArrayList<>();
+                for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                    if(c.canDiscover(progress)) {
+                        constellations.add(c);
                     }
                 }
 
@@ -118,19 +113,19 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                     return;
                 }
 
-                List<WRItemObject<Constellation>> wrp = buildWeightedRandomList(constellations);
-                WRItemObject<Constellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
+                List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
+                WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
                 setConstellation(stack, result.getValue());
             }
         }
     }
 
-    private void removeInventoryConstellations(InventoryPlayer inventory, List<Constellation> constellations) {
+    private void removeInventoryConstellations(InventoryPlayer inventory, List<IConstellation> constellations) {
         if (inventory == null) return;
         for (ItemStack stack : inventory.mainInventory) {
             if (stack == null || stack.getItem() == null) continue;
             if (stack.getItem() instanceof ItemConstellationPaper) {
-                Constellation c = getConstellation(stack);
+                IConstellation c = getConstellation(stack);
                 if (c != null) {
                     constellations.remove(c);
                 }
@@ -138,12 +133,10 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
         }
     }
 
-    private List<WRItemObject<Constellation>> buildWeightedRandomList(List<Constellation> constellations) {
-        List<WRItemObject<Constellation>> wrc = new ArrayList<WRItemObject<Constellation>>();
-        for (Constellation c : constellations) {
-            Tier tier = ConstellationRegistry.getTier(c.getAssociatedTier());
-            if (tier == null) continue;
-            WRItemObject<Constellation> i = new WRItemObject<>((int) (tier.getShowupChance() * 100), c);
+    private List<WRItemObject<IConstellation>> buildWeightedRandomList(List<IConstellation> constellations) {
+        List<WRItemObject<IConstellation>> wrc = new ArrayList<>();
+        for (IConstellation c : constellations) {
+            WRItemObject<IConstellation> i = new WRItemObject<>(1, c);//(int) (tier.getShowupChance() * 100), c);
             wrc.add(i);
         }
         return wrc;
@@ -151,17 +144,17 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
 
     @Override
     public Color getHightlightColor(ItemStack stack) {
-        Constellation c = getConstellation(stack);
-        return c == null ? Color.GRAY : c.queryTier().calcRenderColor();
+        IConstellation c = getConstellation(stack);
+        return c == null ? Color.GRAY : c.getRenderColor();
     }
 
-    public static Constellation getConstellation(ItemStack stack) {
+    public static IConstellation getConstellation(ItemStack stack) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return null;
-        return Constellation.readFromNBT(NBTHelper.getPersistentData(stack));
+        return IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static void setConstellation(ItemStack stack, Constellation constellation) {
+    public static void setConstellation(ItemStack stack, IConstellation constellation) {
         Item i = stack.getItem();
         if (!(i instanceof ItemConstellationPaper)) return;
         NBTTagCompound tag = NBTHelper.getPersistentData(stack);

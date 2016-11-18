@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -25,9 +26,9 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     protected static final Random rand = new Random();
 
-    private final Constellation constellation;
+    private final IMajorConstellation constellation;
 
-    public ConstellationEffect(Constellation constellation, String cfgName) {
+    public ConstellationEffect(IMajorConstellation constellation, String cfgName) {
         super(Section.RITUAL_EFFECTS, cfgName);
         this.constellation = constellation;
     }
@@ -37,7 +38,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
         return super.getConfigurationSection() + "." + getKey();
     }
 
-    public Constellation getConstellation() {
+    public IMajorConstellation getConstellation() {
         return constellation;
     }
 
@@ -55,13 +56,13 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     //May be executed multiple times per tick
     //Even if this effect can handle multiple effects per tick, it is still possible that this method is called.
-    public abstract boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect);
+    public abstract boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect);
 
     //May be executed multiple times per tick
-    public abstract boolean playTraitEffect(World world, BlockPos pos, Constellation traitType, float traitStrength);
+    public abstract boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength);
 
     //Should handle multiple executions at once ('times' executions)
-    public boolean playMainEffectMultiple(World world, BlockPos pos, int times, boolean mayDoTraitEffect, @Nullable Constellation possibleTraitEffect) {
+    public boolean playMainEffectMultiple(World world, BlockPos pos, int times, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         boolean changed = false;
         for (int i = 0; i < times; i++) {
             if(playMainEffect(world, pos, 1, mayDoTraitEffect, possibleTraitEffect)) changed = true;
@@ -69,7 +70,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
         return changed;
     }
 
-    public boolean playTraitEffectMultiple(World world, BlockPos pos, Constellation traitType, int times) {
+    public boolean playTraitEffectMultiple(World world, BlockPos pos, IMinorConstellation traitType, int times) {
         boolean changed = false;
         for (int i = 0; i < times; i++) {
             if(playTraitEffect(world, pos, traitType, 1)) changed = true;

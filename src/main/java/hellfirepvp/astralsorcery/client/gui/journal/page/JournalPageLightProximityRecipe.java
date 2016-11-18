@@ -12,12 +12,11 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -98,7 +97,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
             if(r.contains(mouseX, mouseY)) {
                 RenderingUtils.renderTooltip((int) (offsetX), (int) (offsetY),
-                        Lists.newArrayList(I18n.translateToLocal("astralsorcery.journal.recipe.starlight")),
+                        Lists.newArrayList(I18n.format("astralsorcery.journal.recipe.starlight")),
                         new Color(0x000033), new Color(0x000044), Minecraft.getMinecraft().fontRendererObj);
             }
 

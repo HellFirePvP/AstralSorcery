@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -89,7 +89,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
             List<BlockPos> posList = buf.collectPositions(pos, 2);
             for (BlockPos rPos : posList) {
                 BlockPos p = worldIn.getTopSolidOrLiquidBlock(rPos).up();
-                double dstr = CelestialHandler.calcDaytimeDistribution(worldIn);
+                double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
                 if(dstr > 1E-4) {
                     PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.WAND_CRYSTAL_HIGHLIGHT, p.getX(), p.getY(), p.getZ());
                     PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) entityIn);
@@ -107,7 +107,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         double velX = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double velY = rand.nextFloat() * 0.2F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
-        double dstr = CelestialHandler.calcDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+        double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
         for (int i = 0; i < 10; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(x, y, z);
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);

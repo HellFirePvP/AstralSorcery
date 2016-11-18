@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.client.util;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 
 /**
@@ -17,6 +17,7 @@ public class TexturePreloader {
 
     public static void doPreloadRoutine() {
         //Needs to happen...
+        AstralSorcery.log.info("[AstralSorcery] Preload mandatory textures");
         TexturePreloader.preloadMandatoryTextures();
 
         if(Config.clientPreloadTextures) {
@@ -45,6 +46,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")   .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solarEclipse") .allocateGlId();
     }
 
     private static void preloadTextures() {
@@ -72,7 +74,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath").allocateGlId();
-        MoonPhaseRenderHelper.getMoonPhaseTexture(CelestialHandler.MoonPhase.NEW); //Loads all phase textures
+        MoonPhaseRenderHelper.getMoonPhaseTexture(MoonPhase.NEW); //Loads all phase textures
 
         SpriteLibrary.init(); //Loads all spritesheets
     }

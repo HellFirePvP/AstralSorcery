@@ -1,17 +1,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +12,7 @@ import java.util.HashMap;
  */
 public abstract class CEffectPositionMap<K extends NBTBase, V extends NBTBase> extends CEffectPositionListGen<GenListEntries.PosDefinedTuple<K, V>> {
 
-    public CEffectPositionMap(Constellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+    public CEffectPositionMap(IMajorConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
         super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.PosDefinedTuple::new);
     }
 

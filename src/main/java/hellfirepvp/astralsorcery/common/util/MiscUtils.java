@@ -39,6 +39,12 @@ public class MiscUtils {
     }
 
     @Nullable
+    public static <T> T getRandomEntry(List<T> list, Random rand) {
+        if(list == null || list.isEmpty()) return null;
+        return list.get(rand.nextInt(list.size()));
+    }
+
+    @Nullable
     public static RayTraceResult rayTraceLook(EntityLivingBase entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();

@@ -1,12 +1,12 @@
 package hellfirepvp.astralsorcery.common.auxiliary.link;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -54,7 +54,7 @@ public class LinkHandler implements ITickHandler {
             case SELECT:
                 String name = tile.getUnLocalizedDisplayName();
                 if(name != null) {
-                    playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.start", I18n.translateToLocal(name))));
+                    playerIn.addChatMessage(new TextComponentString("§a" + I18n.format("misc.link.start", I18n.format(name))));
                 }
                 tile.onSelect(playerIn);
                 break;
@@ -65,32 +65,32 @@ public class LinkHandler implements ITickHandler {
                 }
                 if(tile.tryLink(playerIn, pos)) {
                     tile.onLinkCreate(playerIn, pos);
-                    String linkedTo = I18n.translateToLocal("misc.link.link.block");
+                    String linkedTo = I18n.format("misc.link.link.block");
                     if(te != null && te instanceof ILinkableTile) {
                         String unloc = ((ILinkableTile) te).getUnLocalizedDisplayName();
                         if(unloc != null) {
-                            linkedTo = I18n.translateToLocal(unloc);
+                            linkedTo = I18n.format(unloc);
                         }
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
-                        playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.link", I18n.translateToLocal(linkedFrom), linkedTo)));
+                        playerIn.addChatMessage(new TextComponentString("§a" + I18n.format("misc.link.link", I18n.format(linkedFrom), linkedTo)));
                     }
                 }
                 break;
             case TRY_UNLINK:
                 if(tile.tryUnlink(playerIn, pos)) {
-                    String linkedTo = I18n.translateToLocal("misc.link.link.block");
+                    String linkedTo = I18n.format("misc.link.link.block");
                     te = worldIn.getTileEntity(pos);
                     if(te != null && te instanceof ILinkableTile) {
                         String unloc = ((ILinkableTile) te).getUnLocalizedDisplayName();
                         if(unloc != null) {
-                            linkedTo = I18n.translateToLocal(unloc);
+                            linkedTo = I18n.format(unloc);
                         }
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
-                        playerIn.addChatMessage(new TextComponentString("§a" + I18n.translateToLocalFormatted("misc.link.unlink", I18n.translateToLocal(linkedFrom), linkedTo)));
+                        playerIn.addChatMessage(new TextComponentString("§a" + I18n.format("misc.link.unlink", I18n.format(linkedFrom), linkedTo)));
                     }
                 }
                 break;
@@ -118,7 +118,7 @@ public class LinkHandler implements ITickHandler {
             if(dimId != pl.dimension) needsRemoval = true;
             if (needsRemoval) {
                 iterator.remove();
-                pl.addChatMessage(new TextComponentString("§c" + I18n.translateToLocal("misc.link.stop")));
+                pl.addChatMessage(new TextComponentString("§c" + I18n.format("misc.link.stop")));
             }
         }
     }

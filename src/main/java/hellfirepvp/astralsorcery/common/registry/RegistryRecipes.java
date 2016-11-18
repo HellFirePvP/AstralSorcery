@@ -11,7 +11,6 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.LensRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.PrismLensRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.RecipeRitualPedestal;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.SimpleCrystalAttunationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttenuationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
@@ -65,7 +64,7 @@ public class RegistryRecipes {
     public static AttenuationUpgradeRecipe rAltarUpgradeAttenuation;
     public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
 
-    public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
+    //public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
 
     //CraftingComponents
     //public static DiscoveryRecipe rCCGlassLensRockCrystal, rCCGlassLensCelCrystal;
@@ -213,8 +212,8 @@ public class RegistryRecipes {
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
 
-        rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
-        rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
+        //rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
+        //rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
 
         rLinkToolRock = registerConstellationRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Blocks.LOG,

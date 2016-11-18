@@ -7,8 +7,8 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -66,7 +66,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
         if(!worldObj.isRemote) {
             if(worldObj.canSeeSky(getPos())) {
-                starlightBuffer += Math.max(0.0001, CelestialHandler.calcDaytimeDistribution(worldObj));
+                starlightBuffer += Math.max(0.0001, ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldObj));
             }
 
             ItemStack stack = getStackInSlot(0);
@@ -135,7 +135,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         }
     }
 
-    private void receiveStarlight(Constellation type, double amount) {
+    private void receiveStarlight(IMajorConstellation type, double amount) {
         this.starlightBuffer += amount;
     }
 
@@ -284,7 +284,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileWell tw = MiscUtils.getTileAt(world, getPos(), TileWell.class, false);
                 if(tw != null) {

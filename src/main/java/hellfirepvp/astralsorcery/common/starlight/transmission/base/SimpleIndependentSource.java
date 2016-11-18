@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -15,20 +16,20 @@ import javax.annotation.Nonnull;
  */
 public abstract class SimpleIndependentSource implements IIndependentStarlightSource {
 
-    private Constellation starlightType;
+    private IMajorConstellation starlightType;
 
-    public SimpleIndependentSource(@Nonnull Constellation constellation) {
+    public SimpleIndependentSource(@Nonnull IMajorConstellation constellation) {
         this.starlightType = constellation;
     }
 
     @Override
-    public Constellation getStarlightType() {
+    public IMajorConstellation getStarlightType() {
         return starlightType;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.starlightType = Constellation.readFromNBT(compound);
+        this.starlightType = (IMajorConstellation) IConstellation.readFromNBT(compound);
     }
 
     @Override

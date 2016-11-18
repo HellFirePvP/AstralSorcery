@@ -1,19 +1,16 @@
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class TileFakeTree extends TileEntityTick {
 
-    public static final Constellation SUSTAIN_CONSTELLATION = Constellations.ara;
+    public static final IMajorConstellation SUSTAIN_CONSTELLATION = Constellations.ara;
 
     private BlockPos reference;
     private IBlockState fakedState;
@@ -48,7 +45,7 @@ public class TileFakeTree extends TileEntityTick {
                 if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(reference))) {
                     TileRitualPedestal ped = MiscUtils.getTileAt(worldObj, reference, TileRitualPedestal.class, true);
                     if(ped != null) {
-                        Constellation c = ped.getRitualConstellation();
+                        IMajorConstellation c = ped.getRitualConstellation();
                         if (c == null || !c.equals(SUSTAIN_CONSTELLATION) || !ped.isWorking() || !ped.hasMultiblock()) {
                             cleanUp();
                         }

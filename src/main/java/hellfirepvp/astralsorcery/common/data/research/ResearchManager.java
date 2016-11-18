@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
@@ -125,12 +125,12 @@ public class ResearchManager {
         savePlayerKnowledge(player);
     }
 
-    public static boolean discoverConstellations(Collection<Constellation> csts, EntityPlayer player) {
+    public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
-        for (Constellation c : csts) {
-            progress.discoverConstellation(c.getName());
+        for (IConstellation c : csts) {
+            progress.discoverConstellation(c.getUnlocalizedName());
         }
 
         player.addStat(RegistryAchievements.achvDiscoverConstellation);
@@ -140,11 +140,11 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean discoverConstellation(Constellation c, EntityPlayer player) {
+    public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
-        progress.discoverConstellation(c.getName());
+        progress.discoverConstellation(c.getUnlocalizedName());
 
         player.addStat(RegistryAchievements.achvDiscoverConstellation);
 

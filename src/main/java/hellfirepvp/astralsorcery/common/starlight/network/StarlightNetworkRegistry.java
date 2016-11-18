@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.StarmetalFormHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -79,7 +79,7 @@ public class StarlightNetworkRegistry {
     //This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
 
-        public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount);
+        public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount);
 
     }
 

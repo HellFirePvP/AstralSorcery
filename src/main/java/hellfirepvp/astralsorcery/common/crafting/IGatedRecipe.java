@@ -40,21 +40,4 @@ public interface IGatedRecipe {
 
     }
 
-    public interface Constellation extends IGatedRecipe {
-
-        @Nonnull
-        hellfirepvp.astralsorcery.common.constellation.Constellation getRequiredConstellation();
-
-        default public boolean hasProgressionServer(EntityPlayer player) {
-            PlayerProgress progress = ResearchManager.getProgress(player);
-            return progress != null && progress.hasConstellationDiscovered(getRequiredConstellation().getName());
-        }
-
-        @SideOnly(Side.CLIENT)
-        default public boolean hasProgressionClient() {
-            return ResearchManager.clientProgress.hasConstellationDiscovered(getRequiredConstellation().getName());
-        }
-
-    }
-
 }

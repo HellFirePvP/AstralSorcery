@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -108,7 +108,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 2, offsetY + 4, zLevel + 50);
         GL11.glScaled(0.7, 0.7, 0.7);
-        fontRendererObj.drawString(I18n.translateToLocal(title), 0, 0, titleRGBColor);
+        fontRendererObj.drawString(I18n.format(title), 0, 0, titleRGBColor);
         GL11.glPopMatrix();
 
         GlStateManager.color(1F, 1F, 1F, 1F);

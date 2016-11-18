@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -19,17 +19,15 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -88,12 +86,12 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
         if(shift && missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
-            Constellation c = ItemCollectorCrystal.getConstellation(stack);
+            IMajorConstellation c = ItemCollectorCrystal.getConstellation(stack);
             if(c != null) {
-                if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.collect.type") + " " + TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
+                if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
                 } else if(!missing.get()) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
             }
         }
@@ -130,7 +128,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te == null) return;
 
-        Constellation c = ItemCollectorCrystal.getConstellation(stack);
+        IMajorConstellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c == null) c = Constellations.ara; //Default out
         te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
     }

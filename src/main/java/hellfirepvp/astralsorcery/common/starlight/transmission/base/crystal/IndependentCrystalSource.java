@@ -2,8 +2,9 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
@@ -39,7 +40,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private boolean enhanced = false;
 
-    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull Constellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull IMajorConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
@@ -49,13 +50,14 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public float produceStarlightTick(World world, BlockPos pos) {
-        if(!doesSeeSky || world.provider.getDimension() != 0) {
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        if(!doesSeeSky || handle == null) {
             return 0F;
         }
         Function<Float, Float> distrFunction = getDistributionFunc();
-        double perc = distrFunction.apply((float) CelestialHandler.calcDaytimeDistribution(world));
+        double perc = distrFunction.apply(handle.getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
-        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, CelestialHandler.getCurrentDistribution(getStarlightType(), distrFunction)));
+        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(getStarlightType(), distrFunction)));
     }
 
     public void setEnhanced(boolean enhanced) {

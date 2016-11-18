@@ -1,8 +1,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -28,8 +27,8 @@ import java.util.Map;
  */
 public class RenderConstellation {
 
-    @SideOnly(Side.CLIENT)
-    public static void renderConstellation(Tier tier, Constellation c, Vector3 renderOffset, BrightnessFunction brFunc) {
+    /*@SideOnly(Side.CLIENT) FIXME reset
+    public static void renderConstellation(IConstellation c, Vector3 renderOffset, BrightnessFunction brFunc) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
 
@@ -42,7 +41,7 @@ public class RenderConstellation {
         double uLength = dirU.length();
         RenderAstralSkybox.TEX_CONNECTION.bind();
         for (int j = 0; j < 2; j++) {
-            for (StarConnection con : c.getConnections()) {
+            for (StarConnection con : c.getStarConnections()) {
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 float brightness = brFunc.getBrightness();
                 GL11.glColor4f(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
@@ -78,10 +77,10 @@ public class RenderConstellation {
             }
             tessellator.draw();
         }
-    }
+    }*/
 
     //non-rotating, builds into x/z space
-    public static void renderConstellationIntoWorldFlat(Constellation c, Color rC, Vector3 offsetPos, double scale, double lineBreadth, float br) {
+    public static void renderConstellationIntoWorldFlat(IConstellation c, Color rC, Vector3 offsetPos, double scale, double lineBreadth, float br) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
@@ -102,7 +101,7 @@ public class RenderConstellation {
 
         RenderAstralSkybox.TEX_CONNECTION.bind();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        for (StarConnection sc : c.getConnections()) {
+        for (StarConnection sc : c.getStarConnections()) {
             float brightness = br;
             brightness *= 0.8;
             float fAlpha = brightness < 0 ? 0 : brightness;
@@ -200,15 +199,15 @@ public class RenderConstellation {
         GL11.glPopMatrix();
     }*/
 
-    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Constellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
+    /*public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         return renderConstellationIntoGUI(c.queryTier(), c, offsetX, offsetY, zLevel, width, height, linebreadth, func, isKnown, applyStarBrightness);
+    }*/
+
+    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
+        return renderConstellationIntoGUI(c.getRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, func, isKnown, applyStarBrightness);
     }
 
-    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Tier tier, Constellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
-        return renderConstellationIntoGUI(tier.calcRenderColor(), c, offsetX, offsetY, zLevel, width, height, linebreadth, func, isKnown, applyStarBrightness);
-    }
-
-    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, Constellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
+    public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
         double ulength = ((double) width) / 32;
@@ -218,7 +217,7 @@ public class RenderConstellation {
         RenderAstralSkybox.TEX_CONNECTION.bind();
         if (isKnown) {
             for (int j = 0; j < 2; j++) {
-                for (StarConnection sc : c.getConnections()) {
+                for (StarConnection sc : c.getStarConnections()) {
                     float brightness = func.getBrightness();
                     if (applyStarBrightness) {
                         float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);

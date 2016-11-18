@@ -8,16 +8,15 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.common.block.BlockStructural;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
@@ -25,7 +24,6 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -84,21 +82,24 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private void drawCellsWithEffects(float partialTicks) {
-        Random r = new Random(owningPlayer.worldObj.getSeed() * 31 + CelestialHandler.lastTrackedDate * 31);
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(guiOwner.getWorld());
+        int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
+        Random r = new Random(guiOwner.getWorld().getSeed() * 31 + lastTracked * 31);
         World world = Minecraft.getMinecraft().theWorld;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
-        Collection<Constellation> activeConstellations =
+        /*Collection<IConstellation> activeConstellations =
                 ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
-        Constellation[] constellations = evaluateConstellations(r, activeConstellations);
+        IConstellation[] constellations = evaluateConstellations(r, activeConstellations);*/
+        IConstellation[] constellations = new IConstellation[8];
 
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
 
         drawGridBackground(partialTicks, canSeeSky);
 
-        Map<Rectangle, Integer> cells = new HashMap<Rectangle, Integer>();
-        Map<Integer, ConstellationInformation> starRectangles = new HashMap<Integer, ConstellationInformation>();
+        Map<Rectangle, Integer> cells = new HashMap<>();
+        Map<Integer, ConstellationInformation> starRectangles = new HashMap<>();
 
         if (world.provider.getDimension() == 0 && canSeeSky) {
             int wstep = guiWidth / 4;
@@ -202,7 +203,7 @@ public class GuiTelescope extends GuiWHScreen {
         tes.draw();
     }
 
-    private Constellation[] evaluateConstellations(Random rand, Collection<Constellation> activeConstellations) {
+    /*private Constellation[] evaluateConstellations(Random rand, Collection<Constellation> activeConstellations) { FIXME
         if (activeConstellations.size() > 8) {
             throw new IllegalStateException("More than 8 constellations active? More than 8 tiers? Wtf? Did someone add tiers?");
         }
@@ -216,7 +217,7 @@ public class GuiTelescope extends GuiWHScreen {
             array[pos] = c;
         }
         return array;
-    }
+    }*/
 
     private void drawGridBackground(float partialTicks, boolean canSeeSky) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -306,7 +307,7 @@ public class GuiTelescope extends GuiWHScreen {
         }
     }
 
-    private Optional<Map<StarLocation, Rectangle>> drawCellEffects(final Random rand, Constellation c, int offsetX, int offsetY, int width, int height, final float partialTicks) {
+    private Optional<Map<StarLocation, Rectangle>> drawCellEffects(final Random rand, IConstellation c, int offsetX, int offsetY, int width, int height, final float partialTicks) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
@@ -346,7 +347,7 @@ public class GuiTelescope extends GuiWHScreen {
                             return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getWorldTime(), partialTicks, 5 + rand.nextInt(15));
                         }
                     },
-                    ResearchManager.clientProgress.hasConstellationDiscovered(c.getName()),
+                    ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()),
                     true
             );
 
@@ -465,13 +466,13 @@ public class GuiTelescope extends GuiWHScreen {
         if (!currentInformation.starRectangleMap.containsKey(currentLinesCell)) return;
 
         ConstellationInformation constellationInfo = currentInformation.starRectangleMap.get(currentLinesCell);
-        Constellation c = constellationInfo.constellation;
-        if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) return;
+        IConstellation c = constellationInfo.constellation;
+        if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) return;
 
         boolean has = false;
         List<ItemStack> papers = ItemUtils.scanInventoryFor(Minecraft.getMinecraft().thePlayer.inventory, ItemsAS.constellationPaper);
         for (ItemStack stack : papers) {
-            Constellation con = ItemConstellationPaper.getConstellation(stack);
+            IConstellation con = ItemConstellationPaper.getConstellation(stack);
             if(con.equals(c)) {
                 has = true;
                 break;
@@ -480,7 +481,7 @@ public class GuiTelescope extends GuiWHScreen {
 
         if(!has) return;
 
-        List<StarConnection> sc = c.getConnections();
+        List<StarConnection> sc = c.getStarConnections();
         if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
 
         Map<StarLocation, Rectangle> stars = constellationInfo.starRectangles;
@@ -502,7 +503,7 @@ public class GuiTelescope extends GuiWHScreen {
         }
 
         //We found a match. horray.
-        PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getName()));
+        PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
         clearLines();
         abortDrawing();
     }
@@ -557,9 +558,9 @@ public class GuiTelescope extends GuiWHScreen {
     public static class ConstellationInformation {
 
         private final Map<StarLocation, Rectangle> starRectangles;
-        private final Constellation constellation;
+        private final IConstellation constellation;
 
-        public ConstellationInformation(Map<StarLocation, Rectangle> starRectangles, Constellation c) {
+        public ConstellationInformation(Map<StarLocation, Rectangle> starRectangles, IConstellation c) {
             this.starRectangles = starRectangles;
             this.constellation = c;
         }

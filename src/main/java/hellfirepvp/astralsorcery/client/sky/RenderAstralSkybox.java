@@ -4,9 +4,10 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.Tier;
+import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -50,6 +51,9 @@ public class RenderAstralSkybox extends IRenderHandler {
     public static final BindableResource TEX_STAR_4 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
+    public static final BindableResource TEX_SOLAR_ECLIPSE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solarEclipse");
+
+    public static final BindableResource TEX_DEBUG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "red");
 
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
@@ -323,20 +327,21 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glRotatef(-90F, 0F, 1F, 0F);
         GL11.glRotatef(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 
-        if (CelestialHandler.solarEclipse) {
-
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().theWorld);
+        if(handle != null && handle.getCurrentlyActiveEvent() == CelestialEvent.SOLAR_ECLIPSE) {
+            renderSolarEclipseSun(handle);
         } else {
             renderSun();
         }
 
-        if (CelestialHandler.lunarEclipse) {
-            int eclTick = CelestialHandler.lunarEclipseTick;
-            if (eclTick >= CelestialHandler.LUNAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= CelestialHandler.LUNAR_ECLIPSE_HALF_DUR;
+        if(handle != null && handle.getCurrentlyActiveEvent() == CelestialEvent.LUNAR_ECLIPSE) {
+            int eclTick = handle.lunarEclipseTick;
+            if (eclTick >= ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR) { //fading out
+                eclTick -= ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR;
             } else {
-                eclTick = CelestialHandler.LUNAR_ECLIPSE_HALF_DUR - eclTick;
+                eclTick = ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR - eclTick;
             }
-            float perc = ((float) eclTick) / CelestialHandler.LUNAR_ECLIPSE_HALF_DUR;
+            float perc = ((float) eclTick) / ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR;
             GL11.glColor4f(1.0F, 0.4F + (0.6F * perc), 0.4F + (0.6F * perc), alphaSubRain);
             renderMoon();
         } else {
@@ -407,6 +412,29 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glColor4f(0.0F, 0.0F, 0.0F, 1.0F);
     }
 
+    private void renderSolarEclipseSun(WorldSkyHandler handle) {
+        double xzSize = 30F;
+
+        float part = ((float) ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR * 2) / 7F;
+        float u = 0;
+        float tick = handle.solarEclipseTick;
+        while (tick - part > 0) {
+            tick -= part;
+            u += 1;
+        }
+
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vb = tessellator.getBuffer();
+        TEX_SOLAR_ECLIPSE.bind();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(-xzSize, 100.0D, -xzSize).tex( u      / 7F, 0.0D).endVertex();
+        vb.pos( xzSize, 100.0D, -xzSize).tex((u + 1) / 7F, 0.0D).endVertex();
+        vb.pos( xzSize, 100.0D,  xzSize).tex((u + 1) / 7F, 1.0D).endVertex();
+        vb.pos(-xzSize, 100.0D,  xzSize).tex( u      / 7F, 1.0D).endVertex();
+        tessellator.draw();
+        TextureHelper.refreshTextureBindState();
+    }
+
     private void renderConstellations(final World w, final float partialTicks) {
         long wTime = w.getWorldTime() % 24000;
         if (wTime < 12000) return; //Daytime.
@@ -420,25 +448,26 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         tes.draw();
-        Collection<Constellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
-        for (Constellation c : toShow) {
-            Tier tier = c.queryTier();
-            if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) continue;
+        Collection<IConstellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(w.provider.getDimension());
+        /*if(toShow != null) { FIXME reset
+            for (IConstellation c : toShow) {
+                if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
 
-            RenderConstellation.renderConstellation(tier, c, tier.getRenderInformation().offset, new RenderConstellation.BrightnessFunction() {
-                @Override
-                public float getBrightness() {
-                    return RenderConstellation.conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) * (2 * brightness);
-                }
-            });
-        }
+                RenderConstellation.renderConstellation(c, tier.getRenderInformation().offset, new RenderConstellation.BrightnessFunction() {
+                    @Override
+                    public float getBrightness() {
+                        return RenderConstellation.conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) * (2 * brightness);
+                    }
+                });
+            }
+        }*/
         //tes.draw();
         //long now = System.nanoTime();
         //AstralSorcery.log.info("Rendering Constellations took " + (now - nano) + " ns");
     }
 
     private void renderMoon() {
-        float xzSize = 20F;
+        double xzSize = 20F;
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
@@ -451,24 +480,25 @@ public class RenderAstralSkybox extends IRenderHandler {
         float minV = (float) (i1 + 1) / 2.0F;
 
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos((double) (-xzSize), -100.0D, (double) xzSize).tex((double) minU, (double) minV).endVertex();
-        vb.pos((double) xzSize, -100.0D, (double) xzSize).tex((double) maxU, (double) minV).endVertex();
-        vb.pos((double) xzSize, -100.0D, (double) (-xzSize)).tex((double) maxU, (double) maxV).endVertex();
-        vb.pos((double) (-xzSize), -100.0D, (double) (-xzSize)).tex((double) minU, (double) maxV).endVertex();
+        vb.pos(-xzSize, -100.0D,  xzSize).tex((double) minU, (double) minV).endVertex();
+        vb.pos( xzSize, -100.0D,  xzSize).tex((double) maxU, (double) minV).endVertex();
+        vb.pos( xzSize, -100.0D, -xzSize).tex((double) maxU, (double) maxV).endVertex();
+        vb.pos(-xzSize, -100.0D, -xzSize).tex((double) minU, (double) maxV).endVertex();
         tessellator.draw();
     }
 
     private void renderSun() {
-        float xzSize = 30F;
+        double xzSize = 30F;
+
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
 
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vb.pos((double) (-xzSize), 100.0D, (double) (-xzSize)).tex(0.0D, 0.0D).endVertex();
-        vb.pos((double) xzSize, 100.0D, (double) (-xzSize)).tex(1.0D, 0.0D).endVertex();
-        vb.pos((double) xzSize, 100.0D, (double) xzSize).tex(1.0D, 1.0D).endVertex();
-        vb.pos((double) (-xzSize), 100.0D, (double) xzSize).tex(0.0D, 1.0D).endVertex();
+        vb.pos(-xzSize, 100.0D, -xzSize).tex(0.0D, 0.0D).endVertex();
+        vb.pos( xzSize, 100.0D, -xzSize).tex(1.0D, 0.0D).endVertex();
+        vb.pos( xzSize, 100.0D,  xzSize).tex(1.0D, 1.0D).endVertex();
+        vb.pos(-xzSize, 100.0D,  xzSize).tex(0.0D, 1.0D).endVertex();
         tessellator.draw();
     }
 

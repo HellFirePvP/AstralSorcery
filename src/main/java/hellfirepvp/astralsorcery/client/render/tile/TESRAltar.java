@@ -9,17 +9,13 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.item.ItemFocusLens;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -96,10 +92,10 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     }
 
     private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {
-        Constellation c = te.getFocusedConstellation();
+        IConstellation c = te.getFocusedConstellation();
         if(c == null) return;
 
-        float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(te.getWorld());
+        float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(te.getWorld());
 
         int max = 5000;
         int t = ClientScheduler.getClientTick() % max;
@@ -110,12 +106,10 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        RenderConstellation.renderConstellationIntoWorldFlat(c, c.queryTier().calcRenderColor().brighter().brighter(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
+        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
     }
 
     private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {
-        ItemStack focus = te.getFocusLensStack();
-        if(focus == null || focus.getItem() == null || !(focus.getItem() instanceof ItemFocusLens)) return;
 
     }
 

@@ -8,11 +8,10 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -42,20 +41,20 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     private static final Map<Integer, Point> offsetMap = new HashMap<>(); //we put 6 on "1" page/screen
 
     private final boolean isDiscovered;
-    private List<Constellation> constellations;
+    private List<IConstellation> constellations;
     private String unlocTitle;
     private int pageId = 0;
 
-    private Map<Rectangle, Constellation> rectCRenderMap = new HashMap<>();
+    private Map<Rectangle, IConstellation> rectCRenderMap = new HashMap<>();
 
     private Rectangle rectBack, rectPrev, rectNext;
 
-    public GuiJournalConstellationCluster(int bookmark, int pageId, boolean discoveredTier, String unlocTitle, List<Constellation> constellations) {
+    public GuiJournalConstellationCluster(int bookmark, int pageId, boolean discoveredTier, String unlocTitle, List<IConstellation> constellations) {
         this(bookmark, discoveredTier, unlocTitle, constellations);
         this.pageId = pageId;
     }
 
-    public GuiJournalConstellationCluster(int bookmark, boolean discoveredTier, String unlocTitle, List<Constellation> constellations) {
+    public GuiJournalConstellationCluster(int bookmark, boolean discoveredTier, String unlocTitle, List<IConstellation> constellations) {
         super(bookmark);
         this.unlocTitle = unlocTitle;
         this.isDiscovered = discoveredTier;
@@ -84,9 +83,9 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     private void drawConstellations() {
         Point mouse = getCurrentMousePoint();
-        List<Constellation> cs = constellations.subList(pageId * 6, Math.min((pageId + 1) * 6, constellations.size()));
+        List<IConstellation> cs = constellations.subList(pageId * 6, Math.min((pageId + 1) * 6, constellations.size()));
         for (int i = 0; i < cs.size(); i++) {
-            Constellation c = cs.get(i);
+            IConstellation c = cs.get(i);
             Point p = offsetMap.get(i);
             rectCRenderMap.put(drawConstellationRect(c, guiLeft + p.x, guiTop + p.y, zLevel, mouse, null), c);
         }
@@ -99,7 +98,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             float b = 0xDD / 255F;
 
             GL11.glColor4f(r, g, b, 1F);
-            String translated = I18n.translateToLocal(unlocTitle).toUpperCase();
+            String translated = I18n.format(unlocTitle).toUpperCase();
             fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
             GL11.glColor4f(1F, 1F, 1F, 1F);
         }
@@ -179,7 +178,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         }
     }
 
-    protected static Rectangle drawConstellationRect(Constellation display, double offsetX, double offsetY, float zLevel, Point mouse, @Nullable String specTitle) {
+    protected static Rectangle drawConstellationRect(IConstellation display, double offsetX, double offsetY, float zLevel, Point mouse, @Nullable String specTitle) {
         Rectangle rect = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), width, height);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -209,7 +208,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         GL11.glColor4f(r, g, b, 1F);
 
-        String trName = specTitle == null ? I18n.translateToLocal(display.getName()).toUpperCase() : I18n.translateToLocal(specTitle).toUpperCase();
+        String trName = specTitle == null ? I18n.format(display.getUnlocalizedName()).toUpperCase() : I18n.format(specTitle).toUpperCase();
         OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
         fontRenderer.font_size_multiplicator = 0.04F;
         float fullLength = (width / 2) - (((float) fontRenderer.getStringWidth(trName)) / 2F);
@@ -237,7 +236,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         }
         for (Rectangle r : rectCRenderMap.keySet()) {
             if(r.contains(p)) {
-                Constellation c = rectCRenderMap.get(r);
+                IConstellation c = rectCRenderMap.get(r);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationDetails(this, c, isDiscovered));
             }
         }

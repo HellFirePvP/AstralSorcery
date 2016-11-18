@@ -1,16 +1,16 @@
 package hellfirepvp.astralsorcery.common.world;
 
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.border.WorldBorder;
@@ -38,6 +38,10 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     public WorldProviderBrightnessInj(World world, WorldProvider parent) {
         this.parentOvrProvider = parent;
         this.parentWorld = world;
+    }
+
+    private WorldSkyHandler getSkyHandler() {
+        return ConstellationSkyHandler.getInstance().getWorldHandler(parentWorld);
     }
 
     @Override
@@ -124,33 +128,36 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     @Override
     @SideOnly(Side.CLIENT)
     public float getSunBrightness(float parTicks) {
-        if (CelestialHandler.dayOfSolarEclipse && CelestialHandler.solarEclipse) {
+        WorldSkyHandler handle = getSkyHandler();
+        if(handle != null) {
             float sunBr = parentWorld.getSunBrightnessBody(parTicks);
-            int eclTick = CelestialHandler.solarEclipseTick;
-            if (eclTick >= CelestialHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= CelestialHandler.SOLAR_ECLIPSE_HALF_DUR;
+            int eclTick = handle.solarEclipseTick;
+            if (eclTick >= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
+                eclTick -= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
             } else {
-                eclTick = CelestialHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
+                eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
             }
-            float perc = ((float) eclTick) / CelestialHandler.SOLAR_ECLIPSE_HALF_DUR;
+            float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
             return sunBr * (0.15F + (0.85F * perc));
         }
-
         return parentWorld.getSunBrightnessBody(parTicks);
     }
 
     @Override
     public float getSunBrightnessFactor(float parTicks) {
-        if (CelestialHandler.dayOfSolarEclipse && CelestialHandler.solarEclipse) {
-            float sunBr = parentWorld.getSunBrightnessFactor(parTicks);
-            int eclTick = CelestialHandler.solarEclipseTick;
-            if (eclTick >= CelestialHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= CelestialHandler.SOLAR_ECLIPSE_HALF_DUR;
-            } else {
-                eclTick = CelestialHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
+        WorldSkyHandler handle = getSkyHandler();
+        if(handle != null) {
+            if (handle.dayOfSolarEclipse && handle.solarEclipse) {
+                float sunBr = parentWorld.getSunBrightnessFactor(parTicks);
+                int eclTick = handle.solarEclipseTick;
+                if (eclTick >= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR) { //fading out
+                    eclTick -= ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+                } else {
+                    eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
+                }
+                float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
+                return sunBr * (0.15F + (0.85F * perc));
             }
-            float perc = ((float) eclTick) / CelestialHandler.SOLAR_ECLIPSE_HALF_DUR;
-            return sunBr * (0.15F + (0.85F * perc));
         }
         return parentWorld.getSunBrightnessFactor(parTicks);
     }

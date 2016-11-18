@@ -1,17 +1,19 @@
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -40,52 +42,52 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         if(shift && out.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
 
-            Constellation c = getConstellation(stack);
+            IMajorConstellation c = getMainConstellation(stack);
             if(c != null) {
-                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.attuned") + " " + TextFormatting.BLUE + I18n.translateToLocal(c.getName()));
+                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.attuned") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
                 } else if(!out.get()) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                     out = Optional.of(true);
                 }
             }
 
-            Constellation tr = getTrait(stack);
+            IMinorConstellation tr = getTrait(stack);
             if(tr != null) {
-                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("crystal.trait") + " " + TextFormatting.BLUE + I18n.translateToLocal(tr.getName()));
+                if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait") + " " + TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()));
                 } else if(!out.get()) {
-                    tooltip.add(TextFormatting.GRAY + I18n.translateToLocal("progress.missing.knowledge"));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
             }
         }
     }
 
-    public static void applyTrait(ItemStack stack, Constellation trait) {
+    public static void applyTrait(ItemStack stack, IMinorConstellation trait) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
-        cmp.setString("trait", trait.getName());
+        cmp.setString("trait", trait.getUnlocalizedName());
     }
 
-    public static Constellation getTrait(ItemStack stack) {
+    public static IMinorConstellation getTrait(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         String strCName = cmp.getString("trait");
-        return ConstellationRegistry.getConstellationByName(strCName);
+        return (IMinorConstellation) ConstellationRegistry.getConstellationByName(strCName);
     }
 
-    public static void applyConstellation(ItemStack stack, Constellation constellation) {
+    public static void applyMainConstellation(ItemStack stack, IMajorConstellation constellation) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static Constellation getConstellation(ItemStack stack) {
+    public static IMajorConstellation getMainConstellation(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
-        return Constellation.readFromNBT(NBTHelper.getPersistentData(stack));
+        return (IMajorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
 }

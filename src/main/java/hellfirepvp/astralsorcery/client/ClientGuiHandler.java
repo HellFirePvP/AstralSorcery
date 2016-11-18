@@ -8,8 +8,8 @@ import hellfirepvp.astralsorcery.client.gui.container.GuiAltarAttenuation;
 import hellfirepvp.astralsorcery.client.gui.container.GuiAltarConstellation;
 import hellfirepvp.astralsorcery.client.gui.container.GuiAltarDiscovery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -49,7 +49,7 @@ public class ClientGuiHandler {
                 }*/
                 return new GuiTelescope(player, (TileTelescope) t);
             case CONSTELLATION_PAPER:
-                Constellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
+                IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
                 if(c == null) {
                     AstralSorcery.log.info("Tried opening ConstellationPaper GUI with out-of-range constellation id!");
                     return null;

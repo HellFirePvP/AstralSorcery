@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import net.minecraft.block.state.IBlockState;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,6 +31,6 @@ public interface IBlockStarlightRecipient {
      * @param starlightType the constellation type of the starlight received
      * @param amount the amount received
      */
-    public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount);
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount);
 
 }

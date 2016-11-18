@@ -2,7 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +27,7 @@ public abstract class CEffectEntityCollect<T extends Entity> extends Constellati
 
     private static AxisAlignedBB baseBoundingBox = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
-    public CEffectEntityCollect(Constellation constellation, String cfgName, double defaultRange, Class<T> entityClass, Predicate<T> filter) {
+    public CEffectEntityCollect(IMajorConstellation constellation, String cfgName, double defaultRange, Class<T> entityClass, Predicate<T> filter) {
         super(constellation, cfgName);
         this.classToSearch = entityClass;
         this.searchFilter = filter;

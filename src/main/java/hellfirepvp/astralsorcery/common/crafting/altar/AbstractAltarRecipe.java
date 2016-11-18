@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
@@ -10,7 +11,6 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -70,7 +70,8 @@ public abstract class AbstractAltarRecipe {
         if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
         if(this instanceof INighttimeRecipe) {
-            if(CelestialHandler.calcDaytimeDistribution(altar.getWorld()) < 0.65) return false;
+            WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(altar.getWorld());
+            if(handle != null && handle.getCurrentDaytimeDistribution(altar.getWorld()) < 0.65) return false;
         }
 
         ItemStack[] altarInv = new ItemStack[9];

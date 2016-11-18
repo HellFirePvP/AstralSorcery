@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +30,6 @@ public interface ITransmissionReceiver extends IPrismTransmissionNode {
         return false;
     }
 
-    public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount);
+    public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount);
 
 }

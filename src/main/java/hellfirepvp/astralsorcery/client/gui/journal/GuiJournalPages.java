@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
@@ -12,8 +11,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -98,7 +97,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             TextureHelper.refreshTextureBindState();
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
-            String name = I18n.translateToLocal(unlocTitle);
+            String name = I18n.format(unlocTitle);
             double width = fontRendererObj.getStringWidth(name);
             GL11.glTranslated(guiLeft + 117, guiTop + 22, 0);
             GL11.glScaled(1.3, 1.3, 1.3);

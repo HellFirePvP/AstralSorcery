@@ -7,8 +7,9 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -43,7 +44,7 @@ public class TileCollectorCrystal extends TileSourceBase {
     private CrystalProperties usedCrystalProperties;
     private boolean playerMade;
     private boolean enhanced = false;
-    private Constellation associatedType;
+    private IMajorConstellation associatedType;
 
     private Object[] orbitals = new Object[4];
 
@@ -97,11 +98,11 @@ public class TileCollectorCrystal extends TileSourceBase {
         return usedCrystalProperties;
     }
 
-    public Constellation getConstellation() {
+    public IMajorConstellation getConstellation() {
         return associatedType;
     }
 
-    public void onPlace(Constellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public void onPlace(IMajorConstellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.playerMade = player;
         this.usedCrystalProperties = properties;
@@ -143,7 +144,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         super.readCustomNBT(compound);
 
         this.playerMade = compound.getBoolean("player");
-        this.associatedType = Constellation.readFromNBT(compound);
+        this.associatedType = (IMajorConstellation) IConstellation.readFromNBT(compound);
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
         this.enhanced = compound.getBoolean("enhanced");

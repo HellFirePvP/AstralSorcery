@@ -6,8 +6,9 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.IPlayerCapabilityPerks;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
@@ -49,6 +50,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -101,6 +103,12 @@ public class CommonProxy implements IGuiHandler {
 
         registerOreDictEntries();
         RegistryAchievements.init();
+
+        registerCapabilities();
+    }
+
+    private void registerCapabilities() {
+        CapabilityManager.INSTANCE.register(IPlayerCapabilityPerks.class, new IPlayerCapabilityPerks.Storage(), IPlayerCapabilityPerks.Impl.class);
     }
 
     private void registerOreDictEntries() {
@@ -131,7 +139,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     protected void registerTickHandlers(TickManager manager) {
-        manager.register(new CelestialHandler.CelestialTickHandler());
+        manager.register(ConstellationSkyHandler.getInstance());
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
@@ -219,6 +227,7 @@ public class CommonProxy implements IGuiHandler {
         public Class<? extends TileEntity> getTileClass() {
             return tileClass;
         }
+
     }
 
 }

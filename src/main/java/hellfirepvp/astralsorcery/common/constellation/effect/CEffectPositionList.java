@@ -1,18 +1,9 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,7 +14,7 @@ import java.util.List;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(Constellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+    public CEffectPositionList(IMajorConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
         super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 

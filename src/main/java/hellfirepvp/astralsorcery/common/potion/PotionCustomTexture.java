@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,6 +23,8 @@ import java.awt.*;
  * Date: 13.11.2016 / 01:36
  */
 public abstract class PotionCustomTexture extends Potion {
+
+    protected static final Random rand = new Random();
 
     protected PotionCustomTexture(boolean isBadEffectIn, int liquidColorIn) {
         super(isBadEffectIn, liquidColorIn);

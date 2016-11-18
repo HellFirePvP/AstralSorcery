@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -19,80 +20,64 @@ import java.util.stream.Collectors;
  */
 public class ConstellationRegistry {
 
-    private static TreeMap<Integer, Tier> tiers = new TreeMap<>();
+    private static List<IMajorConstellation> majorConstellations = new LinkedList<>();
+    private static List<IMinorConstellation> minorConstellations = new LinkedList<>();
 
-    public static void registerConstellation(int tier, Constellation constellation) {
-        Tier t = getTier(tier);
-        if (t == null) {
-            AstralSorcery.log.warn("Tried to register Constellation on TierID=" + tier + " which does not exist!");
-            return;
+    private static List<IConstellation> generalConstellationList = new LinkedList<>();
+
+    public static <T extends IConstellation> void registerConstellation(T constellation) {
+        if(constellation instanceof IMajorConstellation) {
+            majorConstellations.add((IMajorConstellation) constellation);
+        } else if(constellation instanceof IMinorConstellation) {
+            minorConstellations.add((IMinorConstellation) constellation);
+        } else {
+            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major: " + constellation.toString());
+            AstralSorcery.log.warn("Skipping specific constellation registration...");
         }
-        t.addConstellation(constellation);
-    }
-
-    public static void registerTier(int tierNumber, ProgressionTier progressionNeeded, Tier.RInformation renderInfo, float chanceForShowingUp) {
-        registerTier(tierNumber, progressionNeeded, renderInfo, chanceForShowingUp, null);
-    }
-
-    public static void registerTier(int tierNumber, ProgressionTier progressionNeeded, Tier.RInformation renderInfo, float chanceForShowingUp, AppearanceCondition condition) {
-        if (tiers.containsKey(tierNumber)) return;
-        if (tierNumber < 0 || (tierNumber > 0 && !tiers.containsKey(tierNumber - 1))) return;
-        Tier t = new Tier(tierNumber, progressionNeeded, chanceForShowingUp, renderInfo, condition);
-        tiers.put(tierNumber, t);
-    }
-
-    public static Tier getTier(int tierNumber) {
-        return tiers.get(tierNumber);
+        generalConstellationList.add(constellation);
     }
 
     @Nullable
-    public static Constellation getConstellationByName(String name) {
+    public static IConstellation getConstellationByName(String name) {
         if(name == null) return null;
 
-        for (Tier tier : tiers.values()) {
-            for (Constellation c : tier.getConstellations()) {
-                if (c.getName().equals(name)) return c;
-            }
+        for(IConstellation c : majorConstellations) {
+            if(c.getUnlocalizedName().equals(name)) return c;
+        }
+        for(IConstellation c : minorConstellations) {
+            if(c.getUnlocalizedName().equals(name)) return c;
         }
         return null;
     }
 
-    public static List<Constellation> resolve(List<String> constellationsAsStrings) {
-        List<Constellation> resolved = new LinkedList<>();
+    public static List<IConstellation> resolve(List<String> constellationsAsStrings) {
+        List<IConstellation> resolved = new LinkedList<>();
         for (String s : constellationsAsStrings) {
-            Constellation c = getConstellationByName(s);
+            IConstellation c = getConstellationByName(s);
             if(c != null) resolved.add(c);
         }
         return resolved;
     }
 
-    public static int getHighestTierNumber() {
-        return tiers.lastKey();
+    public static List<IMajorConstellation> getMajorConstellations() {
+        return Collections.unmodifiableList(majorConstellations);
     }
 
-    public static Collection<Tier> ascendingTiers() {
-        LinkedList<Tier> sortedTiers = new LinkedList<>();
-        for (Integer tierInt : tiers.keySet()) {
-            sortedTiers.addLast(tiers.get(tierInt));
-        }
-        return sortedTiers;
+    public static List<IMinorConstellation> getMinorConstellations() {
+        return Collections.unmodifiableList(minorConstellations);
     }
 
-    public static List<Constellation> getAllConstellations() {
-        List<Constellation> constellations = new LinkedList<>();
-        for (Tier t : ascendingTiers()) {
-            constellations.addAll(t.getConstellations().stream().collect(Collectors.toList()));
-        }
-        return constellations;
+    public static List<IConstellation> getAllConstellations() {
+        return Collections.unmodifiableList(generalConstellationList);
     }
 
-    public static int getConstellationId(Constellation c) {
-        List<Constellation> allConstellations = getAllConstellations();
+    public static int getConstellationId(IConstellation c) {
+        List<IConstellation> allConstellations = getAllConstellations();
         return allConstellations.indexOf(c);
     }
 
-    public static Constellation getConstellationById(int id) {
-        List<Constellation> allConstellations = getAllConstellations();
+    public static IConstellation getConstellationById(int id) {
+        List<IConstellation> allConstellations = getAllConstellations();
         return allConstellations.get(id);
     }
 

@@ -1,14 +1,11 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
@@ -149,7 +146,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, Constellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount) {
         if(starlightType.equals(Constellations.horologium) && amount >= 3) {
             TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
             if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (900 / amount)))) == 0) {

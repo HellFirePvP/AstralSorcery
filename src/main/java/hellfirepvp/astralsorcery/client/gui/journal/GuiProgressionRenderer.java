@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -238,7 +238,7 @@ public class GuiProgressionRenderer {
 
         if(focusedClusterMouse != null) {
             String name = focusedClusterMouse.getUnlocalizedName();
-            name = I18n.translateToLocal(name);
+            name = I18n.format(name);
             if(clusterText != null && !clusterText.getText().equalsIgnoreCase(name)) {
                 clusterText = null;
             }
@@ -278,7 +278,7 @@ public class GuiProgressionRenderer {
 
             if(clusterText.aboutToBeRemoved() && focusedClusterMouse != null) {
                 String name = focusedClusterMouse.getUnlocalizedName();
-                name = I18n.translateToLocal(name);
+                name = I18n.format(name);
                 int time = (name.length() * 10) - 20;
                 clusterText.forceTicks(time);
             } else if(focusedClusterMouse == null && !clusterText.aboutToBeRemoved()) {

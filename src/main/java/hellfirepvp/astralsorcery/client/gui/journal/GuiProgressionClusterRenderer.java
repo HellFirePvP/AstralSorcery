@@ -18,8 +18,8 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -92,7 +92,7 @@ public class GuiProgressionClusterRenderer {
                     GL11.glTranslated(r.getX(), r.getY(), 0);
                     GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
                     String name = clickableNodes.get(r).getUnLocalizedName();
-                    name = I18n.translateToLocal(name);
+                    name = I18n.format(name);
                     RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00100033), new Color(0xf0100010), Minecraft.getMinecraft().fontRendererObj);
                     GL11.glPopMatrix();
                 }

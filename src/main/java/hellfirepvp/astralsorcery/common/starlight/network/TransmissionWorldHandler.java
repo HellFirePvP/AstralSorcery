@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -80,7 +80,7 @@ public class TransmissionWorldHandler {
 
                 TransmissionChain chain = cachedSourceChain.get(source);
                 double starlight = source.produceStarlightTick(world, at);
-                Constellation type = source.getStarlightType();
+                IMajorConstellation type = source.getStarlightType();
 
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {

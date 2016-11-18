@@ -3,12 +3,13 @@ package hellfirepvp.astralsorcery.common.tile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.common.constellation.CelestialHandler;
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAra;
@@ -30,8 +31,6 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,9 +48,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -119,7 +116,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         if(worldObj.isRemote && working) {
-            float alphaDaytime = (float) CelestialHandler.calcDaytimeDistribution(worldObj);
+            float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldObj);
             alphaDaytime *= 0.8F;
             boolean isDay = alphaDaytime <= 1E-4;
 
@@ -146,7 +143,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             ItemStack crystal = getStackInSlot(0);
             if(crystal != null && crystal.getItem() != null &&
                     crystal.getItem() instanceof ItemTunedCrystalBase) {
-                Constellation ch = ItemTunedCrystalBase.getConstellation(crystal);
+                IMajorConstellation ch = ItemTunedCrystalBase.getMainConstellation(crystal);
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
@@ -189,7 +186,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @Nullable
     @SideOnly(Side.CLIENT)
-    public Constellation getDisplayConstellation() {
+    public IMajorConstellation getDisplayConstellation() {
         if(offsetMirrorPositions.size() != TransmissionReceiverRitualPedestal.MAX_MIRROR_COUNT)
             return null;
         return getRitualConstellation();
@@ -201,11 +198,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     }
 
     @Nullable
-    public Constellation getRitualConstellation() {
+    public IMajorConstellation getRitualConstellation() {
         ItemStack crystal = getStackInSlot(0);
         if(crystal != null && crystal.getItem() != null &&
                 crystal.getItem() instanceof ItemTunedCrystalBase) {
-            return ItemTunedCrystalBase.getConstellation(crystal);
+            return ItemTunedCrystalBase.getMainConstellation(crystal);
         }
         return null;
     }
@@ -266,8 +263,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             if(in != null && in.getItem() != null &&
                     in.getItem() instanceof ItemTunedCrystalBase) {
                 CrystalProperties properties = CrystalProperties.getCrystalProperties(in);
-                Constellation tuned = ItemTunedCrystalBase.getConstellation(in);
-                Constellation trait = ItemTunedCrystalBase.getTrait(in);
+                IMajorConstellation tuned = ItemTunedCrystalBase.getMainConstellation(in);
+                IMinorConstellation trait = ItemTunedCrystalBase.getTrait(in);
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
                     recNode.updateCrystalProperties(worldObj, properties, tuned, trait);
@@ -401,7 +398,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private int ticksTicking = 0;
 
         private boolean doesSeeSky, hasMultiblock;
-        private Constellation channeling, trait;
+        private IMajorConstellation channeling;
+        private IMinorConstellation trait;
         private CrystalProperties properties;
         private int channeled = 0;
 
@@ -423,7 +421,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(channeling != null && properties != null && hasMultiblock) {
                 if(ce == null) {
-                    ce = ConstellationEffectRegistry.getEffect(channeling);
+                    ce = channeling.getRitualEffect();
                     if(channeling.equals(Constellations.ara)) {
                         tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getPos(), CEffectAra.treeRange);
                         if(CEffectAra.enabled) {
@@ -472,19 +470,15 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 }
 
                 if(doesSeeSky) {
-                    double perc = 0.2D + (0.8D * CelestialHandler.calcDaytimeDistribution(world));
-                    double collect = perc * CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
-                    collectionChannelBuffer += collect / 2D;
-                    /*if(collectionChannelBuffer <= 0) {
-                        AstralSorcery.log.info("Ended up with < 0 starlight back from gathering it from sky.");
-                        AstralSorcery.log.info("perc: " + perc + ", distr: " + CelestialHandler.calcDaytimeDistribution(world));
-                        AstralSorcery.log.info("distribution: " + CelestialHandler.getCurrentDistribution(channeling, (in) -> in));
-                        AstralSorcery.log.info("collection from properties from distr: " + CrystalCalculations.getCollectionAmt(properties, CelestialHandler.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in))));
-                    }*/
+                    WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+                    if(handle != null) {
+                        double perc = 0.2D + (0.8D * handle.getCurrentDaytimeDistribution(world));
+                        double collect = perc * CrystalCalculations.getCollectionAmt(properties, handle.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
+                        collectionChannelBuffer += collect / 2D;
+                    }
                 }
                 if(collectionChannelBuffer > 0) {
                     doMainEffect(world, ce, trait, trait != null && collectionTraitBuffer > 0);
-                    //if(collectionChannelBuffer <= 0) AstralSorcery.log.info("Ended up with < 0 starlight back from main effect.");
 
                     if(tryIncrementChannelingTimer())
                         channeled++;
@@ -537,7 +531,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         //TODO occasionally returns with <0?
-        private void doMainEffect(World world, ConstellationEffect ce, @Nullable Constellation trait, boolean mayDoTrait) {
+        private void doMainEffect(World world, ConstellationEffect ce, @Nullable IMinorConstellation trait, boolean mayDoTrait) {
             double maxDrain = 20D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
@@ -599,7 +593,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, Constellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
             if(channeling != null && hasMultiblock) {
                 if(channeling == type) {
                     collectionChannelBuffer += amount;
@@ -698,8 +692,24 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             hasMultiblock = compound.getBoolean("hasMultiblock");
             channeled = compound.getInteger("channeled");
             properties = CrystalProperties.readFromNBT(compound);
-            channeling = Constellation.readFromNBT(compound, Constellation.getDefaultSaveKey() + "Normal");
-            trait = Constellation.readFromNBT(compound, Constellation.getDefaultSaveKey() + "Trait");
+            IConstellation c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Normal");
+            if(c != null && !(c instanceof IMajorConstellation)) {
+                AstralSorcery.log.warn("[AstralSorcery] Tried to load RitualPedestal from NBT with a non-Major constellation as effect. Ignoring constellation...");
+                AstralSorcery.log.warn("[AstralSorcery] Block affected is at " + getPos());
+            } else if(c == null) {
+                channeling = null;
+            } else {
+                channeling = (IMajorConstellation) c;
+            }
+            c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
+            if(c != null && !(c instanceof IMinorConstellation)) {
+                AstralSorcery.log.warn("[AstralSorcery] Tried to load RitualPedestal from NBT with a non-Minor constellation as trait. Ignoring constellation...");
+                AstralSorcery.log.warn("[AstralSorcery] Block affected is at " + getPos());
+            } else if(c == null) {
+                trait = null;
+            } else {
+                trait = (IMinorConstellation) c;
+            }
 
             offsetMirrors.clear();
             NBTTagList listPos = compound.getTagList("positions", 10);
@@ -708,8 +718,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
 
             if(channeling != null) {
-                ce = ConstellationEffectRegistry.getEffect(channeling);
-                if(compound.hasKey("effect")) {
+                ce = channeling.getRitualEffect();
+                if(compound.hasKey("effect") && ce != null) {
                     NBTTagCompound cmp = compound.getCompoundTag("effect");
                     ce.readFromNBT(cmp);
                 }
@@ -736,10 +746,10 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 properties.writeToNBT(compound);
             }
             if(channeling != null) {
-                channeling.writeToNBT(compound, Constellation.getDefaultSaveKey() + "Normal");
+                channeling.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "Normal");
             }
             if(trait != null) {
-                trait.writeToNBT(compound, Constellation.getDefaultSaveKey() + "Trait");
+                trait.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
             }
             if(ce != null) {
                 NBTTagCompound tag = new NBTTagCompound();
@@ -767,7 +777,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             this.hasMultiblock = hasMultiblock;
         }
 
-        public void updateCrystalProperties(World world, CrystalProperties properties, Constellation channeling, Constellation trait) {
+        public void updateCrystalProperties(World world, CrystalProperties properties, IMajorConstellation channeling, IMinorConstellation trait) {
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;

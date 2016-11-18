@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
-import hellfirepvp.astralsorcery.common.constellation.Constellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -39,7 +39,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         ItemStack center = centralGridMap.get(ShapedRecipeSlot.CENTER);
         if(center == null || center.getItem() == null || !(center.getItem() instanceof ItemTunedCrystalBase)) return null;
         ItemStack out = super.getOutput(centralGridMap, altar);
-        Constellation attuned = ItemTunedCrystalBase.getConstellation(center);
+        IMajorConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);
         if(attuned == null) return null;
         ItemCollectorCrystal.setConstellation(out, attuned);
         return out;

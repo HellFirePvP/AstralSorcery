@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.LootTableUtil;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -398,7 +399,7 @@ public class StructureAncientShrine extends StructureBlockArray {
             public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
                     if(te instanceof TileCollectorCrystal) {
                     ((TileCollectorCrystal) te).onPlace(
-                            ConstellationRegistry.getTier(4).getRandomConstellation(STATIC_RAND),
+                            MiscUtils.getRandomEntry(ConstellationRegistry.getMajorConstellations(), STATIC_RAND),
                             CrystalProperties.createStructural(), false,
                             BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
                 }
