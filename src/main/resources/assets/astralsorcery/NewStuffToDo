@@ -1,0 +1,47 @@
+Changes:
+
+- Constellation-Tiers removed
+- Split constellations into Major and Minor ones
+- Multiple major and multiple minor may show up each day
+- Crystal attunement may only happen with Major constellations
+- Starlight may only be collected/transmitted/received from major constellations
+- Minor constellations may still be used as traits
+- Only major constellations provide a ritual pedestal AOE
+- Constellation discovery now in telescope-tiers:
+    - Hand-Telescope (max. 1 major discoverable during 1 night)
+    - Telescope (all major ones that are visible in the night are discoverable)
+    - Observatory (all major ones and some minor ones are visible/discoverable)
+- Player may attune to 1 major constellation early on
+    - the ritual may require the player to 'place' blocks that represent the constellation's stars in a 32x32 field.
+    - Depending on the constellation the player may progress through a 'Skyrim-skills'-like perk/buffs/skill system
+    - Mainly small buffs/effects that should fit the constellation's meaning
+    - The last unlockable buff will be a powerful active ability
+    - The unlocking-progression should be loosely tied to the progression in the mod
+- In order to see details of a constellation in the book, the player needs to store the constellation papers into the book
+    - GUI for that can be opened with shift-right-click with the book
+- New book section where you can see your constellation as well as the perk/buff-progression and things
+    - Unlocking the next perks/buffs will be in that gui
+    - Short description will be given when hovered over it.
+
+Open tasks/questions:
+Code & Design-Wise:
+
+- Write up the algorithm that chooses constellations for each night
+- Assoicate those constellations with render position informations
+- Think about the player-attunement ritual
+    - Requires a lot of space 32x32
+    - Has no central block (center is in some block corners...)
+    - Design & Logic lore-wise
+    - Further purposes after 1st use/attunement?
+- Select major constellations and their themes
+    - If possible think about some where a variety of effects and more general usabilities are possible
+    - Try to avoid association of those effects with items
+    - Find at least 5 perks/passive buffs for the constellation
+    
+Graphical-Wise:
+
+- New book section background + maybe book texture? Keep using the one that's also used for 'Knowledge'?
+    - 1... uuh... hover image? look up videos/screenshots of skyrim's skill system to see what i mean..
+    - Star (idle + active) + Star-Connection (idle + active) textures for those
+    - a more special Star (idle + active) texture for the final star that unlocks the ability
+
