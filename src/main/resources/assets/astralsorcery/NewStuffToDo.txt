@@ -44,4 +44,5 @@ Graphical-Wise:
     - 1... uuh... hover image? look up videos/screenshots of skyrim's skill system to see what i mean..
     - Star (idle + active) + Star-Connection (idle + active) textures for those
     - a more special Star (idle + active) texture for the final star that unlocks the ability
-
+- Hand-Telescope item-icon and GUI
+- New/Changed telescope GUI
