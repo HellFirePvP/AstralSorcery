@@ -55,6 +55,6 @@ public class Constellations {
     public static Constellation ss_scorpio; //
     public static Constellation libra; //Balance? uuh...
     public static Constellation ss_leo;
-    public static Constellation ss_cancer; //Cancer music playing 24/7 LUL*/
+    public static Constellation ss_cancer;*/
 
 }

@@ -46,3 +46,38 @@ Graphical-Wise:
     - a more special Star (idle + active) texture for the final star that unlocks the ability
 - Hand-Telescope item-icon and GUI
 - New/Changed telescope GUI
+
+Constellation Perk/Buff ideas:
+
+-> Damage/Offense (?)
+    -> Perks/Buff-Ideas:
+        - Small overall damage increase
+        - Upon killing something, damage and movement speed is increased for short time
+        - more damage against a target that's further away
+        - more damage against a target after it's been knocked back
+    -> Ability:
+
+-> Defence/Shielding (?)
+    -> Perks/Buff-Ideas:
+        - A shield regenerates slowly over time, preventing incoming damage
+        - A perk that increases the amount of damage shielded
+        - As long as you're 'seeing the sky' you take % less damage
+        - % chance that projectiles don't damage you if they hit you
+    -> Ability: A short shockwave, destroying all nearby projectiles, knocking all entities back, dealing damage to those. Refreshes shield to full.
+
+-> Travel
+    -> Perks/Buff-Ideas:
+        - generally small % additional movement speed
+    -> Ability:
+
+-> Creation
+    -> Perks/Buff-Ideas:
+        - low chance that something close to you might get bonemeal'd
+        - chance that a baby animal close to you grows into an adult
+        - low chance that a cleanstone somewhere around you turns into an ore
+    -> Ability: Wave of Creation -> Shockwave of all above + turns dirt into grass + vanilla animal spawn + plants saplings + bonemeals those
+
+-> Destruction
+    -> Perks/Buff-Ideas:
+        -
+    -> Ability:
