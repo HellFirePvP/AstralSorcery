@@ -8,7 +8,6 @@ import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -129,8 +128,9 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         if(te == null) return;
 
         IMajorConstellation c = ItemCollectorCrystal.getConstellation(stack);
-        if(c == null) c = Constellations.ara; //Default out
-        te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
+        if(c != null) {
+            te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
+        }
     }
 
     @Override

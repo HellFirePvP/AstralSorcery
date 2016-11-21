@@ -31,7 +31,6 @@ public class ItemsAS {
     public static ItemCelestialCrystal celestialCrystal;
     public static ItemTunedRockCrystal tunedRockCrystal;
     public static ItemTunedCelestialCrystal tunedCelestialCrystal;
-    //public static ItemEntityPlacer entityPlacer;
     public static ItemLinkingTool linkingTool;
     public static ItemJournal journal;
 

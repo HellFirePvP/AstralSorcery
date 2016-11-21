@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -65,6 +66,8 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandAstralSorcery());
+
+        ServerData.reloadData();
     }
 
     @Mod.EventHandler

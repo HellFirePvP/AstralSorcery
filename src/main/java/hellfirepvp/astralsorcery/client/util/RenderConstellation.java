@@ -86,9 +86,9 @@ public class RenderConstellation {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
 
-        double s = 1D / 32D * scale;
+        double s = 1D / 31D * scale;
 
-        GL11.glTranslated(-16 * s, 0, -16 * s);
+        GL11.glTranslated(-15.5D * s, 0, -15.5D * s);
 
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -210,8 +210,8 @@ public class RenderConstellation {
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
-        double ulength = ((double) width) / 32;
-        double vlength = ((double) height) / 32;
+        double ulength = ((double) width) / 31;
+        double vlength = ((double) height) / 31;
 
         Vector3 offsetVec = new Vector3(offsetX, offsetY, zLevel);
         RenderAstralSkybox.TEX_CONNECTION.bind();

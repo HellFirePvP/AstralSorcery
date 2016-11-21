@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -47,6 +48,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class EventHandlerServer {
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
         int id = w.provider.getDimension();
-        if(Config.isDimensionWhitelisted(id)) {
+        if(DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER)) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
             AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");

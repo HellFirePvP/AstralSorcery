@@ -3,7 +3,6 @@ package hellfirepvp.astralsorcery.common.starlight.network.handlers;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
@@ -38,12 +37,6 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
         long diff = ms - node.lastMSrec;
         if(diff >= 18_000) node.accCharge = 0;
         node.accCharge += amount;
-        if(starlightType == Constellations.mineralis) {
-            node.accCharge += amount * 6;
-        }
-        if(starlightType == Constellations.horologium) {
-            node.accCharge += amount * 2;
-        }
         node.lastMSrec = ms;
 
         PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.STARMETAL_ORE_CHARGE, pos.getX(), pos.getY(), pos.getZ());

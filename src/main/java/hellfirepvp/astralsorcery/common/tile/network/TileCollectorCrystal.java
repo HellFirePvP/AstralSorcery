@@ -52,7 +52,12 @@ public class TileCollectorCrystal extends TileSourceBase {
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote) setEnhanced(true);
+        if(!worldObj.isRemote) {
+            setEnhanced(true);
+            if(ticksExisted > 4 && associatedType == null) {
+                getWorld().setBlockToAir(getPos());
+            }
+        }
 
         if(worldObj.isRemote && enhanced && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             playEnhancedEffects();

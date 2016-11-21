@@ -35,8 +35,8 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public StarLocation addStar(int x, int y) {
-        x &= 31; //32x32
-        y &= 31;
+        x &= 30; //31x31
+        y &= 30;
         StarLocation star = new StarLocation(x, y);
         if (!starLocations.contains(star)) {
             starLocations.add(star);

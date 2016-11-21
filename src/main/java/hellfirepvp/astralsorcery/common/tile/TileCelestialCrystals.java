@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandl
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import net.minecraft.block.state.IBlockState;
@@ -108,11 +107,7 @@ public class TileCelestialCrystals extends TileSkybound {
                 Collection<IConstellation> activeConstellations =
                         ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(worldObj.provider.getDimension());
                 if(activeConstellations != null) {
-                    if(activeConstellations.contains(Constellations.mineralis)) {
-                        r = 4200;
-                    } else {
-                        r = 9500;
-                    }
+                    r = 9500;
                 }
                 r *= (0.5 + ((1 - dstr) * 0.5));
             }

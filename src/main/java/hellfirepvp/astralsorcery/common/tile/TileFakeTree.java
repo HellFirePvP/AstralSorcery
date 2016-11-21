@@ -1,7 +1,5 @@
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
@@ -21,7 +19,7 @@ import net.minecraft.util.math.ChunkPos;
  */
 public class TileFakeTree extends TileEntityTick {
 
-    public static final IMajorConstellation SUSTAIN_CONSTELLATION = Constellations.ara;
+    //public static final IMajorConstellation SUSTAIN_CONSTELLATION = Constellations.fertilitas;
 
     private BlockPos reference;
     private IBlockState fakedState;
@@ -43,7 +41,7 @@ public class TileFakeTree extends TileEntityTick {
                     return;
                 }
                 if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(reference))) {
-                    TileRitualPedestal ped = MiscUtils.getTileAt(worldObj, reference, TileRitualPedestal.class, true);
+                    /*TileRitualPedestal ped = MiscUtils.getTileAt(worldObj, reference, TileRitualPedestal.class, true);
                     if(ped != null) {
                         IMajorConstellation c = ped.getRitualConstellation();
                         if (c == null || !c.equals(SUSTAIN_CONSTELLATION) || !ped.isWorking() || !ped.hasMultiblock()) {
@@ -51,7 +49,8 @@ public class TileFakeTree extends TileEntityTick {
                         }
                     } else {
                         cleanUp();
-                    }
+                    }*/
+                    cleanUp();
                 }
             }
         }

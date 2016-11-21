@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -36,7 +38,7 @@ public class ConstellationSkyHandler implements ITickHandler {
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         World w = (World) context[0];
-        if(Config.isDimensionWhitelisted(w.provider.getDimension())) {
+        if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), w.isRemote ? Side.CLIENT : Side.SERVER)) {
             WorldSkyHandler handle = worldHandlers.get(w.provider.getDimension());
             if(handle == null) {
                 handle = new WorldSkyHandler();
@@ -53,6 +55,10 @@ public class ConstellationSkyHandler implements ITickHandler {
             return handle.getCurrentDaytimeDistribution(world);
         }
         return 0.1F;
+    }
+
+    public void resetIterationsClient() {
+        worldHandlers.clear();
     }
 
     @Nullable

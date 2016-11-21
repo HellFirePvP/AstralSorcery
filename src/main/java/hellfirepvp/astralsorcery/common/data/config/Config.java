@@ -42,7 +42,6 @@ public class Config {
     @Sync
     public static double swordSharpMultiplier = 0.1;
 
-    @Sync
     public static Integer[] constellationSkyDimWhitelist = new Integer[0];
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
@@ -101,13 +100,6 @@ public class Config {
         for (ConfigEntry ce : dynamicConfigEntries) {
             ce.loadFromConfig(latestConfig);
         }
-    }
-
-    public static boolean isDimensionWhitelisted(int dimId) {
-        for (Integer i : constellationSkyDimWhitelist) {
-            if(i == dimId) return true;
-        }
-        return false;
     }
 
     private static void fillWhitelistIDs(String[] dimWhitelist) {

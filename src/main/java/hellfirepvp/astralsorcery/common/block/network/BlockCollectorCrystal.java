@@ -1,8 +1,9 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,11 +27,13 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        ItemStack stack = new ItemStack(itemIn);
-        ItemCollectorCrystal.setConstellation(stack, Constellations.ara);
-        ItemCollectorCrystal.setType(stack, CollectorCrystalType.ROCK_CRYSTAL);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
-        list.add(stack);
+        for (IMajorConstellation major : ConstellationRegistry.getMajorConstellations()) {
+            ItemStack stack = new ItemStack(itemIn);
+            ItemCollectorCrystal.setConstellation(stack, major);
+            ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
+            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+            list.add(stack);
+        }
     }
 
 
