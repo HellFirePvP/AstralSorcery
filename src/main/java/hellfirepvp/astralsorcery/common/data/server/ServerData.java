@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import scala.actors.threadpool.Arrays;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +28,15 @@ public class ServerData {
 
     public static List<Integer> fileRequestedDimWhitelists = new ArrayList<>();
 
+    @Nullable
     public static File getServerDataFile() {
-        File f = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("AS_FixData.dat");
+        File worldDir;
+        try {
+            worldDir = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getSaveHandler().getWorldDirectory();
+        } catch (Exception exc) {
+            return null;
+        }
+        File f = new File(worldDir, "AstralSorcery_ServerData.dat");
         if(!f.exists()) {
             f.getParentFile().mkdirs();
             try {
@@ -41,6 +49,10 @@ public class ServerData {
     public static void reloadData() {
         loadDataFromFile();
 
+        updateData();
+    }
+
+    public static void writeData() {
         updateData();
     }
 
@@ -60,15 +72,20 @@ public class ServerData {
 
     private static void updateData() {
         File dataFile = getServerDataFile();
+        if(dataFile == null) {
+            FMLLog.bigWarning("[AstralSorcery] Couldn't find folder for AstralSorcery_ServerData.dat - Are you calling this too early or too late in the execution?");
+            return;
+        }
         try {
             NBTTagCompound out = new NBTTagCompound();
             NBTTagList list = new NBTTagList();
             for (Integer dimId : fileRequestedDimWhitelists) {
                 list.appendTag(new NBTTagInt(dimId));
             }
+            out.setTag("dimWhitelist", list);
             CompressedStreamTools.write(out, dataFile);
         } catch (IOException e) {
-            FMLLog.bigWarning("[AstralSorcery] Couldn't write ServerData File (AS_FixData.dat) - Expect issues.");
+            FMLLog.bigWarning("[AstralSorcery] Couldn't write ServerData File (AstralSorcery_ServerData.dat) - Expect issues.");
         } finally {
             pushData(fileRequestedDimWhitelists);
         }
@@ -81,6 +98,10 @@ public class ServerData {
 
     private static void loadDataFromFile() {
         File dataFile = getServerDataFile();
+        if(dataFile == null) {
+            FMLLog.bigWarning("[AstralSorcery] Couldn't find folder for AstralSorcery_ServerData.dat - Are you calling this too early or too late in the execution?");
+            return;
+        }
         try {
             NBTTagCompound cmp = CompressedStreamTools.read(dataFile);
             NBTTagList dimIds = cmp.getTagList("dimWhitelist", 3);
@@ -88,7 +109,7 @@ public class ServerData {
                 fileRequestedDimWhitelists.add(dimIds.getIntAt(i));
             }
         } catch (IOException e) {
-            FMLLog.bigWarning("[AstralSorcery] Couldn't read ServerData File (AS_FixData.dat) - Expect issues.");
+            FMLLog.bigWarning("[AstralSorcery] Couldn't read ServerData File (AstralSorcery_ServerData.dat) - Expect issues.");
             defaultToConfig();
         }
     }

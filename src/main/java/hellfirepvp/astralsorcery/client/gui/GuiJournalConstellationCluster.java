@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -10,6 +9,8 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
-    private static OverlayText.OverlayFontRenderer fRend = new OverlayText.OverlayFontRenderer();
+    //private static OverlayText.OverlayFontRenderer fRend = new OverlayText.OverlayFontRenderer();
 
     //private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
     //private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
@@ -70,8 +71,8 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         zLevel += 250;
         drawNavArrows(partialTicks);
-        fRend.zLevel = zLevel;
-        fRend.font_size_multiplicator = 0.07F;
+        //fRend.zLevel = zLevel;
+        //fRend.font_size_multiplicator = 0.07F;
         drawTitle();
         rectCRenderMap.clear();
         drawConstellations();
@@ -92,14 +93,19 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     }
 
     private void drawTitle() {
-        if(unlocTitle != null) {
+        //no title atm
+        if(unlocTitle != null && false) {
             float r = 0xDD / 255F;
             float g = 0xDD / 255F;
             float b = 0xDD / 255F;
 
+            TextureHelper.refreshTextureBindState();
             GL11.glColor4f(r, g, b, 1F);
             String translated = I18n.format(unlocTitle).toUpperCase();
-            fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
+            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            fr.drawString(translated, guiLeft + 225, guiTop + 14, Color.DARK_GRAY.getRGB(), true);
+            //fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
+            GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glColor4f(1F, 1F, 1F, 1F);
         }
     }
@@ -208,15 +214,18 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         GL11.glColor4f(r, g, b, 1F);
 
+        TextureHelper.refreshTextureBindState();
         String trName = specTitle == null ? I18n.format(display.getUnlocalizedName()).toUpperCase() : I18n.format(specTitle).toUpperCase();
-        OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
-        fontRenderer.font_size_multiplicator = 0.04F;
-        float fullLength = (width / 2) - (((float) fontRenderer.getStringWidth(trName)) / 2F);
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        //OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
+        //fontRenderer.font_size_multiplicator = 0.04F;
+        float fullLength = (width / 2) - (((float) fr.getStringWidth(trName)) / 2F);
 
-        fontRenderer.zLevel = zLevel;
-        fontRenderer.drawString(trName, fullLength, 75F, zLevel, null, 1F, 0);
+        fr.drawString(trName, fullLength, 75F, 0xBBDDDDDD, true);
+        //fontRenderer.drawString(trName, fullLength, 75F, zLevel, null, 1F, 0);
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glPopMatrix();
         return rect;
     }

@@ -1,10 +1,9 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -15,8 +14,12 @@ import java.util.LinkedList;
  */
 public interface IMajorConstellation extends IConstellation {
 
-    //TODO add Perks hook.
+    //Those 2 methods are registry lookups. Try to avoid spamming them maybe.
 
+    @Nullable
+    public ConstellationPerkMap getPerkMap();
+
+    @Nullable
     public ConstellationEffect getRitualEffect();
 
 }

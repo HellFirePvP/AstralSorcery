@@ -2,11 +2,14 @@ package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +99,13 @@ public abstract class ConstellationBase implements IConstellation {
         }
 
         @Override
+        @Nullable
+        public ConstellationPerkMap getPerkMap() {
+            return ConstellationPerkMapRegistry.getPerkMap(this);
+        }
+
+        @Override
+        @Nullable
         public ConstellationEffect getRitualEffect() {
             return ConstellationEffectRegistry.getEffect(this);
         }

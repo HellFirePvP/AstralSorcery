@@ -95,8 +95,8 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             if(recipe.getPassiveStarlightRequired() > 0) {
                 String displReq = getDescriptionFromStarlightAmount(recipe.getPassiveStarlightRequired());
                 displReq = I18n.format(displReq);
-                String dsc = I18n.format("astralsorcery.journal.recipe.amt.desc");
-                out.add(String.format(dsc, displReq));
+                String dsc = I18n.format("astralsorcery.journal.recipe.amt.desc", displReq);
+                out.add(dsc);
             }
             if(recipe instanceof INighttimeRecipe) {
                 out.add(I18n.format("astralsorcery.journal.recipe.nighttime"));

@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -11,6 +11,9 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
@@ -29,7 +32,7 @@ import java.util.List;
 public class GuiConstellationPaper extends GuiWHScreen {
 
     private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
-    private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
+    //private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
 
     private final IConstellation constellation;
     private List<MoonPhase> phases = new LinkedList<>();
@@ -60,7 +63,9 @@ public class GuiConstellationPaper extends GuiWHScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ofr.font_size_multiplicator = 0.08F;
+        //ofr.font_size_multiplicator = 0.08F;
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
         drawScroll();
 
         drawHeader();
@@ -68,15 +73,26 @@ public class GuiConstellationPaper extends GuiWHScreen {
         drawConstellation(partialTicks);
 
         drawPhaseInformation();
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     private void drawHeader() {
         String locName = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
-        double length = ofr.getStringWidth(locName);
+        TextureHelper.refreshTextureBindState();
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        double length = fr.getStringWidth(locName) * 1.8;
         double offsetLeft = width / 2 - length / 2;
-        int offsetTop = guiTop + 20;
-        GL11.glColor4f(0.3F, 0.3F, 0.3F, 0.8F);
-        ofr.drawString(locName, offsetLeft, offsetTop, zLevel, null, 0F, 0);
+        int offsetTop = guiTop + 31;
+        //new Color(0.3F, 0.3F, 0.3F, 0.8F);
+        //GL11.glColor4f(0.3F, 0.3F, 0.3F, 0.8F);
+        GL11.glPushMatrix();
+        GL11.glTranslated(offsetLeft + 15, offsetTop, 0);
+        GL11.glScaled(1.8, 1.8, 1.8);
+        fr.drawString(locName, 0, 0, 0xAA4D4D4D, false);
+        GL11.glPopMatrix();
+        //ofr.drawString(locName, offsetLeft, offsetTop, zLevel, null, 0F, 0);
+        GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);
     }
 

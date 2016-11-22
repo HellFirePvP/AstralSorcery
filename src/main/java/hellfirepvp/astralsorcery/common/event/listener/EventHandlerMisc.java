@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.perk.IPlayerCapabilityPerks;
-import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.cap.IPlayerCapabilityPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.cap.PlayerPerkHelper;
 import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;

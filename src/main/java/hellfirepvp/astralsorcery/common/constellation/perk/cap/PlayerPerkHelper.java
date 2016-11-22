@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.common.constellation.perk;
+package hellfirepvp.astralsorcery.common.constellation.perk.cap;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;

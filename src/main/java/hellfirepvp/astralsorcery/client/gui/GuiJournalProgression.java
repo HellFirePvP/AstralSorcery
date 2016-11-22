@@ -73,7 +73,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         progressionRenderer.updateOffset(guiLeft + 10, guiTop + 10);
         progressionRenderer.setBox(10, 10, guiWidth - 10, guiHeight - 10);
-        progressionRenderer.resetOverlayText();
+        //progressionRenderer.resetOverlayText();
 
         if(rescaleAndRefresh) {
             progressionRenderer.resetZoom();
@@ -137,9 +137,9 @@ public class GuiJournalProgression extends GuiScreenJournal {
         progressionRenderer.drawMouseHighlight(zLevel, mousePoint);
     }
 
-    public void updateTick() {
+    /*public void updateTick() {
         progressionRenderer.updateTick();
-    }
+    }*/
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {

@@ -27,17 +27,17 @@ import java.util.Map;
  */
 public class RenderConstellation {
 
-    /*@SideOnly(Side.CLIENT) FIXME reset
-    public static void renderConstellation(IConstellation c, Vector3 renderOffset, BrightnessFunction brFunc) {
+    @SideOnly(Side.CLIENT)
+    public static void renderConstellation(IConstellation c, ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
 
-        Tier.RInformation renderInfo = tier.getRenderInformation();
-        Color rC = tier.calcRenderColor();
+        Vector3 renderOffset = renderPos.offset;
+        Color rC = c.getRenderColor();
 
-        //Now we build from the exact UV vectors a 32x32 grid and render the stars & connections.
-        Vector3 dirU = renderInfo.incU.clone().subtract(renderOffset).divide(32);
-        Vector3 dirV = renderInfo.incV.clone().subtract(renderOffset).divide(32);
+        //Now we build from the exact UV vectors a 31x31 grid and render the stars & connections.
+        Vector3 dirU = renderPos.incU.clone().subtract(renderOffset).divide(31);
+        Vector3 dirV = renderPos.incV.clone().subtract(renderOffset).divide(31);
         double uLength = dirU.length();
         RenderAstralSkybox.TEX_CONNECTION.bind();
         for (int j = 0; j < 2; j++) {
@@ -77,7 +77,7 @@ public class RenderConstellation {
             }
             tessellator.draw();
         }
-    }*/
+    }
 
     //non-rotating, builds into x/z space
     public static void renderConstellationIntoWorldFlat(IConstellation c, Color rC, Vector3 offsetPos, double scale, double lineBreadth, float br) {
@@ -147,7 +147,7 @@ public class RenderConstellation {
         GL11.glPopAttrib();
     }
 
-    /*public static void renderConstellationIntoWorld(Constellation c, Color rC, Vector3 offsetPos, double lineBreadth, BrightnessFunction func) {
+    public static void renderConstellationIntoWorld(IConstellation c, Color rC, Vector3 offsetPos, double lineBreadth, BrightnessFunction func) {
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
@@ -157,11 +157,10 @@ public class RenderConstellation {
 
         RenderAstralSkybox.TEX_CONNECTION.bind();
         for (int j = 0; j < 2; j++) {
-            for (StarConnection con : c.getConnections()) {
+            for (StarConnection con : c.getStarConnections()) {
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 float brightness = func.getBrightness();
-                GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                        brightness < 0 ? 0 : brightness);
+                GL11.glColor4f(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
 
                 Vector3 vecA = offsetPos.clone().add(dirU.clone().multiply(con.from.x + 1)).add(dirV.clone().multiply(con.from.y + 1));
                 Vector3 vecB = offsetPos.clone().add(dirU.clone().multiply(con.to.x + 1)).add(dirV.clone().multiply(con.to.y + 1));
@@ -183,8 +182,7 @@ public class RenderConstellation {
         for (StarLocation star : c.getStars()) {
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             float brightness = func.getBrightness();
-            GlStateManager.color(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F,
-                    brightness < 0 ? 0 : brightness);
+            GL11.glColor4f(((float) rC.getRed()) / 255F, ((float) rC.getGreen()) / 255F, ((float) rC.getBlue()) / 255F, brightness < 0 ? 0 : brightness);
             int x = star.x;
             int y = star.y;
             Vector3 ofStar = offsetPos.clone().add(dirU.clone().multiply(x)).add(dirV.clone().multiply(y));
@@ -197,7 +195,7 @@ public class RenderConstellation {
             tes.draw();
         }
         GL11.glPopMatrix();
-    }*/
+    }
 
     /*public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         return renderConstellationIntoGUI(c.queryTier(), c, offsetX, offsetY, zLevel, width, height, linebreadth, func, isKnown, applyStarBrightness);

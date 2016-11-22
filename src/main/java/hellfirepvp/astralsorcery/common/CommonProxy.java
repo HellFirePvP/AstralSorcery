@@ -8,10 +8,11 @@ import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.IPlayerCapabilityPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.cap.IPlayerCapabilityPerks;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
+import hellfirepvp.astralsorcery.common.container.ContainerJournal;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
@@ -26,6 +28,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.registry.RegistryPerks;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
@@ -45,8 +48,10 @@ import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -103,6 +108,7 @@ public class CommonProxy implements IGuiHandler {
 
         registerOreDictEntries();
         RegistryAchievements.init();
+        RegistryPerks.init();
 
         registerCapabilities();
     }
@@ -192,6 +198,14 @@ public class CommonProxy implements IGuiHandler {
                 return new ContainerAltarAttenuation(player.inventory, (TileAltar) t);
             case ALTAR_CONSTELLATION:
                 return new ContainerAltarConstellation(player.inventory, (TileAltar) t);
+            case JOURNAL_STORAGE: {
+                ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
+                if(held != null) {
+                    if(held.getItem() != null && held.getItem() instanceof ItemJournal) {
+                        return new ContainerJournal(player.inventory, held);
+                    }
+                }
+            }
         }
         return null;
     }
@@ -212,7 +226,8 @@ public class CommonProxy implements IGuiHandler {
         ALTAR_DISCOVERY(TileAltar.class),
         ALTAR_ATTENUATION(TileAltar.class),
         ALTAR_CONSTELLATION(TileAltar.class),
-        JOURNAL;
+        JOURNAL,
+        JOURNAL_STORAGE;
 
         private final Class<? extends TileEntity> tileClass;
 

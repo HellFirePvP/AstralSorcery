@@ -115,7 +115,7 @@ public class WorldCacheManager implements ITickHandler {
             return key.getNewInstance();
         }
         AstralSorcery.log.info("[AstralSorcery] Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
-        AstralSorcery.log.info("[AstralSorcery] Any error that appears in connection to some load issue may be related to this world.");
+        //AstralSorcery.log.info("[AstralSorcery] Any error that appears in connection to some load issue may be related to this world.");
         CachedWorldData data = key.getNewInstance();
         NBTTagCompound cmp = CompressedStreamTools.read(f);
         data.readFromNBT(cmp);

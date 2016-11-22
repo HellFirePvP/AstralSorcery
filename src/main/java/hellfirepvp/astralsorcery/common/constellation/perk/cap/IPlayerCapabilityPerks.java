@@ -1,5 +1,6 @@
-package hellfirepvp.astralsorcery.common.constellation.perk;
+package hellfirepvp.astralsorcery.common.constellation.perk.cap;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

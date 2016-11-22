@@ -29,10 +29,10 @@ public class ClientScheduler implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         clientTick++;
 
-        GuiScreen current = Minecraft.getMinecraft().currentScreen;
+        /*GuiScreen current = Minecraft.getMinecraft().currentScreen;
         if(current != null && current instanceof GuiJournalProgression) {
             ((GuiJournalProgression) current).updateTick();
-        }
+        }*/
 
         synchronized (lock) {
             Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();

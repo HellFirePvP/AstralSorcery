@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
+import hellfirepvp.astralsorcery.client.util.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -28,6 +29,7 @@ import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -443,25 +445,24 @@ public class RenderAstralSkybox extends IRenderHandler {
         if (brightness <= 0.0F) return;
         final Random flRand = new Random(w.getSeed());
 
-        Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(w);
+        if(handle != null) {
+            ClientConstellationPositionMapping mapping = handle.getConstellationPositionMapping();
+            if(mapping != null) {
+                Map<IConstellation, ClientConstellationPositionMapping.RenderPosition> renderMap = mapping.getCurrentRenderPositions();
+                for (Map.Entry<IConstellation, ClientConstellationPositionMapping.RenderPosition> entry : renderMap.entrySet()) {
+                    IConstellation c = entry.getKey();
+                    if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
 
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        tes.draw();
-        Collection<IConstellation> toShow = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(w.provider.getDimension());
-        /*if(toShow != null) { FIXME reset
-            for (IConstellation c : toShow) {
-                if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
-
-                RenderConstellation.renderConstellation(c, tier.getRenderInformation().offset, new RenderConstellation.BrightnessFunction() {
-                    @Override
-                    public float getBrightness() {
-                        return RenderConstellation.conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) * (2 * brightness);
-                    }
-                });
+                    RenderConstellation.renderConstellation(c, entry.getValue(), new RenderConstellation.BrightnessFunction() {
+                        @Override
+                        public float getBrightness() {
+                            return RenderConstellation.conCFlicker(w.getWorldTime(), partialTicks, 5 + flRand.nextInt(10)) * (2 * brightness);
+                        }
+                    });
+                }
             }
-        }*/
-        //tes.draw();
+        }
         //long now = System.nanoTime();
         //AstralSorcery.log.info("Rendering Constellations took " + (now - nano) + " ns");
     }

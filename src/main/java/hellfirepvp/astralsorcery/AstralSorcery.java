@@ -73,6 +73,8 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStopping(FMLServerStoppingEvent event) {
         ResearchManager.saveAndClearServerCache();
+
+        ServerData.writeData();
     }
 
     @Mod.EventHandler

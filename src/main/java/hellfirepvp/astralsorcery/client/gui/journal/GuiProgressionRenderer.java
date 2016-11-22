@@ -1,9 +1,8 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
-import hellfirepvp.astralsorcery.client.effect.text.OverlayTextPolicy;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -12,6 +11,9 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -52,8 +54,6 @@ public class GuiProgressionRenderer {
 
     private ResearchProgression focusedClusterZoom = null, focusedClusterMouse = null;
     private GuiProgressionClusterRenderer clusterRenderer = null;
-
-    private OverlayText clusterText = null;
 
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
@@ -239,7 +239,18 @@ public class GuiProgressionRenderer {
         if(focusedClusterMouse != null) {
             String name = focusedClusterMouse.getUnlocalizedName();
             name = I18n.format(name);
-            if(clusterText != null && !clusterText.getText().equalsIgnoreCase(name)) {
+            TextureHelper.refreshTextureBindState();
+            Point mouse = parentGui.getCurrentMousePoint();
+            GL11.glPushMatrix();
+            GL11.glTranslated(mouse.x, mouse.y - 15, 0);
+            GL11.glScaled(1.4, 1.4, 1.4);
+            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            fr.drawString(name, 0, 0, 0xBB5A28FF);
+            GL11.glPopMatrix();
+            GlStateManager.color(1F, 1F, 1F, 1F); //Resetting.
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            TextureHelper.refreshTextureBindState();
+            /*if(clusterText != null && !clusterText.getText().equalsIgnoreCase(name)) {
                 clusterText = null;
             }
 
@@ -249,26 +260,26 @@ public class GuiProgressionRenderer {
                                 .setPolicy(OverlayTextPolicy.Policies.WRITING)
                                 .setColor(new Color(90, 40, 255))
                                 .setAlpha(1F));
-            }
-        } else {
-            if(clusterText != null && clusterText.canRemove()) {
+            }*/
+        }// else {
+            /*if(clusterText != null && clusterText.canRemove()) {
                 clusterText = null;
-            }
-        }
+            }*/
+        //}
 
-        if(clusterText != null) {
+        /*if(clusterText != null) {
             Point mouse = parentGui.getCurrentMousePoint();
             GL11.glPushMatrix();
             GL11.glTranslated(mouse.x, mouse.y - 18, 0);
             GL11.glScaled(0.8, 0.8, 0.8);
             clusterText.doRender(null, 0, false);
             GL11.glPopMatrix();
-        }
+        }*/
 
         drawBlendedStarfieldLayers(scaleX, scaleY, zLevel);
     }
 
-    public void resetOverlayText() {
+    /*public void resetOverlayText() {
         clusterText = null;
     }
 
@@ -285,7 +296,7 @@ public class GuiProgressionRenderer {
                 clusterText.scheduleDeath();
             }
         }
-    }
+    }*/
 
     @Nullable
     private ResearchProgression tryFocusCluster() {

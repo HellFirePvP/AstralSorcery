@@ -9,11 +9,6 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
  */
 public class ConstellationPerk {
 
-    public static enum ExecutionType {
 
-        PASSIVE,
-        ABILITY;
-
-    }
 
 }

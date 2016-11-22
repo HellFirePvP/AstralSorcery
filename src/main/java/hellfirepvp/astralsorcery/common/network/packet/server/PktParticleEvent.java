@@ -94,12 +94,12 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WAND_CRYSTAL_HIGHLIGHT,
         PHOENIX_PROC,
 
-        CE_CROP_INTERACT,
+        //CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
         //CE_ACCEL_TILE,
-        CE_DMG_ENTITY,
+        //CE_DMG_ENTITY,
         //CE_WATER_FISH,
-        CE_TREE_VORTEX,
+        //CE_TREE_VORTEX,
 
         DEBUG;
 
@@ -124,17 +124,17 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return ItemWand::highlightEffects;
                 case PHOENIX_PROC:
                     return PotionCheatDeath::playEntityDeathEffect;
-                case CE_CROP_INTERACT: //TODO adjust accordingly
+                //case CE_CROP_INTERACT:
                     //return CEffectFertilitas::playParticles;
                 //case CE_MELT_BLOCK:
                 //    return CEffectFornax::playParticles;
                 //case CE_ACCEL_TILE:
                 //    return CEffectHorologium::playParticles;
-                case CE_DMG_ENTITY:
+                //case CE_DMG_ENTITY:
                     //return CEffectOrion::playParticles;
                 //case CE_WATER_FISH:
                 //    return CEffectOctans::playParticles;
-                case CE_TREE_VORTEX:
+                //case CE_TREE_VORTEX:
                     //return CEffectAra::playParticles;
                 case DEBUG:
                     return RaytraceAssist::playDebug;

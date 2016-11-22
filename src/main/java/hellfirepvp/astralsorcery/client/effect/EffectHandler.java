@@ -4,7 +4,6 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
@@ -97,7 +96,7 @@ public final class EffectHandler {
         synchronized (complexEffects) {
             Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
             EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
-            //EffectLightbeam.renderFast(fastRenderBeams); FIXME Translation is off
+            //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
             for (int i = 0; i <= 2; i++) {
                 for (IComplexEffect effect : layeredEffects.get(i)) {
                     GL11.glPushMatrix();
@@ -123,7 +122,7 @@ public final class EffectHandler {
         return entityComplexFX;
     }
 
-    public OverlayText overlayText(String message, int tickTimeout, OverlayText.OverlayTextProperties properties) {
+    /*public OverlayText overlayText(String message, int tickTimeout, OverlayText.OverlayTextProperties properties) {
         OverlayText text;
         if (properties == null) {
             text = new OverlayText(message, tickTimeout);
@@ -132,7 +131,7 @@ public final class EffectHandler {
         }
         register(text);
         return text;
-    }
+    }*/
 
     public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence, @Nullable OrbitalEffectController.OrbitTickModifier tickModifier) {
         OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence, tickModifier);

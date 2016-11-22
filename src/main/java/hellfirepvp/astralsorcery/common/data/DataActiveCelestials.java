@@ -31,8 +31,8 @@ public class DataActiveCelestials extends AbstractData {
         return activeConstellations.get(dimId);
     }
 
-    public void setNewConstellations(int dimId, List<IConstellation> constellations) {
-        activeConstellations.put(dimId, constellations);
+    public void setNewConstellations(int dimId, Collection<IConstellation> constellations) {
+        activeConstellations.put(dimId, new LinkedList<>(constellations));
 
         requestUpdate(dimId);
         markDirty();

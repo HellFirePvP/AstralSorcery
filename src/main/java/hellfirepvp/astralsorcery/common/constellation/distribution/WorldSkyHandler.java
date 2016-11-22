@@ -1,12 +1,22 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
+import hellfirepvp.astralsorcery.client.util.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -20,6 +30,11 @@ import java.util.function.Function;
 public class WorldSkyHandler {
 
     public int lastRecordedDay = -1;
+
+    //Only contains distributions > 0 if the constellation is a major.
+    private Map<IConstellation, Float> activeDistributionMap = new HashMap<>();
+
+    private Object clientConstellationPositionMapping;
 
     private Random seededRand = null;
     private long savedSeed;
@@ -60,18 +75,42 @@ public class WorldSkyHandler {
             seededRand = new Random(savedSeed);
 
             //Iterate back to current day.
+            //+1 because we start from 'day -1'
             scheduleDayProgression(w, currentDay + 1);
         }
     }
 
     private void scheduleDayProgression(World w, int days) {
         for (int i = 0; i < days; i++) {
-            toConstellationIteration();
+            doConstellationIteration();
+        }
+
+        if(!w.isRemote) {
+            DataActiveCelestials celestials = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
+            celestials.setNewConstellations(w.provider.getDimension(), activeDistributionMap.keySet());
+        } else {
+            if(clientConstellationPositionMapping == null) {
+                clientConstellationPositionMapping = new ClientConstellationPositionMapping();
+            }
+            ((ClientConstellationPositionMapping) clientConstellationPositionMapping)
+                    .updatePositions(activeDistributionMap);
         }
     }
 
-    private void toConstellationIteration() {
-        //TODO do iterations, compute the distributions and update data holder to sync to clients.
+    private void doConstellationIteration() {
+        activeDistributionMap.clear();
+        //TODO do iterations, compute the distributions.
+    }
+
+    public Map<IConstellation, Float> getCurrentDistributions() {
+        return Collections.unmodifiableMap(activeDistributionMap);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Nullable
+    public ClientConstellationPositionMapping getConstellationPositionMapping() {
+        if(clientConstellationPositionMapping == null) return null;
+        return (ClientConstellationPositionMapping) clientConstellationPositionMapping;
     }
 
     public MoonPhase getCurrentMoonPhase() {
@@ -137,7 +176,8 @@ public class WorldSkyHandler {
     }
 
     public Float getCurrentDistribution(IMajorConstellation c, Function<Float, Float> func) {
-        return 1F; //TODO fix and implement
+        if(!activeDistributionMap.containsKey(c)) return 0F;
+        return func.apply(activeDistributionMap.get(c));
     }
 
 }

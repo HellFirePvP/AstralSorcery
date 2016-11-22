@@ -62,6 +62,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridCst")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJStorageBook")   .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")         .allocateGlId();
@@ -74,6 +75,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")    .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "overlayfont")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_hunt")      .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(MoonPhase.NEW); //Loads all phase textures
 
         SpriteLibrary.init(); //Loads all spritesheets

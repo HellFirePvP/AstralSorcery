@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.effect.text.OverlayText;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -15,6 +14,8 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
-    private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
+    //private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
 
     private IConstellation constellation;
@@ -75,8 +76,6 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
         zLevel += 150;
         drawBackArrow(partialTicks);
-        fontRenderer.zLevel = zLevel;
-        fontRenderer.font_size_multiplicator = 0.08F;
         drawConstellation();
         drawPhaseInformation();
         if(detailed) {
@@ -90,13 +89,23 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void drawExtendedInformation() {
-        fontRenderer.font_size_multiplicator = 0.08F;
         float br = 0.8666F;
         GL11.glColor4f(br, br, br, 0.8F);
         String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
-        double w = fontRenderer.getStringWidth(info);
-        double chX = 305 - (w / 2);
-        fontRenderer.drawString(info, guiLeft + chX, guiTop + 18, zLevel, null, 0.7F, 0);
+        TextureHelper.refreshTextureBindState();
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        double width = fr.getStringWidth(info);
+        double chX = 305 - (width * 1.8 / 2);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glTranslated(guiLeft + chX, guiTop + 26, 0);
+        GL11.glScaled(1.8, 1.8, 1.8);
+        fr.drawString(info, 0, 0, 0xCCDDDDDD, true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(br, br, br, 0.8F);
+        TextureHelper.refreshTextureBindState();
 
         /*texArrow.bind();
         fontRenderer.font_size_multiplicator = 0.06F;
@@ -138,7 +147,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         Blending.DEFAULT.apply();
         GL11.glColor4f(1F, 1F, 1F, 1F);
         int size = 19;
-        int offsetX = 105 + (width / 2) - (phases.size() * (size + 2)) / 2;
+        int offsetX = 95 + (width / 2) - (phases.size() * (size + 2)) / 2;
         int offsetY = 199 + guiTop;
         for (int i = 0; i < phases.size(); i++) {
             MoonPhase ph = phases.get(i);
@@ -151,9 +160,21 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         float br = 0.866F;
         GL11.glColor4f(br, br, br, 0.8F);
         String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
-        double width = fontRenderer.getStringWidth(name);
-        double offsetX = 110 - (width / 2);
-        fontRenderer.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
+        TextureHelper.refreshTextureBindState();
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        double width = fr.getStringWidth(name);
+        double offsetX = 110 - (width * 1.8 / 2);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glTranslated(guiLeft + offsetX, guiTop + 26, 0);
+        GL11.glScaled(1.8, 1.8, 1.8);
+        fr.drawString(name, 0, 0, 0xCCDDDDDD, true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(br, br, br, 0.8F);
+        TextureHelper.refreshTextureBindState();
+        //ofr.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
         RenderConstellation.renderConstellationIntoGUI(new Color(0xDDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 3F, new RenderConstellation.BrightnessFunction() {
