@@ -8,7 +8,6 @@ import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.cap.IPlayerCapabilityPerks;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
@@ -114,7 +113,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(IPlayerCapabilityPerks.class, new IPlayerCapabilityPerks.Storage(), IPlayerCapabilityPerks.Impl.class);
+        //CapabilityManager.INSTANCE.register(IPlayerCapabilityPerks.class, new IPlayerCapabilityPerks.Storage(), IPlayerCapabilityPerks.Impl.class);
     }
 
     private void registerOreDictEntries() {

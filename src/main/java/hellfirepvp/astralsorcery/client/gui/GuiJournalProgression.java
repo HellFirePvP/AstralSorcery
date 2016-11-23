@@ -150,6 +150,11 @@ public class GuiJournalProgression extends GuiScreenJournal {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
             return;
         }
+        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+            resetJournal();
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            return;
+        }
         progressionRenderer.propagateClick(p);
     }
 

@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.sky;
 
-import hellfirepvp.astralsorcery.client.util.ClientConstellationPositionMapping;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -9,8 +9,6 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
-import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
-import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import net.minecraft.client.Minecraft;
@@ -28,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
@@ -357,53 +354,58 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         renderConstellations(Minecraft.getMinecraft().theWorld, partialTicks);
 
-        //Used for debug purposes. define x,y,z,size at will to produce favorable outcomes..
-        //y<0 is used to render on moon-side of the skybox.
-        /*double x, y, z;
-        x = 0.4;
-        y = -0.5;
-        z = 0.5;
-        double size = 19;
+        /*Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
 
-        double fx = x * 100.0D;
-        double fy = y * 100.0D;
-        double fz = z * 100.0D;
+        List<double[]> poss = new LinkedList<>();
 
-        double d8 = Math.atan2(x, z); // [-PI - PI]
-        double d9 = Math.sin(d8);
-        double d10 = Math.cos(d8);
+        poss.add(new double[] { 0.2,  -0.2,     0,   5});
+        poss.add(new double[] {-0.2,  -0.2,  -0.05,  5});
+        poss.add(new double[] {   0,  -0.25, -0.2,   8});
+        poss.add(new double[] {-0.4,  -0.6,   0.5,  18});
+        poss.add(new double[] { 0.3,  -0.5,   0.5,  19});
+        poss.add(new double[] { 0.15, -0.2,  -0.1,   5});
+        poss.add(new double[] {-0.05, -0.3,   0.4,  10});
+        poss.add(new double[] {-0.3,  -0.3,   0.1,  10});
+        poss.add(new double[] {-0.3,  -0.4,  -0.35, 15});
+        poss.add(new double[] { 0.4,  -0.4,   0.2,  15});
 
-        //                                pythagoras?
-        double d11 = Math.atan2(Math.sqrt(x * x + z * z), y); // [-PI - PI]
-        double d12 = Math.sin(d11);
-        double d13 = Math.cos(d11);
+        for (double[] position : poss) {
+            double x = position[0];
+            double y = position[1];
+            double z = position[2];
+            double size = position[3];
 
-        //double d14 = random.nextDouble() * Math.PI * 2.0D;
-        //double d16 = Math.cos(d14); rotation!
-
-        double rotation = 0;
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        //Minecraft.getMinecraft().renderEngine.bindTexture(TEST);
-        TEX_STAR_1.bind();
-        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
-        for (int j = 0; j < 4; ++j) {
-            double d18 = (double) ((j & 2) - 1) * 0.5;
-            double d19 = (double) ((j + 1 & 2) - 1) * 0.5;
-
-            double d21 = d18 * rotation - d19 * size;
-            double d22 = d19 * rotation + d18 * size;
-            double d23 = d21 * d12;
-
-            double d24 = -(d21 * d13);
-
-            double d25 = d24 * d9 - d22 * d10;
-            double d26 = d22 * d9 + d24 * d10;
-
-            //System.out.println((((j + 1) & 2) >> 1) + "" + (((j + 2) & 2) >> 1) + " === " + (fx + d25) + " --- " + (fy + d23) + " --- " + (fz + d26));
-            vb.pos(fx + d25, fy + d23, fz + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
+            double fx = x * 100.0D;
+            double fy = y * 100.0D;
+            double fz = z * 100.0D;
+            double d8 = Math.atan2(x, z); // [-PI - PI]
+            double d9 = Math.sin(d8);
+            double d10 = Math.cos(d8);
+            //                                pythagoras?
+            double d11 = Math.atan2(Math.sqrt(x * x + z * z), y); // [-PI - PI]
+            double d12 = Math.sin(d11);
+            double d13 = Math.cos(d11);
+            //double d14 = random.nextDouble() * Math.PI * 2.0D;
+            //double d16 = Math.cos(d14); rotation!
+            double rotation = 0;
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            TEX_DEBUG.bind();
+            vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+            for (int j = 0; j < 4; ++j) {
+                double d18 = (double) ((j & 2) - 1) * 0.5;
+                double d19 = (double) ((j + 1 & 2) - 1) * 0.5;
+                double d21 = d18 * rotation - d19 * size;
+                double d22 = d19 * rotation + d18 * size;
+                double d23 = d21 * d12;
+                double d24 = -(d21 * d13);
+                double d25 = d24 * d9 - d22 * d10;
+                double d26 = d22 * d9 + d24 * d10;
+                vb.pos(fx + d25, fy + d23, fz + d26).tex(((j + 1) & 2) >> 1, ((j + 2) & 2) >> 1).endVertex();
+            }
+            tes.draw();
         }
-        tessellator.draw();*/
+        TextureHelper.refreshTextureBindState();*/
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDisable(GL11.GL_BLEND);
@@ -463,8 +465,6 @@ public class RenderAstralSkybox extends IRenderHandler {
                 }
             }
         }
-        //long now = System.nanoTime();
-        //AstralSorcery.log.info("Rendering Constellations took " + (now - nano) + " ns");
     }
 
     private void renderMoon() {

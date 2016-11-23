@@ -15,6 +15,7 @@ effect.as.cheatdeath=Phoenix-Fire
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
+gui.journal.bm.perks.name=Perks
 gui.journal.c.unmapped=Unknown
 
 achievementpage.astralsorcery.name=AstralSorcery

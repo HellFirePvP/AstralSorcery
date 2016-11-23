@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;

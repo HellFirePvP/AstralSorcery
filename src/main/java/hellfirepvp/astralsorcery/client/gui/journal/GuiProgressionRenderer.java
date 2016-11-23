@@ -6,7 +6,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;

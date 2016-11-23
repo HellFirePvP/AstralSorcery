@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -47,6 +48,9 @@ public class LensRecipe extends ConstellationRecipe {
         setCstItem(Blocks.LOG,
                 AltarAdditionalSlot.DOWN_LEFT_LEFT,
                 AltarAdditionalSlot.DOWN_RIGHT_RIGHT);
+        setCstItem(Items.GOLD_INGOT,
+                AltarAdditionalSlot.UP_LEFT_LEFT,
+                AltarAdditionalSlot.UP_RIGHT_RIGHT);
     }
 
     @Nullable

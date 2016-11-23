@@ -45,7 +45,6 @@ public class RenderEntityGrindstone<T extends EntityGrindstone> extends RenderEn
         GL11.glPopMatrix();
         GL11.glPopAttrib();
 
-        //TODO adjust item positions again with the new model
         ItemStack grind = entity.getGrindItem();
         if(grind != null) {
             if(grind.getItem() != null) {

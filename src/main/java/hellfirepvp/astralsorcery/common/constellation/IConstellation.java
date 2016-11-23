@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 
@@ -63,10 +64,12 @@ public interface IConstellation {
         compound.setString(key, getUnlocalizedName());
     }
 
+    @Nullable
     public static IConstellation readFromNBT(NBTTagCompound compound) {
         return readFromNBT(compound, getDefaultSaveKey());
     }
 
+    @Nullable
     public static IConstellation readFromNBT(NBTTagCompound compound, String key) {
         return ConstellationRegistry.getConstellationByName(compound.getString(key));
     }

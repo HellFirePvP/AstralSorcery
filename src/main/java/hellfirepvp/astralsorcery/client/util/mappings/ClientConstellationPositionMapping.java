@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.client.util;
+package hellfirepvp.astralsorcery.client.util.mappings;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -6,7 +6,12 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -18,12 +23,32 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class ClientConstellationPositionMapping {
 
-    public void updatePositions(Map<IConstellation, Float> activeDistributionMap) {
-        //TODO
+    public static LinkedList<RenderPosition> availablePositions = new LinkedList<>();
+
+    private Map<IConstellation, RenderPosition> activePositions = new HashMap<>();
+
+    //Collection should be sorted: Major ones first, Minor ones later.
+    public void updatePositions(LinkedList<IConstellation> activeConstellations) {
+        for (int i = 0; i < activeConstellations.size(); i++) {
+            activePositions.put(activeConstellations.get(i), availablePositions.get(i));
+        }
     }
 
     public Map<IConstellation, RenderPosition> getCurrentRenderPositions() {
-        return Maps.newLinkedHashMap();
+        return Collections.unmodifiableMap(activePositions);
+    }
+
+    static {
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.2,  -0.2,     0,   5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.2,  -0.2,  -0.05,  5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -0.25, -0.2,   8));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -0.6,   0.5,  18));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.3,  -0.5,   0.5,  19));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.2,  -0.1,   5));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.05, -0.3,   0.4,  10));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.3,   0.1,  10));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.4,  -0.35, 15));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.4,  -0.4,   0.2,  15));
     }
 
     public static class RenderPosition {

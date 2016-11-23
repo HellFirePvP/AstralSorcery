@@ -234,7 +234,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                             if(i instanceof IGrindable) {
                                 if(((IGrindable) i).canGrind(tgr, grind)) {
                                     for (int j = 0; j < 8; j++) {
-                                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.75, posZ,
+                                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
@@ -242,7 +242,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                 }
                             } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
                                 for (int j = 0; j < 8; j++) {
-                                    worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.75, posZ,
+                                    worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);

@@ -1,13 +1,16 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -31,10 +34,10 @@ import java.util.Random;
 public class ConstellationRecipe extends AttenuationRecipe {
 
     private static Vector3[] offsetPillars = new Vector3[] {
-            new Vector3( 5, 3,  5),
-            new Vector3(-5, 3,  5),
-            new Vector3( 5, 3, -5),
-            new Vector3(-5, 3, -5)
+            new Vector3( 4, 3,  4),
+            new Vector3(-4, 3,  4),
+            new Vector3( 4, 3, -4),
+            new Vector3(-4, 3, -4)
     };
 
     private Map<AltarAdditionalSlot, ItemStack> matchStacks = new HashMap<>();
@@ -120,6 +123,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
             particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
         }
+
     }
 
     public static enum AltarAdditionalSlot {

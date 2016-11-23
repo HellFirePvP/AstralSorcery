@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
-import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;

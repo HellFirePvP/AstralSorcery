@@ -19,12 +19,13 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTelescope;
 import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
-import hellfirepvp.astralsorcery.client.util.ClientJournalMapping;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.client.util.item.ItemRendererFilteredTESR;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
@@ -138,6 +139,7 @@ public class ClientProxy extends CommonProxy {
         //TexturePreloader.doPreloadRoutine();
 
         ClientJournalMapping.init();
+        ClientPerkTextureMapping.init();
         OBJModelLibrary.init();
     }
 

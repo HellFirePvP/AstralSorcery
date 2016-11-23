@@ -221,6 +221,10 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
             return;
         }
+        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            return;
+        }
         if(rectBack != null && rectBack.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(origin);
         }

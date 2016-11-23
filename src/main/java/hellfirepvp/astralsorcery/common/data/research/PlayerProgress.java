@@ -1,8 +1,15 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.MathHelper;
@@ -23,18 +30,41 @@ import java.util.List;
 public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
+    private IMajorConstellation attunedConstellation = null;
+    private List<ConstellationPerk> appliedPerks = new LinkedList<>();
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
         researchProgression.clear();
+        appliedPerks.clear();
+        attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
             for (int i = 0; i < list.tagCount(); i++) {
                 knownConstellations.add(list.getStringTagAt(i));
+            }
+        }
+        if(compound.hasKey("listPerks")) {
+            NBTTagList list = compound.getTagList("listPerks", 3);
+            for (int i = 0; i < list.tagCount(); i++) {
+                ConstellationPerks perkEnum = ConstellationPerks.values()[list.getIntAt(i)];
+                if(perkEnum != null) {
+                    appliedPerks.add(perkEnum.createPerk());
+                }
+            }
+        }
+
+        if (compound.hasKey("attuned")) {
+            String cst = compound.getString("attuned");
+            IConstellation c = ConstellationRegistry.getConstellationByName(cst);
+            if(c == null || !(c instanceof IMajorConstellation)) {
+                AstralSorcery.log.warn("[AstralSorcery] Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
+            } else {
+                attunedConstellation = (IMajorConstellation) c;
             }
         }
 
@@ -65,6 +95,14 @@ public class PlayerProgress {
             researchArray[i] = progression.getProgressId();
         }
         cmp.setIntArray("research", researchArray);
+        if(attunedConstellation != null) {
+            cmp.setString("attuned", attunedConstellation.getUnlocalizedName());
+        }
+        list = new NBTTagList();
+        for (ConstellationPerk perk : appliedPerks) {
+            list.appendTag(new NBTTagInt(perk.getId()));
+        }
+        cmp.setTag("listPerks", list);
     }
 
     protected boolean forceGainResearch(ResearchProgression progression) {
@@ -75,12 +113,40 @@ public class PlayerProgress {
         return false;
     }
 
+    protected void setAttunedConstellation(IMajorConstellation constellation) {
+        this.attunedConstellation = constellation;
+    }
+
+    public void addPerk(ConstellationPerk singleInstance) {
+        this.appliedPerks.add(singleInstance);
+    }
+
+    public void clearPerks() {
+        this.appliedPerks.clear();
+    }
+
     public List<ResearchProgression> getResearchProgression() {
         return Lists.newLinkedList(researchProgression);
     }
 
     public ProgressionTier getTierReached() {
         return tierReached;
+    }
+
+    public IMajorConstellation getAttunedConstellation() {
+        return attunedConstellation;
+    }
+
+    public List<ConstellationPerk> getAppliedPerks() {
+        return Collections.unmodifiableList(appliedPerks);
+    }
+
+    public boolean hasPerkUnlocked(ConstellationPerks perk) {
+        return hasPerkUnlocked(perk.getSingleInstance());
+    }
+
+    public boolean hasPerkUnlocked(ConstellationPerk perk) {
+        return appliedPerks.contains(perk);
     }
 
     protected boolean stepTier() {
@@ -111,6 +177,8 @@ public class PlayerProgress {
         this.knownConstellations = message.knownConstellations;
         this.researchProgression = message.researchProgression;
         this.tierReached = ProgressionTier.values()[MathHelper.clamp_int(message.progressTier, 0, ProgressionTier.values().length - 1)];
+        this.attunedConstellation = message.attunedConstellation;
+        this.appliedPerks = message.appliedPerks;
     }
 
 }

@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -79,7 +80,14 @@ public class ServerData {
         try {
             NBTTagCompound out = new NBTTagCompound();
             NBTTagList list = new NBTTagList();
-            for (Integer dimId : fileRequestedDimWhitelists) {
+            List<Integer> collect = new LinkedList<>();
+            collect.addAll(fileRequestedDimWhitelists);
+            for (Integer configDim : Config.constellationSkyDimWhitelist) {
+                if(!collect.contains(configDim)) {
+                    collect.add(configDim);
+                }
+            }
+            for (Integer dimId : collect) {
                 list.appendTag(new NBTTagInt(dimId));
             }
             out.setTag("dimWhitelist", list);
@@ -107,6 +115,11 @@ public class ServerData {
             NBTTagList dimIds = cmp.getTagList("dimWhitelist", 3);
             for (int i = 0; i < dimIds.tagCount(); i++) {
                 fileRequestedDimWhitelists.add(dimIds.getIntAt(i));
+            }
+            for (Integer configDim : Config.constellationSkyDimWhitelist) {
+                if(!fileRequestedDimWhitelists.contains(configDim)) {
+                    fileRequestedDimWhitelists.add(configDim);
+                }
             }
         } catch (IOException e) {
             FMLLog.bigWarning("[AstralSorcery] Couldn't read ServerData File (AstralSorcery_ServerData.dat) - Expect issues.");

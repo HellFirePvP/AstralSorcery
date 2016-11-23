@@ -27,7 +27,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
 
     public int tier = -1;
     public boolean isProg = false;
-    public boolean isPresent =false;
+    public boolean isPresent = false;
 
     public PktProgressionUpdate() {
         isPresent = false;

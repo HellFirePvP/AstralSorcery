@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
@@ -235,6 +236,11 @@ public class GuiJournalPages extends GuiScreenJournal {
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
             saveSite = false;
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            return;
+        }
+        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+            saveSite = false;
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
             return;
         }
         if(rectBack != null && rectBack.contains(p)) {

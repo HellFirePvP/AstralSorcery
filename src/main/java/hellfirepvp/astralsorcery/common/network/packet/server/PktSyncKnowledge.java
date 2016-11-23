@@ -1,5 +1,11 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -25,8 +31,10 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public static final byte STATE_WIPE = 1;
 
     private byte state;
-    public List<String> knownConstellations = null;
-    public List<ResearchProgression> researchProgression = null;
+    public List<String> knownConstellations = new ArrayList<>();
+    public List<ResearchProgression> researchProgression = new ArrayList<>();
+    public IMajorConstellation attunedConstellation = null;
+    public List<ConstellationPerk> appliedPerks = new ArrayList<>();
     public int progressTier = 0;
 
     public PktSyncKnowledge() {}
@@ -39,6 +47,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.knownConstellations = progress.getKnownConstellations();
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
+        this.attunedConstellation = progress.getAttunedConstellation();
+        this.appliedPerks = progress.getAppliedPerks();
     }
 
     @Override
@@ -52,6 +62,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
                 String val = ByteBufUtils.readString(buf);
                 knownConstellations.add(val);
             }
+        } else {
+            knownConstellations = new ArrayList<>();
         }
 
         int rLength = buf.readInt();
@@ -60,6 +72,29 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             for (int i = 0; i < rLength; i++) {
                 researchProgression.add(ResearchProgression.getById(buf.readInt()));
             }
+        } else {
+            researchProgression = new ArrayList<>();
+        }
+
+        int attunementPresent = buf.readByte();
+        if(attunementPresent != -1) {
+            String attunement = ByteBufUtils.readString(buf);
+            IConstellation c = ConstellationRegistry.getConstellationByName(attunement);
+            if(c == null || !(c instanceof IMajorConstellation)) {
+                AstralSorcery.log.warn("[AstralSorcery] received constellation-attunement progress-packet with unknown constellation: " + attunement);
+            } else {
+                this.attunedConstellation = (IMajorConstellation) c;
+            }
+        }
+
+        int perkLength = buf.readInt();
+        if(perkLength != -1) {
+            this.appliedPerks = new ArrayList<>(perkLength);
+            for (int i = 0; i < perkLength; i++) {
+                this.appliedPerks.add(ConstellationPerks.values()[buf.readInt()].getSingleInstance());
+            }
+        } else {
+            this.appliedPerks = new ArrayList<>();
         }
 
         this.progressTier = buf.readInt();
@@ -82,6 +117,22 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeInt(researchProgression.size());
             for (ResearchProgression progression : researchProgression) {
                 buf.writeInt(progression.getProgressId());
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
+        if(attunedConstellation != null) {
+            buf.writeByte(1);
+            ByteBufUtils.writeString(buf, attunedConstellation.getUnlocalizedName());
+        } else {
+            buf.writeByte(-1);
+        }
+
+        if(appliedPerks != null) {
+            buf.writeInt(appliedPerks.size());
+            for (ConstellationPerk perk : appliedPerks) {
+                buf.writeInt(perk.getId());
             }
         } else {
             buf.writeInt(-1);

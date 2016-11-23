@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -16,9 +17,9 @@ import java.util.Map;
  */
 public class ConstellationPerkMapRegistry {
 
-    private static Map<ConstellationBase.Major, ConstellationPerkMap> registeredPerks = new HashMap<>();
+    private static Map<IMajorConstellation, ConstellationPerkMap> registeredPerks = new HashMap<>();
 
-    public static void registerPerkMap(ConstellationBase.Major constellation, ConstellationPerkMap perkMap) {
+    public static void registerPerkMap(IMajorConstellation constellation, ConstellationPerkMap perkMap) {
         if(registeredPerks.containsKey(constellation)) {
             AstralSorcery.log.info("[AstralSorcery] PerkMapRegistry already contains mapping for '" + constellation.getUnlocalizedName() + "' - overwriting...");
         }
@@ -26,7 +27,7 @@ public class ConstellationPerkMapRegistry {
     }
 
     @Nullable
-    public static ConstellationPerkMap getPerkMap(ConstellationBase.Major constellation) {
+    public static ConstellationPerkMap getPerkMap(IMajorConstellation constellation) {
         return registeredPerks.get(constellation);
     }
 

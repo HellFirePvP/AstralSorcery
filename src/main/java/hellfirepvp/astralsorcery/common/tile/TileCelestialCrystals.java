@@ -107,7 +107,7 @@ public class TileCelestialCrystals extends TileSkybound {
                 Collection<IConstellation> activeConstellations =
                         ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(worldObj.provider.getDimension());
                 if(activeConstellations != null) {
-                    r = 9500;
+                    r = 9500; //If this dim has sky handling active.
                 }
                 r *= (0.5 + ((1 - dstr) * 0.5));
             }

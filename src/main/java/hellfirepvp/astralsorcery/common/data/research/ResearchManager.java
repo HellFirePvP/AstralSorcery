@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.data.research;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
@@ -18,6 +20,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
@@ -157,6 +160,48 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.setAttunedConstellation(constellation);
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.addPerk(perk.getSingleInstance());
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean resetPerks(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.clearPerks();
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);

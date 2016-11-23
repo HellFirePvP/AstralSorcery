@@ -1,8 +1,6 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.perk.cap.IPlayerCapabilityPerks;
-import hellfirepvp.astralsorcery.common.constellation.perk.cap.PlayerPerkHelper;
 import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -45,7 +43,7 @@ public class EventHandlerMisc {
 
     //Player CAP stuffs.
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onAttach(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof EntityPlayer) {
             event.addCapability(new ResourceLocation(AstralSorcery.MODID, "constellationperks"), new IPlayerCapabilityPerks.Provider());
@@ -57,8 +55,8 @@ public class EventHandlerMisc {
         IPlayerCapabilityPerks current = PlayerPerkHelper.getPerks(event.getEntityPlayer());
         IPlayerCapabilityPerks cloned = PlayerPerkHelper.getPerks(event.getEntityPlayer());
         if(cloned != null && current != null) {
-            cloned.updatePerks(current.getCurrentPlayerPerks());
+            cloned.updatePerks(current.getAttunedConstellation(), current.getCurrentPlayerPerks());
         }
-    }
+    }*/
 
 }

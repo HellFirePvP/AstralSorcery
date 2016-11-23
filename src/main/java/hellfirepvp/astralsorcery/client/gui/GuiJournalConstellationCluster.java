@@ -239,6 +239,10 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
             return;
         }
+        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            return;
+        }
         if(bookmarkIndex == -1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
             return;

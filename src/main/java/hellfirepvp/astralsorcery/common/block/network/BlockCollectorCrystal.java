@@ -30,8 +30,8 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
         for (IMajorConstellation major : ConstellationRegistry.getMajorConstellations()) {
             ItemStack stack = new ItemStack(itemIn);
             ItemCollectorCrystal.setConstellation(stack, major);
-            ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);
-            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+            ItemCollectorCrystal.setType(stack, CollectorCrystalType.ROCK_CRYSTAL);
+            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
             list.add(stack);
         }
     }

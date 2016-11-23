@@ -1,4 +1,4 @@
-package hellfirepvp.astralsorcery.client.util;
+package hellfirepvp.astralsorcery.client.util.mappings;
 
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -24,12 +24,6 @@ public class ClientJournalMapping {
     private static Map<ResearchProgression, JournalCluster> map = new HashMap<>();
 
     public static void init() {
-        /*BindableResource cloud1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1");
-        map.put(ResearchProgression.DISCOVERY, new JournalCluster(cloud1, cloud1, -2, -2, 1, 0));
-
-        BindableResource cloud2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2");
-        map.put(ResearchProgression.STARLIGHT, new JournalCluster(cloud2, cloud2, -1, 3, 2, 5));*/
-
         BindableResource cloudDsc = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5");
         map.put(ResearchProgression.DISCOVERY, new JournalCluster(cloudDsc, cloudDsc, -2, -2, 0, 0));
 

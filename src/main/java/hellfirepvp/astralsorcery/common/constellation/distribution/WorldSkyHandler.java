@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
-import hellfirepvp.astralsorcery.client.util.ClientConstellationPositionMapping;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
@@ -33,6 +33,7 @@ public class WorldSkyHandler {
 
     //Only contains distributions > 0 if the constellation is a major.
     private Map<IConstellation, Float> activeDistributionMap = new HashMap<>();
+    private LinkedList<IConstellation> activeConstellations = new LinkedList<>();
 
     private Object clientConstellationPositionMapping;
 
@@ -87,23 +88,33 @@ public class WorldSkyHandler {
 
         if(!w.isRemote) {
             DataActiveCelestials celestials = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
-            celestials.setNewConstellations(w.provider.getDimension(), activeDistributionMap.keySet());
+            celestials.setNewConstellations(w.provider.getDimension(), activeConstellations);
         } else {
             if(clientConstellationPositionMapping == null) {
                 clientConstellationPositionMapping = new ClientConstellationPositionMapping();
             }
             ((ClientConstellationPositionMapping) clientConstellationPositionMapping)
-                    .updatePositions(activeDistributionMap);
+                    .updatePositions(activeConstellations);
         }
     }
 
     private void doConstellationIteration() {
         activeDistributionMap.clear();
+        activeConstellations.clear();
+
         //TODO do iterations, compute the distributions.
     }
 
     public Map<IConstellation, Float> getCurrentDistributions() {
         return Collections.unmodifiableMap(activeDistributionMap);
+    }
+
+    public boolean isActive(IConstellation c) {
+        return getActiveConstellations().contains(c);
+    }
+
+    public List<IConstellation> getActiveConstellations() {
+        return Collections.unmodifiableList(activeConstellations);
     }
 
     @SideOnly(Side.CLIENT)
