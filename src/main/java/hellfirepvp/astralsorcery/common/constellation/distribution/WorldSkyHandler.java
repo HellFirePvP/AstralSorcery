@@ -1,17 +1,21 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
 import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,15 +35,17 @@ public class WorldSkyHandler {
 
     public int lastRecordedDay = -1;
 
-    //Only contains distributions > 0 if the constellation is a major.
-    private Map<IConstellation, Float> activeDistributionMap = new HashMap<>();
     private LinkedList<IConstellation> activeConstellations = new LinkedList<>();
+
+    private Map<Integer, LinkedList<IConstellation>> initialValueMappings = new HashMap<>();
+    private Map<Integer, Map<IConstellation, Float>> dayDistributionMap = new HashMap<>();
+
+    private Map<IConstellation, Float> activeDistributions = new HashMap<>();
 
     private Object clientConstellationPositionMapping;
 
     private Random seededRand = null;
-    private long savedSeed;
-    private boolean isSeedInitialized = false;
+    private final long savedSeed;
 
     public boolean solarEclipse = false;
     public boolean dayOfSolarEclipse = false;
@@ -51,14 +57,18 @@ public class WorldSkyHandler {
     public int prevLunarEclipseTick = 0;
     public int lunarEclipseTick = 0;
 
+    public WorldSkyHandler(World world) {
+        this.savedSeed = world.getSeed();
+    }
+
+    private void refreshRandom() {
+        this.seededRand = new Random(savedSeed);
+    }
+
     //Fired on client and serverside - client only if it's the world the client is in obviously.
     public void tick(World w) {
-        if(!isSeedInitialized) {
-            savedSeed = w.getSeed();
-            isSeedInitialized = true;
-        }
-        if(seededRand == null) {
-            seededRand = new Random(savedSeed);
+        if(initialValueMappings.isEmpty() || initialValueMappings.size() != ConstellationRegistry.getAllConstellations().size()) {
+            setupInitialFunctions();
         }
 
         evaluateCelestialEventTimes(w);
@@ -72,13 +82,72 @@ public class WorldSkyHandler {
             scheduleDayProgression(w, trackingDifference);
         } else if (trackingDifference < 0) {
             //Resetting and recalculating until specified day is reached!
-            //Refreshing random
-            seededRand = new Random(savedSeed);
 
             //Iterate back to current day.
             //+1 because we start from 'day -1'
             scheduleDayProgression(w, currentDay + 1);
         }
+    }
+
+    private void setupInitialFunctions() {
+        initialValueMappings.clear();
+        dayDistributionMap.clear();
+        for (int i = 0; i < 8; i++) {
+            initialValueMappings.put(i, new LinkedList<>());
+            dayDistributionMap.put(i, new HashMap<>());
+        }
+
+        refreshRandom();
+
+        boolean[] occupied = new boolean[8];
+        Arrays.fill(occupied, false);
+        LinkedList<IConstellation> constellations = new LinkedList<>(ConstellationRegistry.getMinorConstellations());
+        Collections.shuffle(constellations, seededRand);
+        LinkedList<IMajorConstellation> majors = new LinkedList<>(ConstellationRegistry.getMajorConstellations());
+        Collections.shuffle(majors, seededRand);
+        majors.forEach(constellations::addFirst);
+
+        for (IConstellation c : constellations) {
+            int start;
+            boolean foundFree = false;
+            int tries = 5;
+            do {
+                tries--;
+                start = seededRand.nextInt(8);
+
+                int needed = Math.min(3, getFreeSlots(occupied));
+                int count = collect(start, occupied);
+                if(count >= needed) {
+                    foundFree = true;
+                }
+            } while (!foundFree && tries > 0);
+            occupySlots(start, occupied);
+            if(getFreeSlots(occupied) <= 0) {
+                Arrays.fill(occupied, false);
+            }
+            for (int i = 0; i < 5; i++) {
+                int index = (start + i) % 8;
+                initialValueMappings.get(index).addLast(c);
+            }
+            if(c instanceof IMajorConstellation) {
+                for (int i = 0; i < 8; i++) {
+                    int index = (start + i) % 8;
+                    float distr = spSine(start, index);
+                    dayDistributionMap.get(index).put(c, distr);
+                }
+            } else {
+                for (int i = 0; i < 8; i++) {
+                    dayDistributionMap.get(i).put(c, 0F);
+                }
+            }
+        }
+    }
+
+    //1F to 0F
+    private float spSine(int dayStart, int dayIn) {
+        int v = dayStart > dayIn ? (dayIn + 8) - dayStart : dayIn;
+        float part = ((float) v) / 4F;
+        return MathHelper.sin((float) (part * Math.PI)) * 0.25F + 0.75F;
     }
 
     private void scheduleDayProgression(World w, int days) {
@@ -99,14 +168,39 @@ public class WorldSkyHandler {
     }
 
     private void doConstellationIteration() {
-        activeDistributionMap.clear();
         activeConstellations.clear();
+        activeDistributions.clear();
 
-        //TODO do iterations, compute the distributions.
+        int activeDay = lastRecordedDay % 8;
+        LinkedList<IConstellation> linkedConstellations = initialValueMappings.get(activeDay);
+        for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
+            activeConstellations.addLast(linkedConstellations.get(i));
+        }
+        activeDistributions = Maps.newHashMap(dayDistributionMap.get(activeDay));
     }
 
-    public Map<IConstellation, Float> getCurrentDistributions() {
-        return Collections.unmodifiableMap(activeDistributionMap);
+    private void occupySlots(int start, boolean[] occupied) {
+        for (int i = start; i < start + 8; i++) {
+            int index = start % 8;
+            if(!occupied[index]) occupied[index] = true;
+        }
+    }
+
+    private int collect(int start, boolean[] occupied) {
+        int found = 0;
+        for (int i = start; i < start + 8; i++) {
+            int index = start % 8;
+            if(!occupied[index]) found++;
+        }
+        return found;
+    }
+
+    private int getFreeSlots(boolean[] array) {
+        int it = 0;
+        for (boolean b : array) {
+            if(!b) it++;
+        }
+        return it;
     }
 
     public boolean isActive(IConstellation c) {
@@ -187,8 +281,8 @@ public class WorldSkyHandler {
     }
 
     public Float getCurrentDistribution(IMajorConstellation c, Function<Float, Float> func) {
-        if(!activeDistributionMap.containsKey(c)) return 0F;
-        return func.apply(activeDistributionMap.get(c));
+        if(!activeDistributions.containsKey(c)) return func.apply(0F);
+        return func.apply(activeDistributions.get(c));
     }
 
 }

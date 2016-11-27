@@ -7,12 +7,11 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,22 +22,22 @@ import java.util.TreeMap;
  */
 public class ConstellationPerkMap {
 
-    private TreeMap<OrderedPerkEntry, Position> perks = new TreeMap<>(new PerkOrderer());
+    private HashMap<ConstellationPerks, Position> perks = new HashMap<>();
+    private HashMap<ConstellationPerks, PerkOrder> perkOrderMap = new HashMap<>();
     private List<Dependency> perkDependencies = new LinkedList<>();
 
     public ConstellationPerkMap() {}
 
     public ConstellationPerkMap addPerk(ConstellationPerks perk, PerkOrder obtainOrder, int x, int y, ConstellationPerks... dependencies) {
-        OrderedPerkEntry entry = new OrderedPerkEntry(obtainOrder, perk);
-        if(perks.containsKey(entry)) {
+        if(perks.containsKey(perk)) {
             AstralSorcery.log.warn("[AstralSorcery] Tried to register the same perk (id=" + perk.ordinal() + ") twice to a perk map! Skipping registration...");
             return this;
         }
         Position p = new Position(x % 15, y % 15);
-        perks.put(entry, p);
+        perks.put(perk, p);
+        perkOrderMap.put(perk, obtainOrder);
         for (ConstellationPerks from : dependencies) {
-            OrderedPerkEntry query = new OrderedPerkEntry(null, from);
-            if(perks.containsKey(query)) {
+            if(perks.containsKey(from)) {
                 boolean found = false;
                 for (Dependency c : perkDependencies) {
                     if((c.from.equals(from) && c.to.equals(perk)) ||
@@ -58,16 +57,25 @@ public class ConstellationPerkMap {
         return this;
     }
 
+    /*private boolean hasPerk(ConstellationPerks perk) {
+        for (OrderedPerkEntry perkEntry : perks.keySet()) {
+            if (perkEntry.perk.ordinal() == perk.ordinal()) {
+                return true;
+            }
+        }
+        return false;
+    }*/
+
     public List<Dependency> getPerkDependencies() {
         return Collections.unmodifiableList(perkDependencies);
     }
 
     @Nullable
     public Position getPosition(ConstellationPerks perk) {
-        return perks.get(new OrderedPerkEntry(null, perk));
+        return perks.get(perk);
     }
 
-    public Map<OrderedPerkEntry, Position> getPerks() {
+    public Map<ConstellationPerks, Position> getPerks() {
         return Collections.unmodifiableMap(perks);
     }
 
@@ -76,9 +84,10 @@ public class ConstellationPerkMap {
         if(prog == null) return null;
         List<ConstellationPerk> appliedPerks = prog.getAppliedPerks();
         List<ConstellationPerks> available = new LinkedList<>();
-        for (OrderedPerkEntry entry : perks.keySet()) {
-            if(entry.order.ordinal() <= availableOrder.ordinal()) {
-                available.add(entry.perk);
+        for (ConstellationPerks entry : perkOrderMap.keySet()) {
+            PerkOrder order = perkOrderMap.get(entry);
+            if(order.ordinal() <= availableOrder.ordinal()) {
+                available.add(entry);
             }
         }
         for (ConstellationPerk perk : appliedPerks) {
@@ -101,7 +110,7 @@ public class ConstellationPerkMap {
 
     }
 
-    public static class PerkOrderer implements Comparator<OrderedPerkEntry> {
+    /*public static class PerkOrderer implements Comparator<OrderedPerkEntry> {
 
         public PerkOrderer() {}
 
@@ -111,7 +120,6 @@ public class ConstellationPerkMap {
         }
 
     }
-
 
     public static class OrderedPerkEntry {
 
@@ -128,14 +136,14 @@ public class ConstellationPerkMap {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             OrderedPerkEntry that = (OrderedPerkEntry) o;
-            return perk == that.perk;
+            return perk.ordinal() == that.perk.ordinal();
         }
 
         @Override
         public int hashCode() {
             return perk != null ? perk.hashCode() : 0;
         }
-    }
+    }*/
 
     public static class Dependency {
 

@@ -27,6 +27,7 @@ public class DataWorldSkyHandlers extends AbstractData {
     public boolean hasWorldHandler(int dim) {
         return activeWorldSkyHandlers.contains(dim);
     }
+
     public static boolean hasWorldHandler(int dim, Side side) {
         DataWorldSkyHandlers handle = SyncDataHolder.getData(side, SyncDataHolder.DATA_SKY_HANDLERS);
         return handle.hasWorldHandler(dim);

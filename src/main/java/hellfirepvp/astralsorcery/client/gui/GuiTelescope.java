@@ -203,7 +203,7 @@ public class GuiTelescope extends GuiWHScreen {
         tes.draw();
     }
 
-    /*private Constellation[] evaluateConstellations(Random rand, Collection<Constellation> activeConstellations) { FIXME
+    /*private Constellation[] evaluateConstellations(Random rand, Collection<Constellation> activeConstellations) {
         if (activeConstellations.size() > 8) {
             throw new IllegalStateException("More than 8 constellations active? More than 8 tiers? Wtf? Did someone add tiers?");
         }

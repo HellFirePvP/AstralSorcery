@@ -129,7 +129,7 @@ public class RenderingUtils {
     }
 
     public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer) {
-        renderTooltip(x, y, tooltipData, new Color(0x000033), new Color(0x000044), fontRenderer);
+        renderTooltip(x, y, tooltipData, new Color(0x000027), new Color(0x000044), fontRenderer);
     }
 
     public static void renderTooltip(int x, int y, List<String> tooltipData, Color color, Color colorFade, FontRenderer fontRenderer) {

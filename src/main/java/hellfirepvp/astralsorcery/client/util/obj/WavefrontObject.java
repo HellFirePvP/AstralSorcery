@@ -160,6 +160,35 @@ public class WavefrontObject {
     }
 
     @SideOnly(Side.CLIENT)
+    public void renderOnly(boolean expectTexture, String... groupNames) {
+        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+
+        VertexFormat vf;
+        if (expectTexture) {
+            vf = DefaultVertexFormats.POSITION_TEX;
+        } else {
+            vf = DefaultVertexFormats.POSITION;
+        }
+        if (currentGroupObject != null) {
+            vb.begin(currentGroupObject.glDrawingMode, vf);
+        } else {
+            vb.begin(GL11.GL_TRIANGLES, vf);
+        }
+
+        for (GroupObject groupObject : groupObjects) {
+            for (String groupName : groupNames)
+            {
+                if (groupName.equalsIgnoreCase(groupObject.name))
+                {
+                    groupObject.render(vb);
+                }
+            }
+        }
+
+        Tessellator.getInstance().draw();
+    }
+
+    @SideOnly(Side.CLIENT)
     public void tessellateAll(VertexBuffer vb) {
         for (GroupObject groupObject : groupObjects) {
             groupObject.render(vb);

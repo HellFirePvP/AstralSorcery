@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -40,12 +42,9 @@ import java.util.Map;
  */
 public class GuiJournalPerkMap extends GuiScreenJournal {
 
-    private static final BindableResource texStar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
-    private static final BindableResource texConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
-    private static final BindableResource texConnectionActive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
 
-    private static final double widthHeight = 90;
+    private static final double widthHeight = 70;
 
     private ConstellationPerkMap mapToDisplay = null;
     private IMajorConstellation attunedConstellation = null;
@@ -61,8 +60,13 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             }
         }
         this.attunedConstellation = Constellations.evorsio;
+
         this.mapToDisplay = new ConstellationPerkMap();
-        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_INCREASE, ConstellationPerkMap.PerkOrder.DEFAULT, 14, 14);
+        //Goes from 0,0 -> 14,14 max.
+        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT, 14, 14);
+        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_DISTANCE,  ConstellationPerkMap.PerkOrder.DEFAULT, 12,  7, ConstellationPerks.OFF_DMG_INCREASE);
+        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_KNOCKBACK, ConstellationPerkMap.PerkOrder.DEFAULT, 10,  2, ConstellationPerks.OFF_DMG_DISTANCE);
+        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_AFTERKILL, ConstellationPerkMap.PerkOrder.DEFAULT,  0,  0, ConstellationPerks.OFF_DMG_INCREASE);
     }
 
     @Override
@@ -72,6 +76,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        TextureHelper.refreshTextureBindState();
         drawDefault(textureResShell);
         drawBaseBackground(zLevel - 50);
 
@@ -90,13 +95,13 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     private void drawPerkMap(ConstellationPerkMap mapToDisplay, Point mouse) {
-        double whStar = 4;
-        double whBetweenStars = 11.875; //All sides 5 to the outer border, remaining: 190 / 16 -> 11.875
+        double whStar = 6;
+        double whBetweenStars = widthHeight / 7D;
 
-        double offsetX = guiLeft + (guiWidth / 2D) - 90;
-        double offsetY = guiTop + (guiHeight / 2D) - 90;
+        double offsetX = guiLeft + ((guiWidth ) / 2D) - widthHeight;
+        double offsetY = guiTop  + ((guiHeight) / 2D) - widthHeight;
 
-        drawConnections(mapToDisplay, offsetX, offsetY, whStar, whBetweenStars, 2);
+        drawConnections(mapToDisplay, offsetX, offsetY, whBetweenStars, 4D);
 
         Map<Rectangle, ConstellationPerks> rects = drawStars(mapToDisplay.getPerks(), offsetX, offsetY, whStar, whBetweenStars);
         for (Rectangle r : rects.keySet()) {
@@ -111,25 +116,31 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         }
     }
 
-    //TODO add flicker effect (brightness + size)
-    private void drawConnections(ConstellationPerkMap mapToDisplay, double offsetX, double offsetY, double whStar, double whBetweenStars, double linebreadth) {
+    private void drawConnections(ConstellationPerkMap mapToDisplay, double offsetX, double offsetY, double whBetweenStars, double linebreadth) {
         PlayerProgress prog = ResearchManager.clientProgress;
-        GL11.glColor4f(1F, 1F, 1F, 1F);
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
 
         Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         for (ConstellationPerkMap.Dependency dep : mapToDisplay.getPerkDependencies()) {
             BindableResource tex;
             if(prog.hasPerkUnlocked(dep.to)) {
-                tex = texConnectionActive;
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection"); //TODO wiiv, here.
             } else {
-                tex = texConnection;
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
             }
 
             ConstellationPerkMap.Position from = mapToDisplay.getPosition(dep.from);
             ConstellationPerkMap.Position to = mapToDisplay.getPosition(dep.to);
             if(from != null && to != null) {
+
+                int count = ClientScheduler.getClientTick() + from.x + from.y + to.x + to.y;
+                double part = (Math.sin(Math.toRadians(((count) * 8) % 360D)) + 1D) / 4D;
+
+                float br = 0.2F + 0.4F * (2F - ((float) part));
+                GL11.glColor4f(br, br, br, br);
+
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 Vector3 fromStar = new Vector3(offset.getX() + from.x * whBetweenStars, offset.getY() + from.y * whBetweenStars, offset.getZ());
@@ -151,27 +162,34 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 tes.draw();
             }
         }
+        GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
-    //TODO add flicker effect (brightness + size)
-    private Map<Rectangle, ConstellationPerks> drawStars(Map<ConstellationPerkMap.OrderedPerkEntry, ConstellationPerkMap.Position> perks, double offsetX, double offsetY, double whStar, double whBetweenStars) {
+    private Map<Rectangle, ConstellationPerks> drawStars(Map<ConstellationPerks, ConstellationPerkMap.Position> perks, double offsetX, double offsetY, double whStar, double whBetweenStars) {
         Map<Rectangle, ConstellationPerks> drawn = new HashMap<>(perks.size());
         PlayerProgress prog = ResearchManager.clientProgress;
 
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
         Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
-        for (Map.Entry<ConstellationPerkMap.OrderedPerkEntry, ConstellationPerkMap.Position> star : perks.entrySet()) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        for (Map.Entry<ConstellationPerks, ConstellationPerkMap.Position> star : perks.entrySet()) {
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             BindableResource tex;
-            if(prog.hasPerkUnlocked(star.getKey().perk)) {
-                tex = texStar;
+            if(prog.hasPerkUnlocked(star.getKey())) {
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1"); //TODO wiiv, here.
             } else {
-                tex = texStar;
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
             }
             tex.bind();
             int starX = star.getValue().x;
             int starY = star.getValue().y;
+
+            int count = ClientScheduler.getClientTick() + starX + starY;
+            float part = (MathHelper.sin((float) Math.toRadians(((count) * 8) % 360F)) / 2F + 1F);
+
+            float br = 0.6F + 0.3F * (2F - part);
+            GL11.glColor4f(br, br, br, br);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
             Point upperLeft = new Point(starVec.getBlockX(), starVec.getBlockY());
@@ -184,10 +202,11 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
             }
 
-            drawn.put(new Rectangle(upperLeft.x, upperLeft.y, (int) (whStar * 2), (int) (whStar * 2)), star.getKey().perk);
+            drawn.put(new Rectangle(upperLeft.x, upperLeft.y, (int) (whStar * 2), (int) (whStar * 2)), star.getKey());
             tes.draw();
         }
 
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         return drawn;
     }
 
@@ -195,18 +214,17 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         BindableResource overlayTex = ClientPerkTextureMapping.getOverlayTexture(attunedConstellation);
         if(overlayTex == null) return;
 
-        double cX = guiLeft + guiWidth / 2D;
-        double cY = guiTop + guiHeight / 2D;
+        double cX = guiLeft + guiWidth / 2D - widthHeight;
+        double cY = guiTop + guiHeight / 2D - widthHeight;
 
         overlayTex.bind();
-        textureResBack.bind();
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(cX,               cY + widthHeight, zLevel).tex(0, 1).endVertex();
-        vb.pos(cX + widthHeight, cY + widthHeight, zLevel).tex(1, 1).endVertex();
-        vb.pos(cX + widthHeight, cY,               zLevel).tex(1, 0).endVertex();
-        vb.pos(cX,               cY,               zLevel).tex(0, 0).endVertex();
+        vb.pos(cX,                   cY + widthHeight * 2, zLevel).tex(0, 1).endVertex();
+        vb.pos(cX + widthHeight * 2, cY + widthHeight * 2, zLevel).tex(1, 1).endVertex();
+        vb.pos(cX + widthHeight * 2, cY,                   zLevel).tex(1, 0).endVertex();
+        vb.pos(cX,                   cY,                   zLevel).tex(0, 0).endVertex();
         Tessellator.getInstance().draw();
 
         GL11.glColor4f(1F, 1F, 1F, 1F);

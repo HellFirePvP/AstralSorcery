@@ -1,17 +1,14 @@
 package hellfirepvp.astralsorcery.client.util.mappings;
 
-import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -114,13 +114,13 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     }
 
     private void renderCrystalEffects(TileAltar te, double x, double y, double z, float partialTicks, long sBase) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        /*GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         RenderingUtils.renderLightRayEffects(x + 0.5, y + 3.5, z + 0.5, BlockCollectorCrystal.CollectorCrystalType.ROCK_CRYSTAL.displayColor, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y + 3, z + 0.5);
         TESRCollectorCrystal.renderCrystal(false, true);
         GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GL11.glPopAttrib();*/
     }
 
     /*private void doAltarTileTransforms(TileAltar.AltarLevel level) {

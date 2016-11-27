@@ -18,8 +18,9 @@ public class ClientPerkTextureMapping {
 
     private static Map<IMajorConstellation, BindableResource> mapOverlayTextures = new HashMap<>();
 
+    //TODO wiiv, in case you wanna do the overlay-texture things, those go here. you gotta restart the client when adding ones here.
     public static void init() {
-
+        //mapOverlayTextures.put(Constellations.evorsio, AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "red"));
     }
 
     @Nullable

@@ -3,9 +3,11 @@ package hellfirepvp.astralsorcery.common.constellation.distribution;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -37,11 +39,28 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        World w = (World) context[0];
-        if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), w.isRemote ? Side.CLIENT : Side.SERVER)) {
+        if(type == TickEvent.Type.WORLD) {
+            World w = (World) context[0];
+            if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.SERVER)) {
+                WorldSkyHandler handle = worldHandlers.get(w.provider.getDimension());
+                if(handle == null) {
+                    handle = new WorldSkyHandler(w);
+                    worldHandlers.put(w.provider.getDimension(), handle);
+                }
+                handle.tick(w);
+            }
+        } else {
+            handleClientTick();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void handleClientTick() {
+        World w = Minecraft.getMinecraft().theWorld;
+        if(w != null && DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.CLIENT)) {
             WorldSkyHandler handle = worldHandlers.get(w.provider.getDimension());
             if(handle == null) {
-                handle = new WorldSkyHandler();
+                handle = new WorldSkyHandler(w);
                 worldHandlers.put(w.provider.getDimension(), handle);
             }
             handle.tick(w);
@@ -72,7 +91,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @Override
     public EnumSet<TickEvent.Type> getHandledTypes() {
-        return EnumSet.of(TickEvent.Type.WORLD);
+        return EnumSet.of(TickEvent.Type.WORLD, TickEvent.Type.CLIENT);
     }
 
     @Override

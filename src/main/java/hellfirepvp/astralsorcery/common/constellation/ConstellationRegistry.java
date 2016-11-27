@@ -33,6 +33,7 @@ public class ConstellationRegistry {
         } else {
             AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major: " + constellation.toString());
             AstralSorcery.log.warn("Skipping specific constellation registration...");
+            throw new IllegalStateException("Tried to register non-minor and non-major constellation.");
         }
         generalConstellationList.add(constellation);
     }
