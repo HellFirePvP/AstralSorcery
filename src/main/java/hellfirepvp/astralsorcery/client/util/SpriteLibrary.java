@@ -20,13 +20,15 @@ public class SpriteLibrary {
     private static final BindableResource texCraftBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1");
     private static final BindableResource texCollectorBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");
     private static final BindableResource texLightbeam = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam");
-    private static final BindableResource texHalo = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
+    private static final BindableResource texHalo1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
+    private static final BindableResource texHalo2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
     private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
     public static final SpriteSheetResource spriteStarlight = texSpriteStarlight.asSpriteSheet(16, 4);
     public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(4, 16);
-    public static final SpriteSheetResource spriteHalo = texHalo.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteHalo1 = texHalo1.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteHalo2 = texHalo2.asSpriteSheet(8, 8);
     public static final SpriteSheetResource spriteCelestialBurst1 = texBurst1.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spriteCelestialBurst2 = texBurst2.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(1, 40);

@@ -70,7 +70,7 @@ public class BlockArrayRenderHelper {
         double sc = new ScaledResolution(mc).getScaleFactor();
         GL11.glTranslated(x + 16D / sc, y + 16D / sc, 512);
 
-        double mul = 12;
+        double mul = 10.5;
 
         double size = 2;
         double minSize = 0.5;
@@ -88,7 +88,7 @@ public class BlockArrayRenderHelper {
         maxLength -= 5;
 
         if(maxLength > 0) {
-            size = (size - minSize) * (1D - (Math.min(20, maxLength) / 20D));
+            size = (size - minSize) * (1D - (maxLength / 20D));
         }
 
         double dr = -5.75*size;

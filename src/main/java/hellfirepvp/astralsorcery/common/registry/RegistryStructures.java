@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAltarAttenuation;
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAltarConstellation;
+import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAttunementFrame;
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockRitualPedestal;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureDesertShrine;
@@ -24,6 +25,7 @@ public class RegistryStructures {
         patternRitualPedestal = new MultiblockRitualPedestal();
         patternAltarAttenuation = new MultiblockAltarAttenuation();
         patternAltarConstellation = new MultiblockAltarConstellation();
+        patternAttunementFrame = new MultiblockAttunementFrame();
     }
 
 }

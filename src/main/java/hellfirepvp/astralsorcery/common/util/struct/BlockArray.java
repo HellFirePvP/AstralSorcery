@@ -2,14 +2,21 @@ package hellfirepvp.astralsorcery.common.util.struct;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.UniversalBucket;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -26,7 +33,7 @@ public class BlockArray {
 
     protected Map<BlockPos, TileEntityCallback> tileCallbacks = new HashMap<>();
     protected Map<BlockPos, BlockInformation> pattern = new HashMap<>();
-    private Vec3i min = new Vec3i(0, 0, 0), max = new Vec3i(0, 0, 0);
+    private Vec3i min = new Vec3i(0, 0, 0), max = new Vec3i(0, 0, 0), size = new Vec3i(0, 0, 0);
 
     public void addBlock(int x, int y, int z, @Nonnull IBlockState state) {
         addBlock(new BlockPos(x, y, z), state);
@@ -49,6 +56,10 @@ public class BlockArray {
         return min;
     }
 
+    public Vec3i getSize() {
+        return size;
+    }
+
     private void updateSize(BlockPos addedPos) {
         if(addedPos.getX() < min.getX()) {
             min = new Vec3i(addedPos.getX(), min.getY(), min.getZ());
@@ -68,6 +79,7 @@ public class BlockArray {
         if(addedPos.getZ() > max.getZ()) {
             max = new Vec3i(max.getX(), max.getY(), addedPos.getZ());
         }
+        size = new Vec3i(max.getX() - min.getX(), max.getY() - min.getY(), max.getZ() - min.getZ());
     }
 
     public Map<BlockPos, BlockInformation> getPattern() {
@@ -110,6 +122,35 @@ public class BlockArray {
                 }
             }
         }
+    }
+
+    public List<ItemStack> getAsDescriptiveStacks() {
+        List<ItemStack> out = new LinkedList<>();
+        for (BlockInformation info : pattern.values()) {
+            int meta = info.metadata;
+            ItemStack s;
+            if(info.type instanceof BlockFluidBase) {
+                s = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ((BlockFluidBase) info.type).getFluid());
+            } else {
+                Item i = Item.getItemFromBlock(info.type);
+                if(i == null) continue;
+                s = new ItemStack(i, 1, meta);
+            }
+            if(s != null) {
+                boolean found = false;
+                for (ItemStack stack : out) {
+                    if(stack.getItem().equals(s.getItem()) && stack.getItemDamage() == meta) {
+                        stack.stackSize++;
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
+                    out.add(s);
+                }
+            }
+        }
+        return out;
     }
 
     public static interface TileEntityCallback {

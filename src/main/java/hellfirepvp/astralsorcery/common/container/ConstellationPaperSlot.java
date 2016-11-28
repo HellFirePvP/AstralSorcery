@@ -16,8 +16,11 @@ import javax.annotation.Nullable;
  */
 public class ConstellationPaperSlot extends Slot {
 
-    public ConstellationPaperSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+    private final ContainerJournal listener;
+
+    public ConstellationPaperSlot(IInventory inventoryIn, ContainerJournal containerJournal, int index, int xPosition, int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
+        this.listener = containerJournal;
     }
 
     @Override
@@ -25,4 +28,10 @@ public class ConstellationPaperSlot extends Slot {
         return stack != null && stack.getItem() != null && stack.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(stack) != null;
     }
 
+    @Override
+    public void onSlotChanged() {
+        super.onSlotChanged();
+
+        listener.slotChanged();
+    }
 }

@@ -67,8 +67,12 @@ public class WorldSkyHandler {
 
     //Fired on client and serverside - client only if it's the world the client is in obviously.
     public void tick(World w) {
-        if(initialValueMappings.isEmpty() || initialValueMappings.size() != ConstellationRegistry.getAllConstellations().size()) {
+        if(initialValueMappings.isEmpty()) {
             setupInitialFunctions();
+        }
+
+        if(w.isRemote && clientConstellationPositionMapping == null) {
+            clientConstellationPositionMapping = new ClientConstellationPositionMapping();
         }
 
         evaluateCelestialEventTimes(w);
@@ -159,9 +163,6 @@ public class WorldSkyHandler {
             DataActiveCelestials celestials = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             celestials.setNewConstellations(w.provider.getDimension(), activeConstellations);
         } else {
-            if(clientConstellationPositionMapping == null) {
-                clientConstellationPositionMapping = new ClientConstellationPositionMapping();
-            }
             ((ClientConstellationPositionMapping) clientConstellationPositionMapping)
                     .updatePositions(activeConstellations);
         }

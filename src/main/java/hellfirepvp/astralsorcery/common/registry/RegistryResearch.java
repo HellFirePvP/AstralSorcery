@@ -108,11 +108,11 @@ public class RegistryResearch {
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
         resIlluminator.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rIlluminatorRock));
 
-        //ResearchNode resSimpleAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_SIMPLE", 0, 2);
-        //resSimpleAtt.addPage(getTextPage("ATT_SIMPLE.1"));
-        //resSimpleAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttuneRockCrystalBasic));
+        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 1, 1);
+        resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
+        resPlayerAtt.addPage(new JournalPageStructure(MultiBlockArrays.patternAttunementFrame));
 
-        ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 1, 4);
+        ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 0, 2);
         resRitPedestal.addPage(getTextPage("RIT_PEDESTAL.1"));
         resRitPedestal.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rRitualPedestalRock));
         resRitPedestal.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
@@ -122,12 +122,12 @@ public class RegistryResearch {
         resConstellationUpgrade.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
-        //resRitPedestal.addSourceConnectionFrom(resSimpleAtt);
-        //resConstellationUpgrade.addSourceConnectionFrom(resSimpleAtt);
+        resRitPedestal.addSourceConnectionFrom(resPlayerAtt);
+        resConstellationUpgrade.addSourceConnectionFrom(resPlayerAtt);
 
         regAttenuation.register(resWell);
         regAttenuation.register(resIlluminator);
-        //regAttenuation.register(resSimpleAtt);
+        regAttenuation.register(resPlayerAtt);
         regAttenuation.register(resRitPedestal);
         regAttenuation.register(resConstellationUpgrade);
     }

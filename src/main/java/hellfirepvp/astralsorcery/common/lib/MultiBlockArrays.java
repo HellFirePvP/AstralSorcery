@@ -18,5 +18,6 @@ public class MultiBlockArrays {
     public static PatternBlockArray patternRitualPedestal;
     public static PatternBlockArray patternAltarAttenuation;
     public static PatternBlockArray patternAltarConstellation;
+    public static PatternBlockArray patternAttunementFrame;
 
 }

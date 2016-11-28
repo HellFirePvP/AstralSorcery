@@ -96,9 +96,9 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             float widthHeightStar = 15F;
             Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
             if(r.contains(mouseX, mouseY)) {
-                RenderingUtils.renderTooltip((int) (offsetX), (int) (offsetY),
+                RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
                         Lists.newArrayList(I18n.format("astralsorcery.journal.recipe.starlight")),
-                        new Color(0x000033), new Color(0x000044), Minecraft.getMinecraft().fontRendererObj);
+                        Minecraft.getMinecraft().fontRendererObj);
             }
 
             renderStandartRecipeGrid(offsetX, offsetY, zLevel, texGrid);

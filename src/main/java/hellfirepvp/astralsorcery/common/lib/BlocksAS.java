@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
+import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
@@ -46,6 +47,7 @@ public class BlocksAS {
     public static BlockPrism lensPrism;
     public static BlockCelestialCrystals celestialCrystals;
     public static BlockFakeTree blockFakeTree;
+    public static BlockAttunementAltar attunementAltar;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

@@ -9,6 +9,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -23,9 +26,11 @@ import java.util.LinkedList;
 public class ContainerJournal extends Container {
 
     private final ItemStack parentJournal;
+    private final int journalIndex;
 
-    public ContainerJournal(InventoryPlayer playerInv, ItemStack journal) {
+    public ContainerJournal(InventoryPlayer playerInv, ItemStack journal, int journalIndex) {
         this.parentJournal = journal;
+        this.journalIndex = journalIndex;
         IInventory inv = ItemJournal.getJournalStorage(journal);
         buildPlayerSlots(playerInv);
         buildSlots(inv);
@@ -34,19 +39,29 @@ public class ContainerJournal extends Container {
     private void buildPlayerSlots(InventoryPlayer playerInv) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+                int index = j + i * 9 + 9;
+
+                if(index == journalIndex) {
+                    addSlotToContainer(new ContainerSlotUnclickable(playerInv, index, 8 + j * 18, 84 + i * 18));
+                } else {
+                    addSlotToContainer(                    new Slot(playerInv, index, 8 + j * 18, 84 + i * 18));
+                }
             }
         }
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
+            if(i == journalIndex) {
+                addSlotToContainer(new ContainerSlotUnclickable(playerInv, i, 8 + i * 18, 142));
+            } else {
+                addSlotToContainer(                    new Slot(playerInv, i, 8 + i * 18, 142));
+            }
         }
     }
 
     private void buildSlots(IInventory in) {
         for (int xx = 0; xx < 9; xx++) {
-            addSlotToContainer(new ConstellationPaperSlot(in,      xx, 8 + xx * 18, 13));
-            addSlotToContainer(new ConstellationPaperSlot(in, 9 +  xx, 8 + xx * 18, 31));
-            addSlotToContainer(new ConstellationPaperSlot(in, 18 + xx, 8 + xx * 18, 49));
+            addSlotToContainer(new ConstellationPaperSlot(in, this,      xx, 8 + xx * 18, 13));
+            addSlotToContainer(new ConstellationPaperSlot(in, this, 9 +  xx, 8 + xx * 18, 31));
+            addSlotToContainer(new ConstellationPaperSlot(in, this, 18 + xx, 8 + xx * 18, 49));
         }
     }
 
@@ -93,11 +108,8 @@ public class ContainerJournal extends Container {
         return true;
     }
 
-    @Override
-    public void onContainerClosed(EntityPlayer playerIn) {
-        super.onContainerClosed(playerIn);
-
-        if(!playerIn.getEntityWorld().isRemote) {
+    void slotChanged() {
+        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
             LinkedList<IConstellation> saveConstellations = new LinkedList<>();
             for (int i = 36; i < 63; i++) {
                 ItemStack in = inventorySlots.get(i).getStack();

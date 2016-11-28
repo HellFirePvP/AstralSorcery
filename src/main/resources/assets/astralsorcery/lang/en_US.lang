@@ -83,8 +83,7 @@ astralsorcery.journal.WELL.1.text=[WIP]<NL>Well that collects liquid starlight. 
 research.ILLUMINATOR.name=[WIP]Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=[WIP]<NL>Cave Illuminator. Once placed down, it'll try and light the caves below it. conditions for 'light' to spawn: must be dark (<8 light, <6 skylight) must not see sky. Places light from its x,z pos outwards on ylevels below it. light spawned acts like air and can be replaced, but not broken.
 
-research.ATT_SIMPLE.name=[WIP]Crystal Attunement
-astralsorcery.journal.ATT_SIMPLE.1.text=[WIP]<NL>Attunes a rock crystal to the [known] constellation (Tier1) shown on the left side of the altar. Only Tier1 is attuneable on this atlar level.
+research.ATT_PLAYER.name=[WIP]Attunement
 
 research.RIT_PEDESTAL.name=[WIP]Ritual Pedestal
 astralsorcery.journal.RIT_PEDESTAL.1.text=[WIP]<NL>Can be used to create an AOE effect based on the constellation-attunement of the rock crystal. Different constellations have different effects and sizes/range.<NL>If the ritual pedestal receives starlight of the starlight network with the same constellation-type as it is attuned to, it'll greatly speed up. Also it will, over time, create rays of light coming out of it. Reflect those lights back onto it (starlight network again) with lenses and it'll speed up even more. (Current effects: only fertilitas)
@@ -184,6 +183,7 @@ tile.BlockAltar.altar_3.name=Celestial Altar
 tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
 tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=Altar
+tile.BlockAttunementAltar.name=Attunement Altar
 tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=Volatile Flare
 tile.BlockWorldIlluminator.name=Cave Illuminator

@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
@@ -100,6 +101,7 @@ public class RegistryItems {
         //entityPlacer = registerItem(new ItemEntityPlacer());
         linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
+        handTelescope = registerItem(new ItemHandTelescope());
         wand = registerItem(new ItemWand());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());

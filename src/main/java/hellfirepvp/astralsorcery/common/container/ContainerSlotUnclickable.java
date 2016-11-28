@@ -1,0 +1,25 @@
+package hellfirepvp.astralsorcery.common.container;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: ContainerSlotUnclickable
+ * Created by HellFirePvP
+ * Date: 28.11.2016 / 07:05
+ */
+public class ContainerSlotUnclickable extends Slot {
+
+    public ContainerSlotUnclickable(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+        super(inventoryIn, index, xPosition, yPosition);
+    }
+
+    @Override
+    public boolean canTakeStack(EntityPlayer playerIn) {
+        return false;
+    }
+
+}

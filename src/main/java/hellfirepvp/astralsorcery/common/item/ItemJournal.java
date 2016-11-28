@@ -52,9 +52,9 @@ public class ItemJournal extends Item {
     }
 
     @Nullable
-    public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack) {
+    public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack, int journalIndex) {
         if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemJournal)) return null;
-        return new ContainerJournal(playerInv, stack);
+        return new ContainerJournal(playerInv, stack, journalIndex);
     }
 
     @Nullable

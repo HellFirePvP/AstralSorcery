@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -9,11 +10,15 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.opengl.GL11;
@@ -128,11 +133,72 @@ public class RenderingUtils {
         GL11.glPopMatrix();
     }
 
-    public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer) {
-        renderTooltip(x, y, tooltipData, new Color(0x000027), new Color(0x000044), fontRenderer);
+    public static void renderBlueStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fr, RenderItem ri) {
+        renderStackTooltip(x, y, tooltipData, new Color(0x000027), new Color(0x000044), Color.WHITE, fr, ri);
     }
 
-    public static void renderTooltip(int x, int y, List<String> tooltipData, Color color, Color colorFade, FontRenderer fontRenderer) {
+    public static void renderStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, Color color, Color colorFade, Color strColor, FontRenderer fr, RenderItem ri) {
+        TextureHelper.setActiveTextureToAtlasSprite();
+
+        if (!tooltipData.isEmpty()) {
+            int esWidth = 0;
+            for (Tuple<ItemStack, String> toolTip : tooltipData) {
+                int width = fr.getStringWidth(toolTip.value) + 17;
+                if (width > esWidth)
+                    esWidth = width;
+            }
+            int pX = x + 12;
+            int pY = y - 12;
+            int sumLineHeight = 8;
+            if (tooltipData.size() > 1)
+                sumLineHeight += 2 + (tooltipData.size() - 1) * 17;
+            float z = 300F;
+
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            drawGradientRect(pX - 3,           pY - 4,                 z, pX + esWidth + 3, pY - 3,                 color, colorFade);
+            drawGradientRect(pX - 3,           pY + sumLineHeight + 3, z, pX + esWidth + 3, pY + sumLineHeight + 4, color, colorFade);
+            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(pX - 4,           pY - 3,                 z, pX - 3,           pY + sumLineHeight + 3, color, colorFade);
+            drawGradientRect(pX + esWidth + 3, pY - 3,                 z, pX + esWidth + 4, pY + sumLineHeight + 3, color, colorFade);
+
+            int rgb = color.getRGB();
+            int col = (rgb & 0x00FFFFFF) | rgb & 0xFF000000;
+            Color colOp = new Color(col);
+            drawGradientRect(pX - 3,           pY - 3 + 1,             z, pX - 3 + 1,       pY + sumLineHeight + 3 - 1, color, colOp);
+            drawGradientRect(pX + esWidth + 2, pY - 3 + 1,             z, pX + esWidth + 3, pY + sumLineHeight + 3 - 1, color, colOp);
+            drawGradientRect(pX - 3,           pY - 3,                 z, pX + esWidth + 3, pY - 3 + 1,                 colOp, colOp);
+            drawGradientRect(pX - 3,           pY + sumLineHeight + 2, z, pX + esWidth + 3, pY + sumLineHeight + 3,     color, color);
+
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            for (Tuple<ItemStack, String> stackDesc : tooltipData) {
+                fr.drawString(stackDesc.value, pX + 17, pY, strColor.getRGB());
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glPushMatrix();
+                RenderHelper.enableGUIStandardItemLighting();
+                ri.renderItemAndEffectIntoGUI(stackDesc.key, pX - 1, pY - 5);
+
+                GL11.glEnable(GL11.GL_BLEND);
+                Blending.DEFAULT.apply();
+
+                GL11.glPopMatrix();
+                pY += 17;
+            }
+            GL11.glPopAttrib();
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+        }
+
+        GlStateManager.enableAlpha();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        TextureHelper.refreshTextureBindState();
+    }
+
+    public static void renderBlueTooltip(int x, int y, List<String> tooltipData, FontRenderer fontRenderer) {
+        renderTooltip(x, y, tooltipData, new Color(0x000027), new Color(0x000044), Color.WHITE, fontRenderer);
+    }
+
+    public static void renderTooltip(int x, int y, List<String> tooltipData, Color color, Color colorFade, Color strColor, FontRenderer fontRenderer) {
         TextureHelper.setActiveTextureToAtlasSprite();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
@@ -168,12 +234,13 @@ public class RenderingUtils {
 
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             for (int i = 0; i < tooltipData.size(); ++i) {
-                String var14 = tooltipData.get(i);
-                fontRenderer.drawString(var14, pX, pY, Color.WHITE.getRGB());
+                String str = tooltipData.get(i);
+                fontRenderer.drawString(str, pX, pY, strColor.getRGB());
                 if (i == 0)
                     pY += 2;
                 pY += 10;
             }
+            GlStateManager.color(1F, 1F, 1F, 1F);
             GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
 

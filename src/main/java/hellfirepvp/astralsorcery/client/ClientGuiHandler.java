@@ -73,7 +73,7 @@ public class ClientGuiHandler {
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
                 if(held != null) {
                     if(held.getItem() != null && held.getItem() instanceof ItemJournal) {
-                        return new GuiJournalContainer(player.inventory, held);
+                        return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
                 }
             default:

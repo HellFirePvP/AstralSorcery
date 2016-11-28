@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
+import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.block.BlockWorldIlluminator;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
@@ -102,6 +104,8 @@ public class RegistryBlocks {
 
         //Mechanics
         blockAltar = registerBlock(new BlockAltar());
+        attunementAltar = registerBlock(new BlockAttunementAltar());
+        queueDefaultItemBlock(attunementAltar);
         ritualPedestal = registerBlock(new BlockRitualPedestal());
         blockWell = registerBlock(new BlockWell());
         queueDefaultItemBlock(blockWell);
@@ -152,6 +156,7 @@ public class RegistryBlocks {
         registerTile(TileGrindstone.class);
         registerTile(TileStructuralConnector.class);
         registerTile(TileFakeTree.class);
+        registerTile(TileAttunementAltar.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

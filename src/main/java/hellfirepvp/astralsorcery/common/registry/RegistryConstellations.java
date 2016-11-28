@@ -92,7 +92,7 @@ public class RegistryConstellations {
         sl3 = aevitas.addStar(3, 6);
         sl4 = aevitas.addStar(21, 8);
         sl5 = aevitas.addStar(25, 2);
-        sl6 = aevitas.addStar(14, 21);
+        sl6 = aevitas.addStar(13, 21);
         sl7 = aevitas.addStar(9, 26);
         sl8 = aevitas.addStar(17, 28);
         sl9 = aevitas.addStar(27, 17);

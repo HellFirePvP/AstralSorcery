@@ -241,7 +241,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     public TextureSpritePlane getHaloEffectSprite() {
         TextureSpritePlane spr = (TextureSpritePlane) spritePlane;
         if(spr == null || spr.canRemove() || spr.isRemoved()) { //Refresh.
-            spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo, Axis.Y_AXIS);
+            spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo1, Axis.Y_AXIS);
             spr.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
             spr.setAlphaOverDistance(true);
             spr.setNoRotation(45);

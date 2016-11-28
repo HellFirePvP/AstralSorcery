@@ -130,6 +130,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                     constellations.remove(c);
                 }
             }
+            if (stack.getItem() instanceof ItemJournal) {
+                for(IConstellation c : ItemJournal.getStoredConstellations(stack)) {
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
+            }
         }
     }
 

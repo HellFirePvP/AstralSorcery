@@ -22,8 +22,8 @@ public class GuiJournalContainer extends GuiContainer {
 
     private static BindableResource texJournalContainer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJStorageBook");
 
-    public GuiJournalContainer(InventoryPlayer playerInv, ItemStack journal) {
-        super(new ContainerJournal(playerInv, journal));
+    public GuiJournalContainer(InventoryPlayer playerInv, ItemStack journal, int journalIndex) {
+        super(new ContainerJournal(playerInv, journal, journalIndex));
     }
 
     @Override
