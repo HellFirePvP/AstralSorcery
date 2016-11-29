@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
@@ -45,6 +46,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private Rectangle rectBack;
     private List<MoonPhase> phases = new LinkedList<>();
+    private List<String> locText = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c, boolean detailed) {
         super(-1);
@@ -52,6 +54,37 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         this.constellation = c;
         this.detailed = detailed;
         testPhases();
+        buildLines();
+    }
+
+    private void buildLines() {
+        String unloc = constellation.getUnlocalizedName() + ".effect";
+        String text = I18n.format(unloc);
+        if(unloc.equals(text)) return;
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+
+        List<String> lines = new LinkedList<>();
+        for (String segment : text.split("<NL>")) {
+            StringBuilder cache = new StringBuilder();
+            for(String element : segment.split(" ")) {
+                String cacheStr = cache.toString();
+                String built = cacheStr.isEmpty() ? element : cacheStr + " " + element;
+                if(fr.getStringWidth(built) > IJournalPage.DEFAULT_WIDTH) {
+                    lines.add(cacheStr);
+                    cache = new StringBuilder();
+                    cache.append(element);
+                } else {
+                    if(cacheStr.isEmpty()) {
+                        cache.append(element);
+                    } else {
+                        cache.append(' ').append(element);
+                    }
+                }
+            }
+            lines.add(cache.toString());
+            lines.add("");
+        }
+        locText.addAll(lines);
     }
 
     private void testPhases() {
@@ -94,6 +127,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+
         double width = fr.getStringWidth(info);
         double chX = 305 - (width * 1.8 / 2);
         GL11.glPushMatrix();
@@ -106,6 +140,22 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
+
+        if(!locText.isEmpty()) {
+            int offsetX = 220, offsetY = 70;
+            for (String s : locText) {
+                GL11.glPushMatrix();
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                GL11.glTranslated(guiLeft + offsetX, guiTop + offsetY, 0);
+                fr.drawString(s, 0, 0, 0xCCDDDDDD, true);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glPopMatrix();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glColor4f(br, br, br, 0.8F);
+                TextureHelper.refreshTextureBindState();
+                offsetY += 13;
+            }
+        }
 
         /*texArrow.bind();
         fontRenderer.font_size_multiplicator = 0.06F;

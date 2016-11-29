@@ -1,7 +1,10 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -22,39 +25,13 @@ public class ConstellationEffectRegistry {
     private static Map<IMajorConstellation, ConstellationEffect> singleRenderInstances = new HashMap<>();
 
     public static void init() {
-        //register(fertilitas, CEffectFertilitas::new);
-        //register(fornax,     CEffectFornax::new);
-        //register(horologium, CEffectHorologium::new);
-        //register(mineralis,  CEffectMineralis::new);
-        //register(lucerna,    CEffectLucerna::new);
-        //register(orion,      CEffectOrion::new);
-        //register(circinus,   CEffectCircinus::new);
-        //register(octans,     CEffectOctans::new);
-        //register(chitra,     CEffectChitra::new);
-        //register(tenifium,   CEffectTenifium::new);
-        //register(ara,        CEffectAra::new);
-        //register(phoenix,    CEffectPhoenix::new);
-        //register(bootes,     CEffectBootes::new);
-        //register(inpes,      CEffectInpes::new);
+        register(Constellations.aevitas, CEffectAevitas::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
 
     public static void addDynamicConfigEntries() {
-        //Config.addDynamicEntry(new CEffectFertilitas());
-        //Config.addDynamicEntry(new CEffectFornax());
-        //Config.addDynamicEntry(new CEffectHorologium());
-        //Config.addDynamicEntry(new CEffectMineralis());
-        //Config.addDynamicEntry(new CEffectLucerna());
-        //Config.addDynamicEntry(new CEffectOrion());
-        //Config.addDynamicEntry(new CEffectCircinus());
-        //Config.addDynamicEntry(new CEffectOctans());
-        //Config.addDynamicEntry(new CEffectChitra());
-        //Config.addDynamicEntry(new CEffectTenifium());
-        //Config.addDynamicEntry(new CEffectAra());
-        //Config.addDynamicEntry(new CEffectPhoenix());
-        //Config.addDynamicEntry(new CEffectBootes());
-        //Config.addDynamicEntry(new CEffectInpes());
+        Config.addDynamicEntry(new CEffectAevitas());
     }
 
     private static void register(IMajorConstellation c, ConstellationEffectProvider provider) {

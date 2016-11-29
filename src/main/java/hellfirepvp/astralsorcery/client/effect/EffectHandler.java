@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -43,9 +44,13 @@ public final class EffectHandler {
 
     public static final EffectHandler instance = new EffectHandler();
 
+    private static boolean acceptsNewParticles = true, cleanRequested = false;
+
+    private static List<IComplexEffect> toAddBuffer = new LinkedList<>();
+
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
-    public static final List<EffectLightbeam> fastRenderBeams = new LinkedList<>();
+    //public static final List<EffectLightbeam> fastRenderBeams = new LinkedList<>();
 
     private EffectHandler() {}
 
@@ -67,18 +72,18 @@ public final class EffectHandler {
     @SubscribeEvent
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.TEXT) {
-            synchronized (complexEffects) {
-                Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT);
-                for (int i = 0; i <= 2; i++) {
-                    for (IComplexEffect effect : layeredEffects.get(i)) {
-                        GL11.glPushMatrix();
-                        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                        effect.render(event.getPartialTicks());
-                        GL11.glPopAttrib();
-                        GL11.glPopMatrix();
-                    }
+            acceptsNewParticles = false;
+            Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.OVERLAY_TEXT);
+            for (int i = 0; i <= 2; i++) {
+                for (IComplexEffect effect : layeredEffects.get(i)) {
+                    GL11.glPushMatrix();
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    effect.render(event.getPartialTicks());
+                    GL11.glPopAttrib();
+                    GL11.glPopMatrix();
                 }
             }
+            acceptsNewParticles = true;
         }
     }
 
@@ -93,20 +98,20 @@ public final class EffectHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRender(RenderWorldLastEvent event) {
-        synchronized (complexEffects) {
-            Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
-            EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
-            //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
-            for (int i = 0; i <= 2; i++) {
-                for (IComplexEffect effect : layeredEffects.get(i)) {
-                    GL11.glPushMatrix();
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    effect.render(event.getPartialTicks());
-                    GL11.glPopAttrib();
-                    GL11.glPopMatrix();
-                }
+        acceptsNewParticles = false;
+        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+        EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
+        //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
+        for (int i = 0; i <= 2; i++) {
+            for (IComplexEffect effect : layeredEffects.get(i)) {
+                GL11.glPushMatrix();
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                effect.render(event.getPartialTicks());
+                GL11.glPopAttrib();
+                GL11.glPopMatrix();
             }
         }
+        acceptsNewParticles = true;
         TESRFakeTree.renderTranslucentBlocks();
     }
 
@@ -121,17 +126,6 @@ public final class EffectHandler {
         register(entityComplexFX);
         return entityComplexFX;
     }
-
-    /*public OverlayText overlayText(String message, int tickTimeout, OverlayText.OverlayTextProperties properties) {
-        OverlayText text;
-        if (properties == null) {
-            text = new OverlayText(message, tickTimeout);
-        } else {
-            text = new OverlayText(message, tickTimeout, properties);
-        }
-        register(text);
-        return text;
-    }*/
 
     public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence, @Nullable OrbitalEffectController.OrbitTickModifier tickModifier) {
         OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence, tickModifier);
@@ -166,56 +160,65 @@ public final class EffectHandler {
     private void register(final IComplexEffect effect) {
         if(AssetLibrary.reloading || Minecraft.getMinecraft().isGamePaused()) return;
 
-        new Thread(() -> {
-            synchronized (complexEffects) {
-                if(effect instanceof EntityFXFacingParticle) {
-                    fastRenderParticles.add((EntityFXFacingParticle) effect);
-                //} else if(effect instanceof EffectLightbeam) {
-                //    fastRenderBeams.add((EffectLightbeam) effect);
-                } else {
-                    complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
-                }
-                effect.clearRemoveFlag();
-            }
-        }).start();
+        if(acceptsNewParticles) {
+            registerUnsafe(effect);
+        } else {
+            toAddBuffer.add(effect);
+        }
     }
 
-    /*public void unregister(final IComplexEffect effect) {
-        new Thread(() -> {
-            synchronized (lock) {
-                complexEffects.get(effect.getRenderTarget()).remove(effect);
-            }
-        }).start();
-    }*/
+    private void registerUnsafe(IComplexEffect effect) {
+        if(effect instanceof EntityFXFacingParticle) {
+            fastRenderParticles.add((EntityFXFacingParticle) effect);
+            //} else if(effect instanceof EffectLightbeam) {
+            //    fastRenderBeams.add((EffectLightbeam) effect);
+        } else {
+            complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
+        }
+        effect.clearRemoveFlag();
+    }
 
     public void tick() {
         clientEffectTick++;
 
-        synchronized (complexEffects) {
-            for (IComplexEffect.RenderTarget target : complexEffects.keySet()) {
-                Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(target);
+        if(cleanRequested) {
+            for (IComplexEffect.RenderTarget t : IComplexEffect.RenderTarget.values()) {
                 for (int i = 0; i <= 2; i++) {
-                    Iterator<IComplexEffect> iterator = layeredEffects.get(i).iterator();
-                    while (iterator.hasNext()) {
-                        IComplexEffect effect = iterator.next();
-                        effect.tick();
-                        if(effect.canRemove()) {
-                            effect.flagAsRemoved();
-                            iterator.remove();
-                        }
+                    complexEffects.get(t).get(i).clear();
+                }
+            }
+            fastRenderParticles.clear();
+            toAddBuffer.clear();
+            cleanRequested = false;
+        }
+
+        acceptsNewParticles = false;
+        for (IComplexEffect.RenderTarget target : complexEffects.keySet()) {
+            Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(target);
+            for (int i = 0; i <= 2; i++) {
+                Iterator<IComplexEffect> iterator = layeredEffects.get(i).iterator();
+                while (iterator.hasNext()) {
+                    IComplexEffect effect = iterator.next();
+                    effect.tick();
+                    if(effect.canRemove()) {
+                        effect.flagAsRemoved();
+                        iterator.remove();
                     }
                 }
             }
-            Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
-            while (iterator.hasNext()) {
-                EntityFXFacingParticle effect = iterator.next();
-                effect.tick();
-                if(effect.canRemove()) {
-                    effect.flagAsRemoved();
-                    iterator.remove();
-                }
+        }
+        Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
+        while (iterator.hasNext()) {
+            EntityFXFacingParticle effect = iterator.next();
+            effect.tick();
+            if(effect.canRemove()) {
+                effect.flagAsRemoved();
+                iterator.remove();
             }
         }
+        acceptsNewParticles = true;
+        toAddBuffer.forEach(this::registerUnsafe);
+        toAddBuffer.clear();
     }
 
     public static int getClientEffectTick() {
@@ -233,13 +236,6 @@ public final class EffectHandler {
     }
 
     public static void cleanUp() {
-        synchronized (complexEffects) {
-            for (IComplexEffect.RenderTarget t : IComplexEffect.RenderTarget.values()) {
-                for (int i = 0; i <= 2; i++) {
-                    complexEffects.get(t).get(i).clear();
-                }
-            }
-            fastRenderParticles.clear();
-        }
+        cleanRequested = true;
     }
 }

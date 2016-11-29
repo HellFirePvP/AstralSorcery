@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
@@ -94,7 +95,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WAND_CRYSTAL_HIGHLIGHT,
         PHOENIX_PROC,
 
-        //CE_CROP_INTERACT,
+        CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
         //CE_ACCEL_TILE,
         //CE_DMG_ENTITY,
@@ -124,8 +125,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return ItemWand::highlightEffects;
                 case PHOENIX_PROC:
                     return PotionCheatDeath::playEntityDeathEffect;
-                //case CE_CROP_INTERACT:
-                    //return CEffectFertilitas::playParticles;
+                case CE_CROP_INTERACT:
+                    return CEffectAevitas::playParticles;
                 //case CE_MELT_BLOCK:
                 //    return CEffectFornax::playParticles;
                 //case CE_ACCEL_TILE:

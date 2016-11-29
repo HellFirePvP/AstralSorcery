@@ -70,9 +70,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         return "tile.BlockAttunementAltar.name";
     }
 
-    private void receiveStarlight(IMajorConstellation type, double amount) {
-
-    }
+    private void receiveStarlight(IMajorConstellation type, double amount) {}
 
     @Override
     public ITransmissionReceiver provideEndpoint(BlockPos at) {

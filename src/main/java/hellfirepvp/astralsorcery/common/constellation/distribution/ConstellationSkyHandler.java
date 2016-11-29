@@ -29,7 +29,8 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     private static final ConstellationSkyHandler instance = new ConstellationSkyHandler();
 
-    private Map<Integer, WorldSkyHandler> worldHandlers = new HashMap<>();
+    private Map<Integer, WorldSkyHandler> worldHandlersServer  = new HashMap<>();
+    private Map<Integer, WorldSkyHandler> worldHandlersClient  = new HashMap<>();
 
     private ConstellationSkyHandler() {}
 
@@ -42,10 +43,10 @@ public class ConstellationSkyHandler implements ITickHandler {
         if(type == TickEvent.Type.WORLD) {
             World w = (World) context[0];
             if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.SERVER)) {
-                WorldSkyHandler handle = worldHandlers.get(w.provider.getDimension());
+                WorldSkyHandler handle = worldHandlersServer.get(w.provider.getDimension());
                 if(handle == null) {
                     handle = new WorldSkyHandler(w);
-                    worldHandlers.put(w.provider.getDimension(), handle);
+                    worldHandlersServer.put(w.provider.getDimension(), handle);
                 }
                 handle.tick(w);
             }
@@ -58,10 +59,10 @@ public class ConstellationSkyHandler implements ITickHandler {
     private void handleClientTick() {
         World w = Minecraft.getMinecraft().theWorld;
         if(w != null && DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.CLIENT)) {
-            WorldSkyHandler handle = worldHandlers.get(w.provider.getDimension());
+            WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if(handle == null) {
                 handle = new WorldSkyHandler(w);
-                worldHandlers.put(w.provider.getDimension(), handle);
+                worldHandlersClient.put(w.provider.getDimension(), handle);
             }
             handle.tick(w);
         }
@@ -77,16 +78,23 @@ public class ConstellationSkyHandler implements ITickHandler {
     }
 
     public void resetIterationsClient() {
-        worldHandlers.clear();
+        worldHandlersClient.clear();
     }
 
     @Nullable
     public WorldSkyHandler getWorldHandler(World world) {
-        return worldHandlers.get(world.provider.getDimension());
+        Map<Integer, WorldSkyHandler> handlerMap;
+        if(world.isRemote) {
+            handlerMap = worldHandlersClient;
+        } else {
+            handlerMap = worldHandlersServer;
+        }
+        return handlerMap.get(world.provider.getDimension());
     }
 
     public void informWorldUnload(World world) {
-        worldHandlers.remove(world.provider.getDimension());
+        worldHandlersServer.remove(world.provider.getDimension());
+        worldHandlersClient.remove(world.provider.getDimension());
     }
 
     @Override
