@@ -102,7 +102,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         //CE_WATER_FISH,
         //CE_TREE_VORTEX,
 
-        DEBUG;
+        RT_DEBUG;
 
         //GOD I HATE THIS PART
         //But i can't do this in the ctor because server-client stuffs.
@@ -137,7 +137,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                 //    return CEffectOctans::playParticles;
                 //case CE_TREE_VORTEX:
                     //return CEffectAra::playParticles;
-                case DEBUG:
+                case RT_DEBUG:
                     return RaytraceAssist::playDebug;
             }
             return null;

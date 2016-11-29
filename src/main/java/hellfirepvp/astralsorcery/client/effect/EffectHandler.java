@@ -217,8 +217,11 @@ public final class EffectHandler {
             }
         }
         acceptsNewParticles = true;
-        toAddBuffer.forEach(this::registerUnsafe);
+        List<IComplexEffect> effects = new LinkedList<>(toAddBuffer);
         toAddBuffer.clear();
+        for (IComplexEffect eff : effects) {
+            registerUnsafe(eff);
+        }
     }
 
     public static int getClientEffectTick() {

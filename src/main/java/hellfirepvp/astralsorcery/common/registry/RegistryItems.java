@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
@@ -103,6 +104,7 @@ public class RegistryItems {
         journal = registerItem(new ItemJournal());
         handTelescope = registerItem(new ItemHandTelescope());
         wand = registerItem(new ItemWand());
+        coloredLens = registerItem(new ItemColoredLens());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

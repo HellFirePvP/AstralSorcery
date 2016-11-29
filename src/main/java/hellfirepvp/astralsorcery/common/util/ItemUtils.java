@@ -30,12 +30,14 @@ public class ItemUtils {
         ei.motionX = 0;
         ei.motionY = 0;
         ei.motionZ = 0;
+        ei.setDefaultPickupDelay();
         return ei;
     }
     public static EntityItem dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
         if(world.isRemote) return null;
         EntityItem ei = dropItem(world, x, y, z, stack);
         applyRandomDropOffset(ei);
+        ei.setDefaultPickupDelay();
         return ei;
     }
 

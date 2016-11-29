@@ -102,6 +102,7 @@ public class TransmissionChain {
 
         CrystalProperties properties = node.getTransmissionProperties();
         float lossPerc = CrystalCalculations.getThroughputMultiplier(properties);
+        lossPerc *= node.getAdditionalTransmissionLossMultiplier();
         List<NodeConnection<IPrismTransmissionNode>> next = node.queryNext(handler);
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
         prevPath.push(node.getPos());

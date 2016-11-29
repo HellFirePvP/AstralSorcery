@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
@@ -41,6 +42,7 @@ public class ItemsAS {
     public static ItemCrystalAxe crystalAxe;
     public static ItemCrystalSword crystalSword;
     public static ItemWand wand;
+    public static ItemColoredLens coloredLens;
 
     public static ItemStack itemBucketLiquidStarlight;
 

@@ -162,6 +162,15 @@ item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe
 item.ItemCrystalSword.name=Crystal Sword
+item.ItemColoredLens.name=Colored Lens
+
+item.ItemColoredLens.effect.fire.name=Ignition
+item.ItemColoredLens.effect.break.name=Break
+item.ItemColoredLens.effect.grow.name=Growth
+item.ItemColoredLens.effect.harvest.name=Harvest
+item.ItemColoredLens.effect.damage.name=Damage
+item.ItemColoredLens.effect.regen.name=Regeneration
+item.ItemColoredLens.effect.night.name=Night Vision
 
 inventory.altar.0=Luminous Crafting Table
 inventory.altar.1=Starlight Crafting Altar

@@ -57,6 +57,7 @@ public class Vector3 {
     public Vector3(Entity entity) {
         this(entity.posX, entity.posY, entity.posZ);
     }
+
     public Vector3(TileEntity te) {
         this(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
     }

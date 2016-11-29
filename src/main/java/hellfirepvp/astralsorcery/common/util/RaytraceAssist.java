@@ -1,17 +1,16 @@
 package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +40,12 @@ public class RaytraceAssist {
     private final Vector3 start, target;
     private final BlockPos startPos, targetPos;
 
+    private boolean collectEntities = false;
+    private List<Integer> collected = new LinkedList<>();
+    private AxisAlignedBB collectBox = null;
+
+    private BlockPos hit = null;
+
     public RaytraceAssist(BlockPos start, BlockPos target) {
         this(new Vector3(start).add(CENTRALIZE), new Vector3(target).add(CENTRALIZE));
     }
@@ -51,6 +57,12 @@ public class RaytraceAssist {
         this.targetPos = target.toBlockPos();
     }
 
+    public void setCollectEntities(double additionalCollectRadius) {
+        this.collectEntities = true;
+        this.collectBox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        this.collectBox = this.collectBox.expandXyz(additionalCollectRadius);
+    }
+
     public boolean isClear(World world) {
         Vector3 aim = start.vectorFromHereTo(target);
         Vector3 stepAim = aim.clone().normalize().multiply(STEP_WIDTH);
@@ -59,10 +71,21 @@ public class RaytraceAssist {
         for (double distancePart = STEP_WIDTH; distancePart <= distance; distancePart += STEP_WIDTH) {
             Vector3 stepVec = prevVec.clone().add(stepAim);
             BlockPos at = stepVec.toBlockPos();
+
+            if(collectEntities) {
+                List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
+                for (EntityLivingBase b : entities) {
+                    if(!collected.contains(b.getEntityId())) {
+                        collected.add(b.getEntityId());
+                    }
+                }
+            }
+
             if(!isStartEnd(at) && !world.isAirBlock(at)) {
                 IBlockState state = world.getBlockState(at);
                 if(!isAllowed(state)) {
-                     return false;
+                    hit = at;
+                    return false;
                 }
             }
 
@@ -82,6 +105,21 @@ public class RaytraceAssist {
             prevVec = stepVec;
         }
         return true;
+    }
+
+    public BlockPos blockHit() {
+        return hit;
+    }
+
+    public List<EntityLivingBase> collectedEntities(World world) {
+        List<EntityLivingBase> entities = new LinkedList<>();
+        for (Integer id : collected) {
+            Entity e = world.getEntityByID(id);
+            if(e != null && e instanceof EntityLivingBase) {
+                entities.add((EntityLivingBase) e);
+            }
+        }
+        return entities;
     }
 
     private boolean isAllowed(IBlockState state) {

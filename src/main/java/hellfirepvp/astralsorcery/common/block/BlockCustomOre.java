@@ -148,7 +148,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     public static void playStarmetalOreEffects(PktParticleEvent event) {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                 event.getVec().getX() + rand.nextFloat(),
-                event.getVec().getY() - 1 + rand.nextFloat(),
+                event.getVec().getY() + rand.nextFloat(),
                 event.getVec().getZ() + rand.nextFloat());
         p.motion(0, rand.nextFloat() * 0.05, 0);
         p.scale(0.2F);

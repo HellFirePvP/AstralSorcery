@@ -79,7 +79,7 @@ public class StarlightNetworkRegistry {
     //This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
 
-        public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount);
+        public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IMajorConstellation starlightType, double amount);
 
     }
 

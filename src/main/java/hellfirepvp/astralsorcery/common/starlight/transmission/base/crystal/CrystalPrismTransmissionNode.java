@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
 
     private CrystalProperties properties;
+    private float additionalLoss = 1F;
 
     public CrystalPrismTransmissionNode(@Nonnull BlockPos thisPos, CrystalProperties properties) {
         super(thisPos);
@@ -28,6 +29,15 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
 
     public CrystalPrismTransmissionNode(@Nonnull BlockPos thisPos) {
         super(thisPos);
+    }
+
+    public void updateAdditionalLoss(float loss) {
+        this.additionalLoss = loss;
+    }
+
+    @Override
+    public float getAdditionalTransmissionLossMultiplier() {
+        return additionalLoss;
     }
 
     @Override
@@ -46,6 +56,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
         super.readFromNBT(compound);
 
         this.properties = CrystalProperties.readFromNBT(compound);
+        this.additionalLoss = compound.getFloat("lossMultiplier");
     }
 
     @Override
@@ -53,6 +64,7 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
         super.writeToNBT(compound);
 
         this.properties.writeToNBT(compound);
+        compound.setFloat("lossMultiplier", this.additionalLoss);
     }
 
     public static class Provider implements TransmissionClassRegistry.TransmissionProvider {

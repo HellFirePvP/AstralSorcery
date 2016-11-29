@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegist
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -25,7 +26,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
     private static Map<BlockPos, IronOreReceiverNode> turningIrons = new HashMap<>();
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IMajorConstellation starlightType, double amount) {
         long ms = System.currentTimeMillis();
         if(!turningIrons.containsKey(pos)) {
             IronOreReceiverNode node = new IronOreReceiverNode();

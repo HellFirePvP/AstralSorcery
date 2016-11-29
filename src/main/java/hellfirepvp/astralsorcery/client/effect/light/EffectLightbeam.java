@@ -29,6 +29,7 @@ public class EffectLightbeam implements IComplexEffect {
     private int maxAge = 64;
     private int age = 0;
     private float alphaMultiplier = 1F;
+    private float cR = 1F, cG = 1F, cB = 1F, cA = 1F;
 
     private boolean flagRemoved = true;
 
@@ -51,6 +52,14 @@ public class EffectLightbeam implements IComplexEffect {
 
     public void setDead() {
         age = maxAge;
+    }
+
+    public EffectLightbeam setColorOverlay(float red, float green, float blue, float alpha) {
+        this.cR = red;
+        this.cG = green;
+        this.cB = blue;
+        this.cA = alpha;
+        return this;
     }
 
     public EffectLightbeam setAlphaMultiplier(float alphaMultiplier) {
@@ -136,7 +145,7 @@ public class EffectLightbeam implements IComplexEffect {
 
         GL11.glPushMatrix();
         removeOldTranslate(rView, pTicks);
-        GL11.glColor4f(tr, tr, tr, tr);
+        GL11.glColor4f(cR * tr, cG * tr, cB * tr, cA * tr);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);

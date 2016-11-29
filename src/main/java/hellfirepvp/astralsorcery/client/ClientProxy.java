@@ -232,6 +232,7 @@ public class ClientProxy extends CommonProxy {
         List<ItemStack> list = new ArrayList<>();
         item.getSubItems(item, RegistryItems.creativeTabAstralSorcery, list);
         item.getSubItems(item, RegistryItems.creativeTabAstralSorceryPapers, list);
+        item.getSubItems(item, RegistryItems.creativeTabAstralSorceryTunedCrystals, list);
         if (list.size() > 0) {
             for (ItemStack i : list) {
                 registerItemRender(item, i.getItemDamage(), name);

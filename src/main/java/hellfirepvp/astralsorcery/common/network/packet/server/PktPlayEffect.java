@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,8 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
     public static enum EffectType {
 
         //DEFINE EVENT TRIGGER IN THE FCKING HUGE SWITCH STATEMENT DOWN TEHRE.
-        GRINDSTONE_WHEEL;
+        GRINDSTONE_WHEEL,
+        BEAM_BREAK;
 
         //GOD I HATE THIS PART
         //But i can't do this in the ctor because server-client stuffs.
@@ -74,6 +76,8 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
             switch (type) {
                 case GRINDSTONE_WHEEL:
                     return TileGrindstone::playWheelAnimation;
+                case BEAM_BREAK:
+                    return ItemColoredLens.ColorType::blockBreakAnimation;
             }
             return null;
         }

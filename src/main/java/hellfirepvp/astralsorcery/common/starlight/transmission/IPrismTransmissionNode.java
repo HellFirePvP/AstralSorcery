@@ -29,6 +29,14 @@ public interface IPrismTransmissionNode {
         return CrystalProperties.getMaxCelestialProperties();
     }
 
+    //Get this node's additional transmission loss multiplier.
+    //Why the transmission is reduced even more is not important here.
+    //0 means 100% all starlight is lost here, 1 means nothing is lost.
+    //By default we don't increase additional loss.
+    default public float getAdditionalTransmissionLossMultiplier() {
+        return 1F;
+    }
+
     //Fired to notify THIS that the link to "to" is no longer valid
     //The node at "to" should have THIS as a valid source.
     public boolean notifyUnlink(World world, BlockPos to);

@@ -10,6 +10,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -23,26 +25,28 @@ import java.util.Random;
  */
 public class TileCrystalPrismLens extends TileCrystalLens {
 
-    private static final Random rand = new Random();
-
     @Override
     public void update() {
         super.update();
 
         if(worldObj.isRemote && getLinkedPositions().size() > 0) {
-            Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-            if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
-            if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
-            Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
-            particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-            particle.motion(
-                    rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1));
-            particle.scale(0.2F);
+            playPrismEffects();
         }
+    }
 
+    @SideOnly(Side.CLIENT)
+    private void playPrismEffects() {
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
+        Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
+        EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+        particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+        particle.motion(
+                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1));
+        particle.scale(0.2F);
     }
 
     @Nullable
