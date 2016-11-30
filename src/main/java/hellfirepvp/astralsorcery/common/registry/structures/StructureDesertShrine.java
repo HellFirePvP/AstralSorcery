@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import java.util.Map;
 import java.util.Random;
 
 import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
@@ -40,17 +41,19 @@ public class StructureDesertShrine extends StructureBlockArray {
     }
 
     @Override
-    public void placeInWorld(World world, BlockPos center) {
+    public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center) {
         center = center.down();
-        super.placeInWorld(world, center);
+        Map<BlockPos, IBlockState> result = super.placeInWorld(world, center);
         placeSand(world, center);
+        return result;
     }
 
     @Override
-    public void placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
+    public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center, PastPlaceProcessor processor) {
         center = center.down();
-        super.placeInWorld(world, center, processor);
+        Map<BlockPos, IBlockState> result = super.placeInWorld(world, center, processor);
         placeSand(world, center);
+        return result;
     }
 
     private void placeSand(World world, BlockPos center) {

@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -79,7 +80,7 @@ public class BlockArray {
         if(addedPos.getZ() > max.getZ()) {
             max = new Vec3i(max.getX(), max.getY(), addedPos.getZ());
         }
-        size = new Vec3i(max.getX() - min.getX(), max.getY() - min.getY(), max.getZ() - min.getZ());
+        size = new Vec3i(max.getX() - min.getX() + 1, max.getY() - min.getY() + 1, max.getZ() - min.getZ() + 1);
     }
 
     public Map<BlockPos, BlockInformation> getPattern() {
@@ -122,6 +123,30 @@ public class BlockArray {
                 }
             }
         }
+    }
+
+    public Map<BlockPos, IBlockState> placeInWorld(World world, BlockPos center) {
+        Map<BlockPos, IBlockState> result = new HashMap<>();
+        for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
+            BlockInformation info = entry.getValue();
+            BlockPos at = center.add(entry.getKey());
+            IBlockState state = info.state;
+            world.setBlockState(at, state, 3);
+            result.put(at, state);
+
+            if(state.getBlock() instanceof BlockLiquid) {
+                world.notifyBlockOfStateChange(at, state.getBlock());
+            }
+
+            TileEntity placed = world.getTileEntity(at);
+            if(tileCallbacks.containsKey(entry.getKey())) {
+                TileEntityCallback callback = tileCallbacks.get(entry.getKey());
+                if(callback.isApplicable(placed)) {
+                    callback.onPlace(world, at, placed);
+                }
+            }
+        }
+        return result;
     }
 
     public List<ItemStack> getAsDescriptiveStacks() {

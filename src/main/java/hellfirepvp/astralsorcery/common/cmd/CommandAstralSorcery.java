@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -166,11 +167,11 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void buildStruct(MinecraftServer server, ICommandSender sender, String name) {
-        StructureBlockArray array;
+        BlockArray array;
         try {
             Field f = MultiBlockArrays.class.getDeclaredField(name);
             f.setAccessible(true);
-            array = (StructureBlockArray) f.get(null);
+            array = (BlockArray) f.get(null);
         } catch (NoSuchFieldException e) {
             sender.addChatMessage(new TextComponentString("§cFailed! " + name + " doesn't exist!"));
             return;
