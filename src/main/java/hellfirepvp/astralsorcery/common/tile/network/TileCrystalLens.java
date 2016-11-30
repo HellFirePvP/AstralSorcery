@@ -43,6 +43,8 @@ public class TileCrystalLens extends TileTransmissionBase {
     private CrystalProperties properties;
     private ItemColoredLens.ColorType lensColor;
 
+    private int lensEffectTimeout = 0;
+
     //So we can tell the client to render beams eventhough the actual connection doesn't exist.
     private List<BlockPos> occupiedConnections = new LinkedList<>();
 
@@ -53,6 +55,10 @@ public class TileCrystalLens extends TileTransmissionBase {
     public void onPlace(CrystalProperties properties) {
         this.properties = properties;
         markForUpdate();
+    }
+
+    public void onTransmissionTick() {
+        this.lensEffectTimeout = 5;
     }
 
     //Returns the old one.
@@ -98,6 +104,12 @@ public class TileCrystalLens extends TileTransmissionBase {
 
     private void doLensColorEffects(ItemColoredLens.ColorType lensColor) {
         if(getTicksExisted() % 4 != 0) return;
+
+        if(lensEffectTimeout > 0) {
+            lensEffectTimeout--;
+        } else {
+            return;
+        }
 
         this.occupiedConnections.clear();
 
@@ -207,4 +219,5 @@ public class TileCrystalLens extends TileTransmissionBase {
     public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
         return new CrystalTransmissionNode(at, getCrystalProperties());
     }
+
 }

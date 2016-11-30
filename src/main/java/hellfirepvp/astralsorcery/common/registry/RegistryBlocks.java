@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -106,6 +107,8 @@ public class RegistryBlocks {
         blockAltar = registerBlock(new BlockAltar());
         attunementAltar = registerBlock(new BlockAttunementAltar());
         queueDefaultItemBlock(attunementAltar);
+        attunementRelay = registerBlock(new BlockAttunementRelay());
+        queueDefaultItemBlock(attunementRelay);
         ritualPedestal = registerBlock(new BlockRitualPedestal());
         blockWell = registerBlock(new BlockWell());
         queueDefaultItemBlock(blockWell);

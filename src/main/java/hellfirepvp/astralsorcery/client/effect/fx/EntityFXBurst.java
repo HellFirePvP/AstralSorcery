@@ -14,6 +14,7 @@ public class EntityFXBurst extends EntityFXFacingSprite {
     public EntityFXBurst(double x, double y, double z) {
         super(SpriteLibrary.spriteCollectorBurst, x, y, z);
     }
+
     public EntityFXBurst(double x, double y, double z, float scale) {
         super(SpriteLibrary.spriteCollectorBurst, x, y, z, scale);
     }

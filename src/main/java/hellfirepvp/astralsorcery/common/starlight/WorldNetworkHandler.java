@@ -176,7 +176,7 @@ public class WorldNetworkHandler {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
             new Throwable().printStackTrace();
-            AstralSorcery.log.warn("Can't find Transmission node for removal-queued Transmission tile!");
+            AstralSorcery.log.warn("Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
@@ -194,7 +194,7 @@ public class WorldNetworkHandler {
     private void removeThisSourceFromNext(IStarlightTransmission tr) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
-            AstralSorcery.log.warn("Can't find Transmission node for removal-queued Transmission tile!");
+            AstralSorcery.log.warn("Could not find transmission node for Transmission tile '" + tr.getClass().getSimpleName() + "'");
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }
@@ -221,7 +221,7 @@ public class WorldNetworkHandler {
     private void linkNextToThisSources(IStarlightTransmission tr) {
         IPrismTransmissionNode node = tr.getNode();
         if(node == null) {
-            AstralSorcery.log.warn("Previously added Transmission tile didn't create a Transmission node!");
+            AstralSorcery.log.warn("Previously added Transmission tile '" + tr.getClass().getSimpleName() + "' didn't create a Transmission node!");
             AstralSorcery.log.warn("This is an implementation error. Report it along with the steps to create this, if you come across this.");
             return;
         }

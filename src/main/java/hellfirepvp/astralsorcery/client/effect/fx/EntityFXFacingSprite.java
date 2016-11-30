@@ -2,7 +2,10 @@ package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -19,6 +22,8 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
     private final double x, y, z;
     private final float scale;
 
+    private RefreshFunction refreshFunction;
+
     public EntityFXFacingSprite(SpriteSheetResource spriteSheet, double x, double y, double z) {
         this(spriteSheet, x, y, z, 1F);
     }
@@ -32,6 +37,22 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         this.maxAge = spriteSheet.getFrameCount();
     }
 
+    public static EntityFXFacingSprite fromSpriteSheet(SpriteSheetResource res, double x, double y, double z, float scale, int rLayer) {
+        return new EntityFXFacingSprite(res, x, y, z, scale) {
+
+            @Override
+            public int getLayer() {
+                return rLayer;
+            }
+
+        };
+    }
+
+    public EntityFXFacingSprite setRefreshFunc(RefreshFunction func) {
+        this.refreshFunction = func;
+        return this;
+    }
+
     protected float getULengthMultiplier() {
         return 1F;
     }
@@ -43,6 +64,23 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
     protected int getAgeBasedFrame() {
         float perc = ((float) age) / ((float) maxAge);
         return MathHelper.floor_float(spriteSheet.getFrameCount() * perc);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if(maxAge >= 0 && age >= maxAge) {
+            if(refreshFunction != null) {
+                Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+                if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+                if(rView.getDistanceSq(x, y, z) <= Config.maxEffectRenderDistanceSq) {
+                    if(refreshFunction.shouldRefresh()) {
+                        age = 0;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -60,6 +98,12 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
+    }
+
+    public static interface RefreshFunction {
+
+        public boolean shouldRefresh();
+
     }
 
 }

@@ -6,12 +6,22 @@ import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,11 +35,11 @@ import java.util.zip.GZIPInputStream;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SkyboxRenderEventHandler
+ * Class: ClientRenderEventHandler
  * Created by HellFirePvP
  * Date: 07.05.2016 / 00:43
  */
-public class SkyboxRenderEventHandler {
+public class ClientRenderEventHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -37,6 +47,36 @@ public class SkyboxRenderEventHandler {
         World world = Minecraft.getMinecraft().theWorld;
         if (world.provider.getDimension() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
             world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onHighlight(DrawBlockHighlightEvent event) {
+        RayTraceResult res = event.getTarget();
+        if(res.typeOfHit == RayTraceResult.Type.BLOCK && res.getBlockPos() != null) {
+            BlockPos bp = res.getBlockPos();
+            IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
+            TileAttunementAltar taa = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, bp, TileAttunementAltar.class, false);
+            if(state.getBlock().equals(BlocksAS.attunementAltar) && taa != null) {
+                EntityPlayer pl = event.getPlayer();
+                IMajorConstellation held = null;
+                if(pl.getHeldItemMainhand() != null && pl.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
+                    IConstellation cst = ItemConstellationPaper.getConstellation(pl.getHeldItemMainhand());
+                    if(cst != null && cst instanceof IMajorConstellation) {
+                        held = (IMajorConstellation) cst;
+                    }
+                }
+                if(held == null && pl.getHeldItemOffhand() != null && pl.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
+                    IConstellation cst = ItemConstellationPaper.getConstellation(pl.getHeldItemOffhand());
+                    if(cst != null && cst instanceof IMajorConstellation) {
+                        held = (IMajorConstellation) cst;
+                    }
+                }
+                if(held != null) {
+                    taa.highlightConstellation(held);
+                }
+            }
         }
     }
 

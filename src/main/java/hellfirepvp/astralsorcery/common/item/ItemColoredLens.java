@@ -102,7 +102,6 @@ public class ItemColoredLens extends Item {
         FIRE   (TargetType.ENTITY, 0xFF5711, 0.05F),
         BREAK  (TargetType.BLOCK,  0xD4FF00, 0.10F),
         GROW   (TargetType.BLOCK,  0x009434, 0.40F),
-        HARVEST(TargetType.BLOCK,  0x00FF00, 0.80F),
         DAMAGE (TargetType.ENTITY, 0x343434, 0.60F),
         REGEN  (TargetType.ENTITY, 0xA13085, 0.90F),
         NIGHT  (TargetType.ENTITY, 0x008EAE, 0.25F);
@@ -181,7 +180,7 @@ public class ItemColoredLens extends Item {
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
                     break;
-                case HARVEST:
+                /*case HARVEST:
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.HarvestablePlant harvest = CropHelper.wrapHarvestablePlant(world, at);
                     if(harvest != null) {
@@ -195,7 +194,7 @@ public class ItemColoredLens extends Item {
                         PktParticleEvent packet = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
-                    break;
+                    break;*/
             }
         }
 

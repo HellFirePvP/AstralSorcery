@@ -40,6 +40,7 @@ public class TransmissionChain {
     private List<BlockPos> uncheckedEndpointsBlock = new LinkedList<>(); //Might be IBlockSLRecipient or just a normal block.
     private List<BlockPos> resolvedNormalBlockPositions = new LinkedList<>();
     private List<ITransmissionReceiver> endpointsNodes = new LinkedList<>(); //Safe to assume those are endpoints
+    private List<IPrismTransmissionNode> transmissionUpdateList = new LinkedList<>();
 
     private final WorldNetworkHandler handler;
 
@@ -107,6 +108,10 @@ public class TransmissionChain {
         float nextLoss = (lossMultiplier * lossPerc) / ((float) next.size());
         prevPath.push(node.getPos());
 
+        if(node.needsTransmissionUpdate() && !transmissionUpdateList.contains(node)) {
+            transmissionUpdateList.add(node);
+        }
+
         for (NodeConnection<IPrismTransmissionNode> nextNode : next) {
             IPrismTransmissionNode trNode = nextNode.getNode();
             if(nextNode.canConnect()) {
@@ -155,6 +160,10 @@ public class TransmissionChain {
     private void addIfNonExistentConnection(BlockPos start, BlockPos end) {
         LightConnection newCon = new LightConnection(start, end);
         if(!foundConnections.contains(newCon)) foundConnections.add(newCon);
+    }
+
+    public List<IPrismTransmissionNode> getTransmissionUpdateList() {
+        return transmissionUpdateList;
     }
 
     public List<ChunkPos> getInvolvedChunks() {

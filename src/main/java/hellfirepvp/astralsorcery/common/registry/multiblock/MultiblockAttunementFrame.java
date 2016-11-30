@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
+import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
@@ -20,6 +21,7 @@ public class MultiblockAttunementFrame extends PatternBlockArray {
 
     private void load() {
         IBlockState mar = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
+        IBlockState mbl = BlocksAS.blockBlackMarble.getDefaultState().withProperty(BlockBlackMarble.BLACK_MARBLE_TYPE, BlockBlackMarble.BlackMarbleBlockType.RAW);
 
         addBlock(0, 0, 0, BlocksAS.attunementAltar.getDefaultState());
 
@@ -27,6 +29,8 @@ public class MultiblockAttunementFrame extends PatternBlockArray {
         addBlockCube(mar, -7, -2,  8,  7, -2,  8);
         addBlockCube(mar, -8, -2, -7, -8, -2,  7);
         addBlockCube(mar,  8, -2, -7,  8, -2,  7);
+
+        addBlockCube(mbl, -7, -2, -7,  7, -2,  7);
 
         pillarAt(-8, -1, -8);
         pillarAt(-8, -1,  8);

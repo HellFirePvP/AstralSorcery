@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
-import hellfirepvp.astralsorcery.client.event.SkyboxRenderEventHandler;
+import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityGrindstone;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
@@ -119,7 +119,7 @@ public class ClientProxy extends CommonProxy {
     public void init() {
         super.init();
 
-        MinecraftForge.EVENT_BUS.register(new SkyboxRenderEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientConnectionEventHandler());
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
 

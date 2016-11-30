@@ -90,6 +90,11 @@ public class TransmissionWorldHandler {
                         rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, starlight * multiplier);
                     }
                 }
+
+                for (IPrismTransmissionNode node : chain.getTransmissionUpdateList()) {
+                    node.onTransmissionTick(world);
+                }
+
                 Iterator<BlockPos> iterator = chain.getUncheckedEndpointsBlock().iterator();
                 while (iterator.hasNext()) {
                     BlockPos endPointPos = iterator.next();

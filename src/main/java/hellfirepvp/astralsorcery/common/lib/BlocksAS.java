@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -48,6 +49,7 @@ public class BlocksAS {
     public static BlockCelestialCrystals celestialCrystals;
     public static BlockFakeTree blockFakeTree;
     public static BlockAttunementAltar attunementAltar;
+    public static BlockAttunementRelay attunementRelay;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission;
 
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -36,6 +37,16 @@ public interface IPrismTransmissionNode {
     default public float getAdditionalTransmissionLossMultiplier() {
         return 1F;
     }
+
+    //If this returns true, this node will be additionally cached in the transmission chain
+    //Whenever starlight flows through the chain, it'll receive an update with #onTransmissionTick
+    //This can not be used to manipulate starlight transmission in any way.
+    default public boolean needsTransmissionUpdate() {
+        return false;
+    }
+
+    //The update method of #needsTransmissionUpdate
+    default public void onTransmissionTick(World world) {}
 
     //Fired to notify THIS that the link to "to" is no longer valid
     //The node at "to" should have THIS as a valid source.
