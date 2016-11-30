@@ -155,7 +155,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     private void addStarSprites() {
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
-            EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.55, pos.getZ() + 0.5, 3F, 2);
+            EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.55, pos.getZ() + 0.5, 1.5F, 2);
             EffectHandler.getInstance().registerFX(sprite);
             starSprites.add(sprite);
             sprite.setRefreshFunc(() -> starSprites.contains(sprite) && !isInvalid());

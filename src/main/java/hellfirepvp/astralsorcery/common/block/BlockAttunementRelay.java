@@ -7,6 +7,9 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -17,6 +20,8 @@ import net.minecraft.util.BlockRenderLayer;
  */
 public class BlockAttunementRelay extends Block {
 
+    private static final AxisAlignedBB box = new AxisAlignedBB(3F / 16F, 0, 3F / 16F, 13F / 16F, 3F / 16F, 13F / 16F);
+
     public BlockAttunementRelay() {
         super(Material.GLASS, MapColor.QUARTZ);
         setHardness(0.5F);
@@ -25,6 +30,12 @@ public class BlockAttunementRelay extends Block {
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return box;
+    }
+
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.world;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.WorldStructureEntry;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -30,6 +31,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,8 +67,6 @@ public class AstralWorldGenerator implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        if (world.provider.getDimension() != 0) return;
-
         genResources(random, chunkX, chunkZ, world);
 
         if(world.getWorldType() != WorldType.FLAT) {
@@ -95,7 +95,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         if(Config.aquamarineAmount > 0) {
             for (int i = 0; i < Config.aquamarineAmount; i++) {
                 int rX = (chunkX  * 16) + random.nextInt(16);
-                int rY = 57 + random.nextInt(7);
+                int rY = 55 + random.nextInt(9);
                 int rZ = (chunkZ  * 16) + random.nextInt(16);
                 BlockPos pos = new BlockPos(rX, rY, rZ);
                 IBlockState stateAt = world.getBlockState(pos);

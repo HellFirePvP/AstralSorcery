@@ -1,10 +1,12 @@
 package hellfirepvp.astralsorcery.common.world.structure;
 
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.WorldStructureEntry;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Random;
 
@@ -37,6 +39,7 @@ public abstract class WorldGenAttributeStructure {
     public abstract BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand);
 
     public boolean canGenerate(int chX, int chZ, World world, Random rand) {
+        if(!DataWorldSkyHandlers.hasWorldHandler(world, Side.SERVER)) return false;
         return cfgEntry.shouldGenerate() && cfgEntry.tryGenerate(rand);
     }
 

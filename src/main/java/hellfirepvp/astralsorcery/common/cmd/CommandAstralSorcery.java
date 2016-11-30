@@ -171,6 +171,10 @@ public class CommandAstralSorcery extends CommandBase {
         try {
             Field f = MultiBlockArrays.class.getDeclaredField(name);
             f.setAccessible(true);
+            if(f.isAnnotationPresent(MultiBlockArrays.PasteBlacklist.class)) {
+                sender.addChatMessage(new TextComponentString("§cFailed! You may not paste " + name + ", as it may be unstable or may have other unwanted effects!"));
+                return;
+            }
             array = (BlockArray) f.get(null);
         } catch (NoSuchFieldException e) {
             sender.addChatMessage(new TextComponentString("§cFailed! " + name + " doesn't exist!"));
