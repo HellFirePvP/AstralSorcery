@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -68,15 +69,11 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     private void matchActiveConstellation() {
-        List<BlockPos> offsets = translateConstellationPositions(activeFound);
-        List<BlockPos> positions = new LinkedList<>();
-        for (BlockPos offset : offsets) {
-            positions.add(offset.add(getPos()).add(0, -1, 0));
-        }
+        List<BlockPos> positions = translateConstellationPositions(activeFound);
         boolean valid = true;
         for (BlockPos pos : positions) {
             IBlockState state = worldObj.getBlockState(pos);
-            if(!state.getBlock().equals(Blocks.GLASS)) {
+            if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                 valid = false;
             }
         }
@@ -93,7 +90,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             boolean valid = true;
             for (BlockPos pos : positions) {
                 IBlockState state = worldObj.getBlockState(pos);
-                if(!state.getBlock().equals(Blocks.GLASS)) {
+                if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                     valid = false;
                 }
             }

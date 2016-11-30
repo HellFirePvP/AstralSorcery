@@ -163,6 +163,7 @@ item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe
 item.ItemCrystalSword.name=Crystal Sword
 item.ItemColoredLens.name=Colored Lens
+item.ItemHandTelescope.name=Hand Telescope
 
 item.ItemColoredLens.effect.fire.name=Ignition
 item.ItemColoredLens.effect.break.name=Break
@@ -192,6 +193,7 @@ tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
 tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=Altar
 tile.BlockAttunementAltar.name=Attunement Altar
+tile.BlockAttunementRelay.name=Attunement Relay
 tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=Volatile Flare
 tile.BlockWorldIlluminator.name=Cave Illuminator
