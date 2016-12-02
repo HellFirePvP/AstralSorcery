@@ -51,10 +51,10 @@ Constellation Perk/Buff ideas:
 
 -> Damage/Offense (?)
     -> Perks/Buff-Ideas:
-        - Small overall damage increase
-        - Upon killing something, damage and movement speed is increased for short time
-        - more damage against a target that's further away
-        - more damage against a target after it's been knocked back
+        - (F) Small overall damage increase
+        - (F) Upon killing something, damage and movement speed is increased for short time
+        - (F) more damage against a target that's further away
+        - (F) more damage against a target after it's been knocked back
     -> Ability:
 
 -> Defence/Shielding (?)

@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -63,10 +64,10 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
         this.mapToDisplay = new ConstellationPerkMap();
         //Goes from 0,0 -> 14,14 max.
-        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT, 14, 14);
-        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_DISTANCE,  ConstellationPerkMap.PerkOrder.DEFAULT, 12,  7, ConstellationPerks.OFF_DMG_INCREASE);
-        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_KNOCKBACK, ConstellationPerkMap.PerkOrder.DEFAULT, 10,  2, ConstellationPerks.OFF_DMG_DISTANCE);
-        this.mapToDisplay.addPerk(ConstellationPerks.OFF_DMG_AFTERKILL, ConstellationPerkMap.PerkOrder.DEFAULT,  0,  0, ConstellationPerks.OFF_DMG_INCREASE);
+        this.mapToDisplay.addPerk(ConstellationPerks.DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT, 14, 14);
+        this.mapToDisplay.addPerk(ConstellationPerks.DMG_DISTANCE,  ConstellationPerkMap.PerkOrder.DEFAULT, 12,  7, ConstellationPerks.DMG_INCREASE);
+        this.mapToDisplay.addPerk(ConstellationPerks.DMG_KNOCKBACK, ConstellationPerkMap.PerkOrder.DEFAULT, 10,  2, ConstellationPerks.DMG_DISTANCE);
+        this.mapToDisplay.addPerk(ConstellationPerks.DMG_AFTERKILL, ConstellationPerkMap.PerkOrder.DEFAULT,  0,  0, ConstellationPerks.DMG_INCREASE);
     }
 
     @Override
@@ -109,6 +110,15 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 List<String> toolTip = new LinkedList<>();
                 ConstellationPerk perk = rects.get(r).getSingleInstance();
                 perk.addLocalizedDescription(toolTip);
+                PlayerProgress prog = ResearchManager.clientProgress;
+                String unlockStr;
+                //TODO add clause where perk would be unlockable, but isn't yet.
+                if(prog.hasPerkUnlocked(perk)) {
+                    unlockStr = "perk.info.unlocked";
+                } else {
+                    unlockStr = "perk.info.locked";
+                }
+                toolTip.add(I18n.format(unlockStr));
                 RenderingUtils.renderBlueTooltip(mouse.x, mouse.y, toolTip, Minecraft.getMinecraft().fontRendererObj);
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);

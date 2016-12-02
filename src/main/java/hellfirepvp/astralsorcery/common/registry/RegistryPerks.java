@@ -16,7 +16,7 @@ public class RegistryPerks {
 
     public static void init() {
         ConstellationPerkMap map = new ConstellationPerkMap();
-        map.addPerk(ConstellationPerks.OFF_DMG_INCREASE, ConstellationPerkMap.PerkOrder.DEFAULT, 1, 1);
+        map.addPerk(ConstellationPerks.DMG_INCREASE, ConstellationPerkMap.PerkOrder.DEFAULT, 1, 1);
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.discidia, map);
     }

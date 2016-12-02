@@ -53,14 +53,32 @@ public class TileCollectorCrystal extends TileSourceBase {
         super.update();
 
         if(!worldObj.isRemote) {
-            setEnhanced(true);
             if(ticksExisted > 4 && associatedType == null) {
                 getWorld().setBlockToAir(getPos());
+            }
+            if(isEnhanced() && getTicksExisted() % 10 == 0) {
+                checkAdjacentBlocks();
             }
         }
 
         if(worldObj.isRemote && enhanced && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             playEnhancedEffects();
+        }
+    }
+
+    private void checkAdjacentBlocks() {
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int yy = -1; yy <= 1; yy++) {
+                for (int zz = -1; zz <= 1; zz++) {
+                    if(xx == 0 && yy == 0 && zz == 0) continue;
+
+                    BlockPos other = getPos().add(xx, yy, zz);
+                    if(!getWorld().isAirBlock(other)) {
+                        setEnhanced(false);
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -112,6 +130,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.playerMade = player;
         this.usedCrystalProperties = properties;
         this.type = type;
+        setEnhanced(true);
         markDirty();
     }
 

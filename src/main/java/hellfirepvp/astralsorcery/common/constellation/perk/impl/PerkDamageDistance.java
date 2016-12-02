@@ -29,6 +29,11 @@ public class PerkDamageDistance extends ConstellationPerk {
     }
 
     @Override
+    public boolean hasConfigEntries() {
+        return true;
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
         maxMultiplier = cfg.getFloat(getKey() + "MaxMultiplier", getConfigurationSection(), 4F, 1F, 60F, "Defines the multiplier how much the player can get additionally at max. distance defined.");
         double dst = cfg.getFloat(getKey() + "MaxDistance", getConfigurationSection(), 128F, 16F, 2048F, "Defines the max. distance that is relevant. If you hit something further away it won't grant more additional bonus than defined in MaxMultiplier");

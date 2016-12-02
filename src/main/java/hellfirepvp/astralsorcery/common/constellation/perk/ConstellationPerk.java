@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,6 +22,8 @@ import java.util.List;
  * Date: 16.11.2016 / 23:03
  */
 public abstract class ConstellationPerk extends ConfigEntry {
+
+    protected static final Random rand = new Random();
 
     private final String unlocName;
     private final String unlocInfo;
@@ -80,6 +83,11 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
     public final void setCooldownActiveForPlayer(EntityPlayer player, int cooldownTicks) {
         EventHandlerServer.perkCooldowns.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
+    }
+
+    @Override
+    public String getConfigurationSection() {
+        return super.getConfigurationSection() + "." + getKey();
     }
 
     @Override

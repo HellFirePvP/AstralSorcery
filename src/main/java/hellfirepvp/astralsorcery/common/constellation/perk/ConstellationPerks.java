@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageDistan
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageIncrease;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageKnockedback;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageOnKill;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelPlaceLight;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 
 /**
@@ -15,10 +16,12 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
  */
 public enum ConstellationPerks {
 
-    OFF_DMG_INCREASE(PerkDamageIncrease::new),
-    OFF_DMG_AFTERKILL(PerkDamageOnKill::new),
-    OFF_DMG_DISTANCE(PerkDamageDistance::new),
-    OFF_DMG_KNOCKBACK(PerkDamageKnockedback::new);
+    DMG_INCREASE(PerkDamageIncrease::new),
+    DMG_AFTERKILL(PerkDamageOnKill::new),
+    DMG_DISTANCE(PerkDamageDistance::new),
+    DMG_KNOCKBACK(PerkDamageKnockedback::new),
+
+    TRV_PLACELIGHTS(PerkTravelPlaceLight::new);
 
     private final PerkProvider provider;
     private final ConstellationPerk singleInstance;

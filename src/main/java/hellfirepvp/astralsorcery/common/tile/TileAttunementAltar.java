@@ -187,6 +187,12 @@ public class TileAttunementAltar extends TileReceiverBase {
                 }
             }
         } else {
+            for(Object o : starSprites) {
+                EntityFXFacingSprite p = (EntityFXFacingSprite) o;
+                if(p.isRemoved()) {
+                    EffectHandler.getInstance().registerFX(p);
+                }
+            }
             if(starSprites.isEmpty()) {
                 addStarSprites();
             }

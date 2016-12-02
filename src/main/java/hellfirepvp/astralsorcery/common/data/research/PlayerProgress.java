@@ -146,8 +146,8 @@ public class PlayerProgress {
     }
 
     public boolean hasPerkUnlocked(ConstellationPerk perk) {
-        if(perk == ConstellationPerks.OFF_DMG_INCREASE.getSingleInstance()) return true; //Remove after wiiv adjusted things.
-        if(perk == ConstellationPerks.OFF_DMG_DISTANCE.getSingleInstance()) return true;
+        if(perk == ConstellationPerks.DMG_INCREASE.getSingleInstance()) return true; //TODO Remove after wiiv adjusted things.
+        if(perk == ConstellationPerks.DMG_DISTANCE.getSingleInstance()) return true;
 
         return appliedPerks.contains(perk);
     }

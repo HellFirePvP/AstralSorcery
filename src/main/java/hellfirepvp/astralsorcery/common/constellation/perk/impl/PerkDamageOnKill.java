@@ -35,6 +35,11 @@ public class PerkDamageOnKill extends ConstellationPerk {
     }
 
     @Override
+    public boolean hasConfigEntries() {
+        return true;
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
         dmgMultiplier = cfg.getFloat(getKey() + "DamageIncrease", getConfigurationSection(), 1.05F, 1F, 2F, "Sets the damage multiplier that is applied to entity damaged after knocked back if the player has this perk.");
         ticksDuration = cfg.getInt(getKey() + "KillDuration", getConfigurationSection(), 60, 1, 1000, "Sets the duration on how long the player gets additional damage on the mob when it was knocked back.");
