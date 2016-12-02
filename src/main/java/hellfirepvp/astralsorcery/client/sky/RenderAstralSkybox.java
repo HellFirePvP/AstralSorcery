@@ -52,8 +52,6 @@ public class RenderAstralSkybox extends IRenderHandler {
     public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
     public static final BindableResource TEX_SOLAR_ECLIPSE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solarEclipse");
 
-    public static final BindableResource TEX_DEBUG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "red");
-
     private static int glSkyList = -1; //Sky background vertices.
     private static int glSkyList2 = -1; // - "" -
 

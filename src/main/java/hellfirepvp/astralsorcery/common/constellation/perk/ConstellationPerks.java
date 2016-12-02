@@ -1,5 +1,11 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageDistance;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageIncrease;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageKnockedback;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageOnKill;
+import hellfirepvp.astralsorcery.common.data.config.Config;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -9,10 +15,10 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
  */
 public enum ConstellationPerks {
 
-    OFF_DMG_INCREASE(() -> new ConstellationPerk("dmg_inc")),
-    OFF_DMG_AFTERKILL(() -> new ConstellationPerk("dmg_afterkill")),
-    OFF_DMG_DISTANCE(() -> new ConstellationPerk("dmg_distance")),
-    OFF_DMG_KNOCKBACK(() -> new ConstellationPerk("dmg_afterknock"));
+    OFF_DMG_INCREASE(PerkDamageIncrease::new),
+    OFF_DMG_AFTERKILL(PerkDamageOnKill::new),
+    OFF_DMG_DISTANCE(PerkDamageDistance::new),
+    OFF_DMG_KNOCKBACK(PerkDamageKnockedback::new);
 
     private final PerkProvider provider;
     private final ConstellationPerk singleInstance;
@@ -34,6 +40,15 @@ public enum ConstellationPerks {
 
     public boolean isInstanceOfThis(ConstellationPerk perk) {
         return perk.getId() == ordinal();
+    }
+
+    public static void addDynamicConfigEntries() {
+        for (ConstellationPerks p : values()) {
+            ConstellationPerk perk = p.getSingleInstance();
+            if(perk.hasConfigEntries()) {
+                Config.addDynamicEntry(perk);
+            }
+        }
     }
 
     private static interface PerkProvider {

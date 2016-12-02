@@ -15,11 +15,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class RegistryPotions {
 
     public static PotionCheatDeath potionCheatDeath;
-    public static PotionHunt potionHunt;
+    //public static PotionHunt potionHunt;
 
     public static void init() {
         potionCheatDeath = registerPotion(new PotionCheatDeath());
-        potionHunt = registerPotion(new PotionHunt());
+        //potionHunt = registerPotion(new PotionHunt());
     }
 
     private static <T extends Potion> T registerPotion(T potion) {

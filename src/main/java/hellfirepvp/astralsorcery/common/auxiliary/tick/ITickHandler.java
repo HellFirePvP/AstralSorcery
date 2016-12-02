@@ -20,7 +20,7 @@ public interface ITickHandler {
      * SERVER, context:
      * CLIENT, context:
      * RENDER, context: pTicks
-     * PLAYER, context: player
+     * PLAYER, context: player, side
      */
     public EnumSet<TickEvent.Type> getHandledTypes();
 

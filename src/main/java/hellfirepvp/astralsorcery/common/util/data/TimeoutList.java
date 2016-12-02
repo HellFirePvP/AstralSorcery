@@ -24,36 +24,59 @@ public class TimeoutList<V> implements ITickHandler {
     private final EnumSet<TickEvent.Type> tickTypes;
 
     private List<TimeoutEntry<V>> tickEntries = new LinkedList<>();
-    private final Object syncLock = new Object();
 
-    public TimeoutList(@Nullable TimeoutDelegate<V> delegate, @Nonnull TickEvent.Type first, @Nonnull TickEvent.Type... types) {
+    public TimeoutList(@Nullable TimeoutDelegate<V> delegate, TickEvent.Type... types) {
         this.delegate = delegate;
-        this.tickTypes = EnumSet.of(first, types);
+        this.tickTypes = EnumSet.noneOf(TickEvent.Type.class);
+        for (TickEvent.Type type : types) {
+            if(type != null) this.tickTypes.add(type);
+        }
     }
 
-    public void add(V value) {
+    public void add(@Nonnull V value) {
         this.add(0, value);
     }
 
-    public void add(int timeout, V value) {
-        synchronized (syncLock) {
-            this.tickEntries.add(new TimeoutEntry<>(timeout, value));
+    public void add(int timeout, @Nonnull V value) {
+        this.tickEntries.add(new TimeoutEntry<>(timeout, value));
+    }
+
+    public boolean setTimeout(int timeout, @Nonnull V value) {
+        int index = tickEntries.indexOf(value);
+        if(index == -1) return false;
+        TimeoutEntry<V> entry = tickEntries.get(index);
+        entry.timeout = timeout;
+        return true;
+    }
+
+    public boolean setOrAddTimeout(int timeout, @Nonnull V value) {
+        if(!contains(value)) {
+            add(timeout, value);
+            return true;
+        } else {
+            return setTimeout(timeout, value);
         }
+    }
+
+    public boolean contains(V value) {
+        return value != null && tickEntries.contains(value);
+    }
+
+    public boolean isEmpty() {
+        return tickEntries.isEmpty();
     }
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        synchronized (syncLock) {
-            Iterator<TimeoutEntry<V>> iterator = tickEntries.iterator();
-            while (iterator.hasNext()) {
-                TimeoutEntry<V> entry = iterator.next();
-                entry.timeout--;
-                if(entry.timeout <= 0) {
-                    if(delegate != null) {
-                        delegate.onTimeout(entry.value);
-                    }
-                    iterator.remove();
+        Iterator<TimeoutEntry<V>> iterator = tickEntries.iterator();
+        while (iterator.hasNext()) {
+            TimeoutEntry<V> entry = iterator.next();
+            entry.timeout--;
+            if(entry.timeout <= 0) {
+                if(delegate != null) {
+                    delegate.onTimeout(entry.value);
                 }
+                iterator.remove();
             }
         }
     }
@@ -82,11 +105,24 @@ public class TimeoutList<V> implements ITickHandler {
     private static class TimeoutEntry<V> {
 
         private int timeout;
-        private V value;
+        @Nonnull private V value;
 
-        private TimeoutEntry(int timeout, V value) {
+        private TimeoutEntry(int timeout, @Nonnull V value) {
             this.timeout = timeout;
             this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TimeoutEntry that = (TimeoutEntry) o;
+            return value.equals(that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return value.hashCode();
         }
     }
 

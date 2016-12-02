@@ -81,7 +81,7 @@ public class TickManager {
     public void playerTick(TickEvent.PlayerTickEvent event) {
         TickEvent.Phase ph = event.phase;
         for (ITickHandler handler : registeredTickHandlers.get(TickEvent.Type.PLAYER)) {
-            if(handler.canFire(ph)) handler.tick(TickEvent.Type.PLAYER, event.player);
+            if(handler.canFire(ph)) handler.tick(TickEvent.Type.PLAYER, event.player, event.side);
         }
     }
 

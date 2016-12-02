@@ -52,8 +52,8 @@ public class ResearchManager {
         PlayerProgress progress = playerProgressServer.get(uuid);
         if (progress == null) {
             loadPlayerKnowledge(uuid);
+            progress = playerProgressServer.get(uuid);
         }
-        progress = playerProgressServer.get(uuid);
         if (progress == null) {
             AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
             AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");

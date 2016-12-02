@@ -32,7 +32,8 @@ public abstract class ConfigEntry {
     public static enum Section {
 
         WORLDGEN,
-        RITUAL_EFFECTS
+        RITUAL_EFFECTS,
+        PERKS
 
     }
 

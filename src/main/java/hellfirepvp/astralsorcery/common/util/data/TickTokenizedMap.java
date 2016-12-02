@@ -52,6 +52,7 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
 
     public static class SimpleTickToken<E> implements TickMapToken<E> {
 
+        @Nonnull
         private E value;
         private int timeout;
 
@@ -82,14 +83,27 @@ public class TickTokenizedMap<K, V extends TickTokenizedMap.TickMapToken<?>> ext
         public void onTimeout() {}
 
         @Override
+        @Nonnull
         public E getValue() {
             return value;
         }
 
-        public void setValue(E value) {
+        public void setValue(@Nonnull E value) {
             this.value = value;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            SimpleTickToken that = (SimpleTickToken) o;
+            return value.equals(that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return value.hashCode();
+        }
     }
 
     public static interface TickMapToken<E> extends MapToken<E> {

@@ -226,4 +226,9 @@ astralsorcery.constellation.aevitas.effect=Being exposed to focused light of thi
 astralsorcery.constellation.evorsio=Evorsio
 astralsorcery.constellation.evorsio.info=Destruction
 
+perk.DMG_KILL.info=Increased damage after killing a mob
+perk.DMG_DST.info=Increased damage to distant mobs
+perk.DMG_PERM.info=Slightly overall increased damage
+perk.DMG_KNOCK.info=Increased damage to mobs that were knocked back
+
 constellation.noInformation=No useful information
