@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -20,9 +21,9 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,8 +31,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,6 +46,9 @@ import java.util.List;
 public class TileAttunementAltar extends TileReceiverBase {
 
     private IMajorConstellation activeFound = null;
+    private boolean doesSeeSky = false, hasMultiblock = false;
+
+    private Map<BlockPos, Boolean> unloadCache = new HashMap<>();
 
     private List<Object> starSprites = new LinkedList<>();
     private IMajorConstellation highlight = null;
@@ -62,9 +68,61 @@ public class TileAttunementAltar extends TileReceiverBase {
                     matchActiveConstellation();
                 }
             }
-            if(activeFound == null && getTicksExisted() % 10 == 0) {
+            if((ticksExisted & 15) == 0) {
+                updateSkyState();
+            }
+
+            if((ticksExisted & 31) == 0) {
+                updateMultiblockState();
+            }
+            if(activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
                 searchForConstellation();
             }
+        }
+    }
+
+    protected void updateSkyState() {
+        boolean seesSky = true;
+        BlockPos at = getPos();
+        lbl:
+        for (int xx = -7; xx <= 7; xx++) {
+            for (int zz = -7; zz <= 7; zz++) {
+                BlockPos other = at.add(xx, 0, zz);
+                if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(other))) {
+                    boolean see = worldObj.canSeeSky(other);
+                    unloadCache.put(other, see);
+                    if(!see) {
+                        seesSky = false;
+                        break lbl;
+                    }
+                } else if(unloadCache.containsKey(other)) {
+                    if(!unloadCache.get(other)) {
+                        seesSky = false;
+                        break lbl;
+                    }
+                } else {
+                    boolean see = worldObj.canSeeSky(other);
+                    unloadCache.put(other, see);
+                    if(!see) {
+                        seesSky = false;
+                        break lbl;
+                    }
+                }
+            }
+        }
+        boolean update = doesSeeSky != seesSky;
+        this.doesSeeSky = seesSky;
+        if(update) {
+            markForUpdate();
+        }
+    }
+
+    private void updateMultiblockState() {
+        boolean found = MultiBlockArrays.patternAttunementFrame.matches(worldObj, getPos());
+        boolean update = hasMultiblock != found;
+        this.hasMultiblock = found;
+        if(update) {
+            markForUpdate();
         }
     }
 
@@ -111,9 +169,13 @@ public class TileAttunementAltar extends TileReceiverBase {
             highlightActive--;
         }
 
-        if(activeFound == null) {
+        if(!hasMultiblock || !doesSeeSky) {
             starSprites.clear();
 
+        } else if(activeFound == null) {
+            starSprites.clear();
+
+            spawnAmbientParticles();
             if(highlight != null && highlightActive > 0) {
                 List<BlockPos> positions = translateConstellationPositions(highlight);
                 for (BlockPos pos : positions) {
@@ -131,8 +193,19 @@ public class TileAttunementAltar extends TileReceiverBase {
             if(getTicksExisted() % 50 == 0) {
                 addConnectionBeams();
             }
+            spawnAmbientParticles();
         }
 
+    }
+
+    private void spawnAmbientParticles() {
+        if(rand.nextBoolean()) return;
+        Vector3 at = new Vector3(this).add(0, -0.98, 0);
+        at.add(rand.nextFloat() * 15 - 7, 0, rand.nextFloat() * 15 - 7);
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+        p.setAlphaMultiplier(0.7F);
+        p.setColor(Color.WHITE);
+        p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.1F);
     }
 
     @SideOnly(Side.CLIENT)
@@ -146,8 +219,8 @@ public class TileAttunementAltar extends TileReceiverBase {
         for (Tuple<BlockPos, BlockPos> connection : connectionTuples) {
             Vector3 from = new Vector3(connection.key)  .add(0.5, 0.5, 0.5);
             Vector3 to   = new Vector3(connection.value).add(0.5, 0.5, 0.5);
-            EffectHandler.getInstance().lightbeam(from, to, 1.5).setColorOverlay(cR, cG, cB, alpha);
-            EffectHandler.getInstance().lightbeam(to, from, 1.5).setColorOverlay(cR, cG, cB, alpha);
+            EffectHandler.getInstance().lightbeam(from, to, 1.1).setColorOverlay(cR, cG, cB, alpha);
+            EffectHandler.getInstance().lightbeam(to, from, 1.1).setColorOverlay(cR, cG, cB, alpha);
         }
     }
 
@@ -205,6 +278,9 @@ public class TileAttunementAltar extends TileReceiverBase {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
+        this.hasMultiblock = compound.getBoolean("mbState");
+        this.doesSeeSky = compound.getBoolean("skState");
+
         IConstellation found = IConstellation.readFromNBT(compound);
         if(found == null || !(found instanceof IMajorConstellation)) {
             activeFound = null;
@@ -216,6 +292,9 @@ public class TileAttunementAltar extends TileReceiverBase {
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
+
+        compound.setBoolean("mbState", hasMultiblock);
+        compound.setBoolean("skState", doesSeeSky);
 
         if (activeFound != null) {
             activeFound.writeToNBT(compound);

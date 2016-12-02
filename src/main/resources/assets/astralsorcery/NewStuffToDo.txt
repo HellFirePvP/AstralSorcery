@@ -68,6 +68,7 @@ Constellation Perk/Buff ideas:
 -> Travel
     -> Perks/Buff-Ideas:
         - generally small % additional movement speed
+        - if you're in a cave, light sources randomly spawn around you
     -> Ability:
 
 -> Creation

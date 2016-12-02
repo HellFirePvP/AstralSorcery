@@ -125,10 +125,13 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         for (ConstellationPerkMap.Dependency dep : mapToDisplay.getPerkDependencies()) {
             BindableResource tex;
+            Color overlay = null;
             if(prog.hasPerkUnlocked(dep.to)) {
                 tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection"); //TODO wiiv, here.
+                overlay = new Color(0x00EEEE00);
             } else {
                 tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
+                overlay = new Color(0xBBBBFF);
             }
 
             ConstellationPerkMap.Position from = mapToDisplay.getPosition(dep.from);
@@ -139,7 +142,17 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 double part = (Math.sin(Math.toRadians(((count) * 8) % 360D)) + 1D) / 4D;
 
                 float br = 0.2F + 0.4F * (2F - ((float) part));
-                GL11.glColor4f(br, br, br, br);
+                float rR = br;
+                float rG = br;
+                float rB = br;
+                float rA = br;
+                if(overlay != null) {
+                    rR *= (overlay.getRed()   / 255F);
+                    rG *= (overlay.getGreen() / 255F);
+                    rB *= (overlay.getBlue()  / 255F);
+                    rA *= (overlay.getAlpha() / 255F);
+                }
+                GL11.glColor4f(rR, rG, rB, rA);
 
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -176,10 +189,13 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         for (Map.Entry<ConstellationPerks, ConstellationPerkMap.Position> star : perks.entrySet()) {
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
             BindableResource tex;
+            Color overlay = null;
             if(prog.hasPerkUnlocked(star.getKey())) {
                 tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1"); //TODO wiiv, here.
+                overlay = new Color(0x00EEEE00);
             } else {
                 tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+                overlay = new Color(0xBBBBFF);
             }
             tex.bind();
             int starX = star.getValue().x;
@@ -189,7 +205,17 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             float part = (MathHelper.sin((float) Math.toRadians(((count) * 8) % 360F)) / 2F + 1F);
 
             float br = 0.6F + 0.3F * (2F - part);
-            GL11.glColor4f(br, br, br, br);
+            float rR = br;
+            float rG = br;
+            float rB = br;
+            float rA = br;
+            if(overlay != null) {
+                rR *= (overlay.getRed()   / 255F);
+                rG *= (overlay.getGreen() / 255F);
+                rB *= (overlay.getBlue()  / 255F);
+                rA *= (overlay.getAlpha() / 255F);
+            }
+            GL11.glColor4f(rR, rG, rB, rA);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
             Point upperLeft = new Point(starVec.getBlockX(), starVec.getBlockY());

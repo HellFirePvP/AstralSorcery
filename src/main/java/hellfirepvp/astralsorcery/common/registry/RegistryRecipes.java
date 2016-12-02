@@ -56,6 +56,7 @@ public class RegistryRecipes {
     public static RecipeRitualPedestal rRitualPedestalRock, rRitualPedestalCel;
     public static AttenuationRecipe rLightwell;
     public static AttenuationRecipe rIlluminatorRock, rIlluminatorCel;
+    public static AttenuationRecipe rAttenuationAltarRelay;
 
     public static LensRecipe rLensRock, rLensCel;
     public static PrismLensRecipe rPrismRock, rPrismCel;
@@ -212,8 +213,17 @@ public class RegistryRecipes {
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
 
-        //rAttuneRockCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.rockCrystal, ItemsAS.tunedRockCrystal));
-        //rAttuneCelestialCrystalBasic = registerAltarRecipe(new SimpleCrystalAttunationRecipe(ItemsAS.celestialCrystal, ItemsAS.tunedCelestialCrystal));
+        rAttenuationAltarRelay = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.attunementRelay)
+                .addPart(Items.GOLD_INGOT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(Blocks.PLANKS,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER));
 
         rLinkToolRock = registerConstellationRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(Blocks.LOG,

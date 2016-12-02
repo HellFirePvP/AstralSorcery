@@ -101,7 +101,6 @@ public class CommonProxy implements IGuiHandler {
         RegistryRecipes.init();
         RegistryResearch.init();
 
-        GameRegistry.registerWorldGenerator(worldGenerator.init(), 50);
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
 
@@ -133,6 +132,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
+
+        GameRegistry.registerWorldGenerator(worldGenerator.init(), 50);
 
         TickManager manager = TickManager.getInstance();
         registerTickHandlers(manager);

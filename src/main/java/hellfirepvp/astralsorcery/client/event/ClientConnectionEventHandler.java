@@ -22,12 +22,13 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
  */
 public class ClientConnectionEventHandler {
 
+    //Used to cleanup stuff on clientside to make the client functional to switch servers at any time.
     @SubscribeEvent
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         AstralSorcery.log.info("[AstralSorcery] Disconnected from server. Cleaning client cache.");
         EffectHandler.cleanUp();
         Config.rebuildClientConfig();
-        ConstellationSkyHandler.getInstance().resetIterationsClient();
+        ConstellationSkyHandler.getInstance().clientClearCache();
         GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();

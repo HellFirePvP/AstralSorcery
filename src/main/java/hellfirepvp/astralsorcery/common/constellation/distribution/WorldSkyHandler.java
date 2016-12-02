@@ -57,8 +57,8 @@ public class WorldSkyHandler {
     public int prevLunarEclipseTick = 0;
     public int lunarEclipseTick = 0;
 
-    public WorldSkyHandler(World world) {
-        this.savedSeed = world.getSeed();
+    public WorldSkyHandler(long seed) {
+        this.savedSeed = seed;
     }
 
     private void refreshRandom() {
@@ -210,6 +210,15 @@ public class WorldSkyHandler {
 
     public List<IConstellation> getActiveConstellations() {
         return Collections.unmodifiableList(activeConstellations);
+    }
+
+    public LinkedList<IConstellation> getSortedActiveConstellations() {
+        LinkedList<IConstellation> out = new LinkedList<>();
+        LinkedList<Map.Entry<IConstellation, Float>> entries = new LinkedList<>();
+        activeDistributions.entrySet().forEach(entries::add);
+        Collections.sort(entries, (e1, e2) -> e2.getValue().intValue() - e1.getValue().intValue());
+        entries.forEach((e) -> out.addLast(e.getKey()));
+        return out;
     }
 
     @SideOnly(Side.CLIENT)

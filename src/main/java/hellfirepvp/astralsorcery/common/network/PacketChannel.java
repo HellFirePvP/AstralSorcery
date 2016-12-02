@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -38,9 +39,11 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktProgressionUpdate.class, PktProgressionUpdate.class, id++, Side.CLIENT); //Sends visual packet that player has discovered research 'X'
         //CHANNEL.registerMessage(PktSpawnWorldParticles.class, PktSpawnWorldParticles.class, id++, Side.CLIENT); //General std world-particles
         CHANNEL.registerMessage(PktPlayEffect.class, PktPlayEffect.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.CLIENT);
 
         //Constellation discovery (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.
+        CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.SERVER);
     }
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, BlockPos pos, double range) {

@@ -3,6 +3,8 @@ package hellfirepvp.astralsorcery.common.constellation.distribution;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -28,6 +30,9 @@ public class ConstellationSkyHandler implements ITickHandler {
     public static final int LUNAR_ECLIPSE_HALF_DUR = 2400;
 
     private static final ConstellationSkyHandler instance = new ConstellationSkyHandler();
+    private static int activeSession = 0;
+
+    private Map<Integer, Long> cacheSeedLookup = new HashMap<>();
 
     private Map<Integer, WorldSkyHandler> worldHandlersServer  = new HashMap<>();
     private Map<Integer, WorldSkyHandler> worldHandlersClient  = new HashMap<>();
@@ -45,7 +50,7 @@ public class ConstellationSkyHandler implements ITickHandler {
             if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.SERVER)) {
                 WorldSkyHandler handle = worldHandlersServer.get(w.provider.getDimension());
                 if(handle == null) {
-                    handle = new WorldSkyHandler(w);
+                    handle = new WorldSkyHandler(w.getSeed());
                     worldHandlersServer.put(w.provider.getDimension(), handle);
                 }
                 handle.tick(w);
@@ -61,10 +66,25 @@ public class ConstellationSkyHandler implements ITickHandler {
         if(w != null && DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.CLIENT)) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if(handle == null) {
-                handle = new WorldSkyHandler(w);
-                worldHandlersClient.put(w.provider.getDimension(), handle);
+                int dim = w.provider.getDimension();
+                long seed;
+                if(cacheSeedLookup.containsKey(dim)) {
+                    seed = cacheSeedLookup.get(dim);
+                } else {
+                    PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+                    PacketChannel.CHANNEL.sendToServer(req);
+                    return;
+                }
+                handle = new WorldSkyHandler(seed);
+                worldHandlersClient.put(dim, handle);
             }
             handle.tick(w);
+        }
+    }
+
+    public void updateSeedCache(int dimId, int session, long seed) {
+        if(activeSession == session) {
+            cacheSeedLookup.put(dimId, seed);
         }
     }
 
@@ -77,10 +97,6 @@ public class ConstellationSkyHandler implements ITickHandler {
         return 0.1F;
     }
 
-    public void resetIterationsClient() {
-        worldHandlersClient.clear();
-    }
-
     @Nullable
     public WorldSkyHandler getWorldHandler(World world) {
         Map<Integer, WorldSkyHandler> handlerMap;
@@ -90,6 +106,12 @@ public class ConstellationSkyHandler implements ITickHandler {
             handlerMap = worldHandlersServer;
         }
         return handlerMap.get(world.provider.getDimension());
+    }
+
+    public void clientClearCache() {
+        activeSession++;
+        cacheSeedLookup.clear();
+        worldHandlersClient.clear();
     }
 
     public void informWorldUnload(World world) {

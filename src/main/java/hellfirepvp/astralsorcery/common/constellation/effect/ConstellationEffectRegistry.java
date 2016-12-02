@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -25,13 +26,15 @@ public class ConstellationEffectRegistry {
     private static Map<IMajorConstellation, ConstellationEffect> singleRenderInstances = new HashMap<>();
 
     public static void init() {
-        register(Constellations.aevitas, CEffectAevitas::new);
+        register(Constellations.aevitas,  CEffectAevitas::new);
+        register(Constellations.discidia, CEffectDiscidia::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
 
     public static void addDynamicConfigEntries() {
         Config.addDynamicEntry(new CEffectAevitas());
+        Config.addDynamicEntry(new CEffectDiscidia());
     }
 
     private static void register(IMajorConstellation c, ConstellationEffectProvider provider) {

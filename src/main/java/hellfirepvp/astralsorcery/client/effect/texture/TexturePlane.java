@@ -205,10 +205,12 @@ public class TexturePlane implements IComplexEffect {
         }
 
         GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
 
         currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
-        currRenderAroundAxis(partialTicks, Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
+        //currRenderAroundAxis(partialTicks, Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
 
+        GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDisable(GL11.GL_BLEND);
