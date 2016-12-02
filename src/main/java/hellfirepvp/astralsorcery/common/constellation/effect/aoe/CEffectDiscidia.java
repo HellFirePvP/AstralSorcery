@@ -101,7 +101,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
             p.motion((rand.nextFloat() * 0.05F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.05F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.05F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(Color.DARK_GRAY);
+            p.scale(0.25F).setColor(Color.RED);
         }
     }
 }
