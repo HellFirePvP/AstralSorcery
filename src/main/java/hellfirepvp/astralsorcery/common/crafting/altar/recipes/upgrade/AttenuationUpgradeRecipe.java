@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.item.ItemStack;
@@ -56,8 +57,8 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar);
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
+        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler);
     }
 
     @Nullable

@@ -48,7 +48,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 18.10.2016 / 12:28
  */
-public class TileWell extends TileReceiverBaseInventory implements IFluidHandler, IFluidTankProperties, ISidedInventory {
+public class TileWell extends TileReceiverBaseInventory implements IFluidHandler, IFluidTankProperties {
 
     private static final Random rand = new Random();
     private static final int MAX_CAPACITY = 2000;
@@ -57,7 +57,12 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     private double starlightBuffer = 0;
 
     public TileWell() {
-        super(1);
+        super(1, EnumFacing.UP);
+    }
+
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new CatalystItemHandler(this);
     }
 
     @Override
@@ -69,7 +74,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                 starlightBuffer += Math.max(0.0001, ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldObj));
             }
 
-            ItemStack stack = getStackInSlot(0);
+            ItemStack stack = getInventoryHandler().getStackInSlot(0);
             if(stack != null) {
                 if(!worldObj.isAirBlock(getPos().up())) {
                     breakCatalyst();
@@ -96,7 +101,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                 starlightBuffer = 0;
             }
         } else {
-            ItemStack stack = getStackInSlot(0);
+            ItemStack stack = getInventoryHandler().getStackInSlot(0);
             if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemWellCatalyst) {
                 Color color = ((ItemWellCatalyst) stack.getItem()).getCatalystColor(stack);
                 doCatalystEffect(color);
@@ -108,7 +113,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     }
 
     public void breakCatalyst() {
-        setInventorySlotContents(0, null);
+        getInventoryHandler().setStackInSlot(0, null);
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK, getPos().getX(), getPos().getY(), getPos().getZ());
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(worldObj, getPos(), 32));
     }
@@ -149,11 +154,6 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         EffectHandler.getInstance().registerFX(new EntityFXCrystalBurst(rand.nextInt(), at.getX() + 0.5, at.getY() + 1.3, at.getZ() + 0.5, 1.5F));
     }
 
-    @Override
-    public String getInventoryName() {
-        return getUnLocalizedDisplayName();
-    }
-
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
@@ -163,11 +163,6 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Override
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverWell(at);
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 1;
     }
 
     public double getLiquidStarlightAmount() {
@@ -257,24 +252,24 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         return fluidStack.getFluid() != null && fluidStack.getFluid() instanceof FluidLiquidStarlight;
     }
 
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        if(side != EnumFacing.UP) {
-            return new int[] { 0 };
+    public static class CatalystItemHandler extends ItemHandlerTileFiltered {
+
+        public CatalystItemHandler(TileReceiverBaseInventory inv) {
+            super(inv);
         }
-        return new int[0];
-    }
 
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        if(getStackInSlot(0) != null || itemStackIn == null) return false;
-        Item i = itemStackIn.getItem();
-        return i instanceof ItemWellCatalyst && ((ItemWellCatalyst) i).isCatalyst(itemStackIn);
-    }
+        @Override
+        public int getStackLimit(int slot, ItemStack stack) {
+            return 1;
+        }
 
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return false;
+        @Override
+        public boolean canInsertItem(int slot, ItemStack toAdd, @Nullable ItemStack existing) {
+            if(toAdd == null) return true;
+            Item i = toAdd.getItem();
+            return i instanceof ItemWellCatalyst && ((ItemWellCatalyst) i).isCatalyst(toAdd);
+        }
+
     }
 
     public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {

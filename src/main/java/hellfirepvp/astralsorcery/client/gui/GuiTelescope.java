@@ -30,8 +30,11 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -470,7 +473,8 @@ public class GuiTelescope extends GuiWHScreen {
         if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) return;
 
         boolean has = false;
-        List<ItemStack> papers = ItemUtils.scanInventoryFor(Minecraft.getMinecraft().thePlayer.inventory, ItemsAS.constellationPaper);
+        IItemHandler handle = Minecraft.getMinecraft().thePlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        List<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
         for (ItemStack stack : papers) {
             IConstellation con = ItemConstellationPaper.getConstellation(stack);
             if(con.equals(c)) {

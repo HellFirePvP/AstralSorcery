@@ -91,7 +91,7 @@ public class AltarRecipeRegistry {
             List<AbstractAltarRecipe> validRecipes = recipes.get(lvl);
             if(validRecipes != null) {
                 for (AbstractAltarRecipe rec : validRecipes) {
-                    if(rec.matches(ta)) {
+                    if(rec.matches(ta, ta.getInventoryHandler())) {
                         return rec;
                     }
                 }

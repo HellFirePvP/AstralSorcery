@@ -13,8 +13,8 @@ import net.minecraft.inventory.Slot;
  */
 public class ContainerSlotUnclickable extends Slot {
 
-    public ContainerSlotUnclickable(IInventory inventoryIn, int index, int xPosition, int yPosition) {
-        super(inventoryIn, index, xPosition, yPosition);
+    public ContainerSlotUnclickable(IInventory inv, int index, int xPosition, int yPosition) {
+        super(inv, index, xPosition, yPosition);
     }
 
     @Override

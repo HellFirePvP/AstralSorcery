@@ -86,14 +86,14 @@ public class GuiAltarDiscovery extends GuiAltarBase {
         }
 
         texBlack.bind();
-        drawRect(guiLeft + 6, guiTop + 70, 165, 10);
+        drawRect(guiLeft + 6, guiTop + 69, 165, 10);
 
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
             int t = containerAltarBase.tileAltar.getTicksExisted();
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
-            drawRect(guiLeft + 6, guiTop + 70, (int) (165 * percFilled), 10,
+            drawRect(guiLeft + 6, guiTop + 69, (int) (165 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
                     spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
         }

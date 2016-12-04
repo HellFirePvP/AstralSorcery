@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,7 +67,7 @@ public abstract class AbstractAltarRecipe {
         return out;
     }
 
-    public boolean matches(TileAltar altar) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
         if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
         if(this instanceof INighttimeRecipe) {
@@ -76,7 +77,7 @@ public abstract class AbstractAltarRecipe {
 
         ItemStack[] altarInv = new ItemStack[9];
         for (int i = 0; i < 9; i++) {
-            altarInv[i] = altar.getStackInSlot(i);
+            altarInv[i] = invHandler.getStackInSlot(i);
         }
         RecipeAdapter adapter = new RecipeAdapter(altar.getCraftingRecipeWidth(), altar.getCraftingRecipeHeight());
         adapter.fill(altarInv);

@@ -91,7 +91,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         if(perkLength != -1) {
             this.appliedPerks = new ArrayList<>(perkLength);
             for (int i = 0; i < perkLength; i++) {
-                this.appliedPerks.add(ConstellationPerks.values()[buf.readInt()].getSingleInstance());
+                this.appliedPerks.add(ConstellationPerks.getById(buf.readInt()).getSingleInstance());
             }
         } else {
             this.appliedPerks = new ArrayList<>();

@@ -32,11 +32,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,7 +74,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     private UUID ownerUUID = null;
 
     public TileRitualPedestal() {
-        super(1);
+        super(1, EnumFacing.UP);
     }
 
     @Override
@@ -136,7 +138,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     lightbeam.setMaxAge(64);
                 }
             }
-            ItemStack crystal = getStackInSlot(0);
+            ItemStack crystal = getInventoryHandler().getStackInSlot(0);
             if(crystal != null && crystal.getItem() != null &&
                     crystal.getItem() instanceof ItemTunedCrystalBase) {
                 IMajorConstellation ch = ItemTunedCrystalBase.getMainConstellation(crystal);
@@ -195,7 +197,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @Nullable
     public IMajorConstellation getRitualConstellation() {
-        ItemStack crystal = getStackInSlot(0);
+        ItemStack crystal = getInventoryHandler().getStackInSlot(0);
         if(crystal != null && crystal.getItem() != null &&
                 crystal.getItem() instanceof ItemTunedCrystalBase) {
             return ItemTunedCrystalBase.getMainConstellation(crystal);
@@ -253,9 +255,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     }
 
     @Override
-    protected void onInventoryChanged() {
+    protected void onInventoryChanged(int slotChanged) {
         if(!worldObj.isRemote) {
-            ItemStack in = getStackInSlot(0);
+            ItemStack in = getInventoryHandler().getStackInSlot(0);
             if(in != null && in.getItem() != null &&
                     in.getItem() instanceof ItemTunedCrystalBase) {
                 CrystalProperties properties = CrystalProperties.getCrystalProperties(in);
@@ -323,11 +325,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     public void flagDirty() {
         this.dirty = true;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return getUnLocalizedDisplayName();
     }
 
     @Nullable

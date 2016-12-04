@@ -51,7 +51,7 @@ public class PlayerProgress {
         if(compound.hasKey("listPerks")) {
             NBTTagList list = compound.getTagList("listPerks", 3);
             for (int i = 0; i < list.tagCount(); i++) {
-                ConstellationPerks perkEnum = ConstellationPerks.values()[list.getIntAt(i)];
+                ConstellationPerks perkEnum = ConstellationPerks.getById(list.getIntAt(i));
                 if(perkEnum != null) {
                     appliedPerks.add(perkEnum.createPerk());
                 }

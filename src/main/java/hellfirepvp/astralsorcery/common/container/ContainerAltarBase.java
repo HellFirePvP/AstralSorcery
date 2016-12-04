@@ -6,6 +6,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
@@ -20,11 +21,13 @@ public abstract class ContainerAltarBase extends Container {
 
     public final InventoryPlayer playerInv;
     public final TileAltar tileAltar;
+    public final ItemStackHandler invHandler;
     private final int plSize;
 
     public ContainerAltarBase(InventoryPlayer playerInv, TileAltar tileAltar) {
         this.playerInv = playerInv;
         this.tileAltar = tileAltar;
+        this.invHandler = tileAltar.getInventoryHandler();
 
         bindPlayerInventory();
         bindAltarInventory();

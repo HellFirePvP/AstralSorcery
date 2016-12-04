@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -68,20 +69,20 @@ public class AttenuationRecipe extends DiscoveryRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
         for (AltarSlot slot : AltarSlot.values()) {
             ItemStack expected = additionalSlots.get(slot);
             if(expected != null) {
-                ItemStack altarItem = altar.getStackInSlot(slot.slotId);
+                ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
                 if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
                     return false;
                 }
             } else {
-                if(altar.getStackInSlot(slot.slotId) != null) return false;
+                if(invHandler.getStackInSlot(slot.slotId) != null) return false;
             }
         }
 
-        return super.matches(altar);
+        return super.matches(altar, invHandler);
     }
 
     @Override

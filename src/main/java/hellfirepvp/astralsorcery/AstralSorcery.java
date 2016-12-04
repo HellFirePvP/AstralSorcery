@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -34,6 +35,8 @@ public class AstralSorcery {
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
+    private static boolean devEnvChache = false;
+
     @Mod.Instance(MODID)
     public static AstralSorcery instance;
 
@@ -45,6 +48,7 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         event.getModMetadata().version = VERSION;
+        devEnvChache = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
         proxy.preLoadConfigEntries();
 
@@ -80,6 +84,10 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
+    }
+
+    public static boolean isRunningInDevEnvironment() {
+        return devEnvChache;
     }
 
     static {

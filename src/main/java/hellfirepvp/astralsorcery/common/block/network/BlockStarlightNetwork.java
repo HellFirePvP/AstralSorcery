@@ -7,9 +7,12 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,9 +38,15 @@ public abstract class BlockStarlightNetwork extends BlockContainer {
             teN.onBreak();
         }
 
-        IInventory inv = MiscUtils.getTileAt(worldIn, pos, IInventory.class, true);
+        TileEntity inv = MiscUtils.getTileAt(worldIn, pos, TileEntity.class, true);
         if(inv != null && !worldIn.isRemote) {
-            ItemUtils.dropInventory(inv, worldIn, pos);
+            for (EnumFacing face : EnumFacing.VALUES) {
+                IItemHandler handle = inv.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
+                if(handle != null) {
+                    ItemUtils.dropInventory(handle, worldIn, pos);
+                    break;
+                }
+            }
         }
 
         super.breakBlock(worldIn, pos, state);

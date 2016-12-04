@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -90,7 +91,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
         if(skyConstellationNeeded != null) {
             DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             Collection<IConstellation> activeConstellations = cel.getActiveConstellations(altar.getWorld().provider.getDimension());
@@ -99,15 +100,15 @@ public class ConstellationRecipe extends AttenuationRecipe {
         for (AltarAdditionalSlot slot : AltarAdditionalSlot.values()) {
             ItemStack expected = matchStacks.get(slot);
             if(expected != null) {
-                ItemStack altarItem = altar.getStackInSlot(slot.slotId);
+                ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
                 if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
                     return false;
                 }
             } else {
-                if(altar.getStackInSlot(slot.slotId) != null) return false;
+                if(invHandler.getStackInSlot(slot.slotId) != null) return false;
             }
         }
-        return super.matches(altar);
+        return super.matches(altar, invHandler);
     }
 
     @Override

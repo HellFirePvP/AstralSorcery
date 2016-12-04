@@ -62,6 +62,15 @@ public class TimeoutList<V> implements ITickHandler {
         return value != null && tickEntries.contains(value);
     }
 
+    public int getTimeout(V value) {
+        for (TimeoutEntry<V> entry : tickEntries) {
+            if(entry.value.equals(value)) {
+                return entry.timeout;
+            }
+        }
+        return -1;
+    }
+
     public boolean isEmpty() {
         return tickEntries.isEmpty();
     }

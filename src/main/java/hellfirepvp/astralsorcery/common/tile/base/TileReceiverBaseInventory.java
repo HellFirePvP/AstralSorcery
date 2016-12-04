@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -15,109 +18,127 @@ import java.util.Arrays;
  * Created by HellFirePvP
  * Date: 21.09.2016 / 23:34
  */
-public abstract class TileReceiverBaseInventory extends TileReceiverBase implements IInventoryBase {
+public abstract class TileReceiverBaseInventory extends TileReceiverBase {
 
-    protected ItemStack[] inv;
+    protected int inventorySize;
+    private ItemHandlerTile handle;
+    private List<EnumFacing> applicableSides;
 
     public TileReceiverBaseInventory() {
         this(0);
     }
 
     public TileReceiverBaseInventory(int inventorySize) {
-        this.inv = new ItemStack[inventorySize];
+        this(inventorySize, EnumFacing.VALUES);
+    }
+
+    public TileReceiverBaseInventory(int inventorySize, EnumFacing... applicableSides) {
+        this.inventorySize = inventorySize;
+        this.handle = createNewItemHandler();
+        this.applicableSides = Arrays.asList(applicableSides);
+    }
+
+    protected ItemHandlerTile createNewItemHandler() {
+        return new ItemHandlerTile(this);
+    }
+
+    public ItemHandlerTile getInventoryHandler() {
+        return handle;
+    }
+
+    private boolean hasHandlerForSide(EnumFacing facing) {
+        return applicableSides.contains(facing);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return hasHandlerForSide(facing) ? capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY : super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(hasHandlerForSide(facing)) {
+            if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(handle);
+            }
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        Arrays.fill(inv, null);
-        int size = compound.getInteger("invSize");
-        inv = new ItemStack[size];
-        NBTTagCompound tag = compound.getCompoundTag("grid");
-        for (int i = 0; i < size; i++) {
-            if(tag.hasKey(String.valueOf(i))) {
-                inv[i] = NBTHelper.getStack(tag, String.valueOf(i));
-            }
-        }
+        this.handle = createNewItemHandler();
+        this.handle.deserializeNBT(compound.getCompoundTag("inventory"));
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        NBTTagCompound tag = new NBTTagCompound();
-        for (int index = 0; index < inv.length; index++) {
-            ItemStack i = inv[index];
-            if (i != null) {
-                NBTHelper.setStack(tag, String.valueOf(index), i);
+        compound.setTag("inventory", this.handle.serializeNBT());
+    }
+
+    public int getInventorySize() {
+        return inventorySize;
+    }
+
+    protected void onInventoryChanged(int slotChanged) {}
+
+    public static class ItemHandlerTileFiltered extends ItemHandlerTile {
+
+        public ItemHandlerTileFiltered(TileReceiverBaseInventory inv) {
+            super(inv);
+        }
+
+        @Override
+        public void setStackInSlot(int slot, ItemStack stack) {
+            if(canInsertItem(slot, stack, getStackInSlot(slot))) {
+                super.setStackInSlot(slot, stack);
             }
         }
-        compound.setTag("grid", tag);
-        compound.setInteger("invSize", inv.length);
-    }
 
-    @Override
-    public int getSizeInventory() {
-        return inv.length;
-    }
-
-    @Nullable
-    @Override
-    public ItemStack getStackInSlot(int index) {
-        return inv[index];
-    }
-
-    @Nullable
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        ItemStack itemstack = ItemStackHelper.getAndSplit(inv, index, count);
-        if (itemstack != null) {
-            onInventoryChanged();
-            markForUpdate();
-        }
-        return itemstack;
-    }
-
-    @Nullable
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = ItemStackHelper.getAndRemove(inv, index);
-        if(stack != null) {
-            onInventoryChanged();
-        }
-        return stack;
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
-        inv[index] = stack;
-
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-            stack.stackSize = this.getInventoryStackLimit();
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            if(!canInsertItem(slot, stack, getStackInSlot(slot))) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
         }
 
-        onInventoryChanged();
-        markForUpdate();
-    }
-
-    public abstract String getInventoryName();
-
-    @Override
-    public String getName() {
-        return getInventoryName();
-    }
-
-    @Override
-    public void clear() {
-        for (int i = 0; i < inv.length; ++i) {
-            inv[i] = null;
+        public boolean canInsertItem(int slot, ItemStack toAdd, @Nullable ItemStack existing) {
+            return true;
         }
 
-        onInventoryChanged();
-        markForUpdate();
     }
 
-    protected void onInventoryChanged() {}
+    public static class ItemHandlerTile extends ItemStackHandler {
 
+        private final TileReceiverBaseInventory tile;
+
+        public ItemHandlerTile(TileReceiverBaseInventory inv) {
+            super(inv.inventorySize);
+            this.tile = inv;
+        }
+
+        @Override
+        public void onContentsChanged(int slot) {
+            tile.onInventoryChanged(slot);
+            tile.markForUpdate();
+        }
+
+        public void clearInventory() {
+            for (int i = 0; i < getSlots(); i++) {
+                setStackInSlot(i, null);
+                onContentsChanged(i);
+            }
+        }
+
+        @Override
+        public int getStackLimit(int slot, ItemStack stack) {
+            return super.getStackLimit(slot, stack);
+        }
+
+    }
 }

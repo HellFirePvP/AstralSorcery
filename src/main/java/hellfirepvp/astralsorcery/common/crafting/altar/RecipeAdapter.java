@@ -2,7 +2,6 @@ package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 
@@ -32,18 +31,17 @@ public class RecipeAdapter extends InventoryCrafting {
     }
 
     private static class AdapterContainer extends Container {
+
         @Override
         public boolean canInteractWith(EntityPlayer playerIn) {
             return false;
         }
 
         @Override
-        public void onCraftMatrixChanged(IInventory inventoryIn) {}
-
-        @Override
         public void onContainerClosed(EntityPlayer playerIn) {
             super.onContainerClosed(playerIn);
         }
+
     }
 
 }

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -81,8 +82,8 @@ public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAl
     }
 
     @Override
-    public boolean matches(TileAltar altar) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar);
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
+        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler);
     }
 
     @Nullable

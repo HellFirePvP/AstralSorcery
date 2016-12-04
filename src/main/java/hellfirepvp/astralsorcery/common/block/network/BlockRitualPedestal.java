@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -30,6 +31,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -96,19 +98,20 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if(pedestal == null) {
             return false;
         }
-        ItemStack in = pedestal.getStackInSlot(0);
+        ItemStackHandler handle = pedestal.getInventoryHandler();
+        ItemStack in = handle.getStackInSlot(0);
         if(heldItem != null) {
             Item i = heldItem.getItem();
             if(i != null && i instanceof ItemTunedCrystalBase) {
                 if(in == null) {
-                    pedestal.setInventorySlotContents(0, ItemUtils.copyStackWithSize(heldItem, 1));
+                    handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
                     playerIn.setHeldItem(hand, null);
                 }
             }
         }
         if(in != null && playerIn.isSneaking()) {
             ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, in);
-            pedestal.setInventorySlotContents(0, null);
+            handle.setStackInSlot(0, null);
         }
         return true;
     }
@@ -120,8 +123,9 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             BlockPos toCheck = pos.up();
             IBlockState other = worldIn.getBlockState(toCheck);
             if(other.isSideSolid(worldIn, toCheck, EnumFacing.DOWN)) {
-                ItemUtils.dropInventory(te, worldIn, pos);
-                te.clear();
+                TileReceiverBaseInventory.ItemHandlerTile handle = te.getInventoryHandler();
+                ItemUtils.dropInventory(te.getInventoryHandler(), worldIn, pos);
+                handle.clearInventory();
                 te.markForUpdate();
             }
         }

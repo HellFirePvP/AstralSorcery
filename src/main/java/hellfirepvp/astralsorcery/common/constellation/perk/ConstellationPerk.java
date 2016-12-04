@@ -7,6 +7,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,9 +69,15 @@ public abstract class ConstellationPerk extends ConfigEntry {
         return dmgIn;
     }
 
+    public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
+        return dmgIn;
+    }
+
     public void onEntityKnockback(EntityPlayer attacker, EntityLivingBase attacked) {}
 
     public void onEntityKilled(EntityPlayer attacker, EntityLivingBase killed) {}
+
+    public void onTimeout(EntityPlayer player) {}
 
     public boolean hasConfigEntries() {
         return false;
@@ -83,6 +90,13 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
     public final void setCooldownActiveForPlayer(EntityPlayer player, int cooldownTicks) {
         EventHandlerServer.perkCooldowns.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
+    }
+
+    public final int getActiveCooldownForPlayer(EntityPlayer player) {
+        if(!EventHandlerServer.perkCooldowns.hasList(player)) {
+            return -1;
+        }
+        return EventHandlerServer.perkCooldowns.getOrCreateList(player).getTimeout(getId());
     }
 
     @Override
@@ -105,11 +119,35 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
     public static enum Target {
 
+        /**
+         * Called when a Player attacks some LivingEntityBase.
+         * Calls {@link #onEntityAttack(net.minecraft.entity.player.EntityPlayer, net.minecraft.entity.EntityLivingBase, float)}
+         */
         ENTITY_ATTACK,
+
+        /**
+         * Called when a EntityLivingBase gets knockbacked by a player's attack.
+         * Calls {@link #onEntityKnockback(net.minecraft.entity.player.EntityPlayer, net.minecraft.entity.EntityLivingBase)}
+         */
         ENTITY_KNOCKBACK,
+
+        /**
+         * Called when a Player attack kills an EntityLivingBase.
+         * Calls {@link #onEntityKilled(net.minecraft.entity.player.EntityPlayer, net.minecraft.entity.EntityLivingBase)}
+         */
         ENTITY_KILL,
 
-        PLAYER_TICK;
+        /**
+         * Called when a Player gets generally hurt.
+         * Calls {@link #onEntityHurt(net.minecraft.entity.player.EntityPlayer, float)}
+         */
+        ENTITY_HURT,
+
+        /**
+         * Gets called on each player's tick.
+         * Calls {@link #onPlayerTick(net.minecraft.entity.player.EntityPlayer)}
+         */
+        PLAYER_TICK
 
     }
 

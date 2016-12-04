@@ -6,12 +6,12 @@ import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -31,9 +31,8 @@ public class ContainerJournal extends Container {
     public ContainerJournal(InventoryPlayer playerInv, ItemStack journal, int journalIndex) {
         this.parentJournal = journal;
         this.journalIndex = journalIndex;
-        IInventory inv = ItemJournal.getJournalStorage(journal);
         buildPlayerSlots(playerInv);
-        buildSlots(inv);
+        buildSlots(new InvWrapper(ItemJournal.getJournalStorage(journal)));
     }
 
     private void buildPlayerSlots(InventoryPlayer playerInv) {
@@ -57,11 +56,11 @@ public class ContainerJournal extends Container {
         }
     }
 
-    private void buildSlots(IInventory in) {
+    private void buildSlots(IItemHandler handle) {
         for (int xx = 0; xx < 9; xx++) {
-            addSlotToContainer(new ConstellationPaperSlot(in, this,      xx, 8 + xx * 18, 13));
-            addSlotToContainer(new ConstellationPaperSlot(in, this, 9 +  xx, 8 + xx * 18, 31));
-            addSlotToContainer(new ConstellationPaperSlot(in, this, 18 + xx, 8 + xx * 18, 49));
+            addSlotToContainer(new ConstellationPaperSlot(handle, this,      xx, 8 + xx * 18, 13));
+            addSlotToContainer(new ConstellationPaperSlot(handle, this, 9 +  xx, 8 + xx * 18, 31));
+            addSlotToContainer(new ConstellationPaperSlot(handle, this, 18 + xx, 8 + xx * 18, 49));
         }
     }
 

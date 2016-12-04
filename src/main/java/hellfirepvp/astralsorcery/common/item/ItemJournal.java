@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.ClientGuiHandler;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;

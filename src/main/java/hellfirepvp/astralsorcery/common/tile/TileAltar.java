@@ -33,15 +33,18 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,7 +75,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     public TileAltar(AltarLevel level) {
-        super(21);
+        super(21, EnumFacing.UP);
         this.level = level;
     }
 
@@ -170,7 +173,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private boolean doTryCraft(boolean needUpdate) {
         if(craftingTask == null) return needUpdate;
         AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-        if(!altarRecipe.matches(this)) {
+        if(!altarRecipe.matches(this, getInventoryHandler())) {
             abortCrafting();
             return true;
         }
@@ -202,36 +205,39 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         for (int i = 0; i < 9; i++) {
             ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i % 3, i / 3);
             if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(inv, i);
+                ItemUtils.decrStackInInventory(getInventoryHandler(), i);
             }
         }
 
         for (AttenuationRecipe.AltarSlot slot : AttenuationRecipe.AltarSlot.values()) {
             int slotId = slot.slotId;
             if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(inv, slotId);
+                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
             }
         }
 
         for (ConstellationRecipe.AltarAdditionalSlot slot : ConstellationRecipe.AltarAdditionalSlot.values()) {
             int slotId = slot.getSlotId();
             if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(inv, slotId);
+                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
             }
         }
 
         if(out != null) {
-            for (EnumFacing dir : EnumFacing.VALUES) {
+            /*for (EnumFacing dir : EnumFacing.VALUES) { FIXME Item capability system break here :|
                 if(dir == EnumFacing.UP) continue;
-                IInventory i = MiscUtils.getTileAt(worldObj, pos.offset(dir), IInventory.class, true);
-                if(i != null) {
-                    if(ItemUtils.tryPlaceItemInInventory(out, i)) {
-                        if(out.stackSize == 0) {
+
+                TileEntity te = MiscUtils.getTileAt(worldObj, pos.offset(dir), TileEntity.class, true);
+                if(te != null) {
+                    IItemHandler handle = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
+                    if(handle != null) {
+                        ItemUtils.tryPlaceItemInInventory(out, handle);
+                        if(out.stackSize <= 0) {
                             break;
                         }
                     }
                 }
-            }
+            }*/
             if(out.stackSize > 0) {
                 ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
@@ -240,7 +246,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
-        if (!recipe.allowsForChaining() || !recipe.matches(this) || !matchDownMultiblocks(recipe.getNeededLevel())) {
+        if (!recipe.allowsForChaining() || !recipe.matches(this, getInventoryHandler()) || !matchDownMultiblocks(recipe.getNeededLevel())) {
             if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
                 Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY() + 0.05, pos.getZ());
@@ -257,7 +263,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         ShapeMap current = new ShapeMap();
         for (int i = 0; i < 9; i++) {
             ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
-            ItemStack stack = inv[i];
+            ItemStack stack = getInventoryHandler().getStackInSlot(i);
             if(stack != null) {
                 current.put(slot, ItemUtils.copyStackWithSize(stack, 1));
             }
@@ -366,7 +372,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!worldObj.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-                if(matchDownMultiblocks(altarRecipe.getNeededLevel()) && !altarRecipe.matches(this)) {
+                if(matchDownMultiblocks(altarRecipe.getNeededLevel()) && !altarRecipe.matches(this, getInventoryHandler())) {
                     abortCrafting();
                     return;
                 }
@@ -470,11 +476,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Override
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverAltar(at);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return getUnLocalizedDisplayName();
     }
 
     public void onPlace(int exp, AltarLevel level) {

@@ -67,8 +67,12 @@ Constellation Perk/Buff ideas:
 
 -> Travel
     -> Perks/Buff-Ideas:
-        - generally small % additional movement speed
-        - if you're in a cave, light sources randomly spawn around you
+        - (F) generally small % additional movement speed
+        - (F) if you're in a cave, light sources randomly spawn around you
+        - (F) Take no damage for the first 'x' seconds after falling in lava
+        - Gain small amount of feather fall forever
+        - you move faster underwater
+        - Reduce amount of hunger?..
     -> Ability:
 
 -> Creation

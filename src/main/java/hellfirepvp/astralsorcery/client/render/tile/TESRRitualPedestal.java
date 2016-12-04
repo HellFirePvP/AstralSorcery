@@ -77,7 +77,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
     }
 
     private void renderCrystalStack(TileRitualPedestal te, double x, double y, double z) {
-        ItemStack i = te.getStackInSlot(0);
+        ItemStack i = te.getInventoryHandler().getStackInSlot(0);
         if(i != null && i.getItem() != null) {
             Item it = i.getItem();
             if(it instanceof ItemTunedCrystalBase) {

@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
@@ -83,7 +84,8 @@ public class BlockWell extends BlockStarlightNetwork {
                 if(tw == null) return false;
 
                 if(heldItem.getItem() instanceof ItemWellCatalyst) {
-                    if(tw.getStackInSlot(0) != null) return false;
+                    ItemStackHandler handle = tw.getInventoryHandler();
+                    if(handle.getStackInSlot(0) != null) return false;
 
                     ItemWellCatalyst catalyst = (ItemWellCatalyst) heldItem.getItem();
                     if(catalyst.isCatalyst(heldItem)) {
@@ -91,7 +93,7 @@ public class BlockWell extends BlockStarlightNetwork {
                             return false;
                         }
 
-                        tw.setInventorySlotContents(0, ItemUtils.copyStackWithSize(heldItem, 1));
+                        handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
 
                         //Lets assume it starts collecting right away...
                         playerIn.addStat(RegistryAchievements.achvLiqStarlight);
@@ -117,7 +119,7 @@ public class BlockWell extends BlockStarlightNetwork {
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, true);
         if(tw != null && !worldIn.isRemote) {
-            ItemStack stack = tw.getStackInSlot(0);
+            ItemStack stack = tw.getInventoryHandler().getStackInSlot(0);
             if(stack != null) {
                 tw.breakCatalyst();
             }

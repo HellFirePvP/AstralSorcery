@@ -20,14 +20,14 @@ import java.util.Map;
 public class TimeoutListContainer<K, V> implements ITickHandler {
 
     private EnumSet<TickEvent.Type> tickTypes;
-    private final TimeoutList.TimeoutDelegate<V> delegate;
+    private final ContainerTimeoutDelegate<K, V> delegate;
     private Map<K, TimeoutList<V>> timeoutListMap = new HashMap<>();
 
     public TimeoutListContainer(TickEvent.Type... restTypes) {
         this(null, restTypes);
     }
 
-    public TimeoutListContainer(@Nullable TimeoutList.TimeoutDelegate<V> delegate, TickEvent.Type... types) {
+    public TimeoutListContainer(@Nullable ContainerTimeoutDelegate<K, V> delegate, TickEvent.Type... types) {
         this.tickTypes = EnumSet.noneOf(TickEvent.Type.class);
         for (TickEvent.Type type : types) {
             if(type != null) this.tickTypes.add(type);
@@ -42,7 +42,7 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
     public TimeoutList<V> getOrCreateList(K key) {
         TimeoutList<V> list = timeoutListMap.get(key);
         if(list == null) {
-            list = new TimeoutList<>(delegate);
+            list = new TimeoutList<>(new RedirectTimeoutDelegate<>(key, delegate));
             timeoutListMap.put(key, list);
         }
         return list;
@@ -74,6 +74,31 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
     @Override
     public String getName() {
         return "TimeoutListContainer";
+    }
+
+    private static class RedirectTimeoutDelegate<K, V> implements TimeoutList.TimeoutDelegate<V> {
+
+        private final K key;
+        private final ContainerTimeoutDelegate<K, V> delegate;
+
+        private RedirectTimeoutDelegate(K key, @Nullable ContainerTimeoutDelegate<K, V> delegate) {
+            this.key = key;
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void onTimeout(V object) {
+            if(delegate != null) {
+                delegate.onContainerTimeout(key, object);
+            }
+        }
+
+    }
+
+    public static interface ContainerTimeoutDelegate<K, V> {
+
+        public void onContainerTimeout(K key, V timedOut);
+
     }
 
 }

@@ -71,7 +71,7 @@ import java.util.Map;
 public class EventHandlerServer {
 
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
-    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(TickEvent.Type.SERVER);
+    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
@@ -93,15 +93,30 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        if(source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer) source.getSourceOfDamage();
-            PlayerProgress prog = ResearchManager.getProgress(p);
+        if(source.getEntity() != null) {
+            if(source.getEntity() instanceof EntityPlayer) {
+                EntityPlayer p = (EntityPlayer) source.getSourceOfDamage();
+                PlayerProgress prog = ResearchManager.getProgress(p);
+                if(prog != null) {
+                    float dmg = event.getAmount();
+                    List<ConstellationPerk> perks = prog.getAppliedPerks();
+                    for (ConstellationPerk perk : perks) {
+                        if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
+                            dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
+                        }
+                    }
+                    event.setAmount(dmg);
+                }
+            }
+        } else if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
+            EntityPlayer hurt = (EntityPlayer) event.getEntityLiving();
+            PlayerProgress prog = ResearchManager.getProgress(hurt);
             if(prog != null) {
                 float dmg = event.getAmount();
                 List<ConstellationPerk> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks) {
-                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
-                        dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
+                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
+                        dmg = perk.onEntityHurt(hurt, source, dmg);
                     }
                 }
                 event.setAmount(dmg);
