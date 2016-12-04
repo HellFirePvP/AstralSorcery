@@ -63,7 +63,7 @@ public abstract class ConstellationPerk extends ConfigEntry {
         tooltip.add(I18n.format(getUnlocalizedDescription()));
     }
 
-    public void onPlayerTick(EntityPlayer player) {}
+    public void onPlayerTick(EntityPlayer player, Side side) {}
 
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
         return dmgIn;

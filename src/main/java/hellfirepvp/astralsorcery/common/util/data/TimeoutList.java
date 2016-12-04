@@ -42,11 +42,13 @@ public class TimeoutList<V> implements ITickHandler {
     }
 
     public boolean setTimeout(int timeout, @Nonnull V value) {
-        int index = tickEntries.indexOf(value);
-        if(index == -1) return false;
-        TimeoutEntry<V> entry = tickEntries.get(index);
-        entry.timeout = timeout;
-        return true;
+        for (TimeoutEntry<V> entry : tickEntries) {
+            if(entry.value.equals(value)) {
+                entry.timeout = timeout;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean setOrAddTimeout(int timeout, @Nonnull V value) {
@@ -59,7 +61,11 @@ public class TimeoutList<V> implements ITickHandler {
     }
 
     public boolean contains(V value) {
-        return value != null && tickEntries.contains(value);
+        if(value == null) return false;
+        for (TimeoutEntry<V> entry : tickEntries) {
+            if(entry.value.equals(value)) return true;
+        }
+        return false;
     }
 
     public int getTimeout(V value) {

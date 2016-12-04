@@ -7,6 +7,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
@@ -29,11 +30,13 @@ public class PerkTravelMovespeed extends ConstellationPerk {
     }
 
     @Override
-    public void onPlayerTick(EntityPlayer player) {
-        AbstractAttributeMap map = player.getAttributeMap();
-        IAttributeInstance instance = map.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
-        if(!instance.hasModifier(modMovespeedIncrease)) {
-            instance.applyModifier(modMovespeedIncrease);
+    public void onPlayerTick(EntityPlayer player, Side side) {
+        if(side == Side.SERVER) {
+            AbstractAttributeMap map = player.getAttributeMap();
+            IAttributeInstance instance = map.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
+            if(!instance.hasModifier(modMovespeedIncrease)) {
+                instance.applyModifier(modMovespeedIncrease);
+            }
             setCooldownActiveForPlayer(player, 20);
         }
     }

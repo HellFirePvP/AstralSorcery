@@ -70,16 +70,16 @@ Constellation Perk/Buff ideas:
         - (F) generally small % additional movement speed
         - (F) if you're in a cave, light sources randomly spawn around you
         - (F) Take no damage for the first 'x' seconds after falling in lava
-        - Gain small amount of feather fall forever
-        - you move faster underwater
-        - Reduce amount of hunger?..
+        - (F) Gain an amount of feather fall forever
+        - (F) you move faster underwater
+        - (F) Reduce amount of hunger?..
     -> Ability:
 
 -> Creation
     -> Perks/Buff-Ideas:
-        - low chance that something close to you might get bonemeal'd
-        - chance that a baby animal close to you grows into an adult
-        - low chance that a cleanstone somewhere around you turns into an ore
+        - (F) low chance that something close to you might get bonemeal'd
+        - (F) chance that a baby animal close to you grows into an adult
+        - (F) low chance that a cleanstone somewhere around you turns into an ore
     -> Ability: Wave of Creation -> Shockwave of all above + turns dirt into grass + vanilla animal spawn + plants saplings + bonemeals those
 
 -> Destruction

@@ -1,5 +1,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationBreedables;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationGrowables;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationStoneEnrichment;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageDistance;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageIncrease;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageKnockedback;
@@ -7,6 +10,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageOnKill
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelLavaProtection;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelMovespeed;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelPlaceLight;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelReduceFall;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelReduceFoodNeed;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelWaterMovement;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutList;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
@@ -21,14 +27,21 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public enum ConstellationPerks {
 
-    DMG_INCREASE   (0,  PerkDamageIncrease::new),
-    DMG_AFTERKILL  (1,  PerkDamageOnKill::new),
-    DMG_DISTANCE   (2,  PerkDamageDistance::new),
-    DMG_KNOCKBACK  (3,  PerkDamageKnockedback::new),
+    DMG_INCREASE     (0,  PerkDamageIncrease::new),
+    DMG_AFTERKILL    (1,  PerkDamageOnKill::new),
+    DMG_DISTANCE     (2,  PerkDamageDistance::new),
+    DMG_KNOCKBACK    (3,  PerkDamageKnockedback::new),
 
-    TRV_PLACELIGHTS(20, PerkTravelPlaceLight::new),
-    TRV_LAVAPROTECT(21, PerkTravelLavaProtection::new),
-    TRV_MOVESPEED  (22, PerkTravelMovespeed::new);
+    TRV_PLACELIGHTS  (20, PerkTravelPlaceLight::new),
+    TRV_LAVAPROTECT  (21, PerkTravelLavaProtection::new),
+    TRV_MOVESPEED    (22, PerkTravelMovespeed::new),
+    TRV_FALLREDUCTION(23, PerkTravelReduceFall::new),
+    TRV_SWIMSPEED    (24, PerkTravelWaterMovement::new),
+    TRV_REDFOODNEED  (25, PerkTravelReduceFoodNeed::new),
+
+    CRE_GROWTH       (40, PerkCreationGrowables::new),
+    CRE_BREEDING     (41, PerkCreationBreedables::new),
+    CRE_OREGEN       (42, PerkCreationStoneEnrichment::new);
 
     private final int id;
     private final PerkProvider provider;

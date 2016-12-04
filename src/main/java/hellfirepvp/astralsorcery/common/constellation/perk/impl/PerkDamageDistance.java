@@ -14,8 +14,8 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageDistance extends ConstellationPerk {
 
-    private static float maxMultiplier = 4F;
-    private static double maxRelevantSqDistance = 128 * 128;
+    private static float maxMultiplier = 8F;
+    private static double maxRelevantSqDistance = 64 * 64;
 
     public PerkDamageDistance() {
         super("DMG_DST", Target.ENTITY_ATTACK);
@@ -25,7 +25,7 @@ public class PerkDamageDistance extends ConstellationPerk {
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
         double dst = attacker.getDistanceSqToEntity(attacked);
         float perc = (float) (dst / maxRelevantSqDistance);
-        return dmgIn * (maxMultiplier * (perc > 1 ? 1 : perc));
+        return dmgIn * (Math.max(1, 1 + (maxMultiplier * (perc > 1 ? 1 : perc))));
     }
 
     @Override
@@ -35,8 +35,8 @@ public class PerkDamageDistance extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        maxMultiplier = cfg.getFloat(getKey() + "MaxMultiplier", getConfigurationSection(), 4F, 1F, 60F, "Defines the multiplier how much the player can get additionally at max. distance defined.");
-        double dst = cfg.getFloat(getKey() + "MaxDistance", getConfigurationSection(), 128F, 16F, 2048F, "Defines the max. distance that is relevant. If you hit something further away it won't grant more additional bonus than defined in MaxMultiplier");
+        maxMultiplier = cfg.getFloat(getKey() + "MaxMultiplier", getConfigurationSection(), 8F, 1F, 60F, "Defines the multiplier how much the player can get additionally at max. distance defined.");
+        double dst = cfg.getFloat(getKey() + "MaxDistance", getConfigurationSection(), 64F, 16F, 2048F, "Defines the max. distance that is relevant. If you hit something further away it won't grant more additional bonus than defined in MaxMultiplier");
         maxRelevantSqDistance = dst * dst;
     }
 }

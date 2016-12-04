@@ -21,15 +21,13 @@ public class PlayerPerkHandler implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        if(context[1] == Side.SERVER) {
-            EntityPlayer ticked = (EntityPlayer) context[0];
-            PlayerProgress prog = ResearchManager.getProgress(ticked);
-            if(prog != null) {
-                List<ConstellationPerk> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks) {
-                    if(perk.mayExecute(ConstellationPerk.Target.PLAYER_TICK)) {
-                        perk.onPlayerTick(ticked);
-                    }
+        EntityPlayer ticked = (EntityPlayer) context[0];
+        PlayerProgress prog = ResearchManager.getProgress(ticked);
+        if(prog != null) {
+            List<ConstellationPerk> perks = prog.getAppliedPerks();
+            for (ConstellationPerk perk : perks) {
+                if(perk.mayExecute(ConstellationPerk.Target.PLAYER_TICK)) {
+                    perk.onPlayerTick(ticked, (Side) context[1]);
                 }
             }
         }

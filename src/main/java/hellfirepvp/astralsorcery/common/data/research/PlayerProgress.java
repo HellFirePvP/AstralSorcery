@@ -138,6 +138,11 @@ public class PlayerProgress {
     }
 
     public List<ConstellationPerk> getAppliedPerks() {
+        /*List<ConstellationPerk> perks = new LinkedList<>();
+        for (ConstellationPerks c : ConstellationPerks.values()) {
+            perks.add(c.getSingleInstance());
+        }
+        return perks;*/
         return Collections.unmodifiableList(appliedPerks);
     }
 
@@ -146,6 +151,7 @@ public class PlayerProgress {
     }
 
     public boolean hasPerkUnlocked(ConstellationPerk perk) {
+        //return true;
         if(perk == ConstellationPerks.DMG_INCREASE.getSingleInstance()) return true; //TODO Remove after wiiv adjusted things.
         if(perk == ConstellationPerks.DMG_DISTANCE.getSingleInstance()) return true;
 

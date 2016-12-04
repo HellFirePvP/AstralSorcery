@@ -32,7 +32,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -93,20 +95,30 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
         DamageSource source = event.getSource();
-        if(source.getEntity() != null) {
-            if(source.getEntity() instanceof EntityPlayer) {
-                EntityPlayer p = (EntityPlayer) source.getSourceOfDamage();
-                PlayerProgress prog = ResearchManager.getProgress(p);
-                if(prog != null) {
-                    float dmg = event.getAmount();
-                    List<ConstellationPerk> perks = prog.getAppliedPerks();
-                    for (ConstellationPerk perk : perks) {
-                        if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
-                            dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
-                        }
-                    }
-                    event.setAmount(dmg);
+        if(source.getSourceOfDamage() != null) {
+            EntityPlayer p;
+            if(source.getSourceOfDamage() instanceof EntityPlayer) {
+                p = (EntityPlayer) source.getSourceOfDamage();
+            } else if(source.getSourceOfDamage() instanceof EntityArrow) {
+                Entity shooter = ((EntityArrow) source.getSourceOfDamage()).shootingEntity;
+                if(shooter != null && shooter instanceof EntityPlayer) {
+                    p = (EntityPlayer) shooter;
+                } else {
+                    return;
                 }
+            } else {
+                return;
+            }
+            PlayerProgress prog = ResearchManager.getProgress(p);
+            if(prog != null) {
+                float dmg = event.getAmount();
+                List<ConstellationPerk> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks) {
+                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
+                        dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
+                    }
+                }
+                event.setAmount(dmg);
             }
         } else if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer hurt = (EntityPlayer) event.getEntityLiving();
