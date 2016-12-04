@@ -12,11 +12,15 @@ misc.link.unlink=Unlinked %s from %s!
 misc.sword.sharpened=Sharpened
 
 effect.as.cheatdeath=Phoenix-Fire
+effect.as.bleed=Bleeding
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
 gui.journal.bm.perks.name=Perks
 gui.journal.c.unmapped=Unknown
+
+death.attack.as.stellar=%1$s disintegrated into stardust
+death.attack.as.bleed=%1$s bled to death
 
 achievementpage.astralsorcery.name=AstralSorcery
 achievement.astralsorcery.minerockcrystal=Such pure crystals

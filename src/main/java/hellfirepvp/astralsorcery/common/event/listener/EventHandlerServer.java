@@ -41,6 +41,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -207,7 +208,11 @@ public class EventHandlerServer {
         }
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity));
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.worldObj, entity.getPosition(), 32));
-        entity.removePotionEffect(RegistryPotions.potionCheatDeath);
+
+        MinecraftServer server = entity.getServer();
+        if(server != null) {
+            server.addScheduledTask(() -> entity.removePotionEffect(RegistryPotions.potionCheatDeath));
+        }
     }
 
     @SubscribeEvent

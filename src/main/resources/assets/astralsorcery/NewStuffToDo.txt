@@ -47,6 +47,14 @@ Graphical-Wise:
 - Hand-Telescope item-icon and GUI
 - New/Changed telescope GUI
 
+Scraped ideas for perks:
+
+    - Moved to some shielding thing:
+        - A shield regenerates slowly over time, preventing incoming damage
+        - A perk that increases the amount of damage shielded
+        - As long as you're 'seeing the sky' you take % less damage
+        - % chance that projectiles don't damage you if they hit you
+
 Constellation Perk/Buff ideas:
 
 -> Damage/Offense (?)
@@ -55,14 +63,15 @@ Constellation Perk/Buff ideas:
         - (F) Upon killing something, damage and movement speed is increased for short time
         - (F) more damage against a target that's further away
         - (F) more damage against a target after it's been knocked back
+        - (F) applies a bleed on hit that damages the mob afterwards
     -> Ability:
 
--> Defence/Shielding (?)
+-> Defence (?)
     -> Perks/Buff-Ideas:
-        - A shield regenerates slowly over time, preventing incoming damage
-        - A perk that increases the amount of damage shielded
-        - As long as you're 'seeing the sky' you take % less damage
-        - % chance that projectiles don't damage you if they hit you
+        - (F) Small overall damage reduction
+        - (F) Chance that an attack just misses you
+        - (F) Damage reduction and faster regeneration when having less then 2 or 2 armorpieces equipped
+        - (F) Damage reduction against severeal types of non-physical damage
     -> Ability: A short shockwave, destroying all nearby projectiles, knocking all entities back, dealing damage to those. Refreshes shield to full.
 
 -> Travel

@@ -4,9 +4,11 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
@@ -48,6 +50,9 @@ public class PerkCreationGrowables extends ConstellationPerk {
                             ((IGrowable) at.getBlock()).grow(w, rand, pos, at);
                             pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                         }
+                    } else if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
+                        w.setBlockState(pos, Blocks.GRASS.getDefaultState());
+                        pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                     }
                 }
                 if(pkt != null) {

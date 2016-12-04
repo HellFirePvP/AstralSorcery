@@ -70,6 +70,7 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class CommonProxy implements IGuiHandler {
 
+    public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
 
     private AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
