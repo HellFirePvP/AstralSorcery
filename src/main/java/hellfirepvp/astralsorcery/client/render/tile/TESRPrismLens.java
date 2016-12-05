@@ -51,8 +51,8 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
         if(te.getLensColor() != null) {
             GL11.glPopMatrix();
             GL11.glPushMatrix();
-            GL11.glTranslated(x + 0.5, y + 1.44, z + 0.5);
-            GL11.glScaled(0.06, 0.06, 0.06);
+            GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
+            GL11.glScaled(0.0625, 0.0625, 0.0625);
             GL11.glRotated(180, 1, 0, 0);
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();

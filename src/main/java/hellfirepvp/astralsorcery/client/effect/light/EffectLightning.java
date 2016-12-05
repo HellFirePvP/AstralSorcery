@@ -34,10 +34,14 @@ public class EffectLightning extends EntityComplexFX {
         setMaxAge(this.vertices.size() + (this.vertices.size() / 2));
     }
 
+    @Deprecated
     public static EffectLightning buildLightning(Vector3 source, Vector3 destination) {
         return buildLightning(source, destination, defaultMinJitter, defaultMaxJitter, defaultForkChance, defaultMinForkAngle, defaultMaxForkAngle);
     }
 
+    //TODO implement at some point
+
+    @Deprecated
     public static EffectLightning buildLightning(Vector3 source, Vector3 destination, float minJitterAngle, float maxJitterAngle, float forkChance, float minForkAngle, float maxForkAngle) {
         Vector3 directionVector = destination.clone().subtract(source);
         List<LightningVertex> vertices = new LinkedList<>();

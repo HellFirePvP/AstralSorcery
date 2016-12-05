@@ -45,12 +45,12 @@ public class PerkCreationGrowables extends ConstellationPerk {
                     pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                 } else {
                     IBlockState at = w.getBlockState(pos);
-                    if(at.getBlock() instanceof IGrowable) {
+                    /*if(at.getBlock() instanceof IGrowable) {
                         if(((IGrowable) at.getBlock()).canUseBonemeal(w, rand, pos, at)) {
                             ((IGrowable) at.getBlock()).grow(w, rand, pos, at);
                             pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                         }
-                    } else if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
+                    } else*/ if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
                         w.setBlockState(pos, Blocks.GRASS.getDefaultState());
                         pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
                     }
