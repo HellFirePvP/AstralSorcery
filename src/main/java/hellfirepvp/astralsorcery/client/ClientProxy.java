@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
@@ -51,6 +52,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -93,8 +95,14 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
 
         registerFluidRenderers();
-
         registerEntityRenderers();
+    }
+
+    private void registerPendingIBlockColorBlocks() {
+        BlockColors colors = Minecraft.getMinecraft().getBlockColors();
+        for (BlockDynamicColor b : RegistryBlocks.pendingIBlockColorBlocks) {
+            colors.registerBlockColorHandler(b::getColorMultiplier, (Block) b);
+        }
     }
 
     private void registerFluidRenderers() {
@@ -211,6 +219,7 @@ public class ClientProxy extends CommonProxy {
             MeshRegisterHelper.getIMM().register(modelEntry.item, modelEntry.metadata, new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
         }
 
+        registerPendingIBlockColorBlocks();
         //registerAdditionalItemRenderers();
 
         for (RenderInfoBlock modelEntry : blockRegister) {

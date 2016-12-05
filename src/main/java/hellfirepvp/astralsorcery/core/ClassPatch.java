@@ -29,36 +29,12 @@ public abstract class ClassPatch {
         this.className = className;
     }
 
-    public byte[] transform(byte[] bytes) {
-        ClassNode node = new ClassNode();
-        ClassReader reader = new ClassReader(bytes);
-        reader.accept(node, 0);
-
+    public void transform(ClassNode node) {
         try {
             patch(node);
         } catch (ASMTransformationException exc) {
             throw new ASMTransformationException("Failed to apply ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase(), exc);
         }
-
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        node.accept(writer);
-        bytes = writer.toByteArray();
-
-        if(writeAsClassFile) {
-            try {
-                File f = new File("C:/ASTestClasses/" + getClass().getSimpleName() + ".class");
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-                FileOutputStream out = new FileOutputStream(f);
-                out.write(bytes);
-                out.close();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return bytes;
     }
 
     public abstract void patch(ClassNode cn);

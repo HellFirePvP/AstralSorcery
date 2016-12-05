@@ -1,20 +1,17 @@
 package hellfirepvp.astralsorcery.core;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
-import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.core.transform.AstralPatchTransformer;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.asm.transformers.AccessTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,60 +22,62 @@ import java.util.Map;
  */
 public class AstralTransformer extends AccessTransformer {
 
-    private static final String PATCH_PACKAGE = "hellfirepvp.astralsorcery.core.patch";
-
-    private Map<String, List<ClassPatch>> availablePatches = new HashMap<>();
+    private static List<SubClassTransformer> subTransformers = new LinkedList<>();
 
     public AstralTransformer() throws IOException {
-        FMLLog.info("[AstralTransformer] Loading patches...");
-        int loaded = loadClassPatches();
-        FMLLog.info("[AstralTransformer] Initialized! Loaded " + loaded + " class patches!");
+        loadSubTransformers();
     }
 
-    private int loadClassPatches() throws IOException {
-        ImmutableSet<ClassPath.ClassInfo> classes =
-                ClassPath.from(Thread.currentThread().getContextClassLoader()).getTopLevelClassesRecursive(PATCH_PACKAGE);
-        List<Class> patchClasses = new LinkedList<>();
-        for (ClassPath.ClassInfo info : classes) {
-            if(info.getName().startsWith(PATCH_PACKAGE)) {
-                patchClasses.add(info.load());
-            }
+    private void loadSubTransformers() throws IOException {
+        subTransformers.add(new AstralPatchTransformer());
+        //subTransformers.add(new TransformerSideStrippable());
+    }
+
+    private boolean isTransformationRequired(String trName) {
+        for (SubClassTransformer transformer : subTransformers) {
+            if(transformer.isTransformRequired(trName)) return true;
         }
-        int load = 0;
-        for (Class patchClass : patchClasses) {
-            if (ClassPatch.class.isAssignableFrom(patchClass) && !Modifier.isAbstract(patchClass.getModifiers())) {
-                try {
-                    ClassPatch patch = (ClassPatch) patchClass.newInstance();
-                    if(!availablePatches.containsKey(patch.getClassName())) {
-                        availablePatches.put(patch.getClassName(), new LinkedList<>());
-                    }
-                    availablePatches.get(patch.getClassName()).add(patch);
-                    load++;
-                } catch (Exception exc) {
-                    throw new IllegalStateException("Could not load ClassPatch: " + patchClass.getSimpleName(), exc);
-                }
-            }
-        }
-        return load;
+        return false;
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
-        if(!availablePatches.isEmpty()) {
-            List<ClassPatch> patches = availablePatches.get(transformedName);
-            if(patches != null && !patches.isEmpty()) {
-                FMLLog.info("[AstralTransformer] Transforming " + name + " : " + transformedName + " with " + patches.size() + " patches!");
-                try {
-                    for (ClassPatch patch : patches) {
-                        bytes = patch.transform(bytes);
-                        FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
-                    }
-                } catch (Exception exc) {
-                    throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + name + " - " + transformedName + ") - Rethrowing exception!", exc);
-                }
+        if(!isTransformationRequired(transformedName)) return bytes;
+
+        ClassNode node = new ClassNode();
+        ClassReader reader = new ClassReader(bytes);
+        reader.accept(node, 0);
+
+        for (SubClassTransformer subTransformer : subTransformers) {
+            try {
+                subTransformer.transformClassNode(node, transformedName, name);
+            } catch (ASMTransformationException asmException) {
+                FMLLog.warning("Access transformation failed for Transformer: " + subTransformer.getIdentifier());
+                FMLLog.warning("Transformer added information:");
+                subTransformer.addErrorInformation();
+                asmException.printStackTrace();
+                throw asmException; //Rethrow
             }
-            availablePatches.remove(transformedName);
         }
+
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        node.accept(writer);
+        bytes = writer.toByteArray();
+
+        if(false) {
+            try {
+                File f = new File("C:/ASTestClasses/" + transformedName + ".class");
+                f.getParentFile().mkdirs();
+                f.createNewFile();
+                FileOutputStream out = new FileOutputStream(f);
+                out.write(bytes);
+                out.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return bytes;
     }
 

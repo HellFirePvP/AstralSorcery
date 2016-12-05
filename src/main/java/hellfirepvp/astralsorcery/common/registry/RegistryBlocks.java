@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
@@ -43,6 +44,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -68,6 +71,7 @@ public class RegistryBlocks {
 
     public static List<Block> defaultItemBlocksToRegister = new LinkedList<>();
     public static List<Block> customNameItemBlocksToRegister = new LinkedList<>();
+    public static List<BlockDynamicColor> pendingIBlockColorBlocks = new LinkedList<>();
 
     public static void init() {
         registerFluids();
@@ -175,6 +179,9 @@ public class RegistryBlocks {
 
     private static <T extends Block> T registerBlock(T block, String name) {
         GameRegistry.register(block.setUnlocalizedName(name).setRegistryName(name));
+        if(block instanceof BlockDynamicColor) {
+            pendingIBlockColorBlocks.add((BlockDynamicColor) block);
+        }
         return block;
     }
 

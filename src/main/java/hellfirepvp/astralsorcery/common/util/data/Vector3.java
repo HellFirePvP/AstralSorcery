@@ -560,12 +560,7 @@ public class Vector3 {
         }
 
         public String toString() {
-            StringBuilder stringbuilder = new StringBuilder();
-            Formatter formatter = new Formatter(stringbuilder, Locale.US);
-            formatter.format("Quaternion:\n");
-            formatter.format("  < %f %f %f %f >\n", this.s, this.i, this.j, this.k);
-            formatter.close();
-            return stringbuilder.toString();
+            return String.format("Quaternion: { s=%f, i=%f, j=%f, k=%f }", this.s, this.i, this.j, this.k);
         }
 
         public static Quat buildQuatFrom3DVector(Vector3 axis, double angle) {
