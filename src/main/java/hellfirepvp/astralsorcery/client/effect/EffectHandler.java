@@ -1,10 +1,9 @@
 package hellfirepvp.astralsorcery.client.effect;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
-import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
@@ -39,18 +38,15 @@ import java.util.Random;
 public final class EffectHandler {
 
     public static final Random STATIC_EFFECT_RAND = new Random();
-
     private static int clientEffectTick = 0;
-
     public static final EffectHandler instance = new EffectHandler();
 
     private static boolean acceptsNewParticles = true, cleanRequested = false;
-
     private static List<IComplexEffect> toAddBuffer = new LinkedList<>();
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
-    //public static final List<EffectLightbeam> fastRenderBeams = new LinkedList<>();
+    public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
 
     private EffectHandler() {}
 
@@ -101,6 +97,7 @@ public final class EffectHandler {
         acceptsNewParticles = false;
         Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
+        EffectLightning.renderFast(event.getPartialTicks(), fastRenderLightnings);
         //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
         for (int i = 0; i <= 2; i++) {
             for (IComplexEffect effect : layeredEffects.get(i)) {
@@ -168,10 +165,10 @@ public final class EffectHandler {
     }
 
     private void registerUnsafe(IComplexEffect effect) {
-        if(effect instanceof EntityFXFacingParticle) {
+        if(effect instanceof EffectLightning) {
+            fastRenderLightnings.add((EffectLightning) effect);
+        } else if(effect instanceof EntityFXFacingParticle) {
             fastRenderParticles.add((EntityFXFacingParticle) effect);
-            //} else if(effect instanceof EffectLightbeam) {
-            //    fastRenderBeams.add((EffectLightbeam) effect);
         } else {
             complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
         }
@@ -188,6 +185,7 @@ public final class EffectHandler {
                 }
             }
             fastRenderParticles.clear();
+            fastRenderLightnings.clear();
             toAddBuffer.clear();
             cleanRequested = false;
         }
@@ -214,6 +212,15 @@ public final class EffectHandler {
             if(effect.canRemove()) {
                 effect.flagAsRemoved();
                 iterator.remove();
+            }
+        }
+        Iterator<EffectLightning> it = fastRenderLightnings.iterator();
+        while (it.hasNext()) {
+            EffectLightning effect = it.next();
+            effect.tick();
+            if(effect.canRemove()) {
+                effect.flagAsRemoved();
+                it.remove();
             }
         }
         acceptsNewParticles = true;

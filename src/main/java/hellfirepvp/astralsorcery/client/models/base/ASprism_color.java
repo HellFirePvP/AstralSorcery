@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.client.models.base;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 /**
  * astralsorcery_prism_coloured - wiiv
@@ -61,16 +62,18 @@ public class ASprism_color extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.fitting4.render(f5);
-        this.fitting8.render(f5);
-        this.fitting6.render(f5);
-        this.fitting7.render(f5);
-        this.fitting1.render(f5);
-        this.fitting5.render(f5);
-        this.glass.render(f5);
-        this.fitting3.render(f5);
-        this.fitting2.render(f5);
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
+        this.glass.render(scale);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+
+        this.fitting4.render(scale);
+        this.fitting8.render(scale);
+        this.fitting6.render(scale);
+        this.fitting7.render(scale);
+        this.fitting1.render(scale);
+        this.fitting5.render(scale);
+        this.fitting3.render(scale);
+        this.fitting2.render(scale);
     }
 
     /**

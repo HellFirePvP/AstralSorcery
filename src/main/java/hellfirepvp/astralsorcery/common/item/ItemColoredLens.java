@@ -101,8 +101,8 @@ public class ItemColoredLens extends Item {
 
         FIRE   (TargetType.ENTITY, 0xFF5711, 0.05F),
         BREAK  (TargetType.BLOCK,  0xD4FF00, 0.10F),
-        GROW   (TargetType.BLOCK,  0x009434, 0.40F),
-        DAMAGE (TargetType.ENTITY, 0x343434, 0.60F),
+        GROW   (TargetType.BLOCK,  0x00D736, 0.40F),
+        DAMAGE (TargetType.ENTITY, 0x767676, 0.60F),
         REGEN  (TargetType.ENTITY, 0xA13085, 0.90F),
         NIGHT  (TargetType.ENTITY, 0x008EAE, 0.25F);
 

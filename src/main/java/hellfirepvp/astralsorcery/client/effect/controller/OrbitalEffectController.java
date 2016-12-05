@@ -1,8 +1,7 @@
 package hellfirepvp.astralsorcery.client.effect.controller;
 
-import hellfirepvp.astralsorcery.client.effect.fx.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

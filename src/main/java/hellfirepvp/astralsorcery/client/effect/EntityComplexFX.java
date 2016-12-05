@@ -1,6 +1,4 @@
-package hellfirepvp.astralsorcery.client.effect.fx;
-
-import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+package hellfirepvp.astralsorcery.client.effect;
 
 /**
  * This class is part of the Astral Sorcery Mod

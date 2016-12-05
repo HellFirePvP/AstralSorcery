@@ -32,6 +32,12 @@ public class Vector3 {
         this.z = 0.0D;
     }
 
+    public Vector3(Vector3 copy) {
+        this.x = copy.x;
+        this.y = copy.y;
+        this.z = copy.z;
+    }
+
     public Vector3(int x, int y, int z) {
         this.x = x;
         this.y = y;

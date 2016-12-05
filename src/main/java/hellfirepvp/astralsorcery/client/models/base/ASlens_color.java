@@ -3,12 +3,14 @@ package hellfirepvp.astralsorcery.client.models.base;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 /**
  * astralsorcery_lens_coloured - wiiv
  * Created using Tabula 4.1.1
  */
 public class ASlens_color extends ModelBase {
+
     public ModelRenderer glass;
     public ModelRenderer detail1;
     public ModelRenderer detail1_1;
@@ -36,12 +38,20 @@ public class ASlens_color extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.glass.render(f5);
-        this.fitting1.render(f5);
-        this.detail1_1.render(f5);
-        this.fitting2.render(f5);
-        this.detail1.render(f5);
+    public void render(Entity entity, float modelYaw, float modelPitch, float f2, float f3, float f4, float scale) {
+        this.glass.    rotateAngleX = modelPitch * 0.017453292F;
+        this.fitting1. rotateAngleX = modelPitch * 0.017453292F;
+        this.fitting2. rotateAngleX = modelPitch * 0.017453292F;
+        this.detail1_1.rotateAngleX = modelPitch * 0.017453292F;
+        this.detail1.  rotateAngleX = modelPitch * 0.017453292F;
+
+        this.glass.render(scale);
+        GL11.glColor4f(1F, 1F, 1F, 1F); //Super render hacky though.
+
+        this.fitting1.render(scale);
+        this.detail1_1.render(scale);
+        this.fitting2.render(scale);
+        this.detail1.render(scale);
     }
 
     /**

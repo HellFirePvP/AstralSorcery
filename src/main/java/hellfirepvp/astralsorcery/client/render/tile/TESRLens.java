@@ -1,10 +1,13 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.models.base.ASlens;
+import hellfirepvp.astralsorcery.client.models.base.ASlens_color;
 import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.RenderHelper;
@@ -12,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -25,6 +29,9 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
 
     private static final ASlens modelLensPart = new ASlens();
     private static final BindableResource texLensPart = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/lens");
+
+    private static final ASlens_color modelLensColoredFrame = new ASlens_color();
+    private static final BindableResource texLensColorFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "lens/lens_color");
 
     @Override
     public void renderTileEntityAt(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -55,8 +62,21 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
         GL11.glRotated(180, 1, 0, 0);
         GL11.glRotated(yaw % 360, 0, 1, 0);
         renderHandle(yaw, pitch);
+        if(te.getLensColor() != null) {
+            GL11.glRotated(180, 0, 1, 0);
+            Color c = te.getLensColor().wrappedColor;
+            GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
+            renderColoredLens(yaw, -pitch);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+        }
+        TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    private void renderColoredLens(float yaw, float pitch) {
+        texLensColorFrame.bind();
+        modelLensColoredFrame.render(null, yaw, pitch, 0, 0, 0, 1);
     }
 
     private void renderHandle(float yaw, float pitch) {

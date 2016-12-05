@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class PerkCreationGrowables extends ConstellationPerk {
 
-    private static int chanceToBonemeal = 60;
+    private static int chanceToBonemeal = 40;
 
     public PerkCreationGrowables() {
         super("CRE_GROWTH", Target.PLAYER_TICK);
@@ -69,7 +69,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), 60, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
+        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), 40, 2, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
     }
 
 }
