@@ -281,7 +281,7 @@ public class Vector3 {
 
     //In rad's
     public Vector3 rotate(double angle, Vector3 axis) {
-        Quat.aroundAxis(axis.clone().normalize(), angle).rotate(this);
+        Quat.buildQuatFrom3DVector(axis.clone().normalize(), angle).rotateWithMagnitude(this);
         return this;
     }
 
@@ -468,69 +468,73 @@ public class Vector3 {
 
     public static class Quat {
 
-        public double x;
-        public double y;
-        public double z;
+        public double i;
+        public double j;
+        public double k;
         public double s;
 
         public Quat() {
-            this.s = 1.0D;
-            this.x = 0.0D;
-            this.y = 0.0D;
-            this.z = 0.0D;
+            this(1D);
+        }
+
+        public Quat(double zeroMag) {
+            this.s = zeroMag;
+            this.i = 0D;
+            this.j = 0D;
+            this.k = 0D;
         }
 
         public Quat(Quat quat) {
-            this.x = quat.x;
-            this.y = quat.y;
-            this.z = quat.z;
+            this.i = quat.i;
+            this.j = quat.j;
+            this.k = quat.k;
             this.s = quat.s;
         }
 
-        public Quat(double d, double d1, double d2, double d3) {
-            this.x = d1;
-            this.y = d2;
-            this.z = d3;
-            this.s = d;
+        public Quat(double w, double i, double j, double k) {
+            this.i = i;
+            this.j = j;
+            this.k = k;
+            this.s = w;
         }
 
         public void set(Quat quat) {
-            this.x = quat.x;
-            this.y = quat.y;
-            this.z = quat.z;
+            this.i = quat.i;
+            this.j = quat.j;
+            this.k = quat.k;
             this.s = quat.s;
         }
 
-        public static Quat aroundAxis(double ax, double ay, double az, double angle) {
+        public static Quat buildQuatWithAngle(double ax, double ay, double az, double angle) {
             angle *= 0.5D;
             double d4 = Math.sin(angle);
             return new Quat(Math.cos(angle), ax * d4, ay * d4, az * d4);
         }
 
-        public void multiply(Quat quat) {
-            double d = this.s * quat.s - this.x * quat.x - this.y * quat.y - this.z * quat.z;
-            double d1 = this.s * quat.x + this.x * quat.s - this.y * quat.z + this.z * quat.y;
-            double d2 = this.s * quat.y + this.x * quat.z + this.y * quat.s - this.z * quat.x;
-            double d3 = this.s * quat.z - this.x * quat.y + this.y * quat.x + this.z * quat.s;
+        public void leftMultiply(Quat quat) {
+            double d =  this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
+            double d1 = this.s * quat.i + this.i * quat.s - this.j * quat.k + this.k * quat.j;
+            double d2 = this.s * quat.j + this.i * quat.k + this.j * quat.s - this.k * quat.i;
+            double d3 = this.s * quat.k - this.i * quat.j + this.j * quat.i + this.k * quat.s;
             this.s = d;
-            this.x = d1;
-            this.y = d2;
-            this.z = d3;
+            this.i = d1;
+            this.j = d2;
+            this.k = d3;
         }
 
         public void rightMultiply(Quat quat) {
-            double d = this.s * quat.s - this.x * quat.x - this.y * quat.y - this.z * quat.z;
-            double d1 = this.s * quat.x + this.x * quat.s + this.y * quat.z - this.z * quat.y;
-            double d2 = this.s * quat.y - this.x * quat.z + this.y * quat.s + this.z * quat.x;
-            double d3 = this.s * quat.z + this.x * quat.y - this.y * quat.x + this.z * quat.s;
+            double d =  this.s * quat.s - this.i * quat.i - this.j * quat.j - this.k * quat.k;
+            double d1 = this.s * quat.i + this.i * quat.s + this.j * quat.k - this.k * quat.j;
+            double d2 = this.s * quat.j - this.i * quat.k + this.j * quat.s + this.k * quat.i;
+            double d3 = this.s * quat.k + this.i * quat.j - this.j * quat.i + this.k * quat.s;
             this.s = d;
-            this.x = d1;
-            this.y = d2;
-            this.z = d3;
+            this.i = d1;
+            this.j = d2;
+            this.k = d3;
         }
 
         public double mag() {
-            return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.s * this.s);
+            return Math.sqrt(this.i * this.i + this.j * this.j + this.k * this.k + this.s * this.s);
         }
 
         public void normalize() {
@@ -539,33 +543,33 @@ public class Vector3 {
                 return;
             }
             d = 1.0D / d;
-            this.x *= d;
-            this.y *= d;
-            this.z *= d;
+            this.i *= d;
+            this.j *= d;
+            this.k *= d;
             this.s *= d;
         }
 
-        public void rotate(Vector3 vec) {
-            double d = -this.x * vec.x - this.y * vec.y - this.z * vec.z;
-            double d1 = this.s * vec.x + this.y * vec.z - this.z * vec.y;
-            double d2 = this.s * vec.y - this.x * vec.z + this.z * vec.x;
-            double d3 = this.s * vec.z + this.x * vec.y - this.y * vec.x;
-            vec.x = (d1 * this.s - d * this.x - d2 * this.z + d3 * this.y);
-            vec.y = (d2 * this.s - d * this.y + d1 * this.z - d3 * this.x);
-            vec.z = (d3 * this.s - d * this.z - d1 * this.y + d2 * this.x);
+        public void rotateWithMagnitude(Vector3 vec) {
+            double d = -this.i * vec.x - this.j * vec.y - this.k * vec.z;
+            double d1 = this.s * vec.x + this.j * vec.z - this.k * vec.y;
+            double d2 = this.s * vec.y - this.i * vec.z + this.k * vec.x;
+            double d3 = this.s * vec.z + this.i * vec.y - this.j * vec.x;
+            vec.x = (d1 * this.s - d * this.i - d2 * this.k + d3 * this.j);
+            vec.y = (d2 * this.s - d * this.j + d1 * this.k - d3 * this.i);
+            vec.z = (d3 * this.s - d * this.k - d1 * this.j + d2 * this.i);
         }
 
         public String toString() {
             StringBuilder stringbuilder = new StringBuilder();
             Formatter formatter = new Formatter(stringbuilder, Locale.US);
             formatter.format("Quaternion:\n");
-            formatter.format("  < %f %f %f %f >\n", this.s, this.x, this.y, this.z);
+            formatter.format("  < %f %f %f %f >\n", this.s, this.i, this.j, this.k);
             formatter.close();
             return stringbuilder.toString();
         }
 
-        public static Quat aroundAxis(Vector3 axis, double angle) {
-            return aroundAxis(axis.x, axis.y, axis.z, angle);
+        public static Quat buildQuatFrom3DVector(Vector3 axis, double angle) {
+            return buildQuatWithAngle(axis.x, axis.y, axis.z, angle);
         }
 
     }

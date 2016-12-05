@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -333,11 +332,11 @@ public class RenderingUtils {
             Vector3 pvec = new Vector3(iPX, iPY, iPZ);
             Vector3 tvec = new Vector3(px, py, pz);
             Vector3 qvec = pvec.subtract(tvec).normalize();
-            Vector3.Quat q = Vector3.Quat.aroundAxis(qvec, angle);
-            q.rotate(v1);
-            q.rotate(v2);
-            q.rotate(v3);
-            q.rotate(v4);
+            Vector3.Quat q = Vector3.Quat.buildQuatFrom3DVector(qvec, angle);
+            q.rotateWithMagnitude(v1);
+            q.rotateWithMagnitude(v2);
+            q.rotateWithMagnitude(v3);
+            q.rotateWithMagnitude(v4);
         }
         vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u,           v + vLength).color(colorRed, colorGreen, colorBlue, alpha).endVertex();
         vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).color(colorRed, colorGreen, colorBlue, alpha).endVertex();
@@ -372,11 +371,11 @@ public class RenderingUtils {
             Vector3 pvec = new Vector3(iPX, iPY, iPZ);
             Vector3 tvec = new Vector3(px, py, pz);
             Vector3 qvec = pvec.subtract(tvec).normalize();
-            Vector3.Quat q = Vector3.Quat.aroundAxis(qvec, angle);
-            q.rotate(v1);
-            q.rotate(v2);
-            q.rotate(v3);
-            q.rotate(v4);
+            Vector3.Quat q = Vector3.Quat.buildQuatFrom3DVector(qvec, angle);
+            q.rotateWithMagnitude(v1);
+            q.rotateWithMagnitude(v2);
+            q.rotateWithMagnitude(v3);
+            q.rotateWithMagnitude(v4);
         }
         Tessellator t = Tessellator.getInstance();
         VertexBuffer vb = t.getBuffer();
