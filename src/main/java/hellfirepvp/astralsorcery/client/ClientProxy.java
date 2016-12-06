@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityTelescope;
+import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
@@ -53,6 +54,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -102,6 +104,13 @@ public class ClientProxy extends CommonProxy {
         BlockColors colors = Minecraft.getMinecraft().getBlockColors();
         for (BlockDynamicColor b : RegistryBlocks.pendingIBlockColorBlocks) {
             colors.registerBlockColorHandler(b::getColorMultiplier, (Block) b);
+        }
+    }
+
+    private void registerPendingIItemColorItems() {
+        ItemColors colors = Minecraft.getMinecraft().getItemColors();
+        for (ItemDynamicColor i : RegistryItems.pendingDynamicColorItems) {
+            colors.registerItemColorHandler(i::getColorForItemStack, (Item) i);
         }
     }
 
@@ -220,6 +229,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         registerPendingIBlockColorBlocks();
+        registerPendingIItemColorItems();
         //registerAdditionalItemRenderers();
 
         for (RenderInfoBlock modelEntry : blockRegister) {

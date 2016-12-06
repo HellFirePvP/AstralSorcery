@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
@@ -36,6 +37,9 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
 
 /**
@@ -46,6 +50,8 @@ import static hellfirepvp.astralsorcery.common.lib.ItemsAS.*;
  * Date: 07.05.2016 / 15:03
  */
 public class RegistryItems {
+
+    public static List<ItemDynamicColor> pendingDynamicColorItems = new LinkedList<>();
 
     public static Item.ToolMaterial crystalToolMaterial;
     public static EnumRarity rarityCelestial;
@@ -177,6 +183,9 @@ public class RegistryItems {
 
         if (item instanceof Item) {
             registerItemInformations((Item) item, name);
+            if(item instanceof ItemDynamicColor) {
+                pendingDynamicColorItems.add((ItemDynamicColor) item);
+            }
         }
     }
 
