@@ -1,8 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -52,6 +50,16 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         super(Material.BARRIER, MapColor.AIR);
         setBlockUnbreakable();
         setSoundType(SoundType.GLASS);
+    }
+
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        switch (state.getValue(BLOCK_TYPE)) {
+            case TELESCOPE_STRUCT:
+                IBlockState downState = world.getBlockState(pos.down());
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getSoundType(downState, world, pos, entity);
+        }
+        return super.getSoundType(state, world, pos, entity);
     }
 
     @Override

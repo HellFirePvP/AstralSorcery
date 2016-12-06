@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
@@ -13,6 +14,7 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -88,6 +90,7 @@ public class ItemColoredLens extends Item {
                 TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
                 if(lens != null) {
                     ColorType oldType = lens.setLensColor(type);
+                    SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);
                     if(oldType != null) {
                         ItemUtils.dropItem(worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, oldType.asStack());
                     }

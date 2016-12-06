@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryPerks;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
+import hellfirepvp.astralsorcery.common.registry.RegistrySounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
@@ -137,6 +138,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
 
         GameRegistry.registerWorldGenerator(worldGenerator.init(), 50);
+        RegistrySounds.init();
 
         TickManager manager = TickManager.getInstance();
         registerTickHandlers(manager);

@@ -114,12 +114,12 @@ public class WorldCacheManager implements ITickHandler {
         if (!f.exists()) {
             return key.getNewInstance();
         }
-        AstralSorcery.log.info("[AstralSorcery] Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
+        AstralSorcery.log.info("Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
         //AstralSorcery.log.info("[AstralSorcery] Any error that appears in connection to some load issue may be related to this world.");
         CachedWorldData data = key.getNewInstance();
         NBTTagCompound cmp = CompressedStreamTools.read(f);
         data.readFromNBT(cmp);
-        AstralSorcery.log.info("[AstralSorcery] Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
+        AstralSorcery.log.info("Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
         return data;
     }
 

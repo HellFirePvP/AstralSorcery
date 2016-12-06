@@ -1,0 +1,11 @@
+{
+    "clipSwitch": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "astralsorcery:clip",
+                "stream": false
+            }
+        ]
+    }
+}

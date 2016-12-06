@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,6 +42,15 @@ public class ResearchManager {
     public static PlayerProgress clientProgress = new PlayerProgress();
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
+
+    @Nullable
+    public static PlayerProgress getProgress(EntityPlayer player, Side side) {
+        if(side == Side.CLIENT) {
+            return clientProgress;
+        } else {
+            return getProgress(player);
+        }
+    }
 
     @Nullable
     public static PlayerProgress getProgress(EntityPlayer player) {
