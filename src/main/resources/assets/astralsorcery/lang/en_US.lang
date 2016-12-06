@@ -197,6 +197,7 @@ tile.BlockAltar.altar_4.name=[NoName-TraitCraft] Altar
 tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=Altar
 tile.BlockAttunementAltar.name=Attunement Altar
+tile.BlockStructural.attunement_altar_struct.name=Attunement Altar
 tile.BlockAttunementRelay.name=Attunement Relay
 tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=Volatile Flare

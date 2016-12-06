@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -57,6 +58,10 @@ public class ClientRenderEventHandler {
         if(res.typeOfHit == RayTraceResult.Type.BLOCK && res.getBlockPos() != null) {
             BlockPos bp = res.getBlockPos();
             IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
+            if(state.getBlock() instanceof BlockStructural && state.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT)) {
+                bp.down();
+                state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
+            }
             TileAttunementAltar taa = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, bp, TileAttunementAltar.class, false);
             if(state.getBlock().equals(BlocksAS.attunementAltar) && taa != null) {
                 EntityPlayer pl = event.getPlayer();

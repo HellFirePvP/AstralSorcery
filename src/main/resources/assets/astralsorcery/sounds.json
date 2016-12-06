@@ -1,4 +1,13 @@
 {
+    "attunement": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "astralsorcery:attunementAltar",
+                "stream": false
+            }
+        ]
+    },
     "clipSwitch": {
         "category": "master",
         "sounds": [

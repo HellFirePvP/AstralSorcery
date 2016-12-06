@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.common.lib;
 
-import net.minecraft.util.SoundEvent;
+import hellfirepvp.astralsorcery.common.util.SoundUtils;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -11,6 +11,7 @@ import net.minecraft.util.SoundEvent;
  */
 public class Sounds {
 
-    public static SoundEvent clipSwitch;
+    public static SoundUtils.CategorizedSoundEvent clipSwitch;
+    public static SoundUtils.LoopableSoundEvent attunement;
 
 }

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
+import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -13,11 +14,14 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
@@ -50,6 +54,7 @@ public class TileAttunementAltar extends TileReceiverBase {
 
     private Map<BlockPos, Boolean> unloadCache = new HashMap<>();
 
+    private Object activeSound = null;
     private List<Object> starSprites = new LinkedList<>();
     private IMajorConstellation highlight = null;
     private int highlightActive = 0;
@@ -171,9 +176,11 @@ public class TileAttunementAltar extends TileReceiverBase {
 
         if(!hasMultiblock || !doesSeeSky) {
             starSprites.clear();
+            activeSound = null;
 
         } else if(activeFound == null) {
             starSprites.clear();
+            activeSound = null;
 
             spawnAmbientParticles();
             if(highlight != null && highlightActive > 0) {
@@ -187,6 +194,10 @@ public class TileAttunementAltar extends TileReceiverBase {
                 }
             }
         } else {
+            if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
+                activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.7F, 0.8F, () -> isInvalid() || activeFound == null);
+            }
+
             for(Object o : starSprites) {
                 EntityFXFacingSprite p = (EntityFXFacingSprite) o;
                 if(p.isRemoved()) {

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -36,10 +37,22 @@ public class SoundHelper {
     }
 
     public static void playSoundAround(SoundEvent sound, SoundCategory category, World world, double posX, double posY, double posZ, float volume, float pitch) {
-        if(sound instanceof CategorizedSoundEvent) {
-            category = ((CategorizedSoundEvent) sound).getCategory();
+        if(sound instanceof SoundUtils.CategorizedSoundEvent) {
+            category = ((SoundUtils.CategorizedSoundEvent) sound).getCategory();
         }
         world.playSound(null, posX, posY, posZ, sound, category, volume, pitch);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static PositionedLoopSound playSoundLoopClient(SoundEvent sound, Vector3 pos, float volume, float pitch, PositionedLoopSound.ActivityFunction func) {
+        SoundCategory cat = SoundCategory.MASTER;
+        if(sound instanceof SoundUtils.CategorizedSoundEvent) {
+            cat = ((SoundUtils.CategorizedSoundEvent) sound).getCategory();
+        }
+        PositionedLoopSound posSound = new PositionedLoopSound(sound, cat, volume, pitch, pos);
+        posSound.setRefreshFunction(func);
+        Minecraft.getMinecraft().getSoundHandler().playSound(posSound);
+        return posSound;
     }
 
     @SideOnly(Side.CLIENT)
