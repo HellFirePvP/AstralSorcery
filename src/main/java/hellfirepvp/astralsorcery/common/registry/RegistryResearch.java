@@ -111,6 +111,7 @@ public class RegistryResearch {
         ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 1, 1);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
         resPlayerAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttenuationAltarRelay));
+        resPlayerAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttunementAltarRock));
         resPlayerAtt.addPage(new JournalPageStructure(MultiBlockArrays.patternAttunementFrame));
 
         ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 0, 2);

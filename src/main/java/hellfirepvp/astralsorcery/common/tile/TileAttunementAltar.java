@@ -25,7 +25,10 @@ import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -59,6 +62,12 @@ public class TileAttunementAltar extends TileReceiverBase {
     private IMajorConstellation highlight = null;
     private int highlightActive = 0;
 
+    public static final int MAX_START_ANIMATION_TICK = 60;
+    public static final int MAX_START_ANIMATION_SPIN = 100;
+    public int activationTick = 0;
+    public int prevActivationTick = 0;
+    public boolean animate = false, tesrLocked = true;
+
     @Override
     public void update() {
         super.update();
@@ -84,6 +93,12 @@ public class TileAttunementAltar extends TileReceiverBase {
                 searchForConstellation();
             }
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().expand(1.5, 2, 1.5);
     }
 
     protected void updateSkyState() {
@@ -135,6 +150,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         List<BlockPos> positions = translateConstellationPositions(activeFound);
         boolean valid = true;
         for (BlockPos pos : positions) {
+            if(pos.equals(getPos())) continue;
             IBlockState state = worldObj.getBlockState(pos);
             if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                 valid = false;
@@ -152,6 +168,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             List<BlockPos> positions = translateConstellationPositions(attuneable);
             boolean valid = true;
             for (BlockPos pos : positions) {
+                if(pos.equals(getPos())) continue;
                 IBlockState state = worldObj.getBlockState(pos);
                 if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                     valid = false;
@@ -177,10 +194,22 @@ public class TileAttunementAltar extends TileReceiverBase {
         if(!hasMultiblock || !doesSeeSky) {
             starSprites.clear();
             activeSound = null;
+            animate = false;
+
+            prevActivationTick = activationTick;
+            if(activationTick > 0) {
+                activationTick--;
+            }
 
         } else if(activeFound == null) {
             starSprites.clear();
             activeSound = null;
+            animate = false;
+
+            prevActivationTick = activationTick;
+            if(activationTick > 0) {
+                activationTick--;
+            }
 
             spawnAmbientParticles();
             if(highlight != null && highlightActive > 0) {
@@ -194,8 +223,19 @@ public class TileAttunementAltar extends TileReceiverBase {
                 }
             }
         } else {
-            if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
-                activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.7F, 0.8F, () -> isInvalid() || activeFound == null);
+            if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
+                if(activeSound == null || ((PositionedLoopSound) activeSound).hasStoppedPlaying()) {
+                    activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.7F, 0.8F,
+                            () -> isInvalid() ||
+                                    activeFound == null ||
+                                    Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
+                }
+            }
+
+            animate = true;
+            prevActivationTick = activationTick;
+            if(activationTick < MAX_START_ANIMATION_TICK) {
+                activationTick++;
             }
 
             for(Object o : starSprites) {
@@ -207,7 +247,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             if(starSprites.isEmpty()) {
                 addStarSprites();
             }
-            if(getTicksExisted() % 50 == 0) {
+            if(getTicksExisted() % 53 == 0) {
                 addConnectionBeams();
             }
             spawnAmbientParticles();
@@ -217,7 +257,7 @@ public class TileAttunementAltar extends TileReceiverBase {
 
     private void spawnAmbientParticles() {
         if(rand.nextBoolean()) return;
-        Vector3 at = new Vector3(this).add(0, -0.98, 0);
+        Vector3 at = new Vector3(this).add(0, 0.01, 0);
         at.add(rand.nextFloat() * 15 - 7, 0, rand.nextFloat() * 15 - 7);
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
         p.setAlphaMultiplier(0.7F);
@@ -276,7 +316,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         for (StarConnection c : cst.getStarConnections()) {
             StarLocation from = c.from;
             StarLocation to = c.to;
-            offsetPositions.add(new Tuple<>(new BlockPos(from.x / 2 - 7, -1, from.y / 2 - 7).add(getPos()), new BlockPos(to.x / 2 - 7, -1, to.y / 2 - 7).add(getPos())));
+            offsetPositions.add(new Tuple<>(new BlockPos(from.x / 2 - 7, 0, from.y / 2 - 7).add(getPos()), new BlockPos(to.x / 2 - 7, 0, to.y / 2 - 7).add(getPos())));
         }
         return offsetPositions;
     }
@@ -286,7 +326,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         for (StarLocation sl : cst.getStars()) {
             int x = sl.x / 2;
             int z = sl.y / 2;
-            offsetPositions.add(new BlockPos(x - 7, -1, z - 7).add(getPos()));
+            offsetPositions.add(new BlockPos(x - 7, 0, z - 7).add(getPos()));
         }
         return offsetPositions;
     }

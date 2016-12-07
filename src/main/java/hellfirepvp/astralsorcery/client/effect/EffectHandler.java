@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
+import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -94,6 +95,7 @@ public final class EffectHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRender(RenderWorldLastEvent event) {
+        TESRPrismLens.renderColoredPrismsLast();
         acceptsNewParticles = false;
         Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);

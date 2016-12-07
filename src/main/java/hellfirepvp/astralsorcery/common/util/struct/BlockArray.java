@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
+import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -156,6 +157,12 @@ public class BlockArray {
             ItemStack s;
             if(info.type instanceof BlockFluidBase) {
                 s = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ((BlockFluidBase) info.type).getFluid());
+            } else if(info.type instanceof BlockStructural) {
+                continue;
+                //IBlockState otherState = info.state.getValue(BlockStructural.BLOCK_TYPE).getSupportedState();
+                //Item i = Item.getItemFromBlock(otherState.getBlock());
+                //if(i == null) continue;
+                //s = new ItemStack(i, 1, otherState.getBlock().getMetaFromState(otherState));
             } else {
                 Item i = Item.getItemFromBlock(info.type);
                 if(i == null) continue;
@@ -164,7 +171,7 @@ public class BlockArray {
             if(s != null) {
                 boolean found = false;
                 for (ItemStack stack : out) {
-                    if(stack.getItem().equals(s.getItem()) && stack.getItemDamage() == meta) {
+                    if(stack.getItem().getRegistryName().equals(s.getItem().getRegistryName()) && stack.getItemDamage() == s.getItemDamage()) {
                         stack.stackSize++;
                         found = true;
                         break;

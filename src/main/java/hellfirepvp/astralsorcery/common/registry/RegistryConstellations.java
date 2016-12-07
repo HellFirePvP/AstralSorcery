@@ -71,13 +71,13 @@ public class RegistryConstellations {
         armara.addConnection(sl5, sl7);
 
         vicio = new ConstellationBase.Major("vicio");
-        sl1 = vicio.addStar(3, 12);
-        sl2 = vicio.addStar(13, 13);
-        sl3 = vicio.addStar(6, 27);
-        sl4 = vicio.addStar(14, 20);
-        sl5 = vicio.addStar(23, 28);
-        sl6 = vicio.addStar(22, 20);
-        sl7 = vicio.addStar(24, 8);
+        sl1 = vicio.addStar(3,  8);
+        sl2 = vicio.addStar(13, 9);
+        sl3 = vicio.addStar(6,  23);
+        sl4 = vicio.addStar(14, 16);
+        sl5 = vicio.addStar(23, 24);
+        sl6 = vicio.addStar(22, 16);
+        sl7 = vicio.addStar(24, 4);
 
         vicio.addConnection(sl1, sl2);
         vicio.addConnection(sl2, sl7);

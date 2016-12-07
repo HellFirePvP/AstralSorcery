@@ -45,13 +45,6 @@ public class ClientGuiHandler {
         }
         switch (guiType) {
             case TELESCOPE:
-                /*Entity e = world.getEntityByID(x); //Suggested entity id;
-                if (e == null || !(e instanceof EntityTelescope)) {
-                    AstralSorcery.log.info("Tried opening Telescope GUI without valid telescope entity?");
-                    return null;
-                } else {
-                    return new GuiTelescope(player, (EntityTelescope) e);
-                }*/
                 return new GuiTelescope(player, (TileTelescope) t);
             case CONSTELLATION_PAPER:
                 IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;

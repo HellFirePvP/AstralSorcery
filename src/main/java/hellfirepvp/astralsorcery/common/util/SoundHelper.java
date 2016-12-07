@@ -56,6 +56,11 @@ public class SoundHelper {
     }
 
     @SideOnly(Side.CLIENT)
+    public float getSoundVolume(SoundCategory cat) {
+        return Minecraft.getMinecraft().gameSettings.getSoundLevel(cat);
+    }
+
+    @SideOnly(Side.CLIENT)
     public static void playSoundClient(SoundEvent sound, float volume, float pitch) {
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         player.playSound(sound, volume, pitch);

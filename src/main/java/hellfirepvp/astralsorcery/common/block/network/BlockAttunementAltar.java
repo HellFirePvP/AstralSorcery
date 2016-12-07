@@ -33,6 +33,8 @@ import net.minecraft.world.World;
  */
 public class BlockAttunementAltar extends BlockStarlightNetwork {
 
+    public static final AxisAlignedBB boxAttunementAlar = new AxisAlignedBB(-2D / 16D, 0, -2D / 16D, 18D / 16D, 6D / 16D, 18D / 16D);
+
     public BlockAttunementAltar() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(3.0F);
@@ -51,7 +53,7 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0, 0, 0, 1, 2, 1);
+        return boxAttunementAlar;
     }
 
     @Override

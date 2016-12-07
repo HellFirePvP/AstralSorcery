@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.SoundCategory;
@@ -36,12 +37,12 @@ public class PositionedLoopSound extends PositionedSoundRecord implements ITicka
 
     @Override
     public boolean isDonePlaying() {
-        hasStoppedPlaying = func == null || func.shouldRefresh();
+        hasStoppedPlaying = func == null || func.shouldStop();
         return hasStoppedPlaying;
     }
 
     public boolean hasStoppedPlaying() {
-        return hasStoppedPlaying;
+        return hasStoppedPlaying || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class PositionedLoopSound extends PositionedSoundRecord implements ITicka
     @SideOnly(Side.CLIENT)
     public static interface ActivityFunction {
 
-        public boolean shouldRefresh();
+        public boolean shouldStop();
 
     }
 }

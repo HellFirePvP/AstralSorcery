@@ -10,11 +10,16 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,8 +30,40 @@ import java.awt.*;
  */
 public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLens> {
 
+    private static List<TileCrystalPrismLens> coloredPositions = new LinkedList<>();
+
     private static final ASprism_color modelPrismColoredFrame = new ASprism_color();
     private static final BindableResource texPrismColorFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "prism/prism_color");
+
+    public static void renderColoredPrismsLast() {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
+        RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
+
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
+
+        for (TileCrystalPrismLens prism : coloredPositions) {
+            Color c = prism.getLensColor().wrappedColor;
+            GL11.glPushMatrix();
+            BlockPos pos = prism.getPos();
+
+            GL11.glTranslated(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
+            GL11.glScaled(0.0625, 0.0625, 0.0625);
+            GL11.glRotated(180, 1, 0, 0);
+
+            GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
+            renderColoredPrism();
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+
+            GL11.glPopMatrix();
+        }
+
+        coloredPositions.clear();
+
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+    }
 
     @Override
     public void renderTileEntityAt(TileCrystalPrismLens te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -49,8 +86,9 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
         TESRCollectorCrystal.renderCrystal(false, true);
         RenderHelper.disableStandardItemLighting();
         if(te.getLensColor() != null) {
+            coloredPositions.add(te);
             //TODO move past world render
-            GL11.glPopMatrix();
+            /*GL11.glPopMatrix();
             GL11.glPushMatrix();
             GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
             GL11.glScaled(0.0625, 0.0625, 0.0625);
@@ -60,14 +98,14 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
             Color c = te.getLensColor().wrappedColor;
             GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
             renderColoredPrism();
-            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glColor4f(1F, 1F, 1F, 1F);*/
         }
         TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void renderColoredPrism() {
+    private static void renderColoredPrism() {
         texPrismColorFrame.bind();
         modelPrismColoredFrame.render(null, 0, 0, 0, 0, 0, 1);
     }

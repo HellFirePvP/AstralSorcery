@@ -59,7 +59,7 @@ public class ClientRenderEventHandler {
             BlockPos bp = res.getBlockPos();
             IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
             if(state.getBlock() instanceof BlockStructural && state.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT)) {
-                bp.down();
+                bp = bp.down();
                 state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
             }
             TileAttunementAltar taa = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, bp, TileAttunementAltar.class, false);

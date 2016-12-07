@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
 import net.minecraft.block.Block;
@@ -95,8 +96,9 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-            case ATTUNEMENT_ALTAR_STRUCT:
                 return new AxisAlignedBB(0, -1, 0, 1, 1, 1);
+            case ATTUNEMENT_ALTAR_STRUCT:
+                return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
         }
         return FULL_BLOCK_AABB;
     }
