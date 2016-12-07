@@ -65,7 +65,8 @@ public class ASaltarAT extends ModelBase {
     }
 
     public void renderHovering(float offX, float offZ, float perc) {
-        this.subhovering1.setRotationPoint(-2F + (16F * offX), -16F, -2F + (16F * offZ));
+        float distance = 0.9453125F;
+        this.subhovering1.setRotationPoint(-2F + (16F * offX * distance), -16F, -2F + (16F * offZ * distance));
         this.setRotateAngle(this.subhovering1, offZ * 0.39269908169872414F * perc, 0, offX * -0.39269908169872414F * perc);
         this.subhovering1.render(1F);
     }

@@ -69,7 +69,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.06, 0.06, 0.06);
+        GL11.glScaled(0.0625, 0.0625, 0.0625);
 
         texAltar3.bind();
         modelAltar3.render(null, jump, 0, 0, 0, 0, 1F);
@@ -83,7 +83,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.06, 0.06, 0.06);
+        GL11.glScaled(0.0625, 0.0625, 0.0625);
 
         texAltar2.bind();
         modelAltar2.render(null, jump, 0, 0, 0, 0, 1F);

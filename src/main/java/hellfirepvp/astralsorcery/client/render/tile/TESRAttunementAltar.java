@@ -29,8 +29,8 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
-        GL11.glTranslated(x + 0.5, y + 0.48, z + 0.5);
-        GL11.glScaled(0.06, 0.06, 0.06);
+        GL11.glTranslated(x + 0.5, y + 0.5, z + 0.5);
+        GL11.glScaled(0.0625, 0.0625, 0.0625);
         GL11.glRotated(180, 1, 0, 0);
 
         texModelAttunementAltar.bind();
@@ -52,10 +52,10 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
             }
         } else {
             if(te.tesrLocked) {
-                generalAnimationTick = 7D;
+                generalAnimationTick = 7.25D;
             } else {
-                if(Math.abs((generalAnimationTick % TileAttunementAltar.MAX_START_ANIMATION_SPIN) - 7D) <= 0.3) {
-                    generalAnimationTick = 7D;
+                if(Math.abs((generalAnimationTick % TileAttunementAltar.MAX_START_ANIMATION_SPIN) - 7.25D) <= 0.3125) {
+                    generalAnimationTick = 7.25D;
                     te.tesrLocked = true;
                 }
             }
@@ -78,7 +78,7 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
 
             GL11.glPushMatrix();
             GL11.glTranslated(x + 0.5, y + framePosY, z + 0.5);
-            GL11.glScaled(0.06, 0.06, 0.06);
+            GL11.glScaled(0.0625, 0.0625, 0.0625);
             GL11.glRotated(180, 1, 0, 0);
 
             modelAttunementAltar.renderHovering(xOffset, zOffset,
