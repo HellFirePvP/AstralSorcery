@@ -290,6 +290,15 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+        state = worldIn.getBlockState(pos);
+        BlockType bt = state.getValue(BLOCK_TYPE);
+        if(bt.equals(BlockType.ATTUNEMENT_ALTAR_STRUCT)) return;
+
+        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn);
+    }
+
+    @Override
     public String getStateName(IBlockState state) {
         return state.getValue(BLOCK_TYPE).getName();
     }

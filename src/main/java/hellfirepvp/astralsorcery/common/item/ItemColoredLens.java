@@ -49,7 +49,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 29.11.2016 / 12:35
  */
-public class ItemColoredLens extends Item {
+public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     public ItemColoredLens() {
         setMaxStackSize(16);
@@ -98,6 +98,13 @@ public class ItemColoredLens extends Item {
             }
         }
         return EnumActionResult.SUCCESS;
+    }
+
+    @Override
+    public int getColorForItemStack(ItemStack stack, int tintIndex) {
+        int dmg = stack.getItemDamage();
+        if(dmg < 0 || dmg >= ColorType.values().length) return 0xFFFFFFFF;
+        return ColorType.values()[dmg].colorRGB;
     }
 
     public static enum ColorType {

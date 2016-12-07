@@ -87,7 +87,7 @@ public class AttenuationRecipe extends DiscoveryRecipe {
 
     @Override
     public int craftingTickTime() {
-        return 500;
+        return 300;
     }
 
     @Override

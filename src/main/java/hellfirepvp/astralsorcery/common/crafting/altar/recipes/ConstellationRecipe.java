@@ -83,7 +83,7 @@ public class ConstellationRecipe extends AttenuationRecipe {
 
     @Override
     public int craftingTickTime() {
-        return 600;
+        return 500;
     }
 
     public void setSkyConstellation(IConstellation constellation) {

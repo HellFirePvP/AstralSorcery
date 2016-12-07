@@ -251,18 +251,33 @@ public class TileAttunementAltar extends TileReceiverBase {
                 addConnectionBeams();
             }
             spawnAmbientParticles();
+            spawnAmbientActiveParticles();
         }
 
     }
 
+    @SideOnly(Side.CLIENT)
+    private void spawnAmbientActiveParticles() {
+        if(rand.nextInt(3) == 0) {
+            Vector3 at = new Vector3(this).add(0, 0.1, 0);
+            at.add(rand.nextFloat() * 3 - 1, 0, rand.nextFloat() * 3 - 1);
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+            p.setAlphaMultiplier(0.7F);
+            p.setMaxAge((int) (30 + rand.nextFloat() * 50));
+            p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
     private void spawnAmbientParticles() {
-        if(rand.nextBoolean()) return;
-        Vector3 at = new Vector3(this).add(0, 0.01, 0);
-        at.add(rand.nextFloat() * 15 - 7, 0, rand.nextFloat() * 15 - 7);
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
-        p.setAlphaMultiplier(0.7F);
-        p.setColor(Color.WHITE);
-        p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.1F);
+        if(rand.nextBoolean()) {
+            Vector3 at = new Vector3(this).add(0, 0.01, 0);
+            at.add(rand.nextFloat() * 15 - 7, 0, rand.nextFloat() * 15 - 7);
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+            p.setAlphaMultiplier(0.7F);
+            p.setColor(Color.WHITE);
+            p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.1F);
+        }
     }
 
     @SideOnly(Side.CLIENT)
