@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -47,6 +48,21 @@ public class RegistryResearch {
         resLens.addPage(getTextPage("LENS.1"));
         resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLensRock));
 
+        ItemStack[] stacks = new ItemStack[ItemColoredLens.ColorType.values().length];
+        ItemColoredLens.ColorType[] values = ItemColoredLens.ColorType.values();
+        for (int i = 0; i < values.length; i++) {
+            ItemColoredLens.ColorType ct = values[i];
+            stacks[i] = ct.asStack();
+        }
+        ResearchNode resColoredLenses = new ResearchNode(stacks, "LENSES_EFFECTS", 1, 0);
+        resColoredLenses.addPage(getTextPage("LENSES_EFFECTS.1"));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensFire));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensBreak));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensDamage));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensGrowth));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensRegeneration));
+        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensNightvision));
+
         ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 2);
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
         resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkToolRock));
@@ -78,6 +94,7 @@ public class RegistryResearch {
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
+        resColoredLenses.addSourceConnectionFrom(resLens);
         resRitualAccel.addSourceConnectionFrom(resLens);
         resRitualAccel.addSourceConnectionFrom(resLinkTool);
         resPrism.addSourceConnectionFrom(resStarResult);
@@ -87,6 +104,7 @@ public class RegistryResearch {
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
 
         regConstellation.register(resLens);
+        regConstellation.register(resColoredLenses);
         regConstellation.register(resLinkTool);
         regConstellation.register(resStarOre);
         regConstellation.register(resStarResult);

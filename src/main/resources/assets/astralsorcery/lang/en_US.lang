@@ -98,6 +98,8 @@ astralsorcery.journal.ALTAR3.1.text=[WIP]<NL>Altar upgraging recipe. Advance to 
 research.LENS.name=[WIP] Crystal Lens
 astralsorcery.journal.LENS.1.text=[WIP]<NL>Can be linked to 1 other point in a 16 blocks radius. Requires line of sight to the target to transmit starlight to it. Can have N inputs, 1 output. Transmission loss depends on the crystal properties of the lens. It copies the properties of the crystal used in crafting.
 
+research.LENSES_EFFECTS.name=[WIP] Colored Lenses
+
 research.LINKTOOL.name=[WIP] Linking Tool
 astralsorcery.journal.LINKTOOL.1.text=[WIP]<NL>Can be used to link 1 block of the starlight network to another or onto a block. Right-click selects something, deselect by switching the item held in your hand to another item. To link to something, right-click in select mode; un-link with shift-right-click
 

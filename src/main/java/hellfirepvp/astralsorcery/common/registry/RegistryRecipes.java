@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
+import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -72,6 +73,7 @@ public class RegistryRecipes {
     //CraftingComponents
     //public static DiscoveryRecipe rCCGlassLensRockCrystal, rCCGlassLensCelCrystal;
     public static DiscoveryRecipe rCCGlassLens;
+    public static AttenuationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensNightvision;
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;
@@ -217,6 +219,80 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttenuationUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rGlassLensFire = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.FIRE.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rGlassLensFire.setAttItem(Items.BLAZE_POWDER, AttenuationRecipe.AltarSlot.values());
+
+        rGlassLensBreak = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.BREAK.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.DIAMOND,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Items.GOLD_INGOT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT));
+        rGlassLensBreak.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttenuationRecipe.AltarSlot.UPPER_RIGHT,
+                AttenuationRecipe.AltarSlot.UPPER_LEFT);
+
+        rGlassLensDamage = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.DAMAGE.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.FLINT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(Items.DIAMOND,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Items.IRON_INGOT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT));
+        rGlassLensDamage.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttenuationRecipe.AltarSlot.LOWER_LEFT,
+                AttenuationRecipe.AltarSlot.LOWER_RIGHT);
+
+        rGlassLensGrowth = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.GROW.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.WHEAT_SEEDS,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(Items.CARROT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(Items.REEDS,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER));
+        rGlassLensGrowth.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AttenuationRecipe.AltarSlot.values());
+
+        rGlassLensRegeneration = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.REGEN.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.GHAST_TEAR,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(Items.DIAMOND,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rGlassLensRegeneration.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttenuationRecipe.AltarSlot.UPPER_LEFT,
+                AttenuationRecipe.AltarSlot.UPPER_RIGHT);
+
+        rGlassLensNightvision = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.NIGHT.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.GOLDEN_CARROT,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(Items.GLOWSTONE_DUST,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rGlassLensNightvision.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttenuationRecipe.AltarSlot.UPPER_RIGHT,
+                AttenuationRecipe.AltarSlot.UPPER_LEFT);
 
         rAttenuationAltarRelay = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.attunementRelay)
                 .addPart(Items.GOLD_INGOT,
