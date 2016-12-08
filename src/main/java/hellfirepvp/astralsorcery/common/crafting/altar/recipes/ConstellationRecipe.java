@@ -1,9 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
@@ -11,7 +9,6 @@ import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -32,7 +29,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.10.2016 / 22:22
  */
-public class ConstellationRecipe extends AttenuationRecipe {
+public class ConstellationRecipe extends AttunementRecipe {
 
     private static Vector3[] offsetPillars = new Vector3[] {
             new Vector3( 4, 3,  4),

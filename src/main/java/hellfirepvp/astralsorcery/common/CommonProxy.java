@@ -10,7 +10,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.container.ContainerJournal;
@@ -201,8 +201,8 @@ public class CommonProxy implements IGuiHandler {
         switch (guiType) {
             case ALTAR_DISCOVERY:
                 return new ContainerAltarDiscovery(player.inventory, (TileAltar) t);
-            case ALTAR_ATTENUATION:
-                return new ContainerAltarAttenuation(player.inventory, (TileAltar) t);
+            case ALTAR_ATTUNEMENT:
+                return new ContainerAltarAttunement(player.inventory, (TileAltar) t);
             case ALTAR_CONSTELLATION:
                 return new ContainerAltarConstellation(player.inventory, (TileAltar) t);
             case JOURNAL_STORAGE: {
@@ -231,7 +231,7 @@ public class CommonProxy implements IGuiHandler {
         TELESCOPE(TileTelescope.class),
         CONSTELLATION_PAPER,
         ALTAR_DISCOVERY(TileAltar.class),
-        ALTAR_ATTENUATION(TileAltar.class),
+        ALTAR_ATTUNEMENT(TileAltar.class),
         ALTAR_CONSTELLATION(TileAltar.class),
         JOURNAL,
         JOURNAL_STORAGE;

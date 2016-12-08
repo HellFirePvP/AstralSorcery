@@ -1,13 +1,12 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,8 +57,8 @@ public class AltarRecipeRegistry {
         return dr;
     }
 
-    public static AttenuationRecipe registerAttenuationRecipe(AbstractCacheableRecipe recipe) {
-        AttenuationRecipe dr = new AttenuationRecipe(recipe);
+    public static AttunementRecipe registerAttenuationRecipe(AbstractCacheableRecipe recipe) {
+        AttunementRecipe dr = new AttunementRecipe(recipe);
         registerAltarRecipe(dr);
         return dr;
     }

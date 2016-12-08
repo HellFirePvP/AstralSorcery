@@ -25,18 +25,18 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: GuiAltarAttenuation
+ * Class: GuiAltarAttunement
  * Created by HellFirePvP
  * Date: 16.10.2016 / 17:13
  */
-public class GuiAltarAttenuation extends GuiAltarBase {
+public class GuiAltarAttunement extends GuiAltarBase {
 
     private static final Random rand = new Random();
 
     private static final BindableResource texAltarAttenuation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
-    public GuiAltarAttenuation(InventoryPlayer playerInv, TileAltar tileAltar) {
+    public GuiAltarAttunement(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);
     }
 

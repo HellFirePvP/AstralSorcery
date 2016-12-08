@@ -1,6 +1,6 @@
 package hellfirepvp.astralsorcery.client.gui.container;
 
-import hellfirepvp.astralsorcery.common.container.ContainerAltarAttenuation;
+import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
@@ -61,8 +61,8 @@ public abstract class GuiAltarBase extends GuiContainer {
         switch (tileAltar.getAltarLevel()) {
             case DISCOVERY:
                 return new ContainerAltarDiscovery(playerInv, tileAltar);
-            case ATTENUATION:
-                return new ContainerAltarAttenuation(playerInv, tileAltar);
+            case ATTUNEMENT:
+                return new ContainerAltarAttunement(playerInv, tileAltar);
             case CONSTELLATION_CRAFT:
                 return new ContainerAltarConstellation(playerInv, tileAltar);
             case TRAIT_CRAFT:

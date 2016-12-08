@@ -27,36 +27,36 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 16.10.2016 / 17:20
  */
-public class AttenuationRecipe extends DiscoveryRecipe {
+public class AttunementRecipe extends DiscoveryRecipe {
 
     private Map<AltarSlot, ItemStack> additionalSlots = new HashMap<>();
 
-    protected AttenuationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    protected AttunementRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
     }
 
-    protected AttenuationRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
+    protected AttunementRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
         super(neededLevel, recipe);
     }
 
-    public AttenuationRecipe(AbstractCacheableRecipe recipe) {
+    public AttunementRecipe(AbstractCacheableRecipe recipe) {
         this(recipe.make());
     }
 
-    public AttenuationRecipe(IAccessibleRecipe recipe) {
-        super(TileAltar.AltarLevel.ATTENUATION, recipe);
+    public AttunementRecipe(IAccessibleRecipe recipe) {
+        super(TileAltar.AltarLevel.ATTUNEMENT, recipe);
         setPassiveStarlightRequirement(2000);
     }
 
-    public AttenuationRecipe setAttItem(Block b, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Block b, AltarSlot... slots) {
         return this.setAttItem(new ItemStack(b), slots);
     }
 
-    public AttenuationRecipe setAttItem(Item i, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Item i, AltarSlot... slots) {
         return this.setAttItem(new ItemStack(i), slots);
     }
 
-    public AttenuationRecipe setAttItem(ItemStack stack, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(ItemStack stack, AltarSlot... slots) {
         for (AltarSlot slot : slots) {
             additionalSlots.put(slot, stack.copy());
         }

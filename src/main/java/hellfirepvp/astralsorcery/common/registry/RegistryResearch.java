@@ -1,7 +1,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttenuationRecipe;
+import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttunementRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageConstellationRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageLightProximityRecipe;
@@ -17,11 +17,9 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
@@ -37,7 +35,7 @@ public class RegistryResearch {
     public static void init() {
         initDiscovery();
         initCrafting();
-        initAttenuation();
+        initAttunement();
         initConstellation();
     }
 
@@ -56,12 +54,12 @@ public class RegistryResearch {
         }
         ResearchNode resColoredLenses = new ResearchNode(stacks, "LENSES_EFFECTS", 1, 0);
         resColoredLenses.addPage(getTextPage("LENSES_EFFECTS.1"));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensFire));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensBreak));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensDamage));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensGrowth));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensRegeneration));
-        resColoredLenses.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rGlassLensNightvision));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensFire));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensBreak));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensDamage));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensGrowth));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensRegeneration));
+        resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensNightvision));
 
         ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 2);
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
@@ -115,41 +113,41 @@ public class RegistryResearch {
         regConstellation.register(resRitualAccel);
     }
 
-    private static void initAttenuation() {
-        ResearchProgression.Registry regAttenuation = ResearchProgression.ATTENUATION.getRegistry();
+    private static void initAttunement() {
+        ResearchProgression.Registry regAttunement = ResearchProgression.ATTUNEMENT.getRegistry();
 
         ResearchNode resWell = new ResearchNode(new ItemStack(BlocksAS.blockWell), "WELL", 0, 0);
         resWell.addPage(getTextPage("WELL.1"));
-        resWell.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rLightwell));
+        resWell.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rLightwell));
 
         ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 1, -1);
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
-        resIlluminator.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rIlluminatorRock));
+        resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminatorRock));
 
         ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 1, 1);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
-        resPlayerAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttenuationAltarRelay));
-        resPlayerAtt.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAttunementAltarRock));
+        resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttenuationAltarRelay));
+        resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltarRock));
         resPlayerAtt.addPage(new JournalPageStructure(MultiBlockArrays.patternAttunementFrame));
 
         ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 0, 2);
         resRitPedestal.addPage(getTextPage("RIT_PEDESTAL.1"));
-        resRitPedestal.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rRitualPedestalRock));
+        resRitPedestal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rRitualPedestalRock));
         resRitPedestal.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
 
         ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 3, 0);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));
-        resConstellationUpgrade.addPage(new JournalPageAttenuationRecipe(RegistryRecipes.rAltarUpgradeConstellation));
+        resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
         resRitPedestal.addSourceConnectionFrom(resPlayerAtt);
         resConstellationUpgrade.addSourceConnectionFrom(resPlayerAtt);
 
-        regAttenuation.register(resWell);
-        regAttenuation.register(resIlluminator);
-        regAttenuation.register(resPlayerAtt);
-        regAttenuation.register(resRitPedestal);
-        regAttenuation.register(resConstellationUpgrade);
+        regAttunement.register(resWell);
+        regAttunement.register(resIlluminator);
+        regAttunement.register(resPlayerAtt);
+        regAttunement.register(resRitPedestal);
+        regAttunement.register(resConstellationUpgrade);
     }
 
     private static void initCrafting() {
@@ -186,7 +184,7 @@ public class RegistryResearch {
         ResearchNode resAltarUpgradeAttenuation = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), "ALTAR2", 2, 1);
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));
         resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
-        resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttenuation));
+        resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
 
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);

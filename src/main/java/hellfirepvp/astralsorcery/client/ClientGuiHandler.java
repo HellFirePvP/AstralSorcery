@@ -4,14 +4,13 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
-import hellfirepvp.astralsorcery.client.gui.container.GuiAltarAttenuation;
+import hellfirepvp.astralsorcery.client.gui.container.GuiAltarAttunement;
 import hellfirepvp.astralsorcery.client.gui.container.GuiAltarConstellation;
 import hellfirepvp.astralsorcery.client.gui.container.GuiAltarDiscovery;
 import hellfirepvp.astralsorcery.client.gui.container.GuiJournalContainer;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.container.ContainerJournal;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
@@ -56,8 +55,8 @@ public class ClientGuiHandler {
                 }
             case ALTAR_DISCOVERY:
                 return new GuiAltarDiscovery(player.inventory, (TileAltar) t);
-            case ALTAR_ATTENUATION:
-                return new GuiAltarAttenuation(player.inventory, (TileAltar) t);
+            case ALTAR_ATTUNEMENT:
+                return new GuiAltarAttunement(player.inventory, (TileAltar) t);
             case ALTAR_CONSTELLATION:
                 return new GuiAltarConstellation(player.inventory, (TileAltar) t);
             case JOURNAL:

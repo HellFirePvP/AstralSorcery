@@ -51,7 +51,6 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         private final DiscoveryRecipe recipe;
         protected BindableResource gridTexture;
 
-        //TODO do this for shapedlight and general recipes.
         private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
 
         public Render(DiscoveryRecipe recipe) {

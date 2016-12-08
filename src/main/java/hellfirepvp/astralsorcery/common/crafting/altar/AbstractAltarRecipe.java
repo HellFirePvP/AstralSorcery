@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
@@ -123,7 +123,7 @@ public abstract class AbstractAltarRecipe {
         return true;
     }
 
-    public boolean mayDecrement(TileAltar ta, AttenuationRecipe.AltarSlot slot) {
+    public boolean mayDecrement(TileAltar ta, AttunementRecipe.AltarSlot slot) {
         return true;
     }
 

@@ -59,7 +59,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         switch (type) {
             case STARDUST:
                 EntityItemStardust stardust = new EntityItemStardust(world, location.posX, location.posY, location.posZ, itemstack);
-                stardust.setPickupDelay(40);
+                stardust.setDefaultPickupDelay();
                 stardust.motionX = location.motionX;
                 stardust.motionY = location.motionY;
                 stardust.motionZ = location.motionZ;

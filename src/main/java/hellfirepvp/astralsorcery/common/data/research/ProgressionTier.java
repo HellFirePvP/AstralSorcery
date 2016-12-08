@@ -11,7 +11,7 @@ public enum ProgressionTier {
 
     DISCOVERY,
     BASIC_CRAFT,
-    ATTENUATION,
+    ATTUNEMENT,
     CONSTELLATION_CRAFT,
     NETWORKING,
     TRAIT_CRAFT,

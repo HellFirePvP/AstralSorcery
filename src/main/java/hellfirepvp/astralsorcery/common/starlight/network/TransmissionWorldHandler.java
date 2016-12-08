@@ -91,8 +91,10 @@ public class TransmissionWorldHandler {
                     }
                 }
 
-                for (IPrismTransmissionNode node : chain.getTransmissionUpdateList()) {
-                    node.onTransmissionTick(world);
+                if(starlight > 1D) {
+                    for (IPrismTransmissionNode node : chain.getTransmissionUpdateList()) {
+                        node.onTransmissionTick(world);
+                    }
                 }
 
                 Iterator<BlockPos> iterator = chain.getUncheckedEndpointsBlock().iterator();

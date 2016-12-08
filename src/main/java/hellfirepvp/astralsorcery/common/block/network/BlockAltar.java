@@ -1,10 +1,8 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.BlockCustomName;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
@@ -20,7 +18,6 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,8 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.LinkedList;
@@ -79,8 +74,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                     case DISCOVERY:
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_DISCOVERY, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
-                    case ATTENUATION:
-                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_ATTENUATION, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                    case ATTUNEMENT:
+                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_ATTUNEMENT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
                     case CONSTELLATION_CRAFT:
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_CONSTELLATION, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -288,7 +283,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     public static enum AltarType implements IStringSerializable, IVariantTileProvider {
 
         ALTAR_1((world, state) -> new TileAltar(TileAltar.AltarLevel.DISCOVERY)),
-        ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTENUATION)),
+        ALTAR_2((world, state) -> new TileAltar(TileAltar.AltarLevel.ATTUNEMENT)),
         ALTAR_3((world, state) -> new TileAltar(TileAltar.AltarLevel.CONSTELLATION_CRAFT)),
         ALTAR_4((world, state) -> new TileAltar(TileAltar.AltarLevel.TRAIT_CRAFT)),
         ALTAR_5((world, state) -> new TileAltar(TileAltar.AltarLevel.ENDGAME));

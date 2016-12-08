@@ -29,6 +29,11 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase {
     }
 
     @Override
+    public Color getHightlightColor(ItemStack stack) {
+        return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+    }
+
+    @Override
     public Color getCatalystColor(@Nonnull ItemStack stack) {
         return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
     }

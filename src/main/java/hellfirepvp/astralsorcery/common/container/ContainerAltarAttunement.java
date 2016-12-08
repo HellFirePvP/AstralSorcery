@@ -8,13 +8,13 @@ import net.minecraftforge.items.SlotItemHandler;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ContainerAltarAttenuation
+ * Class: ContainerAltarAttunement
  * Created by HellFirePvP
  * Date: 16.10.2016 / 17:18
  */
-public class ContainerAltarAttenuation extends ContainerAltarBase {
+public class ContainerAltarAttunement extends ContainerAltarBase {
 
-    public ContainerAltarAttenuation(InventoryPlayer playerInv, TileAltar tileAltar) {
+    public ContainerAltarAttunement(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);
     }
 

@@ -4,10 +4,8 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
@@ -33,7 +31,7 @@ public class JournalPageConstellationRecipe implements IJournalPage {
         return new Render(recipe);
     }
 
-    public static class Render extends JournalPageAttenuationRecipe.Render {
+    public static class Render extends JournalPageAttunementRecipe.Render {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridCst");
 

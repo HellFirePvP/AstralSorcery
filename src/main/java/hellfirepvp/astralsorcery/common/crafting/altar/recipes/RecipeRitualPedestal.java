@@ -1,16 +1,10 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,7 +13,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 01.11.2016 / 14:48
  */
-public class RecipeRitualPedestal extends AttenuationRecipe {
+public class RecipeRitualPedestal extends AttunementRecipe {
 
     public RecipeRitualPedestal(boolean celestial) {
         super(new ShapedRecipe(BlocksAS.ritualPedestal)
@@ -36,11 +30,11 @@ public class RecipeRitualPedestal extends AttenuationRecipe {
                 .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
                         ShapedRecipeSlot.CENTER));
         setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
-                AttenuationRecipe.AltarSlot.UPPER_LEFT,
-                AttenuationRecipe.AltarSlot.UPPER_RIGHT);
+                AttunementRecipe.AltarSlot.UPPER_LEFT,
+                AttunementRecipe.AltarSlot.UPPER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                AttenuationRecipe.AltarSlot.LOWER_LEFT,
-                AttenuationRecipe.AltarSlot.LOWER_RIGHT);
+                AttunementRecipe.AltarSlot.LOWER_LEFT,
+                AttunementRecipe.AltarSlot.LOWER_RIGHT);
         setPassiveStarlightRequirement(3000);
     }
 }

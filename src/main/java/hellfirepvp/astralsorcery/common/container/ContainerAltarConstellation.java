@@ -11,7 +11,7 @@ import net.minecraftforge.items.SlotItemHandler;
  * Created by HellFirePvP
  * Date: 02.11.2016 / 14:42
  */
-public class ContainerAltarConstellation extends ContainerAltarAttenuation {
+public class ContainerAltarConstellation extends ContainerAltarAttunement {
 
     public ContainerAltarConstellation(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);

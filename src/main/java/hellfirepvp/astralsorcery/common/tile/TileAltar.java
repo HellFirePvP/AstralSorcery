@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -39,8 +39,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -48,8 +46,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -230,7 +226,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
         }
 
-        for (AttenuationRecipe.AltarSlot slot : AttenuationRecipe.AltarSlot.values()) {
+        for (AttunementRecipe.AltarSlot slot : AttunementRecipe.AltarSlot.values()) {
             int slotId = slot.slotId;
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
@@ -376,7 +372,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         switch (getAltarLevel()) {
             case DISCOVERY:
                 return 1000;
-            case ATTENUATION:
+            case ATTUNEMENT:
                 return 4000;
             case CONSTELLATION_CRAFT:
                 return 6000;
@@ -513,7 +509,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public static enum AltarLevel {
 
         DISCOVERY          (100,   (ta) -> true       ), //Default one...
-        ATTENUATION        (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttenuation), false),
+        ATTUNEMENT         (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttunement), false),
         CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarConstellation), false),
         TRAIT_CRAFT        (12000, (ta) -> true, false),
         ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.

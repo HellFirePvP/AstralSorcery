@@ -4,11 +4,13 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
@@ -17,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -96,13 +99,13 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     private void drawPerkMap(ConstellationPerkMap mapToDisplay, Point mouse) {
-        double whStar = 6;
+        double whStar = 10;
         double whBetweenStars = widthHeight / 7D;
 
         double offsetX = guiLeft + ((guiWidth ) / 2D) - widthHeight;
         double offsetY = guiTop  + ((guiHeight) / 2D) - widthHeight;
 
-        drawConnections(mapToDisplay, offsetX, offsetY, whBetweenStars, 4D);
+        drawConnections(mapToDisplay, offsetX, offsetY, whBetweenStars, 3D);
 
         Map<Rectangle, ConstellationPerks> rects = drawStars(mapToDisplay.getPerks(), offsetX, offsetY, whStar, whBetweenStars);
         for (Rectangle r : rects.keySet()) {
@@ -137,10 +140,10 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             BindableResource tex;
             Color overlay = null;
             if(prog.hasPerkUnlocked(dep.to)) {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection"); //TODO wiiv, here.
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
                 overlay = new Color(0x00EEEE00);
             } else {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
                 overlay = new Color(0xBBBBFF);
             }
 
@@ -198,44 +201,46 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         for (Map.Entry<ConstellationPerks, ConstellationPerkMap.Position> star : perks.entrySet()) {
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-            BindableResource tex;
-            Color overlay = null;
+            SpriteSheetResource sprite;
             if(prog.hasPerkUnlocked(star.getKey())) {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1"); //TODO wiiv, here.
-                overlay = new Color(0x00EEEE00);
+                sprite = SpriteLibrary.spritePerkActive;
             } else {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
-                overlay = new Color(0xBBBBFF);
+                sprite = SpriteLibrary.spritePerkInactive;
             }
-            tex.bind();
+            sprite.getResource().bind();
             int starX = star.getValue().x;
             int starY = star.getValue().y;
 
             int count = ClientScheduler.getClientTick() + starX + starY;
-            float part = (MathHelper.sin((float) Math.toRadians(((count) * 8) % 360F)) / 2F + 1F);
+            //float part = (MathHelper.sin((float) Math.toRadians(((count) * 8) % 360F)) / 2F + 1F);
 
-            float br = 0.6F + 0.3F * (2F - part);
+            //float br = 0.6F + 0.3F * (2F - part);
+            float br = 1F;
             float rR = br;
             float rG = br;
             float rB = br;
             float rA = br;
-            if(overlay != null) {
+            /*if(overlay != null) {
                 rR *= (overlay.getRed()   / 255F);
                 rG *= (overlay.getGreen() / 255F);
                 rB *= (overlay.getBlue()  / 255F);
                 rA *= (overlay.getAlpha() / 255F);
-            }
+            }*/
             GL11.glColor4f(rR, rG, rB, rA);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
             Point upperLeft = new Point(starVec.getBlockX(), starVec.getBlockY());
+
+            double uLength = sprite.getULength();
+            double vLength = sprite.getVLength();
+            Tuple<Double, Double> frameUV = sprite.getUVOffset(count);
 
             for (int i = 0; i < 4; i++) {
                 int u = ((i + 1) & 2) >> 1;
                 int v = ((i + 2) & 2) >> 1;
 
                 Vector3 pos = starVec.clone().addX(whStar * u * 2).addY(whStar * v * 2);
-                vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
+                vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.key + uLength * u, frameUV.value + vLength * v).endVertex();
             }
 
             drawn.put(new Rectangle(upperLeft.x, upperLeft.y, (int) (whStar * 2), (int) (whStar * 2)), star.getKey());

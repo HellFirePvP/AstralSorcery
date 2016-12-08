@@ -47,7 +47,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         jBase /= 20F;
 
         switch (te.getAltarLevel()) {
-            case ATTENUATION:
+            case ATTUNEMENT:
                 renderT2Additions(te, x, y, z, jBase);
                 break;
             case CONSTELLATION_CRAFT:

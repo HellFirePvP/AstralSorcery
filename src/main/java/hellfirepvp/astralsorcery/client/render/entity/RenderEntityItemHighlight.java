@@ -42,7 +42,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
 
     @Override
     public void doRender(EntityItemHighlighted entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        RenderingUtils.renderLightRayEffects(x, y + 0.5, z, entity.getHighlightColor(), 16024L, entity.getAge(), entity.getAge(), 20, 5);
+        RenderingUtils.renderLightRayEffects(x, y + 0.5, z, entity.getHighlightColor(), 16024L, entity.getAge(), 16, 20, 5);
 
         GL11.glPushMatrix();
         ItemStack stack = entity.getEntityItem();

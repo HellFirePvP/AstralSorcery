@@ -14,13 +14,13 @@ import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: MultiblockAltarAttenuation
+ * Class: MultiblockAltarAttunement
  * Created by HellFirePvP
  * Date: 17.10.2016 / 11:46
  */
-public class MultiblockAltarAttenuation extends PatternBlockArray {
+public class MultiblockAltarAttunement extends PatternBlockArray {
 
-    public MultiblockAltarAttenuation() {
+    public MultiblockAltarAttunement() {
         load();
     }
 

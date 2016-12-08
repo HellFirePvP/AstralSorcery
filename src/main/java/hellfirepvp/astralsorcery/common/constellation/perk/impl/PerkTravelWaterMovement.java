@@ -22,10 +22,17 @@ public class PerkTravelWaterMovement extends ConstellationPerk {
 
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
-        if(player.isInWater() && !player.capabilities.isFlying) {
-            player.motionX *=        swimSpeedMultiplier;
-            player.motionY *= 0.9F * swimSpeedMultiplier;
-            player.motionZ *=        swimSpeedMultiplier;
+        if(!player.capabilities.isFlying) {
+            if(player.isInWater()) {
+                player.motionX *= swimSpeedMultiplier;
+                player.motionY *= swimSpeedMultiplier;
+                player.motionZ *= swimSpeedMultiplier;
+            }
+            if(player.isInLava()) {
+                player.motionX *= 1.4F * swimSpeedMultiplier;
+                player.motionY *= 1.2F * swimSpeedMultiplier;
+                player.motionZ *= 1.4F * swimSpeedMultiplier;
+            }
         }
     }
 

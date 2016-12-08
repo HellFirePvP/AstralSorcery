@@ -23,7 +23,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 07.12.2016 / 13:47
  */
-public class AttunementAltarRecipe extends AttenuationRecipe implements INighttimeRecipe {
+public class AttunementAltarRecipe extends AttunementRecipe implements INighttimeRecipe {
 
     private static Vector3[] offsetPillars = new Vector3[] {
         new Vector3( 3, 2,  3),

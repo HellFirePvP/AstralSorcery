@@ -1,17 +1,21 @@
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
+import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,7 +32,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 21:38
  */
-public abstract class ItemRockCrystalBase extends Item implements IGrindable, ItemWellCatalyst {
+public abstract class ItemRockCrystalBase extends Item implements IGrindable, ItemWellCatalyst, ItemHighlighted {
 
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
@@ -55,6 +59,26 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
             return GrindResult.failBreakItem();
         }
         return GrindResult.success();
+    }
+
+    @Override
+    public Color getHightlightColor(ItemStack stack) {
+        return Color.WHITE;
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        EntityCrystal crystal = new EntityCrystal(world, location.posX, location.posY, location.posZ, itemstack);
+        crystal.setDefaultPickupDelay();
+        crystal.motionX = location.motionX;
+        crystal.motionY = location.motionY;
+        crystal.motionZ = location.motionZ;
+        return crystal;
     }
 
     @Override

@@ -21,12 +21,25 @@ public class EntityUtils {
         return new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                if(entity == null) return false;
+                if(entity == null || entity.isDead) return false;
                 Class<? extends Entity> clazz = entity.getClass();
                 for (Class<? extends Entity> test : entities) {
-                    if(clazz.equals(test)) return true;
+                    if(test.isAssignableFrom(clazz)) return true;
                 }
                 return false;
+            }
+        };
+    }
+
+    public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
+        return new Predicate<Entity>() {
+            @Override
+            public boolean apply(@Nullable Entity entity) {
+                if(entity == null || entity.isDead) return false;
+                if(!(entity instanceof EntityItem)) return false;
+                ItemStack i = ((EntityItem) entity).getEntityItem();
+                if(i == null || i.getItem() == null) return false;
+                return itemClass.isAssignableFrom(i.getItem().getClass());
             }
         };
     }
@@ -35,7 +48,7 @@ public class EntityUtils {
         return new Predicate<Entity>() {
             @Override
             public boolean apply(@Nullable Entity entity) {
-                if(entity == null) return false;
+                if(entity == null || entity.isDead) return false;
                 if(!(entity instanceof EntityItem)) return false;
                 ItemStack i = ((EntityItem) entity).getEntityItem();
                 if(i == null || i.getItem() == null) return false;

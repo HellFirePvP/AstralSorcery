@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -81,11 +82,13 @@ public class RaytraceAssist {
                 }
             }
 
-            if(!isStartEnd(at) && !world.isAirBlock(at)) {
-                IBlockState state = world.getBlockState(at);
-                if(!isAllowed(state)) {
-                    hit = at;
-                    return false;
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(at))) {
+                if(!isStartEnd(at) && !world.isAirBlock(at)) {
+                    IBlockState state = world.getBlockState(at);
+                    if(!isAllowed(state)) {
+                        hit = at;
+                        return false;
+                    }
                 }
             }
 

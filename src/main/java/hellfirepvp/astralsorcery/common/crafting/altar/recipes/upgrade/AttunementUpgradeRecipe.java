@@ -25,13 +25,13 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: AttenuationUpgradeRecipe
+ * Class: AttunementUpgradeRecipe
  * Created by HellFirePvP
  * Date: 09.10.2016 / 11:40
  */
-public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
+public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
 
-    public AttenuationUpgradeRecipe() {
+    public AttunementUpgradeRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -47,7 +47,7 @@ public class AttenuationUpgradeRecipe extends DiscoveryRecipe implements IAltarU
 
     @Override
     public TileAltar.AltarLevel getLevelUpgradingTo() {
-        return TileAltar.AltarLevel.ATTENUATION;
+        return TileAltar.AltarLevel.ATTUNEMENT;
     }
 
     @Nonnull

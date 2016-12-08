@@ -8,7 +8,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -37,7 +37,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.10.2016 / 13:03
  */
-public class ConstellationUpgradeRecipe extends AttenuationRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
+public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
 
     private static Vector3[] offsetPillars = new Vector3[] {
             new Vector3( 3, 2,  3),

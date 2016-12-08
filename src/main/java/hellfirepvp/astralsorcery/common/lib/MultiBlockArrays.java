@@ -24,7 +24,7 @@ public class MultiBlockArrays {
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;
 
-    public static PatternBlockArray patternAltarAttenuation;
+    public static PatternBlockArray patternAltarAttunement;
 
     public static PatternBlockArray patternAltarConstellation;
 

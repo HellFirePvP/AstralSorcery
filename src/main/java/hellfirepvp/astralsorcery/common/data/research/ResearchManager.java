@@ -363,9 +363,9 @@ public class ResearchManager {
 
                 TileAltar.AltarLevel to = TileAltar.AltarLevel.values()[crafted.getItemDamage()];
                 switch (to) {
-                    case ATTENUATION:
-                        giveProgressionIgnoreFail(crafter, ProgressionTier.ATTENUATION);
-                        giveResearchIgnoreFail(crafter, ResearchProgression.ATTENUATION);
+                    case ATTUNEMENT:
+                        giveProgressionIgnoreFail(crafter, ProgressionTier.ATTUNEMENT);
+                        giveResearchIgnoreFail(crafter, ResearchProgression.ATTUNEMENT);
                         break;
                     case CONSTELLATION_CRAFT:
                         giveProgressionIgnoreFail(crafter, ProgressionTier.CONSTELLATION_CRAFT);

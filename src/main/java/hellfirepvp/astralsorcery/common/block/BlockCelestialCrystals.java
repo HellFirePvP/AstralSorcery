@@ -133,6 +133,12 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
                     }
                     drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
+                    IBlockState down = world.getBlockState(pos.down());
+                    if(down.getBlock() instanceof BlockCustomOre &&
+                            down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL) &&
+                            rand.nextBoolean()) {
+                        drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
+                    }
                 }
                 break;
         }

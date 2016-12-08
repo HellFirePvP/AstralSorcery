@@ -67,7 +67,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     @Override
     public Entity createEntity(World world, Entity entity, ItemStack itemstack) {
         EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
-        ei.setPickupDelay(40);
+        ei.setDefaultPickupDelay();
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
@@ -107,6 +107,12 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                     }
                 }
 
+                for (String strConstellation : progress.getKnownConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
                 removeInventoryConstellations(((EntityPlayer) entityIn).inventory, constellations);
 
                 if (constellations.isEmpty()) {

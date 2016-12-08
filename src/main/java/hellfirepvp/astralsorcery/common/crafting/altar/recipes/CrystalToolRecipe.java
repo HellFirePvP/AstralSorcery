@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,6 +47,18 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
         }
         ItemCrystalToolBase.setToolProperties(toolOut, ToolCrystalProperties.merge(prop));
         return toolOut;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getOutputForRender() {
+        ItemStack stack = super.getOutputForRender();
+        List<CrystalProperties> props = new LinkedList<>();
+        for (int i = 0; i < positions.length; i++) {
+            props.add(CrystalProperties.getMaxRockProperties());
+        }
+        ItemCrystalToolBase.setToolProperties(stack, ToolCrystalProperties.merge(props));
+        return stack;
     }
 
     @Override

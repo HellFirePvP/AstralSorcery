@@ -4,7 +4,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttenuationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -14,15 +14,15 @@ import java.awt.*;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: JournalPageAttenuationRecipe
+ * Class: JournalPageAttunementRecipe
  * Created by HellFirePvP
  * Date: 27.10.2016 / 01:10
  */
-public class JournalPageAttenuationRecipe implements IJournalPage {
+public class JournalPageAttunementRecipe implements IJournalPage {
 
-    private final AttenuationRecipe recipe;
+    private final AttunementRecipe recipe;
 
-    public JournalPageAttenuationRecipe(AttenuationRecipe recipe) {
+    public JournalPageAttunementRecipe(AttunementRecipe recipe) {
         this.recipe = recipe;
     }
 
@@ -35,20 +35,20 @@ public class JournalPageAttenuationRecipe implements IJournalPage {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt");
 
-        private final AttenuationRecipe recipe;
+        private final AttunementRecipe recipe;
 
-        public Render(AttenuationRecipe recipe) {
+        public Render(AttunementRecipe recipe) {
             super(recipe);
             this.recipe = recipe;
             this.gridTexture = texGrid;
         }
 
-        protected void renderAltarSlots(float offsetX, float offsetY, float zLevel, AttenuationRecipe recipe) {
+        protected void renderAltarSlots(float offsetX, float offsetY, float zLevel, AttunementRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAltarSlot(offsetX + 30, offsetY + 78, zLevel, recipe.getAttItem(AttenuationRecipe.AltarSlot.UPPER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 78, zLevel, recipe.getAttItem(AttenuationRecipe.AltarSlot.UPPER_RIGHT));
-            renderAltarSlot(offsetX +  30, offsetY + 178, zLevel, recipe.getAttItem(AttenuationRecipe.AltarSlot.LOWER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 178, zLevel, recipe.getAttItem(AttenuationRecipe.AltarSlot.LOWER_RIGHT));
+            renderAltarSlot(offsetX + 30, offsetY + 78, zLevel, recipe.getAttItem(AttunementRecipe.AltarSlot.UPPER_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 78, zLevel, recipe.getAttItem(AttunementRecipe.AltarSlot.UPPER_RIGHT));
+            renderAltarSlot(offsetX +  30, offsetY + 178, zLevel, recipe.getAttItem(AttunementRecipe.AltarSlot.LOWER_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 178, zLevel, recipe.getAttItem(AttunementRecipe.AltarSlot.LOWER_RIGHT));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
         }

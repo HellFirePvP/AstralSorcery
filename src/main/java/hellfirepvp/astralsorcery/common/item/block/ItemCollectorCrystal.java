@@ -37,7 +37,7 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         EntityItemHighlighted ei = new EntityItemHighlighted(world, entity.posX, entity.posY, entity.posZ, itemstack);
         BlockCollectorCrystalBase.CollectorCrystalType type = getType(itemstack);
         ei.applyColor(type.displayColor);
-        ei.setPickupDelay(40);
+        ei.setDefaultPickupDelay();
         ei.motionX = entity.motionX;
         ei.motionY = entity.motionY;
         ei.motionZ = entity.motionZ;
