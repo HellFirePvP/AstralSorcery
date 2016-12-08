@@ -11,6 +11,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -66,7 +68,9 @@ public class JournalPageConstellationRecipe implements IJournalPage {
             GL11.glPushMatrix();
             GL11.glTranslated(offsetX, offsetY, zLevel + 60);
             GL11.glScaled(1.1, 1.1, 1.1);
-            drawItemStack(stack, 0, 0, 0);
+            Rectangle r = drawItemStack(stack, 0, 0, 0);
+            r = new Rectangle((int) offsetX, (int) offsetY, (int) (r.getWidth() * 1.1), (int) (r.getHeight() * 1.1));
+            addRenderedStackRectangle(r, stack);
             GL11.glPopMatrix();
         }
 

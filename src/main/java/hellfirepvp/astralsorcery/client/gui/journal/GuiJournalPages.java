@@ -122,7 +122,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
+            page.render    (guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
@@ -132,7 +132,27 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             IGuiRenderablePage page = pages.get(index);
-            page.render(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            page.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            GL11.glPopAttrib();
+            GL11.glPopMatrix();
+            TextureHelper.refreshTextureBindState();
+        }
+        index = currentPageOffset * 2;
+        if(pages.size() > index) {
+            GL11.glPushMatrix();
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            IGuiRenderablePage page = pages.get(index);
+            page.postRender(guiLeft + 30, guiTop + pageOffsetY, partialTicks, zLevel, mouseX, mouseY);
+            GL11.glPopAttrib();
+            GL11.glPopMatrix();
+            TextureHelper.refreshTextureBindState();
+        }
+        index = index + 1;
+        if(pages.size() > index) {
+            GL11.glPushMatrix();
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            IGuiRenderablePage page = pages.get(index);
+            page.postRender(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
             GL11.glPopAttrib();
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();

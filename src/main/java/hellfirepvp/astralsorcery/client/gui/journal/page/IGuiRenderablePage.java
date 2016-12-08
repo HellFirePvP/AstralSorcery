@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -33,26 +34,31 @@ public interface IGuiRenderablePage {
 
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);
 
-    default public void drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel) {
-        drawItemStack(stack, offsetX, offsetY, zLevel, getStandardFontRenderer(), getRenderItem());
+    default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
+
+    default public Rectangle drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel) {
+        return drawItemStack(stack, offsetX, offsetY, zLevel, getStandardFontRenderer(), getRenderItem());
     }
 
-    default public void drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel, FontRenderer fontRenderer, RenderItem ri) {
+    default public Rectangle drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel, FontRenderer fontRenderer, RenderItem ri) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 
         float zIR = ri.zLevel;
         ri.zLevel = zLevel;
+        RenderHelper.enableGUIStandardItemLighting();
 
         ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
         ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
+        RenderHelper.disableStandardItemLighting();
         GlStateManager.enableAlpha(); //Because Mc item rendering..
         ri.zLevel = zIR;
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+        return new Rectangle(offsetX, offsetY, 16, 16);
     }
 
     default public Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {

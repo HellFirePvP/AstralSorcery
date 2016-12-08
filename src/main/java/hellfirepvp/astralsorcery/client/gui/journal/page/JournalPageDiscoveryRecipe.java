@@ -12,13 +12,17 @@ import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,6 +51,9 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         private final DiscoveryRecipe recipe;
         protected BindableResource gridTexture;
 
+        //TODO do this for shapedlight and general recipes.
+        private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
+
         public Render(DiscoveryRecipe recipe) {
             this.recipe = recipe;
             this.gridTexture = texGrid;
@@ -67,7 +74,9 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPushMatrix();
             GL11.glTranslated(offsetX + 78, offsetY + 25, zLevel + 60);
             GL11.glScaled(1.4, 1.4, 1.4);
-            drawItemStack(out, 0, 0, 0);
+            Rectangle r = drawItemStack(out, 0, 0, 0);
+            r = new Rectangle((int) offsetX + 78, (int) offsetY + 25, (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
+            addRenderedStackRectangle(r, out);
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
             RenderHelper.disableStandardItemLighting();
@@ -84,8 +93,11 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();
                 GL11.glTranslated(offX + (srs.columnMultiplier * 25), offY + (srs.rowMultipler * 25), zLevel + 60);
-                GL11.glScaled(1.13, 1.13, 1.13);
-                drawItemStack(expected, 0, 0, 0);
+                GL11.glScaled(1.1, 1.1, 1.1);
+                Rectangle r = drawItemStack(expected, 0, 0, 0);
+                r = new Rectangle((int) (offX + (srs.columnMultiplier * 25)), (int) (offY + (srs.rowMultipler * 25)),
+                        (int) (r.getWidth() * 1.1), (int) (r.getHeight() * 1.1));
+                addRenderedStackRectangle(r, expected);
                 GL11.glPopMatrix();
             }
             RenderHelper.disableStandardItemLighting();
@@ -101,16 +113,19 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             if(recipe instanceof INighttimeRecipe) {
                 out.add(I18n.format("astralsorcery.journal.recipe.nighttime"));
             }
-            /*if(recipe instanceof SimpleCrystalAttunationRecipe) {
-                Tier t = ConstellationRegistry.getTier(0);
-                if(t != null) {
-                    IConstellation c = ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellaionForTier(t);
-                    if(c != null && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                        String dsc = I18n.format("astralsorcery.journal.recipe.attunement");
-                        out.add(String.format(dsc, I18n.format(c.getUnlocalizedName())));
-                    }
+        }
+
+        public void addStackTooltip(float mouseX, float mouseY, List<String> tooltip) {
+            for (Rectangle rect : thisFrameStackFrames.keySet()) {
+                if(rect.contains(mouseX, mouseY)) {
+                    ItemStack stack = thisFrameStackFrames.get(rect);
+                    tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
                 }
-            }*/
+            }
+        }
+
+        protected void addRenderedStackRectangle(Rectangle r, ItemStack rendered) {
+            this.thisFrameStackFrames.put(r, rendered);
         }
 
         @Override
@@ -125,7 +140,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
                 if(r.contains(mouseX, mouseY)) {
                     RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
-                            out, Minecraft.getMinecraft().fontRendererObj);
+                            out, getStandardFontRenderer());
                 }
             }
 
@@ -139,6 +154,22 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPopAttrib();
         }
 
+        @Override
+        public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+            List<String> out = Lists.newLinkedList();
+            addStackTooltip(mouseX, mouseY, out);
+            if(!out.isEmpty()) {
+                RenderingUtils.renderBlueTooltip((int) (mouseX), (int) (mouseY),
+                        out, getStandardFontRenderer());
+            }
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopAttrib();
+            thisFrameStackFrames.clear();
+        }
     }
 
 }
