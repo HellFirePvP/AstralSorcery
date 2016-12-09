@@ -22,6 +22,8 @@ Changes:
 - New book section where you can see your constellation as well as the perk/buff-progression and things
     - Unlocking the next perks/buffs will be in that gui
     - Short description will be given when hovered over it.
+    
+- blacklist: c7d044f4-94db-40a0-9038-add8473d3e28
 
 Open tasks/questions:
 Code & Design-Wise:
