@@ -2,24 +2,16 @@ package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,7 +25,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 08.12.2016 / 19:11
  */
-public class EntityCrystal extends EntityItemHighlighted {
+public class EntityCrystal extends EntityItemHighlighted implements EntityStarlightReacttant {
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
@@ -57,9 +49,6 @@ public class EntityCrystal extends EntityItemHighlighted {
             applyColor(((ItemHighlighted) i).getHightlightColor(stack));
         }
         setNoDespawn();
-        if(CrystalProperties.getCrystalProperties(stack) == null) {
-            setDead();
-        }
     }
 
     @Override
@@ -119,18 +108,8 @@ public class EntityCrystal extends EntityItemHighlighted {
     }
 
     private boolean canCraft() {
-        BlockPos at = getPosition();
-        IBlockState state = worldObj.getBlockState(at);
-        if(!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
-            return false;
-        }
-        if(!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(worldObj, at)) {
-            return false;
-        }
-        state = worldObj.getBlockState(at.down());
-        if(!state.isSideSolid(worldObj, at.down(), EnumFacing.UP)) {
-            return false;
-        }
+        if(!isInLiquidStarlight(this)) return false;
+
         List<Entity> foundEntities = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
         return foundEntities.size() <= 0;
     }

@@ -35,7 +35,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 17:42
  */
-public class EntityItemStardust extends EntityItem {
+public class EntityItemStardust extends EntityItem implements EntityStarlightReacttant {
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(-0.6, -0.2, -0.6, 0.6, 0.2, 0.6);
 
@@ -116,18 +116,8 @@ public class EntityItemStardust extends EntityItem {
     }
 
     private boolean canCraft() {
-        BlockPos at = getPosition();
-        IBlockState state = worldObj.getBlockState(at);
-        if(!(state.getBlock() instanceof FluidBlockLiquidStarlight)) {
-            return false;
-        }
-        if(!((FluidBlockLiquidStarlight) state.getBlock()).isSourceBlock(worldObj, at)) {
-            return false;
-        }
-        state = worldObj.getBlockState(at.down());
-        if(!state.isSideSolid(worldObj, at.down(), EnumFacing.UP)) {
-            return false;
-        }
+        if(!isInLiquidStarlight(this)) return false;
+
         List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         return foundItems.size() > 0;
     }

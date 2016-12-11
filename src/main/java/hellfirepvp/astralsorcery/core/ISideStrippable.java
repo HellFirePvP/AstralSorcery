@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
  * Created by HellFirePvP
  * Date: 05.12.2016 / 16:41
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface ISideStrippable {

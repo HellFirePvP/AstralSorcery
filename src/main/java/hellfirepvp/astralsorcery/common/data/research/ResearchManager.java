@@ -6,11 +6,13 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
+import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -339,6 +341,20 @@ public class ResearchManager {
     public static void informCraftingGridCompletion(EntityPlayer player, ItemStack out) {
         Item iOut = out.getItem();
         informCraft(player, out, iOut, Block.getBlockFromItem(iOut));
+    }
+
+    public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
+        EntityPlayer crafter = recipe.tryGetCraftingPlayerServer();
+        if(crafter == null) {
+            AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+            return;
+        }
+
+        ItemStack out = recipe.getRecipeToCraft().getOutput(infuser);
+        Item iOut = out.getItem();
+
+        informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));
     }
 
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {

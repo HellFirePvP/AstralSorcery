@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
+import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -89,6 +90,12 @@ public class RegistryRecipes {
         initVanillaRecipes();
 
         initAltarRecipes();
+
+        initInfusionRecipes();
+    }
+
+    public static void initInfusionRecipes() {
+        InfusionRecipeRegistry.registerBasicInfusion(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
     }
 
     public static void initVanillaRecipes() {

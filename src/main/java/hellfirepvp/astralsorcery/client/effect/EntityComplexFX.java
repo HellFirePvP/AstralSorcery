@@ -18,6 +18,10 @@ public abstract class EntityComplexFX implements IComplexEffect {
         this.maxAge = maxAge;
     }
 
+    public int getMaxAge() {
+        return maxAge;
+    }
+
     @Override
     public boolean canRemove() {
         return age >= maxAge;

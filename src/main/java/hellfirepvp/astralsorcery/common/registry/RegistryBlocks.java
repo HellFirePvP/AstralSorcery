@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
@@ -33,6 +34,7 @@ import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -122,6 +124,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(blockMachine);
         blockFakeTree = registerBlock(new BlockFakeTree());
         queueDefaultItemBlock(blockFakeTree);
+        starlightInfuser = registerBlock(new BlockStarlightInfuser());
+        queueDefaultItemBlock(starlightInfuser);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -141,6 +145,7 @@ public class RegistryBlocks {
     }
 
     //Called after items are registered.
+    //Necessary for blocks that require different models/renders for different metadata values
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
@@ -164,6 +169,7 @@ public class RegistryBlocks {
         registerTile(TileStructuralConnector.class);
         registerTile(TileFakeTree.class);
         registerTile(TileAttunementAltar.class);
+        registerTile(TileStarlightInfuser.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

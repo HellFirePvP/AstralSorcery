@@ -152,6 +152,7 @@ item.ItemCraftingComponent.aquamarine.name=Aquamarine
 item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot
 item.ItemCraftingComponent.stardust.name=Stardust
 item.ItemCraftingComponent.glass_lens.name=Glass lens
+item.ItemCraftingComponent.reso_gem.name=Resonating Gem
 
 item.ItemConstellationPaper.name=Constellation Paper
 item.ItemRockCrystalSimple.name=Rock Crystal
@@ -220,6 +221,7 @@ tile.BlockMachine.telescope.name=Telescope
 tile.BlockMachine.grindstone.name=Grindstone
 tile.BlockStructural.telescope_struct.name=Telescope
 tile.BlockFakeTree.name=
+tile.BlockStarlightInfuser.name=Starlight Infuser
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive

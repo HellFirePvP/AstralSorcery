@@ -50,7 +50,7 @@ public class TileCelestialCrystals extends TileSkybound {
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 mul *= 0.8;
 
-                if(rand.nextInt(4000) == 0) {
+                if(rand.nextInt(5000) == 0) {
                     worldObj.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
                 }
             }

@@ -21,6 +21,7 @@ public class OrbitalEffectController extends EntityComplexFX {
     private final OrbitPersistence persistence;
     private final OrbitTickModifier tickModifier;
     private double orbitRadius = 1;
+    private int tickOffset = 0;
     private Vector3 orbitAxis = Vector3.RotAxis.Y_AXIS;
     private Vector3 offset = new Vector3();
 
@@ -43,6 +44,11 @@ public class OrbitalEffectController extends EntityComplexFX {
 
     public OrbitalEffectController setOrbitAxis(Vector3 orbitAxis) {
         this.orbitAxis = orbitAxis;
+        return this;
+    }
+
+    public OrbitalEffectController setTickOffset(int tickOffset) {
+        this.tickOffset = tickOffset;
         return this;
     }
 
@@ -80,7 +86,7 @@ public class OrbitalEffectController extends EntityComplexFX {
     }
 
     public double getRotationDegree() {
-        double perc = ((double) this.age) / ((double) this.maxAge);
+        double perc = ((double) ((this.age + this.tickOffset) % this.maxAge)) / ((double) this.maxAge);
         return 360D * perc;
     }
 

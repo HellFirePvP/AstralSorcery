@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAltarAttun
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAltarConstellation;
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockAttunementFrame;
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockRitualPedestal;
+import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureDesertShrine;
 
@@ -26,6 +27,7 @@ public class RegistryStructures {
         patternAltarAttunement = new MultiblockAltarAttunement();
         patternAltarConstellation = new MultiblockAltarConstellation();
         patternAttunementFrame = new MultiblockAttunementFrame();
+        patternStarlightInfuser = new MultiblockStarlightInfuser();
     }
 
 }

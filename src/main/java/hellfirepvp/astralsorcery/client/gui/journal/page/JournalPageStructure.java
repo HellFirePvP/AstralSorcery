@@ -12,6 +12,9 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.UniversalBucket;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -60,7 +63,12 @@ public class JournalPageStructure implements IJournalPage {
             this.unlocName = unlocName;
             List<ItemStack> stacksNeeded = structure.getAsDescriptiveStacks();
             for (ItemStack stack : stacksNeeded) {
-                descriptionStacks.add(new Tuple<>(stack, stack.getUnlocalizedName() + ".name"));
+                if(stack.getItem() instanceof UniversalBucket) {
+                    FluidStack f = ((UniversalBucket) stack.getItem()).getFluid(stack);
+                    descriptionStacks.add(new Tuple<>(stack, stack.stackSize + "x " + I18n.format(stack.getUnlocalizedName() + ".name", f.getLocalizedName())));
+                } else {
+                    descriptionStacks.add(new Tuple<>(stack, stack.stackSize + "x " + I18n.format(stack.getUnlocalizedName() + ".name")));
+                }
             }
         }
 
@@ -87,11 +95,11 @@ public class JournalPageStructure implements IJournalPage {
         private void drawBlockInformations(float offsetX, float offsetY, float offsetZ, float pTicks, float mouseX, float mouseY) {
             Rectangle rect = drawInfoStar(offsetX + 160, offsetY + 10, offsetZ, 15, pTicks);
             if(rect.contains(mouseX, mouseY)) {
-                List<Tuple<ItemStack, String>> localized = new LinkedList<>();
+                /*List<Tuple<ItemStack, String>> localized = new LinkedList<>();
                 for (Tuple<ItemStack, String> entry : descriptionStacks) {
                     localized.add(new Tuple<>(entry.key, entry.key.stackSize + "x " + I18n.format(entry.value)));
-                }
-                RenderingUtils.renderBlueStackTooltip((int) offsetX + 160, (int) offsetY + 10, localized,
+                }*/
+                RenderingUtils.renderBlueStackTooltip((int) offsetX + 160, (int) offsetY + 10, descriptionStacks,
                         getStandardFontRenderer(), getRenderItem());
             }
         }

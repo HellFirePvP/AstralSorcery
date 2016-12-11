@@ -389,7 +389,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!worldObj.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-                if(matchDownMultiblocks(altarRecipe.getNeededLevel()) && !altarRecipe.matches(this, getInventoryHandler())) {
+                if(!matchDownMultiblocks(altarRecipe.getNeededLevel()) || !altarRecipe.matches(this, getInventoryHandler())) {
                     abortCrafting();
                     return;
                 }

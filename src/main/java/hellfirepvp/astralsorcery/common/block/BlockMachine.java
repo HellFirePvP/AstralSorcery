@@ -192,7 +192,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             break;
                                         case FAIL_BREAK_ITEM:
                                             tgr.setGrindingItem(null);
-                                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
                                             break;
                                     }
                                     tgr.playWheelEffect();
@@ -210,7 +210,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     ItemStack toSet = stack.copy();
                                     toSet.stackSize = 1;
                                     tgr.setGrindingItem(toSet);
-                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
                                         stack.stackSize--;
@@ -219,7 +219,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     ItemStack toSet = stack.copy();
                                     toSet.stackSize = 1;
                                     tgr.setGrindingItem(toSet);
-                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
                                         stack.stackSize--;

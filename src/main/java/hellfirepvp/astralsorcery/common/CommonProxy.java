@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.container.ContainerJournal;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
@@ -167,6 +168,7 @@ public class CommonProxy implements IGuiHandler {
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 
         AltarRecipeRegistry.compileRecipes();
+        InfusionRecipeRegistry.compileRecipes();
     }
 
     public void registerVariantName(Item item, String name) {}

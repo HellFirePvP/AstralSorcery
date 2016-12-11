@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
@@ -50,6 +51,7 @@ public class BlocksAS {
     public static BlockFakeTree blockFakeTree;
     public static BlockAttunementAltar attunementAltar;
     public static BlockAttunementRelay attunementRelay;
+    public static BlockStarlightInfuser starlightInfuser;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

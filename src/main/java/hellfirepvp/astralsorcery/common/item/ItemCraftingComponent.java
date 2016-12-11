@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.common.entities.EntityAquamarine;
 import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
@@ -47,6 +48,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     public boolean hasCustomEntity(ItemStack stack) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
         switch (type) {
+            case AQUAMARINE:
             case STARDUST:
                 return true;
         }
@@ -64,6 +66,13 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
                 stardust.motionY = location.motionY;
                 stardust.motionZ = location.motionZ;
                 return stardust;
+            case AQUAMARINE:
+                EntityAquamarine aquamarine = new EntityAquamarine(world, location.posX, location.posY, location.posZ, itemstack);
+                aquamarine.setDefaultPickupDelay();
+                aquamarine.motionX = location.motionX;
+                aquamarine.motionY = location.motionY;
+                aquamarine.motionZ = location.motionZ;
+                return aquamarine;
         }
         return null;
     }
@@ -145,7 +154,8 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         AQUAMARINE,
         STARMETAL_INGOT,
         STARDUST,
-        GLASS_LENS;
+        GLASS_LENS,
+        RESO_GEM;
 
         public ItemStack asStack() {
             return new ItemStack(ItemsAS.craftingComponent, 1, getMeta());
