@@ -33,6 +33,7 @@ public abstract class ConfigEntry {
 
         WORLDGEN,
         RITUAL_EFFECTS,
+        PERK_LEVELS,
         PERKS
 
     }

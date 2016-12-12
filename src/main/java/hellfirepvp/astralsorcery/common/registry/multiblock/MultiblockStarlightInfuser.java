@@ -19,7 +19,6 @@ public class MultiblockStarlightInfuser extends PatternBlockArray {
         load();
     }
 
-    //TODO add actual infuser into this
     private void load() {
         IBlockState mar = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.ARCH);
         IBlockState mrw = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW);
@@ -27,6 +26,8 @@ public class MultiblockStarlightInfuser extends PatternBlockArray {
         IBlockState mch = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
 
         IBlockState liquidStarlight = BlocksAS.blockLiquidStarlight.getDefaultState();
+
+        addBlock(0, 0, 0, BlocksAS.starlightInfuser.getDefaultState());
 
         addBlockCube(mar, -2, -1, -3, 2, -1, 3);
         addBlockCube(mar, -3, -1, -2, 3, -1, 2);

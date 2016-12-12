@@ -34,6 +34,7 @@ public class PlayerProgress {
     private List<ConstellationPerk> appliedPerks = new LinkedList<>();
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
+    private int perkExperience = 0;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
@@ -41,6 +42,7 @@ public class PlayerProgress {
         appliedPerks.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
+        perkExperience = 0;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -80,6 +82,9 @@ public class PlayerProgress {
             }
         }
 
+        if(compound.hasKey("perkExperience")) {
+            this.perkExperience = compound.getInteger("perkExperience");
+        }
     }
 
     public void store(NBTTagCompound cmp) {
@@ -103,6 +108,7 @@ public class PlayerProgress {
             list.appendTag(new NBTTagInt(perk.getId()));
         }
         cmp.setTag("listPerks", list);
+        cmp.setInteger("perkExperience", perkExperience);
     }
 
     protected boolean forceGainResearch(ResearchProgression progression) {
@@ -151,11 +157,15 @@ public class PlayerProgress {
     }
 
     public boolean hasPerkUnlocked(ConstellationPerk perk) {
-        //return true;
-        if(perk == ConstellationPerks.DMG_INCREASE.getSingleInstance()) return true; //TODO Remove after wiiv adjusted things.
-        if(perk == ConstellationPerks.DMG_DISTANCE.getSingleInstance()) return true;
-
         return appliedPerks.contains(perk);
+    }
+
+    public int getPerkExperience() {
+        return perkExperience;
+    }
+
+    protected void addPerkExperience(int exp) {
+        this.perkExperience = exp;
     }
 
     protected boolean stepTier() {
@@ -188,6 +198,7 @@ public class PlayerProgress {
         this.tierReached = ProgressionTier.values()[MathHelper.clamp_int(message.progressTier, 0, ProgressionTier.values().length - 1)];
         this.attunedConstellation = message.attunedConstellation;
         this.appliedPerks = message.appliedPerks;
+        this.perkExperience = message.perkExperience;
     }
 
 }

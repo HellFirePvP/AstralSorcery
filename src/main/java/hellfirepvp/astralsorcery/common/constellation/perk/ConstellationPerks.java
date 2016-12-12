@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveNoA
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelLavaProtection;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelMovespeed;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelPlaceLight;
-import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelReduceFall;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveReduceFall;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelReduceFoodNeed;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelWaterMovement;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -40,9 +40,8 @@ public enum ConstellationPerks {
     TRV_PLACELIGHTS  (20, PerkTravelPlaceLight::new),
     TRV_LAVAPROTECT  (21, PerkTravelLavaProtection::new),
     TRV_MOVESPEED    (22, PerkTravelMovespeed::new),
-    TRV_FALLREDUCTION(23, PerkTravelReduceFall::new),
-    TRV_SWIMSPEED    (24, PerkTravelWaterMovement::new),
-    TRV_REDFOODNEED  (25, PerkTravelReduceFoodNeed::new),
+    TRV_SWIMSPEED    (23, PerkTravelWaterMovement::new),
+    TRV_REDFOODNEED  (24, PerkTravelReduceFoodNeed::new),
 
     CRE_GROWTH       (40, PerkCreationGrowables::new),
     CRE_BREEDING     (41, PerkCreationBreedables::new),
@@ -51,7 +50,8 @@ public enum ConstellationPerks {
     DEF_DMGREDUCTION (60, PerkDefensiveDamageReduction::new),
     DEF_DODGE        (61, PerkDefensiveDamageDodge::new),
     DEF_NOARMOR      (62, PerkDefensiveNoArmor::new),
-    DEF_ELEMENTAL    (63, PerkDefensiveElemental::new);
+    DEF_ELEMENTAL    (63, PerkDefensiveElemental::new),
+    DEF_FALLREDUCTION(64, PerkDefensiveReduceFall::new);
 
     private final int id;
     private final PerkProvider provider;
@@ -65,6 +65,10 @@ public enum ConstellationPerks {
 
     public ConstellationPerk getSingleInstance() {
         return singleInstance;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public ConstellationPerk createPerk() {

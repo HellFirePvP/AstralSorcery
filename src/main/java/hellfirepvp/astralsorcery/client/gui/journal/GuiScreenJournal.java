@@ -77,7 +77,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         }
 
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
-        attuned = Constellations.discidia;
+        //attuned = Constellations.discidia;
         if(attuned != null) {
             ConstellationPerkMap map = ConstellationPerkMapRegistry.getPerkMap(attuned);
             if(map != null) {

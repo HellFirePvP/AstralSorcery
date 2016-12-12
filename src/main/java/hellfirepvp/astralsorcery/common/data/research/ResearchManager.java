@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -214,6 +215,20 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.clearPerks();
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean addPerkExperience(EntityPlayer player, double exp) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.addPerkExperience(MathHelper.floor_double(exp));
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);

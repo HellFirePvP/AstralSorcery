@@ -109,7 +109,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
                 if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(other))) {
-                    boolean see = worldObj.canSeeSky(other);
+                    boolean see = itDown(other) <= other.getY() + 1;
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -121,7 +121,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                         break lbl;
                     }
                 } else {
-                    boolean see = worldObj.canSeeSky(other);
+                    boolean see = itDown(other) <= other.getY() + 1;
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -135,6 +135,19 @@ public class TileAttunementAltar extends TileReceiverBase {
         if(update) {
             markForUpdate();
         }
+    }
+
+    private int itDown(BlockPos xzPos) {
+        BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
+        mut.setPos(xzPos);
+        for (int i = 255; i >= 0; i--) {
+            mut.setY(i);
+            if(!worldObj.isAirBlock(mut)) {
+                mut.release();
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void updateMultiblockState() {

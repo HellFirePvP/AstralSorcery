@@ -26,7 +26,7 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(armara);
         ConstellationRegistry.registerConstellation(vicio);
         ConstellationRegistry.registerConstellation(aevitas);
-        ConstellationRegistry.registerConstellation(evorsio);
+        //ConstellationRegistry.registerConstellation(evorsio);
     }
 
     private static void buildMajorConstellations() {
@@ -106,21 +106,21 @@ public class RegistryConstellations {
         aevitas.addConnection(sl6, sl8);
         aevitas.addConnection(sl4, sl9);
 
-        evorsio = new ConstellationBase.Major("evorsio");
-        sl1 = evorsio.addStar(15, 13);
-        sl2 = evorsio.addStar(3, 19);
-        sl3 = evorsio.addStar(7, 7);
-        sl4 = evorsio.addStar(26, 9);
-        sl5 = evorsio.addStar(21, 19);
-        sl6 = evorsio.addStar(24, 3);
-        sl7 = evorsio.addStar(11, 25);
+        //evorsio = new ConstellationBase.Major("evorsio");
+        //sl1 = evorsio.addStar(15, 13);
+        //sl2 = evorsio.addStar(3, 19);
+        //sl3 = evorsio.addStar(7, 7);
+        //sl4 = evorsio.addStar(26, 9);
+        //sl5 = evorsio.addStar(21, 19);
+        //sl6 = evorsio.addStar(24, 3);
+        //sl7 = evorsio.addStar(11, 25);
 
-        evorsio.addConnection(sl1, sl2);
-        evorsio.addConnection(sl2, sl3);
-        evorsio.addConnection(sl1, sl4);
-        evorsio.addConnection(sl4, sl5);
-        evorsio.addConnection(sl1, sl6);
-        evorsio.addConnection(sl1, sl7);
+        //evorsio.addConnection(sl1, sl2);
+        //evorsio.addConnection(sl2, sl3);
+        //evorsio.addConnection(sl1, sl4);
+        //evorsio.addConnection(sl4, sl5);
+        //evorsio.addConnection(sl1, sl6);
+        //evorsio.addConnection(sl1, sl7);
     }
 
 }

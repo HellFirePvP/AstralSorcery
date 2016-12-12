@@ -8,16 +8,16 @@ import net.minecraftforge.common.config.Configuration;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: PerkTravelReduceFall
+ * Class: PerkDefensiveReduceFall
  * Created by HellFirePvP
  * Date: 04.12.2016 / 14:28
  */
-public class PerkTravelReduceFall extends ConstellationPerk {
+public class PerkDefensiveReduceFall extends ConstellationPerk {
 
     private static float fallDmgReduction = 0.3F;
 
-    public PerkTravelReduceFall() {
-        super("TRV_FALLRED", Target.ENTITY_HURT);
+    public PerkDefensiveReduceFall() {
+        super("DEF_FALLRED", Target.ENTITY_HURT);
     }
 
     @Override

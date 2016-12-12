@@ -19,6 +19,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -53,6 +55,8 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private ConstellationPerkMap mapToDisplay = null;
     private IMajorConstellation attunedConstellation = null;
 
+    private Map<Rectangle, ConstellationPerks> thisFramePerks = new HashMap<>();
+
     public GuiJournalPerkMap() {
         super(2);
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
@@ -63,18 +67,22 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 this.attunedConstellation = attuned;
             }
         }
-        this.attunedConstellation = Constellations.evorsio;
+        /*this.attunedConstellation = Constellations.armara;
 
         this.mapToDisplay = new ConstellationPerkMap();
         //Goes from 0,0 -> 14,14 max.
-        this.mapToDisplay.addPerk(ConstellationPerks.DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT, 14, 14);
-        this.mapToDisplay.addPerk(ConstellationPerks.DMG_DISTANCE,  ConstellationPerkMap.PerkOrder.DEFAULT, 12,  7, ConstellationPerks.DMG_INCREASE);
-        this.mapToDisplay.addPerk(ConstellationPerks.DMG_KNOCKBACK, ConstellationPerkMap.PerkOrder.DEFAULT, 10,  2, ConstellationPerks.DMG_DISTANCE);
-        this.mapToDisplay.addPerk(ConstellationPerks.DMG_AFTERKILL, ConstellationPerkMap.PerkOrder.DEFAULT,  0,  0, ConstellationPerks.DMG_INCREASE);
+        this.mapToDisplay.addPerk(ConstellationPerks.DEF_DMGREDUCTION,  ConstellationPerkMap.PerkOrder.DEFAULT,  5,  0);
+        this.mapToDisplay.addPerk(ConstellationPerks.DEF_ELEMENTAL,     ConstellationPerkMap.PerkOrder.DEFAULT, 11,  2, ConstellationPerks.DEF_DMGREDUCTION);
+        this.mapToDisplay.addPerk(ConstellationPerks.DEF_FALLREDUCTION, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  6, ConstellationPerks.DEF_DMGREDUCTION);
+        this.mapToDisplay.addPerk(ConstellationPerks.DEF_NOARMOR,       ConstellationPerkMap.PerkOrder.DEFAULT,  4, 13, ConstellationPerks.DEF_FALLREDUCTION);
+        this.mapToDisplay.addPerk(ConstellationPerks.DEF_DODGE,         ConstellationPerkMap.PerkOrder.DEFAULT, 13, 11, ConstellationPerks.DEF_ELEMENTAL, ConstellationPerks.DEF_FALLREDUCTION);*/
     }
+
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.thisFramePerks.clear();
+
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -108,6 +116,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         drawConnections(mapToDisplay, offsetX, offsetY, whBetweenStars, 3D);
 
         Map<Rectangle, ConstellationPerks> rects = drawStars(mapToDisplay.getPerks(), offsetX, offsetY, whStar, whBetweenStars);
+        this.thisFramePerks.putAll(rects);
         for (Rectangle r : rects.keySet()) {
             if(r.contains(mouse)) {
                 List<String> toolTip = new LinkedList<>();
@@ -300,6 +309,18 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         }
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            return;
+        }
+        for (Rectangle r : thisFramePerks.keySet()) {
+            if(r.contains(mouseX, mouseY)) {
+                ConstellationPerks perk = thisFramePerks.get(r);
+                PlayerProgress prog = ResearchManager.clientProgress;
+                if(!prog.hasPerkUnlocked(perk)) {
+                    PktUnlockPerk pkt = new PktUnlockPerk(perk, attunedConstellation);
+                    PacketChannel.CHANNEL.sendToServer(pkt);
+                }
+                return;
+            }
         }
     }
 

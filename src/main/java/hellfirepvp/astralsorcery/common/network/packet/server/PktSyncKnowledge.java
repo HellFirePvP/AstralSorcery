@@ -35,7 +35,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public List<ConstellationPerk> appliedPerks = new ArrayList<>();
-    public int progressTier = 0;
+    public int progressTier = 0, perkExperience = 0;
 
     public PktSyncKnowledge() {}
 
@@ -49,6 +49,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
         this.appliedPerks = progress.getAppliedPerks();
+        this.perkExperience = progress.getPerkExperience();
     }
 
     @Override
@@ -98,6 +99,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         }
 
         this.progressTier = buf.readInt();
+        this.perkExperience = buf.readInt();
     }
 
     @Override
@@ -139,6 +141,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         }
 
         buf.writeInt(this.progressTier);
+        buf.writeInt(this.perkExperience);
     }
 
     @Override

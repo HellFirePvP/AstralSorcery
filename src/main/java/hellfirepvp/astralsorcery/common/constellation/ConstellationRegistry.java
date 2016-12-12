@@ -51,6 +51,16 @@ public class ConstellationRegistry {
         return null;
     }
 
+    @Nullable
+    public static IMajorConstellation getMajorConstellationByName(String name) {
+        if(name == null) return null;
+
+        for(IMajorConstellation c : majorConstellations) {
+            if(c.getUnlocalizedName().equals(name)) return c;
+        }
+        return null;
+    }
+
     public static List<IConstellation> resolve(List<String> constellationsAsStrings) {
         List<IConstellation> resolved = new LinkedList<>();
         for (String s : constellationsAsStrings) {

@@ -15,6 +15,6 @@ public class Constellations {
     public static IMajorConstellation armara;   //Aspect of Defence
     public static IMajorConstellation vicio;    //Aspect of Travel
     public static IMajorConstellation aevitas;  //Aspect of Creation
-    public static IMajorConstellation evorsio;  //Aspect of Destruction
+    //public static IMajorConstellation evorsio;  //Aspect of Destruction
 
 }
