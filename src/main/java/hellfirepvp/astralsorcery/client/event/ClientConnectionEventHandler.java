@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.util.ClientCameraManager;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
@@ -27,6 +28,7 @@ public class ClientConnectionEventHandler {
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         AstralSorcery.log.info("[AstralSorcery] Disconnected from server. Cleaning client cache.");
         EffectHandler.cleanUp();
+        ClientCameraManager.getInstance().removeAllAndCleanup();
         Config.rebuildClientConfig();
         ConstellationSkyHandler.getInstance().clientClearCache();
         GuiJournalProgression.resetJournal(); //Refresh journal gui

@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTelescope;
 import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
+import hellfirepvp.astralsorcery.client.util.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
@@ -191,6 +192,7 @@ public class ClientProxy extends CommonProxy {
         super.registerTickHandlers(manager);
         manager.register(new ClientLightbeamHandler());
         manager.register(scheduler);
+        manager.register(ClientCameraManager.getInstance());
     }
 
     @Override
