@@ -23,8 +23,8 @@ public class RenderItemEntityPlacer implements IItemRenderer {
     private static final RenderEntityModel<? super EntityTelescope> renderTelescope = new RenderEntityTelescope.Factory().createRenderFor(Minecraft.getMinecraft().getRenderManager());
     private static final RenderEntityModel<? super EntityGrindstone> renderGrindstone = new RenderEntityGrindstone.Factory().createRenderFor(Minecraft.getMinecraft().getRenderManager());
 
-    private static final EntityTelescope telescopeDummy = new EntityTelescope(Minecraft.getMinecraft().theWorld);
-    private static final EntityGrindstone grindstoneDummy = new EntityGrindstone(Minecraft.getMinecraft().theWorld);
+    private static final EntityTelescope telescopeDummy = new EntityTelescope(Minecraft.getMinecraft().world);
+    private static final EntityGrindstone grindstoneDummy = new EntityGrindstone(Minecraft.getMinecraft().world);
 
     @Override
     public void render(ItemStack stack) {

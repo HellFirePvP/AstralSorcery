@@ -47,7 +47,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
         GL11.glPushMatrix();
         ItemStack stack = entity.getEntityItem();
         if (stack != null) {
-            EntityItem ei = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, stack);
+            EntityItem ei = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
             ei.age = entity.getAge();
             ei.hoverStart = entity.hoverStart;
 

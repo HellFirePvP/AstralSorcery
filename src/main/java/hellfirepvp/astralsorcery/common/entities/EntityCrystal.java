@@ -59,7 +59,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     }
 
     private void checkIncreaseConditions() {
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             if(canCraft()) {
                 spawnCraftingParticles();
             }
@@ -79,8 +79,8 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     }
 
     private void increaseSize() {
-        worldObj.setBlockToAir(getPosition());
-        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+        world.setBlockToAir(getPosition());
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         if(foundItems.size() <= 0) {
             ItemStack stack = getEntityItem();
             CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
@@ -110,7 +110,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     private boolean canCraft() {
         if(!isInLiquidStarlight(this)) return false;
 
-        List<Entity> foundEntities = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
+        List<Entity> foundEntities = world.getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
         return foundEntities.size() <= 0;
     }
 

@@ -101,13 +101,13 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         textureBookmark.bind();
 
-        Rectangle r = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(width), MathHelper.floor_double(height));
+        Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         if(r.contains(mousePoint)) {
             if(mouseOverWidth > width) {
                 textureBookmarkStr.bind();
             }
             width = mouseOverWidth;
-            r = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(width), MathHelper.floor_double(height));
+            r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         }
 
         Tessellator tes = Tessellator.getInstance();

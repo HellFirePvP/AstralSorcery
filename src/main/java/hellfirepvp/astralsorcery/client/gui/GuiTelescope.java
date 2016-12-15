@@ -88,7 +88,7 @@ public class GuiTelescope extends GuiWHScreen {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(guiOwner.getWorld());
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random(guiOwner.getWorld().getSeed() * 31 + lastTracked * 31);
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
         /*Collection<IConstellation> activeConstellations =
@@ -149,7 +149,7 @@ public class GuiTelescope extends GuiWHScreen {
         RenderConstellation.BrightnessFunction func = new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
-                return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getWorldTime(), pTicks, 5 + r.nextInt(15));
+                return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), pTicks, 5 + r.nextInt(15));
             }
         };
 
@@ -178,7 +178,7 @@ public class GuiTelescope extends GuiWHScreen {
         } else {
             brightness = 1F;
         }
-        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
+        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
         if (starBr <= 0.0F) {
             return;
         }
@@ -224,7 +224,7 @@ public class GuiTelescope extends GuiWHScreen {
 
     private void drawGridBackground(float partialTicks, boolean canSeeSky) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        World renderWorld = Minecraft.getMinecraft().theWorld;
+        World renderWorld = Minecraft.getMinecraft().world;
         int rgbFrom, rgbTo;
         if (canSeeSky) {
             float starBr = renderWorld.getStarBrightness(partialTicks) * 2;
@@ -321,8 +321,8 @@ public class GuiTelescope extends GuiWHScreen {
             int innerOffsetX = starSize + rand.nextInt(width - starSize);
             int innerOffsetY = starSize + rand.nextInt(height - starSize);
             GL11.glPushMatrix();
-            float brightness = RenderConstellation.stdFlicker(owningPlayer.worldObj.getWorldTime(), partialTicks, 10 + rand.nextInt(20));
-            brightness *= Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) * 2;
+            float brightness = RenderConstellation.stdFlicker(owningPlayer.world.getWorldTime(), partialTicks, 10 + rand.nextInt(20));
+            brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
             GL11.glColor4f(brightness, brightness, brightness, brightness);
             drawRect(offsetX + innerOffsetX - starSize, offsetY + innerOffsetY - starSize, starSize * 2, starSize * 2);
             GL11.glColor4f(1, 1, 1, 1);
@@ -347,7 +347,7 @@ public class GuiTelescope extends GuiWHScreen {
                     new RenderConstellation.BrightnessFunction() {
                         @Override
                         public float getBrightness() {
-                            return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getWorldTime(), partialTicks, 5 + rand.nextInt(15));
+                            return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + rand.nextInt(15));
                         }
                     },
                     ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()),
@@ -421,7 +421,7 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private boolean canStartDrawing() {
-        return Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F) >= 0.35F;
+        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F;
     }
 
     private void clearLines() {
@@ -473,7 +473,7 @@ public class GuiTelescope extends GuiWHScreen {
         if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) return;
 
         boolean has = false;
-        IItemHandler handle = Minecraft.getMinecraft().thePlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        IItemHandler handle = Minecraft.getMinecraft().player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
         List<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
         for (ItemStack stack : papers) {
             IConstellation con = ItemConstellationPaper.getConstellation(stack);

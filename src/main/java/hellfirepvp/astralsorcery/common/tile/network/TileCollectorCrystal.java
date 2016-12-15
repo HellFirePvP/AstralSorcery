@@ -52,7 +52,7 @@ public class TileCollectorCrystal extends TileSourceBase {
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             if(ticksExisted > 4 && associatedType == null) {
                 getWorld().setBlockToAir(getPos());
             }
@@ -61,7 +61,7 @@ public class TileCollectorCrystal extends TileSourceBase {
             }
         }
 
-        if(worldObj.isRemote && enhanced && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(world.isRemote && enhanced && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             playEnhancedEffects();
         }
     }
@@ -135,9 +135,9 @@ public class TileCollectorCrystal extends TileSourceBase {
     }
 
     public void setEnhanced(boolean enhanced) {
-        if(!worldObj.isRemote && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(!world.isRemote && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             this.enhanced = enhanced;
-            WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(worldObj);
+            WorldNetworkHandler handle = WorldNetworkHandler.getNetworkHandler(world);
             IIndependentStarlightSource source = handle.getSourceAt(getPos());
             if(source != null && source instanceof IndependentCrystalSource) {
                 ((IndependentCrystalSource) source).setEnhanced(enhanced);

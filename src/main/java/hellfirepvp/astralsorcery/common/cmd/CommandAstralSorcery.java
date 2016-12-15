@@ -206,7 +206,7 @@ public class CommandAstralSorcery extends CommandBase {
                 return;
         }
         sender.addChatMessage(new TextComponentString("§aStarting to build " + name + " at " + hit.toString() + "!"));
-        array.placeInWorld(exec.worldObj, hit);
+        array.placeInWorld(exec.world, hit);
         sender.addChatMessage(new TextComponentString("§aBuilt " + name + "!"));
     }
 

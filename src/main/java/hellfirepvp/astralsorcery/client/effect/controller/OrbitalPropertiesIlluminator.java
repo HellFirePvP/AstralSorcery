@@ -32,7 +32,7 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
-        World w = Minecraft.getMinecraft().theWorld;
+        World w = Minecraft.getMinecraft().world;
         return w.provider.getDimension() == dim && w.getBlockState(thisPos).getBlock().equals(BlocksAS.blockIlluminator);
     }
 

@@ -228,7 +228,7 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
-        progress.addPerkExperience(MathHelper.floor_double(exp));
+        progress.addPerkExperience(MathHelper.floor(exp));
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);

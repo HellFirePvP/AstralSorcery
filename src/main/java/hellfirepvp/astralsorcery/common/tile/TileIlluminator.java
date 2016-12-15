@@ -47,7 +47,7 @@ public class TileIlluminator extends TileSkybound {
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote && doesSeeSky()) {
+        if(!world.isRemote && doesSeeSky()) {
             if(validPositions == null) recalculate();
             if(rand.nextInt(3) == 0 && placeFlares()) {
                 recalcRequested = true;
@@ -61,7 +61,7 @@ public class TileIlluminator extends TileSkybound {
                 }
             }
         }
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             playEffects();
         }
     }
@@ -108,8 +108,8 @@ public class TileIlluminator extends TileSkybound {
             BlockPos at = list.remove(index);
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
-            if(illuminatorCheck.isStateValid(worldObj, at, worldObj.getBlockState(at))) {
-                worldObj.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
+            if(illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+                world.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
             }
         }
         return needsRecalc;
@@ -120,7 +120,7 @@ public class TileIlluminator extends TileSkybound {
         validPositions = new LinkedList[parts];
         for (int i = 1; i <= parts; i++) {
             int yLevel = (int) (((float) getPos().getY()) * (((float) i) / ((float) parts)));
-            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(worldObj, new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
+            LinkedList<BlockPos> calcPositions = new DirectionalLayerBlockDiscoverer(world, new BlockPos(getPos().getX(), yLevel, getPos().getZ()), SEARCH_RADIUS, STEP_WIDTH).discoverApplicableBlocks();
             validPositions[i - 1] = repeatList(calcPositions);
         }
     }

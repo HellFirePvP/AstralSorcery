@@ -68,7 +68,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     public static void renderCrystal(boolean isCelestial, boolean bounce) {
         GL11.glPushMatrix();
         if(bounce) {
-            int t = (int) (Minecraft.getMinecraft().theWorld.getTotalWorldTime() & 255);
+            int t = (int) (Minecraft.getMinecraft().world.getTotalWorldTime() & 255);
             float perc = (256 - t) / 256F;
             perc = MathHelper.cos((float) (perc * 2 * Math.PI));
             GL11.glTranslated(0, 0.03 * perc, 0);

@@ -157,7 +157,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public boolean onBlockActivated(World worldObj, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
         MachineType type = state.getValue(MACHINE_TYPE);
         if (type == null) return true;
         int posX = pos.getX();
@@ -165,18 +165,18 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         int posZ = pos.getZ();
         switch (type) {
             case TELESCOPE:
-                if (player.worldObj.isRemote) {
-                    AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.worldObj, posX, posY, posZ);
+                if (player.world.isRemote) {
+                    AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, posX, posY, posZ);
                 }
                 break;
             case GRINDSTONE:
-                TileGrindstone tgr = MiscUtils.getTileAt(worldObj, pos, TileGrindstone.class, true);
+                TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
                 if(tgr != null) {
-                    if(!worldObj.isRemote) {
+                    if(!world.isRemote) {
                         ItemStack grind = tgr.getGrindingItem();
                         if(grind != null) {
                             if(player.isSneaking()) {
-                                ItemUtils.dropItem(worldObj, posX + 0.5F, posY + 1F, posZ + 0.5F, grind);
+                                ItemUtils.dropItem(world, posX + 0.5F, posY + 1F, posZ + 0.5F, grind);
 
                                 tgr.setGrindingItem(null);
                             } else {
@@ -192,7 +192,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             break;
                                         case FAIL_BREAK_ITEM:
                                             tgr.setGrindingItem(null);
-                                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                            world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                                             break;
                                     }
                                     tgr.playWheelEffect();
@@ -210,7 +210,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     ItemStack toSet = stack.copy();
                                     toSet.stackSize = 1;
                                     tgr.setGrindingItem(toSet);
-                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                    world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
                                         stack.stackSize--;
@@ -219,7 +219,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     ItemStack toSet = stack.copy();
                                     toSet.stackSize = 1;
                                     tgr.setGrindingItem(toSet);
-                                    worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                    world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
                                         stack.stackSize--;
@@ -234,7 +234,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                             if(i instanceof IGrindable) {
                                 if(((IGrindable) i).canGrind(tgr, grind)) {
                                     for (int j = 0; j < 8; j++) {
-                                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
+                                        world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
@@ -242,7 +242,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                 }
                             } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
                                 for (int j = 0; j < 8; j++) {
-                                    worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
+                                    world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);

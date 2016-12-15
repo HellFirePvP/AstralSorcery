@@ -87,11 +87,6 @@ public class BlockFakeTree extends BlockContainer {
     }
 
     @Override
-    public boolean isVisuallyOpaque() {
-        return false;
-    }
-
-    @Override
     public boolean isTranslucent(IBlockState state) {
         return true;
     }

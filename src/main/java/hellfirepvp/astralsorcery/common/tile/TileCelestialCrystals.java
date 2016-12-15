@@ -36,27 +36,27 @@ public class TileCelestialCrystals extends TileSkybound {
     private static final Random rand = new Random();
 
     public int getGrowth() {
-        return worldObj.getBlockState(getPos()).getValue(BlockCelestialCrystals.STAGE);
+        return world.getBlockState(getPos()).getValue(BlockCelestialCrystals.STAGE);
     }
 
     @Override
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             double mul = 1;
-            IBlockState downState = worldObj.getBlockState(getPos().down());
+            IBlockState downState = world.getBlockState(getPos().down());
             if(downState.getBlock() == BlocksAS.customOre &&
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 mul *= 0.8;
 
                 if(rand.nextInt(5000) == 0) {
-                    worldObj.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
+                    world.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
                 }
             }
             tryGrowth(mul);
         } else {
-            IBlockState downState = worldObj.getBlockState(getPos().down());
+            IBlockState downState = world.getBlockState(getPos().down());
             if(downState.getBlock() == BlocksAS.customOre &&
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 playStarmetalOreParticles();
@@ -90,22 +90,22 @@ public class TileCelestialCrystals extends TileSkybound {
     protected void onFirstTick() {}
 
     public void grow() {
-        IBlockState current = worldObj.getBlockState(getPos());
+        IBlockState current = world.getBlockState(getPos());
         int stage = current.getValue(BlockCelestialCrystals.STAGE);
         if(stage < 4) {
             IBlockState next = BlocksAS.celestialCrystals.getStateFromMeta(stage + 1);
-            worldObj.setBlockState(getPos(), next);
+            world.setBlockState(getPos(), next);
         }
     }
 
     public void tryGrowth(double mul) {
         int r = 24000;
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(worldObj);
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if(doesSeeSky() && handle != null) {
-            double dstr = handle.getCurrentDaytimeDistribution(worldObj);
+            double dstr = handle.getCurrentDaytimeDistribution(world);
             if(dstr > 0) {
                 Collection<IConstellation> activeConstellations =
-                        ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(worldObj.provider.getDimension());
+                        ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(world.provider.getDimension());
                 if(activeConstellations != null) {
                     r = 9500; //If this dim has sky handling active.
                 }
@@ -114,7 +114,7 @@ public class TileCelestialCrystals extends TileSkybound {
         }
         r *= Math.abs(mul);
 
-        if(worldObj.rand.nextInt(r) == 0) {
+        if(world.rand.nextInt(r) == 0) {
             grow();
         }
     }

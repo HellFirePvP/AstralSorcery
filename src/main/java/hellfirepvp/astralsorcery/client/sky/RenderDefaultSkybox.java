@@ -213,7 +213,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
     private static void renderDefaultSkybox(float partialTicks) {
         GlStateManager.disableTexture2D();
-        Vec3d vec3 = Minecraft.getMinecraft().theWorld.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+        Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
         float f = (float) vec3.xCoord;
         float f1 = (float) vec3.yCoord;
         float f2 = (float) vec3.zCoord;
@@ -250,14 +250,14 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         RenderHelper.disableStandardItemLighting();
-        float[] afloat = Minecraft.getMinecraft().theWorld.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks), partialTicks);
+        float[] afloat = Minecraft.getMinecraft().world.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
 
         if (afloat != null) {
             GlStateManager.disableTexture2D();
             GlStateManager.shadeModel(7425);
             GlStateManager.pushMatrix();
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(MathHelper.sin(Minecraft.getMinecraft().theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
             float f6 = afloat[0];
             float f7 = afloat[1];
@@ -291,10 +291,10 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.enableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0);
         GlStateManager.pushMatrix();
-        float f16 = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
+        float f16 = 1.0F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
         GlStateManager.color(1.0F, 1.0F, 1.0F, f16);
         GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
         float f17 = 30.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -305,7 +305,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         tessellator.draw();
         f17 = 20.0F;
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
-        int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
+        int i = Minecraft.getMinecraft().world.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
         float f22 = (float) (k) / 4.0F;
@@ -319,7 +319,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         vb.pos((double) (-f17), -100.0D, (double) (-f17)).tex((double) f24, (double) f23).endVertex();
         tessellator.draw();
         GlStateManager.disableTexture2D();
-        float f15 = Minecraft.getMinecraft().theWorld.getStarBrightness(partialTicks) * f16;
+        float f15 = Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * f16;
 
         if (f15 > 0.0F) {
             GlStateManager.color(f15, f15, f15, f15);
@@ -343,7 +343,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
-        double d0 = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().theWorld.getHorizon();
+        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().world.getHorizon();
 
         if (d0 < 0.0D) {
             GlStateManager.pushMatrix();
@@ -388,7 +388,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
             tessellator.draw();
         }
 
-        if (Minecraft.getMinecraft().theWorld.provider.isSkyColored()) {
+        if (Minecraft.getMinecraft().world.provider.isSkyColored()) {
             GlStateManager.color(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F);
         } else {
             GlStateManager.color(f, f1, f2);

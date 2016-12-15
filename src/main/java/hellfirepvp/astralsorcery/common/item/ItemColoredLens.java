@@ -228,7 +228,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
         @SideOnly(Side.CLIENT)
         public static void blockBreakAnimation(PktPlayEffect pktPlayEffect) {
-            World w = Minecraft.getMinecraft().theWorld;
+            World w = Minecraft.getMinecraft().world;
             RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, w.getBlockState(pktPlayEffect.pos));
         }
 

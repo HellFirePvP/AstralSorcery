@@ -121,7 +121,7 @@ public class BlockArrayRenderHelper {
             BlockPos offset = data.getKey();
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null && renderData.tesr != null) {
-                renderData.tileEntity.setWorldObj(Minecraft.getMinecraft().theWorld);
+                renderData.tileEntity.setWorldObj(Minecraft.getMinecraft().world);
                 renderData.tesr.renderTileEntityAt(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0);
             }
         }
@@ -154,7 +154,7 @@ public class BlockArrayRenderHelper {
                 BlockPos offset = entry.getKey();
                 BlockArray.BlockInformation info = entry.getValue();
                 if(info.type.hasTileEntity(info.state)) {
-                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().theWorld, info.state);
+                    TileEntity te = info.type.createTileEntity(Minecraft.getMinecraft().world, info.state);
                     BlockArray.TileEntityCallback callback = array.getTileCallbacks().get(offset);
                     if(te != null && callback != null) {
                         if(callback.isApplicable(te)) {
@@ -190,14 +190,14 @@ public class BlockArrayRenderHelper {
             return !isInBounds(pos) || blockRenderData.get(pos).type == Blocks.AIR;
         }
 
-        private boolean isInBounds(BlockPos pos) {
-            return blockRenderData.containsKey(pos);
-        }
-
         @Override
         @SideOnly(Side.CLIENT)
-        public Biome getBiomeGenForCoords(BlockPos pos) {
+        public Biome getBiome(BlockPos pos) {
             return Biome.getBiome(0);
+        }
+
+        private boolean isInBounds(BlockPos pos) {
+            return blockRenderData.containsKey(pos);
         }
 
         @Override
@@ -208,7 +208,7 @@ public class BlockArrayRenderHelper {
         @Override
         @SideOnly(Side.CLIENT)
         public WorldType getWorldType() {
-            return Minecraft.getMinecraft().theWorld.getWorldType();
+            return Minecraft.getMinecraft().world.getWorldType();
         }
 
         @Override

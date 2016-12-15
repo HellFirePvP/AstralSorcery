@@ -62,7 +62,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     private void handleClientTick() {
-        World w = Minecraft.getMinecraft().theWorld;
+        World w = Minecraft.getMinecraft().world;
         if(w != null && DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.CLIENT)) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if(handle == null) {

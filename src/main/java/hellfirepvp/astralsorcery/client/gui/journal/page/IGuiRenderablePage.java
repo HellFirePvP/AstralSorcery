@@ -48,7 +48,7 @@ public interface IGuiRenderablePage {
         ri.zLevel = zLevel;
         RenderHelper.enableGUIStandardItemLighting();
 
-        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().thePlayer, stack, offsetX, offsetY);
+        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, stack, offsetX, offsetY);
         ri.renderItemOverlayIntoGUI  (fontRenderer,                       stack, offsetX, offsetY, null);
 
         RenderHelper.disableStandardItemLighting();
@@ -72,8 +72,8 @@ public interface IGuiRenderablePage {
         wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
         drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
 
-        return new Rectangle(MathHelper.floor_float(offsetX - widthHeightBase / 2F), MathHelper.floor_float(offsetY - widthHeightBase / 2F),
-                MathHelper.floor_float(widthHeightBase), MathHelper.floor_float(widthHeightBase));
+        return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
+                MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
     }
 
     default public void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {

@@ -93,14 +93,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.update();
 
         if((ticksExisted & 15) == 0) {
-            updateSkyState(worldObj.canSeeSky(getPos()));
+            updateSkyState(world.canSeeSky(getPos()));
         }
 
         if((ticksExisted & 15) == 0) {
             if(matchLevel(false)) markForUpdate();
         }
 
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             boolean needUpdate = false;
 
             needUpdate = starlightPassive(needUpdate);
@@ -244,7 +244,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             /*for (EnumFacing dir : EnumFacing.VALUES) { FIXME Item capability system break here :|
                 if(dir == EnumFacing.UP) continue;
 
-                TileEntity te = MiscUtils.getTileAt(worldObj, pos.offset(dir), TileEntity.class, true);
+                TileEntity te = MiscUtils.getTileAt(world, pos.offset(dir), TileEntity.class, true);
                 if(te != null) {
                     IItemHandler handle = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
                     if(handle != null) {
@@ -256,7 +256,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
             }*/
             if(out.stackSize > 0) {
-                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
+                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
 
@@ -316,7 +316,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         level = to;
         experience = 0;
         mbState = false;
-        worldObj.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
+        world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
 
     @Override
@@ -386,7 +386,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @Override
     public void onInteract(World world, BlockPos pos, EntityPlayer player, EnumFacing side, boolean sneaking) {
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
                 if(!matchDownMultiblocks(altarRecipe.getNeededLevel()) || !altarRecipe.matches(this, getInventoryHandler())) {

@@ -53,7 +53,7 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
     }
 
     private void checkIncreaseConditions() {
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             if(canCraft()) {
                 spawnCraftingParticles();
             }
@@ -70,11 +70,11 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
     }
 
     private void craftCrystal() {
-        worldObj.setBlockToAir(getPosition());
-        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectEntities(Entity.class));
+        world.setBlockToAir(getPosition());
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectEntities(Entity.class));
         if(foundItems.size() <= 0) {
             setDead();
-            ItemUtils.dropItemNaturally(worldObj, posX, posY, posZ, ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+            ItemUtils.dropItemNaturally(world, posX, posY, posZ, ItemCraftingComponent.MetaType.RESO_GEM.asStack());
         }
     }
 
@@ -94,7 +94,7 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
     private boolean canCraft() {
         if(!isInLiquidStarlight(this)) return false;
 
-        List<Entity> foundEntities = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
+        List<Entity> foundEntities = world.getEntitiesInAABBexcluding(this, boxCraft.offset(getPosition()), EntityUtils.selectEntities(Entity.class));
         return foundEntities.size() <= 0;
     }
 

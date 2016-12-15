@@ -30,7 +30,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     @Override
     public void update() {
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             if(tickWheelAnimation > 0) {
                 prevTickWheelAnimation = tickWheelAnimation;
                 tickWheelAnimation--;
@@ -48,16 +48,16 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     public void playWheelEffect() {
         PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.EffectType.GRINDSTONE_WHEEL, getPos());
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             playWheelAnimation(effect);
         } else {
-            PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(worldObj, getPos(), 32));
+            PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, getPos(), 32));
         }
     }
 
     @SideOnly(Side.CLIENT)
     public static void playWheelAnimation(PktPlayEffect pktPlayEffect) {
-        TileGrindstone tgr = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, pktPlayEffect.pos, TileGrindstone.class, false);
+        TileGrindstone tgr = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pktPlayEffect.pos, TileGrindstone.class, false);
         if(tgr != null) {
             if(tgr.tickWheelAnimation == 0) {
                 tgr.tickWheelAnimation = TICKS_WHEEL_ROTATION;

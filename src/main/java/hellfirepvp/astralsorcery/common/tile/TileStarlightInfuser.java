@@ -81,7 +81,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             updateMultiblockState();
         }
 
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             if(doTryCraft()) {
                 markForUpdate();
             }
@@ -145,12 +145,12 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         this.stack = null;
         if(out != null) {
             if(out.stackSize > 0) {
-                ItemUtils.dropItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
+                ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
         for (BlockPos offset : offsetsLiquidStarlight) {
-            if(worldObj.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
-                worldObj.setBlockToAir(getPos().add(offset));
+            if(world.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
+                world.setBlockToAir(getPos().add(offset));
             }
         }
         craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
@@ -159,7 +159,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternStarlightInfuser.matches(worldObj, getPos());
+        boolean found = MultiBlockArrays.patternStarlightInfuser.matches(world, getPos());
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
@@ -168,7 +168,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     }
 
     private void updateSkyState() {
-        boolean seesSky = worldObj.canSeeSky(getPos());
+        boolean seesSky = world.canSeeSky(getPos());
         boolean update = doesSeeSky != seesSky;
         this.doesSeeSky = seesSky;
         if(update) {
@@ -293,7 +293,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                             getPos().getZ() + 0.5,
                             stack);
                     stack = null;
-                    worldObj.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                     markForUpdate();
                 }
             } else {
@@ -304,7 +304,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                         if(heldItem.stackSize <= 0) {
                             playerIn.setHeldItem(heldHand, null);
                         }
-                        worldObj.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                         markForUpdate();
                     }/* else if(heldItem.getItem() instanceof ItemWand) {
                         findRecipe(playerIn);

@@ -3,12 +3,14 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
+import hellfirepvp.astralsorcery.client.util.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.event.ClientKeyboardInputEvent;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
@@ -23,9 +25,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -45,7 +49,7 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         if (world.provider.getDimension() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
             world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
         }
@@ -53,16 +57,33 @@ public class ClientRenderEventHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
+    public void onKey(ClientKeyboardInputEvent event) {
+        if(ClientCameraManager.getInstance().hasActiveTransformer()) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onMouse(MouseEvent event) {
+        if(ClientCameraManager.getInstance().hasActiveTransformer()) {
+            event.setCanceled(true);
+        }
+    }
+
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onHighlight(DrawBlockHighlightEvent event) {
         RayTraceResult res = event.getTarget();
         if(res.typeOfHit == RayTraceResult.Type.BLOCK && res.getBlockPos() != null) {
             BlockPos bp = res.getBlockPos();
-            IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
+            IBlockState state = Minecraft.getMinecraft().world.getBlockState(bp);
             if(state.getBlock() instanceof BlockStructural && state.getValue(BlockStructural.BLOCK_TYPE).equals(BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT)) {
                 bp = bp.down();
-                state = Minecraft.getMinecraft().theWorld.getBlockState(bp);
+                state = Minecraft.getMinecraft().world.getBlockState(bp);
             }
-            TileAttunementAltar taa = MiscUtils.getTileAt(Minecraft.getMinecraft().theWorld, bp, TileAttunementAltar.class, false);
+            TileAttunementAltar taa = MiscUtils.getTileAt(Minecraft.getMinecraft().world, bp, TileAttunementAltar.class, false);
             if(state.getBlock().equals(BlocksAS.attunementAltar) && taa != null) {
                 EntityPlayer pl = event.getPlayer();
                 IMajorConstellation held = null;

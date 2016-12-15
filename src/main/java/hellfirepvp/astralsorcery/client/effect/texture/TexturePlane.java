@@ -158,7 +158,7 @@ public class TexturePlane implements IComplexEffect {
         if(maxAge >= 0 && counter >= maxAge) {
             if(refreshFunc != null) {
                 Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-                if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+                if(rView == null) rView = Minecraft.getMinecraft().player;
                 if(rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()) <= Config.maxEffectRenderDistanceSq) {
                     if(refreshFunc.shouldRefresh()) {
                         counter = 0;

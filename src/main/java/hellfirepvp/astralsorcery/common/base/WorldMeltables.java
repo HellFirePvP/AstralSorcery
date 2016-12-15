@@ -27,7 +27,7 @@ public enum WorldMeltables {
     OBSIDIAN(   new BlockStateCheck.Block(Blocks.OBSIDIAN),        Blocks.FLOWING_LAVA.getDefaultState(),  300),
     NETHERRACK( new BlockStateCheck.Block(Blocks.NETHERRACK),      Blocks.FLOWING_LAVA.getDefaultState(),  90),
     NETHERBRICK(new BlockStateCheck.Block(Blocks.NETHER_BRICK),    Blocks.FLOWING_LAVA.getDefaultState(),  140),
-    MAGMA(      new BlockStateCheck.Block(Blocks.field_189877_df), Blocks.FLOWING_LAVA.getDefaultState(),  2),
+    MAGMA(      new BlockStateCheck.Block(Blocks.MAGMA),           Blocks.FLOWING_LAVA.getDefaultState(),  2),
     SAND(       new BlockStateCheck.Block(Blocks.SAND),            Blocks.GLASS.getDefaultState(),         20),
     ICE(        new BlockStateCheck.Block(Blocks.ICE),             Blocks.FLOWING_WATER.getDefaultState(), 10),
     FROSTED_ICE(new BlockStateCheck.Block(Blocks.FROSTED_ICE),     Blocks.FLOWING_WATER.getDefaultState(), 20),

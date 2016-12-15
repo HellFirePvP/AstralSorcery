@@ -16,7 +16,7 @@ public interface ITickHandler {
     public void tick(TickEvent.Type type, Object... context);
 
     /**
-     * WORLD, context: worldObj
+     * WORLD, context: world
      * SERVER, context:
      * CLIENT, context:
      * RENDER, context: pTicks

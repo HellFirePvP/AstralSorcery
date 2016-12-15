@@ -72,7 +72,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         public List<ItemStack> getHerdingDropsTick(EntityPolarBear entity, World world, Random rand, float herdingLuck) {
             LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
             builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
-            return world.getLootTableManager().getLootTableFromLocation(LootTableList.field_189969_E).generateLootForPools(rand, builder.build());
+            return world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_POLAR_BEAR).generateLootForPools(rand, builder.build());
         }
     }
 

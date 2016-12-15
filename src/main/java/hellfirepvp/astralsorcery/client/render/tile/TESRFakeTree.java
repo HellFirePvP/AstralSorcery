@@ -68,7 +68,7 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
         IBlockState renderState = te.getFakedState();
         if(te.getFakedState() == null) return;
 
-        ItemStack i = renderState.getBlock().getPickBlock(renderState, new RayTraceResult(Vec3d.ZERO, EnumFacing.UP, te.getPos()), Minecraft.getMinecraft().theWorld, te.getPos(), Minecraft.getMinecraft().thePlayer);
+        ItemStack i = renderState.getBlock().getPickBlock(renderState, new RayTraceResult(Vec3d.ZERO, EnumFacing.UP, te.getPos()), Minecraft.getMinecraft().world, te.getPos(), Minecraft.getMinecraft().player);
         if(i != null) {
             blocks.add(new TranslucentBlockState(i, te.getPos()));
         }

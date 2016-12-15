@@ -81,9 +81,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             if((ticksExisted & 15) == 0) {
-                updateSkyState(worldObj.canSeeSky(getPos()));
+                updateSkyState(world.canSeeSky(getPos()));
             }
 
             if((ticksExisted & 31) == 0) {
@@ -97,7 +97,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     recNode.updateSkyState(doesSeeSky);
                     recNode.updateMultiblockState(hasMultiblock);
 
-                    recNode.markDirty(worldObj);
+                    recNode.markDirty(world);
                 }
                 markForUpdate();
             }
@@ -113,8 +113,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
         }
 
-        if(worldObj.isRemote && working) {
-            float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldObj);
+        if(world.isRemote && working) {
+            float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
             alphaDaytime *= 0.8F;
             boolean isDay = alphaDaytime <= 1E-4;
 
@@ -145,7 +145,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
-                        ce.playClientEffect(worldObj, getPos(), this, percRunning, shouldDoAdditionalEffects());
+                        ce.playClientEffect(world, getPos(), this, percRunning, shouldDoAdditionalEffects());
                     }
                 }
             }
@@ -168,7 +168,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternRitualPedestal.matches(worldObj, getPos());
+        boolean found = MultiBlockArrays.patternRitualPedestal.matches(world, getPos());
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
@@ -229,7 +229,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @Override
     public void onLoad() {
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             TransmissionReceiverRitualPedestal ped = getUpdateCache();
             if(ped != null) {
                 offsetMirrorPositions.clear();
@@ -256,7 +256,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @Override
     protected void onInventoryChanged(int slotChanged) {
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             ItemStack in = getInventoryHandler().getStackInSlot(0);
             if(in != null && in.getItem() != null &&
                     in.getItem() instanceof ItemTunedCrystalBase) {
@@ -265,18 +265,18 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 IMinorConstellation trait = ItemTunedCrystalBase.getTrait(in);
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
-                    recNode.updateCrystalProperties(worldObj, properties, tuned, trait);
+                    recNode.updateCrystalProperties(world, properties, tuned, trait);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
-                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
+                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
                 }
             } else {
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
-                    recNode.updateCrystalProperties(worldObj, null, null, null);
+                    recNode.updateCrystalProperties(world, null, null, null);
                 } else {
                     AstralSorcery.log.warn("[AstralSorcery] Updated inventory and tried to update pedestal state.");
-                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + worldObj.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
+                    AstralSorcery.log.warn("[AstralSorcery] Tried to find receiver node at dimId=" + world.provider.getDimension() + " pos=" + getPos() + " - couldn't find it.");
                 }
             }
             markForUpdate();
@@ -497,7 +497,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             double maxDrain = 20D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
-            int executeTimes = MathHelper.floor_double(collectionChannelBuffer / maxDrain);
+            int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);
             boolean consumeCompletely = executeTimes == 0;
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleTrait()) {
@@ -528,7 +528,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             double maxDrain = 20D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
-            int executeTimes = MathHelper.floor_double(collectionChannelBuffer / maxDrain);
+            int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);
             boolean consumeCompletely = executeTimes == 0;
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleMain()) {

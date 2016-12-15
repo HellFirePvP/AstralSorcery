@@ -1,12 +1,19 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHandSide;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.TreeSet;
 
@@ -77,6 +84,10 @@ public class ClientCameraManager implements ITickHandler {
         }
         transformers.clear();
     }
+    
+    public boolean hasActiveTransformer() {
+        return !transformers.isEmpty();
+    }
 
     public static interface ICameraTransformer {
 
@@ -129,25 +140,38 @@ public class ClientCameraManager implements ITickHandler {
 
     }
 
-    public static class EntityRenderViewReplacement extends Entity {
+    public static class EntityRenderViewReplacement extends EntityLivingBase {
 
         public EntityRenderViewReplacement() {
-            super(Minecraft.getMinecraft().theWorld);
+            super(Minecraft.getMinecraft().world);
         }
 
         public void setAsRenderViewEntity() {
             Minecraft.getMinecraft().setRenderViewEntity(this);
         }
 
-        @Override
-        protected void entityInit() {}
+        public void transformToFocusOnPoint(Vector3 toFocus, float pTicks) {
+
+        }
 
         @Override
-        protected void readEntityFromNBT(NBTTagCompound compound) {}
+        public Iterable<ItemStack> getArmorInventoryList() {
+            return Collections.emptyList();
+        }
+
+        @Nullable
+        @Override
+        public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
+            return null;
+        }
 
         @Override
-        protected void writeEntityToNBT(NBTTagCompound compound) {}
+        public void setItemStackToSlot(EntityEquipmentSlot slotIn, @Nullable ItemStack stack) {}
 
+        @Override
+        public EnumHandSide getPrimaryHand() {
+            return EnumHandSide.RIGHT;
+        }
     }
 
 }

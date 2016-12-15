@@ -219,7 +219,7 @@ public class RenderConstellation {
                 for (StarConnection sc : c.getStarConnections()) {
                     float brightness = func.getBrightness();
                     if (applyStarBrightness) {
-                        float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
+                        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
                         if (starBr <= 0.23F) {
                             continue;
                         }
@@ -256,7 +256,7 @@ public class RenderConstellation {
 
             float brightness = func.getBrightness();
             if (applyStarBrightness) {
-                float starBr = Minecraft.getMinecraft().theWorld.getStarBrightness(1.0F);
+                float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
                 if (starBr <= 0.23F) {
                     continue;
                 }

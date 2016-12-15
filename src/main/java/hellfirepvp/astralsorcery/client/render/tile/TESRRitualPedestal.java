@@ -71,7 +71,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
         float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
         if(percRunning > 1E-4) {
             TextureSpritePlane sprite = te.getHaloEffectSprite();
-            float alphaMul = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+            float alphaMul = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
             sprite.setAlphaMultiplier(percRunning * alphaMul);
         }
     }

@@ -106,7 +106,7 @@ public class EffectLightbeam implements IComplexEffect {
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
 
         for (EffectLightbeam beam : beams) {
             if(rView.getDistanceSq(beam.from.getX(), beam.from.getY(), beam.from.getZ()) > Config.maxEffectRenderDistanceSq) return;
@@ -135,7 +135,7 @@ public class EffectLightbeam implements IComplexEffect {
     @Override
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > Config.maxEffectRenderDistanceSq) return;
 
         float halfAge = maxAge / 2F;

@@ -29,7 +29,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     public void update() {
         super.update();
 
-        if(worldObj.isRemote && getLinkedPositions().size() > 0) {
+        if(world.isRemote && getLinkedPositions().size() > 0) {
             playPrismEffects();
         }
     }
@@ -37,7 +37,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     @SideOnly(Side.CLIENT)
     private void playPrismEffects() {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());

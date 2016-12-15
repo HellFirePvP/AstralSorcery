@@ -65,7 +65,7 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
 
     public static void sendOpenCraftingTable(EntityPlayer player, BlockPos at) {
         EntityPlayerMP mp = (EntityPlayerMP) player;
-        BlockWorkbench.InterfaceCraftingTable containerInterface = new BlockWorkbench.InterfaceCraftingTable(mp.worldObj, at);
+        BlockWorkbench.InterfaceCraftingTable containerInterface = new BlockWorkbench.InterfaceCraftingTable(mp.world, at);
         mp.getNextWindowId();
         int guiId = mp.currentWindowId;
         PacketChannel.CHANNEL.sendTo(new PktCraftingTableFix(at, guiId), mp);
@@ -90,8 +90,8 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
 
         @Override
         public void run() {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-            GuiCrafting gui = new GuiCrafting(player.inventory, player.worldObj, message.at);
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            GuiCrafting gui = new GuiCrafting(player.inventory, player.world, message.at);
             Minecraft.getMinecraft().displayGuiScreen(gui);
             player.openContainer.windowId = message.guiId;
         }

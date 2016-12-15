@@ -50,7 +50,7 @@ public class EntityGrindstone extends EntityLivingBase {
     public void onUpdate() {
         super.onUpdate();
 
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             if(tickWheelAnimation >= 0) {
                 prevTickWheelAnimation = tickWheelAnimation;
                 tickWheelAnimation--;
@@ -85,10 +85,10 @@ public class EntityGrindstone extends EntityLivingBase {
             return EnumActionResult.SUCCESS;
         }
         ItemStack grind = getGrindItem();
-        if(!worldObj.isRemote) {
+        if(!world.isRemote) {
             if(grind != null) {
                 if(player.isSneaking()) {
-                    ItemUtils.dropItem(worldObj, posX, posY + 1.3F, posZ, grind);
+                    ItemUtils.dropItem(world, posX, posY + 1.3F, posZ, grind);
 
                     setGrindItem(null);
                 } else {
@@ -104,7 +104,7 @@ public class EntityGrindstone extends EntityLivingBase {
                                 break;
                             case FAIL_BREAK_ITEM:
                                 setGrindItem(null);
-                                worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                                world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                                 break;
                         }
                     } else if(i instanceof ItemSword) {
@@ -117,7 +117,7 @@ public class EntityGrindstone extends EntityLivingBase {
                 if(player.isSneaking()) {
                     setDead();
                     if(!player.isCreative()) {
-                        //ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()));
+                        //ItemUtils.dropItemNaturally(world, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.GRINDSTONE.getMeta()));
                     }
                 } else {
                     if(stack != null) {
@@ -126,7 +126,7 @@ public class EntityGrindstone extends EntityLivingBase {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
                             setGrindItem(toSet);
-                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                            world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                             if(!player.isCreative()) {
                                 stack.stackSize--;
@@ -135,7 +135,7 @@ public class EntityGrindstone extends EntityLivingBase {
                             ItemStack toSet = stack.copy();
                             toSet.stackSize = 1;
                             setGrindItem(toSet);
-                            worldObj.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, worldObj.rand.nextFloat() * 0.2F + 0.8F);
+                            world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.AMBIENT, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                             if(!player.isCreative()) {
                                 stack.stackSize--;
@@ -150,7 +150,7 @@ public class EntityGrindstone extends EntityLivingBase {
                 if(i instanceof IGrindable) {
                     if(((IGrindable) i).canGrind(this, grind)) {
                         for (int j = 0; j < 12; j++) {
-                            worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
+                            world.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
                                     (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5);
@@ -159,7 +159,7 @@ public class EntityGrindstone extends EntityLivingBase {
                     }
                 } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
                     for (int j = 0; j < 12; j++) {
-                        worldObj.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
+                        world.spawnParticle(EnumParticleTypes.CRIT, posX, posY + 0.9, posZ - 0.75,
                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5,
                                 (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.5);
@@ -175,17 +175,17 @@ public class EntityGrindstone extends EntityLivingBase {
     public void onDeath(DamageSource cause) {
         ItemStack grind = getGrindItem();
         if(grind != null) {
-            ItemUtils.dropItem(worldObj, posX, posY + 1.3F, posZ, grind);
+            ItemUtils.dropItem(world, posX, posY + 1.3F, posZ, grind);
         }
         super.onDeath(cause);
     }
 
     public void playWheelEffect() {
         /*PktPlayEffect effect = new PktPlayEffect(PktPlayEffect.EffectType.GRINDSTONE_WHEEL, this);
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             playWheelAnimation(effect);
         } else {
-            PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(worldObj, getPosition(), 32));
+            PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, getPosition(), 32));
         }*/
     }
 

@@ -107,7 +107,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         double velX = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double velY = rand.nextFloat() * 0.2F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
-        double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().theWorld);
+        double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
         for (int i = 0; i < 10; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(x, y, z);
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);

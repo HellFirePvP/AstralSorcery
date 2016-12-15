@@ -62,7 +62,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     }
 
     private void checkMergeConditions() {
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             if(canCraft()) {
                 spawnCraftingParticles();
             }
@@ -80,11 +80,11 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
 
     private void buildCelestialCrystals() {
         PacketChannel.CHANNEL.sendToAllAround(new PktParticleEvent(PktParticleEvent.ParticleEventType.CELESTIAL_CRYSTAL_FORM, posX, posY, posZ),
-                PacketChannel.pointFromPos(worldObj, getPosition(), 64));
+                PacketChannel.pointFromPos(world, getPosition(), 64));
 
-        worldObj.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState());
+        world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState());
         getEntityItem().stackSize--;
-        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         if(foundItems.size() > 0) {
             EntityItem ei = (EntityItem) foundItems.get(0);
             ItemStack stack = ei.getEntityItem();
@@ -118,7 +118,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     private boolean canCraft() {
         if(!isInLiquidStarlight(this)) return false;
 
-        List<Entity> foundItems = worldObj.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         return foundItems.size() > 0;
     }
 

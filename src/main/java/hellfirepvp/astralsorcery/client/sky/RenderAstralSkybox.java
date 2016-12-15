@@ -236,7 +236,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     private void renderSky(float partialTicks) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        Vec3d vec3 = Minecraft.getMinecraft().theWorld.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+        Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
         float f = (float) vec3.xCoord;
         float f1 = (float) vec3.yCoord;
         float f2 = (float) vec3.zCoord;
@@ -261,13 +261,13 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
         RenderHelper.disableStandardItemLighting();
-        float[] sunsetColors = Minecraft.getMinecraft().theWorld.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks), partialTicks);
+        float[] sunsetColors = Minecraft.getMinecraft().world.provider.calcSunriseSunsetColors(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks), partialTicks);
         if (sunsetColors != null) {
             renderSunsetToBackground(sunsetColors, partialTicks);
         }
         renderDefaultCelestials(partialTicks);
 
-        double absPlayerHorizon = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().theWorld.getHorizon();
+        double absPlayerHorizon = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().world.getHorizon();
         if (absPlayerHorizon < 0.0D) {
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, 12.0F, 0.0F);
@@ -298,7 +298,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             tessellator.draw();
         }
 
-        if (Minecraft.getMinecraft().theWorld.provider.isSkyColored()) {
+        if (Minecraft.getMinecraft().world.provider.isSkyColored()) {
             GL11.glColor4f(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F, 1.0F);
         } else {
             GL11.glColor4f(f, f1, f2, 1.0F);
@@ -318,13 +318,13 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glPushMatrix();
 
         //Bind alpha according to rain strength - if it rains "completely", moon, sun and stars are not rendered.
-        float alphaSubRain = 1.0F - Minecraft.getMinecraft().theWorld.getRainStrength(partialTicks);
+        float alphaSubRain = 1.0F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, alphaSubRain);
 
         GL11.glRotatef(-90F, 0F, 1F, 0F);
-        GL11.glRotatef(Minecraft.getMinecraft().theWorld.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GL11.glRotatef(Minecraft.getMinecraft().world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
 
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().theWorld);
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         if(handle != null && handle.getCurrentlyActiveEvent() == CelestialEvent.SOLAR_ECLIPSE) {
             renderSolarEclipseSun(handle);
         } else {
@@ -348,9 +348,9 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDepthMask(false);
 
-        renderStars(Minecraft.getMinecraft().theWorld, partialTicks);
+        renderStars(Minecraft.getMinecraft().world, partialTicks);
 
-        renderConstellations(Minecraft.getMinecraft().theWorld, partialTicks);
+        renderConstellations(Minecraft.getMinecraft().world, partialTicks);
 
         /*Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
@@ -470,7 +470,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
-        int i = Minecraft.getMinecraft().theWorld.getMoonPhase();
+        int i = Minecraft.getMinecraft().world.getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
         float maxU = (float) (k) / 4.0F;
@@ -530,7 +530,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glPushMatrix();
         GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(MathHelper.sin(Minecraft.getMinecraft().theWorld.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+        GL11.glRotatef(MathHelper.sin(Minecraft.getMinecraft().world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
         GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
         float f6 = sunsetColors[0];
         float f7 = sunsetColors[1];

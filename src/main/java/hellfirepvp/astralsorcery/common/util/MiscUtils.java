@@ -49,7 +49,7 @@ public class MiscUtils {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();
         Vec3d end = pos.addVector(lookVec.xCoord * reachDst, lookVec.yCoord * reachDst, lookVec.zCoord * reachDst);
-        return entity.worldObj.rayTraceBlocks(pos, end);
+        return entity.world.rayTraceBlocks(pos, end);
     }
 
     public static Color calcRandomConstellationColor(float perc) {

@@ -201,7 +201,7 @@ public class GuiProgressionClusterRenderer {
         double zoomedWH = partSizeHandler.getZoomedWHNode();
 
         if(partSizeHandler.getScalingFactor() >= 0.7) {
-            clickableNodes.put(new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(zoomedWH), MathHelper.floor_double(zoomedWH)), node);
+            clickableNodes.put(new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(zoomedWH), MathHelper.floor(zoomedWH)), node);
         }
 
         drawResearchItemBackground(zoomedWH, xAdd, yAdd, zLevel);

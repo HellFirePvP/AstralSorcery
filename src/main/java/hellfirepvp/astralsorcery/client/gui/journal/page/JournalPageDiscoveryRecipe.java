@@ -118,7 +118,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             for (Rectangle rect : thisFrameStackFrames.keySet()) {
                 if(rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
-                    tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                    tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
                 }
             }
         }

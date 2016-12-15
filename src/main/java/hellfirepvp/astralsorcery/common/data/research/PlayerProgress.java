@@ -72,7 +72,7 @@ public class PlayerProgress {
 
         if (compound.hasKey("tierReached")) {
             int tierOrdinal = compound.getInteger("tierReached");
-            tierReached = ProgressionTier.values()[MathHelper.clamp_int(tierOrdinal, 0, ProgressionTier.values().length - 1)];
+            tierReached = ProgressionTier.values()[MathHelper.clamp(tierOrdinal, 0, ProgressionTier.values().length - 1)];
         }
 
         if (compound.hasKey("research")) {
@@ -195,7 +195,7 @@ public class PlayerProgress {
     protected void receive(PktSyncKnowledge message) {
         this.knownConstellations = message.knownConstellations;
         this.researchProgression = message.researchProgression;
-        this.tierReached = ProgressionTier.values()[MathHelper.clamp_int(message.progressTier, 0, ProgressionTier.values().length - 1)];
+        this.tierReached = ProgressionTier.values()[MathHelper.clamp(message.progressTier, 0, ProgressionTier.values().length - 1)];
         this.attunedConstellation = message.attunedConstellation;
         this.appliedPerks = message.appliedPerks;
         this.perkExperience = message.perkExperience;

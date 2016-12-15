@@ -72,7 +72,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     public void update() {
         super.update();
 
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
             renderEffects();
         } else {
             if(getTicksExisted() % 10 == 0) {
@@ -108,7 +108,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         for (int xx = -7; xx <= 7; xx++) {
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
-                if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(other))) {
+                if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
                     boolean see = itDown(other) <= other.getY() + 1;
                     unloadCache.put(other, see);
                     if(!see) {
@@ -142,7 +142,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         mut.setPos(xzPos);
         for (int i = 255; i >= 0; i--) {
             mut.setY(i);
-            if(!worldObj.isAirBlock(mut)) {
+            if(!world.isAirBlock(mut)) {
                 mut.release();
                 return i;
             }
@@ -151,7 +151,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     private void updateMultiblockState() {
-        boolean found = MultiBlockArrays.patternAttunementFrame.matches(worldObj, getPos());
+        boolean found = MultiBlockArrays.patternAttunementFrame.matches(world, getPos());
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
@@ -164,7 +164,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         boolean valid = true;
         for (BlockPos pos : positions) {
             if(pos.equals(getPos())) continue;
-            IBlockState state = worldObj.getBlockState(pos);
+            IBlockState state = world.getBlockState(pos);
             if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                 valid = false;
             }
@@ -182,7 +182,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             boolean valid = true;
             for (BlockPos pos : positions) {
                 if(pos.equals(getPos())) continue;
-                IBlockState state = worldObj.getBlockState(pos);
+                IBlockState state = world.getBlockState(pos);
                 if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
                     valid = false;
                 }

@@ -62,7 +62,7 @@ public class GuiAltarAttunement extends GuiAltarBase {
             GL11.glTranslated(190, 35, 0);
             GL11.glScaled(2.5, 2.5, 2.5);
 
-            itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
+            itemRender.renderItemAndEffectIntoGUI(mc.player, out, 0, 0);
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
 
             GL11.glPopMatrix();
@@ -93,7 +93,7 @@ public class GuiAltarAttunement extends GuiAltarBase {
             RenderConstellation.renderConstellationIntoGUI(c, 10, 20, zLevel, 70, 70, 2, new RenderConstellation.BrightnessFunction() {
                 @Override
                 public float getBrightness() {
-                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().theWorld.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5));
+                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5));
                 }
             }, true, false);
 

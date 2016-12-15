@@ -55,7 +55,7 @@ public class SoundUtils {
 
         @SideOnly(Side.CLIENT)
         private EntityPlayer getClientPlayer() {
-            return Minecraft.getMinecraft().thePlayer;
+            return Minecraft.getMinecraft().player;
         }
 
     }*/

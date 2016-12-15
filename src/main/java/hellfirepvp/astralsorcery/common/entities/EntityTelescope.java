@@ -45,15 +45,15 @@ public class EntityTelescope extends EntityLivingBase {
     @Override
     public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, ItemStack stack, EnumHand hand) {
         if(player.isSneaking()) {
-            if(!worldObj.isRemote) {
+            if(!world.isRemote) {
                 setDead();
                 if(!player.isCreative()) {
-                    //ItemUtils.dropItemNaturally(worldObj, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()));
+                    //ItemUtils.dropItemNaturally(world, posX, posY + 0.3, posZ, new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()));
                 }
             }
         } else {
-            if (player.worldObj.isRemote) {
-                AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.worldObj, getEntityId(), 0, 0);
+            if (player.world.isRemote) {
+                AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, getEntityId(), 0, 0);
             }
         }
 

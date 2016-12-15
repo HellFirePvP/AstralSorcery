@@ -28,7 +28,7 @@ public class TileFakeTree extends TileEntityTick {
     public void update() {
         super.update();
 
-        if(worldObj.isRemote) {
+        if(world.isRemote) {
 
         } else {
             if(ticksExisted > 5 && ticksExisted % 4 == 0) {
@@ -40,8 +40,8 @@ public class TileFakeTree extends TileEntityTick {
                     cleanUp();
                     return;
                 }
-                if(MiscUtils.isChunkLoaded(worldObj, new ChunkPos(reference))) {
-                    /*TileRitualPedestal ped = MiscUtils.getTileAt(worldObj, reference, TileRitualPedestal.class, true);
+                if(MiscUtils.isChunkLoaded(world, new ChunkPos(reference))) {
+                    /*TileRitualPedestal ped = MiscUtils.getTileAt(world, reference, TileRitualPedestal.class, true);
                     if(ped != null) {
                         IMajorConstellation c = ped.getRitualConstellation();
                         if (c == null || !c.equals(SUSTAIN_CONSTELLATION) || !ped.isWorking() || !ped.hasMultiblock()) {
@@ -58,9 +58,9 @@ public class TileFakeTree extends TileEntityTick {
 
     private void cleanUp() {
         if(fakedState != null) {
-            worldObj.setBlockState(getPos(), fakedState);
+            world.setBlockState(getPos(), fakedState);
         } else {
-            worldObj.setBlockToAir(getPos());
+            world.setBlockToAir(getPos());
         }
     }
 

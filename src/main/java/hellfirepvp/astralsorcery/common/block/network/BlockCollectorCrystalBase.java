@@ -67,7 +67,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
+    public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
         return true;
     }
 

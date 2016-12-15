@@ -185,7 +185,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     }
 
     protected static Rectangle drawConstellationRect(IConstellation display, double offsetX, double offsetY, float zLevel, Point mouse, @Nullable String specTitle) {
-        Rectangle rect = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), width, height);
+        Rectangle rect = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), width, height);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glTranslated(offsetX + (width / 2), offsetY + (width / 2), zLevel);

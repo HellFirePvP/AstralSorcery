@@ -377,6 +377,17 @@ public class Vector3 {
         return new Vector3(tX - x, tY - y, tZ - z);
     }
 
+    //copy & converts to polar coordinates
+    //Order: Distance, Tetha, Phi
+    public Vector3 toPolar() {
+        double length = length();
+        double thetha = Math.acos(y / length);
+        double phi = Math.atan2(x, z);
+        thetha = Math.toDegrees(thetha);
+        phi = 180 + Math.toDegrees(phi);
+        return new Vector3(length, thetha, phi);
+    }
+
     public double getX() {
         return this.x;
     }

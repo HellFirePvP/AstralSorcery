@@ -69,14 +69,14 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     public void update() {
         super.update();
 
-        if(!worldObj.isRemote) {
-            if(worldObj.canSeeSky(getPos())) {
-                starlightBuffer += Math.max(0.0001, ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldObj));
+        if(!world.isRemote) {
+            if(world.canSeeSky(getPos())) {
+                starlightBuffer += Math.max(0.0001, ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
             }
 
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
             if(stack != null) {
-                if(!worldObj.isAirBlock(getPos().up())) {
+                if(!world.isAirBlock(getPos().up())) {
                     breakCatalyst();
                 } else {
                     if(stack.getItem() != null && stack.getItem() instanceof ItemWellCatalyst) {
@@ -115,7 +115,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     public void breakCatalyst() {
         getInventoryHandler().setStackInSlot(0, null);
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK, getPos().getX(), getPos().getY(), getPos().getZ());
-        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(worldObj, getPos(), 32));
+        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPos(), 32));
     }
 
     @SideOnly(Side.CLIENT)
@@ -132,7 +132,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     private void doCatalystEffect(Color color) {
         if(rand.nextInt(6) == 0) {
             Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-            if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+            if(rView == null) rView = Minecraft.getMinecraft().player;
             if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5);
             p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1, rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
@@ -224,7 +224,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Nullable
     @Override
     public FluidStack getContents() {
-        return new FluidStack(BlocksAS.fluidLiquidStarlight, MathHelper.floor_double(mbStarlightAmount));
+        return new FluidStack(BlocksAS.fluidLiquidStarlight, MathHelper.floor(mbStarlightAmount));
     }
 
     @Override

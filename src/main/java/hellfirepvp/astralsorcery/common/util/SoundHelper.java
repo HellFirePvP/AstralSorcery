@@ -62,7 +62,7 @@ public class SoundHelper {
 
     @SideOnly(Side.CLIENT)
     public static void playSoundClient(SoundEvent sound, float volume, float pitch) {
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
         player.playSound(sound, volume, pitch);
     }
 

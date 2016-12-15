@@ -207,7 +207,7 @@ public class EventHandlerServer {
             lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - lb.posZ);
         }
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity));
-        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.worldObj, entity.getPosition(), 32));
+        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.world, entity.getPosition(), 32));
 
         MinecraftServer server = entity.getServer();
         if(server != null) {
@@ -310,7 +310,7 @@ public class EventHandlerServer {
             EntityItem ei = (EntityItem) joined;
             if (ei.getEntityItem() != null && (ei.getEntityItem().getAttItem() instanceof ItemHighlighted)) {
                 ei.setDead();
-                EntityItemHighlighted newItem = new EntityItemHighlighted(ei.worldObj, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
+                EntityItemHighlighted newItem = new EntityItemHighlighted(ei.world, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
                 ItemHighlighted i = (ItemHighlighted) ei.getEntityItem().getAttItem();
                 newItem.applyColor(i.getHightlightColor(ei.getEntityItem()));
                 newItem.motionX = ei.motionX;

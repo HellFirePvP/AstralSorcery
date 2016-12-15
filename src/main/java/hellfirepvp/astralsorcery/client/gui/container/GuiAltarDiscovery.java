@@ -52,7 +52,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
             GL11.glTranslated(130, 20, 0);
             GL11.glScaled(1.7, 1.7, 1.7);
 
-            itemRender.renderItemAndEffectIntoGUI(mc.thePlayer, out, 0, 0);
+            itemRender.renderItemAndEffectIntoGUI(mc.player, out, 0, 0);
             itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
 
             GL11.glPopMatrix();

@@ -58,8 +58,8 @@ public abstract class TileEntitySynchronized extends TileEntity {
     }
 
     public void markForUpdate() {
-        IBlockState thisState = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, thisState, thisState, 3);
+        IBlockState thisState = world.getBlockState(pos);
+        world.notifyBlockUpdate(pos, thisState, thisState, 3);
         markDirty();
     }
 

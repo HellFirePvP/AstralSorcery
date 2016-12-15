@@ -79,9 +79,9 @@ public class ItemEntityPlacer extends Item {
 
     private boolean entityFits(World worldIn, BlockPos pos, Entity toSpawn) {
         BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
-        for (int xx = MathHelper.floor_double(-toSpawn.width); xx <= MathHelper.ceiling_double_int(toSpawn.width); xx++) {
-            for (int zz = MathHelper.floor_double(-toSpawn.width); zz <= MathHelper.ceiling_double_int(toSpawn.width); zz++) {
-                for (int yy = 0; yy <= MathHelper.ceiling_double_int(toSpawn.height); yy++) {
+        for (int xx = MathHelper.floor(-toSpawn.width); xx <= MathHelper.ceil(toSpawn.width); xx++) {
+            for (int zz = MathHelper.floor(-toSpawn.width); zz <= MathHelper.ceil(toSpawn.width); zz++) {
+                for (int yy = 0; yy <= MathHelper.ceil(toSpawn.height); yy++) {
                     mut.setPos(pos).add(xx, yy, zz);
                     if(!worldIn.isAirBlock(mut)) {
                         mut.release();

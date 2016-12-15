@@ -348,7 +348,7 @@ public class GuiProgressionRenderer {
         double width =  higherPosX - lowerPosX;
         double height = higherPosY - lowerPosY;
 
-        Rectangle r = new Rectangle(MathHelper.floor_double(offsetX), MathHelper.floor_double(offsetY), MathHelper.floor_double(width), MathHelper.floor_double(height));
+        Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
         clusterRectMap.put(r, p);
 
         Tessellator t = Tessellator.getInstance();

@@ -62,7 +62,7 @@ public abstract class TileReceiverBase extends TileNetwork implements IStarlight
     }
 
     public <T extends ITransmissionReceiver> T tryGetNode() {
-        IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(worldObj).getTransmissionNode(getPos());
+        IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(world).getTransmissionNode(getPos());
         if(node == null || !(node instanceof ITransmissionReceiver)) return null;
         return (T) node;
     }

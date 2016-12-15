@@ -170,7 +170,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         }
 
         public static MetaType fromMeta(int meta) {
-            int ord = MathHelper.clamp_int(meta, 0, values().length -1);
+            int ord = MathHelper.clamp(meta, 0, values().length -1);
             return values()[ord];
         }
 

@@ -94,7 +94,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         super.update();
 
         if(lensColor != null) {
-            if(worldObj.isRemote) {
+            if(world.isRemote) {
                 playColorEffects();
             } else {
                 doLensColorEffects(lensColor);
@@ -120,16 +120,16 @@ public class TileCrystalLens extends TileTransmissionBase {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to);
             if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK) {
-                boolean clear = rta.isClear(worldObj);
+                boolean clear = rta.isClear(world);
                 if(!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
-                    lensColor.onBlockOccupyingBeam(worldObj, hit, worldObj.getBlockState(hit), str);
+                    lensColor.onBlockOccupyingBeam(world, hit, world.getBlockState(hit), str);
                     this.occupiedConnections.add(hit);
                 }
             } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY) {
                 rta.setCollectEntities(0.5);
-                rta.isClear(worldObj);
-                List<EntityLivingBase> found = rta.collectedEntities(worldObj);
+                rta.isClear(world);
+                List<EntityLivingBase> found = rta.collectedEntities(world);
                 float lessStr = str / ((float) found.size());
                 for(EntityLivingBase entity : found) {
                     lensColor.onLivingEntityInBeam(entity, lessStr);
@@ -143,7 +143,7 @@ public class TileCrystalLens extends TileTransmissionBase {
     @SideOnly(Side.CLIENT)
     private void playColorEffects() {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         if(rView.getDistanceSq(getPos()) > Config.maxEffectRenderDistanceSq) return;
         Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
         EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());

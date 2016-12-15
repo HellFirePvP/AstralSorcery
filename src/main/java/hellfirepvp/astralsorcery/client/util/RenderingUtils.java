@@ -15,8 +15,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -47,7 +50,7 @@ public class RenderingUtils {
                     double d0 = (double) pos.getX() + ((double) j + 0.5D) / 4D;
                     double d1 = (double) pos.getY() + ((double) k + 0.5D) / 4D;
                     double d2 = (double) pos.getZ() + ((double) l + 0.5D) / 4D;
-                    Particle digging = diggingFactory.getEntityFX(0, Minecraft.getMinecraft().theWorld,
+                    Particle digging = diggingFactory.createParticle(0, Minecraft.getMinecraft().world,
                             d0, d1, d2,
                             d0 - (double) pos.getX() - 0.5D,
                             d1 - (double) pos.getY() - 0.5D,
@@ -73,6 +76,47 @@ public class RenderingUtils {
             rot -= 360.0F;
         }
         return prevRotation + partialTick * rot;
+    }
+
+    //Use with caution. Big block of rendering hack.
+    @Deprecated
+    public static void unsafe_preRenderHackCamera(EntityLivingBase renderView, double x, double y, double z, double prevX, double prevY, double prevZ, double yaw, double yawPrev, double pitch, double pitchPrev) {
+        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+
+        manager.setRenderPosition(x, y, z);
+        manager.viewerPosX = x;
+        manager.viewerPosY = y;
+        manager.viewerPosZ = z;
+
+        TileEntityRendererDispatcher.staticPlayerX = x;
+        TileEntityRendererDispatcher.staticPlayerY = y;
+        TileEntityRendererDispatcher.staticPlayerZ = z;
+
+        Entity rv = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rv == null || rv.equals(Minecraft.getMinecraft().player) || !(rv instanceof EntityLivingBase)) {
+            Minecraft.getMinecraft().setRenderViewEntity(renderView);
+            rv = renderView;
+        }
+        EntityLivingBase render = (EntityLivingBase) rv;
+
+        render.posX = x;
+        render.posY = y;
+        render.posZ = z;
+        render.prevPosX = prevX;
+        render.prevPosY = prevY;
+        render.prevPosZ = prevZ;
+        render.lastTickPosX = prevX;
+        render.lastTickPosY = prevY;
+        render.lastTickPosZ = prevZ;
+
+        render.rotationYawHead =     (float)yaw;
+        render.rotationYaw =         (float)yaw;
+        render.prevRotationYaw =     (float)yawPrev;
+        render.prevRotationYawHead = (float)yawPrev;
+        render.rotationPitch =       (float)pitch;
+        render.prevRotationPitch =   (float)pitchPrev;
+
+        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
     }
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {
@@ -250,7 +294,7 @@ public class RenderingUtils {
 
     public static void removeStandartTranslationFromTESRMatrix(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().thePlayer;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         Entity entity = rView;
         double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
@@ -318,7 +362,7 @@ public class RenderingUtils {
 
         Entity e = Minecraft.getMinecraft().getRenderViewEntity();
         if(e == null) {
-            e = Minecraft.getMinecraft().thePlayer;
+            e = Minecraft.getMinecraft().player;
         }
         double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
         double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
@@ -357,7 +401,7 @@ public class RenderingUtils {
 
         Entity e = Minecraft.getMinecraft().getRenderViewEntity();
         if(e == null) {
-            e = Minecraft.getMinecraft().thePlayer;
+            e = Minecraft.getMinecraft().player;
         }
         double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
         double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
