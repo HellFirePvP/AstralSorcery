@@ -366,7 +366,7 @@ public class Vector3 {
     }
 
     public BlockPos toBlockPos() {
-        return new BlockPos(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z));
+        return new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
     }
 
     public Vector3 vectorFromHereTo(Vector3 target) {
@@ -377,7 +377,7 @@ public class Vector3 {
         return new Vector3(tX - x, tY - y, tZ - z);
     }
 
-    //copy & converts to polar coordinates
+    //copy & converts to polar coordinates (in degrees)
     //Order: Distance, Tetha, Phi
     public Vector3 toPolar() {
         double length = length();

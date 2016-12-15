@@ -10,6 +10,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nullable;
@@ -39,32 +40,39 @@ public class ClientCameraManager implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        float pTicks = (float) context[0];
-        if(!transformers.isEmpty()) {
-            ICameraTransformer prio = transformers.last();
-            if(prio != lastTransformer) {
+        if(type == TickEvent.Type.RENDER) {
+            float pTicks = (float) context[0];
+            if(!transformers.isEmpty()) {
+                ICameraTransformer prio = transformers.last();
+                if(prio != lastTransformer) {
+                    if(lastTransformer != null) {
+                        lastTransformer.onStopTransforming(pTicks);
+                    }
+                    prio.onStartTransforming(pTicks);
+                    lastTransformer = prio;
+                }
+                prio.transformRenderView(pTicks);
+                if(prio.needsRemoval()) {
+                    prio.onStopTransforming(pTicks);
+                    transformers.remove(prio);
+                }
+            } else {
                 if(lastTransformer != null) {
                     lastTransformer.onStopTransforming(pTicks);
+                    lastTransformer = null;
                 }
-                prio.onStartTransforming(pTicks);
-                lastTransformer = prio;
-            }
-            prio.transformRenderView(pTicks);
-            if(prio.needsRemoval()) {
-                prio.onStopTransforming(pTicks);
-                transformers.remove(prio);
             }
         } else {
-            if(lastTransformer != null) {
-                lastTransformer.onStopTransforming(pTicks);
-                lastTransformer = null;
+            if(!transformers.isEmpty()) {
+                ICameraTransformer prio = transformers.last();
+                prio.onClientTick();
             }
         }
     }
 
     @Override
     public EnumSet<TickEvent.Type> getHandledTypes() {
-        return EnumSet.of(TickEvent.Type.RENDER);
+        return EnumSet.of(TickEvent.Type.RENDER, TickEvent.Type.CLIENT);
     }
 
     @Override
@@ -84,6 +92,10 @@ public class ClientCameraManager implements ITickHandler {
         }
         transformers.clear();
     }
+
+    public void addTransformer(ICameraTransformer transformer) {
+        this.transformers.add(transformer);
+    }
     
     public boolean hasActiveTransformer() {
         return !transformers.isEmpty();
@@ -94,6 +106,8 @@ public class ClientCameraManager implements ITickHandler {
         public int getPriority();
 
         public boolean needsRemoval();
+
+        public void onClientTick();
 
         public void onStartTransforming(float pTicks);
 
@@ -140,19 +154,106 @@ public class ClientCameraManager implements ITickHandler {
 
     }
 
-    public static class EntityRenderViewReplacement extends EntityLivingBase {
+    public static class CameraTransformerRenderReplacement extends CameraTransformerSettingsCache {
+
+        private final EntityRenderViewReplacement entity;
+        private final PersistencyFunction func;
+
+        public CameraTransformerRenderReplacement(EntityRenderViewReplacement renderView, PersistencyFunction func) {
+            this.entity = renderView;
+            this.func = func;
+        }
+
+        @Override
+        public void onStartTransforming(float pTicks) {
+            super.onStartTransforming(pTicks);
+
+            entity.setAsRenderViewEntity();
+        }
+
+        @Override
+        public void onStopTransforming(float pTicks) {
+            super.onStopTransforming(pTicks);
+
+            RenderingUtils.unsafe_resetCamera();
+        }
+
+        @Override
+        public int getPriority() {
+            return 0;
+        }
+
+        @Override
+        public void transformRenderView(float pTicks) {
+            super.transformRenderView(pTicks);
+
+            Vector3 focus = entity.getCameraFocus();
+            if(focus != null) {
+                entity.transformToFocusOnPoint(focus, pTicks, true);
+            }
+        }
+
+        @Override
+        public boolean needsRemoval() {
+            return func.needsRemoval();
+        }
+
+        @Override
+        public void onClientTick() {
+            entity.ticksExisted++;
+
+            entity.moveEntityTick(entity, entity.ticksExisted);
+        }
+
+    }
+
+    public static interface PersistencyFunction {
+
+        public boolean needsRemoval();
+
+    }
+
+    public static abstract class EntityRenderViewReplacement extends EntityLivingBase {
+
+        private Vector3 cameraFocus = null;
 
         public EntityRenderViewReplacement() {
             super(Minecraft.getMinecraft().world);
+        }
+
+        @Nullable
+        public Vector3 getCameraFocus() {
+            return cameraFocus;
+        }
+
+        public void setCameraFocus(@Nullable Vector3 cameraFocus) {
+            this.cameraFocus = cameraFocus;
         }
 
         public void setAsRenderViewEntity() {
             Minecraft.getMinecraft().setRenderViewEntity(this);
         }
 
-        public void transformToFocusOnPoint(Vector3 toFocus, float pTicks) {
+        public void transformToFocusOnPoint(Vector3 toFocus, float pTicks, boolean propagate) {
+            Vector3 angles = new Vector3(this).subtract(toFocus).toPolar();
+            Vector3 prevAngles = new Vector3(prevPosX, prevPosY, prevPosZ).subtract(toFocus).toPolar();
+            double pitch = 90 - angles.getY();
+            double pitchPrev = 90 - prevAngles.getY();
+            double yaw = -angles.getZ();
+            double yawPrev = -prevAngles.getZ();
 
+            this.rotationYawHead =     (float) yaw;
+            this.rotationYaw =         (float) yaw;
+            this.prevRotationYaw =     (float) yawPrev;
+            this.prevRotationYawHead = (float) yawPrev;
+            this.rotationPitch =       (float) pitch;
+            this.prevRotationPitch =   (float) pitchPrev;
+            if(propagate) {
+                RenderingUtils.unsafe_preRenderHackCamera(this, posX, posY, posZ, prevPosX, prevPosY, prevPosZ, yaw, yawPrev, pitch, pitchPrev);
+            }
         }
+
+        public abstract void moveEntityTick(EntityRenderViewReplacement entity, int ticksExisted);
 
         @Override
         public Iterable<ItemStack> getArmorInventoryList() {

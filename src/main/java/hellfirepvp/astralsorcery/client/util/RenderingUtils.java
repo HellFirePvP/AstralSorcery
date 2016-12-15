@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -117,6 +118,24 @@ public class RenderingUtils {
         render.prevRotationPitch =   (float)pitchPrev;
 
         Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+    }
+
+    @Deprecated
+    public static void unsafe_resetCamera() {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
+        double x = player.posX;
+        double y = player.posY;
+        double z = player.posZ;
+        RenderManager rm = Minecraft.getMinecraft().getRenderManager();
+        rm.setRenderPosition(x, y, z);
+        rm.viewerPosX = x;
+        rm.viewerPosY = y;
+        rm.viewerPosZ = z;
+
+        TileEntityRendererDispatcher.staticPlayerX = x;
+        TileEntityRendererDispatcher.staticPlayerY = y;
+        TileEntityRendererDispatcher.staticPlayerZ = z;
     }
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {
