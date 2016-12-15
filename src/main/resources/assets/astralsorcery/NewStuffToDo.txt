@@ -2,6 +2,7 @@ Needed To-do things:
 
 - Hand Telescope GUI (144x144 as you already said)
 - Telescope GUI (uhhh... kinda like hand-telescope but, well, the gridTelescope.png in textures/gui/ should give you a general idea :P)
+    (-> both of those gui's should have transparent interior. only the frame around it is important :P)
 - Resonating gem item texture (Aquamarine -> starlight infuser -> resonating gem - idk. a blue gem, with some white glowing effect? uh..)
 - Starlight infuser block model (may hold 1 item on top of it, some 'sort' of pedestal?)
 - a gui page for starlight infusion (the recipe is 1 item input -> 1 item output)
