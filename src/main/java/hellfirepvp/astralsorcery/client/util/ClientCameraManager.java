@@ -3,15 +3,19 @@ package hellfirepvp.astralsorcery.client.util;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -124,11 +128,19 @@ public class ClientCameraManager implements ITickHandler {
         private boolean viewBobbing = false, hideGui = false;
         private int thirdPersonView = 0;
 
+        private Vector3 startPosition;
+        private float startYaw, startPitch;
+
         @Override
         public void onStartTransforming(float pTicks) {
             this.viewBobbing = Minecraft.getMinecraft().gameSettings.viewBobbing;
             this.hideGui = Minecraft.getMinecraft().gameSettings.hideGUI;
             this.thirdPersonView = Minecraft.getMinecraft().gameSettings.thirdPersonView;
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            this.startPosition = new Vector3(player);
+            this.startYaw = player.rotationYaw;
+            this.startPitch = player.rotationPitch;
+            player.setVelocity(0, 0, 0);
             this.active = true;
         }
 
@@ -139,6 +151,9 @@ public class ClientCameraManager implements ITickHandler {
                 settings.viewBobbing = viewBobbing;
                 settings.hideGUI = hideGui;
                 settings.thirdPersonView = thirdPersonView;
+                EntityPlayer player = Minecraft.getMinecraft().player;
+                player.setPositionAndRotation(startPosition.getX(), startPosition.getY(), startPosition.getZ(), startYaw, startPitch);
+                player.setVelocity(0, 0, 0);
                 this.active = false;
             }
         }
@@ -150,6 +165,7 @@ public class ClientCameraManager implements ITickHandler {
             settings.hideGUI = true;
             settings.viewBobbing = false;
             settings.thirdPersonView = 0;
+            Minecraft.getMinecraft().player.setVelocity(0, 0, 0);
         }
 
     }
@@ -213,12 +229,12 @@ public class ClientCameraManager implements ITickHandler {
 
     }
 
-    public static abstract class EntityRenderViewReplacement extends EntityLivingBase {
+    public static abstract class EntityRenderViewReplacement extends EntityPlayer {
 
         private Vector3 cameraFocus = null;
 
         public EntityRenderViewReplacement() {
-            super(Minecraft.getMinecraft().world);
+            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
         }
 
         @Nullable
@@ -253,7 +269,21 @@ public class ClientCameraManager implements ITickHandler {
             }
         }
 
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void setAngles(float yaw, float pitch) {}
+
         public abstract void moveEntityTick(EntityRenderViewReplacement entity, int ticksExisted);
+
+        @Override
+        public boolean isSpectator() {
+            return false;
+        }
+
+        @Override
+        public boolean isCreative() {
+            return false;
+        }
 
         @Override
         public Iterable<ItemStack> getArmorInventoryList() {

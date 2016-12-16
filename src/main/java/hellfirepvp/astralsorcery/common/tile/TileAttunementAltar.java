@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
+import hellfirepvp.astralsorcery.client.util.ClientCameraFlightHelper;
 import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
+import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.SoundUtils;
@@ -26,6 +28,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -67,6 +70,8 @@ public class TileAttunementAltar extends TileReceiverBase {
     public int activationTick = 0;
     public int prevActivationTick = 0;
     public boolean animate = false, tesrLocked = true;
+
+    private boolean sheduledCameraFlight = false;
 
     @Override
     public void update() {
@@ -242,6 +247,20 @@ public class TileAttunementAltar extends TileReceiverBase {
                             () -> isInvalid() ||
                                     activeFound == null ||
                                     Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
+                }
+            }
+
+            if(!sheduledCameraFlight) {
+                List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
+                if(!players.isEmpty() && players.contains(Minecraft.getMinecraft().player)) {
+                    sheduledCameraFlight = true;
+                    Vector3 offset = new Vector3(this).add(0, 4, 0);
+                    ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
+                    builder .addPoint(offset.clone().add(-4, 0,  4), 100)
+                            .addPoint(offset.clone().add(-4, 0, -4), 100)
+                            .addPoint(offset.clone().add( 4, 0, -4), 100)
+                            .addPoint(offset.clone().add( 4, 0,  4), 100);
+                    builder.finishAndStart();
                 }
             }
 

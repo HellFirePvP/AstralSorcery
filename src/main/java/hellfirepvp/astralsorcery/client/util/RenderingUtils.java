@@ -81,24 +81,17 @@ public class RenderingUtils {
 
     //Use with caution. Big block of rendering hack.
     @Deprecated
-    public static void unsafe_preRenderHackCamera(EntityLivingBase renderView, double x, double y, double z, double prevX, double prevY, double prevZ, double yaw, double yawPrev, double pitch, double pitchPrev) {
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-
-        manager.setRenderPosition(x, y, z);
-        manager.viewerPosX = x;
-        manager.viewerPosY = y;
-        manager.viewerPosZ = z;
-
+    public static void unsafe_preRenderHackCamera(EntityPlayer renderView, double x, double y, double z, double prevX, double prevY, double prevZ, double yaw, double yawPrev, double pitch, double pitchPrev) {
         TileEntityRendererDispatcher.staticPlayerX = x;
         TileEntityRendererDispatcher.staticPlayerY = y;
         TileEntityRendererDispatcher.staticPlayerZ = z;
 
         Entity rv = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rv == null || rv.equals(Minecraft.getMinecraft().player) || !(rv instanceof EntityLivingBase)) {
+        if(rv == null || !rv.equals(Minecraft.getMinecraft().player)) {
             Minecraft.getMinecraft().setRenderViewEntity(renderView);
             rv = renderView;
         }
-        EntityLivingBase render = (EntityLivingBase) rv;
+        EntityPlayer render = (EntityPlayer) rv;
 
         render.posX = x;
         render.posY = y;
@@ -114,9 +107,34 @@ public class RenderingUtils {
         render.rotationYaw =         (float)yaw;
         render.prevRotationYaw =     (float)yawPrev;
         render.prevRotationYawHead = (float)yawPrev;
+        render.cameraYaw =           (float)yaw;
+        render.prevCameraYaw =       (float)yawPrev;
         render.rotationPitch =       (float)pitch;
         render.prevRotationPitch =   (float)pitchPrev;
 
+        render = Minecraft.getMinecraft().player;
+
+        render.posX = x;
+        render.posY = y;
+        render.posZ = z;
+        render.prevPosX = prevX;
+        render.prevPosY = prevY;
+        render.prevPosZ = prevZ;
+        render.lastTickPosX = prevX;
+        render.lastTickPosY = prevY;
+        render.lastTickPosZ = prevZ;
+
+        render.rotationYawHead =     (float)yaw;
+        render.rotationYaw =         (float)yaw;
+        render.prevRotationYaw =     (float)yawPrev;
+        render.prevRotationYawHead = (float)yawPrev;
+        render.cameraYaw =           (float)yaw;
+        render.prevCameraYaw =       (float)yawPrev;
+        render.rotationPitch =       (float)pitch;
+        render.prevRotationPitch =   (float)pitchPrev;
+
+        Minecraft.getMinecraft().setIngameFocus();
+        ActiveRenderInfo.updateRenderInfo(render, false);
         Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
     }
 
@@ -136,6 +154,8 @@ public class RenderingUtils {
         TileEntityRendererDispatcher.staticPlayerX = x;
         TileEntityRendererDispatcher.staticPlayerY = y;
         TileEntityRendererDispatcher.staticPlayerZ = z;
+
+        Minecraft.getMinecraft().setIngameFocus();
     }
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {

@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.LinkedList;
 
@@ -23,8 +23,12 @@ public class ClientCameraFlightHelper {
 
         private final CameraFlight flight;
 
-        public CameraFlightBuilder(Vector3 start, Vector3 cameraFocus) {
+        private CameraFlightBuilder(Vector3 start, Vector3 cameraFocus) {
             this.flight = new CameraFlight(start, cameraFocus);
+        }
+
+        public CameraFlightBuilder(CameraFlight flight) {
+            this.flight = flight;
         }
 
         public CameraFlightBuilder addPoint(Vector3 nextPoint, int ticksToFlyThere) {
@@ -34,6 +38,10 @@ public class ClientCameraFlightHelper {
             }
             this.flight.addPoint(nextPoint, ticksToFlyThere);
             return this;
+        }
+
+        public CameraFlightBuilder copy() {
+            return new CameraFlightBuilder(this.flight.copy());
         }
 
         public void finishAndStart() {
@@ -49,19 +57,21 @@ public class ClientCameraFlightHelper {
     private static class CameraFlight extends ClientCameraManager.EntityRenderViewReplacement implements ClientCameraManager.PersistencyFunction {
 
         private LinkedList<FlightPoint> flightPoints = new LinkedList<>();
-        private final Vector3 startVector;
+        private final Vector3 startVector, focus;
 
         private int totalTickDuration = 0;
         private boolean expired = false;
 
         private CameraFlight(Vector3 startPoint, Vector3 focusPoint) {
             this.startVector = startPoint;
+            this.focus = focusPoint;
             this.posX = startPoint.getX();
             this.posY = startPoint.getY();
             this.posZ = startPoint.getZ();
             this.prevPosX = posX;
             this.prevPosY = posY;
             this.prevPosZ = posZ;
+            setCameraFocus(focusPoint);
             transformToFocusOnPoint(focusPoint, 0, false);
         }
 
@@ -101,17 +111,28 @@ public class ClientCameraFlightHelper {
                 current = point;
 
                 if(accumulator >= ticks) {
-                    int interp = accumulator - ticks;
+                    int interp = current.ticksToGetThere - (accumulator - ticks);
                     int dstJump = current.ticksToGetThere;
-                    return current.dstPoint.clone().subtract(prev).divide(dstJump).multiply(Math.min(1, interp)).add(prev);
+                    return current.dstPoint.clone().subtract(prev).divide(dstJump).multiply(MathHelper.clamp(interp, 1, dstJump)).add(prev);
+                } else {
+                    acc = accumulator;
                 }
             }
-            return null; //Doesn't happen since the list isn't empty.
+            return flightPoints.getLast().dstPoint; //Doesn't happen since the list isn't empty.
         }
 
         @Override
         public boolean needsRemoval() {
             return expired;
+        }
+
+        private CameraFlight copy() {
+            CameraFlight c = new CameraFlight(this.startVector, this.focus);
+            for (FlightPoint fp : this.flightPoints) {
+                c.flightPoints.addLast(new FlightPoint(fp.dstPoint, fp.ticksToGetThere));
+            }
+            c.totalTickDuration = this.totalTickDuration;
+            return c;
         }
 
         private static class FlightPoint {
