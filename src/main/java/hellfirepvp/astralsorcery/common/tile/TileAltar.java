@@ -28,7 +28,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
@@ -503,7 +502,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @SideOnly(Side.CLIENT)
     public static void finishBurst(PktParticleEvent event) {
-        EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Axis.Y_AXIS).setPosition(event.getVec()).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+        EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(event.getVec()).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
     }
 
     public static enum AltarLevel {

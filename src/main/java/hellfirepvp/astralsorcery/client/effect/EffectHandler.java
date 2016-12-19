@@ -11,7 +11,6 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -132,13 +131,13 @@ public final class EffectHandler {
         return ctrl;
     }
 
-    public TextureSpritePlane textureSpritePlane(SpriteSheetResource sheetResource, Axis rotationAxis) {
+    public TextureSpritePlane textureSpritePlane(SpriteSheetResource sheetResource, Vector3 rotationAxis) {
         TextureSpritePlane plane = new TextureSpritePlane(sheetResource, rotationAxis);
         register(plane);
         return plane;
     }
 
-    public TexturePlane texturePlane(BindableResource texture, Axis rotationAxis) {
+    public TexturePlane texturePlane(BindableResource texture, Vector3 rotationAxis) {
         TexturePlane plane = new TexturePlane(texture, rotationAxis);
         register(plane);
         return plane;

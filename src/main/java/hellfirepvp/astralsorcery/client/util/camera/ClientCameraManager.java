@@ -1,18 +1,16 @@
-package hellfirepvp.astralsorcery.client.util;
+package hellfirepvp.astralsorcery.client.util.camera;
 
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -175,6 +173,8 @@ public class ClientCameraManager implements ITickHandler {
         private final EntityRenderViewReplacement entity;
         private final PersistencyFunction func;
 
+        private EntityClientReplacement clientEntity;
+
         public CameraTransformerRenderReplacement(EntityRenderViewReplacement renderView, PersistencyFunction func) {
             this.entity = renderView;
             this.func = func;
@@ -184,6 +184,11 @@ public class ClientCameraManager implements ITickHandler {
         public void onStartTransforming(float pTicks) {
             super.onStartTransforming(pTicks);
 
+            EntityClientReplacement repl = new EntityClientReplacement();
+            repl.readFromNBT(Minecraft.getMinecraft().player.writeToNBT(new NBTTagCompound()));
+            Minecraft.getMinecraft().world.spawnEntityInWorld(repl);
+            this.clientEntity = repl;
+
             entity.setAsRenderViewEntity();
         }
 
@@ -191,7 +196,10 @@ public class ClientCameraManager implements ITickHandler {
         public void onStopTransforming(float pTicks) {
             super.onStopTransforming(pTicks);
 
+            Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
             RenderingUtils.unsafe_resetCamera();
+
+            entity.onStopTransforming();
         }
 
         @Override
@@ -218,7 +226,9 @@ public class ClientCameraManager implements ITickHandler {
         public void onClientTick() {
             entity.ticksExisted++;
 
-            entity.moveEntityTick(entity, entity.ticksExisted);
+            if(clientEntity != null) {
+                entity.moveEntityTick(entity, clientEntity, entity.ticksExisted);
+            }
         }
 
     }
@@ -273,7 +283,9 @@ public class ClientCameraManager implements ITickHandler {
         @SideOnly(Side.CLIENT)
         public void setAngles(float yaw, float pitch) {}
 
-        public abstract void moveEntityTick(EntityRenderViewReplacement entity, int ticksExisted);
+        public abstract void moveEntityTick(EntityRenderViewReplacement entity, EntityClientReplacement replacementEntity, int ticksExisted);
+
+        public abstract void onStopTransforming();
 
         @Override
         public boolean isSpectator() {
@@ -302,6 +314,14 @@ public class ClientCameraManager implements ITickHandler {
         @Override
         public EnumHandSide getPrimaryHand() {
             return EnumHandSide.RIGHT;
+        }
+
+    }
+
+    public static class EntityClientReplacement extends AbstractClientPlayer {
+
+        public EntityClientReplacement() {
+            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
         }
     }
 

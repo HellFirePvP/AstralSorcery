@@ -1,11 +1,15 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesAttunement;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
-import hellfirepvp.astralsorcery.client.util.ClientCameraFlightHelper;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraFlightHelper;
 import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
@@ -13,17 +17,20 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktAttenuationState;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
-import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
-import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
@@ -34,6 +41,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,6 +53,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,6 +81,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     public boolean animate = false, tesrLocked = true;
 
     private boolean sheduledCameraFlight = false;
+    private Object clientActiveCameraFlight = null;
 
     @Override
     public void update() {
@@ -219,6 +229,11 @@ public class TileAttunementAltar extends TileReceiverBase {
                 activationTick--;
             }
 
+            if(clientActiveCameraFlight != null) {
+                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).setExpired();
+                clientActiveCameraFlight = null;
+            }
+
         } else if(activeFound == null) {
             starSprites.clear();
             activeSound = null;
@@ -227,6 +242,10 @@ public class TileAttunementAltar extends TileReceiverBase {
             prevActivationTick = activationTick;
             if(activationTick > 0) {
                 activationTick--;
+            }
+            if(clientActiveCameraFlight != null) {
+                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).setExpired();
+                clientActiveCameraFlight = null;
             }
 
             spawnAmbientParticles();
@@ -250,17 +269,17 @@ public class TileAttunementAltar extends TileReceiverBase {
                 }
             }
 
-            if(!sheduledCameraFlight) {
+            if(!sheduledCameraFlight && clientActiveCameraFlight == null) {
                 List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
                 if(!players.isEmpty() && players.contains(Minecraft.getMinecraft().player)) {
                     sheduledCameraFlight = true;
-                    Vector3 offset = new Vector3(this).add(0, 4, 0);
+                    Vector3 offset = new Vector3(this).add(0, 6, 0);
                     ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
-                    builder .addPoint(offset.clone().add(-4, 0,  4), 100)
-                            .addPoint(offset.clone().add(-4, 0, -4), 100)
-                            .addPoint(offset.clone().add( 4, 0, -4), 100)
-                            .addPoint(offset.clone().add( 4, 0,  4), 100);
-                    builder.finishAndStart();
+                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
+                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(15, -0.01) , 200, 2);
+                    builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
+
+                    this.clientActiveCameraFlight = builder.finishAndStart();
                 }
             }
 
@@ -286,6 +305,102 @@ public class TileAttunementAltar extends TileReceiverBase {
             spawnAmbientActiveParticles();
         }
 
+    }
+
+    /*@SideOnly(Side.CLIENT)
+    private ClientCameraFlightHelper.StopDelegate createAttunementDelegate() {
+        return () -> {
+            if(clientActiveCameraFlight != null && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()) {
+                if(activeFound != null) {
+                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation(activeFound));
+                }
+                this.clientActiveCameraFlight = null;
+                PktAttenuationState pktState = new PktAttenuationState(getPos(), world.provider.getDimension(), 0);
+                PacketChannel.CHANNEL.sendToServer(pktState);
+            }
+        };
+    }*/
+
+    @SideOnly(Side.CLIENT)
+    private ClientCameraFlightHelper.TickDelegate createFloatDelegate(Vector3 offsetPos) {
+        return (renderView, focusedEntity) -> {
+            if(focusedEntity == null) return;
+
+            float floatTick = (ClientScheduler.getClientTick() % 40) / 40F;
+            float sin = MathHelper.sin((float) (floatTick * 2 * Math.PI)) / 2F + 0.5F;
+            focusedEntity.setAlwaysRenderNameTag(false);
+            focusedEntity.setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
+            focusedEntity.setPositionAndRotation(offsetPos.getX(), offsetPos.getY() + sin * 0.2D, offsetPos.getZ(), 0F, 0F);
+            focusedEntity.rotationYawHead = 0;
+            focusedEntity.prevRotationYawHead = 0;
+            focusedEntity.setVelocity(0, 0, 0);
+
+            playAttenuationEffects(renderView.ticksExisted);
+        };
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playAttenuationEffects(int cameraFlightTick) {
+        if(activeFound == null) return;
+
+        if(cameraFlightTick >= 0 && cameraFlightTick <= 800) {
+            if(cameraFlightTick % 30 == 0) {
+                List<BlockPos> offsets = translateConstellationPositions(activeFound);
+                Color ov = new Color(0x2100FD);
+                float cR = ov.getRed() / 255F;
+                float cG = ov.getGreen() / 255F;
+                float cB = ov.getBlue() / 255F;
+                for (BlockPos effectPos : offsets) {
+                    Vector3 from = new Vector3(effectPos).add(0.5, -0.1, 0.5);
+                    MiscUtils.applyRandomOffset(from, rand, 0.1F);
+                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
+                    lightbeam.setAlphaMultiplier(0.8F);
+                    lightbeam.setColorOverlay(cR, cG, cB, 0.2F);
+                    lightbeam.setMaxAge(64);
+                }
+            }
+        }
+        if(cameraFlightTick >= 200) {
+            for (int i = 0; i < 2; i++) {
+                List<BlockPos> offsets = translateConstellationPositions(activeFound);
+                BlockPos pos = offsets.get(rand.nextInt(offsets.size()));
+                Vector3 offset = new Vector3(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5).subtract(offset);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+            }
+        }
+        if(cameraFlightTick >= 350) {
+            for (int i = 0; i < 3; i++) {
+                Vector3 from = new Vector3(this).add(0.5, 0.5, 0.5);
+                from.addX(rand.nextFloat() * 6F * (rand.nextBoolean() ? 1 : -1));
+                from.addZ(rand.nextFloat() * 6F * (rand.nextBoolean() ? 1 : -1));
+                Vector3 dir = new Vector3(this).add(0.5, 3, 0.5).subtract(from);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+            }
+        }
+        if(cameraFlightTick >= 500) {
+            for (int i = 0; i < 4; i++) {
+                Vector3 at = new Vector3(this).add(0.5, 0.1, 0.5);
+                at.addX(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
+                at.addZ(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+                p.setAlphaMultiplier(0.7F);
+                if(rand.nextBoolean()) p.setColor(Color.WHITE);
+                p.setMaxAge((int) (30 + rand.nextFloat() * 50));
+                p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
+            }
+        }
+        if(cameraFlightTick >= 600) {
+            if(cameraFlightTick % 5 == 0) {
+                Vector3 from = new Vector3(this).add(0.5, -0.1, 0.5);
+                MiscUtils.applyRandomOffset(from, rand, 0.3F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(8), from, 2.4F);
+                lightbeam.setAlphaMultiplier(0.8F);
+                lightbeam.setMaxAge(64);
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)

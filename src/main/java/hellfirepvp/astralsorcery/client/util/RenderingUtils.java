@@ -133,7 +133,7 @@ public class RenderingUtils {
         render.rotationPitch =       (float)pitch;
         render.prevRotationPitch =   (float)pitchPrev;
 
-        Minecraft.getMinecraft().setIngameFocus();
+        Minecraft.getMinecraft().setIngameNotInFocus();
         ActiveRenderInfo.updateRenderInfo(render, false);
         Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
     }
@@ -156,6 +156,10 @@ public class RenderingUtils {
         TileEntityRendererDispatcher.staticPlayerZ = z;
 
         Minecraft.getMinecraft().setIngameFocus();
+        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+        if(Minecraft.getMinecraft().currentScreen != null) {
+            Minecraft.getMinecraft().displayGuiScreen(null);
+        }
     }
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {

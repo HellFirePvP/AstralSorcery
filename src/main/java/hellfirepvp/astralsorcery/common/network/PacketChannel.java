@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktAttenuationState;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
@@ -46,6 +48,8 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktAttenuationState.class, PktAttenuationState.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktAttuneConstellation.class, PktAttuneConstellation.class, id++, Side.SERVER);
     }
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, BlockPos pos, double range) {

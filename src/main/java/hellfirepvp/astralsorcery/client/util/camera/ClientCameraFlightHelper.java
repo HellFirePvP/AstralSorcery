@@ -1,9 +1,10 @@
-package hellfirepvp.astralsorcery.client.util;
+package hellfirepvp.astralsorcery.client.util.camera;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 
 /**
@@ -24,7 +25,7 @@ public class ClientCameraFlightHelper {
         private final CameraFlight flight;
 
         private CameraFlightBuilder(Vector3 start, Vector3 cameraFocus) {
-            this.flight = new CameraFlight(start, cameraFocus);
+            this.flight = new CameraFlight(start, cameraFocus, null);
         }
 
         public CameraFlightBuilder(CameraFlight flight) {
@@ -40,29 +41,75 @@ public class ClientCameraFlightHelper {
             return this;
         }
 
+        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, double radius, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
+            return addCircularPoints(centerOffset, (deg) -> radius, amountOfPointsOnCircle, ticksBetweenEachPoint);
+        }
+
+        public CameraFlightBuilder addCircularPoints(Vector3 centerOffset, DynamicRadiusGetter radius, int amountOfPointsOnCircle, int ticksBetweenEachPoint) {
+            if(ticksBetweenEachPoint < 0) {
+                AstralSorcery.log.warn("Tried to add a point with negative tick-timespan to a camera flight. Skipping...");
+                return this;
+            }
+            double degPerPoint = 360D / ((double) amountOfPointsOnCircle);
+            for (int i = 0; i < amountOfPointsOnCircle; i++) {
+                double deg = i * degPerPoint;
+                Vector3 point = Vector3.RotAxis.Y_AXIS.clone().perpendicular().normalize().multiply(radius.getRadius(deg)).rotate(Math.toRadians(deg), Vector3.RotAxis.Y_AXIS).add(centerOffset);
+                addPoint(point, ticksBetweenEachPoint);
+            }
+            return this;
+        }
+
         public CameraFlightBuilder copy() {
             return new CameraFlightBuilder(this.flight.copy());
         }
 
-        public void finishAndStart() {
+        public CameraFlightBuilder setTickDelegate(TickDelegate delegate) {
+            this.flight.setTickDelegate(delegate);
+            return this;
+        }
+
+        public CameraFlightBuilder setStopDelegate(StopDelegate delegate) {
+            this.flight.setStopDelegate(delegate);
+            return this;
+        }
+
+        public CameraFlight finishAndStart() {
             if(this.flight.flightPoints.size() <= 0) {
                 AstralSorcery.log.warn("Tried to start a camera flight without any points! Skipping...");
-                return;
+                return null;
             }
-            ClientCameraManager.getInstance().addTransformer(new ClientCameraManager.CameraTransformerRenderReplacement(this.flight, this.flight));
+
+            ClientCameraManager.CameraTransformerRenderReplacement repl = new ClientCameraManager.CameraTransformerRenderReplacement(this.flight, this.flight);
+            ClientCameraManager.getInstance().addTransformer(repl);
+            return this.flight;
         }
 
     }
 
-    private static class CameraFlight extends ClientCameraManager.EntityRenderViewReplacement implements ClientCameraManager.PersistencyFunction {
+    public static interface StopDelegate {
+
+        public void onCameraFlightStop();
+
+    }
+
+    public static interface TickDelegate {
+
+        public void tick(ClientCameraManager.EntityRenderViewReplacement renderView, ClientCameraManager.EntityClientReplacement focusedEntity);
+
+    }
+
+    public static class CameraFlight extends ClientCameraManager.EntityRenderViewReplacement implements ClientCameraManager.PersistencyFunction {
 
         private LinkedList<FlightPoint> flightPoints = new LinkedList<>();
         private final Vector3 startVector, focus;
 
+        private TickDelegate delegate;
+        private StopDelegate stopDelegate;
+
         private int totalTickDuration = 0;
         private boolean expired = false;
 
-        private CameraFlight(Vector3 startPoint, Vector3 focusPoint) {
+        private CameraFlight(Vector3 startPoint, Vector3 focusPoint, @Nullable TickDelegate tick) {
             this.startVector = startPoint;
             this.focus = focusPoint;
             this.posX = startPoint.getX();
@@ -71,8 +118,13 @@ public class ClientCameraFlightHelper {
             this.prevPosX = posX;
             this.prevPosY = posY;
             this.prevPosZ = posZ;
+            this.delegate = tick;
             setCameraFocus(focusPoint);
             transformToFocusOnPoint(focusPoint, 0, false);
+        }
+
+        public void setTickDelegate(TickDelegate delegate) {
+            this.delegate = delegate;
         }
 
         private void addPoint(Vector3 point, int ticks) {
@@ -81,7 +133,11 @@ public class ClientCameraFlightHelper {
         }
 
         @Override
-        public void moveEntityTick(ClientCameraManager.EntityRenderViewReplacement entity, int ticksExisted) {
+        public void moveEntityTick(ClientCameraManager.EntityRenderViewReplacement entity, ClientCameraManager.EntityClientReplacement replacement, int ticksExisted) {
+            if(delegate != null) {
+                delegate.tick(entity, replacement);
+            }
+            setCameraFocus(new Vector3(replacement));
             this.expired = this.ticksExisted > totalTickDuration;
             if(flightPoints.isEmpty()) {
                 this.expired = true;
@@ -93,6 +149,13 @@ public class ClientCameraFlightHelper {
                 this.posX = position.getX();
                 this.posY = position.getY();
                 this.posZ = position.getZ();
+            }
+        }
+
+        @Override
+        public void onStopTransforming() {
+            if(stopDelegate != null) {
+                stopDelegate.onCameraFlightStop();
             }
         }
 
@@ -121,18 +184,30 @@ public class ClientCameraFlightHelper {
             return flightPoints.getLast().dstPoint; //Doesn't happen since the list isn't empty.
         }
 
+        public boolean isExpired() {
+            return expired;
+        }
+
+        public void setExpired() {
+            this.expired = true;
+        }
+
         @Override
         public boolean needsRemoval() {
             return expired;
         }
 
         private CameraFlight copy() {
-            CameraFlight c = new CameraFlight(this.startVector, this.focus);
+            CameraFlight c = new CameraFlight(this.startVector, this.focus, this.delegate);
             for (FlightPoint fp : this.flightPoints) {
                 c.flightPoints.addLast(new FlightPoint(fp.dstPoint, fp.ticksToGetThere));
             }
             c.totalTickDuration = this.totalTickDuration;
             return c;
+        }
+
+        public void setStopDelegate(StopDelegate delegate) {
+            this.stopDelegate = delegate;
         }
 
         private static class FlightPoint {
@@ -144,6 +219,27 @@ public class ClientCameraFlightHelper {
                 this.dstPoint = dstPoint;
                 this.ticksToGetThere = ticksToGetThere;
             }
+        }
+
+    }
+
+    public static interface DynamicRadiusGetter {
+
+        public double getRadius(double degree);
+
+        public static DynamicRadiusGetter dyanmicIncrease(double base, double incPerStep) {
+            return new DynamicRadiusGetter() {
+
+                private double baseDst = base;
+                private int count = 0;
+
+                @Override
+                public double getRadius(double degree) {
+                    double rad = baseDst + count * incPerStep;
+                    count++;
+                    return rad;
+                }
+            };
         }
 
     }

@@ -3,7 +3,7 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
-import hellfirepvp.astralsorcery.client.util.ClientCameraManager;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;

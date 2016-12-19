@@ -3,10 +3,9 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
-import hellfirepvp.astralsorcery.client.util.ClientCameraManager;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
@@ -29,12 +28,10 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import java.nio.charset.Charset;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -131,6 +128,7 @@ public class ClientRenderEventHandler {
         GL11.glColor4f(1f, 1f, 1f, 1f);
 
         GL11.glPushMatrix();
+        GL11.glTranslated(event.getX(), event.getY(), event.getZ());
         Minecraft.getMinecraft().renderEngine.bindTexture(tex);
         boolean f = event.getEntityPlayer().capabilities.isFlying;
         double ma = f ? 15 : 5;

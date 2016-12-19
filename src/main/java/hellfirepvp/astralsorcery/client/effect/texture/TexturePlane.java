@@ -5,12 +5,8 @@ import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
@@ -49,9 +45,9 @@ public class TexturePlane implements IComplexEffect {
     private boolean flagRemoved = true;
 
     private final BindableResource texture;
-    private final Axis axis;
+    private final Vector3 axis;
 
-    public TexturePlane(BindableResource texture, Axis axis) {
+    public TexturePlane(BindableResource texture, Vector3 axis) {
         this.texture = texture;
         this.axis = axis;
     }
@@ -193,7 +189,7 @@ public class TexturePlane implements IComplexEffect {
         GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), alphaGrad);
         GL11.glEnable(GL11.GL_BLEND);
         blendMode.apply();
-        Vector3 axis = this.axis.getAxis();
+        Vector3 axis = this.axis.clone();
         float deg;
         if(ticksPerFullRot >= 0) {
             float anglePercent = ((float) (counter)) / ((float) ticksPerFullRot);

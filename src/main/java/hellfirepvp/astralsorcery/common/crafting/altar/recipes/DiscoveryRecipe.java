@@ -1,20 +1,13 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
-import hellfirepvp.astralsorcery.client.effect.EffectHelper;
-import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
-import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

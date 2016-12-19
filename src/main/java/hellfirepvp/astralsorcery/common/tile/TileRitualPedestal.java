@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
@@ -38,7 +37,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -243,7 +241,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     public TextureSpritePlane getHaloEffectSprite() {
         TextureSpritePlane spr = (TextureSpritePlane) spritePlane;
         if(spr == null || spr.canRemove() || spr.isRemoved()) { //Refresh.
-            spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo1, Axis.Y_AXIS);
+            spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo1, Vector3.RotAxis.Y_AXIS.clone());
             spr.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
             spr.setAlphaOverDistance(true);
             spr.setNoRotation(45);
@@ -294,7 +292,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         super.readCustomNBT(compound);
 
         this.working = compound.getBoolean("working");
-        this.ownerUUID = compound.getUniqueId("owner");
+        if(compound.hasKey("ownerMost")) {
+            this.ownerUUID = compound.getUniqueId("owner");
+        } else {
+            this.ownerUUID = UUID.randomUUID();
+        }
         this.doesSeeSky = compound.getBoolean("seesSky");
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
 
@@ -310,7 +312,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("working", working);
-        compound.setUniqueId("owner", ownerUUID);
+        if(ownerUUID != null) {
+            compound.setUniqueId("owner", ownerUUID);
+        }
         compound.setBoolean("hasMultiblock", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
 

@@ -1,8 +1,8 @@
 package hellfirepvp.astralsorcery.client.effect.texture;
 
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,7 +18,7 @@ public class TextureSpritePlane extends TexturePlane {
 
     private final SpriteSheetResource spriteSheet;
 
-    public TextureSpritePlane(SpriteSheetResource spriteSheet, Axis axis) {
+    public TextureSpritePlane(SpriteSheetResource spriteSheet, Vector3 axis) {
         super(spriteSheet.getResource(), axis);
         this.spriteSheet = spriteSheet;
         this.uLength = spriteSheet.getULength();

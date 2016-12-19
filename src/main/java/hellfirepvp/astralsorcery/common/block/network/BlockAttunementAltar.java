@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.SoundType;
@@ -47,7 +48,7 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         RenderingUtils.playBlockBreakParticles(pos.up(), BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
-        RenderingUtils.playBlockBreakParticles(pos     , BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
+        RenderingUtils.playBlockBreakParticles(pos, BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         return true;
     }
 
@@ -59,6 +60,12 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos.up(), BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
+        /*TileAttunementAltar te = MiscUtils.getTileAt(worldIn, pos, TileAttunementAltar.class, true);
+        if(te != null && !worldIn.isRemote) {
+            if(placer != null && placer instanceof EntityPlayer) {
+                te.setOwner(placer.getUniqueID());
+            }
+        }*/
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 

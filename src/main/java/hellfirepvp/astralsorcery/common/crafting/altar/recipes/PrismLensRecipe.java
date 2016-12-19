@@ -3,7 +3,6 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -12,7 +11,6 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.util.Axis;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -74,7 +72,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
 
         Vector3 altarVec = new Vector3(altar);
         if(tick % 48 == 0 && rand.nextBoolean()) {
-            EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Axis.Y_AXIS).setPosition(altarVec.add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+            EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(altarVec.add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
         }
     }
 }

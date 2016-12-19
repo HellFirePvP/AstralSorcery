@@ -110,9 +110,9 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(prop, prop, null);
             ctrl.setOffset(new Vector3(this).add(0.5, 0, 0.5));
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
+            ctrl.setTicksPerRotation(80);
             ctrl.setTickOffset(ctrl.getMaxAge() / 2);
             ctrl.setOrbitRadius(2);
-            ctrl.setTicksPerRotation(80);
             clientOrbitalCraftingMirror = ctrl;
         }
     }
