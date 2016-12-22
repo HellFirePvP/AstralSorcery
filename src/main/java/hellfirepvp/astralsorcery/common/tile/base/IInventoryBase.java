@@ -21,11 +21,6 @@ public interface IInventoryBase extends IInventory {
     }
 
     @Override
-    default public boolean isUseableByPlayer(EntityPlayer player) {
-        return true;
-    }
-
-    @Override
     default public void openInventory(EntityPlayer player) {}
 
     @Override

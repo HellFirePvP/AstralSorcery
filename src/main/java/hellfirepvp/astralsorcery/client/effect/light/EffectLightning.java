@@ -46,7 +46,7 @@ public class EffectLightning extends EntityComplexFX {
         Vector3 directionVector = destination.clone().subtract(source);
         List<LightningVertex> vertices = new LinkedList<>();
         vertices.add(LightningVertex.toTarget(source, destination));
-        int iterations = MathHelper.ceiling_double_int(Math.sqrt(directionVector.clone().length()));
+        int iterations = MathHelper.ceil(Math.sqrt(directionVector.clone().length()));
         for (int i = 0; i < iterations; i++) {
             for (LightningVertex vertex : vertices) {
                 //Vector3 splitDir =

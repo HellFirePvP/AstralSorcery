@@ -50,7 +50,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     }
 
     private boolean isSnowyBiome(World world, BlockPos pos) {
-        Biome b = world.getBiomeGenForCoords(pos);
+        Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;
         boolean snow = false;
@@ -61,7 +61,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     }
 
     private boolean isMountainBiome(World world, BlockPos pos) {
-        Biome b = world.getBiomeGenForCoords(pos);
+        Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;
         boolean mountain = false;

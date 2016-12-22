@@ -26,7 +26,7 @@ public class MiscEffectUtil {
                     double pX = (double) pos.getX() + ((double) xx + 0.5D) / 4.0D;
                     double pY = (double) pos.getY() + ((double) yy + 0.5D) / 4.0D;
                     double pZ = (double) pos.getZ() + ((double) zz + 0.5D) / 4.0D;
-                    Particle p = diggingFactory.getEntityFX(0, world, pX, pY, pZ,
+                    Particle p = diggingFactory.createParticle(0, world, pX, pY, pZ,
                             pX - (double) pos.getX() - 0.5D, pY - (double) pos.getY() - 0.5D, pZ - (double) pos.getZ() - 0.5D,
                             Block.getStateId(dummyState));
                     manager.addEffect(p);
