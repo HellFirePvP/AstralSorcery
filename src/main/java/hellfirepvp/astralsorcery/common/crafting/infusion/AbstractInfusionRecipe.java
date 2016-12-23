@@ -45,7 +45,7 @@ public abstract class AbstractInfusionRecipe {
     }
 
     public int craftingTickTime() {
-        return 100;
+        return 500;
     }
 
     @SideOnly(Side.CLIENT)

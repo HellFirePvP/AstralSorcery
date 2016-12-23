@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.util.SoundUtils;
 public class Sounds {
 
     public static SoundUtils.CategorizedSoundEvent clipSwitch;
-    public static SoundUtils.LoopableSoundEvent attunement;
+    public static SoundUtils.CategorizedSoundEvent craftFinish;
+    public static SoundUtils.CategorizedSoundEvent attunement;
 
 }

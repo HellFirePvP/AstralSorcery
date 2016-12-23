@@ -18,12 +18,7 @@ public class OrbitalPropertiesAttunement implements OrbitalEffectController.Orbi
 
     private static final Random rand = new Random();
 
-    private boolean mirrored;
-    private int persistanceRequests = 5;
-
-    public OrbitalPropertiesAttunement(boolean mirrored) {
-        this.mirrored = mirrored;
-    }
+    private int persistanceRequests = 6;
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {

@@ -16,5 +16,14 @@
                 "stream": false
             }
         ]
-    }
+    },
+	"craftFinish": {
+	    "category": "master",
+	    "sounds": [
+	        {
+	            "name": "astralsorcery:finish",
+	            "stream": false
+	        }
+	    ]
+	}
 }

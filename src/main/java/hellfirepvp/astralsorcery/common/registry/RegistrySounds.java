@@ -20,15 +20,16 @@ public class RegistrySounds {
 
     public static void init() {
         clipSwitch = registerSound("clipSwitch", SoundCategory.BLOCKS);
-        attunement = registerSound("attunement", SoundCategory.MASTER, 63);
+        attunement = registerSound("attunement", SoundCategory.MASTER);
+        craftFinish = registerSound("craftFinish", SoundCategory.BLOCKS);
     }
 
-    private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory, int tickLength) {
+    /*private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {
         ResourceLocation res = new ResourceLocation(AstralSorcery.MODID, jsonName);
-        SoundUtils.LoopableSoundEvent se = new SoundUtils.LoopableSoundEvent(res, predefinedCategory, tickLength);
+        SoundUtils.LoopableSoundEvent se = new SoundUtils.LoopableSoundEvent(res, predefinedCategory);
         se.setRegistryName(res);
         return registerSound((T) se);
-    }
+    }*/
 
     private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {
         ResourceLocation res = new ResourceLocation(AstralSorcery.MODID, jsonName);

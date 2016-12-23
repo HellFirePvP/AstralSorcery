@@ -270,6 +270,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
             craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
             ResearchManager.informCraftingAltarCompletion(this, craftingTask);
+            SoundHelper.playSoundAround(Sounds.craftFinish, world, getPos(), 1F, 1.7F);
             craftingTask = null;
         }
         markForUpdate();

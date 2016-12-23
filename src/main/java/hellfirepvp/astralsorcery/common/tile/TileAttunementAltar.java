@@ -276,8 +276,18 @@ public class TileAttunementAltar extends TileReceiverBase {
                     Vector3 offset = new Vector3(this).add(0, 6, 0);
                     ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
                     builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
-                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(15, -0.01) , 200, 2);
+                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(10, -0.01) , 200, 2);
                     builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
+                    builder.setStopDelegate(createAttunementDelegate());
+
+                    OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement();
+                    OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(att, att, null);
+                    ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                            .setTicksPerRotation(80).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+
+                    ctrl = EffectHandler.getInstance().orbital(att, att, null);
+                    ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                            .setTicksPerRotation(80).setTickOffset(40).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
 
                     this.clientActiveCameraFlight = builder.finishAndStart();
                 }
@@ -307,19 +317,18 @@ public class TileAttunementAltar extends TileReceiverBase {
 
     }
 
-    /*@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     private ClientCameraFlightHelper.StopDelegate createAttunementDelegate() {
         return () -> {
-            if(clientActiveCameraFlight != null && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()) {
+            if(clientActiveCameraFlight != null && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()) {
                 if(activeFound != null) {
                     PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation(activeFound));
+                    SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }
                 this.clientActiveCameraFlight = null;
-                PktAttenuationState pktState = new PktAttenuationState(getPos(), world.provider.getDimension(), 0);
-                PacketChannel.CHANNEL.sendToServer(pktState);
             }
         };
-    }*/
+    }
 
     @SideOnly(Side.CLIENT)
     private ClientCameraFlightHelper.TickDelegate createFloatDelegate(Vector3 offsetPos) {

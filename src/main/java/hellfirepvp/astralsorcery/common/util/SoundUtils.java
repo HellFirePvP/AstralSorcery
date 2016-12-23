@@ -60,16 +60,13 @@ public class SoundUtils {
 
     }*/
 
-    public static class LoopableSoundEvent extends CategorizedSoundEvent {
+    /*public static class LoopableSoundEvent extends CategorizedSoundEvent {
 
-        private final int tickLength;
-
-        public LoopableSoundEvent(ResourceLocation soundNameIn, SoundCategory category, int tickLoopLength) {
+        public LoopableSoundEvent(ResourceLocation soundNameIn, SoundCategory category) {
             super(soundNameIn, category);
-            this.tickLength = tickLoopLength;
         }
 
-    }
+    }*/
 
     public static class CategorizedSoundEvent extends SoundEvent {
 

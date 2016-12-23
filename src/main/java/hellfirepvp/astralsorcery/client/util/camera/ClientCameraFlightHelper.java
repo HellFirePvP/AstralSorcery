@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.util.camera;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
@@ -154,7 +155,7 @@ public class ClientCameraFlightHelper {
 
         @Override
         public void onStopTransforming() {
-            if(stopDelegate != null) {
+            if(stopDelegate != null && Minecraft.getMinecraft().world != null) {
                 stopDelegate.onCameraFlightStop();
             }
         }

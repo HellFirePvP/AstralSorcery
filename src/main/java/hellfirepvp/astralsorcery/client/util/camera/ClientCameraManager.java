@@ -196,10 +196,14 @@ public class ClientCameraManager implements ITickHandler {
         public void onStopTransforming(float pTicks) {
             super.onStopTransforming(pTicks);
 
-            Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
+            if(Minecraft.getMinecraft().world != null) {
+                Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
+            }
             RenderingUtils.unsafe_resetCamera();
 
-            entity.onStopTransforming();
+            if(Minecraft.getMinecraft().world != null) {
+                entity.onStopTransforming();
+            }
         }
 
         @Override
@@ -245,6 +249,8 @@ public class ClientCameraManager implements ITickHandler {
 
         public EntityRenderViewReplacement() {
             super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
+            capabilities.allowFlying = true;
+            capabilities.isFlying = true;
         }
 
         @Nullable

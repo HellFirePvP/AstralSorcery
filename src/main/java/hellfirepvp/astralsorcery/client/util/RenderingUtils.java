@@ -140,25 +140,27 @@ public class RenderingUtils {
 
     @Deprecated
     public static void unsafe_resetCamera() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
-        double x = player.posX;
-        double y = player.posY;
-        double z = player.posZ;
-        RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-        rm.setRenderPosition(x, y, z);
-        rm.viewerPosX = x;
-        rm.viewerPosY = y;
-        rm.viewerPosZ = z;
+        if(Minecraft.getMinecraft().player != null) {
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            Minecraft.getMinecraft().setRenderViewEntity(player);
+            double x = player.posX;
+            double y = player.posY;
+            double z = player.posZ;
+            RenderManager rm = Minecraft.getMinecraft().getRenderManager();
+            rm.setRenderPosition(x, y, z);
+            rm.viewerPosX = x;
+            rm.viewerPosY = y;
+            rm.viewerPosZ = z;
 
-        TileEntityRendererDispatcher.staticPlayerX = x;
-        TileEntityRendererDispatcher.staticPlayerY = y;
-        TileEntityRendererDispatcher.staticPlayerZ = z;
+            TileEntityRendererDispatcher.staticPlayerX = x;
+            TileEntityRendererDispatcher.staticPlayerY = y;
+            TileEntityRendererDispatcher.staticPlayerZ = z;
 
-        Minecraft.getMinecraft().setIngameFocus();
-        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
-        if(Minecraft.getMinecraft().currentScreen != null) {
-            Minecraft.getMinecraft().displayGuiScreen(null);
+            Minecraft.getMinecraft().setIngameFocus();
+            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+            if(Minecraft.getMinecraft().currentScreen != null) {
+                Minecraft.getMinecraft().displayGuiScreen(null);
+            }
         }
     }
 

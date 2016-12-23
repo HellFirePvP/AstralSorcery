@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,6 +65,18 @@ public class SoundHelper {
     public static void playSoundClient(SoundEvent sound, float volume, float pitch) {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         player.playSound(sound, volume, pitch);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playSoundClientWorld(SoundUtils.CategorizedSoundEvent sound, BlockPos pos, float volume, float pitch) {
+        playSoundClientWorld(sound, sound.getCategory(), pos, volume, pitch);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playSoundClientWorld(SoundEvent sound, SoundCategory cat, BlockPos pos, float volume, float pitch) {
+        if(Minecraft.getMinecraft().world != null) {
+            Minecraft.getMinecraft().world.playSound(Minecraft.getMinecraft().player, pos.getX(), pos.getY(), pos.getZ(), sound, cat, volume, pitch);
+        }
     }
 
 }
