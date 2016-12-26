@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -22,12 +23,12 @@ public class GrindstoneRecipe extends DiscoveryRecipe {
 
     public GrindstoneRecipe() {
         super(new ShapedRecipe(BlockMachine.MachineType.GRINDSTONE.asStack())
-                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
+                .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.CENTER)
-                .addPart(Blocks.PLANKS,
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(Items.STICK,
+                .addPart(OreDictAlias.ITEM_STICKS,
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_LEFT));
     }

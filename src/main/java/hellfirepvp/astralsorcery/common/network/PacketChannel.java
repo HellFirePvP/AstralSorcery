@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpda
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateReach;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -43,12 +44,13 @@ public class PacketChannel {
         //CHANNEL.registerMessage(PktSpawnWorldParticles.class, PktSpawnWorldParticles.class, id++, Side.CLIENT); //General std world-particles
         CHANNEL.registerMessage(PktPlayEffect.class, PktPlayEffect.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktUpdateReach.class, PktUpdateReach.class, id++, Side.CLIENT);
 
         //Constellation discovery (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.SERVER);
-        CHANNEL.registerMessage(PktAttenuationState.class, PktAttenuationState.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktAttenuationState.class, PktAttenuationState.class, id++, Side.SERVER); //TODO workaround?
         CHANNEL.registerMessage(PktAttuneConstellation.class, PktAttuneConstellation.class, id++, Side.SERVER);
     }
 

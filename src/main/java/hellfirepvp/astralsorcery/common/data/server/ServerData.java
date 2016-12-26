@@ -41,7 +41,7 @@ public class ServerData {
         if(!f.exists()) {
             f.getParentFile().mkdirs();
             try {
-                f.createNewFile();
+                CompressedStreamTools.write(new NBTTagCompound(), f);
             } catch (IOException ignored) {}
         }
         return f;
@@ -55,6 +55,7 @@ public class ServerData {
 
     public static void writeData() {
         updateData();
+        fileRequestedDimWhitelists.clear();
     }
 
     public static void addDimensionToHandle(int dimId) {
@@ -78,6 +79,9 @@ public class ServerData {
             return;
         }
         try {
+            dataFile.delete();
+            dataFile.createNewFile();
+
             NBTTagCompound out = new NBTTagCompound();
             NBTTagList list = new NBTTagList();
             List<Integer> collect = new LinkedList<>();

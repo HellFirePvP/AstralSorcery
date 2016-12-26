@@ -49,7 +49,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
     @Nullable
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        ItemStack center = centralGridMap.get(ShapedRecipeSlot.CENTER);
+        ItemStack center = centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0);
         if(center == null || center.getItem() == null || !(center.getItem() instanceof ItemTunedCrystalBase)) return null;
         ItemStack out = super.getOutput(centralGridMap, altar);
         IMajorConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);

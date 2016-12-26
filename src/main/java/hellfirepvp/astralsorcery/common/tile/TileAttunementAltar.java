@@ -113,7 +113,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return super.getRenderBoundingBox().expand(1.5, 2, 1.5);
+        return super.getRenderBoundingBox().expand(3.5, 2, 3.5);
     }
 
     protected void updateSkyState() {

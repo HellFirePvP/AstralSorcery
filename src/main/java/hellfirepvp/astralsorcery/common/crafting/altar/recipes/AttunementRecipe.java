@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
@@ -15,8 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -29,7 +33,7 @@ import java.util.Random;
  */
 public class AttunementRecipe extends DiscoveryRecipe {
 
-    private Map<AltarSlot, ItemStack> additionalSlots = new HashMap<>();
+    private Map<AltarSlot, ItemHandle> additionalSlots = new HashMap<>();
 
     protected AttunementRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -57,24 +61,36 @@ public class AttunementRecipe extends DiscoveryRecipe {
     }
 
     public AttunementRecipe setAttItem(ItemStack stack, AltarSlot... slots) {
+        return this.setAttItem(new ItemHandle(stack), slots);
+    }
+
+    public AttunementRecipe setAttItem(String oreDict, AltarSlot... slots) {
+        return this.setAttItem(new ItemHandle(oreDict), slots);
+    }
+
+    public AttunementRecipe setAttItem(ItemHandle handle, AltarSlot... slots) {
         for (AltarSlot slot : slots) {
-            additionalSlots.put(slot, stack.copy());
+            additionalSlots.put(slot, handle);
         }
         return this;
     }
 
-    @Nullable
-    public ItemStack getAttItem(AltarSlot slot) {
-        return additionalSlots.get(slot);
+    @Nonnull
+    public List<ItemStack> getAttItems(AltarSlot slot) {
+        ItemHandle handle = additionalSlots.get(slot);
+        if(handle != null) {
+            return handle.getApplicableItems();
+        }
+        return Lists.newArrayList();
     }
 
     @Override
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
         for (AltarSlot slot : AltarSlot.values()) {
-            ItemStack expected = additionalSlots.get(slot);
+            ItemHandle expected = additionalSlots.get(slot);
             if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
-                if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
+                if(!expected.matchCrafting(altarItem)) {
                     return false;
                 }
             } else {

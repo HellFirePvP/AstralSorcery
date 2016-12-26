@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.crafting.infusion.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -21,7 +22,15 @@ import java.util.Random;
  */
 public class BasicInfusionRecipe extends AbstractInfusionRecipe {
 
+    public BasicInfusionRecipe(ItemStack output, String oreDictInput) {
+        this(output, new ItemHandle(oreDictInput));
+    }
+
     public BasicInfusionRecipe(ItemStack output, ItemStack input) {
+        this(output, new ItemHandle(input));
+    }
+
+    public BasicInfusionRecipe(ItemStack output, ItemHandle input) {
         super(output, input);
     }
 

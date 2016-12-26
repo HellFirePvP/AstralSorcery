@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -30,7 +31,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
 
     public PrismLensRecipe(boolean celestial) {
         super(new ShapedRecipe(BlocksAS.lensPrism)
-                .addPart(Blocks.GLASS_PANE,
+                .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -49,10 +50,10 @@ public class PrismLensRecipe extends ConstellationRecipe {
         setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AltarAdditionalSlot.DOWN_DOWN_LEFT,
                 AltarAdditionalSlot.DOWN_DOWN_RIGHT);
-        setCstItem(Blocks.LOG,
+        setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
                 AltarAdditionalSlot.DOWN_RIGHT_RIGHT,
                 AltarAdditionalSlot.DOWN_LEFT_LEFT);
-        setCstItem(Items.GOLD_INGOT,
+        setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
                 AltarAdditionalSlot.UP_LEFT_LEFT,
                 AltarAdditionalSlot.UP_RIGHT_RIGHT);
     }
@@ -61,7 +62,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack lens = super.getOutput(centralGridMap, altar);
-        CrystalProperties crystalProp = CrystalProperties.getCrystalProperties(centralGridMap.get(ShapedRecipeSlot.CENTER));
+        CrystalProperties crystalProp = CrystalProperties.getCrystalProperties(centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0));
         CrystalProperties.applyCrystalProperties(lens, crystalProp);
         return lens;
     }

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.infusion;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,10 @@ public abstract class AbstractInfusionRecipe {
     private int uniqueRecipeId = -1;
     private float consumptionChance = 0.1F;
 
-    private ItemStack output, input;
+    private ItemStack output;
+    private ItemHandle input;
 
-    public AbstractInfusionRecipe(ItemStack output, ItemStack input) {
+    public AbstractInfusionRecipe(ItemStack output, ItemHandle input) {
         this.output = output;
         this.input = input;
     }
@@ -57,7 +59,7 @@ public abstract class AbstractInfusionRecipe {
         return output;
     }
 
-    public ItemStack getInput() {
+    public ItemHandle getInput() {
         return input;
     }
 
@@ -69,7 +71,7 @@ public abstract class AbstractInfusionRecipe {
     public void onCraftClientTick(TileStarlightInfuser infuser, int tick, Random rand) {}
 
     public boolean matches(TileStarlightInfuser infuser) {
-        return infuser.hasMultiblock() && infuser.getInputStack() != null && ItemUtils.matchStacks(input, infuser.getInputStack());
+        return infuser.hasMultiblock() && infuser.getInputStack() != null && input.matchCrafting(infuser.getInputStack());
     }
 
 }

@@ -139,13 +139,13 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
         /**
          * Called when a Player gets generally hurt.
-         * Calls {@link #onEntityHurt(net.minecraft.entity.player.EntityPlayer, float)}
+         * Calls {@link #onEntityHurt(net.minecraft.entity.player.EntityPlayer, net.minecraft.util.DamageSource, float)}
          */
         ENTITY_HURT,
 
         /**
          * Gets called on each player's tick.
-         * Calls {@link #onPlayerTick(net.minecraft.entity.player.EntityPlayer)}
+         * Calls {@link #onPlayerTick(net.minecraft.entity.player.EntityPlayer, net.minecraftforge.fml.relauncher.Side)}
          */
         PLAYER_TICK
 

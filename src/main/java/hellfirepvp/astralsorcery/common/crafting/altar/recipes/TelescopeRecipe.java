@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -28,13 +29,13 @@ public class TelescopeRecipe extends DiscoveryRecipe {
         super(new ShapedRecipe(BlockMachine.MachineType.TELESCOPE.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(Blocks.PLANKS,
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(Items.GOLD_INGOT,
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(Items.STICK,
+                .addPart(OreDictAlias.ITEM_STICKS,
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT));
     }

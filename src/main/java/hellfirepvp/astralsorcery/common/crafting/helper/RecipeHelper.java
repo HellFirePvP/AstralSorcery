@@ -1,16 +1,8 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
-
-import java.util.List;
-import java.util.Map;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,8 +13,8 @@ import java.util.Map;
  */
 public class RecipeHelper {
 
-    public static ShapelessRecipes getShapelessRecipe(ItemStack stack, Object... recipeComponents) {
-        List<ItemStack> list = Lists.<ItemStack>newArrayList();
+    public static ShapelessOreRecipe getShapelessOreDictRecipe(ItemStack stack, Object... recipeComponents) {
+        /*List<ItemStack> list = Lists.<ItemStack>newArrayList();
 
         for (Object object : recipeComponents) {
             if (object instanceof ItemStack) {
@@ -36,13 +28,13 @@ public class RecipeHelper {
 
                 list.add(new ItemStack((Block) object));
             }
-        }
+        }*/
 
-        return new ShapelessRecipes(stack, list);
+        return new ShapelessOreRecipe(stack, recipeComponents);
     }
 
-    public static ShapedRecipes getShapedRecipe(ItemStack stack, Object... recipeComponents) {
-        String s = "";
+    public static ShapedOreRecipe getShapedOredictRecipe(ItemStack stack, Object... recipeComponents) {
+        /*String s = "";
         int i = 0;
         int j = 0;
         int k = 0;
@@ -91,9 +83,9 @@ public class RecipeHelper {
             } else {
                 aitemstack[l] = null;
             }
-        }
+        }*/
 
-        return new ShapedRecipes(j, k, aitemstack, stack);
+        return new ShapedOreRecipe(stack, recipeComponents);
     }
 
 }

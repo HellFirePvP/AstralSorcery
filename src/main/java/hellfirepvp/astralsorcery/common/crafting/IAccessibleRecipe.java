@@ -3,8 +3,11 @@ package hellfirepvp.astralsorcery.common.crafting;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -16,9 +19,11 @@ import javax.annotation.Nullable;
 public interface IAccessibleRecipe extends IRecipe {
 
     @Nullable
-    public ItemStack getExpectedStack(int row, int column);
+    @SideOnly(Side.CLIENT)
+    public List<ItemStack> getExpectedStack(int row, int column);
 
     @Nullable
-    public ItemStack getExpectedStack(ShapedRecipeSlot slot);
+    @SideOnly(Side.CLIENT)
+    public List<ItemStack> getExpectedStack(ShapedRecipeSlot slot);
 
 }

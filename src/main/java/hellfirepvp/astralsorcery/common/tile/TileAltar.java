@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -282,7 +283,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
             ItemStack stack = getInventoryHandler().getStackInSlot(i);
             if(stack != null) {
-                current.put(slot, ItemUtils.copyStackWithSize(stack, 1));
+                current.put(slot, new ItemHandle(ItemUtils.copyStackWithSize(stack, 1)));
             }
         }
         return current;

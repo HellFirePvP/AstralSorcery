@@ -163,7 +163,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 int count = ClientScheduler.getClientTick() + from.x + from.y + to.x + to.y;
                 double part = (Math.sin(Math.toRadians(((count) * 8) % 360D)) + 1D) / 4D;
 
-                float br = 0.2F + 0.4F * (2F - ((float) part));
+                float br = 0.5F + 0.2F * (2F - ((float) part));
                 float rR = br;
                 float rG = br;
                 float rB = br;

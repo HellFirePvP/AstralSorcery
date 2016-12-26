@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.HashMap;
  * Created by HellFirePvP
  * Date: 10.08.2016 / 15:20
  */
-public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemStack> {
+public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
 
     public ShapeMap() {
         super();

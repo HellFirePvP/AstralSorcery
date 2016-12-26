@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -78,16 +79,22 @@ public class JournalPageRecipe implements IJournalPage {
             double offX = offsetX + 55;
             double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
-                ItemStack expected = recipe.getExpectedStack(srs);
-                if(expected == null) expected = recipe.getExpectedStack(srs.rowMultipler, srs.columnMultiplier);
-                if(expected == null) continue;
+
+                List<ItemStack> expected = recipe.getExpectedStack(srs);
+                if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStack(srs.rowMultipler, srs.columnMultiplier);
+                if(expected == null || expected.isEmpty()) continue;
+
+                int select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
+                select %= expected.size();
+                ItemStack draw = expected.get(select);
+
                 GL11.glPushMatrix();
                 GL11.glTranslated(offX + (srs.columnMultiplier * 25), offY + (srs.rowMultipler * 25), zLevel + 60);
                 GL11.glScaled(1.13, 1.13, 1.13);
                 RenderHelper.enableGUIStandardItemLighting();
-                r = drawItemStack(expected, 0, 0, 0);
+                r = drawItemStack(draw, 0, 0, 0);
                 r = new Rectangle((int) offX + (srs.columnMultiplier * 25), (int) offY + (srs.rowMultipler * 25), (int) (r.getWidth() * 1.4), (int) (r.getHeight() * 1.4));
-                this.thisFrameStackFrames.put(r, expected);
+                this.thisFrameStackFrames.put(r, draw);
                 GL11.glPopMatrix();
                 TextureHelper.refreshTextureBindState();
             }

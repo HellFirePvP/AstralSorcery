@@ -1,24 +1,26 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,7 +40,7 @@ public class ConstellationRecipe extends AttunementRecipe {
             new Vector3(-4, 3, -4)
     };
 
-    private Map<AltarAdditionalSlot, ItemStack> matchStacks = new HashMap<>();
+    private Map<AltarAdditionalSlot, ItemHandle> matchStacks = new HashMap<>();
     private IConstellation skyConstellationNeeded = null;
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
@@ -67,15 +69,27 @@ public class ConstellationRecipe extends AttunementRecipe {
     }
 
     public ConstellationRecipe setCstItem(ItemStack stack, AltarAdditionalSlot... slots) {
+        return setCstItem(new ItemHandle(stack), slots);
+    }
+
+    public ConstellationRecipe setCstItem(String oreDict, AltarAdditionalSlot... slots) {
+        return setCstItem(new ItemHandle(oreDict), slots);
+    }
+
+    public ConstellationRecipe setCstItem(ItemHandle handle, AltarAdditionalSlot... slots) {
         for (AltarAdditionalSlot slot : slots) {
-            matchStacks.put(slot, stack.copy());
+            matchStacks.put(slot, handle);
         }
         return this;
     }
 
-    @Nullable
-    public ItemStack getCstItem(AltarAdditionalSlot slot) {
-        return matchStacks.get(slot);
+    @Nonnull
+    public List<ItemStack> getCstItems(AltarAdditionalSlot slot) {
+        ItemHandle handle = matchStacks.get(slot);
+        if(handle != null) {
+            return handle.getApplicableItems();
+        }
+        return Lists.newArrayList();
     }
 
     @Override
@@ -95,10 +109,10 @@ public class ConstellationRecipe extends AttunementRecipe {
             if(activeConstellations == null || !activeConstellations.contains(skyConstellationNeeded)) return false;
         }
         for (AltarAdditionalSlot slot : AltarAdditionalSlot.values()) {
-            ItemStack expected = matchStacks.get(slot);
+            ItemHandle expected = matchStacks.get(slot);
             if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
-                if(!ItemUtils.stackEqualsNonNBT(altarItem, expected)) {
+                if(!expected.matchCrafting(altarItem)) {
                     return false;
                 }
             } else {

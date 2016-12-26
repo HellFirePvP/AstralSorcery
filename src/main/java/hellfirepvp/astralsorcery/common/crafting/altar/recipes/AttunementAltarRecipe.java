@@ -11,6 +11,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Items;
 
@@ -36,7 +37,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
         super(new ShapedRecipe(BlocksAS.attunementAltar)
                 .addPart(celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal,
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(Items.GOLD_INGOT,
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(BlocksAS.attunementRelay,

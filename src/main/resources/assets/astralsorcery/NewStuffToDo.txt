@@ -77,6 +77,7 @@ Constellation Perk/Buff ideas:
         - (F) Chance that an attack just misses you
         - (F) Damage reduction and faster regeneration when having less then 2 or 2 armorpieces equipped
         - (F) Damage reduction against severeal types of non-physical damage
+        - (F) Gain an amount of feather fall forever
     -> Ability: A short shockwave, destroying all nearby projectiles, knocking all entities back, dealing damage to those. Refreshes shield to full.
 
 -> Travel
@@ -84,7 +85,6 @@ Constellation Perk/Buff ideas:
         - (F) generally small % additional movement speed
         - (F) if you're in a cave, light sources randomly spawn around you
         - (F) Take no damage for the first 'x' seconds after falling in lava
-        - (F) Gain an amount of feather fall forever
         - (F) you move faster underwater
         - (F) Reduce amount of hunger?..
     -> Ability:
@@ -94,6 +94,7 @@ Constellation Perk/Buff ideas:
         - (F) low chance that something close to you might get bonemeal'd
         - (F) chance that a baby animal close to you grows into an adult
         - (F) low chance that a cleanstone somewhere around you turns into an ore
+        - (F) Extend player reach by a bit or a lot. depends. :P
     -> Ability: Wave of Creation -> Shockwave of all above + turns dirt into grass + vanilla animal spawn + plants saplings + bonemeals those
 
 -> Destruction

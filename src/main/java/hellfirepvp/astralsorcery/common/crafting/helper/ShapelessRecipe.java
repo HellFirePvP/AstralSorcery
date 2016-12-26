@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 public class ShapelessRecipe extends AbstractCacheableRecipe {
 
     protected int contentCounter = 0;
-    protected ItemStack[] contents = new ItemStack[9]; //Max. 9
+    protected ItemHandle[] contents = new ItemHandle[9]; //Max. 9
 
     public ShapelessRecipe(Block block) {
         this(new ItemStack(block));
@@ -41,7 +42,13 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
 
     public ShapelessRecipe add(ItemStack stack) {
         if(contentCounter >= 9) return this; //Add nothing then.
-        this.contents[contentCounter++] = stack;
+        this.contents[contentCounter++] = new ItemHandle(stack);
+        return this;
+    }
+
+    public ShapelessRecipe add(String oreDictName) {
+        if(contentCounter >= 9) return this; //Add nothing then.
+        this.contents[contentCounter++] = new ItemHandle(oreDictName);
         return this;
     }
 
@@ -53,20 +60,27 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
     @Override
     public AccessibleRecipeAdapater make() {
         Object[] parts = new Object[contentCounter];
-        System.arraycopy(contents, 0, parts, 0, contentCounter);
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessRecipe(getOutput(), parts), this);
+        for (int i = 0; i < parts.length; i++) {
+            Object obj = parts[i];
+            if(obj instanceof ItemHandle) {
+                parts[i] = contents[i].getObjectForRecipe();
+            } else {
+                parts[i] = contents[i];
+            }
+        }
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts), this);
     }
 
     @Nullable
     @Override
-    public ItemStack getExpectedStack(int row, int column) {
+    public ItemHandle getExpectedStack(int row, int column) {
         int index = row * 3 + column;
         return index >= contentCounter ? null : contents[index];
     }
 
     @Nullable
     @Override
-    public ItemStack getExpectedStack(ShapedRecipeSlot slot) {
+    public ItemHandle getExpectedStack(ShapedRecipeSlot slot) {
         int index = slot.rowMultipler * 3 + slot.columnMultiplier;
         return index >= contentCounter ? null : contents[index];
     }

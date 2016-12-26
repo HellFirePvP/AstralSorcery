@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -39,8 +40,10 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
         ItemStack toolOut = super.getOutput(centralGridMap, altar);
         List<CrystalProperties> prop = new LinkedList<>();
         for (ShapedRecipeSlot slot : positions) {
-            ItemStack stack = centralGridMap.get(slot);
-            if(stack == null) continue;
+            ItemHandle handle = centralGridMap.get(slot);
+            if(handle == null) continue;
+            if(handle.getApplicableItems().size() != 1) continue; //Force it to be the crystal. and only the crystal.
+            ItemStack stack = handle.getApplicableItems().get(0);
             CrystalProperties c = CrystalProperties.getCrystalProperties(stack);
             if(c == null) continue;
             prop.add(c);

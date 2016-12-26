@@ -1,12 +1,19 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,14 +34,33 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
 
     @Nullable
     @Override
-    public ItemStack getExpectedStack(int row, int column) {
-        return abstractRecipe.getExpectedStack(row, column);
+    @SideOnly(Side.CLIENT)
+    public List<ItemStack> getExpectedStack(int row, int column) {
+        ItemHandle handle = abstractRecipe.getExpectedStack(row, column);
+        if(handle == null) return null;
+        return refactorSubItems(handle.getApplicableItems());
     }
 
     @Nullable
     @Override
-    public ItemStack getExpectedStack(ShapedRecipeSlot slot) {
-        return abstractRecipe.getExpectedStack(slot);
+    @SideOnly(Side.CLIENT)
+    public List<ItemStack> getExpectedStack(ShapedRecipeSlot slot) {
+        ItemHandle handle = abstractRecipe.getExpectedStack(slot);
+        if(handle == null) return null;
+        return refactorSubItems(handle.getApplicableItems());
+    }
+
+    @SideOnly(Side.CLIENT)
+    private List<ItemStack> refactorSubItems(List<ItemStack> applicableItems) {
+        List<ItemStack> out = new LinkedList<>();
+        for (ItemStack oreDictIn : applicableItems) {
+            if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
+                oreDictIn.getItem().getSubItems(oreDictIn.getItem(), CreativeTabs.BUILDING_BLOCKS, out);
+            } else {
+                out.add(oreDictIn);
+            }
+        }
+        return out;
     }
 
     @Override

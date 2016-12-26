@@ -1,6 +1,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
@@ -22,9 +23,9 @@ public abstract class AbstractCacheableRecipe extends AbstractRecipe {
     public abstract IAccessibleRecipe make();
 
     @Nullable
-    public abstract ItemStack getExpectedStack(int row, int column);
+    public abstract ItemHandle getExpectedStack(int row, int column);
 
     @Nullable
-    public abstract ItemStack getExpectedStack(ShapedRecipeSlot slot);
+    public abstract ItemHandle getExpectedStack(ShapedRecipeSlot slot);
 
 }

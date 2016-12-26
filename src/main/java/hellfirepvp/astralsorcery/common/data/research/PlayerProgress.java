@@ -144,12 +144,12 @@ public class PlayerProgress {
     }
 
     public List<ConstellationPerk> getAppliedPerks() {
-        /*List<ConstellationPerk> perks = new LinkedList<>();
+        List<ConstellationPerk> perks = new LinkedList<>();
         for (ConstellationPerks c : ConstellationPerks.values()) {
             perks.add(c.getSingleInstance());
         }
-        return perks;*/
-        return Collections.unmodifiableList(appliedPerks);
+        return perks;
+        //return Collections.unmodifiableList(appliedPerks);
     }
 
     public boolean hasPerkUnlocked(ConstellationPerks perk) {
@@ -157,7 +157,8 @@ public class PlayerProgress {
     }
 
     public boolean hasPerkUnlocked(ConstellationPerk perk) {
-        return appliedPerks.contains(perk);
+        return true;
+        //return appliedPerks.contains(perk);
     }
 
     public int getPerkExperience() {
