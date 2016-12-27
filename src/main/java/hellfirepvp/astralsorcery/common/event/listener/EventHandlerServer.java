@@ -113,8 +113,9 @@ public class EventHandlerServer {
             PlayerProgress prog = ResearchManager.getProgress(p);
             if(prog != null) {
                 float dmg = event.getAmount();
-                List<ConstellationPerk> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks) {
+                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks.keySet()) {
+                    if(!prog.isPerkActive(perk)) continue;
                     if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
                         dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
                     }
@@ -126,8 +127,9 @@ public class EventHandlerServer {
             PlayerProgress prog = ResearchManager.getProgress(hurt);
             if(prog != null) {
                 float dmg = event.getAmount();
-                List<ConstellationPerk> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks) {
+                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks.keySet()) {
+                    if(!prog.isPerkActive(perk)) continue;
                     if(perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
                         dmg = perk.onEntityHurt(hurt, source, dmg);
                     }
@@ -144,8 +146,9 @@ public class EventHandlerServer {
             EntityPlayer p = (EntityPlayer) attacker;
             PlayerProgress prog = ResearchManager.getProgress(p);
             if(prog != null) {
-                List<ConstellationPerk> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks) {
+                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks.keySet()) {
+                    if(!prog.isPerkActive(perk)) continue;
                     if(perk.mayExecute(ConstellationPerk.Target.ENTITY_KNOCKBACK)) {
                         perk.onEntityKnockback(p, event.getEntityLiving());
                     }
@@ -171,8 +174,9 @@ public class EventHandlerServer {
                 EntityPlayer p = (EntityPlayer) source.getEntity();
                 PlayerProgress prog = ResearchManager.getProgress(p);
                 if(prog != null) {
-                    List<ConstellationPerk> perks = prog.getAppliedPerks();
-                    for (ConstellationPerk perk : perks) {
+                    Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                    for (ConstellationPerk perk : perks.keySet()) {
+                        if(!prog.isPerkActive(perk)) continue;
                         if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KILL)) {
                             perk.onEntityKilled(p, event.getEntityLiving());
                         }

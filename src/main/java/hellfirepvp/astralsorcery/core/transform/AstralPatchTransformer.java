@@ -75,6 +75,7 @@ public class AstralPatchTransformer implements SubClassTransformer {
                         currentPatch = patch;
                         patch.transform(cn);
                         FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
+                        currentPatch = null;
                     }
                 } catch (Exception exc) {
                     throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + obfName + " - " + transformedClassName + ") - Rethrowing exception!", exc);

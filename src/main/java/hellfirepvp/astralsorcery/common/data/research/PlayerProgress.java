@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,8 +18,10 @@ import net.minecraft.util.math.MathHelper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,10 +34,10 @@ public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
-    private List<ConstellationPerk> appliedPerks = new LinkedList<>();
+    private Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>(); //Perk -> Level Of Unlock
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
-    private int perkExperience = 0;
+    private int alignmentCharge = 0;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
@@ -42,7 +45,7 @@ public class PlayerProgress {
         appliedPerks.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
-        perkExperience = 0;
+        alignmentCharge = 0;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -51,11 +54,13 @@ public class PlayerProgress {
             }
         }
         if(compound.hasKey("listPerks")) {
-            NBTTagList list = compound.getTagList("listPerks", 3);
+            NBTTagList list = compound.getTagList("listPerks", 10);
             for (int i = 0; i < list.tagCount(); i++) {
-                ConstellationPerks perkEnum = ConstellationPerks.getById(list.getIntAt(i));
+                NBTTagCompound tag = list.getCompoundTagAt(i);
+                ConstellationPerks perkEnum = ConstellationPerks.getById(tag.getInteger("perkId"));
+                Integer unlockLevel = tag.getInteger("perkLevel");
                 if(perkEnum != null) {
-                    appliedPerks.add(perkEnum.createPerk());
+                    appliedPerks.put(perkEnum.createPerk(), unlockLevel);
                 }
             }
         }
@@ -82,8 +87,8 @@ public class PlayerProgress {
             }
         }
 
-        if(compound.hasKey("perkExperience")) {
-            this.perkExperience = compound.getInteger("perkExperience");
+        if(compound.hasKey("alignmentCharge")) {
+            this.alignmentCharge = compound.getInteger("alignmentCharge");
         }
     }
 
@@ -104,11 +109,14 @@ public class PlayerProgress {
             cmp.setString("attuned", attunedConstellation.getUnlocalizedName());
         }
         list = new NBTTagList();
-        for (ConstellationPerk perk : appliedPerks) {
-            list.appendTag(new NBTTagInt(perk.getId()));
+        for (ConstellationPerk perk : appliedPerks.keySet()) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setInteger("perkId", perk.getId());
+            tag.setInteger("perkLevel", appliedPerks.get(perk));
+            list.appendTag(tag);
         }
         cmp.setTag("listPerks", list);
-        cmp.setInteger("perkExperience", perkExperience);
+        cmp.setInteger("alignmentCharge", alignmentCharge);
     }
 
     protected boolean forceGainResearch(ResearchProgression progression) {
@@ -123,8 +131,8 @@ public class PlayerProgress {
         this.attunedConstellation = constellation;
     }
 
-    public void addPerk(ConstellationPerk singleInstance) {
-        this.appliedPerks.add(singleInstance);
+    public void addPerk(ConstellationPerk singleInstance, Integer alignmentLevelUnlocked) {
+        this.appliedPerks.put(singleInstance, alignmentLevelUnlocked);
     }
 
     public void clearPerks() {
@@ -143,13 +151,13 @@ public class PlayerProgress {
         return attunedConstellation;
     }
 
-    public List<ConstellationPerk> getAppliedPerks() {
-        List<ConstellationPerk> perks = new LinkedList<>();
+    public Map<ConstellationPerk, Integer> getAppliedPerks() {
+        /*Map<ConstellationPerk, Integer> perks = new HashMap<>();
         for (ConstellationPerks c : ConstellationPerks.values()) {
-            perks.add(c.getSingleInstance());
+            perks.put(c.getSingleInstance(), 1);
         }
-        return perks;
-        //return Collections.unmodifiableList(appliedPerks);
+        return perks;*/
+        return Collections.unmodifiableMap(appliedPerks);
     }
 
     public boolean hasPerkUnlocked(ConstellationPerks perk) {
@@ -157,16 +165,53 @@ public class PlayerProgress {
     }
 
     public boolean hasPerkUnlocked(ConstellationPerk perk) {
-        return true;
-        //return appliedPerks.contains(perk);
+        return appliedPerks.containsKey(perk);
     }
 
-    public int getPerkExperience() {
-        return perkExperience;
+    public boolean isPerkActive(ConstellationPerk perk) {
+        return hasPerkUnlocked(perk) && appliedPerks.get(perk) <= getAlignmentLevel();
     }
 
-    protected void addPerkExperience(int exp) {
-        this.perkExperience = exp;
+    // -1 -> no free level
+    protected int getNextFreeLevel() {
+        int level = getAlignmentLevel();
+        for (int i = 0; i <= level; i++) {
+            if(!appliedPerks.values().contains(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean hasFreeAlignmentLevel() {
+        return getNextFreeLevel() > -1;
+        /*int lowestFree = getNextFreeLevel();
+        int level = getAlignmentLevel();
+        int highestFound = 0;
+        for (ConstellationPerk p : appliedPerks.keySet()) {
+            int claimedAtLevel = appliedPerks.get(p);
+            if(claimedAtLevel > highestFound) highestFound = claimedAtLevel;
+        }
+        if(highestFound == 0 && appliedPerks.isEmpty()) {
+            return true; //First one is free.
+        }
+        return level > highestFound;*/
+    }
+
+    public int getAlignmentCharge() {
+        return alignmentCharge;
+    }
+
+    public int getAlignmentLevel() {
+        return ConstellationPerkLevelManager.getAlignmentLevel(this);
+    }
+
+    protected void modifyCharge(int charge) {
+        this.alignmentCharge += charge;
+    }
+
+    protected void forceCharge(int charge) {
+        this.alignmentCharge = charge;
     }
 
     protected boolean stepTier() {
@@ -199,7 +244,7 @@ public class PlayerProgress {
         this.tierReached = ProgressionTier.values()[MathHelper.clamp(message.progressTier, 0, ProgressionTier.values().length - 1)];
         this.attunedConstellation = message.attunedConstellation;
         this.appliedPerks = message.appliedPerks;
-        this.perkExperience = message.perkExperience;
+        this.alignmentCharge = message.alignmentCharge;
     }
 
 }

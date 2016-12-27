@@ -2,6 +2,8 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -60,6 +62,7 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
     @SideOnly(Side.CLIENT)
     public void addLocalizedDescription(List<String> tooltip) {
+        tooltip.add(I18n.format(getUnlocalizedName()));
         tooltip.add(I18n.format(getUnlocalizedDescription()));
     }
 
@@ -97,6 +100,12 @@ public abstract class ConstellationPerk extends ConfigEntry {
             return -1;
         }
         return EventHandlerServer.perkCooldowns.getOrCreateList(player).getTimeout(getId());
+    }
+
+    public final void addAlignmentCharge(EntityPlayer player, double charge) {
+        if(!player.getEntityWorld().isRemote) {
+            ResearchManager.modifyAlignmentCharge(player, charge);
+        }
     }
 
     @Override

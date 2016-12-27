@@ -79,10 +79,11 @@ public class ConstellationPerkMap {
         return Collections.unmodifiableMap(perks);
     }
 
+    @Deprecated
     public List<ConstellationPerks> getAvailablePerksFor(EntityPlayer player, PerkOrder availableOrder, boolean client) {
         PlayerProgress prog = client ? ResearchManager.clientProgress : ResearchManager.getProgress(player);
         if(prog == null) return null;
-        List<ConstellationPerk> appliedPerks = prog.getAppliedPerks();
+        Map<ConstellationPerk, Integer> appliedPerks = prog.getAppliedPerks();
         List<ConstellationPerks> available = new LinkedList<>();
         for (ConstellationPerks entry : perkOrderMap.keySet()) {
             PerkOrder order = perkOrderMap.get(entry);
@@ -90,7 +91,7 @@ public class ConstellationPerkMap {
                 available.add(entry);
             }
         }
-        for (ConstellationPerk perk : appliedPerks) {
+        for (ConstellationPerk perk : appliedPerks.keySet()) {
             Iterator<ConstellationPerks> iterator = available.iterator();
             while (iterator.hasNext()) {
                 ConstellationPerks av = iterator.next();
@@ -104,9 +105,9 @@ public class ConstellationPerkMap {
 
     public static enum PerkOrder {
 
-        DEFAULT,
-        EXTENDED,
-        ALL
+        DEFAULT
+        //EXTENDED,
+        //ALL
 
     }
 

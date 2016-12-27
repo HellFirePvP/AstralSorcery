@@ -103,6 +103,10 @@ public class CommandAstralSorcery extends CommandBase {
                 if (args.length == 2) {
                     wipeProgression(server, sender, args[1]);
                 }
+            } else if (identifier.equalsIgnoreCase("charge")) {
+                if (args.length == 3) {
+                    setCharge(server, sender, args[1], args[2]);
+                }
             } else if (identifier.equalsIgnoreCase("build")) {
                 if(args.length == 2) {
                     buildStruct(server, sender, args[1]);
@@ -114,6 +118,29 @@ public class CommandAstralSorcery extends CommandBase {
                     maxAll(server, sender, args[1]);
                 }
             }
+        }
+    }
+
+    private void setCharge(MinecraftServer server, ICommandSender sender, String otherPlayerName, String strCharge) {
+        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        if (prTuple == null) {
+            return;
+        }
+        PlayerProgress progress = prTuple.value;
+        EntityPlayer other = prTuple.key;
+
+        int chargeToSet;
+        try {
+            chargeToSet = Integer.parseInt(strCharge);
+        } catch (NumberFormatException exc) {
+            sender.addChatMessage(new TextComponentString("§cFailed! Alignment charge to set should be a number! " + strCharge));
+            return;
+        }
+
+        if(ResearchManager.forceCharge(other, chargeToSet)) {
+            sender.addChatMessage(new TextComponentString("§aSuccess! Player charge has been set to " + chargeToSet));
+        } else {
+            sender.addChatMessage(new TextComponentString("§cFailed! Player specified doesn't seem to have a research progress!"));
         }
     }
 
@@ -336,6 +363,7 @@ public class CommandAstralSorcery extends CommandBase {
         sender.addChatMessage(new TextComponentString("§a/astralsorcery reset [playerName]§7 - resets all progression-related data for that player."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery build [structure]§7 - builds the named structure wherever the player is looking at."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery charge [playerName] <charge>§7 - sets the alignment charge for a player"));
     }
 
     private void listConstellations(ICommandSender sender) {

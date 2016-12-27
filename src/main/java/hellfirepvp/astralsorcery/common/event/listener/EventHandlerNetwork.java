@@ -1,9 +1,11 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,6 +27,7 @@ public class EventHandlerNetwork {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
         AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
+        PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
 
         ResearchManager.sendInitClientKnowledge(p);
 

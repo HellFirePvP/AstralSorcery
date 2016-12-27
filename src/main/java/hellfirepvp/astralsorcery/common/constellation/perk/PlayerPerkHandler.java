@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,8 +25,9 @@ public class PlayerPerkHandler implements ITickHandler {
         EntityPlayer ticked = (EntityPlayer) context[0];
         PlayerProgress prog = ResearchManager.getProgress(ticked, (Side) context[1]);
         if(prog != null) {
-            List<ConstellationPerk> perks = prog.getAppliedPerks();
-            for (ConstellationPerk perk : perks) {
+            Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+            for (ConstellationPerk perk : perks.keySet()) {
+                if(!prog.isPerkActive(perk)) continue;
                 if(perk.mayExecute(ConstellationPerk.Target.PLAYER_TICK)) {
                     perk.onPlayerTick(ticked, (Side) context[1]);
                 }

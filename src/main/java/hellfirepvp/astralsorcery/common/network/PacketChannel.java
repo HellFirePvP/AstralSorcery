@@ -10,6 +10,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFi
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
@@ -45,6 +46,8 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktPlayEffect.class, PktPlayEffect.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktUpdateReach.class, PktUpdateReach.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktSyncAlignmentLevels.class, PktSyncAlignmentLevels.class, id++, Side.CLIENT);
 
         //Constellation discovery (client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER); //discover a constellation in gui and inform server.

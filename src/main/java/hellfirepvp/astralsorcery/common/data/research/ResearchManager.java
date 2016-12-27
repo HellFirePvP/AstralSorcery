@@ -199,8 +199,12 @@ public class ResearchManager {
     public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
+        if(!progress.hasFreeAlignmentLevel()) return false;
+        if(progress.hasPerkUnlocked(perk)) return false;
 
-        progress.addPerk(perk.getSingleInstance());
+        int free = progress.getNextFreeLevel();
+        if(free == -1) return false;
+        progress.addPerk(perk.getSingleInstance(), free);
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
@@ -224,11 +228,25 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean addPerkExperience(EntityPlayer player, double exp) {
+    public static boolean forceCharge(EntityPlayer player, int charge) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
-        progress.addPerkExperience(MathHelper.floor(exp));
+        progress.forceCharge(charge);
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
+    public static boolean modifyAlignmentCharge(EntityPlayer player, double charge) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.modifyCharge(MathHelper.floor(charge));
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);

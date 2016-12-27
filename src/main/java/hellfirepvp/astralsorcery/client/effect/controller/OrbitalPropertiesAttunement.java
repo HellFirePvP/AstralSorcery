@@ -18,7 +18,7 @@ public class OrbitalPropertiesAttunement implements OrbitalEffectController.Orbi
 
     private static final Random rand = new Random();
 
-    private int persistanceRequests = 6;
+    private int persistanceRequests = 8;
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {

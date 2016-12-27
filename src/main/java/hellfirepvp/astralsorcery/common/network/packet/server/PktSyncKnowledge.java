@@ -16,7 +16,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,8 +36,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<String> knownConstellations = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
-    public List<ConstellationPerk> appliedPerks = new ArrayList<>();
-    public int progressTier = 0, perkExperience = 0;
+    public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
+    public int progressTier = 0, alignmentCharge = 0;
 
     public PktSyncKnowledge() {}
 
@@ -49,7 +51,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
         this.appliedPerks = progress.getAppliedPerks();
-        this.perkExperience = progress.getPerkExperience();
+        this.alignmentCharge = progress.getAlignmentCharge();
     }
 
     @Override
@@ -90,16 +92,18 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int perkLength = buf.readInt();
         if(perkLength != -1) {
-            this.appliedPerks = new ArrayList<>(perkLength);
+            this.appliedPerks = new HashMap<>(perkLength);
             for (int i = 0; i < perkLength; i++) {
-                this.appliedPerks.add(ConstellationPerks.getById(buf.readInt()).getSingleInstance());
+                int id = buf.readInt();
+                int lvl = buf.readInt();
+                this.appliedPerks.put(ConstellationPerks.getById(id).getSingleInstance(), lvl);
             }
         } else {
-            this.appliedPerks = new ArrayList<>();
+            this.appliedPerks = new HashMap<>();
         }
 
         this.progressTier = buf.readInt();
-        this.perkExperience = buf.readInt();
+        this.alignmentCharge = buf.readInt();
     }
 
     @Override
@@ -133,15 +137,16 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         if(appliedPerks != null) {
             buf.writeInt(appliedPerks.size());
-            for (ConstellationPerk perk : appliedPerks) {
+            for (ConstellationPerk perk : appliedPerks.keySet()) {
                 buf.writeInt(perk.getId());
+                buf.writeInt(appliedPerks.get(perk));
             }
         } else {
             buf.writeInt(-1);
         }
 
         buf.writeInt(this.progressTier);
-        buf.writeInt(this.perkExperience);
+        buf.writeInt(this.alignmentCharge);
     }
 
     @Override

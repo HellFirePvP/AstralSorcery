@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -75,7 +76,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     private void closeAndRefreshJournal() {
         GuiScreen open = Minecraft.getMinecraft().currentScreen;
         if(open != null) {
-            if(open instanceof GuiScreenJournal) {
+            if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkMap)) {
                 Minecraft.getMinecraft().displayGuiScreen(null);
             }
         }

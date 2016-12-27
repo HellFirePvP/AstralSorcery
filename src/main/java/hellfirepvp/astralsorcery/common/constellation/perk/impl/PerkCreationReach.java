@@ -86,7 +86,7 @@ public class PerkCreationReach extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        reachModifier = cfg.getFloat(getKey() + "ReachModifier", getConfigurationSection(), 3.5F, 0F, 200F, "Sets the reach modifier that gets applied when the player has this perk. (Too high values might cause issues.)");
+        reachModifier = cfg.getFloat(getKey() + "ReachModifier", getConfigurationSection(), 2.5F, 0F, 200F, "Sets the reach modifier that gets applied when the player has this perk. (Too high values might cause issues.)");
     }
 
 }

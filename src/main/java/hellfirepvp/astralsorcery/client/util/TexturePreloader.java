@@ -78,6 +78,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkInactive").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActive")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")       .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(MoonPhase.NEW); //Loads all phase textures

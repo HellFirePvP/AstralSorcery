@@ -237,10 +237,18 @@ astralsorcery.constellation.evorsio.info=Destruction
 
 perk.info.locked=§7Locked
 perk.info.available=§9Available
-perk.info.unlocked=§aActive
+perk.info.active=§aActive
+perk.info.inactive=§cInactive (Missing Alignment)
+perk.info.unlock=§aUnlocked '%s'
+perk.DMG_KILL=Kill frenzy
 perk.DMG_KILL.info=Increased damage after killing a mob
+perk.DMG_DST=Rooftop sniper
 perk.DMG_DST.info=Increased damage to distant mobs
+perk.DMG_PERM=Berserk
 perk.DMG_PERM.info=Slightly overall increased damage
+perk.DMG_KNOCK=Heavy blows
 perk.DMG_KNOCK.info=Increased damage to mobs that were knocked back
+perk.DMG_BLEED=Grievous wounds
+perk.DMG_BLEED.info=Apply a bleed effect when hitting something
 
 constellation.noInformation=No useful information

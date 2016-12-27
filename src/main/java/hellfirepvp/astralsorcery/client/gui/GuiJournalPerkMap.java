@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
@@ -30,11 +31,14 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +55,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
 
     private static final double widthHeight = 70;
+    private Map<ConstellationPerks, Integer> unlockPlayMap = new HashMap<>();
 
     private ConstellationPerkMap mapToDisplay = null;
     private IMajorConstellation attunedConstellation = null;
@@ -100,10 +105,64 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             drawPerkMap(mapToDisplay, new Point(mouseX, mouseY));
         }
 
+        drawUnlockEffects();
+
         TextureHelper.refreshTextureBindState();
 
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    private void drawUnlockEffects() {
+        double whStar = 40;
+        double whBetweenStars = widthHeight / 7D;
+        double offsetX = guiLeft + ((guiWidth ) / 2D) - widthHeight;
+        double offsetY = guiTop  + ((guiHeight) / 2D) - widthHeight;
+        Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
+
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
+        Iterator<ConstellationPerks> iterator = unlockPlayMap.keySet().iterator();
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
+        while (iterator.hasNext()) {
+            ConstellationPerks perk = iterator.next();
+            ConstellationPerkMap.Position position = mapToDisplay.getPosition(perk);
+            if (position == null) continue;
+            Integer startTick = unlockPlayMap.get(perk);
+            int count = ClientScheduler.getClientTick() - startTick;
+            SpriteSheetResource sprite = SpriteLibrary.spritePerkActivate;
+            if (count >= sprite.getFrameCount()) {
+                iterator.remove();
+                continue;
+            }
+
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+            sprite.getResource().bind();
+            int starX = position.x;
+            int starY = position.y;
+
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+
+            Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
+
+            double uLength = sprite.getULength();
+            double vLength = sprite.getVLength();
+            Tuple<Double, Double> frameUV = sprite.getUVOffset(count);
+
+            for (int i = 0; i < 4; i++) {
+                int u = ((i + 1) & 2) >> 1;
+                int v = ((i + 2) & 2) >> 1;
+
+                Vector3 pos = starVec.clone().addX(whStar * u * 2).addY(whStar * v * 2);
+                vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.key + uLength * u, frameUV.value + vLength * v).endVertex();
+            }
+            tes.draw();
+        }
+        Blending.DEFAULT.apply();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        TextureHelper.refreshTextureBindState();
     }
 
     private void drawPerkMap(ConstellationPerkMap mapToDisplay, Point mouse) {
@@ -122,11 +181,17 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 List<String> toolTip = new LinkedList<>();
                 ConstellationPerk perk = rects.get(r).getSingleInstance();
                 perk.addLocalizedDescription(toolTip);
+                toolTip.add("");
                 PlayerProgress prog = ResearchManager.clientProgress;
                 String unlockStr;
-                //TODO add clause where perk would be unlockable, but isn't yet.
                 if(prog.hasPerkUnlocked(perk)) {
-                    unlockStr = "perk.info.unlocked";
+                    if (prog.isPerkActive(perk)) {
+                        unlockStr = "perk.info.active";
+                    } else {
+                        unlockStr = "perk.info.inactive";
+                    }
+                } else if(mayUnlockClient(prog, perk)) {
+                    unlockStr = "perk.info.available";
                 } else {
                     unlockStr = "perk.info.locked";
                 }
@@ -135,6 +200,33 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
+        }
+    }
+
+    private boolean mayUnlockClient(PlayerProgress prog, ConstellationPerk perk) {
+        if(!prog.hasFreeAlignmentLevel()) return false;
+
+        ConstellationPerks enumPerk = ConstellationPerks.getById(perk.getId());
+        Map<ConstellationPerk, Integer> appliedPerks = prog.getAppliedPerks();
+        if(!appliedPerks.containsKey(perk)) {
+            boolean canUnlock = prog.hasFreeAlignmentLevel();
+            for (ConstellationPerkMap.Dependency d : mapToDisplay.getPerkDependencies()) {
+                if(d.to.equals(enumPerk)) {
+                    if(!appliedPerks.containsKey(d.from.getSingleInstance())) {
+                        canUnlock = false;
+                    }
+                }
+            }
+            return canUnlock;
+        }
+        return false;
+    }
+
+    public void playUnlockAnimation(ConstellationPerks perk) {
+        ConstellationPerkMap.Position pos = mapToDisplay.getPosition(perk);
+        if(pos != null) {
+            unlockPlayMap.put(perk, ClientScheduler.getClientTick());
+            Minecraft.getMinecraft().player.addChatMessage(new TextComponentString(I18n.format("perk.info.unlock", I18n.format(perk.getSingleInstance().getUnlocalizedName()))));
         }
     }
 
@@ -315,7 +407,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             if(r.contains(mouseX, mouseY)) {
                 ConstellationPerks perk = thisFramePerks.get(r);
                 PlayerProgress prog = ResearchManager.clientProgress;
-                if(!prog.hasPerkUnlocked(perk)) {
+                if(!prog.hasPerkUnlocked(perk) && mayUnlockClient(prog, perk.getSingleInstance())) {
                     PktUnlockPerk pkt = new PktUnlockPerk(perk, attunedConstellation);
                     PacketChannel.CHANNEL.sendToServer(pkt);
                 }
