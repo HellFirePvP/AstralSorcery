@@ -125,6 +125,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         Iterator<ConstellationPerks> iterator = unlockPlayMap.keySet().iterator();
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
         while (iterator.hasNext()) {
             ConstellationPerks perk = iterator.next();
             ConstellationPerkMap.Position position = mapToDisplay.getPosition(perk);
@@ -162,6 +163,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         }
         Blending.DEFAULT.apply();
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
     }
 
@@ -185,12 +187,19 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 PlayerProgress prog = ResearchManager.clientProgress;
                 String unlockStr;
                 if(prog.hasPerkUnlocked(perk)) {
+                    int unlock = prog.getAppliedPerks().get(perk);
+                    if(unlock > 0) {
+                        toolTip.add(I18n.format("perk.info.unlocked.level", unlock));
+                    } else {
+                        toolTip.add(I18n.format("perk.info.unlocked.free"));
+                    }
                     if (prog.isPerkActive(perk)) {
                         unlockStr = "perk.info.active";
                     } else {
                         unlockStr = "perk.info.inactive";
                     }
                 } else if(mayUnlockClient(prog, perk)) {
+                    toolTip.add(I18n.format("perk.info.unlock.level", prog.getNextFreeLevel()));
                     unlockStr = "perk.info.available";
                 } else {
                     unlockStr = "perk.info.locked";
@@ -305,6 +314,8 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             SpriteSheetResource sprite;
             if(prog.hasPerkUnlocked(star.getKey())) {
                 sprite = SpriteLibrary.spritePerkActive;
+            } else if(mayUnlockClient(prog, star.getKey().getSingleInstance())) {
+                sprite = SpriteLibrary.spritePerkActivateable;
             } else {
                 sprite = SpriteLibrary.spritePerkInactive;
             }

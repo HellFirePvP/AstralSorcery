@@ -3,6 +3,7 @@ itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 misc.moreInformation=<Hold SHIFT for more details>
+misc.craftInformation=§7Click to see recipe
 misc.link.stop=Stopped linking!
 misc.link.start=Selected %s!
 misc.link.link=Linked %s to %s!
@@ -27,12 +28,16 @@ achievement.astralsorcery.minerockcrystal=Such pure crystals
 achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
 achievement.astralsorcery.celestialcrystal=Celestial purity
 achievement.astralsorcery.celestialcrystal.desc=Acquire celestial crystals
-achievement.astralsorcery.buildtelescope=A clear view of the sky
-achievement.astralsorcery.buildtelescope.desc=Make a telescope
+achievement.astralsorcery.buildtelescope.1=A clear view of the sky
+achievement.astralsorcery.buildtelescope.1.desc=Make a hand telescope
 achievement.astralsorcery.seeconstellation=What a beautiful pattern
 achievement.astralsorcery.seeconstellation.desc=Discover a constellation
+achievement.astralsorcery.buildtelescope.2=Looking further
+achievement.astralsorcery.buildtelescope.2.desc=Build an actual telescope
 achievement.astralsorcery.liquidstarlight=Liquified Light
 achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
+achievement.astralsorcery.playerAttunement=Alignment with the stars
+achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation
 
 progress.missing.knowledge=It seems there is more to it than you're able to see.
 progress.gain.progress.chat=Your vision expands.
@@ -49,6 +54,7 @@ astralsorcery.journal.SHRINES.2.text=For sure, this is something man-made. You'r
 
 research.CPAPER.name=Constellation Paper
 astralsorcery.journal.CPAPER.1.text=Inside ancient chests you occassionaly find some blank scrolls. Upon picking them up symbols, stars and a name appear of them, much like some stars you see in the sky. Perhaps these might be some sort of star constellations?<NL>You're not quite sure what they mean, but after you collected some of them, they stopped showing you more. However, all of them showed you something different... It seems like they won't show you something you already know or have in your inventory.
+astralsorcery.journal.CPAPER.3.text=To keep your inventory a bit more organized you decided that keeping each paper always on you is not exactly the solution you want. Putting them between the last few pages of your journal seems a bit better and you'll always have them at hand when needed.
 
 research.WAND.name=Resonating Wand
 astralsorcery.journal.WAND.1.text=Indeed the floating crystal reacts to the crafting table you placed down. Some beam of light is shining onto it. When crafting something on it you can feel that it's easier to form the materials into proper shape.<NL>There are those blue gems you found in a nearby river - they seem to react strongly enderpearls. Maybe you can somehow make them fuse together using that light as a catalyst.
@@ -59,12 +65,12 @@ astralsorcery.journal.ORES.1.text=Various ores can be found scattered around the
 
 research.ALTAR1.name=Luminous Crafting Table
 astralsorcery.journal.ALTAR1.1.text=That light seems incredibly useful for crafting, but coming back to this structure and crystal is tedious. Those rock crystals you found seem to be of the same type as the floating crystal.<NL>Maybe you can construct some sort of crafting table that collects that light so you can craft with it before it radiates away again.
-astralsorcery.journal.ALTAR1.3.text=Looks like that table might work the way you want to. However, upon breaking the crafting table to replace it with your newest invention, the crystal seems to ignore it. Seems like you should place it somewhere above the ground and capture that little bit of light that's coming from the sky.<NL><NL><NL>While it collects starlight, some of it is also radiating away again. Maybe you can somehow increase the amount it collects? Moving it closer to the sky seems to help...
+astralsorcery.journal.ALTAR1.3.text=Looks like that table might work the way you want to. However, upon breaking the crafting table to replace it with your newest invention, the crystal seems to ignore it. Seems like you should place it somewhere above the ground and capture that little bit of light that's coming from the sky.<NL>While it collects starlight, some of it is also radiating away again. Maybe you can somehow increase the amount it collects? Moving it closer to the sky seems to help...
 astralsorcery.journal.ALTAR1.4.text=Additionally, it seems to collect more during nighttime... So this light would be 'starlight' then.<NL>Also, the altar only starts crafting when you rightclick it with the resonating wand. Any output will be placed into adjacent inventories or dropped on top of it.
 
-research.TELESCOPE.name=[WIP]Telescope
-astralsorcery.journal.TELESCOPE.1.text=[WIP]<NL>Constellations may only be discovered during nighttime.<NL>You may only discover constellations whose constellation paper you currently have in your inventory.<NL>Connect lines from the 'slightly bigger' stars to discover. Click/draw on another square to clear all lines in the old square.
-astralsorcery.journal.TELESCOPE.4.text=[WIP]<NL>No content.
+research.HAND_TELESCOPE.name=[WIP]Hand Telescope
+astralsorcery.journal.HAND_TELESCOPE.1.text=[WIP]<NL>Constellations may only be discovered during nighttime.<NL>You may only discover constellations whose constellation paper you currently have in your inventory.<NL>Connect lines from the 'slightly bigger' stars to discover. Click/draw on another square to clear all lines in the old square.
+astralsorcery.journal.HAND_TELESCOPE.4.text=[WIP]<NL>No content.
 
 research.GRINDSTONE.name=[WIP]Grindstone
 astralsorcery.journal.GRINDSTONE.1.text=[WIP]<NL>Put a grindable item (any tool, rock crystal, starmetal ingot, celestial crystal) onto it. Rightclick to 'grind', Shift-rightclick: pickup item on grindstone and without item pickup grindstone as item. grinding generally on anything crystal-ish: reduces 'size', gain 'cutting'.
@@ -126,8 +132,9 @@ astralsorcery.journal.CEL_CRYSTALS.2.text=[WIP]<NL>Nothing here.
 research.PED_ACCEL.name=[WIP] Ritual Pedestal Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=[WIP]<NL>Link starlight of the type of the ritual onto the pedestal. Over time the crystal channeling the ritual will shatter bit by bit, sending starlight off via beams. Place a lens or prism at the position the light is emitting to and link those beams back onto the pedestal via lens or prism. The efficiency of the ritual is greatly increased whenever you do this.
 
-astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting.
+astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
+astralsorcery.journal.recipe.upgrade=Upgrades the altar to the next tier
 astralsorcery.journal.recipe.attunement=Attunes the crystal to: %s
 astralsorcery.journal.recipe.amt.desc=Starlight required: %s
 astralsorcery.journal.recipe.amt.lowest=Almost nothing
@@ -239,7 +246,10 @@ perk.info.locked=§7Locked
 perk.info.available=§9Available
 perk.info.active=§aActive
 perk.info.inactive=§cInactive (Missing Alignment)
-perk.info.unlock=§aUnlocked '%s'
+perk.info.unlock=§aUnlocked perk '%s'
+perk.info.unlock.level=§7Unlock with Alignment level %s
+perk.info.unlocked.level=§7Unlocked with Alignment level %s
+perk.info.unlocked.free=§7Basic perk
 perk.DMG_KILL=Kill frenzy
 perk.DMG_KILL.info=Increased damage after killing a mob
 perk.DMG_DST=Rooftop sniper

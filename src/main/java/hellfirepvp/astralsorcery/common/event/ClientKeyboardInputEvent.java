@@ -26,7 +26,7 @@ public class ClientKeyboardInputEvent extends Event {
         MinecraftForge.EVENT_BUS.post(ev);
         if(!ev.isCanceled()) {
             try {
-                runKeyboardTick.invoke(Minecraft.getMinecraft());
+                runKeyboardTick.invoke(calling);
             } catch (Exception e) {
                 e.printStackTrace();
             }

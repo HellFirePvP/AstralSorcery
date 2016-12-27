@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
@@ -50,6 +52,20 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
         if(contentCounter >= 9) return this; //Add nothing then.
         this.contents[contentCounter++] = new ItemHandle(oreDictName);
         return this;
+    }
+
+    public ShapelessRecipe addPart(FluidStack fluidStack) {
+        if(contentCounter >= 9) return this; //Add nothing then.
+        this.contents[contentCounter++] = new ItemHandle(fluidStack);
+        return this;
+    }
+
+    public ShapelessRecipe addPart(Fluid fluid, int mbAmount) {
+        return addPart(new FluidStack(fluid, mbAmount));
+    }
+
+    public ShapelessRecipe addPart(Fluid fluid) {
+        return addPart(fluid, 1000);
     }
 
     @Override

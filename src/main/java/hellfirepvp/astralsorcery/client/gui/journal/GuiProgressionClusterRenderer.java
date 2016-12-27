@@ -232,7 +232,7 @@ public class GuiProgressionClusterRenderer {
                 RenderHelper.disableStandardItemLighting();
                 GL11.glPopAttrib();
                 break;
-            case TEXTURE:
+            /*case TEXTURE:
                 GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
                 node.getTexture().bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -244,6 +244,8 @@ public class GuiProgressionClusterRenderer {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 TextureHelper.refreshTextureBindState();
                 break;
+            case TEXTURE_SPRITE:
+                break;*/
         }
         GL11.glPopMatrix();
     }

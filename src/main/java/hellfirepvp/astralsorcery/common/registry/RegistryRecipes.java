@@ -54,11 +54,12 @@ public class RegistryRecipes {
 
     //Ugh. Important machines/stuff
     public static DiscoveryRecipe rJournal;
+    public static DiscoveryRecipe rHandTelescope;
     public static TelescopeRecipe rTelescope;
     public static GrindstoneRecipe rGrindstone;
     public static DiscoveryRecipe rAltar;
     public static RecipeRitualPedestal rRitualPedestalRock, rRitualPedestalCel;
-    public static AttunementRecipe rLightwell;
+    public static DiscoveryRecipe rLightwell;
     public static AttunementRecipe rIlluminatorRock, rIlluminatorCel;
     public static AttunementRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltarRock, rAttunementAltarCel;
@@ -228,6 +229,19 @@ public class RegistryRecipes {
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
 
+        rHandTelescope = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.handTelescope)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(OreDictAlias.ITEM_STICKS,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
+                        ShapedRecipeSlot.LOWER_LEFT));
+
         rGlassLensFire = registerAttenuationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.FIRE.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER)
@@ -354,20 +368,20 @@ public class RegistryRecipes {
                         ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkToolCel.setAttItem(OreDictAlias.BLOCK_WOOD_LOGS, AttunementRecipe.AltarSlot.LOWER_LEFT);
 
-        rLightwell = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockWell)
+        rLightwell = registerDiscoveryRecipe(new ShapedRecipe(BlocksAS.blockWell)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemsAS.rockCrystal,
-                        ShapedRecipeSlot.CENTER))
-        .setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AttunementRecipe.AltarSlot.values());
-        rLightwell.setPassiveStarlightRequirement(3900);
+                        ShapedRecipeSlot.CENTER));
+        rLightwell.setPassiveStarlightRequirement(800);
 
         rIlluminatorRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),

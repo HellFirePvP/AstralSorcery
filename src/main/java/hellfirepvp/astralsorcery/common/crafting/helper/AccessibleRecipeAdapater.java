@@ -42,12 +42,22 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     }
 
     @Nullable
+    public ItemHandle getExpectedStackHandle(int row, int column) {
+        return abstractRecipe.getExpectedStack(row, column);
+    }
+
+    @Nullable
     @Override
     @SideOnly(Side.CLIENT)
     public List<ItemStack> getExpectedStack(ShapedRecipeSlot slot) {
         ItemHandle handle = abstractRecipe.getExpectedStack(slot);
         if(handle == null) return null;
         return refactorSubItems(handle.getApplicableItems());
+    }
+
+    @Nullable
+    public ItemHandle getExpectedStackHandle(ShapedRecipeSlot slot) {
+        return abstractRecipe.getExpectedStack(slot);
     }
 
     @SideOnly(Side.CLIENT)

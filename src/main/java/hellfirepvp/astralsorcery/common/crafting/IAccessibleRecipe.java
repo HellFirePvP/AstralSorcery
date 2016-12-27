@@ -23,7 +23,13 @@ public interface IAccessibleRecipe extends IRecipe {
     public List<ItemStack> getExpectedStack(int row, int column);
 
     @Nullable
+    public ItemHandle getExpectedStackHandle(int row, int column);
+
+    @Nullable
     @SideOnly(Side.CLIENT)
     public List<ItemStack> getExpectedStack(ShapedRecipeSlot slot);
+
+    @Nullable
+    public ItemHandle getExpectedStackHandle(ShapedRecipeSlot slot);
 
 }

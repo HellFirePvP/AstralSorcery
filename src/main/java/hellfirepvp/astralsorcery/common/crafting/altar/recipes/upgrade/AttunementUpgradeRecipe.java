@@ -15,6 +15,10 @@ import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +46,9 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
                 .addPart(ItemsAS.rockCrystal,
-                        ShapedRecipeSlot.UPPER_CENTER));
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER));
     }
 
     @Override

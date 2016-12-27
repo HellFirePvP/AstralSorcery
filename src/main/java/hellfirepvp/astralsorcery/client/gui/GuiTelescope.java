@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
@@ -17,12 +18,14 @@ import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
+import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -40,7 +43,9 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +100,25 @@ public class GuiTelescope extends GuiWHScreen {
                 ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
         IConstellation[] constellations = evaluateConstellations(r, activeConstellations);*/
         IConstellation[] constellations = new IConstellation[8];
+        if(handle != null) {
+            LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
+            Iterator<IConstellation> iterator = active.iterator();
+            while (iterator.hasNext()) {
+                IConstellation c = iterator.next();
+                if(!(c instanceof IMajorConstellation)) {
+                    iterator.remove();
+                    continue; //Telescope ignores non-major constellations
+                }
+                if(handle.getCurrentDistribution((IMajorConstellation) c, (f) -> f) <= 0.5F) {
+                    iterator.remove();
+                }
+            }
+            if(active.size() <= 8) {
+                active.toArray(constellations);
+            } else {
+                active.subList(0, 8).toArray(constellations);
+            }
+        }
 
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
@@ -104,26 +128,33 @@ public class GuiTelescope extends GuiWHScreen {
         Map<Rectangle, Integer> cells = new HashMap<>();
         Map<Integer, ConstellationInformation> starRectangles = new HashMap<>();
 
-        if (world.provider.getDimension() == 0 && canSeeSky) {
+        if (handle != null && canSeeSky) {
             int wstep = guiWidth / 4;
             int hstep = guiHeight / 2;
             int cnt = 0;
+            List<Tuple<Integer, Integer>> boxes = new LinkedList<>();
             for (int x = 0; x < 4; x++) {
                 for (int z = 0; z < 2; z++) {
-                    int offsetX = guiLeft + x * wstep;
-                    int offsetZ = guiTop + z * hstep;
-                    zLevel += 1;
-                    Optional<Map<StarLocation, Rectangle>> stars = drawCellEffects(r, constellations[cnt], offsetX, offsetZ, wstep, hstep, partialTicks);
-                    zLevel -= 1;
-
-                    cells.put(new Rectangle(offsetX, offsetZ, wstep, hstep), cnt);
-                    if (stars.isPresent()) {
-                        ConstellationInformation info = new ConstellationInformation(stars.get(), constellations[cnt]);
-                        starRectangles.put(cnt, info);
-                    }
-
-                    cnt++;
+                    boxes.add(new Tuple<>(x, z));
                 }
+            }
+            Collections.shuffle(boxes, r);
+            for (Tuple<Integer, Integer> t : boxes) {
+                int x = t.key;
+                int z = t.value;
+                int offsetX = guiLeft + x * wstep;
+                int offsetZ = guiTop + z * hstep;
+                zLevel += 1;
+                Optional<Map<StarLocation, Rectangle>> stars = drawCellEffects(r, constellations[cnt], offsetX, offsetZ, wstep, hstep, partialTicks);
+                zLevel -= 1;
+
+                cells.put(new Rectangle(offsetX, offsetZ, wstep, hstep), cnt);
+                if (stars.isPresent()) {
+                    ConstellationInformation info = new ConstellationInformation(stars.get(), constellations[cnt]);
+                    starRectangles.put(cnt, info);
+                }
+
+                cnt++;
             }
         }
 
@@ -153,7 +184,8 @@ public class GuiTelescope extends GuiWHScreen {
             }
         };
 
-        RenderAstralSkybox.TEX_CONNECTION.bind();
+        //RenderAstralSkybox.TEX_CONNECTION.bind();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks").bind();
 
         for (int j = 0; j < 2; j++) {
             for (Line l : drawnLines) {
@@ -480,6 +512,18 @@ public class GuiTelescope extends GuiWHScreen {
             if(con.equals(c)) {
                 has = true;
                 break;
+            }
+        }
+        if(!has) {
+            List<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
+            lblJournals:
+            for (ItemStack stack : journals) {
+                for (IConstellation con : ItemJournal.getStoredConstellations(stack)) {
+                    if(con.equals(c)) {
+                        has = true;
+                        break lblJournals;
+                    }
+                }
             }
         }
 

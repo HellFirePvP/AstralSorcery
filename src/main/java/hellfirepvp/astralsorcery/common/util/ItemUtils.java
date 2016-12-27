@@ -3,8 +3,14 @@ package hellfirepvp.astralsorcery.common.util;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
@@ -65,6 +71,34 @@ public class ItemUtils {
             if(stack == null) continue;
             dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
+    }
+
+    public static boolean drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
+        return drainFluidFromItem(stack, new FluidStack(fluid, mbAmount), doDrain);
+    }
+
+    //Returns true if the fluid with the specified amount could be drained, false if not.
+    public static boolean drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
+        if(stack.getItem() instanceof IFluidContainerItem) {
+            IFluidContainerItem ifci = (IFluidContainerItem) stack.getItem();
+            FluidStack containing = ifci.getFluid(stack);
+            if(containing != null && containing.getFluid() != null) {
+                if(containing.getFluid().equals(fluidStack.getFluid())) {
+                    FluidStack drained = ifci.drain(stack, fluidStack.amount, doDrain);
+                    if(drained != null && drained.amount >= fluidStack.amount) {
+                        return true;
+                    }
+                }
+            }
+        }
+        IFluidHandler handle = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
+        if(handle != null) {
+            FluidStack tryDrain = handle.drain(fluidStack.copy(), doDrain);
+            if(tryDrain != null && tryDrain.amount >= fluidStack.amount) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {

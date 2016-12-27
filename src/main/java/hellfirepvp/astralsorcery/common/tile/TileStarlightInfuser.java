@@ -144,7 +144,13 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         if(out != null) {
             out = ItemUtils.copyStackWithSize(out, out.stackSize);
         }
-        this.stack = null;
+
+        if(altarRecipe.mayDeleteInput(this)) {
+            this.stack = null;
+        } else {
+            altarRecipe.handleInputDecrement(this);
+        }
+
         if(out != null) {
             if(out.stackSize > 0) {
                 ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();

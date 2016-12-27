@@ -7,6 +7,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -56,6 +58,22 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
             crafingShape.put(slot, handle);
         }
         return this;
+    }
+
+    public ShapedRecipe addPart(FluidStack fluidStack, ShapedRecipeSlot... slots) {
+        ItemHandle handle = new ItemHandle(fluidStack);
+        for(ShapedRecipeSlot slot : slots) {
+            crafingShape.put(slot, handle);
+        }
+        return this;
+    }
+
+    public ShapedRecipe addPart(Fluid fluid, int mbAmount, ShapedRecipeSlot... slots) {
+        return addPart(new FluidStack(fluid, mbAmount), slots);
+    }
+
+    public ShapedRecipe addPart(Fluid fluid, ShapedRecipeSlot... slots) {
+        return addPart(fluid, 1000, slots);
     }
 
     public ShapedRecipe addPart(String oreDictName, ShapedRecipeSlot... slots) {

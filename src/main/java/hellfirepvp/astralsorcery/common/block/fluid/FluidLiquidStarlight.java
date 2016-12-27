@@ -20,7 +20,7 @@ public class FluidLiquidStarlight extends Fluid {
         super("astralsorcery.liquidStarlight", starlightLiquidStill, starlightLiquidFlow);
         setRarity(EnumRarity.EPIC);
         setLuminosity(15);
-        setDensity(1);
+        setDensity(1001);
         setViscosity(300);
         setTemperature(100);
     }

@@ -11,10 +11,12 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -51,6 +53,20 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
 
         public Render(ShapedRecipe recipe) {
             this.recipe = recipe;
+        }
+
+        @Override
+        public boolean propagateMouseClick(int mouseX, int mouseZ) {
+            for (Rectangle r : thisFrameStackFrames.keySet()) {
+                if(r.contains(mouseX, mouseZ)) {
+                    ItemStack stack = thisFrameStackFrames.get(r);
+                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                    if(lookup != null) {
+                        RegistryBookLookups.openLookupJournalPage(lookup);
+                    }
+                }
+            }
+            return false;
         }
 
         protected void renderStandartRecipeGrid(float offsetX, float offsetY, float zLevel, BindableResource grid) {
@@ -103,6 +119,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
 
         @Override
         public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+            thisFrameStackFrames.clear();
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glPushMatrix();
@@ -132,6 +149,11 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
                 if(rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                    RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
+                    if(lookup != null) {
+                        tooltip.add("");
+                        tooltip.add(I18n.format("misc.craftInformation"));
+                    }
                 }
             }
         }
@@ -150,7 +172,6 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             }
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopAttrib();
-            thisFrameStackFrames.clear();
         }
 
     }

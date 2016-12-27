@@ -1,12 +1,15 @@
 package hellfirepvp.astralsorcery.common.crafting.infusion;
 
+import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -21,10 +24,12 @@ public abstract class AbstractInfusionRecipe {
     private int uniqueRecipeId = -1;
     private float consumptionChance = 0.1F;
 
+    @Nonnull
     private ItemStack output;
+    @Nonnull
     private ItemHandle input;
 
-    public AbstractInfusionRecipe(ItemStack output, ItemHandle input) {
+    public AbstractInfusionRecipe(@Nonnull ItemStack output, @Nonnull ItemHandle input) {
         this.output = output;
         this.input = input;
     }
@@ -50,6 +55,17 @@ public abstract class AbstractInfusionRecipe {
         return 500;
     }
 
+    public boolean mayDeleteInput(TileStarlightInfuser infuser) {
+        return input.getFluidTypeAndAmount() == null;
+    }
+
+    public void handleInputDecrement(TileStarlightInfuser infuser) {
+        ItemStack stack = infuser.getInputStack();
+        if(stack != null) {
+            ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     public ItemStack getOutputForRender() {
         return output;
@@ -59,6 +75,7 @@ public abstract class AbstractInfusionRecipe {
         return output;
     }
 
+    @Nonnull
     public ItemHandle getInput() {
         return input;
     }
@@ -71,7 +88,12 @@ public abstract class AbstractInfusionRecipe {
     public void onCraftClientTick(TileStarlightInfuser infuser, int tick, Random rand) {}
 
     public boolean matches(TileStarlightInfuser infuser) {
+        if(this instanceof IGatedRecipe) {
+            if(infuser.getWorld().isRemote) {
+                if(!((IGatedRecipe) this).hasProgressionClient()) return false;
+            }
+        }
+
         return infuser.hasMultiblock() && infuser.getInputStack() != null && input.matchCrafting(infuser.getInputStack());
     }
-
 }

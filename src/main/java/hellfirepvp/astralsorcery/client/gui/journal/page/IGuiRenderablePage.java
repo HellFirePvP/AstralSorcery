@@ -36,6 +36,10 @@ public interface IGuiRenderablePage {
 
     default public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {}
 
+    default public boolean propagateMouseClick(int mouseX, int mouseZ) {
+        return false;
+    }
+
     default public Rectangle drawItemStack(ItemStack stack, int offsetX, int offsetY, float zLevel) {
         return drawItemStack(stack, offsetX, offsetY, zLevel, getStandardFontRenderer(), getRenderItem());
     }

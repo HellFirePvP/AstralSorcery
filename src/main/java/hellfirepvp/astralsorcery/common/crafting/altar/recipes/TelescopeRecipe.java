@@ -4,15 +4,10 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 import java.util.Random;
 
@@ -23,7 +18,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 26.09.2016 / 13:54
  */
-public class TelescopeRecipe extends DiscoveryRecipe {
+public class TelescopeRecipe extends AttunementRecipe {
 
     public TelescopeRecipe() {
         super(new ShapedRecipe(BlockMachine.MachineType.TELESCOPE.asStack())
@@ -44,7 +39,7 @@ public class TelescopeRecipe extends DiscoveryRecipe {
     public void onCraftServerFinish(TileAltar altar, Random rand) {
         EntityPlayer crafter = altar.getActiveCraftingTask().tryGetCraftingPlayerServer();
         if(crafter != null) {
-            crafter.addStat(RegistryAchievements.achvBuildTelescope);
+            crafter.addStat(RegistryAchievements.achvBuildActTelescope);
         }
         super.onCraftServerFinish(altar, rand);
     }

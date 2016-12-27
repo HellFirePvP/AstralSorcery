@@ -33,8 +33,8 @@ public class TexturePreloader {
     }
 
     private static void preloadMandatoryTextures() {
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")       .allocateGlId();
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")      .allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")        .allocateGlId();
+        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBlankBook")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJSpaceBook")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJBookmark")         .allocateGlId();
@@ -50,37 +50,38 @@ public class TexturePreloader {
     }
 
     private static void preloadTextures() {
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar3")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc")            .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt")             .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridCst")             .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJStorageBook")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam")        .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")            .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2")            .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1")            .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar")        .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")      .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkInactive").allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActive")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")      .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")  .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud1")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud2")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud3")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud4")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "cloud5")                  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar3")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc")                .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt")                 .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridCst")                 .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJStorageBook")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")                .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2")                .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1")                .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkInactive")    .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActive")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActivateable").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")           .allocateGlId();
         MoonPhaseRenderHelper.getMoonPhaseTexture(MoonPhase.NEW); //Loads all phase textures
 
         SpriteLibrary.init(); //Loads all spritesheets

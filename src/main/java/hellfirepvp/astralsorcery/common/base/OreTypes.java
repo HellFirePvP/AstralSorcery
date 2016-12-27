@@ -71,7 +71,7 @@ public class OreTypes {
         for (ItemStack stack : ores) {
             if(Block.getBlockFromItem(stack.getItem()) == null) continue;
             String className = stack.getItem().getClass().getName();
-            if(!className.contains("greg")) {
+            if(!className.toLowerCase().contains("greg")) {
                 return stack;
             }
         }

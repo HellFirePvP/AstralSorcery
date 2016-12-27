@@ -223,6 +223,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i % 3, i / 3);
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(getInventoryHandler(), i);
+            } else {
+                recipe.handleItemConsumption(this, slot);
             }
         }
 
@@ -230,6 +232,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             int slotId = slot.slotId;
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
+            } else {
+                recipe.handleItemConsumption(this, slot);
             }
         }
 
@@ -237,6 +241,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             int slotId = slot.getSlotId();
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
+            } else {
+                recipe.handleItemConsumption(this, slot);
             }
         }
 

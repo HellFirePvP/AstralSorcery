@@ -12,10 +12,12 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,28 +40,57 @@ public class GuiJournalPages extends GuiScreenJournal {
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
     private static final BindableResource texUnderline = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline");
 
-    private GuiJournalProgression origin;
+    @Nullable
+    private final GuiJournalProgression origin;
+    @Nullable
+    private final GuiScreen previous;
+    private final ResearchNode researchNode;
     private List<IGuiRenderablePage> pages;
     private String unlocTitle;
 
+    private boolean informPreviousClose = true;
     private int currentPageOffset = 0; //* 2 = left page.
     private Rectangle rectBack, rectNext, rectPrev;
 
-    GuiJournalPages(GuiJournalProgression origin, ResearchNode node) {
+    GuiJournalPages(@Nullable GuiJournalProgression origin, ResearchNode node) {
         super(-1);
+        this.researchNode = node;
         this.origin = origin;
+        this.previous = null;
         this.pages = new ArrayList<>(node.getPages().size());
         pages.addAll(node.getPages().stream().map(IJournalPage::buildRenderPage).collect(Collectors.toList()));
         this.unlocTitle = node.getUnLocalizedName();
+    }
+
+    //Use this to use this screen independently of the actual journal.
+    public GuiJournalPages(@Nullable GuiScreen previous, ResearchNode detailedInformation, int exactPage) {
+        super(-1);
+        this.researchNode = detailedInformation;
+        this.origin = null;
+        this.previous = previous;
+        this.pages = new ArrayList<>(detailedInformation.getPages().size());
+        pages.addAll(detailedInformation.getPages().stream().map(IJournalPage::buildRenderPage).collect(Collectors.toList()));
+        this.unlocTitle = detailedInformation.getUnLocalizedName();
+        this.currentPageOffset = exactPage / 2;
+    }
+
+    public int getCurrentPageOffset() {
+        return currentPageOffset;
+    }
+
+    public ResearchNode getResearchNode() {
+        return researchNode;
     }
 
     @Override
     public void initGui() {
         super.initGui();
 
-        origin.rescaleAndRefresh = false;
-        origin.setGuiSize(width, height);
-        origin.initGui();
+        if(origin != null) {
+            origin.rescaleAndRefresh = false;
+            origin.setGuiSize(width, height);
+            origin.initGui();
+        }
     }
 
     public static GuiJournalPages getClearOpenGuiInstance() {
@@ -70,11 +101,18 @@ public class GuiJournalPages extends GuiScreenJournal {
 
     @Override
     public void onGuiClosed() {
-        if(saveSite) {
-            openGuiInstance = this;
-            GuiJournalProgression.getJournalInstance().rescaleAndRefresh = false;
-        } else {
-            saveSite = true;
+        if(origin != null) {
+            if(saveSite) {
+                openGuiInstance = this;
+                GuiJournalProgression.getJournalInstance().rescaleAndRefresh = false;
+            } else {
+                saveSite = true;
+            }
+        }
+        if(previous != null) {
+            if(informPreviousClose) {
+                previous.onGuiClosed();
+            }
         }
     }
 
@@ -83,7 +121,11 @@ public class GuiJournalPages extends GuiScreenJournal {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
-        drawDefault(textureResBlank);
+        if(origin != null) {
+            drawDefault(textureResBlank);
+        } else {
+            drawWHRect(textureResBlank);
+        }
         TextureHelper.refreshTextureBindState();
 
         zLevel += 100;
@@ -248,25 +290,34 @@ public class GuiJournalPages extends GuiScreenJournal {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
-            saveSite = false;
-            Minecraft.getMinecraft().displayGuiScreen(origin);
-            return;
-        }
-        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            saveSite = false;
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
-            return;
-        }
-        if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            saveSite = false;
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
-            return;
+        if(origin != null) {
+            if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+                saveSite = false;
+                Minecraft.getMinecraft().displayGuiScreen(origin);
+                return;
+            }
+            if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+                saveSite = false;
+                Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+                return;
+            }
+            if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
+                saveSite = false;
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+                return;
+            }
         }
         if(rectBack != null && rectBack.contains(p)) {
-            origin.expectReinit = true;
-            saveSite = false;
-            Minecraft.getMinecraft().displayGuiScreen(origin);
+            if(origin != null) {
+                origin.expectReinit = true;
+                saveSite = false;
+                Minecraft.getMinecraft().displayGuiScreen(origin);
+                return;
+            } else {
+                informPreviousClose = false;
+                Minecraft.getMinecraft().displayGuiScreen(previous);
+                return;
+            }
         }
         if(rectPrev != null && rectPrev.contains(p)) {
             this.currentPageOffset -= 1;
@@ -274,6 +325,22 @@ public class GuiJournalPages extends GuiScreenJournal {
         }
         if(rectNext != null && rectNext.contains(p)) {
             this.currentPageOffset += 1;
+            return;
+        }
+
+        int index = currentPageOffset * 2;
+        if(pages.size() > index) {
+            IGuiRenderablePage page = pages.get(index);
+            if(page != null) {
+                if(page.propagateMouseClick(mouseX, mouseY)) return;
+            }
+        }
+        index += 1;
+        if(pages.size() > index) {
+            IGuiRenderablePage page = pages.get(index);
+            if(page != null) {
+                page.propagateMouseClick(mouseX, mouseY);
+            }
         }
     }
 

@@ -84,6 +84,11 @@ public class AttunementRecipe extends DiscoveryRecipe {
         return Lists.newArrayList();
     }
 
+    @Nullable
+    public ItemHandle getAttItemHandle(AltarSlot slot) {
+        return additionalSlots.get(slot);
+    }
+
     @Override
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
         for (AltarSlot slot : AltarSlot.values()) {

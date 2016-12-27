@@ -1,7 +1,6 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class ResearchNode {
     //private boolean special = false;
 
     private ItemStack[] renderItemStacks;
-    private BindableResource texture;
+    //private BindableResource texture;
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
     private List<IJournalPage> pages = new LinkedList<>();
@@ -50,10 +49,10 @@ public class ResearchNode {
         this.renderItemStacks = stacks;
     }
 
-    public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
+    /*public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
         this.texture = textureResource;
-    }
+    }*/
 
     public ResearchNode addSourceConnectionFrom(ResearchNode node) {
         this.connectionsTo.add(node);
@@ -94,9 +93,9 @@ public class ResearchNode {
         return renderItemStacks[(tick / 40) % renderItemStacks.length];
     }
 
-    public BindableResource getTexture() {
+    /*public BindableResource getTexture() {
         return texture;
-    }
+    }*/
 
     public List<IJournalPage> getPages() {
         return pages;
@@ -122,7 +121,7 @@ public class ResearchNode {
 
     public static enum RenderType {
 
-        ITEMSTACK, TEXTURE
+        ITEMSTACK//, TEXTURE, TEXTURE_SPRITE
 
     }
 

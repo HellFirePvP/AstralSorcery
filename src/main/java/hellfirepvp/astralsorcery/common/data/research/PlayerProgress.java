@@ -173,7 +173,7 @@ public class PlayerProgress {
     }
 
     // -1 -> no free level
-    protected int getNextFreeLevel() {
+    public int getNextFreeLevel() {
         int level = getAlignmentLevel();
         for (int i = 0; i <= level; i++) {
             if(!appliedPerks.values().contains(i)) {

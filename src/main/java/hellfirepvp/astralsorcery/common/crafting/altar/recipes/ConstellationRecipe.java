@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +91,11 @@ public class ConstellationRecipe extends AttunementRecipe {
             return handle.getApplicableItems();
         }
         return Lists.newArrayList();
+    }
+
+    @Nullable
+    public ItemHandle getCstItemHandle(AltarAdditionalSlot slot) {
+        return matchStacks.get(slot);
     }
 
     @Override
