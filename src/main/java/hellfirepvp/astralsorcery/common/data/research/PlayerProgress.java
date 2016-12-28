@@ -207,11 +207,11 @@ public class PlayerProgress {
     }
 
     protected void modifyCharge(int charge) {
-        this.alignmentCharge += charge;
+        this.alignmentCharge = Math.max(0, this.alignmentCharge + charge);
     }
 
     protected void forceCharge(int charge) {
-        this.alignmentCharge = charge;
+        this.alignmentCharge = Math.max(0, charge);
     }
 
     protected boolean stepTier() {

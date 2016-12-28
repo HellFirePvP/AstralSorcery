@@ -256,14 +256,6 @@ public class WorldSkyHandler {
         return null;
     }
 
-    public float getCurrentDaytimeDistribution(World world) {
-        float dayPart = world.getWorldTime() % 24000;
-        if(dayPart < 11000) return 0F;
-        if(dayPart < 15000) return (dayPart - 11000F) / 4000F;
-        if(dayPart > 20000) return 1F - (dayPart - 20000F) / 4000F;
-        return 1F;
-    }
-
     private void evaluateCelestialEventTimes(World world) {
         int solarTime = (int) ((world.getWorldTime() % 888000) - 864000);
         dayOfSolarEclipse = solarTime > 0;

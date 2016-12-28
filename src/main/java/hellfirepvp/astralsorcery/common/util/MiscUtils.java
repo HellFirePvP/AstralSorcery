@@ -4,6 +4,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -11,6 +13,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -68,6 +72,20 @@ public class MiscUtils {
 
     public static boolean isChunkLoaded(World world, ChunkPos pos) {
         return world.getChunkProvider().getLoadedChunk(pos.chunkXPos, pos.chunkZPos) != null;
+    }
+
+    public static boolean isPlayerFakeMP(EntityPlayerMP player) {
+        if(player instanceof FakePlayer) return true;
+        if(player.getClass() != EntityPlayerMP.class) return true;
+        if(player.connection == null) return true;
+        try {
+            player.getPlayerIP().length();
+            player.connection.netManager.getRemoteAddress().toString();
+        } catch (Exception exc) {
+            return true;
+        }
+        if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return true;
+        return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList().contains(player);
     }
 
     public static List<BlockPos> searchAreaFor(World world, BlockPos center, Block blockToSearch, int metaToSearch, int radius) {

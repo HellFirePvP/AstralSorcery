@@ -14,6 +14,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ItemAlignmentChargeRevealer {
 
     @SideOnly(Side.CLIENT)
-    public boolean shouldReveal(ItemStack stack);
+    default public boolean shouldReveal(ItemStack stack) {
+        return true;
+    }
 
 }

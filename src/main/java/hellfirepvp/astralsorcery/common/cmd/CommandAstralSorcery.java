@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -100,9 +101,9 @@ public class CommandAstralSorcery extends CommandBase {
             } else if (identifier.equalsIgnoreCase("progress") || identifier.equalsIgnoreCase("prog")) {
                 if(args.length <= 2) {
                     showProgress(server, sender, args.length == 1 ? sender.getName() : args[1]);
-                }/* else if(args.length == 3) {
+                } else if(args.length == 3) {
                     modifyProgress(server, sender, args[1], args[2]);
-                }*/
+                }
             } else if (identifier.equalsIgnoreCase("reset")) {
                 if (args.length == 2) {
                     wipeProgression(server, sender, args[1]);
@@ -190,6 +191,8 @@ public class CommandAstralSorcery extends CommandBase {
             if(pr == null) {
                 sender.addChatMessage(new TextComponentString("§cFailed! Unknown research: " + research));
             } else {
+                /*ProgressionTier pt = pr.getRequiredProgress();
+                ResearchManager.giveProgressionIgnoreFail(other, pt);*/
                 ResearchManager.unsafeForceGiveResearch(other, pr);
                 sender.addChatMessage(new TextComponentString("§aSuccess!"));
             }
@@ -415,8 +418,8 @@ public class CommandAstralSorcery extends CommandBase {
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName]§7 - lists all discovered constellations of the specified player if he/she is online"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery constellation [playerName] <cName;all>§7 - player specified discovers the specified constellation or all or resets all"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName]§7 - displays progress information about the player (Enter no player to view your own)"));
-        //sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <all>§7 - maximize progression"));
-        //sender.addChatMessage(new TextComponentString("§a/astralsorcery research [playerName] <research;all>§7 - set/add Research"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery progress [playerName] <all>§7 - maximize progression"));
+        sender.addChatMessage(new TextComponentString("§a/astralsorcery research [playerName] <research;all>§7 - set/add Research"));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery reset [playerName]§7 - resets all progression-related data for that player."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery build [structure]§7 - builds the named structure wherever the player is looking at."));
         sender.addChatMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
@@ -429,7 +432,7 @@ public class CommandAstralSorcery extends CommandBase {
         for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
             sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.addChatMessage(new TextComponentString("§Minor Constellations:"));
+        sender.addChatMessage(new TextComponentString("§cMinor Constellations:"));
         for (IMinorConstellation c : ConstellationRegistry.getMinorConstellations()) {
             sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }

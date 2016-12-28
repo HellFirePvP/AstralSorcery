@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationBreedables;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationGrowables;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationMending;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationReach;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationStoneEnrichment;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDamageBleed;
@@ -48,6 +49,7 @@ public enum ConstellationPerks {
     CRE_BREEDING     (41, PerkCreationBreedables::new),
     CRE_OREGEN       (42, PerkCreationStoneEnrichment::new),
     CRE_REACH        (43, PerkCreationReach::new),
+    CRE_MEND         (44, PerkCreationMending::new),
 
     DEF_DMGREDUCTION (60, PerkDefensiveDamageReduction::new),
     DEF_DODGE        (61, PerkDefensiveDamageDodge::new),

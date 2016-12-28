@@ -114,7 +114,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     private void drawUnlockEffects() {
-        double whStar = 40;
+        double whStar = 80;
         double whBetweenStars = widthHeight / 7D;
         double offsetX = guiLeft + ((guiWidth ) / 2D) - widthHeight;
         double offsetY = guiTop  + ((guiHeight) / 2D) - widthHeight;
@@ -168,7 +168,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     private void drawPerkMap(ConstellationPerkMap mapToDisplay, Point mouse) {
-        double whStar = 10;
+        double whStar = 12;
         double whBetweenStars = widthHeight / 7D;
 
         double offsetX = guiLeft + ((guiWidth ) / 2D) - widthHeight;

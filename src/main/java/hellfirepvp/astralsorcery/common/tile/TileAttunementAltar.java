@@ -15,16 +15,18 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktAttenuationState;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
@@ -35,7 +37,9 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -67,20 +71,30 @@ public class TileAttunementAltar extends TileReceiverBase {
     private IMajorConstellation activeFound = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
+    //Attunement related
+    private int mode = 0; //0 == idle, 1 == att_player, 2 == att_crystal
+    private int entityIdActive = -1;
+    private Entity activeEntity = null; //Unsynced
+
+    private int playerAttunementWaitTick = -1;
+
+    //Chunk load caching
     private Map<BlockPos, Boolean> unloadCache = new HashMap<>();
 
+    //Sound & Visuals around the TE
     private Object activeSound = null;
     private List<Object> starSprites = new LinkedList<>();
     private IMajorConstellation highlight = null;
     private int highlightActive = 0;
 
+    //TESR flags
     public static final int MAX_START_ANIMATION_TICK = 60;
     public static final int MAX_START_ANIMATION_SPIN = 100;
     public int activationTick = 0;
     public int prevActivationTick = 0;
     public boolean animate = false, tesrLocked = true;
 
-    private boolean sheduledCameraFlight = false;
+    private boolean cameraFlightActive = false;
     private Object clientActiveCameraFlight = null;
 
     @Override
@@ -107,6 +121,45 @@ public class TileAttunementAltar extends TileReceiverBase {
             if(activeFound == null && getTicksExisted() % 10 == 0 && hasMultiblock) {
                 searchForConstellation();
             }
+
+            if(activeFound != null) {
+                if(mode == 0) {
+                    if(ConstellationSkyHandler.getInstance().isNight(world)) {
+                        checkForAttunements();
+                    }
+                } else if(mode == 1) {
+                    if(activeEntity == null || !(activeEntity instanceof EntityPlayer) || activeEntity.isDead) {
+                        setAttunementState(0, null);
+                    } else {
+                        if(playerAttunementWaitTick > 0) {
+                            playerAttunementWaitTick--;
+                        }
+                        if(playerAttunementWaitTick == 0) {
+                            setAttunementState(0, null);
+                            playerAttunementWaitTick = -1;
+                        }
+                    }
+                } else if(mode == 2) {
+                    //Uhh... item things. ?
+                }
+            }
+        }
+    }
+
+    private void checkForAttunements() {
+        if((ticksExisted & 31) != 0) return;
+        List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
+        if(!players.isEmpty()) {
+            EntityPlayerMP pl = players.get(0);
+            if(MiscUtils.isPlayerFakeMP(pl)) return;
+            PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
+            if(prog == null || prog.getAttunedConstellation() != null) return;
+            if(!prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT)) return;
+            if(!prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) return;
+
+            PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
+            PacketChannel.CHANNEL.sendTo(state, pl);
+            return;
         }
     }
 
@@ -213,6 +266,89 @@ public class TileAttunementAltar extends TileReceiverBase {
         }
     }
 
+    public void markPlayerStartCameraFlight(EntityPlayer pl) {
+        setAttunementState(1, pl);
+        this.playerAttunementWaitTick = 1000; //Depends on the camera flight... awkwardly enough.. client has a bit more time to answer too.
+    }
+
+    public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
+        if(mode == 1 && playerAttunementWaitTick > 0 && activeEntity != null && playerEntity.equals(activeEntity)) {
+            PlayerProgress prog = ResearchManager.getProgress(playerEntity, Side.SERVER);
+            if(prog != null && prog.getAttunedConstellation() == null &&
+                    prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
+                    prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
+                ResearchManager.setAttunedConstellation(playerEntity, cst);
+            }
+        }
+        setAttunementState(0, null);
+        playerAttunementWaitTick = -1;
+    }
+
+    private void setAttunementState(int mode, Entity trigger) {
+        mode = MathHelper.clamp(mode, 0, 2);
+        this.mode = mode;
+        switch (mode) {
+            case 0:
+                this.entityIdActive = -1;
+                this.activeEntity = null;
+                this.playerAttunementWaitTick = -1;
+                break;
+            case 1:
+            case 2:
+                this.entityIdActive = trigger.getEntityId();
+                this.activeEntity = trigger;
+                break;
+        }
+        markForUpdate();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean tryStartCameraFlight() {
+        if(cameraFlightActive || !isClientCloseEnough()) {
+            return false;
+        }
+
+        Vector3 offset = new Vector3(this).add(0, 6, 0);
+        ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
+        builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
+        builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(10, -0.01) , 200, 2);
+        builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
+        builder.setStopDelegate(createAttunementDelegate());
+
+        OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement();
+        OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(att, att, null);
+        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                .setTicksPerRotation(80).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+
+        ctrl = EffectHandler.getInstance().orbital(att, att, null);
+        ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
+                .setTicksPerRotation(80).setTickOffset(40).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+
+        this.clientActiveCameraFlight = builder.finishAndStart();
+        this.cameraFlightActive = true;
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private boolean isClientCloseEnough() {
+        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
+        return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
+    }
+
+    private void checkCameraFlightIntegrity() {
+        if(clientActiveCameraFlight != null) {
+            checkCameraClient();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void checkCameraClient() {
+        if(mode != 1 || entityIdActive != Minecraft.getMinecraft().player.getEntityId()) {
+            ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
+            clientActiveCameraFlight = null;
+        }
+    }
+
     @SideOnly(Side.CLIENT)
     private void renderEffects() {
         if(highlightActive > 0) {
@@ -230,7 +366,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             }
 
             if(clientActiveCameraFlight != null) {
-                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).setExpired();
+                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
                 clientActiveCameraFlight = null;
             }
 
@@ -244,7 +380,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                 activationTick--;
             }
             if(clientActiveCameraFlight != null) {
-                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).setExpired();
+                ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).forceStop();
                 clientActiveCameraFlight = null;
             }
 
@@ -269,7 +405,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                 }
             }
 
-            if(!sheduledCameraFlight && clientActiveCameraFlight == null) {
+            /*if(!sheduledCameraFlight && clientActiveCameraFlight == null) {
                 List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
                 if(!players.isEmpty() && players.contains(Minecraft.getMinecraft().player)) {
                     sheduledCameraFlight = true;
@@ -291,7 +427,7 @@ public class TileAttunementAltar extends TileReceiverBase {
 
                     this.clientActiveCameraFlight = builder.finishAndStart();
                 }
-            }
+            }*/
 
             animate = true;
             prevActivationTick = activationTick;
@@ -320,13 +456,15 @@ public class TileAttunementAltar extends TileReceiverBase {
     @SideOnly(Side.CLIENT)
     private ClientCameraFlightHelper.StopDelegate createAttunementDelegate() {
         return () -> {
-            if(clientActiveCameraFlight != null && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()) {
+            if(clientActiveCameraFlight != null && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()
+                    && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).wasForciblyStopped()) {
                 if(activeFound != null) {
-                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation(activeFound));
+                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation(activeFound, world.provider.getDimension(), getPos()));
                     SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }
-                this.clientActiveCameraFlight = null;
             }
+            this.cameraFlightActive = false;
+            this.clientActiveCameraFlight = null;
         };
     }
 
@@ -509,6 +647,11 @@ public class TileAttunementAltar extends TileReceiverBase {
         this.hasMultiblock = compound.getBoolean("mbState");
         this.doesSeeSky = compound.getBoolean("skState");
 
+        this.mode = compound.getInteger("modeId");
+        this.entityIdActive = compound.getInteger("entityId");
+
+        checkCameraFlightIntegrity();
+
         IConstellation found = IConstellation.readFromNBT(compound);
         if(found == null || !(found instanceof IMajorConstellation)) {
             activeFound = null;
@@ -523,6 +666,9 @@ public class TileAttunementAltar extends TileReceiverBase {
 
         compound.setBoolean("mbState", hasMultiblock);
         compound.setBoolean("skState", doesSeeSky);
+
+        compound.setInteger("modeId", mode);
+        compound.setInteger("entityId", entityIdActive);
 
         if (activeFound != null) {
             activeFound.writeToNBT(compound);

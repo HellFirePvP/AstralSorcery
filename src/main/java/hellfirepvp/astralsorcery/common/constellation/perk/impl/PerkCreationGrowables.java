@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class PerkCreationGrowables extends ConstellationPerk {
 
-    private static int chanceToBonemeal = 40;
+    private static int chanceToBonemeal = 20;
 
     public PerkCreationGrowables() {
         super("CRE_GROWTH", Target.PLAYER_TICK);
@@ -41,8 +41,9 @@ public class PerkCreationGrowables extends ConstellationPerk {
                 CropHelper.GrowablePlant plant = CropHelper.wrapPlant(w, pos);
                 PktParticleEvent pkt = null;
                 if(plant != null) {
-                    plant.tryGrow(w, rand);
-                    pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                    if(plant.tryGrow(w, rand)) {
+                        pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                    }
                 } else {
                     IBlockState at = w.getBlockState(pos);
                     /*if(at.getBlock() instanceof IGrowable) {
@@ -69,7 +70,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), 40, 2, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
+        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), 20, 2, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
     }
 
 }

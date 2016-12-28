@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
+import hellfirepvp.astralsorcery.client.gui.GuiHandTelescope;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
 import hellfirepvp.astralsorcery.client.gui.container.GuiAltarAttunement;
@@ -45,6 +46,8 @@ public class ClientGuiHandler {
         switch (guiType) {
             case TELESCOPE:
                 return new GuiTelescope(player, (TileTelescope) t);
+            case HAND_TELESCOPE:
+                return new GuiHandTelescope();
             case CONSTELLATION_PAPER:
                 IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
                 if(c == null) {

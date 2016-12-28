@@ -250,6 +250,7 @@ perk.info.unlock=§aUnlocked perk '%s'
 perk.info.unlock.level=§7Unlock with Alignment level %s
 perk.info.unlocked.level=§7Unlocked with Alignment level %s
 perk.info.unlocked.free=§7Basic perk
+
 perk.DMG_KILL=Kill frenzy
 perk.DMG_KILL.info=Increased damage after killing a mob
 perk.DMG_DST=Rooftop sniper
@@ -260,5 +261,38 @@ perk.DMG_KNOCK=Heavy blows
 perk.DMG_KNOCK.info=Increased damage to mobs that were knocked back
 perk.DMG_BLEED=Grievous wounds
 perk.DMG_BLEED.info=Apply a bleed effect when hitting something
+
+perk.CRE_GROWTH=Green thumb
+perk.CRE_GROWTH.info=Plants around you grow a bit faster
+perk.CRE_BREEDING=Increased fertility
+perk.CRE_BREEDING.info=Animals around you feel the need for replication
+perk.CRE_ORES=Mineral enrichment
+perk.CRE_ORES.info=Stone near you might turn into more valuable stone
+perk.CRE_REACH=Extended reach
+perk.CRE_REACH.info=Your reach increases a bit
+perk.CRE_MEND=Passive mending
+perk.CRE_MEND.info=Occasionally your armor repairs itself a bit
+
+perk.DEF_DMGREDUCTION=Tough skin
+perk.DEF_DMGREDUCTION.info=Reduces overall damage taken
+perk.DEF_DODGE=Higher Dexterity
+perk.DEF_DODGE.info=Grants a chance to dodge incoming damage
+perk.DEF_NOARMOR=No armor is more armor
+perk.DEF_NOARMOR.info=Resistances and heal when wearing less than 2 armor pieces
+perk.DEF_ELEMENTAL=Elemental shield
+perk.DEF_ELEMENTAL.info=Take less damage from elemental damage
+perk.DEF_FALLRED=Additional feathers
+perk.DEF_FALLRED.info=Take less damage from falling
+
+perk.TRV_MOVESPEED=Hasted
+perk.TRV_MOVESPEED.info=Grants increased movement speed
+perk.TRV_WATERMOV=Who needs fins
+perk.TRV_WATERMOV.info=Grants increased swim speed
+perk.TRV_FOODREDUCTION=Bigger stomach
+perk.TRV_FOODREDUCTION.info=Reduces overall need for food
+perk.TRV_LIGHT=Miner's delight
+perk.TRV_LIGHT.info=Places light sources close to you in caves
+perk.TRV_LPROT=Digging straight down
+perk.TRV_LPROT.info=Protects against lava for a short time
 
 constellation.noInformation=No useful information

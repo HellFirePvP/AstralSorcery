@@ -109,6 +109,7 @@ public class ClientCameraFlightHelper {
 
         private int totalTickDuration = 0;
         private boolean expired = false;
+        private boolean stopped = false;
 
         private CameraFlight(Vector3 startPoint, Vector3 focusPoint, @Nullable TickDelegate tick) {
             this.startVector = startPoint;
@@ -191,6 +192,15 @@ public class ClientCameraFlightHelper {
 
         public void setExpired() {
             this.expired = true;
+        }
+
+        public void forceStop() {
+            this.stopped = true;
+            setExpired();
+        }
+
+        public boolean wasForciblyStopped() {
+            return stopped;
         }
 
         @Override

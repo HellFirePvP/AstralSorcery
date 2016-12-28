@@ -13,7 +13,6 @@ public enum ProgressionTier {
     BASIC_CRAFT,
     ATTUNEMENT,
     CONSTELLATION_CRAFT,
-    NETWORKING,
     TRAIT_CRAFT,
     ENDGAME;
     //PAST_DIM

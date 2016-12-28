@@ -206,7 +206,7 @@ public class CropHelper {
             for (int i = 1; i < 3; i++) {
                 cache = cache.up();
                 if(world.isAirBlock(cache)) {
-                    if(rand.nextInt(15) == 0) {
+                    if(rand.nextInt(7) == 0) {
                         world.setBlockState(cache, Blocks.REEDS.getDefaultState());
                         return true;
                     } else {

@@ -1,5 +1,6 @@
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
@@ -37,18 +38,18 @@ public class RegistryPerks {
 
         map.addPerk(ConstellationPerks.TRV_MOVESPEED,   ConstellationPerkMap.PerkOrder.DEFAULT,  1, 13);
 
-        map.addPerk(ConstellationPerks.TRV_PLACELIGHTS, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  6,
+        map.addPerk(ConstellationPerks.TRV_LAVAPROTECT, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  6,
                 ConstellationPerks.TRV_MOVESPEED);
 
         map.addPerk(ConstellationPerks.TRV_SWIMSPEED,   ConstellationPerkMap.PerkOrder.DEFAULT,  6,  9,
                 ConstellationPerks.TRV_MOVESPEED);
 
-        map.addPerk(ConstellationPerks.TRV_LAVAPROTECT, ConstellationPerkMap.PerkOrder.DEFAULT,  13, 4,
+        map.addPerk(ConstellationPerks.TRV_PLACELIGHTS, ConstellationPerkMap.PerkOrder.DEFAULT,  13, 4,
                 ConstellationPerks.TRV_SWIMSPEED,
-                ConstellationPerks.TRV_PLACELIGHTS);
+                ConstellationPerks.TRV_LAVAPROTECT);
 
         map.addPerk(ConstellationPerks.TRV_REDFOODNEED, ConstellationPerkMap.PerkOrder.DEFAULT,  7,  0,
-                ConstellationPerks.TRV_PLACELIGHTS);
+                ConstellationPerks.TRV_LAVAPROTECT);
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.vicio, map);
 
@@ -70,7 +71,24 @@ public class RegistryPerks {
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.armara, map);
 
-        //TODO creation
+        map = new ConstellationPerkMap();
+
+        map.addPerk(ConstellationPerks.CRE_GROWTH, ConstellationPerkMap.PerkOrder.DEFAULT, 0, 0);
+
+        map.addPerk(ConstellationPerks.CRE_BREEDING, ConstellationPerkMap.PerkOrder.DEFAULT, 8, 1,
+                ConstellationPerks.CRE_GROWTH);
+
+        map.addPerk(ConstellationPerks.CRE_MEND, ConstellationPerkMap.PerkOrder.DEFAULT, 3, 10,
+                ConstellationPerks.CRE_GROWTH);
+
+        map.addPerk(ConstellationPerks.CRE_OREGEN, ConstellationPerkMap.PerkOrder.DEFAULT, 6, 5,
+                ConstellationPerks.CRE_GROWTH);
+
+        map.addPerk(ConstellationPerks.CRE_REACH, ConstellationPerkMap.PerkOrder.DEFAULT, 14, 3,
+                ConstellationPerks.CRE_OREGEN,
+                ConstellationPerks.CRE_MEND);
+
+        ConstellationPerkMapRegistry.registerPerkMap(Constellations.aevitas, map);
     }
 
 }

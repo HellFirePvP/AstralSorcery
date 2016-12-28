@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class PerkCreationReach extends ConstellationPerk {
 
-    private float reachModifier = 3.5F;
+    private static float reachModifier = 3.5F;
 
     public PerkCreationReach() {
         super("CRE_REACH", Target.PLAYER_TICK);

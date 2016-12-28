@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
@@ -18,7 +19,9 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -89,11 +92,11 @@ public class ClientRenderEventHandler {
 
             if((chargeRevealTicks - fadeTicks) < 0) {
                 if(visibility > 0) {
-                    visibility -= visibilityChange;
+                    visibility = Math.max(0, visibility - visibilityChange);
                 }
             } else {
                 if(visibility < 1) {
-                    visibility += visibilityChange;
+                    visibility = Math.min(1, visibility + visibilityChange);
                 }
             }
         }
@@ -102,24 +105,35 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onOverlay(TickEvent.RenderTickEvent event) {
-        if(event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().gameSettings.hideGUI) {
-            if(Minecraft.isGuiEnabled() && Minecraft.getMinecraft().inGameHasFocus) {
-                ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-                if(inHand == null) Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
-                if(inHand != null && inHand.getItem() != null) {
-                    Item i = inHand.getItem();
-                    if(i instanceof ItemAlignmentChargeRevealer) {
-                        if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
-                            renderAlignmentChargeOverlay(event.renderTickTime);
-                        }
-                    }
-                }
-            }
+        if(event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().gameSettings.hideGUI &&
+                Minecraft.isGuiEnabled() && Minecraft.getMinecraft().inGameHasFocus && visibility > 0) {
+            renderAlignmentChargeOverlay(event.renderTickTime);
         }
     }
 
     private void renderAlignmentChargeOverlay(float partialTicks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glPushMatrix();
 
+        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, res.getScaledHeight_double(), res.getScaledHeight_double(), 0, 1000D, 3000D);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        GL11.glTranslated(0, 0, -2000);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+
+        //TODO rendering
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     @SubscribeEvent

@@ -102,7 +102,7 @@ public class TileCelestialCrystals extends TileSkybound {
         int r = 24000;
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if(doesSeeSky() && handle != null) {
-            double dstr = handle.getCurrentDaytimeDistribution(world);
+            double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
             if(dstr > 0) {
                 Collection<IConstellation> activeConstellations =
                         ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations(world.provider.getDimension());

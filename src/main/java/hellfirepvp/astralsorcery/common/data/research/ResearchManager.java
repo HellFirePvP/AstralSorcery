@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -101,7 +103,23 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return;
 
-        progress.forceGainResearch(prog);
+        ProgressionTier reqTier = prog.getRequiredProgress();
+        if(!progress.getTierReached().isThisLaterOrEqual(reqTier)) {
+            progress.setTierReached(reqTier);
+        }
+
+        LinkedList<ResearchProgression> progToGive = new LinkedList<>();
+        progToGive.add(prog);
+        while (!progToGive.isEmpty()) {
+            ResearchProgression give = progToGive.pop();
+            if(!progress.getResearchProgression().contains(give)) {
+                progress.forceGainResearch(give);
+            }
+            progToGive.addAll(give.getPreConditions());
+        }
+
+        PktProgressionUpdate pkt = new PktProgressionUpdate();
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -116,6 +134,7 @@ public class ResearchManager {
         for (ResearchProgression other : prog.getPreConditions()) {
             if(!progress.getResearchProgression().contains(other)) return;
         }
+
         if(progress.forceGainResearch(prog)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(prog);
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
@@ -187,10 +206,11 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
+        progress.clearPerks();
+        progress.forceCharge(0);
         progress.setAttunedConstellation(constellation);
 
-        PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        player.addStat(RegistryAchievements.achvPlayerAttunement);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -207,9 +227,6 @@ public class ResearchManager {
         if(free == -1) return false;
         progress.addPerk(perk.getSingleInstance(), free);
 
-        PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
-
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;
@@ -220,9 +237,6 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.clearPerks();
-
-        PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -235,9 +249,6 @@ public class ResearchManager {
 
         progress.forceCharge(charge);
 
-        PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
-
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
         return true;
@@ -248,9 +259,6 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.modifyCharge(MathHelper.floor(charge));
-
-        PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);

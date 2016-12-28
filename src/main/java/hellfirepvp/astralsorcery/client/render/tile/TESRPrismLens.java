@@ -87,7 +87,6 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
         RenderHelper.disableStandardItemLighting();
         if(te.getLensColor() != null) {
             coloredPositions.add(te);
-            //TODO move past world render
             /*GL11.glPopMatrix();
             GL11.glPushMatrix();
             GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);

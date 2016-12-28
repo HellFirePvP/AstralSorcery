@@ -235,6 +235,7 @@ public class CommonProxy implements IGuiHandler {
     public static enum EnumGuiId {
 
         TELESCOPE(TileTelescope.class),
+        HAND_TELESCOPE,
         CONSTELLATION_PAPER,
         ALTAR_DISCOVERY(TileAltar.class),
         ALTAR_ATTUNEMENT(TileAltar.class),

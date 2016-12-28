@@ -159,7 +159,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         IMajorConstellation c = getFocusedConstellation();
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
         if(c != null && handle != null) {
-            float alphaDaytime = handle.getCurrentDaytimeDistribution(getWorld());
+            float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld());
             if(alphaDaytime >= 1.0E-3) {
                 if(rand.nextInt(20) == 0) {
                     Vector3 from = new Vector3(getPos()).add(0.5, 3.5, 0.5);
@@ -347,7 +347,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
         if(doesSeeSky() && handle != null) {
             int collect = getAltarLevel().ordinal() != 0 ? 60 : getPos().getY() / 2;
-            double perc =  0.2 + (0.8 * handle.getCurrentDaytimeDistribution(getWorld()));
+            double perc =  0.2 + (0.8 * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld()));
             starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (collect * perc)));
             return true;
         }

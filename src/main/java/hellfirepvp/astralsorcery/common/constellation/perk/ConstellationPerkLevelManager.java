@@ -16,8 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class ConstellationPerkLevelManager {
 
-    //TODO sync levels to client.
-
     public static int[] levelsRequired = new int[8];
     public static int[] levelsRequiredClientCache = new int[8];
 

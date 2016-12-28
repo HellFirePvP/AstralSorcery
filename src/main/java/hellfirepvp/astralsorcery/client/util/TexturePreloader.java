@@ -82,7 +82,14 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")           .allocateGlId();
-        MoonPhaseRenderHelper.getMoonPhaseTexture(MoonPhase.NEW); //Loads all phase textures
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full")              .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning1")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning2")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waning3")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_new")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3")           .allocateGlId();
 
         SpriteLibrary.init(); //Loads all spritesheets
     }

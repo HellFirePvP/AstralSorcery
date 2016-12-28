@@ -80,8 +80,7 @@ public abstract class AbstractAltarRecipe {
         }
 
         if(this instanceof INighttimeRecipe) {
-            WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(altar.getWorld());
-            if(handle != null && handle.getCurrentDaytimeDistribution(altar.getWorld()) < 0.65) return false;
+            if(!ConstellationSkyHandler.getInstance().isNight(altar.getWorld())) return false;
         }
 
         ItemStack[] altarInv = new ItemStack[9];

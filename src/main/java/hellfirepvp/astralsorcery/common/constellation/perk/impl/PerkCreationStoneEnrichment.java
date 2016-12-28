@@ -28,7 +28,7 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
     private static final BlockStateCheck stoneCheck = new CleanStoneCheck();
 
     private static int enrichmentRadius = 3;
-    private static int chanceToEnrich = 90;
+    private static int chanceToEnrich = 70;
 
     public PerkCreationStoneEnrichment() {
         super("CRE_ORES", Target.PLAYER_TICK);
@@ -64,7 +64,7 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
     @Override
     public void loadFromConfig(Configuration cfg) {
         enrichmentRadius = cfg.getInt(getKey() + "GenRadius", getConfigurationSection(), 3, 2, 50, "Defines the radius where a random position to generate a ore at is searched");
-        chanceToEnrich = cfg.getInt(getKey() + "GenChance", getConfigurationSection(), 90, 10, 2000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore");
+        chanceToEnrich = cfg.getInt(getKey() + "GenChance", getConfigurationSection(), 70, 10, 2000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore");
     }
 
     private static class CleanStoneCheck implements BlockStateCheck {

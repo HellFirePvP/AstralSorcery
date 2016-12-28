@@ -89,12 +89,20 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
 
     @Override
     public boolean isCatalyst(@Nonnull ItemStack stack) {
-        return stack.getItemDamage() == MetaType.AQUAMARINE.getMeta();
+        int meta = stack.getItemDamage();
+        return meta == MetaType.AQUAMARINE.getMeta() || meta == MetaType.RESO_GEM.getMeta();
     }
 
     @Override
     public double collectionMultiplier(@Nonnull ItemStack stack) {
-        return 0.1666;
+        int meta = stack.getItemDamage();
+        if(meta == MetaType.AQUAMARINE.getMeta()) {
+            return 0.1666;
+        }
+        if(meta == MetaType.RESO_GEM.getMeta()) {
+            return 0.4333;
+        }
+        return 0;
     }
 
     @Override
@@ -104,7 +112,14 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
 
     @Override
     public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
-        return 4;
+        int meta = stack.getItemDamage();
+        if(meta == MetaType.AQUAMARINE.getMeta()) {
+            return 4;
+        }
+        if(meta == MetaType.RESO_GEM.getMeta()) {
+            return 12;
+        }
+        return 0.01;
     }
 
     @Override

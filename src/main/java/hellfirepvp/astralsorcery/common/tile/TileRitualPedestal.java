@@ -467,12 +467,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 }
 
                 if(doesSeeSky) {
+                    double perc = 0.2D + (0.8D * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
                     WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+                    double collect = 0;
                     if(handle != null) {
-                        double perc = 0.2D + (0.8D * handle.getCurrentDaytimeDistribution(world));
-                        double collect = perc * CrystalCalculations.getCollectionAmt(properties, handle.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
-                        collectionChannelBuffer += collect / 2D;
+                        collect = perc * CrystalCalculations.getCollectionAmt(properties, handle.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
                     }
+                    collectionChannelBuffer += collect / 2D;
                 }
                 if(collectionChannelBuffer > 0) {
                     doMainEffect(world, ce, trait, trait != null && collectionTraitBuffer > 0);

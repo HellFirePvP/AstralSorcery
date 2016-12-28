@@ -90,11 +90,19 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     //Convenience method
     public float getCurrentDaytimeDistribution(World world) {
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-        if(handle != null) {
-            return handle.getCurrentDaytimeDistribution(world);
-        }
-        return 0.1F;
+        float dayPart = world.getWorldTime() % 24000;
+        if(dayPart < 11000) return 0F;
+        if(dayPart < 15000) return (dayPart - 11000F) / 4000F;
+        if(dayPart > 20000) return 1F - (dayPart - 20000F) / 4000F;
+        return 1F;
+    }
+
+    public boolean isNight(World world) {
+        return getCurrentDaytimeDistribution(world) >= 0.65;
+    }
+
+    public boolean isDay(World world) {
+        return !isNight(world);
     }
 
     @Nullable

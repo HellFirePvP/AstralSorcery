@@ -1,9 +1,6 @@
 package hellfirepvp.astralsorcery.client;
 
-import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;
@@ -22,31 +19,30 @@ public class ClientScheduler implements ITickHandler {
 
     private static int clientTick = 0;
 
+    private boolean inTick = false;
     private Map<Runnable, Integer> queuedRunnables = new HashMap<>();
-    private final Object lock = new Object();
+    private Map<Runnable, Integer> waitingRunnables = new HashMap<>();
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         clientTick++;
 
-        /*GuiScreen current = Minecraft.getMinecraft().currentScreen;
-        if(current != null && current instanceof GuiJournalProgression) {
-            ((GuiJournalProgression) current).updateTick();
-        }*/
-
-        synchronized (lock) {
-            Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
-            while (iterator.hasNext()) {
-                Runnable r = iterator.next();
-                int delay = queuedRunnables.get(r);
-                delay--;
-                if(delay <= 0) {
-                    r.run();
-                    iterator.remove();
-                } else {
-                    queuedRunnables.put(r, delay);
-                }
+        inTick = true;
+        Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
+        while (iterator.hasNext()) {
+            Runnable r = iterator.next();
+            int delay = queuedRunnables.get(r);
+            delay--;
+            if(delay <= 0) {
+                r.run();
+                iterator.remove();
+            } else {
+                queuedRunnables.put(r, delay);
             }
+        }
+        inTick = false;
+        for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
+            queuedRunnables.put(waiting.getKey(), waiting.getValue());
         }
     }
 
@@ -70,7 +66,9 @@ public class ClientScheduler implements ITickHandler {
     }
 
     public void addRunnable(Runnable r, int tickDelay) {
-        synchronized (lock) {
+        if(inTick) {
+            waitingRunnables.put(r, tickDelay);
+        } else {
             queuedRunnables.put(r, tickDelay);
         }
     }

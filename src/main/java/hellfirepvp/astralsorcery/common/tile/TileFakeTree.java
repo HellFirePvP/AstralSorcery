@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,6 +24,7 @@ public class TileFakeTree extends TileEntityTick {
 
     private BlockPos reference;
     private IBlockState fakedState;
+    private SustainFunction sFunc;
 
     @Override
     public void update() {
@@ -41,15 +43,9 @@ public class TileFakeTree extends TileEntityTick {
                     return;
                 }
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(reference))) {
-                    /*TileRitualPedestal ped = MiscUtils.getTileAt(world, reference, TileRitualPedestal.class, true);
-                    if(ped != null) {
-                        IMajorConstellation c = ped.getRitualConstellation();
-                        if (c == null || !c.equals(SUSTAIN_CONSTELLATION) || !ped.isWorking() || !ped.hasMultiblock()) {
-                            cleanUp();
-                        }
-                    } else {
+                    if(!sFunc.canSustainFakeTile(world, pos)) {
                         cleanUp();
-                    }*/
+                    }
                     cleanUp();
                 }
             }
@@ -67,9 +63,10 @@ public class TileFakeTree extends TileEntityTick {
     @Override
     protected void onFirstTick() {}
 
-    public void setupTile(BlockPos reference, IBlockState fakedState) {
+    public void setupTile(BlockPos reference, IBlockState fakedState, SustainFunction func) {
         this.reference = reference;
         this.fakedState = fakedState;
+        this.sFunc = func;
         markForUpdate();
     }
 
@@ -108,4 +105,11 @@ public class TileFakeTree extends TileEntityTick {
             compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
         }
     }
+
+    public static interface SustainFunction {
+
+        public boolean canSustainFakeTile(World world, BlockPos pos);
+
+    }
+
 }
