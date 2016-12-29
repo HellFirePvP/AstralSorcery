@@ -7,6 +7,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -124,6 +125,12 @@ public class AttunementRecipe extends DiscoveryRecipe {
                 rand.nextFloat() * 0.1  * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
         particle.scale(0.2F);
+    }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return ResearchProgression.ATTUNEMENT;
     }
 
     public static enum AltarSlot {

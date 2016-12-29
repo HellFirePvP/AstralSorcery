@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.UUID;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -12,6 +14,15 @@ import net.minecraft.util.math.BlockPos;
  * Date: 07.05.2016 / 01:13
  */
 public class ByteBufUtils {
+
+    public static void writeUUID(ByteBuf buf, UUID uuid) {
+        buf.writeLong(uuid.getMostSignificantBits());
+        buf.writeLong(uuid.getLeastSignificantBits());
+    }
+
+    public static UUID readUUID(ByteBuf buf) {
+        return new UUID(buf.readLong(), buf.readLong());
+    }
 
     public static void writeString(PacketBuffer buf, String toWrite) {
         byte[] str = toWrite.getBytes();

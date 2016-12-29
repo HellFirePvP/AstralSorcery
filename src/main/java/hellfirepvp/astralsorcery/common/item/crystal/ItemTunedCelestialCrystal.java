@@ -35,6 +35,11 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase {
     }
 
     @Override
+    public ItemTunedCrystalBase getTunedItemVariant() {
+        return this;
+    }
+
+    @Override
     public Color getHightlightColor(ItemStack stack) {
         return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
     }

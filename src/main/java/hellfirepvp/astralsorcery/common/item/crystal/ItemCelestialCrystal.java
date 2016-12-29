@@ -2,6 +2,8 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
@@ -46,6 +48,11 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase {
     @Override
     public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
         return super.getShatterChanceMultiplier(stack) * 2;
+    }
+
+    @Override
+    public ItemTunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.tunedCelestialCrystal;
     }
 
     @Override

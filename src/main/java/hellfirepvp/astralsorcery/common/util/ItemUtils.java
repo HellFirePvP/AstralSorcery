@@ -33,17 +33,18 @@ public class ItemUtils {
     public static EntityItem dropItem(World world, double x, double y, double z, ItemStack stack) {
         if(world.isRemote) return null;
         EntityItem ei = new EntityItem(world, x, y, z, stack);
-        world.spawnEntityInWorld(ei);
         ei.motionX = 0;
         ei.motionY = 0;
         ei.motionZ = 0;
+        world.spawnEntityInWorld(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }
     public static EntityItem dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
         if(world.isRemote) return null;
-        EntityItem ei = dropItem(world, x, y, z, stack);
+        EntityItem ei = new EntityItem(world, x, y, z, stack);
         applyRandomDropOffset(ei);
+        world.spawnEntityInWorld(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }

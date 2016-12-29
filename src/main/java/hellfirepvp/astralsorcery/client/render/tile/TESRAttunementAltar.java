@@ -8,6 +8,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -33,6 +34,7 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
         GL11.glScaled(0.0625, 0.0625, 0.0625);
         GL11.glRotated(180, 1, 0, 0);
 
+        RenderHelper.disableStandardItemLighting();
         texModelAttunementAltar.bind();
         modelAttunementAltar.renderBase();
         GL11.glPopMatrix();

@@ -5,6 +5,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -20,10 +21,12 @@ import org.lwjgl.opengl.GL11;
 public abstract class EntityFXFacingSprite extends EntityComplexFX {
 
     private final SpriteSheetResource spriteSheet;
-    private final double x, y, z;
+    private double x, y, z;
+    private double prevX, prevY, prevZ;
     private final float scale;
 
     private RefreshFunction refreshFunction;
+    private PositionUpdateFunction positionUpdateFunction;
 
     public EntityFXFacingSprite(SpriteSheetResource spriteSheet, double x, double y, double z) {
         this(spriteSheet, x, y, z, 1F);
@@ -34,6 +37,9 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.prevX = x;
+        this.prevY = y;
+        this.prevZ = z;
         this.scale = scale;
         this.maxAge = spriteSheet.getFrameCount();
     }
@@ -47,6 +53,11 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
             }
 
         };
+    }
+
+    public EntityFXFacingSprite setPositionUpdateFunction(PositionUpdateFunction positionUpdateFunction) {
+        this.positionUpdateFunction = positionUpdateFunction;
+        return this;
     }
 
     public EntityFXFacingSprite setRefreshFunc(RefreshFunction func) {
@@ -82,6 +93,15 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
                 }
             }
         }
+        if(positionUpdateFunction != null) {
+            this.prevX = this.x;
+            this.prevY = this.y;
+            this.prevZ = this.z;
+            Vector3 newPos = positionUpdateFunction.updatePosition(new Vector3(x, y, z));
+            this.x = newPos.getX();
+            this.y = newPos.getY();
+            this.z = newPos.getZ();
+        }
     }
 
     @Override
@@ -94,11 +114,20 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX {
         int frame = getAgeBasedFrame();
         Tuple<Double, Double> uv = spriteSheet.getUVOffset(frame);
         spriteSheet.getResource().bind();
-        RenderingUtils.renderFacingQuad(x, y, z, pTicks, scale, 0, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier());
+        double iX = RenderingUtils.interpolate(prevX, x, pTicks);
+        double iY = RenderingUtils.interpolate(prevY, y, pTicks);
+        double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);
+        RenderingUtils.renderFacingQuad(iX, iY, iZ, pTicks, scale, 0, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier());
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
+    }
+
+    public static interface PositionUpdateFunction {
+
+        public Vector3 updatePosition(Vector3 current);
+
     }
 
     public static interface RefreshFunction {

@@ -88,7 +88,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     private void addResearchChatMessage(int resId) {
         ResearchProgression prog = ResearchProgression.getById(resId);
         String tr = I18n.format(prog.getUnlocalizedName());
-        String out = String.format(I18n.format("progress.gain.research.chat"), tr);
+        String out = I18n.format("progress.gain.research.chat", tr);
         out = TextFormatting.AQUA + out;
         Minecraft.getMinecraft().player.addChatMessage(new TextComponentString(out));
     }

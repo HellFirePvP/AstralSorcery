@@ -123,7 +123,7 @@ public class ClientCameraManager implements ITickHandler {
 
         private boolean active = false;
 
-        private boolean viewBobbing = false, hideGui = false;
+        private boolean viewBobbing = false, hideGui = false, flying = false;
         private int thirdPersonView = 0;
 
         private Vector3 startPosition;
@@ -135,6 +135,7 @@ public class ClientCameraManager implements ITickHandler {
             this.hideGui = Minecraft.getMinecraft().gameSettings.hideGUI;
             this.thirdPersonView = Minecraft.getMinecraft().gameSettings.thirdPersonView;
             EntityPlayer player = Minecraft.getMinecraft().player;
+            this.flying = player.capabilities.isFlying;
             this.startPosition = new Vector3(player);
             this.startYaw = player.rotationYaw;
             this.startPitch = player.rotationPitch;
@@ -150,6 +151,7 @@ public class ClientCameraManager implements ITickHandler {
                 settings.hideGUI = hideGui;
                 settings.thirdPersonView = thirdPersonView;
                 EntityPlayer player = Minecraft.getMinecraft().player;
+                player.capabilities.isFlying = flying;
                 player.setPositionAndRotation(startPosition.getX(), startPosition.getY(), startPosition.getZ(), startYaw, startPitch);
                 player.setVelocity(0, 0, 0);
                 this.active = false;
@@ -163,6 +165,7 @@ public class ClientCameraManager implements ITickHandler {
             settings.hideGUI = true;
             settings.viewBobbing = false;
             settings.thirdPersonView = 0;
+            Minecraft.getMinecraft().player.capabilities.isFlying = true;
             Minecraft.getMinecraft().player.setVelocity(0, 0, 0);
         }
 
@@ -199,6 +202,13 @@ public class ClientCameraManager implements ITickHandler {
             if(Minecraft.getMinecraft().world != null) {
                 Minecraft.getMinecraft().world.removeEntity(this.clientEntity);
             }
+
+            if(Minecraft.getMinecraft().player != null) {
+                EntityPlayer player = Minecraft.getMinecraft().player;
+                player.setPositionAndRotation(this.clientEntity.posX, this.clientEntity.posY, this.clientEntity.posZ, this.clientEntity.rotationYaw, this.clientEntity.rotationPitch);
+                player.setVelocity(0, 0, 0);
+            }
+
             RenderingUtils.unsafe_resetCamera();
 
             if(Minecraft.getMinecraft().world != null) {
@@ -267,8 +277,8 @@ public class ClientCameraManager implements ITickHandler {
         }
 
         public void transformToFocusOnPoint(Vector3 toFocus, float pTicks, boolean propagate) {
-            Vector3 angles = new Vector3(this).subtract(toFocus).toPolar();
-            Vector3 prevAngles = new Vector3(prevPosX, prevPosY, prevPosZ).subtract(toFocus).toPolar();
+            Vector3 angles = new Vector3(this).subtract(toFocus).copyToPolar();
+            Vector3 prevAngles = new Vector3(prevPosX, prevPosY, prevPosZ).subtract(toFocus).copyToPolar();
             double pitch = 90 - angles.getY();
             double pitchPrev = 90 - prevAngles.getY();
             double yaw = -angles.getZ();

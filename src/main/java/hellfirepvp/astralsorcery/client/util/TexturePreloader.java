@@ -74,6 +74,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1")                .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star2")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkInactive")    .allocateGlId();

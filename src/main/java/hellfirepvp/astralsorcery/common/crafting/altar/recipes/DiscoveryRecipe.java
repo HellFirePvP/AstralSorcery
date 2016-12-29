@@ -3,14 +3,18 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -20,7 +24,7 @@ import java.util.Random;
 * Created by HellFirePvP
 * Date: 25.09.2016 / 23:58
 */
-public class DiscoveryRecipe extends AbstractAltarRecipe {
+public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe.Progression {
 
     protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -63,4 +67,11 @@ public class DiscoveryRecipe extends AbstractAltarRecipe {
             lightbeam.setMaxAge(64);
         }
     }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return ResearchProgression.BASIC_CRAFT;
+    }
+
 }

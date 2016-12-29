@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.client.effect.controller;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.awt.*;
@@ -19,11 +20,36 @@ public class OrbitalPropertiesAttunement implements OrbitalEffectController.Orbi
     private static final Random rand = new Random();
 
     private int persistanceRequests = 8;
+    private final TileAttunementAltar ta;
+    private final boolean player;
+
+    public OrbitalPropertiesAttunement(TileAttunementAltar ta, boolean player) {
+        this.ta = ta;
+        this.player = player;
+    }
+
+    public void setPersistanceRequests(int req) {
+        this.persistanceRequests = req;
+    }
 
     @Override
     public boolean canPersist(OrbitalEffectController controller) {
-        persistanceRequests--;
-        return persistanceRequests >= 0;
+        int mode = ta.getMode();
+        if(player) {
+            if(mode != 1) {
+                return false;
+            } else {
+                persistanceRequests--;
+                return persistanceRequests >= 0;
+            }
+        } else {
+            if(mode != 2) {
+                return false;
+            } else {
+                persistanceRequests--;
+                return persistanceRequests >= 0;
+            }
+        }
     }
 
     @Override

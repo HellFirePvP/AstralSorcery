@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -75,6 +76,7 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         EntityCrystal crystal = new EntityCrystal(world, location.posX, location.posY, location.posZ, itemstack);
         crystal.setDefaultPickupDelay();
+        crystal.setNoDespawn();
         crystal.motionX = location.motionX;
         crystal.motionY = location.motionY;
         crystal.motionZ = location.motionZ;
@@ -111,6 +113,8 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
         return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
     }
+
+    public abstract ItemTunedCrystalBase getTunedItemVariant();
 
     public static ItemStack createRandomBaseCrystal() {
         ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);

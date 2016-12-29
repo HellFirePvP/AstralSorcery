@@ -15,12 +15,16 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
@@ -31,6 +35,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionRece
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
+import hellfirepvp.astralsorcery.common.util.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -38,8 +44,11 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -57,7 +66,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -68,11 +77,26 @@ import java.util.UUID;
  */
 public class TileAttunementAltar extends TileReceiverBase {
 
+    private static final Function<ItemStack, Boolean> crystalAcceptor = stack -> {
+
+        if(!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
+        if(stack.stackSize != 1) return false;
+
+        IMajorConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
+        IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);
+        return tuned == null && trait == null;
+
+    };
+
+    private static final int TICKS_PLAYER_ATTUNEMENT = 800;
+    private static final int TICKS_CRYSTAL_ATTUNEMENT = 500;
+
     private IMajorConstellation activeFound = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
     //Attunement related
     private int mode = 0; //0 == idle, 1 == att_player, 2 == att_crystal
+    private int serverSyncAttTick = 0;
     private int entityIdActive = -1;
     private Entity activeEntity = null; //Unsynced
 
@@ -86,6 +110,8 @@ public class TileAttunementAltar extends TileReceiverBase {
     private List<Object> starSprites = new LinkedList<>();
     private IMajorConstellation highlight = null;
     private int highlightActive = 0;
+    private Object spriteCrystalAttunement = null;
+    private int spawnedOrbitalsForCrystal = -1;
 
     //TESR flags
     public static final int MAX_START_ANIMATION_TICK = 60;
@@ -123,12 +149,17 @@ public class TileAttunementAltar extends TileReceiverBase {
             }
 
             if(activeFound != null) {
+                if(mode != 0 && activeEntity == null) {
+                    activeEntity = world.getEntityByID(entityIdActive);
+                    if(activeEntity == null) return;
+                }
+
                 if(mode == 0) {
                     if(ConstellationSkyHandler.getInstance().isNight(world)) {
                         checkForAttunements();
                     }
                 } else if(mode == 1) {
-                    if(activeEntity == null || !(activeEntity instanceof EntityPlayer) || activeEntity.isDead) {
+                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead) {
                         setAttunementState(0, null);
                     } else {
                         if(playerAttunementWaitTick > 0) {
@@ -138,28 +169,79 @@ public class TileAttunementAltar extends TileReceiverBase {
                             setAttunementState(0, null);
                             playerAttunementWaitTick = -1;
                         }
+                        this.serverSyncAttTick++;
+                        markForUpdate();
                     }
                 } else if(mode == 2) {
-                    //Uhh... item things. ?
+                    if(activeEntity.isDead ||
+                            !(activeEntity instanceof EntityItem) ||
+                            !EntityUtils.selectItemStack(crystalAcceptor).apply(activeEntity) ||
+                            !ConstellationSkyHandler.getInstance().isNight(world)) {
+                        setAttunementState(0, null);
+                    } else {
+                        //Sync up with the clients so everyone "has the same effects"
+                        //Not exactly great in terms of amount of syncs, but well...
+                        //The things you/accept do for pretty & consistent effects...
+                        serverSyncAttTick++;
+                        if(serverSyncAttTick % 4 == 0) {
+                            markForUpdate();
+                        }
+
+                        Vector3 crystalHoverPos = new Vector3(this).add(0.5, 1.4, 0.5);
+                        activeEntity.setPosition(crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ());
+                        ((EntityItem) activeEntity).setNoDespawn();
+
+                        if(serverSyncAttTick >= TICKS_CRYSTAL_ATTUNEMENT) {
+
+                            ItemStack current = ((EntityItem) activeEntity).getEntityItem();
+                            Item tuned = ((ItemRockCrystalBase) current.getItem()).getTunedItemVariant();
+                            ItemStack tunedStack = new ItemStack(tuned);
+                            ItemTunedCrystalBase.applyMainConstellation(tunedStack, activeFound);
+                            CrystalProperties.applyCrystalProperties(tunedStack, CrystalProperties.getCrystalProperties(current));
+                            activeEntity.setDead();
+
+                            ItemUtils.dropItem(world, crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ(), tunedStack);
+                            setAttunementState(0, null);
+                            SoundHelper.playSoundAround(Sounds.craftFinish, world, pos, 2.5F, 1.6F);
+                        }
+                    }
                 }
             }
         }
     }
 
+    public int getMode() {
+        return mode;
+    }
+
     private void checkForAttunements() {
         if((ticksExisted & 31) != 0) return;
-        List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
-        if(!players.isEmpty()) {
-            EntityPlayerMP pl = players.get(0);
-            if(MiscUtils.isPlayerFakeMP(pl)) return;
-            PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-            if(prog == null || prog.getAttunedConstellation() != null) return;
-            if(!prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT)) return;
-            if(!prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) return;
 
-            PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
-            PacketChannel.CHANNEL.sendTo(state, pl);
-            return;
+        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos());
+
+        Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
+        List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+        if(!players.isEmpty()) {
+            EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
+            if (pl != null && !MiscUtils.isPlayerFakeMP(pl)) {
+                PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
+                if (prog != null && prog.getAttunedConstellation() == null &&
+                        prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
+                        prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
+
+                    PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
+                    PacketChannel.CHANNEL.sendTo(state, pl);
+                    return;
+                }
+            }
+        }
+
+        List<EntityItem> unfilteredItems = world.getEntitiesWithinAABB(EntityItem.class, box);
+        if(unfilteredItems.size() == 1) {
+            EntityItem item = unfilteredItems.get(0);
+            if(EntityUtils.selectItemStack(crystalAcceptor).apply(item)) {
+                setAttunementState(2, item);
+            }
         }
     }
 
@@ -267,8 +349,10 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     public void markPlayerStartCameraFlight(EntityPlayer pl) {
-        setAttunementState(1, pl);
-        this.playerAttunementWaitTick = 1000; //Depends on the camera flight... awkwardly enough.. client has a bit more time to answer too.
+        if(mode == 0) {
+            setAttunementState(1, pl);
+            this.playerAttunementWaitTick = TICKS_PLAYER_ATTUNEMENT + 200; //Depends on the camera flight... awkwardly enough.. client has a bit more time to answer too.
+        }
     }
 
     public void askForAttunement(EntityPlayerMP playerEntity, IMajorConstellation cst) {
@@ -286,12 +370,13 @@ public class TileAttunementAltar extends TileReceiverBase {
 
     private void setAttunementState(int mode, Entity trigger) {
         mode = MathHelper.clamp(mode, 0, 2);
+        this.serverSyncAttTick = 0;
+        this.playerAttunementWaitTick = -1;
         this.mode = mode;
         switch (mode) {
             case 0:
                 this.entityIdActive = -1;
                 this.activeEntity = null;
-                this.playerAttunementWaitTick = -1;
                 break;
             case 1:
             case 2:
@@ -315,7 +400,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
         builder.setStopDelegate(createAttunementDelegate());
 
-        OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement();
+        OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement(this, true);
         OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(att, att, null);
         ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
                 .setTicksPerRotation(80).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
@@ -335,9 +420,12 @@ public class TileAttunementAltar extends TileReceiverBase {
         return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
     }
 
-    private void checkCameraFlightIntegrity() {
+    private void checkClientEffectIntegrity() {
         if(clientActiveCameraFlight != null) {
             checkCameraClient();
+        }
+        if(spawnedOrbitalsForCrystal != entityIdActive) {
+            spawnedOrbitalsForCrystal = -1;
         }
     }
 
@@ -355,6 +443,10 @@ public class TileAttunementAltar extends TileReceiverBase {
             highlightActive--;
         }
 
+        if(mode != 2) {
+            spriteCrystalAttunement = null;
+        }
+
         if(!hasMultiblock || !doesSeeSky) {
             starSprites.clear();
             activeSound = null;
@@ -370,7 +462,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                 clientActiveCameraFlight = null;
             }
 
-        } else if(activeFound == null) {
+        } else if(activeFound == null || !ConstellationSkyHandler.getInstance().isNight(world)) {
             starSprites.clear();
             activeSound = null;
             animate = false;
@@ -401,33 +493,47 @@ public class TileAttunementAltar extends TileReceiverBase {
                     activeSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this).add(0.5, 0.5, 0.5), 0.7F, 0.8F,
                             () -> isInvalid() ||
                                     activeFound == null ||
+                                    !ConstellationSkyHandler.getInstance().isNight(world) ||
                                     Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0);
                 }
             }
 
-            /*if(!sheduledCameraFlight && clientActiveCameraFlight == null) {
-                List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
-                if(!players.isEmpty() && players.contains(Minecraft.getMinecraft().player)) {
-                    sheduledCameraFlight = true;
-                    Vector3 offset = new Vector3(this).add(0, 6, 0);
-                    ClientCameraFlightHelper.CameraFlightBuilder builder = ClientCameraFlightHelper.builder(offset.clone().add(4, 0, 4), new Vector3(this).add(0.5, 0.5, 0.5));
-                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease( 5,  0.025), 200, 2);
-                    builder.addCircularPoints(offset, ClientCameraFlightHelper.DynamicRadiusGetter.dyanmicIncrease(10, -0.01) , 200, 2);
-                    builder.setTickDelegate(createFloatDelegate(new Vector3(this).add(0.5F, 1.2F, 0.5F)));
-                    builder.setStopDelegate(createAttunementDelegate());
+            if(mode == 1 && clientActiveCameraFlight == null) {
+                playPlayerAttenuationEffects(serverSyncAttTick);
+                serverSyncAttTick++;
+            }
+            if(mode == 2 && entityIdActive != -1) {
+                Entity e = world.getEntityByID(entityIdActive);
+                if(e != null && !e.isDead && e instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).apply(e)) {
+                    /*if(spriteCrystalAttunement == null) {
+                        EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, pos.getX(), pos.getY(), pos.getZ(), 2.5F, 2);
+                        EffectHandler.getInstance().registerFX(sprite);
+                        spriteCrystalAttunement = sprite;
+                        sprite.setRefreshFunc(() -> {
+                            if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
+                            Entity ent = world.getEntityByID(entityIdActive);
+                            return ent != null && !ent.isDead && ent instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).apply(ent);
+                        });
+                        sprite.setPositionUpdateFunction((v) -> {
+                            if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
+                            Entity ent = world.getEntityByID(entityIdActive);
+                            if(ent == null || ent.isDead) return v;
+                            return new Vector3(ent).addY(0.5);
+                        });
+                    }*/
 
-                    OrbitalPropertiesAttunement att = new OrbitalPropertiesAttunement();
-                    OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(att, att, null);
-                    ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
-                            .setTicksPerRotation(80).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
+                    Vector3 crystalHoverPos = new Vector3(this).add(0.5, 1.4, 0.5);
+                    e.setPosition(crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ());
+                    e.setVelocity(0, 0, 0);
 
-                    ctrl = EffectHandler.getInstance().orbital(att, att, null);
-                    ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOrbitRadius(3)
-                            .setTicksPerRotation(80).setTickOffset(40).setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
-
-                    this.clientActiveCameraFlight = builder.finishAndStart();
+                    playCrystalAttenuationEffects(serverSyncAttTick);
+                    serverSyncAttTick++;
+                } else {
+                    if(spriteCrystalAttunement != null) {
+                        spriteCrystalAttunement = null;
+                    }
                 }
-            }*/
+            }
 
             animate = true;
             prevActivationTick = activationTick;
@@ -482,12 +588,12 @@ public class TileAttunementAltar extends TileReceiverBase {
             focusedEntity.prevRotationYawHead = 0;
             focusedEntity.setVelocity(0, 0, 0);
 
-            playAttenuationEffects(renderView.ticksExisted);
+            playPlayerAttenuationEffects(renderView.ticksExisted);
         };
     }
 
     @SideOnly(Side.CLIENT)
-    private void playAttenuationEffects(int cameraFlightTick) {
+    private void playPlayerAttenuationEffects(int cameraFlightTick) {
         if(activeFound == null) return;
 
         if(cameraFlightTick >= 0 && cameraFlightTick <= 800) {
@@ -548,6 +654,132 @@ public class TileAttunementAltar extends TileReceiverBase {
                 lightbeam.setMaxAge(64);
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playCrystalAttenuationEffects(int runTick) {
+        if(activeFound == null) return;
+
+        if(runTick >= 0 && runTick <= TICKS_CRYSTAL_ATTUNEMENT) {
+            if(runTick % 30 == 0) {
+                List<BlockPos> offsets = translateConstellationPositions(activeFound);
+                Color ov = new Color(0x2100FD);
+                float cR = ov.getRed() / 255F;
+                float cG = ov.getGreen() / 255F;
+                float cB = ov.getBlue() / 255F;
+                for (BlockPos effectPos : offsets) {
+                    Vector3 from = new Vector3(effectPos).add(0.5, -0.1, 0.5);
+                    MiscUtils.applyRandomOffset(from, rand, 0.1F);
+                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
+                    lightbeam.setAlphaMultiplier(0.8F);
+                    lightbeam.setColorOverlay(cR, cG, cB, 0.2F);
+                    lightbeam.setMaxAge(64);
+                }
+            }
+        }
+
+        if(runTick >= 0) {
+            if(spawnedOrbitalsForCrystal == -1) {
+                spawnedOrbitalsForCrystal = entityIdActive;
+
+                OrbitalPropertiesAttunement attunement = new OrbitalPropertiesAttunement(this, false);
+                attunement.setPersistanceRequests(3);
+                OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(80).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(2);
+
+                attunement = new OrbitalPropertiesAttunement(this, false);
+                attunement.setPersistanceRequests(3);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(80).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(2);
+                ctrl.setTickOffset(40);
+
+                attunement = new OrbitalPropertiesAttunement(this, false);
+                attunement.setPersistanceRequests(12);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(20).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(1);
+
+                attunement = new OrbitalPropertiesAttunement(this, false);
+                attunement.setPersistanceRequests(2);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(120).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(3.5);
+                ctrl.setTickOffset(40);
+
+                attunement = new OrbitalPropertiesAttunement(this, false);
+                attunement.setPersistanceRequests(2);
+                ctrl = EffectHandler.getInstance().orbital(attunement, attunement, null);
+                ctrl.setTicksPerRotation(120).setOrbitAxis(Vector3.RotAxis.Y_AXIS).setOffset(new Vector3(this).add(0.5, 0, 0.5)).setOrbitRadius(3.5);
+                ctrl.setTickOffset(100);
+            }
+        }
+
+        if(runTick >= 200) {
+            for (int i = 0; i < 2; i++) {
+                List<BlockPos> offsets = translateConstellationPositions(activeFound);
+                BlockPos pos = offsets.get(rand.nextInt(offsets.size()));
+                Vector3 offset = new Vector3(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5).subtract(offset);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+            }
+        }
+
+        if(runTick >= 225) {
+            if(spriteCrystalAttunement == null) {
+                Entity ee = world.getEntityByID(entityIdActive);
+                if(ee != null) {
+                    Vector3 posV = new Vector3(ee).addY(0.5);
+                    EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, posV.getX(), posV.getY(), posV.getZ(), 2.5F, 2);
+                    EffectHandler.getInstance().registerFX(sprite);
+                    spriteCrystalAttunement = sprite;
+                    sprite.setRefreshFunc(() -> {
+                        if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
+                        Entity ent = world.getEntityByID(entityIdActive);
+                        return ent != null && !ent.isDead && ent instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).apply(ent);
+                    });
+                    sprite.setPositionUpdateFunction((v) -> {
+                        if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
+                        Entity ent = world.getEntityByID(entityIdActive);
+                        if(ent == null || ent.isDead) return v;
+                        return new Vector3(ent).addY(0.5);
+                    });
+                }
+            }
+        }
+
+        if(runTick >= 250) {
+            for (int i = 0; i < 3; i++) {
+                Vector3 from = new Vector3(this).add(0.5, 0.5, 0.5);
+                from.addX(rand.nextFloat() * 6.5F * (rand.nextBoolean() ? 1 : -1));
+                from.addZ(rand.nextFloat() * 6.5F * (rand.nextBoolean() ? 1 : -1));
+                Vector3 dir = new Vector3(this).add(0.5, 1.7, 0.5).subtract(from);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
+                p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+            }
+        }
+
+        if(runTick >= 350) {
+            if(runTick % 5 == 0) {
+                Vector3 from = new Vector3(this).add(0.5, -0.1, 0.5);
+                MiscUtils.applyRandomOffset(from, rand, 0.3F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(8), from, 2.4F);
+                lightbeam.setAlphaMultiplier(0.8F);
+                lightbeam.setMaxAge(64);
+            }
+        }
+
+        if(runTick >= 400) {
+            for (int i = 0; i < 4; i++) {
+                Vector3 at = new Vector3(this).add(0.5, 0.1, 0.5);
+                at.addX(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
+                at.addZ(rand.nextFloat() * 7F * (rand.nextBoolean() ? 1 : -1));
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+                p.setAlphaMultiplier(0.7F);
+                if(rand.nextBoolean()) p.setColor(Color.WHITE);
+                p.setMaxAge((int) (30 + rand.nextFloat() * 50));
+                p.gravity(0.05).scale(0.3F + rand.nextFloat() * 0.1F);
+            }
+        }
+
     }
 
     @SideOnly(Side.CLIENT)
@@ -641,16 +873,27 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     @Override
+    public void readNetNBT(NBTTagCompound compound) {
+        this.mode = compound.getInteger("modeId");
+        this.entityIdActive = compound.getInteger("entityId");
+        this.serverSyncAttTick = compound.getInteger("sSync");
+
+        checkClientEffectIntegrity();
+    }
+
+    @Override
+    public void writeNetNBT(NBTTagCompound compound) {
+        compound.setInteger("modeId", mode);
+        compound.setInteger("entityId", entityIdActive);
+        compound.setInteger("sSync", serverSyncAttTick);
+    }
+
+    @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
         this.hasMultiblock = compound.getBoolean("mbState");
         this.doesSeeSky = compound.getBoolean("skState");
-
-        this.mode = compound.getInteger("modeId");
-        this.entityIdActive = compound.getInteger("entityId");
-
-        checkCameraFlightIntegrity();
 
         IConstellation found = IConstellation.readFromNBT(compound);
         if(found == null || !(found instanceof IMajorConstellation)) {
@@ -667,9 +910,6 @@ public class TileAttunementAltar extends TileReceiverBase {
         compound.setBoolean("mbState", hasMultiblock);
         compound.setBoolean("skState", doesSeeSky);
 
-        compound.setInteger("modeId", mode);
-        compound.setInteger("entityId", entityIdActive);
-
         if (activeFound != null) {
             activeFound.writeToNBT(compound);
         }
@@ -683,12 +923,12 @@ public class TileAttunementAltar extends TileReceiverBase {
 
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
-            if(isChunkLoaded) {
+            /*if(isChunkLoaded) {
                 TileAttunementAltar ta = MiscUtils.getTileAt(world, getPos(), TileAttunementAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }
-            }
+            }*/
         }
 
         @Override

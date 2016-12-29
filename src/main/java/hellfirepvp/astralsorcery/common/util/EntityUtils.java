@@ -6,7 +6,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,6 +58,32 @@ public class EntityUtils {
                 return i.getItem().equals(item);
             }
         };
+    }
+
+    public static Predicate<? super Entity> selectItemStack(Function<ItemStack, Boolean> acceptor) {
+        return entity -> {
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
+            ItemStack i = ((EntityItem) entity).getEntityItem();
+            if(i == null || i.getItem() == null) return false;
+            return acceptor.apply(i);
+        };
+    }
+
+    @Nullable
+    public static <T> T selectClosest(Collection<T> elements, Function<T, Double> dstFunc) {
+        if(elements.isEmpty()) return null;
+
+        double dstClosest = Double.MAX_VALUE;
+        T closestElement = null;
+        for (T element : elements) {
+            double dst = dstFunc.apply(element);
+            if(dst < dstClosest) {
+                closestElement = element;
+                dstClosest = dst;
+            }
+        }
+        return closestElement;
     }
 
 }

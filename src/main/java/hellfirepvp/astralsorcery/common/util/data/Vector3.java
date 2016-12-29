@@ -194,6 +194,17 @@ public class Vector3 {
         return difX * difX + difY * difY + difZ * difZ;
     }
 
+    public double distance(Vec3d o) {
+        return Math.sqrt(distanceSquared(o));
+    }
+
+    public double distanceSquared(Vec3d o) {
+        double difX = x - o.xCoord;
+        double difY = y - o.yCoord;
+        double difZ = z - o.zCoord;
+        return difX * difX + difY * difY + difZ * difZ;
+    }
+
     public float angle(Vector3 other) {
         double dot = dot(other) / (length() * other.length());
 
@@ -379,13 +390,20 @@ public class Vector3 {
 
     //copy & converts to polar coordinates (in degrees)
     //Order: Distance, Tetha, Phi
-    public Vector3 toPolar() {
+    public Vector3 copyToPolar() {
         double length = length();
         double thetha = Math.acos(y / length);
         double phi = Math.atan2(x, z);
         thetha = Math.toDegrees(thetha);
         phi = 180 + Math.toDegrees(phi);
         return new Vector3(length, thetha, phi);
+    }
+
+    public Vector3 copyInterpolateWith(Vector3 next, float partial) {
+        return new Vector3(
+                (x == next.x ? x : x + ((next.x - x) * partial)),
+                (y == next.y ? y : y + ((next.y - y) * partial)),
+                (z == next.z ? z : z + ((next.z - z) * partial)));
     }
 
     public double getX() {

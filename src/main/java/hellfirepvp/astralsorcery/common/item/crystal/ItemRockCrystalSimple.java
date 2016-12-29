@@ -1,6 +1,8 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,4 +25,8 @@ public class ItemRockCrystalSimple extends ItemRockCrystalBase {
         subItems.add(stack);
     }
 
+    @Override
+    public ItemTunedCrystalBase getTunedItemVariant() {
+        return ItemsAS.tunedRockCrystal;
+    }
 }

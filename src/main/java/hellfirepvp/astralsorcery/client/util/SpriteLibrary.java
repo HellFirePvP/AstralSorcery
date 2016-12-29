@@ -27,6 +27,7 @@ public class SpriteLibrary {
     private static final BindableResource texHalo1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
     private static final BindableResource texHalo2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2");
     private static final BindableResource texStar1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1");
+    private static final BindableResource texStar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star2");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
     private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
@@ -35,6 +36,7 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteHalo1 = texHalo1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteHalo2 = texHalo2.asSpriteSheet(8, 8);
     public static final SpriteSheetResource spriteStar1 = texStar1.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteStar2 = texStar2.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spritePerkInactive = flareInactive.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spritePerkActive = flareActive.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spritePerkActivateable = flareActivateable.asSpriteSheet(1, 40);

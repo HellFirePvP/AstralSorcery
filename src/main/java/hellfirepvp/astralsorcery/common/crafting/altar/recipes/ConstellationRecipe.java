@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -142,6 +143,12 @@ public class ConstellationRecipe extends AttunementRecipe {
             particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
         }
 
+    }
+
+    @Nonnull
+    @Override
+    public ResearchProgression getRequiredProgression() {
+        return ResearchProgression.CONSTELLATION;
     }
 
     public static enum AltarAdditionalSlot {

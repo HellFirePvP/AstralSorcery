@@ -29,4 +29,9 @@ public class ItemTunedRockCrystal extends ItemTunedCrystalBase {
         }
     }
 
+    @Override
+    public ItemTunedCrystalBase getTunedItemVariant() {
+        return this;
+    }
+
 }
