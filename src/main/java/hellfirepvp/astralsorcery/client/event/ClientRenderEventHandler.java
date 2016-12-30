@@ -153,7 +153,7 @@ public class ClientRenderEventHandler {
     }
 
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onHighlight(DrawBlockHighlightEvent event) {
         RayTraceResult res = event.getTarget();
@@ -185,7 +185,7 @@ public class ClientRenderEventHandler {
                 }
             }
         }
-    }
+    }*/
 
 
     static {

@@ -45,7 +45,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
             new Vector3(-3, 2, -3)
     };
 
-    public ConstellationUpgradeRecipe() {
+    public ConstellationUpgradeRecipe(boolean cel) {
         super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -53,7 +53,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
-                .addPart(ItemsAS.rockCrystal,
+                .addPart(cel ? ItemsAS.tunedCelestialCrystal : ItemsAS.tunedRockCrystal,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,

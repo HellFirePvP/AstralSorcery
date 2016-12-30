@@ -56,7 +56,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         setHarvestLevel("pickaxe", 3);
         setSoundType(SoundType.GLASS);
         setLightLevel(0.7F);
-        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+        setCreativeTab(RegistryItems.creativeTabAstralSorceryTunedCrystals);
     }
 
     @Override

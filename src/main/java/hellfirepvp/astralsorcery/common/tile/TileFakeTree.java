@@ -20,11 +20,8 @@ import net.minecraft.world.World;
  */
 public class TileFakeTree extends TileEntityTick {
 
-    //public static final IMajorConstellation SUSTAIN_CONSTELLATION = Constellations.fertilitas;
-
     private BlockPos reference;
     private IBlockState fakedState;
-    private SustainFunction sFunc;
 
     @Override
     public void update() {
@@ -43,10 +40,10 @@ public class TileFakeTree extends TileEntityTick {
                     return;
                 }
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(reference))) {
-                    if(!sFunc.canSustainFakeTile(world, pos)) {
+                    TileTreeBeacon beacon = MiscUtils.getTileAt(world, reference, TileTreeBeacon.class, true);
+                    if(beacon == null || beacon.isInvalid()) {
                         cleanUp();
                     }
-                    cleanUp();
                 }
             }
         }
@@ -63,10 +60,9 @@ public class TileFakeTree extends TileEntityTick {
     @Override
     protected void onFirstTick() {}
 
-    public void setupTile(BlockPos reference, IBlockState fakedState, SustainFunction func) {
+    public void setupTile(BlockPos reference, IBlockState fakedState) {
         this.reference = reference;
         this.fakedState = fakedState;
-        this.sFunc = func;
         markForUpdate();
     }
 
@@ -104,12 +100,6 @@ public class TileFakeTree extends TileEntityTick {
             compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
             compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
         }
-    }
-
-    public static interface SustainFunction {
-
-        public boolean canSustainFakeTile(World world, BlockPos pos);
-
     }
 
 }

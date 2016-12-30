@@ -31,6 +31,7 @@ public abstract class ConfigEntry {
 
     public static enum Section {
 
+        MACHINERY,
         WORLDGEN,
         RITUAL_EFFECTS,
         PERK_LEVELS,

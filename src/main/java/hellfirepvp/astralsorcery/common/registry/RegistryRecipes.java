@@ -31,6 +31,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
@@ -63,13 +64,15 @@ public class RegistryRecipes {
     public static AttunementRecipe rIlluminatorRock, rIlluminatorCel;
     public static AttunementRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltarRock, rAttunementAltarCel;
+    public static AttunementRecipe rStarlightInfuserRock, rStarlightInfuserCel;
+    public static AttunementRecipe rTreeBeaconRock, rTreeBeaconCel;
 
     public static LensRecipe rLensRock, rLensCel;
     public static PrismLensRecipe rPrismRock, rPrismCel;
     public static CollectorCrystalRecipe rCollectRock, rCollectCel;
 
-    public static AttunementUpgradeRecipe rAltarUpgradeAttenuation;
-    public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
+    public static AttunementUpgradeRecipe rAltarUpgradeAttenuationRock, rAltarUpgradeAttenuationCel;
+    public static ConstellationUpgradeRecipe rAltarUpgradeConstellationRock, rAltarUpgradeConstellationCel;
 
     //public static SimpleCrystalAttunationRecipe rAttuneRockCrystalBasic, rAttuneCelestialCrystalBasic;
 
@@ -226,8 +229,100 @@ public class RegistryRecipes {
         rAttunementAltarRock = registerAltarRecipe(new AttunementAltarRecipe(false));
         rAttunementAltarCel = registerAltarRecipe(new AttunementAltarRecipe(true));
 
-        rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
-        rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+        rAltarUpgradeAttenuationRock = registerAltarRecipe(new AttunementUpgradeRecipe(false));
+        rAltarUpgradeAttenuationCel = registerAltarRecipe(new AttunementUpgradeRecipe(true));
+        rAltarUpgradeConstellationRock = registerAltarRecipe(new ConstellationUpgradeRecipe(false));
+        rAltarUpgradeConstellationCel = registerAltarRecipe(new ConstellationUpgradeRecipe(true));
+
+        rTreeBeaconRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemsAS.rockCrystal,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.BLOCK_SAPLING,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(OreDictAlias.ITEM_ENDERPEARL,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER));
+        rTreeBeaconRock.setAttItem(BlocksAS.fluidLiquidStarlight,
+                AttunementRecipe.AltarSlot.LOWER_LEFT,
+                AttunementRecipe.AltarSlot.LOWER_RIGHT);
+        rTreeBeaconRock.setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                AttunementRecipe.AltarSlot.UPPER_LEFT,
+                AttunementRecipe.AltarSlot.UPPER_RIGHT);
+        rTreeBeaconRock.setPassiveStarlightRequirement(3500);
+
+        rTreeBeaconCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemsAS.celestialCrystal,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.BLOCK_SAPLING,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(OreDictAlias.ITEM_ENDERPEARL,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER));
+        rTreeBeaconCel.setAttItem(BlocksAS.fluidLiquidStarlight,
+                AttunementRecipe.AltarSlot.LOWER_LEFT,
+                AttunementRecipe.AltarSlot.LOWER_RIGHT);
+        rTreeBeaconCel.setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                AttunementRecipe.AltarSlot.UPPER_LEFT,
+                AttunementRecipe.AltarSlot.UPPER_RIGHT);
+        rTreeBeaconCel.setPassiveStarlightRequirement(3500);
+
+        rStarlightInfuserRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
+                .addPart(ItemsAS.rockCrystal,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER));
+        rStarlightInfuserRock.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttunementRecipe.AltarSlot.UPPER_LEFT,
+                AttunementRecipe.AltarSlot.UPPER_RIGHT);
+        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+                AttunementRecipe.AltarSlot.LOWER_LEFT,
+                AttunementRecipe.AltarSlot.LOWER_RIGHT);
+        rStarlightInfuserRock.setPassiveStarlightRequirement(3700);
+
+        rStarlightInfuserCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
+                .addPart(ItemsAS.celestialCrystal,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER));
+        rStarlightInfuserCel.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                AttunementRecipe.AltarSlot.UPPER_LEFT,
+                AttunementRecipe.AltarSlot.UPPER_RIGHT);
+        rStarlightInfuserCel.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+                AttunementRecipe.AltarSlot.LOWER_LEFT,
+                AttunementRecipe.AltarSlot.LOWER_RIGHT);
+        rStarlightInfuserCel.setPassiveStarlightRequirement(3700);
 
         rHandTelescope = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.handTelescope)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),

@@ -9,6 +9,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
@@ -95,6 +96,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WELL_CATALYST_BREAK,
         WAND_CRYSTAL_HIGHLIGHT,
         PHOENIX_PROC,
+        TREE_VORTEX,
 
         CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
@@ -136,8 +138,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectDiscidia::playParticles;
                 //case CE_WATER_FISH:
                 //    return CEffectOctans::playParticles;
-                //case CE_TREE_VORTEX:
-                    //return CEffectAra::playParticles;
+                case TREE_VORTEX:
+                    return TileTreeBeacon::playParticles;
                 case RT_DEBUG:
                     return RaytraceAssist::playDebug;
             }

@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -76,6 +78,18 @@ public class ConstellationRecipe extends AttunementRecipe {
 
     public ConstellationRecipe setCstItem(String oreDict, AltarAdditionalSlot... slots) {
         return setCstItem(new ItemHandle(oreDict), slots);
+    }
+
+    public ConstellationRecipe setCstItem(FluidStack fluid, AltarAdditionalSlot... slots) {
+        return setCstItem(new ItemHandle(fluid), slots);
+    }
+
+    public ConstellationRecipe setCstItem(Fluid fluid, int mbAmount, AltarAdditionalSlot... slots) {
+        return setCstItem(new FluidStack(fluid, mbAmount), slots);
+    }
+
+    public ConstellationRecipe setAttItem(Fluid fluid, AltarAdditionalSlot... slots) {
+        return setCstItem(fluid, 1000, slots);
     }
 
     public ConstellationRecipe setCstItem(ItemHandle handle, AltarAdditionalSlot... slots) {

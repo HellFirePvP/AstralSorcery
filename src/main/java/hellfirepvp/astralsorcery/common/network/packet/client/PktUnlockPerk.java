@@ -80,7 +80,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
             EntityPlayer pl = ctx.getServerHandler().playerEntity;
             if(pl != null) {
                 if(message.perk != null && message.owningConstellation != null) {
-                    ConstellationPerkMap map = ConstellationPerkMapRegistry.getPerkMap(message.owningConstellation);
+                    ConstellationPerkMap map = message.owningConstellation.getPerkMap();
                     if(map != null) {
                         PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
                         if(prog != null) {

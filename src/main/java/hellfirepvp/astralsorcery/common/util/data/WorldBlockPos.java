@@ -2,6 +2,7 @@ package hellfirepvp.astralsorcery.common.util.data;
 
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -22,6 +23,10 @@ public class WorldBlockPos extends BlockPos {
         this.world = world;
     }
 
+    public WorldBlockPos(TileEntity te) {
+        this(te.getWorld(), te.getPos());
+    }
+
     public static WorldBlockPos wrap(World world, BlockPos pos) {
         return new WorldBlockPos(world, pos);
     }
@@ -32,6 +37,10 @@ public class WorldBlockPos extends BlockPos {
 
     public IBlockState getStateAt() {
         return world.getBlockState(this);
+    }
+
+    public <T extends TileEntity> T getTileAt(Class<T> tileClass, boolean forceChunkLoad) {
+        return MiscUtils.getTileAt(world, this, tileClass, forceChunkLoad);
     }
 
     public boolean isChunkLoaded() {

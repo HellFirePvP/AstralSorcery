@@ -3,12 +3,15 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,7 +74,9 @@ public class TreeCaptureHelper {
         watchers.add(new WeakReference<>(watcher));
     }
 
-    public static List<WorldBlockPos> getAndClearCachedEntries(TreeWatcher watcher) {
+    @Nonnull
+    public static List<WorldBlockPos> getAndClearCachedEntries(@Nullable TreeWatcher watcher) {
+        if(watcher == null) return Lists.newArrayList();
         if(watchers.isEmpty()) return Lists.newArrayList();
         Iterator<WeakReference<TreeWatcher>> iterator = watchers.iterator();
         while (iterator.hasNext()) {
@@ -111,6 +116,14 @@ public class TreeCaptureHelper {
         private final int dimId;
         private final BlockPos center;
         private final double watchRadiusSq;
+
+        public TreeWatcher(TileEntity te, double watchRadius) {
+            this(te.getWorld(), te.getPos(), watchRadius);
+        }
+
+        public TreeWatcher(World world, BlockPos center, double watchRadius) {
+            this(world.provider.getDimension(), center, watchRadius);
+        }
 
         public TreeWatcher(int dimId, BlockPos center, double watchRadius) {
             this.dimId = dimId;

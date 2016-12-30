@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,6 +69,18 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
     public AttunementRecipe setAttItem(String oreDict, AltarSlot... slots) {
         return this.setAttItem(new ItemHandle(oreDict), slots);
+    }
+
+    public AttunementRecipe setAttItem(FluidStack fluid, AltarSlot... slots) {
+        return this.setAttItem(new ItemHandle(fluid), slots);
+    }
+
+    public AttunementRecipe setAttItem(Fluid fluid, int mbAmount, AltarSlot... slots) {
+        return setAttItem(new FluidStack(fluid, mbAmount), slots);
+    }
+
+    public AttunementRecipe setAttItem(Fluid fluid, AltarSlot... slots) {
+        return setAttItem(fluid, 1000, slots);
     }
 
     public AttunementRecipe setAttItem(ItemHandle handle, AltarSlot... slots) {

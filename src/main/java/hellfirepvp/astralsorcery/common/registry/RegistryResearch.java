@@ -134,35 +134,58 @@ public class RegistryResearch {
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
         resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminatorRock));
 
-        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 1, 1);
+        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 0, 0);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
         resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttenuationAltarRelay));
         resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltarRock));
         resPlayerAtt.addPage(new JournalPageStructure(MultiBlockArrays.patternAttunementFrame));
 
-        ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 0, 2);
+        ResearchNode resCrystalAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_CRYSTAL", 2, 1);
+        resCrystalAtt.addPage(getTextPage("ATT_CRYSTAL.1"));
+        resCrystalAtt.addPage(getTextPage("ATT_CRYSTAL.2"));
+
+        ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 1, 2);
         resRitPedestal.addPage(getTextPage("RIT_PEDESTAL.1"));
         resRitPedestal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rRitualPedestalRock));
         resRitPedestal.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
 
-        ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 3, 0);
+        ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 3, 3);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));
-        resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellation));
+        resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellationRock));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
+
+        ResearchNode resInfuser = new ResearchNode(new ItemStack(BlocksAS.starlightInfuser), "INFUSER", 3, -1);
+        resInfuser.addPage(getTextPage("INFUSER.1"));
+        resInfuser.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rStarlightInfuserRock));
+        //TODO add reso gem infusion recipe
+
+        ResearchNode resTreeBeacon = new ResearchNode(new ItemStack(BlocksAS.treeBeacon), "TREEBEACON", 4, 1);
+        resTreeBeacon.addPage(getTextPage("TREEBEACON.1"));
+        resTreeBeacon.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rTreeBeaconRock));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), resConstellationUpgrade, 1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.ritualPedestal, 1, OreDictionary.WILDCARD_VALUE),       resRitPedestal,          1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.attunementAltar, 1, OreDictionary.WILDCARD_VALUE),      resPlayerAtt,            2, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.attunementRelay, 1, OreDictionary.WILDCARD_VALUE),      resPlayerAtt,            1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),     resIlluminator,          1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.tunedRockCrystal, 1, OreDictionary.WILDCARD_VALUE),      resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.tunedCelestialCrystal, 1, OreDictionary.WILDCARD_VALUE), resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),     resInfuser,              1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),           resTreeBeacon,           1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                             resInfuser,              1, ResearchProgression.ATTUNEMENT); //TODO change to 2 after adding recipe gui
 
         regAttunement.register(resIlluminator);
         regAttunement.register(resPlayerAtt);
+        regAttunement.register(resCrystalAtt);
         regAttunement.register(resRitPedestal);
         regAttunement.register(resConstellationUpgrade);
+        regAttunement.register(resInfuser);
+        regAttunement.register(resTreeBeacon);
 
-        resRitPedestal.addSourceConnectionFrom(resPlayerAtt);
-        resConstellationUpgrade.addSourceConnectionFrom(resPlayerAtt);
+        resRitPedestal.addSourceConnectionFrom(resCrystalAtt);
+        resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
+        resConstellationUpgrade.addSourceConnectionFrom(resCrystalAtt);
+        resTreeBeacon.addSourceConnectionFrom(resInfuser);
     }
 
     private static void initCrafting() {
@@ -195,7 +218,7 @@ public class RegistryResearch {
 
         ResearchNode resAltarUpgradeAttenuation = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), "ALTAR2", 3, 0);
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));
-        resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
+        resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuationRock));
         resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar,    1, BlockAltar.AltarType.ALTAR_2.ordinal()), resAltarUpgradeAttenuation, 1, ResearchProgression.BASIC_CRAFT);

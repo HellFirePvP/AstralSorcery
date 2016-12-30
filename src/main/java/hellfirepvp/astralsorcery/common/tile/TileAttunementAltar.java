@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
@@ -50,6 +51,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -441,6 +443,28 @@ public class TileAttunementAltar extends TileReceiverBase {
     private void renderEffects() {
         if(highlightActive > 0) {
             highlightActive--;
+        }
+
+        if(activeFound == null) {
+            EntityPlayer player = Minecraft.getMinecraft().player;
+            if(player != null && player.getDistanceSq(getPos()) <= 100) {
+                IMajorConstellation held = null;
+                if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
+                    IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemMainhand());
+                    if(cst != null && cst instanceof IMajorConstellation) {
+                        held = (IMajorConstellation) cst;
+                    }
+                }
+                if(held == null && player.getHeldItemOffhand() != null && player.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
+                    IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemOffhand());
+                    if(cst != null && cst instanceof IMajorConstellation) {
+                        held = (IMajorConstellation) cst;
+                    }
+                }
+                if(held != null) {
+                    highlightConstellation(held);
+                }
+            }
         }
 
         if(mode != 2) {
@@ -849,7 +873,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     @SideOnly(Side.CLIENT)
     public void highlightConstellation(IMajorConstellation highlight) {
         this.highlight = highlight;
-        this.highlightActive = 60;
+        this.highlightActive = 4;
     }
 
     private List<Tuple<BlockPos, BlockPos>> translateConnectionPositions(IConstellation cst) {
