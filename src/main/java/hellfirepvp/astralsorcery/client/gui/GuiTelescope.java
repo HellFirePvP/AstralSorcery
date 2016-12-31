@@ -251,7 +251,7 @@ public class GuiTelescope extends GuiWHScreen {
             rgbTo = 0x000000;
         }
         int alphaMask = 0xFF000000; //100% opacity.
-        RenderingUtils.drawGradientRect(guiLeft, guiTop, zLevel, guiLeft + guiWidth, guiTop + guiHeight, new Color(alphaMask | rgbFrom), new Color(alphaMask | rgbTo));
+        RenderingUtils.drawGradientRect(guiLeft + 4, guiTop + 4, zLevel, guiLeft + guiWidth - 4, guiTop + guiHeight - 4, new Color(alphaMask | rgbFrom), new Color(alphaMask | rgbTo));
         GL11.glPopAttrib();
     }
 

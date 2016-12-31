@@ -9,6 +9,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -20,6 +23,8 @@ import net.minecraft.world.World;
  */
 public class BlockTreeBeacon extends BlockStarlightNetwork {
 
+    private static final AxisAlignedBB box = new AxisAlignedBB(3D / 16D, 0D, 3D / 16D, 13D / 16D, 1D, 13D / 16D);
+
     public BlockTreeBeacon() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(1.0F);
@@ -28,6 +33,11 @@ public class BlockTreeBeacon extends BlockStarlightNetwork {
         setSoundType(SoundType.PLANT);
         setLightLevel(0.7F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return box;
     }
 
     @Override
