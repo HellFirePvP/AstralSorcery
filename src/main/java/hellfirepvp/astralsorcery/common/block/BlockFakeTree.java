@@ -6,10 +6,12 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Random;
 
@@ -64,6 +67,16 @@ public class BlockFakeTree extends BlockContainer {
             p.motion(0, 0, 0);
             p.scale(0.45F).setColor(new Color(63, 255, 63)).setMaxAge(65);
         }
+    }
+
+    @Override
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
+        if(tft != null && tft.getFakedState() != null) {
+            IBlockState fake = tft.getFakedState();
+            return fake.getBlock().getSoundType(fake, world, pos, entity);
+        }
+        return super.getSoundType(state, world, pos, entity);
     }
 
     @Override

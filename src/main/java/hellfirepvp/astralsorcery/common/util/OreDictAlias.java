@@ -23,6 +23,7 @@ public class OreDictAlias {
     public static String BLOCK_WOOD_PLANKS = "plankWood";
     public static String BLOCK_WOOD_LOGS = "logWood";
     public static String BLOCK_SAPLING = "treeSapling";
+    public static String BLOCK_LEAVES = "treeLeaves";
     public static String BLOCK_GLASS_PANE_NOCOLOR = "paneGlassColorless";
 
 }

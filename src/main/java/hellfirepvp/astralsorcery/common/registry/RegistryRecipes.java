@@ -65,7 +65,7 @@ public class RegistryRecipes {
     public static AttunementRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltarRock, rAttunementAltarCel;
     public static AttunementRecipe rStarlightInfuserRock, rStarlightInfuserCel;
-    public static AttunementRecipe rTreeBeaconRock, rTreeBeaconCel;
+    public static AttunementRecipe rTreeBeacon;
 
     public static LensRecipe rLensRock, rLensCel;
     public static PrismLensRecipe rPrismRock, rPrismCel;
@@ -234,51 +234,25 @@ public class RegistryRecipes {
         rAltarUpgradeConstellationRock = registerAltarRecipe(new ConstellationUpgradeRecipe(false));
         rAltarUpgradeConstellationCel = registerAltarRecipe(new ConstellationUpgradeRecipe(true));
 
-        rTreeBeaconRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
+        rTreeBeacon = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(ItemsAS.rockCrystal,
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.BLOCK_SAPLING,
+                .addPart(OreDictAlias.BLOCK_LEAVES,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(OreDictAlias.ITEM_ENDERPEARL,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
-                        ShapedRecipeSlot.CENTER));
-        rTreeBeaconRock.setAttItem(BlocksAS.fluidLiquidStarlight,
-                AttunementRecipe.AltarSlot.LOWER_LEFT,
-                AttunementRecipe.AltarSlot.LOWER_RIGHT);
-        rTreeBeaconRock.setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
-                AttunementRecipe.AltarSlot.UPPER_LEFT,
-                AttunementRecipe.AltarSlot.UPPER_RIGHT);
-        rTreeBeaconRock.setPassiveStarlightRequirement(3500);
-
-        rTreeBeaconCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
-                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(ItemsAS.celestialCrystal,
-                        ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(OreDictAlias.BLOCK_SAPLING,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(OreDictAlias.ITEM_ENDERPEARL,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
-                        ShapedRecipeSlot.CENTER));
-        rTreeBeaconCel.setAttItem(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER));
+        rTreeBeacon.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
-        rTreeBeaconCel.setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
-                AttunementRecipe.AltarSlot.UPPER_LEFT,
-                AttunementRecipe.AltarSlot.UPPER_RIGHT);
-        rTreeBeaconCel.setPassiveStarlightRequirement(3500);
+        rTreeBeacon.setPassiveStarlightRequirement(3500);
 
         rStarlightInfuserRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
                 .addPart(ItemsAS.rockCrystal,
@@ -427,7 +401,7 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_WOOD_LOGS,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(OreDictAlias.ITEM_STICKS,
@@ -438,7 +412,7 @@ public class RegistryRecipes {
         .setCstItem(OreDictAlias.ITEM_STICKS,
                 ConstellationRecipe.AltarAdditionalSlot.UP_UP_LEFT,
                 ConstellationRecipe.AltarAdditionalSlot.DOWN_RIGHT_RIGHT)
-        .setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+        .setCstItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                 ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT,
                 ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkToolRock.setAttItem(OreDictAlias.BLOCK_WOOD_LOGS, AttunementRecipe.AltarSlot.LOWER_LEFT);
@@ -447,7 +421,7 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_WOOD_LOGS,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(OreDictAlias.ITEM_STICKS,
@@ -458,7 +432,7 @@ public class RegistryRecipes {
                 .setCstItem(OreDictAlias.ITEM_STICKS,
                         ConstellationRecipe.AltarAdditionalSlot.UP_UP_LEFT,
                         ConstellationRecipe.AltarAdditionalSlot.DOWN_RIGHT_RIGHT)
-                .setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .setCstItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                         ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT,
                         ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkToolCel.setAttItem(OreDictAlias.BLOCK_WOOD_LOGS, AttunementRecipe.AltarSlot.LOWER_LEFT);

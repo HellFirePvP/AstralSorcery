@@ -37,7 +37,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
                 .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER));
-        setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AltarSlot.values());
+        setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AltarSlot.values());
         this.celestial = celestial;
         ItemStack stack = new ItemStack(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);
         ItemCollectorCrystal.setType(stack, celestial ?

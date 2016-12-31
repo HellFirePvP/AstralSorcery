@@ -161,7 +161,7 @@ public class RegistryResearch {
 
         ResearchNode resTreeBeacon = new ResearchNode(new ItemStack(BlocksAS.treeBeacon), "TREEBEACON", 4, 1);
         resTreeBeacon.addPage(getTextPage("TREEBEACON.1"));
-        resTreeBeacon.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rTreeBeaconRock));
+        resTreeBeacon.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rTreeBeacon));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), resConstellationUpgrade, 1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.ritualPedestal, 1, OreDictionary.WILDCARD_VALUE),       resRitPedestal,          1, ResearchProgression.ATTUNEMENT);
