@@ -29,17 +29,17 @@ achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
 achievement.astralsorcery.celestialcrystal=Celestial purity
 achievement.astralsorcery.celestialcrystal.desc=Acquire celestial crystals
 achievement.astralsorcery.buildtelescope.1=A clear view of the sky
-achievement.astralsorcery.buildtelescope.1.desc=Make a hand telescope
-achievement.astralsorcery.seeconstellation=What a beautiful pattern
-achievement.astralsorcery.seeconstellation.desc=Discover a constellation
-achievement.astralsorcery.buildtelescope.2=Looking further
-achievement.astralsorcery.buildtelescope.2.desc=Build an actual telescope
+achievement.astralsorcery.buildtelescope.1.desc=Craft a hand telescope.
+achievement.astralsorcery.seeconstellation=What beautiful patterns...
+achievement.astralsorcery.seeconstellation.desc=Discover a constellation.
+achievement.astralsorcery.buildtelescope.2=Gazing further
+achievement.astralsorcery.buildtelescope.2.desc=Build a full sized telescope.
 achievement.astralsorcery.liquidstarlight=Liquified Light
-achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
+achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight.
 achievement.astralsorcery.playerAttunement=Alignment with the stars
-achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation
+achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation.
 
-progress.missing.knowledge=It seems there is more to it than you're able to see.
+progress.missing.knowledge=Something seems to be here, but it can’t be seen yet...
 progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
 
@@ -307,4 +307,4 @@ perk.TRV_LIGHT.info=Places light sources close to you in caves
 perk.TRV_LPROT=Digging straight down
 perk.TRV_LPROT.info=Protects against lava for a short time
 
-constellation.noInformation=No useful information.
+constellation.noInformation=There is nothing here.
