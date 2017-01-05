@@ -109,7 +109,6 @@ public class GuiHandTelescope extends GuiWHScreen {
                     topFound = bestGuess;
                     selectedYaw = (random.nextFloat() * 360F) - 180F;
                     selectedPitch = -90F + random.nextFloat() * 45F;
-                    AstralSorcery.log.info("At " + selectedYaw + ", " + selectedPitch);
                 }
             }
         }
@@ -215,7 +214,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         Iterator<StarPosition> iterator = usedStars.iterator();
         while (iterator.hasNext()) {
             StarPosition sl = iterator.next();
-            sl.x += changeX;
+            sl.x -= changeX;
             sl.y += changeY;
 
             if(sl.x < offsetX) {
@@ -370,7 +369,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         for (StarPosition stars : usedStars) {
             r.setSeed(stars.seed);
             GL11.glPushMatrix();
-            float brightness = RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20));
+            float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
             brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
             brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
             GL11.glColor4f(brightness, brightness, brightness, brightness);
@@ -388,8 +387,8 @@ public class GuiHandTelescope extends GuiWHScreen {
             float playerYaw = Minecraft.getMinecraft().player.rotationYaw  % 360F;
             float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
 
-            float diffYaw   = (playerYaw + 180F)   - (selectedYaw + 180F);
-            float diffPitch = playerPitch - selectedPitch;
+            float diffYaw   = (playerYaw + 180F) - (selectedYaw + 180F);
+            float diffPitch =  playerPitch       -  selectedPitch;
 
             if(Math.abs(diffYaw) <= 20F &&
                     Math.abs(diffPitch) <= 20F) {

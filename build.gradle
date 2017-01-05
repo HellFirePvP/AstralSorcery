@@ -21,6 +21,7 @@ archivesBaseName = "astralsorcery"
 minecraft {
     version = "1.10.2-12.18.3.2185"
     runDir = "run"
+    useDepAts = true
 
     mappings = "snapshot_20161116"
 }
