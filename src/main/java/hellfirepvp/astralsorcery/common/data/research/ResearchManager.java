@@ -92,6 +92,8 @@ public class ResearchManager {
         PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
         PktSyncKnowledge pk = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
         PacketChannel.CHANNEL.sendTo(pk, (net.minecraft.entity.player.EntityPlayerMP) p);
+        loadPlayerKnowledge(p);
+        pushProgressToClientUnsafe(p);
     }
 
     public static void sendInitClientKnowledge(EntityPlayer p) {

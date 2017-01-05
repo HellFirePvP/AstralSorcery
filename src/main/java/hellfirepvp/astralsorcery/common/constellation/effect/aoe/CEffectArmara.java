@@ -94,7 +94,7 @@ public class CEffectArmara extends ConstellationEffect {
             for (Entity e : projectiles) {
                 if(!e.isDead) {
                     if(e instanceof IProjectile) { //TODO no
-                        ((IProjectile) e).setThrowableHeading(0, 0, 0, 0, 0);
+                        e.setDead();
                     } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                         ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
                     }

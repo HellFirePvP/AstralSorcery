@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
@@ -46,6 +47,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.IOException;
 import java.util.*;
@@ -72,6 +74,9 @@ public class GuiHandTelescope extends GuiWHScreen {
     private static final int randomStars = 40;
     private List<StarPosition> usedStars = new ArrayList<>(randomStars);
 
+    private IMajorConstellation topFound = null;
+    private float selectedYaw = 0, selectedPitch = 0;
+
     private boolean grabCursor = false;
 
     public GuiHandTelescope() {
@@ -86,6 +91,27 @@ public class GuiHandTelescope extends GuiWHScreen {
 
         for (int i = 0; i < randomStars; i++) {
             usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
+        }
+
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
+        if(handle != null) {
+            LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
+            Iterator<IConstellation> iterator = active.iterator();
+            while (iterator.hasNext()) {
+                IConstellation c = iterator.next();
+                if(!(c instanceof IMajorConstellation)) {
+                    iterator.remove();
+                }
+            }
+            if(!active.isEmpty()) {
+                IMajorConstellation bestGuess = (IMajorConstellation) active.getFirst();
+                if(handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
+                    topFound = bestGuess;
+                    selectedYaw = (random.nextFloat() * 360F) - 180F;
+                    selectedPitch = -90F + random.nextFloat() * 45F;
+                    AstralSorcery.log.info("At " + selectedYaw + ", " + selectedPitch);
+                }
+            }
         }
     }
 
@@ -216,7 +242,6 @@ public class GuiHandTelescope extends GuiWHScreen {
         drawnConstellation = null;
         drawnStars = null;
 
-        IMajorConstellation top = null;
         if(handle != null) {
             LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
             Iterator<IConstellation> iterator = active.iterator();
@@ -227,7 +252,12 @@ public class GuiHandTelescope extends GuiWHScreen {
                 }
             }
             if(!active.isEmpty()) {
-                top = (IMajorConstellation) active.getFirst();
+                IMajorConstellation bestGuess = (IMajorConstellation) active.getFirst();
+                if((topFound == null || !topFound.equals(bestGuess)) && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
+                    topFound = bestGuess;
+                    selectedYaw = (random.nextFloat() * 360F) - 180F;
+                    selectedPitch = -90F + random.nextFloat() * 45F;
+                }
             }
         }
 
@@ -240,11 +270,11 @@ public class GuiHandTelescope extends GuiWHScreen {
             int offsetX = guiLeft;
             int offsetZ = guiTop ;
             zLevel += 1;
-            Optional<Map<StarLocation, Rectangle>> stars = drawCellEffect(top, offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
+            Optional<Map<StarLocation, Rectangle>> stars = drawCellEffect(offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
             zLevel -= 1;
 
             if(stars.isPresent()) {
-                drawnConstellation = top;
+                drawnConstellation = topFound;
                 drawnStars = stars.get();
             }
         } else {
@@ -326,7 +356,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         tes.draw();
     }
 
-    private Optional<Map<StarLocation, Rectangle>> drawCellEffect(IConstellation c, int offsetX, int offsetY, int width, int height, float partialTicks, float transparency) {
+    private Optional<Map<StarLocation, Rectangle>> drawCellEffect(int offsetX, int offsetY, int width, int height, float partialTicks, float transparency) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
@@ -352,29 +382,46 @@ public class GuiHandTelescope extends GuiWHScreen {
         r.setSeed(Minecraft.getMinecraft().world.getSeed() * 31 + lastTracked * 31);
 
         Map<StarLocation, Rectangle> rectangles = null;
-        if (c != null) {
+        if (topFound != null) {
             zLevel += 1;
 
-            int wPart = ((int) (((float) width) * 0.1F));
-            int hPart = ((int) (((float) height) * 0.1F));
+            float playerYaw = Minecraft.getMinecraft().player.rotationYaw  % 360F;
+            float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
 
-            rectangles = RenderConstellation.renderConstellationIntoGUI(
-                    c,
-                    offsetX + wPart,
-                    offsetY + hPart,
-                    zLevel,
-                    width - (((int) (wPart * 1.5F))),
-                    height - (((int) (hPart * 1.5F))),
-                    2,
-                    new RenderConstellation.BrightnessFunction() {
-                        @Override
-                        public float getBrightness() {
-                            return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + r.nextInt(15)) * transparency;
-                        }
-                    },
-                    ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()),
-                    true
-            );
+            float diffYaw   = (playerYaw + 180F)   - (selectedYaw + 180F);
+            float diffPitch = playerPitch - selectedPitch;
+
+            if(Math.abs(diffYaw) <= 20F &&
+                    Math.abs(diffPitch) <= 20F) {
+
+                ScaledResolution res = new ScaledResolution(mc);
+                GL11.glEnable(GL11.GL_SCISSOR_TEST);
+                GL11.glScissor((guiLeft + 5) * res.getScaleFactor(), (guiTop + 5) * res.getScaleFactor(), (guiWidth - 10) * res.getScaleFactor(), (guiHeight - 10) * res.getScaleFactor());
+
+                int wPart = ((int) (((float) width) * 0.1F));
+                int hPart = ((int) (((float) height) * 0.1F));
+
+                rectangles = RenderConstellation.renderConstellationIntoGUI(
+                        topFound,
+                        offsetX + wPart + MathHelper.floor((diffYaw   / 20F) * width),
+                        offsetY + hPart + MathHelper.floor((diffPitch / 20F) * height),
+                        zLevel,
+                        width - (((int) (wPart * 1.5F))),
+                        height - (((int) (hPart * 1.5F))),
+                        2,
+                        new RenderConstellation.BrightnessFunction() {
+                            @Override
+                            public float getBrightness() {
+                                return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + r.nextInt(15)) * transparency;
+                            }
+                        },
+                        ResearchManager.clientProgress.hasConstellationDiscovered(topFound.getUnlocalizedName()),
+                        true
+                );
+
+
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            }
 
             zLevel -= 1;
         }
