@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -42,7 +51,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         if(shift && out.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
 
-            IMajorConstellation c = getMainConstellation(stack);
+            IWeakConstellation c = getMainConstellation(stack);
             if(c != null) {
                 if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.attuned") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
@@ -78,16 +87,16 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         return (IMinorConstellation) ConstellationRegistry.getConstellationByName(strCName);
     }
 
-    public static void applyMainConstellation(ItemStack stack, IMajorConstellation constellation) {
+    public static void applyMainConstellation(ItemStack stack, IWeakConstellation constellation) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static IMajorConstellation getMainConstellation(ItemStack stack) {
+    public static IWeakConstellation getMainConstellation(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
-        return (IMajorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
 }

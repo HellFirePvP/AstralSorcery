@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block.network;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
@@ -116,6 +126,11 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        return Lists.newArrayList();
+    }
+
+    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
         TileCrystalLens lens = MiscUtils.getTileAt(world, pos, TileCrystalLens.class, true);
@@ -130,8 +145,15 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
-        if(lens != null && lens.getLensColor() != null) {
-            ItemStack drop = lens.getLensColor().asStack();
+        if(lens != null) {
+            ItemStack drop;
+            if(lens.getLensColor() != null) {
+                drop = lens.getLensColor().asStack();
+                ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+            }
+
+            drop = new ItemStack(BlocksAS.lens);
+            CrystalProperties.applyCrystalProperties(drop, lens.getCrystalProperties());
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
         }
 

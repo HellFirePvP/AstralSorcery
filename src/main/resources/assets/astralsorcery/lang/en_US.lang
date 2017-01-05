@@ -2,13 +2,13 @@ itemGroup.astralsorcery=Astral Sorcery
 itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
-misc.moreInformation=<Hold SHIFT for more details.>
+misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
-misc.link.stop=Stopped linking.
-misc.link.start=Selected %s.
-misc.link.link=Linked %s to %s.
+misc.link.stop=Stopped linking!
+misc.link.start=Selected %s!
+misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
-misc.link.unlink=Unlinked %s from %s.
+misc.link.unlink=Unlinked %s from %s!
 
 misc.sword.sharpened=Sharpened
 
@@ -29,17 +29,17 @@ achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
 achievement.astralsorcery.celestialcrystal=Celestial purity
 achievement.astralsorcery.celestialcrystal.desc=Acquire celestial crystals
 achievement.astralsorcery.buildtelescope.1=A clear view of the sky
-achievement.astralsorcery.buildtelescope.1.desc=Craft a hand telescope.
-achievement.astralsorcery.seeconstellation=What beautiful patterns...
-achievement.astralsorcery.seeconstellation.desc=Discover a constellation.
-achievement.astralsorcery.buildtelescope.2=Gazing further
-achievement.astralsorcery.buildtelescope.2.desc=Build a full sized telescope.
+achievement.astralsorcery.buildtelescope.1.desc=Make a hand telescope
+achievement.astralsorcery.seeconstellation=What a beautiful pattern
+achievement.astralsorcery.seeconstellation.desc=Discover a constellation
+achievement.astralsorcery.buildtelescope.2=Looking further
+achievement.astralsorcery.buildtelescope.2.desc=Build an actual telescope
 achievement.astralsorcery.liquidstarlight=Liquified Light
-achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight.
+achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
 achievement.astralsorcery.playerAttunement=Alignment with the stars
-achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation.
+achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation
 
-progress.missing.knowledge=Something seems to be here, but it can’t be seen yet...
+progress.missing.knowledge=It seems there is more to it than you're able to see.
 progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
 
@@ -49,19 +49,20 @@ astralsorcery.journal.cluster.attunement.name=Attunement
 astralsorcery.journal.cluster.constellation.name=Constellation
 
 research.SHRINES.name=Ancient Shrines
-astralsorcery.journal.SHRINES.1.text=Scattered across the world are ancient shrines built from marble.<NL>Some of the bigger ones can be found on top of high hills, while smaller ones can be dug up from under the sands in deserts.<NL>While they don't seem very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends however, only 1 or 2 old chests and a strange floating crystal are ever contained within.<NL>The properties of the floating crystals are quite bizarre. They emit a constant shimmering light that flickers in an eerie and enchanting way.
-astralsorcery.journal.SHRINES.2.text=There is little doubt that these crystals are man made. Their true age and origin is practically impossible to ascertain, but after some minimal experimentation and tinkering the crystals seem to be extremely resistant to any kind of environmental damage.<NL>Not even a tiny sliver can be shaved off of them, even with the most destructive methods.<NL>Something seems strange about these crystals. The light they emit seems to ebb and flow almost like water in response to certain objects. §o§3Maybe placing a crafting table nearby would yield interesting results?§r
+astralsorcery.journal.SHRINES.1.text=All around the world there are seemingly ancient shrines built from marble.<NL>Some bigger ones can be found on top of high hills, some are covered in sand in deserts.<NL>They don't seem very special at first, but it's told that they harbor old treasures. Searching for them, you only ever found 1 or 2 old chests in them and a weird floating crystal.<NL>That weird crystal did strike your interest. It emits a constant, shimmering, low amount of light.
+astralsorcery.journal.SHRINES.2.text=For sure, this is something man-made. You're not sure how long this has already been here or who made it in the first place, but it seems to be extremely resistant to any kind of environmental damage.<NL>Despite your best efforts, you also don't seem to be able to break just a tiny sliver off of it. Maybe it's the best to just leave it there for now and keep an eye on it?<NL>Maybe you could try and place some things below it and see what happens. Maybe... a crafting table?
 
 research.CPAPER.name=Constellation Paper
-astralsorcery.journal.CPAPER.1.text=Inside ancient chests found in the scattered shrines across the land, there are occasionally a few blank scrolls. Upon unrolling one of these scrolls, a name appears on the top along with a slightly faded chart of stars. On closer inspection, it seems that the stars in the chart have a very close resemblance to some of the stars seen in the night sky.<NL>After collecting a number of them, it appears that each scroll shows a different set of stars to start with, however after unrolling a few they start showing up blank. On further inspection, it seems as though they are written and enchanted in such a way as to not show charts that are already mapped or in the reader's inventory.
-astralsorcery.journal.CPAPER.3.text=Papers can be filed between the last few pages of the journal for easy access and organization. Simply §6Shift+Rightclick§r while holding the Journal to open the Constellation Paper file.
+astralsorcery.journal.CPAPER.1.text=Inside ancient chests found in the scattered shrines across the land, there are occassionaly some blank scrolls. Upon unrolling one of these scrolls, a name appears on the top along with a strange chart of stars that looks much like some of the stars you see in the sky.<NL>After collecting a number of them, it appears that each scroll shows a different set of stars to start with, but after a collecting a few they start showing up blank. On further inspection, it seems as though they are written and enchanted in such a way as to not show charts that are already mapped or in the reader's inventory.
+astralsorcery.journal.CPAPER.3.text=Papers can be filed between the last few pages of your journal for easy access and organization.
 
 research.WAND.name=Resonating Wand
-astralsorcery.journal.WAND.1.text=Indeed the floating crystal reacts to the crafting table you placed down. Some beam of light is shining onto it. When crafting something on it you can feel that it's easier to form the materials into proper shape.<NL>There are those blue gems you found in a nearby river- they seem to react strongly enderpearls. Maybe you can somehow make them fuse together using that light as a catalyst.
+astralsorcery.journal.WAND.1.text=Indeed the floating crystal reacts to the crafting table you placed down. Some beam of light is shining onto it. When crafting something on it you can feel that it's easier to form the materials into proper shape.<NL>There are those blue gems you found in a nearby river - they seem to react strongly enderpearls. Maybe you can somehow make them fuse together using that light as a catalyst.
 astralsorcery.journal.WAND.3.text=Holding the wand in your hand, it seems to strangely vibrate and emit particles at some places around the surface. Looks like you can see them more easily during the night.<NL>However, nothing seems special about those places... Maybe there's something deep underground?
 
 research.ORES.name=Ores
-astralsorcery.journal.ORES.1.text=Various ores can be found scattered around the world. Some of them are too fragile to be harvested by mechanical hands.<NL>§n§7Rock Crystal Ore:§r Buried deep underground, those fragile crystals were formed by intense heat and pressure. Not every crystal is like the other. It seems mechanical hands aren't careful enough to handle them appropriately.<NL>§n§1Aquamarine Shale:§r Shaped by the continuous flow of water over fragmented rock crystal, these small fragile gems form in the sand in the riverbeds. Usually they can be found close to the surface buried in patches of sand.
+astralsorcery.journal.ORES.1.text=Various ores can be found scattered around the world. Some of them are too fragile to be harvested by mechanical hands.<NL>§nRock Crystal Ore:§r Buried deep underground, those fragile crystals were formed by intense heat and pressure. Not every crystal is like the other. It seems mechanical hands aren't careful enough to handle them appropriately.
+astralsorcery.journal.ORES.2.text=§nAquamarine Shale:§r Shaped by the continuous flow, those gems formed in the sand in the riverbeds. Usually those can be found close to the surface.
 
 research.ALTAR1.name=Luminous Crafting Table
 astralsorcery.journal.ALTAR1.1.text=That light seems incredibly useful for crafting, but coming back to this structure and crystal is tedious. Those rock crystals you found seem to be of the same type as the floating crystal.<NL>Maybe you can construct some sort of crafting table that collects that light so you can craft with it before it radiates away again.
@@ -93,7 +94,7 @@ astralsorcery.journal.WELL.1.text=[WIP]<NL>Well that collects liquid starlight. 
 research.ILLUMINATOR.name=[WIP]Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=[WIP]<NL>Cave Illuminator. Once placed down, it'll try and light the caves below it. conditions for 'light' to spawn: must be dark (<8 light, <6 skylight) must not see sky. Places light from its x,z pos outwards on ylevels below it. light spawned acts like air and can be replaced, but not broken.
 
-research.ATT_PLAYER.name=[WIP]Attunement
+research.ATT_PLAYER.name=Attunement
 astralsorcery.journal.ATT_PLAYER.1.text=[WIP]
 
 research.ATT_CRYSTAL.name=[WIP]Crystal Attunement
@@ -115,7 +116,8 @@ astralsorcery.journal.ALTAR3.1.text=[WIP]<NL>Altar upgraging recipe. Advance to 
 research.LENS.name=[WIP] Crystal Lens
 astralsorcery.journal.LENS.1.text=[WIP]<NL>Can be linked to 1 other point in a 16 blocks radius. Requires line of sight to the target to transmit starlight to it. Can have N inputs, 1 output. Transmission loss depends on the crystal properties of the lens. It copies the properties of the crystal used in crafting.
 
-research.LENSES_EFFECTS.name=[WIP] Colored Lenses
+research.LENSES_EFFECTS.name=Colored Lenses
+astralsorcery.journal.LENSES_EFFECTS.1.text=Due to the nature of starlight, bending reducing its spectrum to down to different colors might yield more useful effects than the perfectly balanced white starlight.<NL>Using aquamarine and some other ingredients you might be able to have it do the effects you want.
 
 research.LINKTOOL.name=[WIP] Linking Tool
 astralsorcery.journal.LINKTOOL.1.text=[WIP]<NL>Can be used to link 1 block of the starlight network to another or onto a block. Right-click selects something, deselect by switching the item held in your hand to another item. To link to something, right-click in select mode; un-link with shift-right-click

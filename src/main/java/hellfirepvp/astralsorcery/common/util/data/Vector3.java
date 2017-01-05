@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.util.data;
 
 import net.minecraft.entity.Entity;
@@ -389,14 +397,14 @@ public class Vector3 {
     }
 
     //copy & converts to polar coordinates (in degrees)
-    //Order: Distance, Tetha, Phi
+    //Order: Distance, Theta, Phi
     public Vector3 copyToPolar() {
         double length = length();
-        double thetha = Math.acos(y / length);
+        double theta = Math.acos(y / length);
         double phi = Math.atan2(x, z);
-        thetha = Math.toDegrees(thetha);
+        theta = Math.toDegrees(theta);
         phi = 180 + Math.toDegrees(phi);
-        return new Vector3(length, thetha, phi);
+        return new Vector3(length, theta, phi);
     }
 
     public Vector3 copyInterpolateWith(Vector3 next, float partial) {

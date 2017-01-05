@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.data.config;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -38,6 +46,8 @@ public class Config {
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
+
+    public static int particleAmount = 2;
 
     @Sync
     public static double swordSharpMultiplier = 0.1;
@@ -86,6 +96,7 @@ public class Config {
         maxEffectRenderDistance = latestConfig.getInt("maxEffectRenderDistance", "rendering", 64, 1, 512, "Defines how close to the position of a particle/floating texture you have to be in order for it to render.");
         maxEffectRenderDistanceSq = maxEffectRenderDistance * maxEffectRenderDistance;
         clientPreloadTextures = latestConfig.getBoolean("preloadTextures", "rendering", true, "If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.");
+        particleAmount = latestConfig.getInt("particleAmount", "rendering", 2, 0, 2, "Sets the amount of particles/effects: 0 = minimal (only necessary particles will appear), 1 = lowered (most unnecessary particles will be filtered), 2 = all particles are visible");
 
         //rand(crystalDensity) == 0 chance per chunk.
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 15, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");

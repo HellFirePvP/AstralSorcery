@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
@@ -22,7 +30,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 06.08.2016 / 15:05
  */
-public class EffectLightbeam implements IComplexEffect {
+public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRemoval {
 
     private final Vector3 from, to, aim, aimPerp;
     private final double fromSize, toSize;

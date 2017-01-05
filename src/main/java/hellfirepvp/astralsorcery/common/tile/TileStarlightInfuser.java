@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -6,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesInfuser;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
@@ -285,7 +294,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         return "tile.BlockStarlightInfuser.name";
     }
 
-    private void receiveStarlight(IMajorConstellation type, double amount) {}
+    private void receiveStarlight(IWeakConstellation type, double amount) {}
 
     @Override
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
@@ -337,7 +346,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileStarlightInfuser ta = MiscUtils.getTileAt(world, getPos(), TileStarlightInfuser.class, false);
                 if(ta != null) {

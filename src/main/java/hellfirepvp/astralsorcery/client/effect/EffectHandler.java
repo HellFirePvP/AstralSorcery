@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.effect;
 
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
@@ -11,6 +19,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -166,6 +175,8 @@ public final class EffectHandler {
     }
 
     private void registerUnsafe(IComplexEffect effect) {
+        if(!mayAcceptParticle(effect)) return;
+
         if(effect instanceof EffectLightning) {
             fastRenderLightnings.add((EffectLightning) effect);
         } else if(effect instanceof EntityFXFacingParticle) {
@@ -206,6 +217,7 @@ public final class EffectHandler {
                 }
             }
         }
+        //Ugh NPE
         Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
         while (iterator.hasNext()) {
             EntityFXFacingParticle effect = iterator.next();
@@ -230,6 +242,11 @@ public final class EffectHandler {
         for (IComplexEffect eff : effects) {
             registerUnsafe(eff);
         }
+    }
+
+    public static boolean mayAcceptParticle(IComplexEffect effect) {
+        if(effect instanceof IComplexEffect.PreventRemoval || Config.particleAmount == 2) return true;
+        return Config.particleAmount == 1 && STATIC_EFFECT_RAND.nextInt(4) == 0;
     }
 
     public static int getClientEffectTick() {

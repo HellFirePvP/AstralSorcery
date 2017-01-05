@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -47,7 +55,6 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
 
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        RenderingUtils.playBlockBreakParticles(pos.up(), BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         RenderingUtils.playBlockBreakParticles(pos, BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         return true;
     }
@@ -57,19 +64,19 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
         return boxAttunementAlar;
     }
 
-    @Override
+    /*@Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos.up(), BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
-        /*TileAttunementAltar te = MiscUtils.getTileAt(worldIn, pos, TileAttunementAltar.class, true);
+        //worldIn.setBlockState(pos.up(), BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
+        TileAttunementAltar te = MiscUtils.getTileAt(worldIn, pos, TileAttunementAltar.class, true);
         if(te != null && !worldIn.isRemote) {
             if(placer != null && placer instanceof EntityPlayer) {
                 te.setOwner(placer.getUniqueID());
             }
-        }*/
+        }
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbor) {
         if(world.isAirBlock(pos.up())) {
             world.setBlockToAir(pos);
@@ -86,7 +93,7 @@ public class BlockAttunementAltar extends BlockStarlightNetwork {
         if(world.isAirBlock(pos.up())) {
             ((World) world).setBlockToAir(pos);
         }
-    }
+    }*/
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {

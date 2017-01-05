@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -8,6 +16,7 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
@@ -139,7 +148,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             ItemStack crystal = getInventoryHandler().getStackInSlot(0);
             if(crystal != null && crystal.getItem() != null &&
                     crystal.getItem() instanceof ItemTunedCrystalBase) {
-                IMajorConstellation ch = ItemTunedCrystalBase.getMainConstellation(crystal);
+                IWeakConstellation ch = ItemTunedCrystalBase.getMainConstellation(crystal);
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
@@ -182,7 +191,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     @Nullable
     @SideOnly(Side.CLIENT)
-    public IMajorConstellation getDisplayConstellation() {
+    public IWeakConstellation getDisplayConstellation() {
         if(offsetMirrorPositions.size() != TransmissionReceiverRitualPedestal.MAX_MIRROR_COUNT)
             return null;
         return getRitualConstellation();
@@ -194,7 +203,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     }
 
     @Nullable
-    public IMajorConstellation getRitualConstellation() {
+    public IWeakConstellation getRitualConstellation() {
         ItemStack crystal = getInventoryHandler().getStackInSlot(0);
         if(crystal != null && crystal.getItem() != null &&
                 crystal.getItem() instanceof ItemTunedCrystalBase) {
@@ -259,7 +268,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             if(in != null && in.getItem() != null &&
                     in.getItem() instanceof ItemTunedCrystalBase) {
                 CrystalProperties properties = CrystalProperties.getCrystalProperties(in);
-                IMajorConstellation tuned = ItemTunedCrystalBase.getMainConstellation(in);
+                IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(in);
                 IMinorConstellation trait = ItemTunedCrystalBase.getTrait(in);
                 TransmissionReceiverRitualPedestal recNode = getUpdateCache();
                 if(recNode != null) {
@@ -395,7 +404,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private int ticksTicking = 0;
 
         private boolean doesSeeSky, hasMultiblock;
-        private IMajorConstellation channeling;
+        private IWeakConstellation channeling;
         private IMinorConstellation trait;
         private CrystalProperties properties;
         private int channeled = 0;
@@ -591,7 +600,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(channeling != null && hasMultiblock) {
                 if(channeling == type) {
                     collectionChannelBuffer += amount;
@@ -775,7 +784,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             this.hasMultiblock = hasMultiblock;
         }
 
-        public void updateCrystalProperties(World world, CrystalProperties properties, IMajorConstellation channeling, IMinorConstellation trait) {
+        public void updateCrystalProperties(World world, CrystalProperties properties, IWeakConstellation channeling, IMinorConstellation trait) {
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;

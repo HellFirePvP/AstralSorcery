@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -151,7 +160,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
         TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
         if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (500 / amount)))) == 0) {
             tile.tryGrowth(1);

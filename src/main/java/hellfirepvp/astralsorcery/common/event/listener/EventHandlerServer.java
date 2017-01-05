@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -208,7 +216,7 @@ public class EventHandlerServer {
         List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
         for (EntityLivingBase lb : others) {
             lb.setFire(16);
-            lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - lb.posZ);
+            lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - entity.posZ);
         }
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity));
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.world, entity.getPosition(), 32));

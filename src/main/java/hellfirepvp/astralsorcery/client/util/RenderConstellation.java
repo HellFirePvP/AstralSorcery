@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
@@ -265,7 +273,7 @@ public class RenderConstellation {
 
             vb.begin(7, DefaultVertexFormats.POSITION_TEX);
             if (isKnown) {
-                GL11.glColor4f(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness < 0.2F ? 0.2F : brightness);
+                GL11.glColor4f(((float) col.getRed()) / 255F, ((float) col.getGreen()) / 255F, ((float) col.getBlue()) / 255F, brightness);
             } else {
                 GL11.glColor4f(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
             }

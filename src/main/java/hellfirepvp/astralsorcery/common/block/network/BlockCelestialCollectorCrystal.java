@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import net.minecraft.block.material.MapColor;
@@ -27,7 +36,7 @@ public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
 
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        for (IMajorConstellation major : ConstellationRegistry.getMajorConstellations()) {
+        for (IWeakConstellation major : ConstellationRegistry.getWeakConstellations()) {
             ItemStack stack = new ItemStack(itemIn);
             ItemCollectorCrystal.setConstellation(stack, major);
             ItemCollectorCrystal.setType(stack, CollectorCrystalType.CELESTIAL_CRYSTAL);

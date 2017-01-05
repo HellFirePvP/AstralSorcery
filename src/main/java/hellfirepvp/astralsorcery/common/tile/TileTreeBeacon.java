@@ -1,9 +1,21 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -194,6 +206,16 @@ public class TileTreeBeacon extends TileReceiverBase {
                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
             p.scale(0.45F).setColor(new Color(63, 255, 63)).gravity(0.008).setMaxAge(55);
         }
+        if((ticksExisted % 32) == 0) {
+            float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
+            alphaDaytime *= 0.8F;
+            Vector3 from = new Vector3(this).add(0.5, 0.05, 0.5);
+            MiscUtils.applyRandomOffset(from, EffectHandler.STATIC_EFFECT_RAND, 0.05F);
+            EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(7), from, 1.5F);
+            lightbeam.setAlphaMultiplier(alphaDaytime);
+            lightbeam.setColorOverlay(63F / 255F, 1F, 63F / 255F, 1F);
+            lightbeam.setMaxAge(64);
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -269,7 +291,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         return new TransmissionReceiverTreeBeacon(at);
     }
 
-    private void receiveStarlight(IMajorConstellation type, double amount) {
+    private void receiveStarlight(IWeakConstellation type, double amount) {
 
     }
 
@@ -280,7 +302,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileTreeBeacon tw = MiscUtils.getTileAt(world, getPos(), TileTreeBeacon.class, false);
                 if(tw != null) {

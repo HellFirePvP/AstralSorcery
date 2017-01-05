@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -80,7 +89,7 @@ public class TransmissionWorldHandler {
 
                 TransmissionChain chain = cachedSourceChain.get(source);
                 double starlight = source.produceStarlightTick(world, at);
-                IMajorConstellation type = source.getStarlightType();
+                IWeakConstellation type = source.getStarlightType();
 
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {

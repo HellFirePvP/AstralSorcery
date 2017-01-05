@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectArmara;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
@@ -22,12 +32,13 @@ import java.util.function.Function;
  */
 public class ConstellationEffectRegistry {
 
-    private static Map<IMajorConstellation, ConstellationEffectProvider> providerMap = new HashMap<>();
-    private static Map<IMajorConstellation, ConstellationEffect> singleRenderInstances = new HashMap<>();
+    private static Map<IWeakConstellation, ConstellationEffectProvider> providerMap = new HashMap<>();
+    private static Map<IWeakConstellation, ConstellationEffect> singleRenderInstances = new HashMap<>();
 
     public static void init() {
         register(Constellations.aevitas,  CEffectAevitas::new);
         register(Constellations.discidia, CEffectDiscidia::new);
+        register(Constellations.armara,   CEffectArmara::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
@@ -35,20 +46,21 @@ public class ConstellationEffectRegistry {
     public static void addDynamicConfigEntries() {
         Config.addDynamicEntry(new CEffectAevitas());
         Config.addDynamicEntry(new CEffectDiscidia());
+        Config.addDynamicEntry(new CEffectArmara());
     }
 
-    private static void register(IMajorConstellation c, ConstellationEffectProvider provider) {
+    private static void register(IWeakConstellation c, ConstellationEffectProvider provider) {
         providerMap.put(c, provider);
         singleRenderInstances.put(c, provider.provideEffectInstance());
     }
 
-    public static void registerFromAPI(IMajorConstellation c, Function<Void, ConstellationEffect> providerFunc) {
+    public static void registerFromAPI(IWeakConstellation c, Function<Void, ConstellationEffect> providerFunc) {
         providerMap.put(c, new APIConstellationProvider(providerFunc));
         singleRenderInstances.put(c, providerFunc.apply(null));
     }
 
     @Nullable
-    public static ConstellationEffect clientRenderInstance(IMajorConstellation c) {
+    public static ConstellationEffect clientRenderInstance(IWeakConstellation c) {
         return singleRenderInstances.get(c);
     }
 

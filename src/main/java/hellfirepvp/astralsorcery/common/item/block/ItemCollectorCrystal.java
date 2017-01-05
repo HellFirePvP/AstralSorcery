@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -61,12 +70,12 @@ public class ItemCollectorCrystal extends ItemBlockCustomName implements ItemHig
         return BlockCollectorCrystalBase.CollectorCrystalType.values()[NBTHelper.getPersistentData(stack).getInteger("collectorType")];
     }
 
-    public static void setConstellation(ItemStack stack, IMajorConstellation constellation) {
+    public static void setConstellation(ItemStack stack, IWeakConstellation constellation) {
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
-    public static IMajorConstellation getConstellation(ItemStack stack) {
-        return (IMajorConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
+    public static IWeakConstellation getConstellation(ItemStack stack) {
+        return (IWeakConstellation) IConstellation.readFromNBT(NBTHelper.getPersistentData(stack));
     }
 
 }

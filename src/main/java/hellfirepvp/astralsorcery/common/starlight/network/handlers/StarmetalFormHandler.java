@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.starlight.network.handlers;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -26,7 +35,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
     private static Map<BlockPos, IronOreReceiverNode> turningIrons = new HashMap<>();
 
     @Override
-    public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IMajorConstellation starlightType, double amount) {
+    public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount) {
         long ms = System.currentTimeMillis();
         if(!turningIrons.containsKey(pos)) {
             IronOreReceiverNode node = new IronOreReceiverNode();

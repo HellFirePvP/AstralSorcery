@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -21,13 +29,17 @@ import java.util.stream.Collectors;
 public class ConstellationRegistry {
 
     private static List<IMajorConstellation> majorConstellations = new LinkedList<>();
+    private static List<IWeakConstellation> weakConstellations = new LinkedList<>();
     private static List<IMinorConstellation> minorConstellations = new LinkedList<>();
 
     private static List<IConstellation> generalConstellationList = new LinkedList<>();
 
     public static <T extends IConstellation> void registerConstellation(T constellation) {
-        if(constellation instanceof IMajorConstellation) {
-            majorConstellations.add((IMajorConstellation) constellation);
+        if(constellation instanceof IWeakConstellation) {
+            if(constellation instanceof IMajorConstellation) {
+                majorConstellations.add((IMajorConstellation) constellation);
+            }
+            weakConstellations.add((IWeakConstellation) constellation);
         } else if(constellation instanceof IMinorConstellation) {
             minorConstellations.add((IMinorConstellation) constellation);
         } else {
@@ -68,6 +80,10 @@ public class ConstellationRegistry {
             if(c != null) resolved.add(c);
         }
         return resolved;
+    }
+
+    public static List<IWeakConstellation> getWeakConstellations() {
+        return Collections.unmodifiableList(weakConstellations);
     }
 
     public static List<IMajorConstellation> getMajorConstellations() {

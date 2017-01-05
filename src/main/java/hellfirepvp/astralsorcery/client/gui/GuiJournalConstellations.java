@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -130,6 +138,8 @@ public class GuiJournalConstellations extends GuiScreenJournal {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {

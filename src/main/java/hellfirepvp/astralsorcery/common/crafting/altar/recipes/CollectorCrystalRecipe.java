@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -52,7 +61,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         ItemStack center = centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0);
         if(center == null || center.getItem() == null || !(center.getItem() instanceof ItemTunedCrystalBase)) return null;
         ItemStack out = super.getOutput(centralGridMap, altar);
-        IMajorConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);
+        IWeakConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);
         CrystalProperties prop = CrystalProperties.getCrystalProperties(center);
         if(attuned == null || prop == null) return null;
         ItemCollectorCrystal.setConstellation(out, attuned);

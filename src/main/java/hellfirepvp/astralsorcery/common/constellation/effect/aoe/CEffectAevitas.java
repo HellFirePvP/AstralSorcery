@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
@@ -44,7 +52,6 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
     @Override
     @SideOnly(Side.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {
-        if(!Minecraft.isFancyGraphicsEnabled() && rand.nextInt(12) != 0) return;
         if(rand.nextBoolean()) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,

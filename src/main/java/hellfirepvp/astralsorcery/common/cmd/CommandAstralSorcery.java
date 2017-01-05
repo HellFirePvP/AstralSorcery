@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.cmd;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
@@ -430,6 +439,11 @@ public class CommandAstralSorcery extends CommandBase {
     private void listConstellations(ICommandSender sender) {
         sender.addChatMessage(new TextComponentString("§cMajor Constellations:"));
         for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
+            sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
+        }
+        sender.addChatMessage(new TextComponentString("§Weak Constellations:"));
+        for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
+            if(c instanceof IMajorConstellation) continue;
             sender.addChatMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
         sender.addChatMessage(new TextComponentString("§cMinor Constellations:"));

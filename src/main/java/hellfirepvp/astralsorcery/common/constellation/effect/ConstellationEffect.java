@@ -1,7 +1,15 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -26,9 +34,9 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     protected static final Random rand = new Random();
 
-    private final IMajorConstellation constellation;
+    private final IWeakConstellation constellation;
 
-    public ConstellationEffect(IMajorConstellation constellation, String cfgName) {
+    public ConstellationEffect(IWeakConstellation constellation, String cfgName) {
         super(Section.RITUAL_EFFECTS, cfgName);
         this.constellation = constellation;
     }
@@ -38,7 +46,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
         return super.getConfigurationSection() + "." + getKey();
     }
 
-    public IMajorConstellation getConstellation() {
+    public IWeakConstellation getConstellation() {
         return constellation;
     }
 

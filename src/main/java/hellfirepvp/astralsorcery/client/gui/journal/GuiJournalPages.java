@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -287,7 +295,22 @@ public class GuiJournalPages extends GuiScreenJournal {
     }
 
     @Override
+    protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        if(origin != null) {
+            origin.expectReinit = true;
+            saveSite = false;
+            Minecraft.getMinecraft().displayGuiScreen(origin);
+        } else {
+            informPreviousClose = false;
+            Minecraft.getMinecraft().displayGuiScreen(previous);
+        }
+        return true;
+    }
+
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(origin != null) {

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.sky;
 
 import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
@@ -49,7 +57,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     public static final BindableResource TEX_STAR_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     public static final BindableResource TEX_STAR_4 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
-    public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection");
+    public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
     public static final BindableResource TEX_SOLAR_ECLIPSE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solarEclipse");
 
     private static int glSkyList = -1; //Sky background vertices.
@@ -425,6 +433,8 @@ public class RenderAstralSkybox extends IRenderHandler {
             u += 1;
         }
 
+        GL11.glPushMatrix();
+        GL11.glRotated(-90, 0, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
         TEX_SOLAR_ECLIPSE.bind();
@@ -435,6 +445,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         vb.pos(-xzSize, 100.0D,  xzSize).tex( u      / 7F, 1.0D).endVertex();
         tessellator.draw();
         TextureHelper.refreshTextureBindState();
+        GL11.glPopMatrix();
     }
 
     private void renderConstellations(final World w, final float partialTicks) {

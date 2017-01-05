@@ -1,5 +1,14 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.effect.texture;
 
+import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -14,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Date: 25.09.2016 / 22:52
  */
 @SideOnly(Side.CLIENT)
-public class TextureSpritePlane extends TexturePlane {
+public class TextureSpritePlane extends TexturePlane implements IComplexEffect.PreventRemoval {
 
     private final SpriteSheetResource spriteSheet;
 

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -75,6 +83,15 @@ import net.minecraftforge.oredict.OreDictionary;
  * Date: 07.05.2016 / 00:23
  */
 public class CommonProxy implements IGuiHandler {
+
+    //new todo
+    /*
+    - bookmarks are a bit 'too strong'/new in relation to the rest of the book
+    - mention that marble spawns in the world. somewhere.
+    - check weird sky rendering interation with optifine
+     */
+
+    //TODO generally: Hide things that are not to be seen from JEI/related
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();

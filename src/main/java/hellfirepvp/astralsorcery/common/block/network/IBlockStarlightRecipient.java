@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,6 +40,6 @@ public interface IBlockStarlightRecipient {
      * @param starlightType the constellation type of the starlight received
      * @param amount the amount received
      */
-    public void receiveStarlight(World world, Random rand, BlockPos pos, IMajorConstellation starlightType, double amount);
+    public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount);
 
 }

@@ -1,5 +1,14 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.effect.fx;
 
+import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -13,7 +22,7 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
  * Created by HellFirePvP
  * Date: 19.09.2016 / 13:20
  */
-public class EntityFXCrystalBurst extends EntityFXFacingSprite {
+public class EntityFXCrystalBurst extends EntityFXFacingSprite implements IComplexEffect.PreventRemoval {
 
     public EntityFXCrystalBurst(int burstId, double x, double y, double z) {
         super(getSprite(burstId), x, y, z);

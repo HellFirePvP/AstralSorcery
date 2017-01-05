@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.starlight;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +32,7 @@ public interface IIndependentStarlightSource {
     //As the purpose of the source, this should produce the starlight - called once every tick
     public float produceStarlightTick(World world, BlockPos pos);
 
-    public IMajorConstellation getStarlightType();
+    public IWeakConstellation getStarlightType();
 
     default public boolean providesAutoLink() {
         return false;

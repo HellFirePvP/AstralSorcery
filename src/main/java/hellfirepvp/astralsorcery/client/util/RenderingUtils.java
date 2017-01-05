@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -23,6 +31,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.opengl.GL11;
 
@@ -61,6 +70,27 @@ public class RenderingUtils {
                 }
             }
         }
+    }
+
+    public static Color clampToColor(int rgb) {
+        return clampToColorWithMultiplier(rgb, 1F);
+    }
+
+    public static Color clampToColorWithMultiplier(int rgb, float mul) {
+        int r = ((rgb >> 16) & 0xFF);
+        int g = ((rgb >> 8)  & 0xFF);
+        int b = ((rgb >> 0)  & 0xFF);
+        return new Color(
+                MathHelper.clamp((int) (((float) r) * mul), 0, 255),
+                MathHelper.clamp((int) (((float) g) * mul), 0, 255),
+                MathHelper.clamp((int) (((float) b) * mul), 0, 255));
+    }
+
+    public static Color clampToColor(int r, int g, int b) {
+        return new Color(
+                MathHelper.clamp((int) (((float) r)), 0, 255),
+                MathHelper.clamp((int) (((float) g)), 0, 255),
+                MathHelper.clamp((int) (((float) b)), 0, 255));
     }
 
     public static double interpolate(double oldP, double newP, float partialTicks) {

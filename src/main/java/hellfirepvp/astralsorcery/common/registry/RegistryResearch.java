@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -263,6 +271,7 @@ public class RegistryResearch {
                 new ItemStack(BlocksAS.customSandOre, 1, BlockCustomSandOre.OreType.AQUAMARINE.ordinal())
         }, "ORES", 1, 2);
         resOres.addPage(getTextPage("ORES.1"));
+        resOres.addPage(getTextPage("ORES.2"));
 
         ItemStack[] stacks = new ItemStack[BlockMarble.MarbleBlockType.values().length];
         BlockMarble.MarbleBlockType[] values = BlockMarble.MarbleBlockType.values();

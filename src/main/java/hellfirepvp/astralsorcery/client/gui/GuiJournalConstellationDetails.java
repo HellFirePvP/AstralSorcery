@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -227,7 +235,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         //ofr.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
-        RenderConstellation.renderConstellationIntoGUI(new Color(0xDDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 3F, new RenderConstellation.BrightnessFunction() {
+        RenderConstellation.renderConstellationIntoGUI(new Color(0xDDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 2F, new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
                 return 0.5F;
@@ -260,6 +268,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
         if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {

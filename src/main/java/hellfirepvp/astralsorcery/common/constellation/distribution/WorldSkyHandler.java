@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
 import com.google.common.collect.Maps;
@@ -6,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -107,7 +116,7 @@ public class WorldSkyHandler {
         Arrays.fill(occupied, false);
         LinkedList<IConstellation> constellations = new LinkedList<>(ConstellationRegistry.getMinorConstellations());
         Collections.shuffle(constellations, seededRand);
-        LinkedList<IMajorConstellation> majors = new LinkedList<>(ConstellationRegistry.getMajorConstellations());
+        LinkedList<IWeakConstellation> majors = new LinkedList<>(ConstellationRegistry.getWeakConstellations());
         Collections.shuffle(majors, seededRand);
         majors.forEach(constellations::addFirst);
 
@@ -282,7 +291,7 @@ public class WorldSkyHandler {
         }
     }
 
-    public Float getCurrentDistribution(IMajorConstellation c, Function<Float, Float> func) {
+    public Float getCurrentDistribution(IWeakConstellation c, Function<Float, Float> func) {
         if(!activeDistributions.containsKey(c)) return func.apply(0F);
         return func.apply(activeDistributions.get(c));
     }

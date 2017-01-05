@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -7,6 +15,7 @@ import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
@@ -81,7 +90,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.level = level;
     }
 
-    private void receiveStarlight(IMajorConstellation type, double amount) {
+    private void receiveStarlight(IWeakConstellation type, double amount) {
         if(amount <= 0.001) return;
 
         starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 100D)));
@@ -578,7 +587,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileAltar ta = MiscUtils.getTileAt(world, getPos(), TileAltar.class, false);
                 if(ta != null) {

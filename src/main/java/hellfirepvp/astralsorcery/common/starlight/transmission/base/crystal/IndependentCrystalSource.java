@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -40,7 +49,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private boolean enhanced = false;
 
-    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull IMajorConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull IWeakConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;

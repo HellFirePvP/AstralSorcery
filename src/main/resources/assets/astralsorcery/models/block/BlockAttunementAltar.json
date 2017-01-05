@@ -3,8 +3,8 @@
     "parent":"block/block",
     "ambientocclusion": true,
     "textures": {
-        "texture": "astralsorcery:models/altar/altar_attunement",
-        "particle": "astralsorcery:models/altar/altar_attunement"
+        "particle": "astralsorcery:blocks/marble_raw",
+        "texture": "astralsorcery:models/altar/altar_attunement"
     },
     "display": {
         "gui": {

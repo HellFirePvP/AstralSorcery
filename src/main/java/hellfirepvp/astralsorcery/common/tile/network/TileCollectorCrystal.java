@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile.network;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
@@ -9,6 +17,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -44,7 +53,7 @@ public class TileCollectorCrystal extends TileSourceBase {
     private CrystalProperties usedCrystalProperties;
     private boolean playerMade;
     private boolean enhanced = false;
-    private IMajorConstellation associatedType;
+    private IWeakConstellation associatedType;
 
     private Object[] orbitals = new Object[4];
 
@@ -121,11 +130,11 @@ public class TileCollectorCrystal extends TileSourceBase {
         return usedCrystalProperties;
     }
 
-    public IMajorConstellation getConstellation() {
+    public IWeakConstellation getConstellation() {
         return associatedType;
     }
 
-    public void onPlace(IMajorConstellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public void onPlace(IWeakConstellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
         this.playerMade = player;
         this.usedCrystalProperties = properties;

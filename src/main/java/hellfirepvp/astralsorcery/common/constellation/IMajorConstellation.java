@@ -1,6 +1,13 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.constellation;
 
-import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 
 import javax.annotation.Nullable;
@@ -12,14 +19,9 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 16.11.2016 / 23:08
  */
-public interface IMajorConstellation extends IConstellation {
-
-    //Those 2 methods are registry lookups. Try to avoid spamming them maybe.
+public interface IMajorConstellation extends IWeakConstellation {
 
     @Nullable
     public ConstellationPerkMap getPerkMap();
-
-    @Nullable
-    public ConstellationEffect getRitualEffect();
 
 }

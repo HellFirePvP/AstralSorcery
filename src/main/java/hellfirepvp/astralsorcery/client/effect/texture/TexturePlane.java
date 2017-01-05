@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.effect.texture;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
@@ -20,7 +28,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 12:55
  */
-public class TexturePlane implements IComplexEffect {
+public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemoval {
 
     protected double u, v, uLength, vLength;
 

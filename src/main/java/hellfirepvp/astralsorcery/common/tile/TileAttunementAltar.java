@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -16,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
@@ -84,7 +93,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         if(!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
         if(stack.stackSize != 1) return false;
 
-        IMajorConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
+        IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
         IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);
         return tuned == null && trait == null;
 
@@ -93,7 +102,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     private static final int TICKS_PLAYER_ATTUNEMENT = 800;
     private static final int TICKS_CRYSTAL_ATTUNEMENT = 500;
 
-    private IMajorConstellation activeFound = null;
+    private IWeakConstellation activeFound = null;
     private boolean doesSeeSky = false, hasMultiblock = false;
 
     //Attunement related
@@ -110,7 +119,7 @@ public class TileAttunementAltar extends TileReceiverBase {
     //Sound & Visuals around the TE
     private Object activeSound = null;
     private List<Object> starSprites = new LinkedList<>();
-    private IMajorConstellation highlight = null;
+    private IWeakConstellation highlight = null;
     private int highlightActive = 0;
     private Object spriteCrystalAttunement = null;
     private int spawnedOrbitalsForCrystal = -1;
@@ -221,19 +230,21 @@ public class TileAttunementAltar extends TileReceiverBase {
 
         AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos());
 
-        Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
-        List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
-        if(!players.isEmpty()) {
-            EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
-            if (pl != null && !MiscUtils.isPlayerFakeMP(pl)) {
-                PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                if (prog != null && prog.getAttunedConstellation() == null &&
-                        prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
-                        prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
+        if(activeFound instanceof IMajorConstellation) {
+            Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
+            List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
+            if(!players.isEmpty()) {
+                EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
+                if (pl != null && !MiscUtils.isPlayerFakeMP(pl)) {
+                    PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
+                    if (prog != null && prog.getAttunedConstellation() == null &&
+                            prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
+                            prog.getKnownConstellations().contains(activeFound.getUnlocalizedName())) {
 
-                    PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
-                    PacketChannel.CHANNEL.sendTo(state, pl);
-                    return;
+                        PktAttunementAltarState state = new PktAttunementAltarState(pl.getEntityId(), world.provider.getDimension(), getPos());
+                        PacketChannel.CHANNEL.sendTo(state, pl);
+                        return;
+                    }
                 }
             }
         }
@@ -328,8 +339,8 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     private void searchForConstellation() {
-        IMajorConstellation match = null;
-        for (IMajorConstellation attuneable : ConstellationRegistry.getMajorConstellations()) {
+        IWeakConstellation match = null;
+        for (IWeakConstellation attuneable : ConstellationRegistry.getWeakConstellations()) {
             List<BlockPos> positions = translateConstellationPositions(attuneable);
             boolean valid = true;
             for (BlockPos pos : positions) {
@@ -589,7 +600,7 @@ public class TileAttunementAltar extends TileReceiverBase {
             if(clientActiveCameraFlight != null && ((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).isExpired()
                     && !((ClientCameraFlightHelper.CameraFlight) clientActiveCameraFlight).wasForciblyStopped()) {
                 if(activeFound != null) {
-                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation(activeFound, world.provider.getDimension(), getPos()));
+                    PacketChannel.CHANNEL.sendToServer(new PktAttuneConstellation((IMajorConstellation) activeFound, world.provider.getDimension(), getPos()));
                     SoundHelper.playSoundClientWorld(Sounds.craftFinish, pos, 1F, 1.4F);
                 }
             }
@@ -920,10 +931,10 @@ public class TileAttunementAltar extends TileReceiverBase {
         this.doesSeeSky = compound.getBoolean("skState");
 
         IConstellation found = IConstellation.readFromNBT(compound);
-        if(found == null || !(found instanceof IMajorConstellation)) {
+        if(found == null || !(found instanceof IWeakConstellation)) {
             activeFound = null;
         } else {
-            activeFound = (IMajorConstellation) found;
+            activeFound = (IWeakConstellation) found;
         }
     }
 
@@ -946,7 +957,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             /*if(isChunkLoaded) {
                 TileAttunementAltar ta = MiscUtils.getTileAt(world, getPos(), TileAttunementAltar.class, false);
                 if(ta != null) {

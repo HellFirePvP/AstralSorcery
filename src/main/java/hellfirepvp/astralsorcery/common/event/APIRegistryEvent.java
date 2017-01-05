@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
@@ -19,7 +27,9 @@ public class APIRegistryEvent {
 
     public static class ConstellationEffectRegister extends Event {
 
-        //This does NOT include config generation.
+        /**
+         * This does NOT include config generation.
+         */
         public void registerEffect(IMajorConstellation c, Function<Void, ConstellationEffect> effectInstanceProvider) {
             ConstellationEffectRegistry.registerFromAPI(c, effectInstanceProvider);
         }

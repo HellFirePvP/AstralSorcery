@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.registry.multiblock;
 
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
@@ -30,7 +38,7 @@ public class MultiblockAttunementFrame extends PatternBlockArray {
         IBlockState mbl = BlocksAS.blockBlackMarble.getDefaultState().withProperty(BlockBlackMarble.BLACK_MARBLE_TYPE, BlockBlackMarble.BlackMarbleBlockType.RAW);
 
         addBlock(0, 0, 0, BlocksAS.attunementAltar.getDefaultState());
-        addBlock(0, 1, 0, BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
+        //addBlock(0, 1, 0, BlocksAS.blockStructural.getDefaultState().withProperty(BlockStructural.BLOCK_TYPE, BlockStructural.BlockType.ATTUNEMENT_ALTAR_STRUCT));
 
         addBlockCube(mar, -7, -1, -8,  7, -1, -8);
         addBlockCube(mar, -7, -1,  8,  7, -1,  8);

@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
@@ -8,6 +16,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
@@ -144,7 +153,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         }
     }
 
-    private void receiveStarlight(IMajorConstellation type, double amount) {
+    private void receiveStarlight(IWeakConstellation type, double amount) {
         this.starlightBuffer += amount;
     }
 
@@ -283,7 +292,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         }
 
         @Override
-        public void onStarlightReceive(World world, boolean isChunkLoaded, IMajorConstellation type, double amount) {
+        public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
                 TileWell tw = MiscUtils.getTileAt(world, getPos(), TileWell.class, false);
                 if(tw != null) {

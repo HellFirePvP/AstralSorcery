@@ -1,17 +1,28 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -85,7 +96,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
 
         if(shift && missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
-            IMajorConstellation c = ItemCollectorCrystal.getConstellation(stack);
+            IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
             if(c != null) {
                 if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
@@ -127,7 +138,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te == null) return;
 
-        IMajorConstellation c = ItemCollectorCrystal.getConstellation(stack);
+        IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c != null) {
             te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
         }
@@ -193,6 +204,14 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
                     pos.getX(), pos.getY(), pos.getZ());
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
             TileCollectorCrystal.breakDamage(worldIn, pos);
+
+            if(te.isPlayerMade()) {
+                ItemStack drop = new ItemStack(te.getType() == CollectorCrystalType.ROCK_CRYSTAL ? BlocksAS.collectorCrystal : BlocksAS.celestialCollectorCrystal);
+                CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
+                ItemCollectorCrystal.setType(drop, te.getType());
+                ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
+                ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+            }
         }
         super.breakBlock(worldIn, pos, state);
     }
