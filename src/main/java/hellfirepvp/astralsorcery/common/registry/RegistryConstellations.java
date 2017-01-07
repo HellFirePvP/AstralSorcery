@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
@@ -27,6 +29,8 @@ public class RegistryConstellations {
         buildMajorConstellations();
 
         registerConstellations();
+
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationRegister());
     }
 
     private static void registerConstellations() {

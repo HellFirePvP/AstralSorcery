@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
@@ -49,6 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -75,6 +78,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     private boolean dirty = false;
     private boolean doesSeeSky = false, hasMultiblock = false;
+    private BlockPos ritualLink = null;
 
     private int effectWorkTick = 0; //up to 63
     private boolean working = false;
@@ -91,6 +95,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         if(!world.isRemote) {
             if((ticksExisted & 15) == 0) {
                 updateSkyState(world.canSeeSky(getPos()));
+
+                updateLinkTile();
             }
 
             if((ticksExisted & 31) == 0) {
@@ -103,6 +109,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 if(recNode != null) {
                     recNode.updateSkyState(doesSeeSky);
                     recNode.updateMultiblockState(hasMultiblock);
+                    recNode.updateLink(ritualLink);
 
                     recNode.markDirty(world);
                 }
@@ -135,6 +142,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 lightbeam.setAlphaMultiplier(0.5F + (0.5F * alphaDaytime));
                 lightbeam.setMaxAge(64);
             }
+            if(ritualLink != null) {
+                if(rand.nextBoolean()) {
+                    Vector3 at = new Vector3(this).add(0, 0.1, 0);
+                    at.add(rand.nextFloat() * 0.5 + 0.25, 0, rand.nextFloat() * 0.5 + 0.25);
+                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+                    p.setAlphaMultiplier(0.7F).setColor(Color.WHITE);
+                    p.setMaxAge((int) (30 + rand.nextFloat() * 50));
+                    p.gravity(0.09).scale(0.3F + rand.nextFloat() * 0.1F);
+                }
+            }
             if(shouldDoAdditionalEffects() && !isDay) {
                 if(EffectHandler.STATIC_EFFECT_RAND.nextInt(chance * 2) == 0) {
                     Vector3 from = new Vector3(this).add(0.5, 0.1, 0.5);
@@ -152,7 +169,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
-                        ce.playClientEffect(world, getPos(), this, percRunning, shouldDoAdditionalEffects());
+                        BlockPos to = getPos();
+                        if(ritualLink != null) {
+                            to = ritualLink;
+                        }
+                        ce.playClientEffect(world, to, this, percRunning, shouldDoAdditionalEffects());
                     }
                 }
             }
@@ -163,6 +184,24 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     EffectHandler.getInstance().lightbeam(to, source, 0.8);
                 }
             }
+        }
+    }
+
+    private void updateLinkTile() {
+        boolean hasLink = ritualLink != null;
+        BlockPos link = getPos().add(0, 5, 0);
+        TileRitualLink linkTile = MiscUtils.getTileAt(world, link, TileRitualLink.class, true);
+        boolean hasLinkNow;
+        if(linkTile != null) {
+            this.ritualLink = linkTile.getLinkedTo();
+            hasLinkNow = this.ritualLink != null;
+        } else {
+            hasLinkNow = false;
+            this.ritualLink = null;
+        }
+        if(hasLink != hasLinkNow) {
+            markForUpdate();
+            flagDirty();
         }
     }
 
@@ -309,6 +348,12 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         this.doesSeeSky = compound.getBoolean("seesSky");
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
 
+        if(compound.hasKey("ritualLinkPos")) {
+            this.ritualLink = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+        } else {
+            this.ritualLink = null;
+        }
+
         offsetMirrorPositions.clear();
         NBTTagList listPos = compound.getTagList("positions", 10);
         for (int i = 0; i < listPos.tagCount(); i++) {
@@ -326,6 +371,12 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
         compound.setBoolean("hasMultiblock", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
+
+        if(ritualLink != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            NBTUtils.writeBlockPosToNBT(ritualLink, tag);
+            compound.setTag("ritualLinkPos", tag);
+        }
 
         NBTTagList listPositions = new NBTTagList();
         for (BlockPos pos : offsetMirrorPositions) {
@@ -404,6 +455,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private int ticksTicking = 0;
 
         private boolean doesSeeSky, hasMultiblock;
+        private BlockPos ritualLinkTo = null;
         private IWeakConstellation channeling;
         private IMinorConstellation trait;
         private CrystalProperties properties;
@@ -516,7 +568,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleTrait()) {
                 collectionTraitBuffer = Math.max(0, collectionTraitBuffer - (executeTimes * maxDrain));
-                if(ce.playTraitEffectMultiple(world, getPos(), trait, executeTimes)) markDirty(world);
+                BlockPos to = getPos();
+                if(ritualLinkTo != null) to = ritualLinkTo;
+                if(ce.playTraitEffectMultiple(world, to, trait, executeTimes)) markDirty(world);
             } else {
                 for (int i = 0; i <= executeTimes; i++) {
                     float perc;
@@ -531,7 +585,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
 
                     if(ce != null) {
-                        if(ce.playTraitEffect(world, getPos(), trait, perc)) markDirty(world);
+                        BlockPos to = getPos();
+                        if(ritualLinkTo != null) to = ritualLinkTo;
+                        if(ce.playTraitEffect(world, to, trait, perc)) markDirty(world);
                     }
                 }
             }
@@ -547,7 +603,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(ce != null && !consumeCompletely && ce.mayExecuteMultipleMain()) {
                 collectionChannelBuffer = Math.max(0, collectionChannelBuffer - (executeTimes * maxDrain));
-                if(ce.playMainEffectMultiple(world, getPos(), executeTimes, mayDoTrait, trait)) markDirty(world);
+                BlockPos to = getPos();
+                if(ritualLinkTo != null) to = ritualLinkTo;
+                if(ce.playMainEffectMultiple(world, to, executeTimes, mayDoTrait, trait)) markDirty(world);
             } else {
                 for (int i = 0; i <= executeTimes; i++) {
                     float perc;
@@ -562,7 +620,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
 
                     if(ce != null) {
-                        if(ce.playMainEffect(world, getPos(), perc, mayDoTrait, trait)) markDirty(world);
+                        BlockPos to = getPos();
+                        if(ritualLinkTo != null) to = ritualLinkTo;
+                        if(ce.playMainEffect(world, to, perc, mayDoTrait, trait)) markDirty(world);
                     }
                 }
             }
@@ -724,6 +784,12 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 offsetMirrors.put(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
             }
 
+            if(compound.hasKey("ritualLinkPos")) {
+                this.ritualLinkTo = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+            } else {
+                this.ritualLinkTo = null;
+            }
+
             if(channeling != null) {
                 ce = channeling.getRitualEffect();
                 if(compound.hasKey("effect") && ce != null) {
@@ -757,6 +823,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
             if(trait != null) {
                 trait.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
+            }
+            if(ritualLinkTo != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                NBTUtils.writeBlockPosToNBT(ritualLinkTo, tag);
+                compound.setTag("ritualLinkPos", tag);
             }
             if(ce != null) {
                 NBTTagCompound tag = new NBTTagCompound();
@@ -793,6 +864,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             markDirty(world);
         }
 
+        public void updateLink(@Nullable BlockPos ritualLink) {
+            this.ritualLinkTo = ritualLink;
+        }
     }
 
     public static class PedestalReceiverProvider implements TransmissionClassRegistry.TransmissionProvider {

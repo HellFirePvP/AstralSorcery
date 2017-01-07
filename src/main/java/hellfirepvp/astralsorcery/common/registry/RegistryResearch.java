@@ -165,6 +165,7 @@ public class RegistryResearch {
         ResearchNode resInfuser = new ResearchNode(new ItemStack(BlocksAS.starlightInfuser), "INFUSER", 3, -1);
         resInfuser.addPage(getTextPage("INFUSER.1"));
         resInfuser.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rStarlightInfuserRock));
+        resInfuser.addPage(new JournalPageStructure(MultiBlockArrays.patternStarlightInfuser));
         //TODO add reso gem infusion recipe
 
         ResearchNode resTreeBeacon = new ResearchNode(new ItemStack(BlocksAS.treeBeacon), "TREEBEACON", 4, 1);
@@ -255,6 +256,7 @@ public class RegistryResearch {
         ResearchNode resShrines = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "SHRINES", 0, 0);
         resShrines.addPage(getTextPage("SHRINES.1"));
         resShrines.addPage(getTextPage("SHRINES.2"));
+        resShrines.addPage(getTextPage("SHRINES.3"));
 
         ResearchNode resConPaper = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "CPAPER", 1, -1);
         resConPaper.addPage(getTextPage("CPAPER.1"));

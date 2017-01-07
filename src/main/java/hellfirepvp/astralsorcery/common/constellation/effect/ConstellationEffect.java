@@ -11,10 +11,12 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -88,7 +90,14 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     @Nullable
     public TileRitualPedestal getPedestal(World world, BlockPos pos) {
-        return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
+        TileEntity te = world.getTileEntity(pos);
+        if(te == null) return null;
+        if(te instanceof TileRitualLink) {
+            TileRitualLink link = (TileRitualLink) te;
+            pos = link.getPos();
+            return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
+        }
+        return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;
     }
 
     public void readFromNBT(NBTTagCompound cmp) {}

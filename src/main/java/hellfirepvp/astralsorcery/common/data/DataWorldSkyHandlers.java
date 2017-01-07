@@ -13,7 +13,9 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,6 +82,19 @@ public class DataWorldSkyHandlers extends AbstractData {
     public void update(List<Integer> newDimIds) {
         this.activeWorldSkyHandlers = new LinkedList<>(newDimIds);
         markDirty();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void updateClient(List<Integer> dimIds) {
+        this.activeWorldSkyHandlers = new LinkedList<>(dimIds);
+    }
+
+    public void clientClean() {
+        this.activeWorldSkyHandlers = new LinkedList<>();
+    }
+
+    public List<Integer> getSkyHandlerDimensions() {
+        return Collections.unmodifiableList(activeWorldSkyHandlers);
     }
 
     public static class Provider extends ProviderAutoAllocate<DataWorldSkyHandlers> {

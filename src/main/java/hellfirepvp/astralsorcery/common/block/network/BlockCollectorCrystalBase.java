@@ -63,7 +63,6 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         super(material, color);
         setBlockUnbreakable();
         setResistance(200000F);
-        setHardness(3F);
         setHarvestLevel("pickaxe", 3);
         setSoundType(SoundType.GLASS);
         setLightLevel(0.7F);

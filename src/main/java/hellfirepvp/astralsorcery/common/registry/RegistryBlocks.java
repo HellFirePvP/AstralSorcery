@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.block.BlockTreeBeacon;
@@ -42,6 +43,7 @@ import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
@@ -136,6 +138,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(blockFakeTree);
         starlightInfuser = registerBlock(new BlockStarlightInfuser());
         queueDefaultItemBlock(starlightInfuser);
+        ritualLink = registerBlock(new BlockRitualLink());
+        queueDefaultItemBlock(ritualLink);
 
         treeBeacon = registerBlock(new BlockTreeBeacon());
         queueDefaultItemBlock(treeBeacon);
@@ -184,6 +188,7 @@ public class RegistryBlocks {
         registerTile(TileAttunementAltar.class);
         registerTile(TileStarlightInfuser.class);
         registerTile(TileTreeBeacon.class);
+        registerTile(TileRitualLink.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

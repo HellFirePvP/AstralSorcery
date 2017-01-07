@@ -10,16 +10,19 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktWorldHandlerSyncEarly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,6 +43,11 @@ public class EventHandlerNetwork {
         ResearchManager.sendInitClientKnowledge(p);
 
         SyncDataHolder.syncAllDataTo(p);
+    }
+
+    @SubscribeEvent
+    public void onLoginEarly(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+        event.getManager().sendPacket(new PktWorldHandlerSyncEarly(((DataWorldSkyHandlers) SyncDataHolder.getDataServer(SyncDataHolder.DATA_SKY_HANDLERS)).getSkyHandlerDimensions()));
     }
 
     @SubscribeEvent

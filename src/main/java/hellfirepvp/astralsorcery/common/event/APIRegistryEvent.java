@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.event;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -32,6 +34,17 @@ public class APIRegistryEvent {
          */
         public void registerEffect(IMajorConstellation c, Function<Void, ConstellationEffect> effectInstanceProvider) {
             ConstellationEffectRegistry.registerFromAPI(c, effectInstanceProvider);
+        }
+
+    }
+
+    public static class ConstellationRegister extends Event {
+
+        /**
+         * Registers and adds the given constellation.
+         */
+        public void registerConstellation(IConstellation c) {
+            ConstellationRegistry.registerConstellation(c);
         }
 
     }

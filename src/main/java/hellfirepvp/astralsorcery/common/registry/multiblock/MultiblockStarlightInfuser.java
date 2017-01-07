@@ -67,6 +67,28 @@ public class MultiblockStarlightInfuser extends PatternBlockArray {
         addBlock( 0, -2,  2, mrw);
         addBlock( 1, -2,  2, mrw);
 
+        addBlock( 3,  3,  2, mar);
+        addBlock( 3,  3, -2, mar);
+        addBlock(-3,  3,  2, mar);
+        addBlock(-3,  3, -2, mar);
+        addBlock( 2,  3,  3, mar);
+        addBlock(-2,  3,  3, mar);
+        addBlock( 2,  3, -3, mar);
+        addBlock(-2,  3, -3, mar);
+
+        addBlock( 3,  4,  1, mar);
+        addBlock( 3,  4,  0, mar);
+        addBlock( 3,  4, -1, mar);
+        addBlock(-3,  4,  1, mar);
+        addBlock(-3,  4,  0, mar);
+        addBlock(-3,  4, -1, mar);
+        addBlock( 1,  4,  3, mar);
+        addBlock( 0,  4,  3, mar);
+        addBlock(-1,  4,  3, mar);
+        addBlock( 1,  4, -3, mar);
+        addBlock( 0,  4, -3, mar);
+        addBlock(-1,  4, -3, mar);
+
         addBlock(-3,  0,  3, mpl);
         addBlock(-3,  1,  3, mpl);
         addBlock(-3,  2,  3, mch);
