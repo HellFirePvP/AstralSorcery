@@ -14,7 +14,7 @@
             {
                "type":"item",
                "name":"astralsorcery:ItemConstellationPaper",
-               "weight":15,
+               "weight":18,
                "functions":[
                   {
                      "function":"set_data",

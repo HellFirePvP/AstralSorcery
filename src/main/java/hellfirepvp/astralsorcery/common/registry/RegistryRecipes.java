@@ -264,12 +264,13 @@ public class RegistryRecipes {
 
         rStarlightInfuserRock = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
                 .addPart(ItemsAS.rockCrystal,
-                        ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER,
@@ -286,12 +287,13 @@ public class RegistryRecipes {
 
         rStarlightInfuserCel = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
                 .addPart(ItemsAS.celestialCrystal,
-                        ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER,

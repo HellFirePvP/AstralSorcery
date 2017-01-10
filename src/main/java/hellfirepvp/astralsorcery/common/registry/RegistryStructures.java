@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockRitualPede
 import hellfirepvp.astralsorcery.common.registry.multiblock.MultiblockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.registry.structures.StructureDesertShrine;
+import hellfirepvp.astralsorcery.common.registry.structures.StructureSmallShrine;
 
 import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
 
@@ -30,6 +31,7 @@ public class RegistryStructures {
     public static void init() {
         ancientShrine = new StructureAncientShrine();
         desertShrine = new StructureDesertShrine();
+        smallShrine = new StructureSmallShrine();
 
         patternRitualPedestal = new MultiblockRitualPedestal();
         patternAltarAttunement = new MultiblockAltarAttunement();

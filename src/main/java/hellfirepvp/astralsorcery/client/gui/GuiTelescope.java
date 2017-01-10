@@ -74,6 +74,7 @@ public class GuiTelescope extends GuiWHScreen {
 
     private final EntityPlayer owningPlayer;
     private final TileTelescope guiOwner;
+    private TileTelescope.TelescopeRotation rotation;
 
     private CellRenderInformation currentInformation = null;
 
@@ -81,6 +82,11 @@ public class GuiTelescope extends GuiWHScreen {
         super(245, 500);
         this.owningPlayer = player;
         this.guiOwner = e;
+        this.rotation = e.getRotation();
+    }
+
+    public void handleRotationChange(boolean isClockwise) {
+        rotation = isClockwise ? rotation.nextClockWise() : rotation.nextCounterClockWise();
     }
 
     @Override

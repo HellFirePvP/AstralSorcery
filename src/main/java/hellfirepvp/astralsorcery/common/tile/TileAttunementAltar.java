@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -170,6 +171,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                         checkForAttunements();
                     }
                 } else if(mode == 1) {
+                    //No isNight check since well.. we don't wanna kick him from the camera flight
                     if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead) {
                         setAttunementState(0, null);
                     } else {
@@ -184,6 +186,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                         markForUpdate();
                     }
                 } else if(mode == 2) {
+                    //isNight check is sufficient since the constellation persists through a night.
                     if(activeEntity.isDead ||
                             !(activeEntity instanceof EntityItem) ||
                             !EntityUtils.selectItemStack(crystalAcceptor).apply(activeEntity) ||
@@ -339,6 +342,8 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     private void searchForConstellation() {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        if(wsh == null) return;
         IWeakConstellation match = null;
         for (IWeakConstellation attuneable : ConstellationRegistry.getWeakConstellations()) {
             List<BlockPos> positions = translateConstellationPositions(attuneable);
@@ -356,8 +361,11 @@ public class TileAttunementAltar extends TileReceiverBase {
             }
         }
         if(match != null) {
-            activeFound = match;
-            markForUpdate();
+            if(wsh.getActiveConstellations().contains(match) &&
+                    wsh.getCurrentDistribution(match, (f) -> f) >= 0.65) {
+                activeFound = match;
+                markForUpdate();
+            }
         }
     }
 

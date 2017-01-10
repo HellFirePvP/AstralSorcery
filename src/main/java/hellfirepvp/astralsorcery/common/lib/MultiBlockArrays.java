@@ -29,6 +29,8 @@ public class MultiBlockArrays {
 
     public static StructureBlockArray desertShrine;
 
+    public static StructureBlockArray smallShrine;
+
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;
 

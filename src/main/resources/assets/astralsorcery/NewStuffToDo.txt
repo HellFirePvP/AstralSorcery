@@ -1,103 +1,22 @@
-Needed To-do things:
+Graphical next:
 
-- Hand Telescope GUI (144x144 as you already said)
-- Telescope GUI (uhhh... kinda like hand-telescope but, well, the gridTelescope.png in textures/gui/ should give you a general idea :P)
-    (-> both of those gui's should have transparent interior. only the frame around it is important :P)
-- Resonating gem item texture (Aquamarine -> starlight infuser -> resonating gem - idk. a blue gem, with some white glowing effect? uh..)
+- Telescope GUI (uh...)
 - Starlight infuser block model (may hold 1 item on top of it, some 'sort' of pedestal?)
 - a gui page for starlight infusion (the recipe is 1 item input -> 1 item output)
 - (not thought out yet) a way to display the current 'perk-experience' in the game-overlay.
     (-> perk experience is passively gained while using perks and can be spent to unlock the next perk(s))
-- Tree-Relay (YES that sounds strange) block model (a miniature marble tree please. xD)
-    (-> central block for the astralsorcery 'tree farm')
 
-Changes:
+Code-Wise next:
 
-- Constellation-Tiers removed
-- Split constellations into Major and Minor ones
-- Multiple major and multiple minor may show up each day
-- Crystal attunement may only happen with Major constellations
-- Starlight may only be collected/transmitted/received from major constellations
-- Minor constellations may still be used as traits
-- Only major constellations provide a ritual pedestal AOE
-- Constellation discovery now in telescope-tiers:
-    - Hand-Telescope (max. 1 major discoverable during 1 night)
-    - Telescope (all major ones that are visible in the night are discoverable)
-    - Observatory (all major ones and some minor ones are visible/discoverable)
-- Player may attune to 1 major constellation early on
-    - the ritual may require the player to 'place' blocks that represent the constellation's stars in a 32x32 field.
-    - Depending on the constellation the player may progress through a 'Skyrim-skills'-like perk/buffs/skill system
-    - Mainly small buffs/effects that should fit the constellation's meaning
-    - The last unlockable buff will be a powerful active ability
-    - The unlocking-progression should be loosely tied to the progression in the mod
-- In order to see details of a constellation in the book, the player needs to store the constellation papers into the book
-    - GUI for that can be opened with shift-right-click with the book
-- New book section where you can see your constellation as well as the perk/buff-progression and things
-    - Unlocking the next perks/buffs will be in that gui
-    - Short description will be given when hovered over it.
+- Change mounted telescope to what was discussed...
+- Add weak constellations lucerna, horologium(SE), mineralis, bootes
+- Add 'random' recipes to infuser
+- Add make starlight collection in altars based on noise maps instead of build height or random numbers.
+- Add a multiplier of said noise maps to starlight collection via crystals
+- [TBA]
+- Add a way to obtain the enhanced celestial collector crystals (Tier4)
 
-Open tasks/questions:
-Code & Design-Wise:
+Brainstorm tasks:
 
-- Write up the algorithm that chooses constellations for each night
-- Assoicate those constellations with render position informations
-- Think about the player-attunement ritual
-    - Requires a lot of space 32x32
-    - Has no central block (center is in some block corners...)
-    - Design & Logic lore-wise
-    - Further purposes after 1st use/attunement?
-- Select major constellations and their themes
-    - If possible think about some where a variety of effects and more general usabilities are possible
-    - Try to avoid association of those effects with items
-    - Find at least 5 perks/passive buffs for the constellation
-
-
-Scraped ideas for perks:
-
-    - Moved to some shielding thing:
-        - A shield regenerates slowly over time, preventing incoming damage
-        - A perk that increases the amount of damage shielded
-        - As long as you're 'seeing the sky' you take % less damage
-        - % chance that projectiles don't damage you if they hit you
-
-Constellation Perk/Buff ideas:
-
--> Damage/Offense (?)
-    -> Perks/Buff-Ideas:
-        - (F) Small overall damage increase
-        - (F) Upon killing something, damage and movement speed is increased for short time
-        - (F) more damage against a target that's further away
-        - (F) more damage against a target after it's been knocked back
-        - (F) applies a bleed on hit that damages the mob afterwards
-    -> Ability:
-
--> Defence (?)
-    -> Perks/Buff-Ideas:
-        - (F) Small overall damage reduction
-        - (F) Chance that an attack just misses you
-        - (F) Damage reduction and faster regeneration when having less then 2 or 2 armorpieces equipped
-        - (F) Damage reduction against severeal types of non-physical damage
-        - (F) Gain an amount of feather fall forever
-    -> Ability: A short shockwave, destroying all nearby projectiles, knocking all entities back, dealing damage to those. Refreshes shield to full.
-
--> Travel
-    -> Perks/Buff-Ideas:
-        - (F) generally small % additional movement speed
-        - (F) if you're in a cave, light sources randomly spawn around you
-        - (F) Take no damage for the first 'x' seconds after falling in lava
-        - (F) you move faster underwater
-        - (F) Reduce amount of hunger?..
-    -> Ability:
-
--> Creation
-    -> Perks/Buff-Ideas:
-        - (F) low chance that something close to you might get bonemeal'd
-        - (F) chance that a baby animal close to you grows into an adult
-        - (F) low chance that a cleanstone somewhere around you turns into an ore
-        - (F) Extend player reach by a bit or a lot. depends. :P
-    -> Ability: Wave of Creation -> Shockwave of all above + turns dirt into grass + vanilla animal spawn + plants saplings + bonemeals those
-
--> Destruction
-    -> Perks/Buff-Ideas:
-        -
-    -> Ability:
+- Think about ways to make the altar crafting less gui based
+- (Based/Aligned with the upper) Think about design for Trait-Craft altar

@@ -33,8 +33,10 @@ public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
     public void renderTileEntityAt(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y + 1.28, z + 0.44);
+        GL11.glTranslated(x + 0.5, y + 1.28, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
+        GL11.glRotated(180, 0, 1, 0);
+        GL11.glRotated(te.getRotation().ordinal() * 45, 0, 1, 0);
         GL11.glScaled(0.053, 0.053, 0.053);
         RenderHelper.disableStandardItemLighting();
         renderModel(te, 1);

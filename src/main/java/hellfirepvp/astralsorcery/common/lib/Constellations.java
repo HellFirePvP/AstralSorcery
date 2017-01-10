@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,5 +25,8 @@ public class Constellations {
     public static IMajorConstellation vicio;    //Aspect of Travel
     public static IMajorConstellation aevitas;  //Aspect of Creation
     //public static IMajorConstellation evorsio;  //Aspect of Destruction
+
+    public static IWeakConstellation mineralis;
+    public static IWeakConstellation lucerna;
 
 }

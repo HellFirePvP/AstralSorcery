@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
@@ -63,6 +64,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktAttuneConstellation.class, PktAttuneConstellation.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.SERVER);
     }
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, BlockPos pos, double range) {

@@ -98,6 +98,12 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
                 if(lens != null) {
                     ColorType oldType = lens.setLensColor(type);
+                    if(!playerIn.isCreative()) {
+                        inHand.stackSize--;
+                        if(inHand.stackSize <= 0) {
+                            playerIn.setHeldItem(EnumHand.MAIN_HAND, null);
+                        }
+                    }
                     SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);
                     if(oldType != null) {
                         ItemUtils.dropItem(worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, oldType.asStack());

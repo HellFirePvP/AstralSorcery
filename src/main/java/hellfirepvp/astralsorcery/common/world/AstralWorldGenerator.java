@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
+import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
 import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -61,6 +62,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
     public void pushConfigEntries() {
         structures.add(new StructureAncientShrine());
         structures.add(new StructureDesertShrine());
+        structures.add(new StructureSmallShrine());
     }
 
     public AstralWorldGenerator init() {
