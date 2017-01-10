@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -16,8 +17,10 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
@@ -31,6 +34,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -43,6 +47,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -69,6 +74,7 @@ import java.util.Random;
  */
 public class GuiTelescope extends GuiWHScreen {
 
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
     private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
     private static final BindableResource textureConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
 
@@ -76,13 +82,56 @@ public class GuiTelescope extends GuiWHScreen {
     private final TileTelescope guiOwner;
     private TileTelescope.TelescopeRotation rotation;
 
-    private CellRenderInformation currentInformation = null;
+    private Rectangle rectArrowCW = null, rectArrowCCW = null;
+
+    private SkyConstellationDistribution currentInformation = null;
 
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
         super(245, 500);
         this.owningPlayer = player;
         this.guiOwner = e;
         this.rotation = e.getRotation();
+
+        setupConstellations();
+    }
+
+    private void setupConstellations() {
+        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(guiOwner.getWorld());
+        int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
+        Random r = new Random(guiOwner.getWorld().getSeed() * 31 + lastTracked * 31);
+
+        currentInformation = new SkyConstellationDistribution();
+
+        for (TileTelescope.TelescopeRotation rot : TileTelescope.TelescopeRotation.values()) {
+            currentInformation.informationMap.put(rot, new RotationConstellationInformation());
+        }
+
+        List<IWeakConstellation> constellations = ConstellationRegistry.getWeakConstellations();
+        for (IWeakConstellation cst : constellations) {
+            Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
+            do {
+                foundPoint = findEmptyPlace(r);
+            } while (foundPoint == null);
+            currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
+        }
+    }
+
+    private Tuple<Point, TileTelescope.TelescopeRotation> findEmptyPlace(Random rand) {
+        TileTelescope.TelescopeRotation rot = TileTelescope.TelescopeRotation.values()[rand.nextInt(TileTelescope.TelescopeRotation.values().length)];
+        RotationConstellationInformation info = currentInformation.informationMap.get(rot);
+        int wh = ((int) SkyConstellationDistribution.constellationWH);
+        int wdh = guiWidth  - 6 - wh;
+        int hgt = guiHeight - 6 - wh;
+        int rX = 6 + rand.nextInt(wdh);
+        int rY = 6 + rand.nextInt(hgt);
+        Rectangle constellationRect = new Rectangle(rX, rY, wh, wh);
+        for (Point p : info.constellations.keySet()) {
+            Rectangle otherRect = new Rectangle(p.x, p.y, wh, wh);
+            if(otherRect.intersects(constellationRect)) {
+                return null;
+            }
+        }
+        return new Tuple<>(new Point(rX, rY), rot);
     }
 
     public void handleRotationChange(boolean isClockwise) {
@@ -99,21 +148,69 @@ public class GuiTelescope extends GuiWHScreen {
         zLevel -= 5;
         drawCellsWithEffects(partialTicks);
         zLevel += 5;
+
+        drawRotationArrows(partialTicks);
+
         TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
+    private void drawRotationArrows(float partialTicks) {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        Point mouse = getCurrentMousePoint();
+        rectArrowCW = null;
+        rectArrowCCW = null;
+
+        int width = 30;
+        int height = 15;
+        rectArrowCCW = new Rectangle(guiLeft - 40, guiTop + (guiHeight / 2), width, height);
+        GL11.glPushMatrix();
+        GL11.glTranslated(rectArrowCCW.getX() + (width / 2), rectArrowCCW.getY() + (height / 2), 0);
+        float uFrom = 0F, vFrom = 0.5F;
+        if(rectArrowCCW.contains(mouse)) {
+            uFrom = 0.5F;
+            GL11.glScaled(1.1, 1.1, 1.1);
+        } else {
+            float t = ClientScheduler.getClientTick() + partialTicks;
+            float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+            GL11.glScaled(sin, sin, sin);
+        }
+        GL11.glColor4f(1F, 1F, 1F, 0.8F);
+        GL11.glTranslated(-(width / 2), -(height / 2), 0);
+        texArrow.bind();
+        drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+        GL11.glPopMatrix();
+
+        rectArrowCW = new Rectangle(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2), width, height);
+        GL11.glPushMatrix();
+        GL11.glTranslated(rectArrowCW.getX() + (width / 2), rectArrowCW.getY() + (height / 2), 0);
+        uFrom = 0F;
+        vFrom = 0F;
+        if(rectArrowCW.contains(mouse)) {
+            uFrom = 0.5F;
+            GL11.glScaled(1.1, 1.1, 1.1);
+        } else {
+            float t = ClientScheduler.getClientTick() + partialTicks;
+            float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+            GL11.glScaled(sin, sin, sin);
+        }
+        GL11.glColor4f(1F, 1F, 1F, 0.8F);
+        GL11.glTranslated(-(width / 2), -(height / 2), 0);
+        texArrow.bind();
+        drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+        GL11.glPopMatrix();
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+    }
+
     private void drawCellsWithEffects(float partialTicks) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(guiOwner.getWorld());
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
-        Random r = new Random(guiOwner.getWorld().getSeed() * 31 + lastTracked * 31);
+        Random r = new Random(guiOwner.getWorld().getSeed() * 31 + lastTracked * 31 + rotation.ordinal());
         World world = Minecraft.getMinecraft().world;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
-        /*Collection<IConstellation> activeConstellations =
-                ((DataActiveCelestials) SyncDataHolder.getDataClient(SyncDataHolder.DATA_CONSTELLATIONS)).getActiveConstellations();
-        IConstellation[] constellations = evaluateConstellations(r, activeConstellations);*/
         IConstellation[] constellations = new IConstellation[8];
         if(handle != null) {
             LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
@@ -140,54 +237,79 @@ public class GuiTelescope extends GuiWHScreen {
 
         drawGridBackground(partialTicks, canSeeSky);
 
-        Map<Rectangle, Integer> cells = new HashMap<>();
-        Map<Integer, ConstellationInformation> starRectangles = new HashMap<>();
-
         if (handle != null && canSeeSky) {
-            int wstep = guiWidth / 4;
-            int hstep = guiHeight / 2;
-            int cnt = 0;
-            List<Tuple<Integer, Integer>> boxes = new LinkedList<>();
-            for (int x = 0; x < 4; x++) {
-                for (int z = 0; z < 2; z++) {
-                    boxes.add(new Tuple<>(x, z));
+            zLevel += 1;
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.apply();
+
+            RenderAstralSkybox.TEX_STAR_1.bind();
+            int starSize = 2;
+            for (int i = 0; i < 72 + r.nextInt(144); i++) {
+                int innerOffsetX = starSize + r.nextInt(guiWidth - starSize);
+                int innerOffsetY = starSize + r.nextInt(guiHeight - starSize);
+                float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
+                brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
+                GL11.glColor4f(brightness, brightness, brightness, brightness);
+                drawRect(guiLeft + innerOffsetX - starSize, guiTop + innerOffsetY - starSize, starSize * 2, starSize * 2);
+                GL11.glColor4f(1, 1, 1, 1);
+            }
+            zLevel -= 1;
+
+            RotationConstellationInformation info = currentInformation.informationMap.get(rotation);
+            if (info != null) {
+                currentInformation.informationMap.get(rotation).informations.clear();
+                for (Map.Entry<Point, IConstellation> entry : info.constellations.entrySet()) {
+
+                    float widthHeight = SkyConstellationDistribution.constellationWH;
+
+                    Point offset = entry.getKey();
+
+                    Map<StarLocation, Rectangle> rectangles = RenderConstellation.renderConstellationIntoGUI(
+                            entry.getValue(),
+                            offset.x + guiLeft,
+                            offset.y + guiTop,
+                            zLevel,
+                            ((int) widthHeight),
+                            ((int) widthHeight),
+                            2,
+                            new RenderConstellation.BrightnessFunction() {
+                                @Override
+                                public float getBrightness() {
+                                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + r.nextInt(15));
+                                }
+                            },
+                            ResearchManager.clientProgress.hasConstellationDiscovered(entry.getValue().getUnlocalizedName()),
+                            true
+                    );
+
+                    currentInformation.informationMap.get(rotation).informations.add(new ConstellationInformation(rectangles, entry.getValue()));
                 }
             }
-            Collections.shuffle(boxes, r);
-            for (Tuple<Integer, Integer> t : boxes) {
-                int x = t.key;
-                int z = t.value;
-                int offsetX = guiLeft + x * wstep;
-                int offsetZ = guiTop + z * hstep;
-                zLevel += 1;
-                Optional<Map<StarLocation, Rectangle>> stars = drawCellEffects(r, constellations[cnt], offsetX, offsetZ, wstep, hstep, partialTicks);
-                zLevel -= 1;
 
-                cells.put(new Rectangle(offsetX, offsetZ, wstep, hstep), cnt);
-                if (stars.isPresent()) {
-                    ConstellationInformation info = new ConstellationInformation(stars.get(), constellations[cnt]);
-                    starRectangles.put(cnt, info);
-                }
-
-                cnt++;
-            }
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glPopAttrib();
         }
+
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
 
         zLevel += 2;
         drawDrawnLines(r, partialTicks);
         zLevel -= 2;
 
-        currentInformation = new CellRenderInformation(cells, starRectangles);
-
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopAttrib();
     }
 
     private void drawDrawnLines(final Random r, final float pTicks) {
         if (!canStartDrawing()) {
-            if (currentLinesCell != -1) {
-                clearLines();
-                abortDrawing();
-            }
+            clearLines();
+            abortDrawing();
             return;
         }
 
@@ -206,7 +328,7 @@ public class GuiTelescope extends GuiWHScreen {
                 drawLine(l.start, l.end, func, linebreadth, true);
             }
 
-            if (currentDrawCell != -1 && start != null && end != null) {
+            if (start != null && end != null) {
                 Point adjStart = new Point(start.x - guiLeft, start.y - guiTop);
                 Point adjEnd = new Point(end.x - guiLeft, end.y - guiTop);
                 drawLine(adjStart, adjEnd, func, linebreadth, false);
@@ -251,21 +373,23 @@ public class GuiTelescope extends GuiWHScreen {
 
         tes.draw();
     }
-
     private void drawGridBackground(float partialTicks, boolean canSeeSky) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        Blending.PREALPHA.apply();
         World renderWorld = Minecraft.getMinecraft().world;
         int rgbFrom, rgbTo;
         if (canSeeSky) {
             float starBr = renderWorld.getStarBrightness(partialTicks) * 2;
-            rgbFrom = calcRGBFrom(starBr);
-            rgbTo = calcRGBTo(starBr);
+            float rain = renderWorld.getRainStrength(partialTicks);
+            rgbFrom = RenderingUtils.clampToColorWithMultiplier(calcRGBFromWithRain(starBr, rain), 1F).getRGB();
+            rgbTo   = RenderingUtils.clampToColorWithMultiplier(calcRGBToWithRain  (starBr, rain), 1F).getRGB();
         } else {
             rgbFrom = 0x000000;
-            rgbTo = 0x000000;
+            rgbTo =   0x000000;
         }
         int alphaMask = 0xFF000000; //100% opacity.
         RenderingUtils.drawGradientRect(guiLeft + 4, guiTop + 4, zLevel, guiLeft + guiWidth - 4, guiTop + guiHeight - 4, new Color(alphaMask | rgbFrom), new Color(alphaMask | rgbTo));
+        Blending.DEFAULT.apply();
         GL11.glPopAttrib();
     }
 
@@ -291,6 +415,24 @@ public class GuiTelescope extends GuiWHScreen {
     private static final float THRESHOLD_TO_START = 0.8F;
     private static final float THRESHOLD_TO_SHIFT_BLUEGRAD = 0.5F;
     private static final float THRESHOLD_TO_MAX_BLUEGRAD = 0.2F;
+
+    private int calcRGBToWithRain(float starBr, float rain) {
+        int to = calcRGBTo(starBr);
+        if(starBr <= THRESHOLD_TO_START) {
+            float starMul = 1F;
+            if(starBr > THRESHOLD_TO_SHIFT_BLUEGRAD) {
+                starMul = 1F - (starBr - THRESHOLD_TO_SHIFT_BLUEGRAD) / (THRESHOLD_TO_START - THRESHOLD_TO_SHIFT_BLUEGRAD);
+            }
+            float interpDeg = starMul * rain;
+            Color safeTo = RenderingUtils.clampToColor(to);
+            Vector3 vTo = new Vector3(safeTo.getRed(), safeTo.getGreen(), safeTo.getBlue()).divide(255D);
+            Vector3 rainC = new Vector3(102, 114, 137).divide(255D);
+            Vector3 interpVec = vTo.copyInterpolateWith(rainC, interpDeg);
+            Color newColor = RenderingUtils.clampToColor((int) (interpVec.getX() * 255), (int) (interpVec.getY() * 255), (int) (interpVec.getZ() * 255));
+            to = newColor.getRGB();
+        }
+        return RenderingUtils.clampToColor(to).getRGB();
+    }
 
     private int calcRGBTo(float starBr) {
         if (starBr >= THRESHOLD_TO_START) { //Blue ranges from 0 (1.0F starBr) to 170 (0.7F starBr)
@@ -318,6 +460,24 @@ public class GuiTelescope extends GuiWHScreen {
     private static final float THRESHOLD_FROM_SHIFT_BLUEGRAD = 0.6F;
     private static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
 
+    private int calcRGBFromWithRain(float starBr, float rain) {
+        int to = calcRGBFrom(starBr);
+        if(starBr <= THRESHOLD_FROM_START) {
+            float starMul = 1F;
+            if(starBr > THRESHOLD_FROM_SHIFT_BLUEGRAD) {
+                starMul = 1F - (starBr - THRESHOLD_FROM_SHIFT_BLUEGRAD) / (THRESHOLD_FROM_START - THRESHOLD_FROM_SHIFT_BLUEGRAD);
+            }
+            float interpDeg = starMul * rain;
+            Color safeTo = RenderingUtils.clampToColor(to);
+            Vector3 vTo = new Vector3(safeTo.getRed(), safeTo.getGreen(), safeTo.getBlue()).divide(255D);
+            Vector3 rainC = new Vector3(102, 114, 137).divide(255D);
+            Vector3 interpVec = vTo.copyInterpolateWith(rainC, interpDeg);
+            Color newColor = RenderingUtils.clampToColor((int) (interpVec.getX() * 255), (int) (interpVec.getY() * 255), (int) (interpVec.getZ() * 255));
+            to = newColor.getRGB();
+        }
+        return RenderingUtils.clampToColor(to).getRGB();
+    }
+
     private int calcRGBFrom(float starBr) {
         if (starBr >= THRESHOLD_FROM_START) { //Blue ranges from 0 (1.0F starBr) to 170 (0.7F starBr)
             return 0; //Black.
@@ -340,59 +500,6 @@ public class GuiTelescope extends GuiWHScreen {
         }
     }
 
-    private Optional<Map<StarLocation, Rectangle>> drawCellEffects(final Random rand, IConstellation c, int offsetX, int offsetY, int width, int height, final float partialTicks) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
-
-        RenderAstralSkybox.TEX_STAR_1.bind();
-        int starSize = 2;
-        for (int i = 0; i < 9 + rand.nextInt(18); i++) {
-            int innerOffsetX = starSize + rand.nextInt(width - starSize);
-            int innerOffsetY = starSize + rand.nextInt(height - starSize);
-            GL11.glPushMatrix();
-            float brightness = RenderConstellation.stdFlicker(owningPlayer.world.getWorldTime(), partialTicks, 10 + rand.nextInt(20));
-            brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
-            GL11.glColor4f(brightness, brightness, brightness, brightness);
-            drawRect(offsetX + innerOffsetX - starSize, offsetY + innerOffsetY - starSize, starSize * 2, starSize * 2);
-            GL11.glColor4f(1, 1, 1, 1);
-            GL11.glPopMatrix();
-        }
-
-        Map<StarLocation, Rectangle> rectangles = null;
-        if (c != null) {
-            zLevel += 1;
-
-            int wPart = ((int) (((float) width) * 0.1F));
-            int hPart = ((int) (((float) height) * 0.1F));
-
-            rectangles = RenderConstellation.renderConstellationIntoGUI(
-                    c,
-                    offsetX + wPart,
-                    offsetY + hPart,
-                    zLevel,
-                    width - (((int) (wPart * 1.5F))),
-                    height - (((int) (hPart * 1.5F))),
-                    2,
-                    new RenderConstellation.BrightnessFunction() {
-                        @Override
-                        public float getBrightness() {
-                            return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + rand.nextInt(15));
-                        }
-                    },
-                    ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()),
-                    true
-            );
-
-            zLevel -= 1;
-        }
-
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glPopAttrib();
-        return Optional.ofNullable(rectangles);
-    }
-
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -400,12 +507,36 @@ public class GuiTelescope extends GuiWHScreen {
         if (mouseButton == 0) {
             tryStartDrawing(mouseX, mouseY);
         }
+
+        if(mouseX <= guiLeft || mouseX >= guiLeft + guiWidth ||
+                mouseY <= guiTop || mouseY >= guiTop + guiHeight) {
+            clearLines();
+            abortDrawing();
+        }
+
+        Point p = new Point(mouseX, mouseY);
+        if(rectArrowCW != null && rectArrowCW.contains(p)) {
+            PktRotateTelescope pkt = new PktRotateTelescope(true, guiOwner.getWorld().provider.getDimension(), guiOwner.getPos());
+            PacketChannel.CHANNEL.sendToServer(pkt);
+            return;
+        }
+        if(rectArrowCCW != null && rectArrowCCW.contains(p)) {
+            PktRotateTelescope pkt = new PktRotateTelescope(false, guiOwner.getWorld().provider.getDimension(), guiOwner.getPos());
+            PacketChannel.CHANNEL.sendToServer(pkt);
+        }
+
     }
 
     @Override
     protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         if (clickedMouseButton == 0) {
             informMovement(mouseX, mouseY);
+        }
+
+        if(mouseX <= guiLeft || mouseX >= guiLeft + guiWidth ||
+                mouseY <= guiTop || mouseY >= guiTop + guiHeight) {
+            clearLines();
+            abortDrawing();
         }
     }
 
@@ -414,20 +545,23 @@ public class GuiTelescope extends GuiWHScreen {
         if (mouseButton == 0) {
             informRelease(mouseX, mouseY);
         }
+
+        if(mouseX <= guiLeft || mouseX >= guiLeft + guiWidth ||
+                mouseY <= guiTop || mouseY >= guiTop + guiHeight) {
+            clearLines();
+            abortDrawing();
+        }
     }
 
-    private int currentLinesCell = -1;
     private LinkedList<Line> drawnLines = new LinkedList<>();
-
-    private int currentDrawCell = -1;
     private Point start, end;
 
     private void tryStartDrawing(int mouseX, int mouseY) {
-        if (currentDrawCell != -1) return;
-
         if (!canStartDrawing()) return;
 
-        int cell = findCurrentCell(mouseX, mouseY);
+        start = new Point(mouseX, mouseY);
+        end = new Point(mouseX, mouseY);
+        /*int cell = findCurrentCell(mouseX, mouseY);
         if (currentLinesCell == -1) {
             if (cell != -1) {
                 currentDrawCell = cell;
@@ -440,16 +574,13 @@ public class GuiTelescope extends GuiWHScreen {
                 abortDrawing();
                 clearLines();
 
-                currentDrawCell = cell;
-                currentLinesCell = cell;
                 start = new Point(mouseX, mouseY);
                 end = new Point(mouseX, mouseY); //We want 2 different objects here though.
             } else {
-                currentDrawCell = cell;
                 start = new Point(mouseX, mouseY);
                 end = new Point(mouseX, mouseY); //We want 2 different objects here though.
             }
-        }
+        }*/
     }
 
     private boolean canStartDrawing() {
@@ -457,11 +588,10 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private void clearLines() {
-        currentLinesCell = -1;
         drawnLines.clear();
     }
 
-    private int findCurrentCell(int x, int y) {
+    /*private int findCurrentCell(int x, int y) {
         CellRenderInformation current = currentInformation;
         for (Rectangle r : current.cells.keySet()) {
             if (r.contains(x, y)) {
@@ -469,91 +599,89 @@ public class GuiTelescope extends GuiWHScreen {
             }
         }
         return -1;
-    }
+    }*/
 
     private void informMovement(int mouseX, int mouseY) {
-        if (currentDrawCell == -1) return;
+        if (!canStartDrawing()) return;
 
-        int cCell = findCurrentCell(mouseX, mouseY);
-        if (cCell != currentDrawCell) {
-            abortDrawing();
-        } else {
-            end = new Point(mouseX, mouseY);
-        }
+        end = new Point(mouseX, mouseY);
     }
 
     private void informRelease(int mouseX, int mouseY) {
-        if (currentDrawCell == -1) return;
+        if (!canStartDrawing()) return;
 
-        int cCell = findCurrentCell(mouseX, mouseY);
-        if (cCell != currentDrawCell) {
-            abortDrawing();
-        } else {
-            end = new Point(mouseX, mouseY);
-            pushDrawnLine(start, end);
-            abortDrawing();
+        if(start == null) return;
 
-            checkConstellation(currentLinesCell, drawnLines);
-        }
+        end = new Point(mouseX, mouseY);
+        pushDrawnLine(start, end);
+        abortDrawing();
+
+        checkConstellation(drawnLines);
     }
 
-    private void checkConstellation(int currentLinesCell, List<Line> drawnLines) {
-        if (!currentInformation.starRectangleMap.containsKey(currentLinesCell)) return;
+    private void checkConstellation(List<Line> drawnLines) {
+        RotationConstellationInformation infos = currentInformation.informationMap.get(rotation);
+        if(infos == null) return;
+        List<ConstellationInformation> renderInfos = infos.informations;
+        if(renderInfos.isEmpty()) return;
 
-        ConstellationInformation constellationInfo = currentInformation.starRectangleMap.get(currentLinesCell);
-        IConstellation c = constellationInfo.constellation;
-        if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) return;
+        lblInfos: for (ConstellationInformation info : renderInfos) {
+            IConstellation c = info.constellation;
+            if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
 
-        boolean has = false;
-        IItemHandler handle = Minecraft.getMinecraft().player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        List<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
-        for (ItemStack stack : papers) {
-            IConstellation con = ItemConstellationPaper.getConstellation(stack);
-            if(con.equals(c)) {
-                has = true;
-                break;
+            boolean has = false;
+            IItemHandler handle = Minecraft.getMinecraft().player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            List<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
+            for (ItemStack stack : papers) {
+                IConstellation con = ItemConstellationPaper.getConstellation(stack);
+                if(con.equals(c)) {
+                    has = true;
+                    break;
+                }
             }
-        }
-        if(!has) {
-            List<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
-            lblJournals:
-            for (ItemStack stack : journals) {
-                for (IConstellation con : ItemJournal.getStoredConstellations(stack)) {
-                    if(con.equals(c)) {
-                        has = true;
-                        break lblJournals;
+            if(!has) {
+                List<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
+                lblJournals:
+                for (ItemStack stack : journals) {
+                    for (IConstellation con : ItemJournal.getStoredConstellations(stack)) {
+                        if(con.equals(c)) {
+                            has = true;
+                            break lblJournals;
+                        }
                     }
                 }
             }
+
+            if(!has) continue;
+
+            List<StarConnection> sc = c.getStarConnections();
+            if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
+
+            Map<StarLocation, Rectangle> stars = info.starRectangles;
+
+            for (StarConnection connection : sc) {
+                Rectangle fromRect = stars.get(connection.from);
+                if (fromRect == null) {
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                    continue lblInfos;
+                }
+                Rectangle toRect = stars.get(connection.to);
+                if (toRect == null) {
+                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                    continue lblInfos;
+                }
+                if (!containsMatch(drawnLines, fromRect, toRect)) {
+                    continue lblInfos;
+                }
+            }
+
+            //We found a match. horray.
+            PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
+            clearLines();
+            abortDrawing();
+            return;
         }
 
-        if(!has) return;
-
-        List<StarConnection> sc = c.getStarConnections();
-        if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
-
-        Map<StarLocation, Rectangle> stars = constellationInfo.starRectangles;
-
-        for (StarConnection connection : sc) {
-            Rectangle fromRect = stars.get(connection.from);
-            if (fromRect == null) {
-                AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
-                return;
-            }
-            Rectangle toRect = stars.get(connection.to);
-            if (toRect == null) {
-                AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
-                return;
-            }
-            if (!containsMatch(drawnLines, fromRect, toRect)) {
-                return;
-            }
-        }
-
-        //We found a match. horray.
-        PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
-        clearLines();
-        abortDrawing();
     }
 
     private boolean containsMatch(List<Line> drawnLines, Rectangle r1, Rectangle r2) {
@@ -582,7 +710,6 @@ public class GuiTelescope extends GuiWHScreen {
     }
 
     private void abortDrawing() {
-        currentDrawCell = -1;
         start = null;
         end = null;
     }
@@ -592,15 +719,18 @@ public class GuiTelescope extends GuiWHScreen {
         return false;
     }
 
-    public static class CellRenderInformation {
+    public static class SkyConstellationDistribution {
 
-        private final Map<Rectangle, Integer> cells;
-        private final Map<Integer, ConstellationInformation> starRectangleMap;
+        private static final float constellationWH = 120;
+        private final Map<TileTelescope.TelescopeRotation, RotationConstellationInformation> informationMap = new HashMap<>();
 
-        public CellRenderInformation(Map<Rectangle, Integer> cells, Map<Integer, ConstellationInformation> starRectangleMap) {
-            this.cells = cells;
-            this.starRectangleMap = starRectangleMap;
-        }
+    }
+
+    public static class RotationConstellationInformation {
+
+        private final List<ConstellationInformation> informations = new LinkedList<>();
+        private final Map<Point, IConstellation> constellations = new HashMap<>();
+
     }
 
     public static class ConstellationInformation {

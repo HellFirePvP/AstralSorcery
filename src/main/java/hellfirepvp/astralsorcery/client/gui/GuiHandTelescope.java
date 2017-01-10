@@ -105,7 +105,8 @@ public class GuiHandTelescope extends GuiWHScreen {
             }
             if(!active.isEmpty()) {
                 IMajorConstellation bestGuess = (IMajorConstellation) active.getFirst();
-                if(handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
+                if(handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
+                        bestGuess.canDiscover(ResearchManager.clientProgress)) {
                     topFound = bestGuess;
                     selectedYaw = (random.nextFloat() * 360F) - 180F;
                     selectedPitch = -90F + random.nextFloat() * 45F;

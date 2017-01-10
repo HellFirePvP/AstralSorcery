@@ -326,8 +326,15 @@ public class TileAttunementAltar extends TileReceiverBase {
     }
 
     private void matchActiveConstellation() {
-        List<BlockPos> positions = translateConstellationPositions(activeFound);
         boolean valid = true;
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
+        if(wsh == null) {
+            valid = false;
+        } else if(!wsh.getActiveConstellations().contains(activeFound) ||
+                wsh.getCurrentDistribution(activeFound, (f) -> f) < 0.65) {
+            valid = false;
+        }
+        List<BlockPos> positions = translateConstellationPositions(activeFound);
         for (BlockPos pos : positions) {
             if(pos.equals(getPos())) continue;
             IBlockState state = world.getBlockState(pos);

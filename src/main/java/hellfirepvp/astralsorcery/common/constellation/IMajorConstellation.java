@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import javax.annotation.Nullable;
 
@@ -23,5 +25,10 @@ public interface IMajorConstellation extends IWeakConstellation {
 
     @Nullable
     public ConstellationPerkMap getPerkMap();
+
+    @Override
+    default boolean canDiscover(PlayerProgress progress) {
+        return true;
+    }
 
 }

@@ -9,9 +9,11 @@ Graphical next:
 Code-Wise next:
 
 - Change mounted telescope to what was discussed...
+- Make player unkillable in camera flight (oups forgot about that.)
 - Add weak constellations lucerna, horologium(SE), mineralis, bootes
 - Add 'random' recipes to infuser
 - Add make starlight collection in altars based on noise maps instead of build height or random numbers.
+- Add item that lets you 'see' those noise maps in some way.
 - Add a multiplier of said noise maps to starlight collection via crystals
 - [TBA]
 - Add a way to obtain the enhanced celestial collector crystals (Tier4)
