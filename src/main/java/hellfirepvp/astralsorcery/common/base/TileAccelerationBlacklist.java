@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
@@ -75,8 +78,12 @@ public class TileAccelerationBlacklist {
         blacklistTileClassAndSubclasses(TileSourceBase.class);
         blacklistTileClassAndSubclasses(TileRitualPedestal.class);
         blacklistTileClassAndSubclasses(TileAltar.class);
+        blacklistTileClassAndSubclasses(TileAttunementAltar.class);
+        blacklistTileClassAndSubclasses(TileCelestialCrystals.class);
+        blacklistTileClassAndSubclasses(TileFakeTree.class);
 
         blacklistTileClassNamePrefix("appeng"); //I don't wanna run into issues that come from accelerating any network stuffs.
+        blacklistTileClassNamePrefix("raoulvdberge/refinedstorage"); //Same as AE stuff
     }
 
 }

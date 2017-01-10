@@ -185,6 +185,7 @@ public class CommonProxy implements IGuiHandler {
         //TickTokenizedMaps
         manager.register(EventHandlerServer.spawnDenyRegions);
         manager.register(EventHandlerServer.perkCooldowns);
+        manager.register(EventHandlerServer.invulnerabilityCooldown);
     }
 
     public void postInit() {

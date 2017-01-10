@@ -177,7 +177,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         super.readCustomNBT(compound);
 
         this.playerMade = compound.getBoolean("player");
-        this.associatedType = (IMajorConstellation) IConstellation.readFromNBT(compound);
+        this.associatedType = (IWeakConstellation) IConstellation.readFromNBT(compound);
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
         this.enhanced = compound.getBoolean("enhanced");

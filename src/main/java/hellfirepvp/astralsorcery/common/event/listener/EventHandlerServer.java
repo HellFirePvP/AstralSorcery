@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
+import hellfirepvp.astralsorcery.common.util.data.TimeoutList;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
@@ -41,6 +42,7 @@ import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +61,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -83,6 +86,7 @@ public class EventHandlerServer {
 
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
+    public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
@@ -103,6 +107,14 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
+        EntityLivingBase living = event.getEntityLiving();
+        if(living != null && !living.isDead && living instanceof EntityPlayer) {
+            if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
+                event.setCanceled(true);
+                return;
+            }
+        }
+
         DamageSource source = event.getSource();
         if(source.getSourceOfDamage() != null) {
             EntityPlayer p;
@@ -143,6 +155,19 @@ public class EventHandlerServer {
                     }
                 }
                 event.setAmount(dmg);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onTarget(LivingSetAttackTargetEvent event) {
+        EntityLivingBase living = event.getTarget();
+        if(living != null && !living.isDead && living instanceof EntityPlayer) {
+            if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
+                event.getEntityLiving().setRevengeTarget(null);
+                if(event.getEntityLiving() instanceof EntityLiving) {
+                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+                }
             }
         }
     }

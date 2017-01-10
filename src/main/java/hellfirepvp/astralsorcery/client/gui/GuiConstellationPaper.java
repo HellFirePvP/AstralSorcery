@@ -16,8 +16,10 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -52,7 +54,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void testPhases() {
-        if(constellation instanceof IMajorConstellation) {
+        if(constellation instanceof IWeakConstellation) {
             Collections.addAll(phases, MoonPhase.values());
         } else if(constellation instanceof IMinorConstellation) {
             //Why this way? To maintain phase-order.
@@ -99,7 +101,6 @@ public class GuiConstellationPaper extends GuiWHScreen {
         GL11.glScaled(1.8, 1.8, 1.8);
         fr.drawString(locName, 0, 0, 0xAA4D4D4D, false);
         GL11.glPopMatrix();
-        //ofr.drawString(locName, offsetLeft, offsetTop, zLevel, null, 0F, 0);
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);
     }
@@ -125,20 +126,37 @@ public class GuiConstellationPaper extends GuiWHScreen {
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
         GL11.glColor4f(1, 1, 1, 1);
-        int size = 15;
-        int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
-        int offsetY = guiTop + 206;
-        for (int i = 0; i < phases.size(); i++) {
-            MoonPhase ph = phases.get(i);
-            MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
-            drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+        if(constellation instanceof IConstellationSpecialShowup) {
+            double scale = 1.8;
+            TextureHelper.refreshTextureBindState();
+            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            double length = fr.getStringWidth("? ? ?") * scale;
+            double offsetLeft = width / 2 - length / 2;
+            int offsetTop = guiTop + 207;
+            GL11.glPushMatrix();
+            GL11.glTranslated(offsetLeft + 10, offsetTop, 0);
+            GL11.glScaled(scale, scale, scale);
+            fr.drawString("? ? ?", 0, 0, 0xAA4D4D4D, false);
+            GL11.glPopMatrix();
+            GlStateManager.color(1, 1, 1, 1);
+            GL11.glColor4f(1, 1, 1, 1);
+            TextureHelper.refreshTextureBindState();
+        } else {
+            int size = 15;
+            int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
+            int offsetY = guiTop + 206;
+            for (int i = 0; i < phases.size(); i++) {
+                MoonPhase ph = phases.get(i);
+                MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
+                drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+            }
         }
     }
 
 
     private void drawScroll() {
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        Blending.DEFAULT.apply();
         drawWHRect(textureScroll);
         GL11.glDisable(GL11.GL_BLEND);
     }

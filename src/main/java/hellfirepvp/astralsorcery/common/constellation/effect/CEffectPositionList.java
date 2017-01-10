@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -22,7 +23,7 @@ import javax.annotation.Nullable;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(IMajorConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+    public CEffectPositionList(IWeakConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
         super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 

@@ -105,14 +105,21 @@ public class GuiTelescope extends GuiWHScreen {
         for (TileTelescope.TelescopeRotation rot : TileTelescope.TelescopeRotation.values()) {
             currentInformation.informationMap.put(rot, new RotationConstellationInformation());
         }
-
-        List<IWeakConstellation> constellations = ConstellationRegistry.getWeakConstellations();
-        for (IWeakConstellation cst : constellations) {
-            Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
-            do {
-                foundPoint = findEmptyPlace(r);
-            } while (foundPoint == null);
-            currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
+        if(handle != null) {
+            List<IConstellation> constellations = handle.getActiveConstellations();
+            List<IWeakConstellation> weakConstellations = new LinkedList<>();
+            for (IConstellation c : constellations) {
+                if(c instanceof IWeakConstellation) {
+                    weakConstellations.add((IWeakConstellation) c);
+                }
+            }
+            for (IWeakConstellation cst : weakConstellations) {
+                Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
+                do {
+                    foundPoint = findEmptyPlace(r);
+                } while (foundPoint == null);
+                currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
+            }
         }
     }
 
@@ -244,14 +251,14 @@ public class GuiTelescope extends GuiWHScreen {
             Blending.DEFAULT.apply();
 
             RenderAstralSkybox.TEX_STAR_1.bind();
-            int starSize = 2;
+            float starSize = 2.5F;
             for (int i = 0; i < 72 + r.nextInt(144); i++) {
-                int innerOffsetX = starSize + r.nextInt(guiWidth - starSize);
-                int innerOffsetY = starSize + r.nextInt(guiHeight - starSize);
+                float innerOffsetX = starSize + r.nextInt(MathHelper.floor(guiWidth  - starSize));
+                float innerOffsetY = starSize + r.nextInt(MathHelper.floor(guiHeight - starSize));
                 float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
                 brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
                 GL11.glColor4f(brightness, brightness, brightness, brightness);
-                drawRect(guiLeft + innerOffsetX - starSize, guiTop + innerOffsetY - starSize, starSize * 2, starSize * 2);
+                drawRectDetailed(guiLeft + innerOffsetX - starSize, guiTop + innerOffsetY - starSize, starSize * 2, starSize * 2);
                 GL11.glColor4f(1, 1, 1, 1);
             }
             zLevel -= 1;

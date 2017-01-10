@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
@@ -93,8 +94,15 @@ public class CEffectArmara extends ConstellationEffect {
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if(!e.isDead) {
-                    if(e instanceof IProjectile) { //TODO no
-                        e.setDead();
+                    if(e instanceof IProjectile) {
+                        double xRatio = (pos.getX() + 0.5) - e.posX;
+                        double zRatio = (pos.getZ() + 0.5) - e.posZ;
+                        float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+                        e.motionX /= 2.0D;
+                        e.motionZ /= 2.0D;
+                        e.motionX -= xRatio / f * 0.4;
+                        e.motionZ -= zRatio / f * 0.4;
+                        ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
                     } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                         ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
                     }

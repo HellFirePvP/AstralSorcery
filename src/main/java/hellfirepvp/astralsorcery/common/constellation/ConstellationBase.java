@@ -100,7 +100,7 @@ public abstract class ConstellationBase implements IConstellation {
         return name.hashCode();
     }
 
-    public static class Major extends ConstellationBase implements IMajorConstellation {
+    public static class Major extends Weak implements IMajorConstellation {
 
         public Major(String name) {
             super(name);
@@ -112,10 +112,25 @@ public abstract class ConstellationBase implements IConstellation {
             return ConstellationPerkMapRegistry.getPerkMap(this);
         }
 
-        @Override
+    }
+
+    public static class Weak extends ConstellationBase implements IWeakConstellation {
+
+        public Weak(String name) {
+            super(name);
+        }
+
         @Nullable
+        @Override
         public ConstellationEffect getRitualEffect() {
             return ConstellationEffectRegistry.getEffect(this);
+        }
+    }
+
+    public static abstract class WeakSpecial extends Weak implements IConstellationSpecialShowup {
+
+        public WeakSpecial(String name) {
+            super(name);
         }
 
     }

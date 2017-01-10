@@ -31,6 +31,7 @@ public class ConstellationRegistry {
     private static List<IMajorConstellation> majorConstellations = new LinkedList<>();
     private static List<IWeakConstellation> weakConstellations = new LinkedList<>();
     private static List<IMinorConstellation> minorConstellations = new LinkedList<>();
+    private static List<IConstellationSpecialShowup> specialShowupConstellations = new LinkedList<>();
 
     private static List<IConstellation> generalConstellationList = new LinkedList<>();
 
@@ -43,9 +44,12 @@ public class ConstellationRegistry {
         } else if(constellation instanceof IMinorConstellation) {
             minorConstellations.add((IMinorConstellation) constellation);
         } else {
-            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major: " + constellation.toString());
+            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
             AstralSorcery.log.warn("Skipping specific constellation registration...");
-            throw new IllegalStateException("Tried to register non-minor and non-major constellation.");
+            throw new IllegalStateException("Tried to register non-minor, non-weak and non-major constellation.");
+        }
+        if(constellation instanceof IConstellationSpecialShowup) {
+            specialShowupConstellations.add((IConstellationSpecialShowup) constellation);
         }
         generalConstellationList.add(constellation);
     }
@@ -55,6 +59,9 @@ public class ConstellationRegistry {
         if(name == null) return null;
 
         for(IConstellation c : majorConstellations) {
+            if(c.getUnlocalizedName().equals(name)) return c;
+        }
+        for(IConstellation c : weakConstellations) {
             if(c.getUnlocalizedName().equals(name)) return c;
         }
         for(IConstellation c : minorConstellations) {
@@ -80,6 +87,10 @@ public class ConstellationRegistry {
             if(c != null) resolved.add(c);
         }
         return resolved;
+    }
+
+    public static List<IConstellationSpecialShowup> getSpecialShowupConstellations() {
+        return Collections.unmodifiableList(specialShowupConstellations);
     }
 
     public static List<IWeakConstellation> getWeakConstellations() {

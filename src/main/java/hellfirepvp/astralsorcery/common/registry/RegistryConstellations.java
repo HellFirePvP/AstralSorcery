@@ -10,8 +10,10 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
@@ -34,11 +36,18 @@ public class RegistryConstellations {
     }
 
     private static void registerConstellations() {
+        //Major
         ConstellationRegistry.registerConstellation(discidia);
         ConstellationRegistry.registerConstellation(armara);
         ConstellationRegistry.registerConstellation(vicio);
         ConstellationRegistry.registerConstellation(aevitas);
-        //ConstellationRegistry.registerConstellation(evorsio);
+
+        //Weak
+        ConstellationRegistry.registerConstellation(lucerna);
+        ConstellationRegistry.registerConstellation(mineralis);
+        ConstellationRegistry.registerConstellation(horologium);
+        ConstellationRegistry.registerConstellation(octans);
+        ConstellationRegistry.registerConstellation(bootes);
     }
 
     private static void buildMajorConstellations() {
@@ -118,21 +127,82 @@ public class RegistryConstellations {
         aevitas.addConnection(sl6, sl8);
         aevitas.addConnection(sl4, sl9);
 
-        //evorsio = new ConstellationBase.Major("evorsio");
-        //sl1 = evorsio.addStar(15, 13);
-        //sl2 = evorsio.addStar(3, 19);
-        //sl3 = evorsio.addStar(7, 7);
-        //sl4 = evorsio.addStar(26, 9);
-        //sl5 = evorsio.addStar(21, 19);
-        //sl6 = evorsio.addStar(24, 3);
-        //sl7 = evorsio.addStar(11, 25);
+        lucerna = new ConstellationBase.Weak("lucerna");
+        sl1 = lucerna.addStar(15, 13);
+        sl2 = lucerna.addStar(3, 5);
+        sl3 = lucerna.addStar(25, 3);
+        sl4 = lucerna.addStar(28, 16);
+        sl5 = lucerna.addStar(22, 27);
+        sl6 = lucerna.addStar(6, 26);
 
-        //evorsio.addConnection(sl1, sl2);
-        //evorsio.addConnection(sl2, sl3);
-        //evorsio.addConnection(sl1, sl4);
-        //evorsio.addConnection(sl4, sl5);
-        //evorsio.addConnection(sl1, sl6);
-        //evorsio.addConnection(sl1, sl7);
+        lucerna.addConnection(sl1, sl2);
+        lucerna.addConnection(sl1, sl3);
+        lucerna.addConnection(sl1, sl4);
+        lucerna.addConnection(sl1, sl5);
+        lucerna.addConnection(sl1, sl6);
+
+        mineralis = new ConstellationBase.Weak("mineralis");
+        sl1 = mineralis.addStar(16, 2);
+        sl2 = mineralis.addStar(8, 8);
+        sl3 = mineralis.addStar(9, 22);
+        sl4 = mineralis.addStar(15, 29);
+        sl5 = mineralis.addStar(23, 21);
+        sl6 = mineralis.addStar(24, 9);
+
+        mineralis.addConnection(sl1, sl2);
+        mineralis.addConnection(sl2, sl3);
+        mineralis.addConnection(sl3, sl4);
+        mineralis.addConnection(sl4, sl5);
+        mineralis.addConnection(sl5, sl6);
+        mineralis.addConnection(sl6, sl1);
+        mineralis.addConnection(sl1, sl4);
+
+        horologium = new ConstellationBase.WeakSpecial("horologium") {
+            @Override
+            public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
+                return isDayOfSolarEclipse(day);
+            }
+
+            @Override
+            public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showsUp) {
+                return showsUp ? 1F : 0.6F;
+            }
+        };
+        sl1 = horologium.addStar(7, 6);
+        sl2 = horologium.addStar(22, 5);
+        sl3 = horologium.addStar(5, 27);
+        sl4 = horologium.addStar(23, 25);
+
+        horologium.addConnection(sl1, sl2);
+        horologium.addConnection(sl2, sl3);
+        horologium.addConnection(sl3, sl4);
+        horologium.addConnection(sl4, sl1);
+
+        octans = new ConstellationBase.Weak("octans");
+        sl1 = octans.addStar(3, 6);
+        sl2 = octans.addStar(11, 11);
+        sl3 = octans.addStar(18, 4);
+        sl4 = octans.addStar(18, 29);
+
+        octans.addConnection(sl1, sl2);
+        octans.addConnection(sl2, sl3);
+        octans.addConnection(sl3, sl4);
+        octans.addConnection(sl2, sl4);
+
+        bootes = new ConstellationBase.Weak("bootes");
+        sl1 = bootes.addStar(9, 22);
+        sl2 = bootes.addStar(3, 14);
+        sl3 = bootes.addStar(22, 27);
+        sl4 = bootes.addStar(16, 5);
+        sl5 = bootes.addStar(26, 3);
+        sl6 = bootes.addStar(24, 11);
+
+        bootes.addConnection(sl1, sl2);
+        bootes.addConnection(sl1, sl3);
+        bootes.addConnection(sl1, sl4);
+        bootes.addConnection(sl1, sl6);
+        bootes.addConnection(sl4, sl5);
+        bootes.addConnection(sl5, sl6);
     }
 
 }

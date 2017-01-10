@@ -16,12 +16,10 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -69,7 +67,6 @@ public class TransmissionClassRegistry {
         register(new TileAltar.AltarReceiverProvider());
         register(new TileWell.WellReceiverProvider());
         register(new TileRitualPedestal.PedestalReceiverProvider());
-        register(new TileAttunementAltar.AttunementAltarReceiverProvider());
         register(new TileStarlightInfuser.StarlightInfuserReceiverProvider());
         register(new TileTreeBeacon.TreeBeaconReceiverProvider());
 

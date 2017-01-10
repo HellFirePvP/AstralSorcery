@@ -124,6 +124,17 @@ public abstract class GuiWHScreen extends GuiScreen {
         tes.draw();
     }
 
+    protected void drawRectDetailed(float offsetX, float offsetY, float width, float height) {
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + width, offsetY,          zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX,         offsetY,          zLevel).tex(0, 0).endVertex();
+        tes.draw();
+    }
+
     protected void drawRect(int offsetX, int offsetY, int width, int height) {
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();

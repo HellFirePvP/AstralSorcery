@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositio
 import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
@@ -116,41 +118,53 @@ public class WorldSkyHandler {
         Arrays.fill(occupied, false);
         LinkedList<IConstellation> constellations = new LinkedList<>(ConstellationRegistry.getMinorConstellations());
         Collections.shuffle(constellations, seededRand);
-        LinkedList<IWeakConstellation> majors = new LinkedList<>(ConstellationRegistry.getWeakConstellations());
-        Collections.shuffle(majors, seededRand);
-        majors.forEach(constellations::addFirst);
+        LinkedList<IWeakConstellation> weakAndMajor = new LinkedList<>(ConstellationRegistry.getWeakConstellations());
+        Collections.shuffle(weakAndMajor, seededRand);
+        weakAndMajor.forEach(constellations::addFirst);
 
         for (IConstellation c : constellations) {
-            int start;
-            boolean foundFree = false;
-            int tries = 5;
-            do {
-                tries--;
-                start = seededRand.nextInt(8);
+            if(c instanceof IConstellationSpecialShowup) continue;
 
-                int needed = Math.min(3, getFreeSlots(occupied));
-                int count = collect(start, occupied);
-                if(count >= needed) {
-                    foundFree = true;
+            if(c instanceof IMinorConstellation) {
+                for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases()) {
+                    initialValueMappings.get(ph.ordinal()).add(c);
                 }
-            } while (!foundFree && tries > 0);
-            occupySlots(start, occupied);
-            if(getFreeSlots(occupied) <= 0) {
-                Arrays.fill(occupied, false);
-            }
-            for (int i = 0; i < 5; i++) {
-                int index = (start + i) % 8;
-                initialValueMappings.get(index).addLast(c);
-            }
-            if(c instanceof IMajorConstellation) {
-                for (int i = 0; i < 8; i++) {
-                    int index = (start + i) % 8;
-                    float distr = spSine(start, index);
-                    dayDistributionMap.get(index).put(c, distr);
-                }
-            } else {
                 for (int i = 0; i < 8; i++) {
                     dayDistributionMap.get(i).put(c, 0F);
+                }
+            } else {
+                int start;
+                boolean foundFree = false;
+                int tries = 5;
+                do {
+                    tries--;
+                    start = seededRand.nextInt(8);
+
+                    int needed = Math.min(3, getFreeSlots(occupied));
+                    int count = collect(start, occupied);
+                    if(count >= needed) {
+                        foundFree = true;
+                    }
+                } while (!foundFree && tries > 0);
+                occupySlots(start, occupied);
+                if(getFreeSlots(occupied) <= 0) {
+                    Arrays.fill(occupied, false);
+                }
+                for (int i = 0; i < 5; i++) {
+                    int index = (start + i) % 8;
+                    initialValueMappings.get(index).addLast(c);
+                }
+
+                if(c instanceof IWeakConstellation) {
+                    for (int i = 0; i < 8; i++) {
+                        int index = (start + i) % 8;
+                        float distr = spSine(start, index);
+                        dayDistributionMap.get(index).put(c, distr);
+                    }
+                } else {
+                    for (int i = 0; i < 8; i++) {
+                        dayDistributionMap.get(i).put(c, 0F);
+                    }
                 }
             }
         }
@@ -165,7 +179,7 @@ public class WorldSkyHandler {
 
     private void scheduleDayProgression(World w, int days) {
         for (int i = 0; i < days; i++) {
-            doConstellationIteration();
+            doConstellationIteration(w);
         }
 
         if(!w.isRemote) {
@@ -177,7 +191,7 @@ public class WorldSkyHandler {
         }
     }
 
-    private void doConstellationIteration() {
+    private void doConstellationIteration(World w) {
         activeConstellations.clear();
         activeDistributions.clear();
 
@@ -186,7 +200,17 @@ public class WorldSkyHandler {
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
         }
+
         activeDistributions = Maps.newHashMap(dayDistributionMap.get(activeDay));
+
+        for (IConstellationSpecialShowup special : ConstellationRegistry.getSpecialShowupConstellations()) {
+            if(special.doesShowUp(this, w, lastRecordedDay)) {
+                activeConstellations.addLast(special);
+                activeDistributions.put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, true), 0F, 1F));
+            } else {
+                activeDistributions.put(special, MathHelper.clamp(special.getDistribution(this, w, lastRecordedDay, false), 0F, 1F));
+            }
+        }
     }
 
     private void occupySlots(int start, boolean[] occupied) {

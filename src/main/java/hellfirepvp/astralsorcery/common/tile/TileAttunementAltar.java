@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
@@ -42,10 +43,7 @@ import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
-import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
-import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
-import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -78,6 +76,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 
 /**
@@ -87,8 +86,9 @@ import java.util.function.Function;
  * Created by HellFirePvP
  * Date: 28.11.2016 / 10:26
  */
-public class TileAttunementAltar extends TileReceiverBase {
+public class TileAttunementAltar extends TileEntityTick {
 
+    private static final Random rand = new Random();
     private static final Function<ItemStack, Boolean> crystalAcceptor = stack -> {
 
         if(!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
@@ -136,6 +136,9 @@ public class TileAttunementAltar extends TileReceiverBase {
     private Object clientActiveCameraFlight = null;
 
     @Override
+    protected void onFirstTick() {}
+
+    @Override
     public void update() {
         super.update();
 
@@ -172,7 +175,7 @@ public class TileAttunementAltar extends TileReceiverBase {
                     }
                 } else if(mode == 1) {
                     //No isNight check since well.. we don't wanna kick him from the camera flight
-                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead) {
+                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead || new Vector3(activeEntity).distance(new Vector3(this)) > 4) {
                         setAttunementState(0, null);
                     } else {
                         if(playerAttunementWaitTick > 0) {
@@ -183,6 +186,11 @@ public class TileAttunementAltar extends TileReceiverBase {
                             playerAttunementWaitTick = -1;
                         }
                         this.serverSyncAttTick++;
+                        if(EventHandlerServer.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
+                            EventHandlerServer.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
+                        } else {
+                            EventHandlerServer.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
+                        }
                         markForUpdate();
                     }
                 } else if(mode == 2) {
@@ -474,17 +482,17 @@ public class TileAttunementAltar extends TileReceiverBase {
         if(activeFound == null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             if(player != null && player.getDistanceSq(getPos()) <= 100) {
-                IMajorConstellation held = null;
+                IWeakConstellation held = null;
                 if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemMainhand());
-                    if(cst != null && cst instanceof IMajorConstellation) {
-                        held = (IMajorConstellation) cst;
+                    if(cst != null && cst instanceof IWeakConstellation) {
+                        held = (IWeakConstellation) cst;
                     }
                 }
                 if(held == null && player.getHeldItemOffhand() != null && player.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemOffhand());
-                    if(cst != null && cst instanceof IMajorConstellation) {
-                        held = (IMajorConstellation) cst;
+                    if(cst != null && cst instanceof IWeakConstellation) {
+                        held = (IWeakConstellation) cst;
                     }
                 }
                 if(held != null) {
@@ -883,21 +891,8 @@ public class TileAttunementAltar extends TileReceiverBase {
         }
     }
 
-    @Nullable
-    @Override
-    public String getUnLocalizedDisplayName() {
-        return "tile.BlockAttunementAltar.name";
-    }
-
-    private void receiveStarlight(IMajorConstellation type, double amount) {}
-
-    @Override
-    public ITransmissionReceiver provideEndpoint(BlockPos at) {
-        return new TransmissionReceiverAttunementAltar(at);
-    }
-
     @SideOnly(Side.CLIENT)
-    public void highlightConstellation(IMajorConstellation highlight) {
+    public void highlightConstellation(IWeakConstellation highlight) {
         this.highlight = highlight;
         this.highlightActive = 4;
     }
@@ -965,7 +960,7 @@ public class TileAttunementAltar extends TileReceiverBase {
         }
     }
 
-    public static class TransmissionReceiverAttunementAltar extends SimpleTransmissionReceiver {
+    /*public static class TransmissionReceiverAttunementAltar extends SimpleTransmissionReceiver {
 
         public TransmissionReceiverAttunementAltar(@Nonnull BlockPos thisPos) {
             super(thisPos);
@@ -973,12 +968,12 @@ public class TileAttunementAltar extends TileReceiverBase {
 
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
-            /*if(isChunkLoaded) {
+            if(isChunkLoaded) {
                 TileAttunementAltar ta = MiscUtils.getTileAt(world, getPos(), TileAttunementAltar.class, false);
                 if(ta != null) {
                     ta.receiveStarlight(type, amount);
                 }
-            }*/
+            }
         }
 
         @Override
@@ -1000,6 +995,6 @@ public class TileAttunementAltar extends TileReceiverBase {
             return AstralSorcery.MODID + ":TransmissionReceiverAttunementAltar";
         }
 
-    }
+    }*/
 
 }

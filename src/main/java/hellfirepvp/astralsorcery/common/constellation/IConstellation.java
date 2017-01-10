@@ -27,6 +27,7 @@ import java.util.List;
 public interface IConstellation {
 
     static final Color major = new Color(40, 67, 204);
+    static final Color weak  = new Color(67, 44, 176);
     static final Color minor = new Color(93, 25, 127);
 
     /**
@@ -57,7 +58,10 @@ public interface IConstellation {
         if(this instanceof IMinorConstellation) {
             return minor;
         }
-        return major;
+        if(this instanceof IMajorConstellation) {
+            return major;
+        }
+        return weak;
     }
 
     default public boolean canDiscover(PlayerProgress progress) {

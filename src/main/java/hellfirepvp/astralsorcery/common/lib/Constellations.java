@@ -28,5 +28,8 @@ public class Constellations {
 
     public static IWeakConstellation mineralis;
     public static IWeakConstellation lucerna;
+    public static IWeakConstellation bootes;
+    public static IWeakConstellation octans;
+    public static IWeakConstellation horologium;
 
 }

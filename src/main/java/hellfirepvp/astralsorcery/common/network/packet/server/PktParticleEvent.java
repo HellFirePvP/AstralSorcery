@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
@@ -108,9 +110,9 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
         CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
-        //CE_ACCEL_TILE,
+        CE_ACCEL_TILE,
         CE_DMG_ENTITY,
-        //CE_WATER_FISH,
+        CE_WATER_FISH,
         //CE_TREE_VORTEX,
 
         RT_DEBUG;
@@ -140,12 +142,12 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectAevitas::playParticles;
                 //case CE_MELT_BLOCK:
                 //    return CEffectFornax::playParticles;
-                //case CE_ACCEL_TILE:
-                //    return CEffectHorologium::playParticles;
+                case CE_ACCEL_TILE:
+                    return CEffectHorologium::playParticles;
                 case CE_DMG_ENTITY:
                     return CEffectDiscidia::playParticles;
-                //case CE_WATER_FISH:
-                //    return CEffectOctans::playParticles;
+                case CE_WATER_FISH:
+                    return CEffectOctans::playParticles;
                 case TREE_VORTEX:
                     return TileTreeBeacon::playParticles;
                 case RT_DEBUG:

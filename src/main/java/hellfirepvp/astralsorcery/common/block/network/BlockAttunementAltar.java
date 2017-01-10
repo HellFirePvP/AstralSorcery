@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -40,7 +41,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 28.11.2016 / 10:20
  */
-public class BlockAttunementAltar extends BlockStarlightNetwork {
+public class BlockAttunementAltar extends BlockContainer {
 
     public static final AxisAlignedBB boxAttunementAlar = new AxisAlignedBB(-2D / 16D, 0, -2D / 16D, 18D / 16D, 6D / 16D, 18D / 16D);
 
