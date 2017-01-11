@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologi
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -44,6 +45,7 @@ public class ConstellationEffectRegistry {
         register(Constellations.aevitas,    CEffectAevitas::new);
         register(Constellations.discidia,   CEffectDiscidia::new);
         register(Constellations.armara,     CEffectArmara::new);
+        register(Constellations.vicio,      CEffectVicio::new);
 
         register(Constellations.mineralis,  CEffectMineralis::new);
         register(Constellations.lucerna,    CEffectLucerna::new);
@@ -58,6 +60,7 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectAevitas());
         Config.addDynamicEntry(new CEffectDiscidia());
         Config.addDynamicEntry(new CEffectArmara());
+        Config.addDynamicEntry(new CEffectVicio());
 
         Config.addDynamicEntry(new CEffectHorologium());
         Config.addDynamicEntry(new CEffectMineralis());

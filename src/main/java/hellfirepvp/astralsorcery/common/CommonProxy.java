@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
+import hellfirepvp.astralsorcery.common.registry.RegistryIntegrations;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.registry.RegistryPerks;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
@@ -83,15 +84,6 @@ import net.minecraftforge.oredict.OreDictionary;
  * Date: 07.05.2016 / 00:23
  */
 public class CommonProxy implements IGuiHandler {
-
-    //new todo
-    /*
-    - bookmarks are a bit 'too strong'/new in relation to the rest of the book
-    - mention that marble spawns in the world. somewhere.
-    - check weird sky rendering interation with optifine
-     */
-
-    //TODO generally: Hide things that are not to be seen from JEI/related
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
@@ -193,6 +185,8 @@ public class CommonProxy implements IGuiHandler {
 
         AltarRecipeRegistry.compileRecipes();
         InfusionRecipeRegistry.compileRecipes();
+
+        RegistryIntegrations.init();
     }
 
     public void registerVariantName(Item item, String name) {}

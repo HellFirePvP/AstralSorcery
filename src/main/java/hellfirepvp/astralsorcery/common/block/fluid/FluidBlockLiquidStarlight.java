@@ -18,6 +18,7 @@ import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
@@ -80,7 +81,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
         super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
 
         if (entityIn instanceof EntityPlayer) {
-            ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(Potion.getPotionById(16), 300, 0, true, true));
+            ((EntityPlayer) entityIn).addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
         }
     }
 }

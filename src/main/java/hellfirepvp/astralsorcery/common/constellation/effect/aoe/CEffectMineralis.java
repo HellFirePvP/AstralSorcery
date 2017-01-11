@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -15,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
@@ -25,8 +28,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,10 +50,23 @@ public class CEffectMineralis extends CEffectPositionList {
     public static int maxCount = 2;
 
     public CEffectMineralis() {
-        super(/*Constellations.mineralis*/null, "mineralis", searchRange, maxCount, (world, pos) -> {
+        super(Constellations.mineralis, "mineralis", searchRange, maxCount, (world, pos) -> {
             IBlockState state = world.getBlockState(pos);
             return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
         });
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal, float percEffectVisibility, boolean extendedEffects) {
+        if(rand.nextBoolean()) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,
+                    pos.getY() + rand.nextFloat() * 2 + 0.5,
+                    pos.getZ() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5);
+            p.motion(0, 0, 0).gravity(-0.01);
+            p.scale(0.45F).setColor(new Color(188, 188, 188)).setMaxAge(55);
+        }
     }
 
     @Override

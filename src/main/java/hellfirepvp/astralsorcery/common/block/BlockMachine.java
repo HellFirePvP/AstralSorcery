@@ -348,6 +348,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {

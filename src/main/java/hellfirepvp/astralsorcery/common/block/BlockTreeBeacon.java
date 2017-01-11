@@ -54,6 +54,11 @@ public class BlockTreeBeacon extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return null;
     }

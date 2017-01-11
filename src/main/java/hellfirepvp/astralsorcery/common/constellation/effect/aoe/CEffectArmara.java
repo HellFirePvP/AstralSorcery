@@ -23,7 +23,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -49,6 +51,7 @@ public class CEffectArmara extends ConstellationEffect {
     public static int protectionRange = 16;
 
     private int rememberedTimeout = 0;
+    public static int potionAmplifier = 0;
 
     public CEffectArmara() {
         super(Constellations.armara, "armara");
@@ -64,6 +67,23 @@ public class CEffectArmara extends ConstellationEffect {
             ctrl.setOrbitRadius(0.8 + rand.nextFloat() * 0.7);
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));
+        }
+        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(protectionRange));
+        if(!projectiles.isEmpty()) {
+            for (Entity e : projectiles) {
+                if(!e.isDead) {
+                    if(e instanceof IProjectile) {
+                        double xRatio = (pos.getX() + 0.5) - e.posX;
+                        double zRatio = (pos.getZ() + 0.5) - e.posZ;
+                        float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+                        e.motionX /= 2.0D;
+                        e.motionZ /= 2.0D;
+                        e.motionX -= xRatio / f * 0.4;
+                        e.motionZ -= zRatio / f * 0.4;
+                        ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
+                    }
+                }
+            }
         }
     }
 
@@ -109,6 +129,12 @@ public class CEffectArmara extends ConstellationEffect {
                 }
             }
         }
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(protectionRange));
+        for (EntityLivingBase entity : entities) {
+            if(!entity.isDead) {
+                entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));
+            }
+        }
 
         return true;
     }
@@ -136,6 +162,7 @@ public class CEffectArmara extends ConstellationEffect {
     public void loadFromConfig(Configuration cfg) {
         protectionRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 16, 1, 32, "Defines the radius (in blocks) in which the ritual will stop mob spawning and projectiles.");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        potionAmplifier = cfg.getInt(getKey() + "ResistanceAmplifier", getConfigurationSection(), 0, 0, Short.MAX_VALUE, "Set the amplifier for the resistance potion effect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 

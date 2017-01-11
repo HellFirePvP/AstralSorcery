@@ -19,7 +19,11 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -28,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.awt.*;
 
 /**
@@ -44,6 +49,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
 
     public static int searchRange = 16;
     public static int maxCropCount = 200;
+    public static int potionAmplifier = 1;
 
     public CEffectAevitas() {
         super(Constellations.aevitas, "aevitas", searchRange, maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
@@ -57,9 +63,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
                     pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,
                     pos.getY() + rand.nextFloat() * 2 + 0.5,
                     pos.getZ() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5);
-            p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
+            p.motion(0, 0, 0).gravity(0.05);
             p.scale(0.45F).setColor(new Color(63, 255, 63)).setMaxAge(35);
         }
     }
@@ -90,6 +94,13 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         }
 
         if(findNewPosition(world, pos)) changed = true;
+
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(searchRange));
+        for (EntityLivingBase entity : entities) {
+            if(!entity.isDead) {
+                entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 30, potionAmplifier));
+            }
+        }
 
         return changed;
     }
@@ -122,6 +133,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 16, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid crops.");
         maxCropCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 200, 1, 4000, "Defines the amount of crops the ritual can cache at max. count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
+        potionAmplifier = cfg.getInt(getKey() + "RegenerationAmplifier", getConfigurationSection(), 1, 0, Short.MAX_VALUE, "Set the amplifier for the regeneration potion effect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 

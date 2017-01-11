@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -79,7 +80,7 @@ public abstract class AbstractInfusionRecipe {
         return output;
     }
 
-    public ItemStack getOutput(TileStarlightInfuser infuser) {
+    public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
         return output;
     }
 

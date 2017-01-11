@@ -38,7 +38,7 @@ public abstract class SimpleIndependentSource implements IIndependentStarlightSo
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.starlightType = (IMajorConstellation) IConstellation.readFromNBT(compound);
+        this.starlightType = (IWeakConstellation) IConstellation.readFromNBT(compound);
     }
 
     @Override

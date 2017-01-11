@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -43,7 +44,7 @@ public class CEffectLucerna extends ConstellationEffect {
     private int rememberedTimeout = 0;
 
     public CEffectLucerna() {
-        super(/*Constellations.lucerna*/null, "lucerna");
+        super(Constellations.lucerna, "lucerna");
     }
 
     @Override

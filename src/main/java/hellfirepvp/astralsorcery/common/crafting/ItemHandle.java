@@ -37,28 +37,35 @@ import java.util.List;
  */
 public class ItemHandle {
 
+    public final Type handleType;
+
     private ItemStack applicableItem = null;
     private String oreDictName = null;
     private FluidStack fluidTypeAndAmount = null;
 
     public ItemHandle(String oreDictName) {
         this.oreDictName = oreDictName;
+        this.handleType = Type.OREDICT;
     }
 
     public ItemHandle(Fluid fluid) {
         this.fluidTypeAndAmount = new FluidStack(fluid, 1000);
+        this.handleType = Type.FLUID;
     }
 
     public ItemHandle(Fluid fluid, int mbAmount) {
         this.fluidTypeAndAmount = new FluidStack(fluid, mbAmount);
+        this.handleType = Type.FLUID;
     }
 
     public ItemHandle(FluidStack compareStack) {
         this.fluidTypeAndAmount = compareStack.copy();
+        this.handleType = Type.FLUID;
     }
 
     public ItemHandle(ItemStack matchStack) {
         this.applicableItem = ItemUtils.copyStackWithSize(matchStack, matchStack.stackSize);
+        this.handleType = Type.STACK;
     }
 
     public List<ItemStack> getApplicableItems() {
@@ -117,6 +124,14 @@ public class ItemHandle {
         } else {
             return ItemUtils.stackEqualsNonNBT(applicableItem, stack);
         }
+    }
+
+    public static enum Type {
+
+        OREDICT,
+        STACK,
+        FLUID
+
     }
 
 }

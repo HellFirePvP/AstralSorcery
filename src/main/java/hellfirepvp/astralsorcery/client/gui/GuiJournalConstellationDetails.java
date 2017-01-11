@@ -19,8 +19,10 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -77,7 +79,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             for(String element : segment.split(" ")) {
                 String cacheStr = cache.toString();
                 String built = cacheStr.isEmpty() ? element : cacheStr + " " + element;
-                if(fr.getStringWidth(built) > IJournalPage.DEFAULT_WIDTH) {
+                if(fr.getStringWidth(built) > IJournalPage.DEFAULT_WIDTH - 20) {
                     lines.add(cacheStr);
                     cache = new StringBuilder();
                     cache.append(element);
@@ -96,7 +98,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testPhases() {
-        if(constellation instanceof IMajorConstellation) {
+        if(constellation instanceof IWeakConstellation) {
             Collections.addAll(phases, MoonPhase.values());
         } else if(constellation instanceof IMinorConstellation) {
             //Why this way? To maintain phase-order.
@@ -187,30 +189,35 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void drawPhaseInformation() {
-        GL11.glColor4f(1F, 1F, 1F, 0.6F);
-        //GL11.glPushMatrix();
-        //fontRenderer.zLevel = zLevel;
-        //fontRenderer.font_size_multiplicator = 0.05F;
-        //String trCh = detailed ? I18n.format(constellation.queryTier().chanceAsRarityUnlocName()).toUpperCase() : "???";
-        //String chance = I18n.format("tier.chance").toUpperCase();
-
-        //fontRenderer.drawString(chance, guiLeft + 228, guiTop + 154, zLevel, null, 0.7F, 0);
-        //TextureHelper.refreshTextureBindState();
-
-        //fontRenderer.font_size_multiplicator = 0.045F;
-        //fontRenderer.drawString(trCh, guiLeft + 230, guiTop + 175, zLevel, null, 0.7F, 0);
-        //GL11.glPopMatrix();
-
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        int size = 19;
-        int offsetX = 95 + (width / 2) - (phases.size() * (size + 2)) / 2;
-        int offsetY = 199 + guiTop;
-        for (int i = 0; i < phases.size(); i++) {
-            MoonPhase ph = phases.get(i);
-            MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
-            drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+        if(constellation instanceof IConstellationSpecialShowup) {
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            double scale = 1.8;
+            TextureHelper.refreshTextureBindState();
+            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            double length = fr.getStringWidth("? ? ?") * scale;
+            double offsetLeft = guiLeft + 296 - length / 2;
+            int offsetTop = guiTop + 199;
+            GL11.glPushMatrix();
+            GL11.glTranslated(offsetLeft + 10, offsetTop, 0);
+            GL11.glScaled(scale, scale, scale);
+            fr.drawStringWithShadow("? ? ?", 0, 0, 0xCCDDDDDD);
+            GL11.glPopMatrix();
+            GlStateManager.color(1, 1, 1, 1);
+            GL11.glColor4f(1, 1, 1, 1);
+            TextureHelper.refreshTextureBindState();
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+        } else {
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.apply();
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            int size = 19;
+            int offsetX = 95 + (width / 2) - (phases.size() * (size + 2)) / 2;
+            int offsetY = 199 + guiTop;
+            for (int i = 0; i < phases.size(); i++) {
+                MoonPhase ph = phases.get(i);
+                MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
+                drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+            }
         }
     }
 

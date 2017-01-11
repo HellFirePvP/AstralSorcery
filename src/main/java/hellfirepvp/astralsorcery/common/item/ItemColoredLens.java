@@ -31,6 +31,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -180,7 +181,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     break;
                 case NIGHT:
                     if(living.getEntityWorld().rand.nextFloat() > percStrength) return;
-                    living.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 300, 0, true, true));
+                    living.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
                     break;
             }
         }

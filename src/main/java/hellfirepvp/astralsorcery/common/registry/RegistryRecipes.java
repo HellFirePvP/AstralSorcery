@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -34,15 +35,16 @@ import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
+import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -91,6 +93,7 @@ public class RegistryRecipes {
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;
+    public static SmeltingRecipe rSmeltAquamarineOre;
 
     //Tools
     public static CrystalToolRecipe rCToolRockPick, rCToolRockShovel, rCToolRockAxe, rCToolRockSword;
@@ -108,7 +111,25 @@ public class RegistryRecipes {
     }
 
     public static void initInfusionRecipes() {
-        InfusionRecipeRegistry.registerBasicInfusion(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
+        registerBasicInfusion(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
+        registerBasicInfusion(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),         new ItemStack(Blocks.GLASS_PANE, 1, 0));
+
+        registerBasicInfusion(new ItemStack(Blocks.CLAY, 1, 0),           new ItemStack(Blocks.SAND, 1, 0));
+        registerBasicInfusion(new ItemStack(Blocks.GRASS, 1, 0),          new ItemStack(Blocks.DIRT, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.ENDER_EYE, 1, 0),       new ItemStack(Items.ENDER_PEARL, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.GLOWSTONE_DUST, 1, 0),  new ItemStack(Items.GUNPOWDER, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.DYE, 4, 15),            new ItemStack(Items.BONE, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.BLAZE_POWDER, 4, 0),    new ItemStack(Items.BLAZE_ROD, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.MAGMA_CREAM, 1, 0),     new ItemStack(Items.SLIME_BALL, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.GOLDEN_CARROT, 1, 0),   new ItemStack(Items.CARROT, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.SPECKLED_MELON, 1, 0),  new ItemStack(Items.MELON, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.IRON_INGOT, 2, 0),      new ItemStack(Blocks.IRON_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.GOLD_INGOT, 2, 0),      new ItemStack(Blocks.GOLD_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Blocks.LAPIS_BLOCK, 1, 0),    new ItemStack(Blocks.LAPIS_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Blocks.REDSTONE_BLOCK, 1, 0), new ItemStack(Blocks.REDSTONE_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.DIAMOND, 2, 0),         new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Items.EMERALD, 2, 0),         new ItemStack(Blocks.EMERALD_ORE, 1, 0));
+        registerBasicInfusion(new ItemStack(Blocks.ICE, 1, 0),            new ItemStack(Blocks.GLASS, 1, 0));
     }
 
     public static void initVanillaRecipes() {
@@ -193,6 +214,10 @@ public class RegistryRecipes {
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
                 .setExp(2F);
 
+        rSmeltAquamarineOre = new SmeltingRecipe(ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), 3))
+                .setInput(new ItemStack(BlocksAS.customSandOre, 1, BlockCustomSandOre.OreType.AQUAMARINE.ordinal()))
+                .setExp(1F);
+
         manager.addRecipe(rLPRAltar.makeLightProximityRecipe());
         manager.addRecipe(rLPRWand.makeLightProximityRecipe());
         manager.addRecipe(rRJournal.make());
@@ -206,6 +231,7 @@ public class RegistryRecipes {
         manager.addRecipe(rMarbleBricks.make());
 
         rSmeltStarmetalOre.register();
+        rSmeltAquamarineOre.register();
     }
 
     public static void initAltarRecipes() {
@@ -266,21 +292,22 @@ public class RegistryRecipes {
                 .addPart(ItemsAS.rockCrystal,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT)
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER));
-        rStarlightInfuserRock.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
                 AttunementRecipe.AltarSlot.UPPER_LEFT,
                 AttunementRecipe.AltarSlot.UPPER_RIGHT);
-        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
         rStarlightInfuserRock.setPassiveStarlightRequirement(3700);
@@ -289,21 +316,22 @@ public class RegistryRecipes {
                 .addPart(ItemsAS.celestialCrystal,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT)
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER));
-        rStarlightInfuserCel.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
                 AttunementRecipe.AltarSlot.UPPER_LEFT,
                 AttunementRecipe.AltarSlot.UPPER_RIGHT);
-        rStarlightInfuserCel.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+        rStarlightInfuserRock.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
         rStarlightInfuserCel.setPassiveStarlightRequirement(3700);
