@@ -92,6 +92,13 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
         return this;
     }
 
+    public ShapedRecipe addPart(ItemHandle handle, ShapedRecipeSlot... slots) {
+        for(ShapedRecipeSlot slot : slots) {
+            crafingShape.put(slot, handle);
+        }
+        return this;
+    }
+
     public ShapedRecipe forceEmptySpaces() {
         this.forceEmptySpaces = true;
         return this;

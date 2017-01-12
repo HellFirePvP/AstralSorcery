@@ -106,8 +106,8 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
 
-                List<ItemStack> expected = recipe.getExpectedStack(srs);
-                if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStack(srs.rowMultipler, srs.columnMultiplier);
+                List<ItemStack> expected = recipe.getExpectedStackForRender(srs);
+                if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null || expected.isEmpty()) continue;
                 int select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
                 select %= expected.size();

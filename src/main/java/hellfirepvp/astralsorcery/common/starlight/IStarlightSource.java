@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -21,8 +23,10 @@ import net.minecraft.util.math.BlockPos;
  */
 public interface IStarlightSource extends IStarlightTransmission {
 
+    @Nonnull
     public IIndependentStarlightSource provideNewSourceNode();
 
+    @Nonnull
     public ITransmissionSource provideSourceNode(BlockPos at);
 
     public boolean needToUpdateStarlightSource();
@@ -30,6 +34,7 @@ public interface IStarlightSource extends IStarlightTransmission {
     public void markUpdated();
 
     @Override
+    @Nonnull
     default public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
         return provideSourceNode(at);
     }

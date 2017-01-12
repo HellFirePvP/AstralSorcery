@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -64,6 +65,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     }
 
     @Override
+    @Nonnull
     public IPrismTransmissionNode provideTransmissionNode(BlockPos at) {
         return new CrystalPrismTransmissionNode(at, getCrystalProperties());
     }

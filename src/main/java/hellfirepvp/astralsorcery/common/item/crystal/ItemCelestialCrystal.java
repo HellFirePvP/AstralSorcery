@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.item.crystal;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -17,6 +19,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -29,7 +33,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 14:13
  */
-public class ItemCelestialCrystal extends ItemRockCrystalBase {
+public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGatedVisibility {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
@@ -67,4 +71,11 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase {
     public EnumRarity getRarity(ItemStack stack) {
         return RegistryItems.rarityCelestial;
     }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isSupposedToSeeInRender(ItemStack stack) {
+        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT);
+    }
+
 }

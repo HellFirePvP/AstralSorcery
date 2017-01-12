@@ -174,6 +174,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     }
 
     @Override
+    @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverWell(at);
     }

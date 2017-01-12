@@ -507,6 +507,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     @Override
+    @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverAltar(at);
     }

@@ -19,6 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,11 +44,13 @@ public abstract class TileReceiverBase extends TileNetwork implements IStarlight
     }
 
     @Override
+    @Nonnull
     public BlockPos getTrPos() {
         return getPos();
     }
 
     @Override
+    @Nonnull
     public World getTrWorld() {
         return getWorld();
     }
@@ -69,6 +73,7 @@ public abstract class TileReceiverBase extends TileNetwork implements IStarlight
         return new LinkedList<>();
     }
 
+    @Nullable
     public <T extends ITransmissionReceiver> T tryGetNode() {
         IPrismTransmissionNode node = WorldNetworkHandler.getNetworkHandler(world).getTransmissionNode(getPos());
         if(node == null || !(node instanceof ITransmissionReceiver)) return null;

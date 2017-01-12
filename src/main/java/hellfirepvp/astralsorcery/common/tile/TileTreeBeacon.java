@@ -287,6 +287,7 @@ public class TileTreeBeacon extends TileReceiverBase {
     }
 
     @Override
+    @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverTreeBeacon(at);
     }

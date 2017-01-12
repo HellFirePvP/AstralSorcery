@@ -11,10 +11,14 @@ package hellfirepvp.astralsorcery.common.item.crystal;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -25,7 +29,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 22:08
  */
-public class ItemTunedRockCrystal extends ItemTunedCrystalBase {
+public class ItemTunedRockCrystal extends ItemTunedCrystalBase implements ItemGatedVisibility {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
@@ -41,6 +45,12 @@ public class ItemTunedRockCrystal extends ItemTunedCrystalBase {
     @Override
     public ItemTunedCrystalBase getTunedItemVariant() {
         return this;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isSupposedToSeeInRender(ItemStack stack) {
+        return getClientProgress().getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
     }
 
 }

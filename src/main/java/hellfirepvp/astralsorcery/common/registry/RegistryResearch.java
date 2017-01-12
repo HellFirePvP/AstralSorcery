@@ -55,7 +55,7 @@ public class RegistryResearch {
 
         ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 1);
         resLens.addPage(getTextPage("LENS.1"));
-        resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLensRock));
+        resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLens));
 
         ItemStack[] stacks = new ItemStack[ItemColoredLens.ColorType.values().length];
         ItemColoredLens.ColorType[] values = ItemColoredLens.ColorType.values();
@@ -74,7 +74,7 @@ public class RegistryResearch {
 
         ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 2);
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
-        resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkToolRock));
+        resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkTool));
 
         ResearchNode resStarOre = new ResearchNode(new ItemStack(Blocks.IRON_ORE), "STARMETAL_ORE", 2, 1);
         resStarOre.addPage(getTextPage("STARMETAL_ORE.1"));
@@ -84,7 +84,7 @@ public class RegistryResearch {
 
         ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 2, 3);
         resPrism.addPage(getTextPage("PRISM.1"));
-        resPrism.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rPrismRock));
+        resPrism.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rPrism));
 
         ResearchNode resCollCrystal = new ResearchNode(new ItemStack(BlocksAS.collectorCrystal), "COLL_CRYSTAL", 4, 3);
         resCollCrystal.addPage(getTextPage("COLL_CRYSTAL.1"));
@@ -140,12 +140,12 @@ public class RegistryResearch {
 
         ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 1, -1);
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
-        resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminatorRock));
+        resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminator));
 
         ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 0, 0);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
         resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttenuationAltarRelay));
-        resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltarRock));
+        resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltar));
         resPlayerAtt.addPage(new JournalPageStructure(MultiBlockArrays.patternAttunementFrame));
 
         ResearchNode resCrystalAtt = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ATT_CRYSTAL", 2, 1);
@@ -154,17 +154,17 @@ public class RegistryResearch {
 
         ResearchNode resRitPedestal = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "RIT_PEDESTAL", 1, 2);
         resRitPedestal.addPage(getTextPage("RIT_PEDESTAL.1"));
-        resRitPedestal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rRitualPedestalRock));
+        resRitPedestal.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rRitualPedestal));
         resRitPedestal.addPage(new JournalPageStructure(MultiBlockArrays.patternRitualPedestal));
 
         ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 3, 3);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));
-        resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellationRock));
+        resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
         ResearchNode resInfuser = new ResearchNode(new ItemStack(BlocksAS.starlightInfuser), "INFUSER", 3, -1);
         resInfuser.addPage(getTextPage("INFUSER.1"));
-        resInfuser.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rStarlightInfuserRock));
+        resInfuser.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rStarlightInfuser));
         resInfuser.addPage(new JournalPageStructure(MultiBlockArrays.patternStarlightInfuser));
         //TODO add reso gem infusion recipe
 
@@ -220,14 +220,14 @@ public class RegistryResearch {
                         new ItemStack(ItemsAS.crystalAxe), new ItemStack(ItemsAS.crystalShovel)
                 }, "TOOLS", -1, 3);
         resTools.addPage(getTextPage("TOOLS.1"));
-        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolRockSword));
-        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolRockPick));
-        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolRockAxe));
-        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolRockShovel));
+        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolSword));
+        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolPick));
+        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolAxe));
+        resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolShovel));
 
         ResearchNode resAltarUpgradeAttenuation = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), "ALTAR2", 3, 0);
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));
-        resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuationRock));
+        resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
         resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar,    1, BlockAltar.AltarType.ALTAR_2.ordinal()), resAltarUpgradeAttenuation, 1, ResearchProgression.BASIC_CRAFT);

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -29,10 +30,13 @@ public interface IStarlightTransmission {
         return netHandler.getTransmissionNode(getTrPos());
     }
 
+    @Nonnull
     public BlockPos getTrPos();
 
+    @Nonnull
     public World getTrWorld();
 
+    @Nonnull
     public IPrismTransmissionNode provideTransmissionNode(BlockPos at);
 
 }

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -33,7 +34,7 @@ import javax.annotation.Nullable;
  */
 public class LensRecipe extends ConstellationRecipe {
 
-    public LensRecipe(boolean celestial) {
+    public LensRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.lens))
                 .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
                         ShapedRecipeSlot.UPPER_LEFT,
@@ -45,7 +46,7 @@ public class LensRecipe extends ConstellationRecipe {
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
+                .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),

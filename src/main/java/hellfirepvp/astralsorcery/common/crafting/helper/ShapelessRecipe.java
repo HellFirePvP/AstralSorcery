@@ -76,6 +76,12 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
         return addPart(fluid, 1000);
     }
 
+    public ShapelessRecipe addPart(ItemHandle handle) {
+        if(contentCounter >= 9) return this; //Add nothing then.
+        this.contents[contentCounter++] = handle;
+        return this;
+    }
+
     @Override
     public void register() {
         CraftingManager.getInstance().addRecipe(make());

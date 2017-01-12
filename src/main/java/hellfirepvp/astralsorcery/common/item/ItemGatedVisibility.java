@@ -6,38 +6,28 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting;
+package hellfirepvp.astralsorcery.common.item;
 
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IAccessibleRecipe
+ * Class: ItemGatedVisibility
  * Created by HellFirePvP
- * Date: 06.10.2016 / 14:18
+ * Date: 13.01.2017 / 00:06
  */
-public interface IAccessibleRecipe extends IRecipe {
+public interface ItemGatedVisibility {
 
-    @Nullable
+    default public PlayerProgress getClientProgress() {
+        return ResearchManager.clientProgress;
+    }
+
     @SideOnly(Side.CLIENT)
-    public List<ItemStack> getExpectedStackForRender(int row, int column);
-
-    @Nullable
-    public ItemHandle getExpectedStackHandle(int row, int column);
-
-    @Nullable
-    @SideOnly(Side.CLIENT)
-    public List<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot);
-
-    @Nullable
-    public ItemHandle getExpectedStackHandle(ShapedRecipeSlot slot);
+    public boolean isSupposedToSeeInRender(ItemStack stack);
 
 }

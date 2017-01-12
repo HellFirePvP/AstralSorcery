@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -41,9 +42,9 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
         new Vector3(-3, 2, -3)
     };
 
-    public AttunementAltarRecipe(boolean celestial) {
+    public AttunementAltarRecipe() {
         super(new ShapedRecipe(BlocksAS.attunementAltar)
-                .addPart(celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal,
+                .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LEFT,

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -23,7 +24,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
  */
 public class RecipeRitualPedestal extends AttunementRecipe {
 
-    public RecipeRitualPedestal(boolean celestial) {
+    public RecipeRitualPedestal() {
         super(new ShapedRecipe(BlocksAS.ritualPedestal)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -35,7 +36,7 @@ public class RecipeRitualPedestal extends AttunementRecipe {
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
+                .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
         setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
                 AttunementRecipe.AltarSlot.UPPER_LEFT,

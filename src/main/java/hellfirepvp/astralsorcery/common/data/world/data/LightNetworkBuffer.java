@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
@@ -113,13 +114,49 @@ public class LightNetworkBuffer extends CachedWorldData {
 
     @Override
     public void onLoad(World world) {
-        for (ChunkNetworkData data : chunkSortedData.values()) {
-            for (ChunkSectionNetworkData secData : data.sections.values()) {
-                for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
-                    if(node.needsUpdate()) {
-                        StarlightUpdateHandler.getInstance().addNode(world, node);
+
+        if(Config.performNetworkIntegrityCheck) {
+            AstralSorcery.log.info("[LightNetworkIntegrityCheck] Performing StarlightNetwork integrity check for world " + world.provider.getDimension());
+            List<IPrismTransmissionNode> invalidRemoval = new LinkedList<>();
+
+            for (ChunkNetworkData data : chunkSortedData.values()) {
+                for (ChunkSectionNetworkData secData : data.sections.values()) {
+                    for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
+                        TileEntity te = world.getTileEntity(node.getPos());
+                        if(te == null || !(te instanceof IStarlightTransmission)) {
+                            invalidRemoval.add(node);
+                            continue;
+                        }
+                        IStarlightTransmission ism = (IStarlightTransmission) te;
+                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getPos());
+                        if(!node.getClass().isAssignableFrom(newNode.getClass())) {
+                            invalidRemoval.add(node);
+                            continue;
+                        }
+
+                        if(node.needsUpdate()) {
+                            StarlightUpdateHandler.getInstance().addNode(world, node);
+                        }
+                        node.postLoad(world);
                     }
-                    node.postLoad(world);
+                }
+            }
+
+            AstralSorcery.log.info("[LightNetworkIntegrityCheck] Performed StarlightNetwork integrity check. Found " + invalidRemoval.size() + " invalid transmission nodes.");
+            for (IPrismTransmissionNode node : invalidRemoval) {
+                removeTransmission(node.getPos());
+            }
+            AstralSorcery.log.info("[LightNetworkIntegrityCheck] Removed invalid transmission nodes from the network.");
+
+        } else {
+            for (ChunkNetworkData data : chunkSortedData.values()) {
+                for (ChunkSectionNetworkData secData : data.sections.values()) {
+                    for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
+                        if(node.needsUpdate()) {
+                            StarlightUpdateHandler.getInstance().addNode(world, node);
+                        }
+                        node.postLoad(world);
+                    }
                 }
             }
         }

@@ -34,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Random;
@@ -201,11 +202,13 @@ public class TileCollectorCrystal extends TileSourceBase {
     }
 
     @Override
+    @Nonnull
     public IIndependentStarlightSource provideNewSourceNode() {
         return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade, type);
     }
 
     @Override
+    @Nonnull
     public ITransmissionSource provideSourceNode(BlockPos at) {
         return new SimpleTransmissionSourceNode(at);
     }

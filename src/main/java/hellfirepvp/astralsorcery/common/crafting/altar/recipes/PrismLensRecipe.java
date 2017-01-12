@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -37,7 +38,7 @@ import java.util.Random;
  */
 public class PrismLensRecipe extends ConstellationRecipe {
 
-    public PrismLensRecipe(boolean celestial) {
+    public PrismLensRecipe() {
         super(new ShapedRecipe(BlocksAS.lensPrism)
                 .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
                         ShapedRecipeSlot.UPPER_LEFT,
@@ -49,7 +50,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
                 .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart((celestial ? ItemsAS.celestialCrystal : ItemsAS.rockCrystal),
+                .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),

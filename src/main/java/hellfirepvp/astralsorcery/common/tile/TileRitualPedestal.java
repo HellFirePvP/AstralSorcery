@@ -398,6 +398,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     }
 
     @Override
+    @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverRitualPedestal(at, doesSeeSky);
     }
@@ -731,17 +732,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         @Override
         public boolean needsUpdate() {
             return true;
-        }
-
-        @Override
-        public void postLoad(World world) {
-            //if(channeling != null && channeling.equals(Constellations.ara) && ce != null) {
-                /*tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getPos(), CEffectAra.treeRange);
-                if(CEffectAra.enabled) {
-                    TreeCaptureHelper.offerWeakWatcher(tw);
-                    ((CEffectAra) ce).refTreeWatcher = new WeakReference<>(tw);
-                }*/
-            //}
         }
 
         public void updateMirrorPositions(World world) {

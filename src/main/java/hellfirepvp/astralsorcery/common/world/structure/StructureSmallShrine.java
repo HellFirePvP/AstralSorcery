@@ -46,7 +46,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        if(Math.abs(dY - pos.getY()) <= 3 && isApplicableBiome(world, pos)) {
+        if(Math.abs(dY - pos.getY()) <= 1 && isApplicableBiome(world, pos)) {
             return !world.getBlockState(new BlockPos(pos.getX(), dY, pos.getZ())).getMaterial().isLiquid();
         }
         return false;

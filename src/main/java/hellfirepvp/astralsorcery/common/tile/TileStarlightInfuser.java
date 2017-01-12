@@ -297,6 +297,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     private void receiveStarlight(IWeakConstellation type, double amount) {}
 
     @Override
+    @Nonnull
     public ITransmissionReceiver provideEndpoint(BlockPos at) {
         return new TransmissionReceiverStarlightInfuser(at);
     }
