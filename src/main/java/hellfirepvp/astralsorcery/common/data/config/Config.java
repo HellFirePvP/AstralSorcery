@@ -35,6 +35,7 @@ public class Config {
     public static List<PktSyncConfig.SyncTuple> savedSyncTuples = new LinkedList<>();
 
     //public static boolean stopOnIllegalState = true;
+    public static boolean spawnRockCrystalOres = true;
     public static int crystalDensity = 15;
     public static int aquamarineAmount = 32;
     public static int marbleAmount = 4, marbleVeinSize = 20;
@@ -43,6 +44,9 @@ public class Config {
     public static boolean clientPreloadTextures = true;
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
+
+    public static boolean enableRetroGen = false;
+    public static boolean enableChunkVersioning = true;
 
     //Also has a squared field to provide slightly faster rendering.
     public static int maxEffectRenderDistance = 64, maxEffectRenderDistanceSq;
@@ -98,13 +102,16 @@ public class Config {
         clientPreloadTextures = latestConfig.getBoolean("preloadTextures", "rendering", true, "If set to 'true' the mod will preload most of the bigger textures during postInit. This provides a more fluent gameplay experience (as it doesn't need to load the textures when they're first needed), but increases loadtime.");
         particleAmount = latestConfig.getInt("particleAmount", "rendering", 2, 0, 2, "Sets the amount of particles/effects: 0 = minimal (only necessary particles will appear), 1 = lowered (most unnecessary particles will be filtered), 2 = all particles are visible");
 
-        //rand(crystalDensity) == 0 chance per chunk.
+        spawnRockCrystalOres = latestConfig.getBoolean("rockCrystalsEnabled", "worldgen", true, "Set this to false to disable rock crystal oregen entirely.");
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 15, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");
-        marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk.");
+        marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk. 0 = disabled");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
-        aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 32, 0, 512, "Defines how many aquamarine ores it'll attempt to generate in per chunk");
+        aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 32, 0, 512, "Defines how many aquamarine ores it'll attempt to generate in per chunk. 0 = disabled");
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
+
+        enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
+        enableChunkVersioning = latestConfig.getBoolean("enableChunkVersioning", "retrogen", true, "WARNING: This keeps track of the 'worldgen-version' of the AstralSorcery worldgen on every chunk. Disabling this might improve server performance, however you will never be able to properly use the retrogen. This can always be disabled later, but isn't re-enableable later in case you disabled it and ran the server once.");
 
         fillWhitelistIDs(dimWhitelist);
 

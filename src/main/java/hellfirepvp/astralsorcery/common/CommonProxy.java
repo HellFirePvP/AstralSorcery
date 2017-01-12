@@ -61,6 +61,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
+import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -88,7 +89,7 @@ public class CommonProxy implements IGuiHandler {
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
 
-    private AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
+    public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
 
     public void preLoadConfigEntries() {
         worldGenerator.pushConfigEntries();
@@ -153,7 +154,10 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
 
-        GameRegistry.registerWorldGenerator(worldGenerator.init(), 50);
+        GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
+        if(Config.enableRetroGen) {
+            MinecraftForge.EVENT_BUS.register(new RetroGenController());
+        }
         RegistrySounds.init();
 
         TickManager manager = TickManager.getInstance();

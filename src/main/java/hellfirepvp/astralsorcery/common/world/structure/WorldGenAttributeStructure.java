@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.WorldStructureEntry;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
+import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,12 +26,13 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 21.10.2016 / 13:24
  */
-public abstract class WorldGenAttributeStructure {
+public abstract class WorldGenAttributeStructure extends WorldGenAttribute {
 
     private final WorldStructureEntry cfgEntry;
     private StructureQuery query;
 
-    public WorldGenAttributeStructure(String entry, StructureQuery query) {
+    public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query) {
+        super(attributeVersion);
         this.cfgEntry = new WorldStructureEntry(entry);
         Config.addDynamicEntry(cfgEntry);
         this.query = query;
@@ -38,6 +40,16 @@ public abstract class WorldGenAttributeStructure {
 
     public StructureBlockArray getStructureTemplate() {
         return query.getStructure();
+    }
+
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world) {
+        if(canGenerate(chunkX, chunkZ, world, random)) {
+            BlockPos pos = getGenerationPosition(chunkX, chunkZ, world, random);
+            if(fulfillsSpecificConditions(pos, world, random)) {
+                generate(pos, world, random);
+            }
+        }
     }
 
     public abstract void generate(BlockPos pos, World world, Random rand);

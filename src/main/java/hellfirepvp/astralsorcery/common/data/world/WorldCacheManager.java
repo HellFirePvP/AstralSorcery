@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.data.world;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import it.unimi.dsi.fastutil.Hash;
@@ -197,7 +198,8 @@ public class WorldCacheManager implements ITickHandler {
     public static enum SaveKey {
 
         ROCK_CRYSTAL("rcrystals", RockCrystalBuffer::new),
-        LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new);
+        LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new),
+        CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new);
 
         private final String identifier;
         private final DataProvider<CachedWorldData> instanceProvider;

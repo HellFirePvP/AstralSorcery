@@ -26,7 +26,7 @@ import java.util.Random;
 public class StructureSmallShrine extends WorldGenAttributeStructure {
 
     public StructureSmallShrine() {
-        super("smallShrine", () -> MultiBlockArrays.smallShrine);
+        super(0, "smallShrine", () -> MultiBlockArrays.smallShrine);
     }
 
     @Override

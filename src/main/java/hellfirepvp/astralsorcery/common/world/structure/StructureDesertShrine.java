@@ -26,7 +26,7 @@ import java.util.Random;
 public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     public StructureDesertShrine() {
-        super("desertStructure", () -> MultiBlockArrays.desertShrine);
+        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine);
     }
 
     @Override
