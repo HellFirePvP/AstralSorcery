@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
@@ -51,8 +52,8 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         sBase ^= (long) te.getPos().getX();
         sBase ^= (long) te.getPos().getY();
         sBase ^= (long) te.getPos().getZ();
-        float jBase = ClientScheduler.getClientTick() + partialTicks;
-        jBase /= 20F;
+        double jBase = ClientScheduler.getClientTick() + partialTicks;
+        jBase /= 20D;
 
         switch (te.getAltarLevel()) {
             case ATTUNEMENT:
@@ -71,30 +72,32 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         }
     }
 
-    private void renderT3Additions(TileAltar te, double x, double y, double z, float jump) {
+    private void renderT3Additions(TileAltar te, double x, double y, double z, double jump) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glScaled(0.0625, 0.0625, 0.0625);
+        float h = (float) (Math.sin(jump) * 1.25);
 
         texAltar3.bind();
-        modelAltar3.render(null, jump, 0, 0, 0, 0, 1F);
+        modelAltar3.render(null, h, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
 
-    private void renderT2Additions(TileAltar te, double x, double y, double z, float jump) {
+    private void renderT2Additions(TileAltar te, double x, double y, double z, double jump) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glScaled(0.0625, 0.0625, 0.0625);
+        float h = (float) (Math.sin(jump) * 0.625);
 
         texAltar2.bind();
-        modelAltar2.render(null, jump, 0, 0, 0, 0, 1F);
+        modelAltar2.render(null, h, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -106,7 +109,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(te.getWorld());
 
         int max = 5000;
-        int t = ClientScheduler.getClientTick() % max;
+        int t = (int) (ClientScheduler.getClientTick() % max);
         float halfAge = max / 2F;
         float tr = 1F - (Math.abs(halfAge - t) / halfAge);
         tr *= 2;

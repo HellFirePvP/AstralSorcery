@@ -230,8 +230,8 @@ public class GuiJournalPages extends GuiScreenJournal {
             uFrom = 0.5F;
             GL11.glScaled(1.1, 1.1, 1.1);
         } else {
-            float t = ClientScheduler.getClientTick() + partialTicks;
-            float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+            double t = ClientScheduler.getClientTick() + partialTicks;
+            float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
             GL11.glScaled(sin, sin, sin);
         }
         GL11.glColor4f(1F, 1F, 1F, 0.8F);
@@ -259,8 +259,8 @@ public class GuiJournalPages extends GuiScreenJournal {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
-                float t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 GL11.glScaled(sin, sin, sin);
             }
             GL11.glColor4f(1F, 1F, 1F, 0.8F);
@@ -281,8 +281,8 @@ public class GuiJournalPages extends GuiScreenJournal {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
-                float t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 GL11.glScaled(sin, sin, sin);
             }
             GL11.glColor4f(1F, 1F, 1F, 0.8F);

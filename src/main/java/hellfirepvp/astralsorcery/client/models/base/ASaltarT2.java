@@ -52,18 +52,17 @@ public class ASaltarT2 extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float tickVal, float f1, float f2, float f3, float f4, float scale) {
-        renderHovering(hovering1, tickVal,                1);
-        renderHovering(hovering3, tickVal + jmpParts,     1);
-        renderHovering(hovering4, tickVal + jmpParts * 2, 1);
-        renderHovering(hovering2, tickVal + jmpParts * 3, 1);
+    public void render(Entity entity, float tickValSin, float f1, float f2, float f3, float f4, float scale) {
+        renderHovering(hovering1, tickValSin,                1);
+        renderHovering(hovering3, tickValSin + jmpParts,     1);
+        renderHovering(hovering4, tickValSin + jmpParts * 2, 1);
+        renderHovering(hovering2, tickValSin + jmpParts * 3, 1);
     }
 
-    private void renderHovering(ModelRenderer model, float tickVal, float scale) {
-        double h = Math.sin(tickVal) * 0.625;
-        GL11.glTranslated(0, h, 0);
+    private void renderHovering(ModelRenderer model, float tickValSin, float scale) {
+        GL11.glTranslatef(0, tickValSin, 0);
         model.render(scale);
-        GL11.glTranslated(0, -h, 0);
+        GL11.glTranslatef(0, -tickValSin, 0);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

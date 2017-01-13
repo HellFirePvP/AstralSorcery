@@ -290,7 +290,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         TextureSpritePlane spr = (TextureSpritePlane) spritePlane;
         if(spr == null || spr.canRemove() || spr.isRemoved()) { //Refresh.
             spr = EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteHalo1, Vector3.RotAxis.Y_AXIS.clone());
-            spr.setPosition(new Vector3(this).add(0.5, 0.15, 0.5));
+            spr.setPosition(new Vector3(this).add(0.5, 0.06, 0.5));
             spr.setAlphaOverDistance(true);
             spr.setNoRotation(45);
             spr.setRefreshFunc(() -> !isInvalid() && working);
@@ -750,13 +750,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             channeled = compound.getInteger("channeled");
             properties = CrystalProperties.readFromNBT(compound);
             IConstellation c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Normal");
-            if(c != null && !(c instanceof IMajorConstellation)) {
+            if(c != null && !(c instanceof IWeakConstellation)) {
                 AstralSorcery.log.warn("[AstralSorcery] Tried to load RitualPedestal from NBT with a non-Major constellation as effect. Ignoring constellation...");
                 AstralSorcery.log.warn("[AstralSorcery] Block affected is at " + getPos());
             } else if(c == null) {
                 channeling = null;
             } else {
-                channeling = (IMajorConstellation) c;
+                channeling = (IWeakConstellation) c;
             }
             c = IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "Trait");
             if(c != null && !(c instanceof IMinorConstellation)) {

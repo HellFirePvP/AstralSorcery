@@ -194,11 +194,11 @@ public class RenderingUtils {
         }
     }
 
-    public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, int countFancy, int countNormal) {
+    public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, long continuousTick, int dstJump, int countFancy, int countNormal) {
         renderLightRayEffects(x, y, z, effectColor, seed, continuousTick, dstJump, 1, countFancy, countNormal);
     }
 
-    public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, int continuousTick, int dstJump, float scale, int countFancy, int countNormal) {
+    public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, long continuousTick, int dstJump, float scale, int countFancy, int countNormal) {
         rand.setSeed(seed);
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);

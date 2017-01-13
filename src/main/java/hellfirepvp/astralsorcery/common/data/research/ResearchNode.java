@@ -97,8 +97,8 @@ public class ResearchNode {
         return getRenderItemStack(0);
     }
 
-    public ItemStack getRenderItemStack(int tick) {
-        return renderItemStacks[(tick / 40) % renderItemStacks.length];
+    public ItemStack getRenderItemStack(long tick) {
+        return renderItemStacks[((int) ((tick / 40) % renderItemStacks.length))];
     }
 
     /*public BindableResource getTexture() {

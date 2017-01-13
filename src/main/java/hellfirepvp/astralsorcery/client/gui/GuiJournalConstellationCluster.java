@@ -136,8 +136,8 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
-                float t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 GL11.glScaled(sin, sin, sin);
             }
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
@@ -158,8 +158,8 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
-                float t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 GL11.glScaled(sin, sin, sin);
             }
             GL11.glTranslated(-(width / 2), -(height / 2), 0);
@@ -180,8 +180,8 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
                 uFrom = 0.5F;
                 GL11.glScaled(1.1, 1.1, 1.1);
             } else {
-                float t = ClientScheduler.getClientTick() + partialTicks;
-                float sin = MathHelper.sin(t / 4F) / 32F + 1F;
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
                 GL11.glScaled(sin, sin, sin);
             }
             GL11.glTranslated(-(width / 2), -(height / 2), 0);

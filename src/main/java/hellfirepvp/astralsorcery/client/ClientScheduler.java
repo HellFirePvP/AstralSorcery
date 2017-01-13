@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class ClientScheduler implements ITickHandler {
 
-    private static int clientTick = 0;
+    private static long clientTick = 0;
 
     private boolean inTick = false;
     private Map<Runnable, Integer> queuedRunnables = new HashMap<>();
@@ -54,7 +54,7 @@ public class ClientScheduler implements ITickHandler {
         }
     }
 
-    public static int getClientTick() {
+    public static long getClientTick() {
         return clientTick;
     }
 

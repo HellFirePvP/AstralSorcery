@@ -63,7 +63,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
 
     private static final double widthHeight = 70;
-    private Map<ConstellationPerks, Integer> unlockPlayMap = new HashMap<>();
+    private Map<ConstellationPerks, Long> unlockPlayMap = new HashMap<>();
 
     private ConstellationPerkMap mapToDisplay = null;
     private IMajorConstellation attunedConstellation = null;
@@ -138,8 +138,8 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             ConstellationPerks perk = iterator.next();
             ConstellationPerkMap.Position position = mapToDisplay.getPosition(perk);
             if (position == null) continue;
-            Integer startTick = unlockPlayMap.get(perk);
-            int count = ClientScheduler.getClientTick() - startTick;
+            Long startTick = unlockPlayMap.get(perk);
+            int count = (int) (ClientScheduler.getClientTick() - startTick);
             SpriteSheetResource sprite = SpriteLibrary.spritePerkActivate;
             if (count >= sprite.getFrameCount()) {
                 iterator.remove();
@@ -269,7 +269,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             ConstellationPerkMap.Position to = mapToDisplay.getPosition(dep.to);
             if(from != null && to != null) {
 
-                int count = ClientScheduler.getClientTick() + from.x + from.y + to.x + to.y;
+                long count = ClientScheduler.getClientTick() + from.x + from.y + to.x + to.y;
                 double part = (Math.sin(Math.toRadians(((count) * 8) % 360D)) + 1D) / 4D;
 
                 float br = 0.5F + 0.2F * (2F - ((float) part));
@@ -331,7 +331,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             int starX = star.getValue().x;
             int starY = star.getValue().y;
 
-            int count = ClientScheduler.getClientTick() + starX + starY;
+            long count = ClientScheduler.getClientTick() + starX + starY;
             //float part = (MathHelper.sin((float) Math.toRadians(((count) * 8) % 360F)) / 2F + 1F);
 
             //float br = 0.6F + 0.3F * (2F - part);

@@ -96,7 +96,7 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
         super.onCraftClientTick(altar, tick, rand);
 
         ParticleManager pm = Minecraft.getMinecraft().effectRenderer;

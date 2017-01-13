@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -20,6 +21,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Items;
@@ -63,7 +65,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
     }
 
     @Override
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
         super.onCraftClientTick(altar, tick, rand);
 
         Vector3 randomPos = new Vector3(altar);
@@ -76,6 +78,14 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                 EffectHandler.getInstance().lightbeam(offset.clone().add(altar.getPos()).add(0.5, 0.5, 0.5), vec, 1.2F);
                         //.setColorOverlay(127F / 255F, 127F / 255F, 1F, 1F);
             }
+        }
+
+        if(rand.nextInt(10) == 0) {
+            Vector3 from = new Vector3(altar).add(0.5, -0.6, 0.5);
+            MiscUtils.applyRandomOffset(from, rand, 1.8F);
+            from.setY(altar.getPos().getY() - 0.6 + 1 * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
+            EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(5 + rand.nextInt(3)), from, 1);
+            lightbeam.setMaxAge(64);
         }
     }
 }

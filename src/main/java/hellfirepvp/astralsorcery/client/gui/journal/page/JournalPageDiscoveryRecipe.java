@@ -114,9 +114,9 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 List<ItemStack> expected = recipe.getExpectedStackForRender(srs);
                 if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null || expected.isEmpty()) continue;
-                int select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
+                long select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
                 select %= expected.size();
-                ItemStack draw = expected.get(select);
+                ItemStack draw = expected.get((int) select);
 
                 TextureHelper.refreshTextureBindState();
                 GL11.glPushMatrix();

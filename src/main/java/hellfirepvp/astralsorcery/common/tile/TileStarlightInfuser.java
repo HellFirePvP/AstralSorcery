@@ -58,7 +58,7 @@ import java.util.UUID;
  */
 public class TileStarlightInfuser extends TileReceiverBase implements IWandInteract {
 
-    private static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
+    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-2, -1, -1),
             new BlockPos(-2, -1,  0),
             new BlockPos(-2, -1,  1),
@@ -308,7 +308,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 if(stack != null) {
                     ItemUtils.dropItemNaturally(playerIn.getEntityWorld(),
                             getPos().getX() + 0.5,
-                            getPos().getY() + 0.9,
+                            getPos().getY() + 1,
                             getPos().getZ() + 0.5,
                             stack);
                     stack = null;

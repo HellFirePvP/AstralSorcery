@@ -58,22 +58,22 @@ public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
         super.onCraftClientTick(altar, tick, rand);
 
-        if(rand.nextInt(8) == 0) {
+        if(rand.nextInt(14) == 0) {
             Vector3 from = new Vector3(altar).add(0.5, 0.3, 0.5);
             MiscUtils.applyRandomOffset(from, rand, 0.4F);
             EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(4 + rand.nextInt(2)), from, 1);
             lightbeam.setMaxAge(64);
         }
-        if(rand.nextInt(10) == 0) {
+        /*if(rand.nextInt(10) == 0) {
             Vector3 from = new Vector3(altar).add(0.5, -0.6, 0.5);
             MiscUtils.applyRandomOffset(from, rand, 1.8F);
             from.setY(altar.getPos().getY() - 0.6 + 1 * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
             EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(5 + rand.nextInt(3)), from, 1);
             lightbeam.setMaxAge(64);
-        }
+        }*/
     }
 
     @Nonnull

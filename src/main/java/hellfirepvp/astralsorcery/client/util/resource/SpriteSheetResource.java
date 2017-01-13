@@ -50,8 +50,8 @@ public class SpriteSheetResource {
         return vPart;
     }
 
-    public Tuple<Double, Double> getUVOffset(int frameTimer) {
-        int frame = frameTimer % frameCount;
+    public Tuple<Double, Double> getUVOffset(long frameTimer) {
+        int frame = (int) (frameTimer % frameCount);
         return new Tuple<>((frame % columns) * uPart, (frame / columns) * vPart);
     }
 

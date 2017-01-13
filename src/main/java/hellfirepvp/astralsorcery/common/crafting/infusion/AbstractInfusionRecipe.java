@@ -94,7 +94,7 @@ public abstract class AbstractInfusionRecipe {
     public void onCraftServerTick(TileStarlightInfuser infuser, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileStarlightInfuser infuser, int tick, Random rand) {}
+    public void onCraftClientTick(TileStarlightInfuser infuser, long tick, Random rand) {}
 
     public boolean matches(TileStarlightInfuser infuser) {
         if(this instanceof IGatedRecipe) {

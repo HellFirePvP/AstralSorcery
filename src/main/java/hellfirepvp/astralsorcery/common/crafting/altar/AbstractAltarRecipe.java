@@ -200,7 +200,7 @@ public abstract class AbstractAltarRecipe {
     public void onCraftServerTick(TileAltar altar, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {}
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
     public void onCraftTESRRender(TileAltar te, double x, double y, double z, float partialTicks) {}

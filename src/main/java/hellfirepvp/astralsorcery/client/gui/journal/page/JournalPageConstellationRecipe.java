@@ -73,9 +73,9 @@ public class JournalPageConstellationRecipe implements IJournalPage {
         private void renderAdditionalSlot(float offsetX, float offsetY, float zLevel, List<ItemStack> stacks) {
             if(stacks == null || stacks.isEmpty()) return;
 
-            int select = ((ClientScheduler.getClientTick() + ((int) offsetX) * 40 + ((int) offsetY) * 40) / 20);
+            long select = ((ClientScheduler.getClientTick() + ((int) offsetX) * 40 + ((int) offsetY) * 40) / 20);
             select %= stacks.size();
-            ItemStack draw = stacks.get(select);
+            ItemStack draw = stacks.get((int) select);
 
             TextureHelper.refreshTextureBindState();
             GL11.glPushMatrix();

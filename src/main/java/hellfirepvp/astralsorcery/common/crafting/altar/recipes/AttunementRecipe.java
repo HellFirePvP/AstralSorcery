@@ -136,7 +136,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
         super.onCraftClientTick(altar, tick, rand);
 
         Vector3 pos = new Vector3(altar).add(0.5, 0.5, 0.5);

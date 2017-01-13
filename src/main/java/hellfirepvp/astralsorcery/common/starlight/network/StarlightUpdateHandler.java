@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import net.minecraft.world.World;

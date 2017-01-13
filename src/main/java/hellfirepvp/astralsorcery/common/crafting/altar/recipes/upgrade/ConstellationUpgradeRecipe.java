@@ -115,7 +115,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, int tick, Random rand) {
+    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
         super.onCraftClientTick(altar, tick, rand);
 
         Vector3 altarVec = new Vector3(altar);
