@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
@@ -84,6 +85,8 @@ import java.util.Map;
  */
 public class EventHandlerServer {
 
+    private static boolean isDataInitialized = false;
+
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
@@ -92,6 +95,12 @@ public class EventHandlerServer {
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
         int id = w.provider.getDimension();
+        if(!w.isRemote && !isDataInitialized) {
+            //This is kinda an early point in server startup, when it loads the overworld.
+            //Since the FML Server start events are either too early or too late, we do it here.
+            ServerData.reloadDataFromSaveHandler(w.getSaveHandler());
+            isDataInitialized = true;
+        }
         if(DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER)) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);

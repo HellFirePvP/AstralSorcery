@@ -24,11 +24,18 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateReach;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktWorldHandlerSyncEarly;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -66,6 +73,17 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktAttuneConstellation.class, PktAttuneConstellation.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.SERVER);
+
+        /*Method registerPacket = ReflectionHelper.findMethod(
+                EnumConnectionState.class,
+                EnumConnectionState.PLAY,
+                new String[] { "registerPacket", "func_179245_a", "a" },
+                EnumPacketDirection.class, Class.class);
+        registerPacket.setAccessible(true);
+
+        try {
+            registerPacket.invoke(EnumConnectionState.HANDSHAKING, EnumPacketDirection.CLIENTBOUND, PktWorldHandlerSyncEarly.class);
+        } catch (Exception e) {}*/
     }
 
     public static NetworkRegistry.TargetPoint pointFromPos(World world, BlockPos pos, double range) {

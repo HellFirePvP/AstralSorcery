@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
 import scala.actors.threadpool.Arrays;
@@ -39,9 +40,20 @@ public class ServerData {
 
     @Nullable
     public static File getServerDataFile() {
+        ISaveHandler handler;
+        try {
+            handler = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getSaveHandler();
+        } catch (Exception exc) {
+            return null;
+        }
+        return getServerDataFile(handler);
+    }
+
+    @Nullable
+    public static File getServerDataFile(ISaveHandler handler) {
         File worldDir;
         try {
-            worldDir = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld().getSaveHandler().getWorldDirectory();
+            worldDir = handler.getWorldDirectory();
         } catch (Exception exc) {
             return null;
         }
@@ -55,21 +67,21 @@ public class ServerData {
         return f;
     }
 
-    public static void reloadData() {
-        loadDataFromFile();
+    public static void reloadDataFromSaveHandler(ISaveHandler handler) {
+        loadDataFromFile(handler);
 
-        updateData();
+        updateData(handler);
     }
 
     public static void writeData() {
-        updateData();
+        updateData(null);
         fileRequestedDimWhitelists.clear();
     }
 
     public static void addDimensionToHandle(int dimId) {
         if(!fileRequestedDimWhitelists.contains(dimId)) {
             fileRequestedDimWhitelists.add(dimId);
-            updateData();
+            updateData(null);
         }
     }
 
@@ -80,8 +92,8 @@ public class ServerData {
         return false;
     }
 
-    private static void updateData() {
-        File dataFile = getServerDataFile();
+    private static void updateData(@Nullable ISaveHandler handler) {
+        File dataFile = handler == null ? getServerDataFile() : getServerDataFile(handler);
         if(dataFile == null) {
             FMLLog.bigWarning("[AstralSorcery] Couldn't find folder for AstralSorcery_ServerData.dat - Are you calling this too early or too late in the execution?");
             return;
@@ -116,8 +128,8 @@ public class ServerData {
         skyHandlers.update(fileRequestedDimWhitelists);
     }
 
-    private static void loadDataFromFile() {
-        File dataFile = getServerDataFile();
+    private static void loadDataFromFile(@Nullable ISaveHandler handler) {
+        File dataFile = handler == null ? getServerDataFile() : getServerDataFile(handler);
         if(dataFile == null) {
             FMLLog.bigWarning("[AstralSorcery] Couldn't find folder for AstralSorcery_ServerData.dat - Are you calling this too early or too late in the execution?");
             return;
