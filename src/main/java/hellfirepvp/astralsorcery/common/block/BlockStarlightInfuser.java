@@ -23,7 +23,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -35,7 +37,9 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 11.12.2016 / 17:05
  */
-public class BlockStarlightInfuser extends BlockStarlightNetwork {
+public class BlockStarlightInfuser extends BlockStarlightNetwork{
+
+    private static final AxisAlignedBB box = new AxisAlignedBB(0D, 0D, 0D, 1D, 12D / 16D, 1D);
 
     public BlockStarlightInfuser() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -44,6 +48,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork {
         setHarvestLevel("pickaxe", 1);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return box;
     }
 
     @Override
@@ -86,6 +95,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork {
     @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
