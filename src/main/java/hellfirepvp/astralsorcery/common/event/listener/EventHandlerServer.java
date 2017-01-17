@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
@@ -72,6 +73,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 import java.util.Map;
@@ -112,6 +114,14 @@ public class EventHandlerServer {
     public void onUnload(WorldEvent.Unload event) {
         World w = event.getWorld();
         ConstellationSkyHandler.getInstance().informWorldUnload(w);
+        if(w.isRemote) {
+            clientUnload();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void clientUnload() {
+        AstralSorcery.proxy.scheduleClientside(TESRTranslucentBlock::cleanUp);
     }
 
     @SubscribeEvent

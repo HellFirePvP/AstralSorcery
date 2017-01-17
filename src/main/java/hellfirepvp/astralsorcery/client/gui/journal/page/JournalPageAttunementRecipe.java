@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -38,7 +39,7 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(recipe);
+        return new Render(recipe, TileAltar.AltarLevel.ATTUNEMENT);
     }
 
     public static class Render extends JournalPageDiscoveryRecipe.Render {
@@ -47,8 +48,8 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
         private final AttunementRecipe recipe;
 
-        public Render(AttunementRecipe recipe) {
-            super(recipe);
+        public Render(AttunementRecipe recipe, TileAltar.AltarLevel altarLevel) {
+            super(recipe, altarLevel);
             this.recipe = recipe;
             this.gridTexture = texGrid;
         }

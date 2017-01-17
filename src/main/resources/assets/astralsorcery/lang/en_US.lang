@@ -159,13 +159,15 @@ astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.upgrade=Upgrades the altar to the next tier
 astralsorcery.journal.recipe.attunement=Attunes the crystal to: %s
-astralsorcery.journal.recipe.amt.desc=Starlight required: %s
+astralsorcery.journal.recipe.amt.desc=Starlight required:
+
 astralsorcery.journal.recipe.amt.lowest=Almost nothing
 astralsorcery.journal.recipe.amt.low=Not much
 astralsorcery.journal.recipe.amt.avg=Average
 astralsorcery.journal.recipe.amt.more=Above average
 astralsorcery.journal.recipe.amt.high=Quite some
 astralsorcery.journal.recipe.amt.highest=Large amounts
+astralsorcery.journal.recipe.amt.toomuch=§cToo much
 
 crystal.size=Size
 crystal.purity=Purity
@@ -202,6 +204,7 @@ item.ItemCrystalSword.name=Crystal Sword
 item.ItemColoredLens.name=Colored Lens
 item.ItemHandTelescope.name=Hand Telescope
 item.ItemSkyResonator.name=Sky Wave Resonator
+item.ItemIlluminationWand.name=Illumination Wand
 
 item.ItemColoredLens.effect.fire.name=Ignition
 item.ItemColoredLens.effect.break.name=Break
@@ -255,6 +258,7 @@ tile.BlockFakeTree.name=
 tile.BlockStarlightInfuser.name=Starlight Infuser
 tile.BlockTreeBeacon.name=Tree Beacon
 tile.BlockRitualLink.name=Ritual Anchor
+tile.BlockTranslucentBlock.name=Translucent Block
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive

@@ -343,9 +343,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return oldState.getBlock() != newSate.getBlock();
     }
 
-    private void onLevelUp(AltarLevel current, AltarLevel next) {
-
-    }
+    private void onLevelUp(AltarLevel current, AltarLevel next) {}
 
     private void abortCrafting() {
         this.craftingTask = null;
@@ -360,7 +358,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(doesSeeSky() && handle != null) {
             int yLevel = getPos().getY();
             if(yLevel > 40) {
-                float collect = 60;
+                float collect = 200;
 
                 float dstr;
                 if(yLevel > 140) {
@@ -406,19 +404,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     }
 
     public int getMaxStarlightStorage() {
-        switch (getAltarLevel()) {
-            case DISCOVERY:
-                return 1000;
-            case ATTUNEMENT:
-                return 4000;
-            case CONSTELLATION_CRAFT:
-                return 6000;
-            case TRAIT_CRAFT:
-                return 10000;
-            case ENDGAME:
-                return 12000;
-        }
-        return 1000;
+        return getAltarLevel().getStarlightMaxStorage();
     }
 
     @Override
@@ -553,18 +539,21 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.
 
         private final int totalExpNeededToLevelUp;
+        private final int maxStarlightStorage;
         private final IAltarMatcher matcher;
         private boolean canLevelToByExpGain = true;
 
         private AltarLevel(int levelExp, IAltarMatcher matcher) {
             this.totalExpNeededToLevelUp = levelExp;
             this.matcher = matcher;
+            this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
 
         private AltarLevel(int levelExp, IAltarMatcher matcher, boolean canLevelToByExpGain) {
             this.totalExpNeededToLevelUp = levelExp;
             this.canLevelToByExpGain = canLevelToByExpGain;
             this.matcher = matcher;
+            this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
 
         public BlockAltar.AltarType getCorrespondingAltarType() {
@@ -593,6 +582,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 return next;
             }
             return this;
+        }
+
+        public int getStarlightMaxStorage() {
+            return maxStarlightStorage;
+        }
+
+        public BlockAltar.AltarType getType() {
+            return BlockAltar.AltarType.values()[ordinal()];
         }
 
         public AltarLevel next() {

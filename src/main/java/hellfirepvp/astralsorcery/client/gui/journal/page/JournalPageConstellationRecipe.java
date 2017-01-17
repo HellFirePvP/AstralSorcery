@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -38,7 +39,7 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(recipe);
+        return new Render(recipe, TileAltar.AltarLevel.CONSTELLATION_CRAFT);
     }
 
     public static class Render extends JournalPageAttunementRecipe.Render {
@@ -47,8 +48,8 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
         private final ConstellationRecipe recipe;
 
-        public Render(ConstellationRecipe recipe) {
-            super(recipe);
+        public Render(ConstellationRecipe recipe, TileAltar.AltarLevel altarLevel) {
+            super(recipe, altarLevel);
             this.recipe = recipe;
             this.gridTexture = texGrid;
         }

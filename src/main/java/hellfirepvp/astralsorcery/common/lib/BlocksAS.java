@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.block.BlockTreeBeacon;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
@@ -64,6 +65,7 @@ public class BlocksAS {
     public static BlockStarlightInfuser starlightInfuser;
     public static BlockTreeBeacon treeBeacon;
     public static BlockRitualLink ritualLink;
+    public static BlockTranslucentBlock translucentBlock;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

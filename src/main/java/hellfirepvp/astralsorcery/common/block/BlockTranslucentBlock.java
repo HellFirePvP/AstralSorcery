@@ -8,16 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -35,18 +40,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: BlockFakeTree
+ * Class: BlockTranslucentBlock
  * Created by HellFirePvP
- * Date: 11.11.2016 / 20:31
+ * Date: 17.01.2017 / 03:44
  */
-public class BlockFakeTree extends BlockContainer {
+public class BlockTranslucentBlock extends BlockContainer {
 
-    public BlockFakeTree() {
+    public BlockTranslucentBlock() {
         super(Material.BARRIER);
         setBlockUnbreakable();
         setResistance(6000001.0F);
@@ -56,9 +62,9 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
-        TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, false);
-        if(tft != null && tft.getFakedState() != null) {
-            RenderingUtils.playBlockBreakParticles(pos, tft.getFakedState());
+        IBlockState fst = getFakedStateTile(world, pos);
+        if(fst != null) {
+            RenderingUtils.playBlockBreakParticles(pos, fst);
         }
         return true;
     }
@@ -66,24 +72,51 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if(rand.nextInt(20) == 0) {
+        if(rand.nextInt(30) == 0) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
                     pos.getZ() + rand.nextFloat());
             p.motion(0, 0, 0);
-            p.scale(0.45F).setColor(new Color(63, 255, 63)).setMaxAge(65);
+            p.scale(0.45F).setColor(Color.WHITE).setMaxAge(65);
         }
     }
 
     @Override
+    public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity) {
+        return false;
+    }
+
+    @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
-        TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
-        if(tft != null && tft.getFakedState() != null) {
-            IBlockState fake = tft.getFakedState();
-            return fake.getBlock().getSoundType(fake, world, pos, entity);
+        IBlockState fst = getFakedStateTile(world, pos);
+        if(fst != null) {
+            return fst.getBlock().getSoundType(fst, world, pos, entity);
         }
         return super.getSoundType(state, world, pos, entity);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        IBlockState fst = getFakedStateTile(worldIn, pos);
+        if(fst != null) {
+            Block actual = fst.getBlock();
+            try {
+                return actual.onBlockActivated(worldIn, pos, fst, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+            } catch (Exception exc) {}
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        return Lists.newArrayList();
+    }
+
+    private IBlockState getFakedStateTile(World world, BlockPos pos) {
+        TileTranslucent tt = MiscUtils.getTileAt(world, pos, TileTranslucent.class, true);
+        if(tt == null) return null;
+        return tt.getFakedState();
     }
 
     @Override
@@ -97,28 +130,13 @@ public class BlockFakeTree extends BlockContainer {
     }
 
     @Override
-    public boolean isFullyOpaque(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
     public boolean isTranslucent(IBlockState state) {
         return true;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(IBlockState state) {
-        return false;
     }
 
     @Override
@@ -129,6 +147,25 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullyOpaque(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        IBlockState fst = getFakedStateTile(world, pos);
+        if(fst != null) {
+            return fst.getBlock().getPickBlock(fst, target, world, pos, player);
+        }
+        return null;
     }
 
     @Override
@@ -143,15 +180,6 @@ public class BlockFakeTree extends BlockContainer {
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileFakeTree();
-    }
-
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
-        if(tft != null && tft.getFakedState() != null) {
-            return tft.getFakedState().getBlock().getPickBlock(tft.getFakedState(), target, world, pos, player);
-        }
-        return null;
+        return new TileTranslucent();
     }
 }

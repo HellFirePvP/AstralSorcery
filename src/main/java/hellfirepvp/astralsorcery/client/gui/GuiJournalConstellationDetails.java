@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
@@ -28,13 +27,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -285,7 +282,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             return;
         }
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
             return;
         }
         if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {

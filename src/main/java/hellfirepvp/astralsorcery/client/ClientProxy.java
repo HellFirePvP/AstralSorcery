@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
 import hellfirepvp.astralsorcery.client.render.tile.TESRStarlightInfuser;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTelescope;
+import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientJournalMapping;
@@ -50,6 +51,7 @@ import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
+import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
@@ -219,6 +221,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileCrystalLens.class, new TESRLens());
         registerTESR(TileCrystalPrismLens.class, new TESRPrismLens());
         registerTESR(TileStarlightInfuser.class, new TESRStarlightInfuser());
+        registerTESR(TileTranslucent.class, new TESRTranslucentBlock());
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {

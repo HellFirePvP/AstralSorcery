@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
+import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -119,7 +120,7 @@ public final class EffectHandler {
             }
         }
         acceptsNewParticles = true;
-        TESRFakeTree.renderTranslucentBlocks();
+        TESRTranslucentBlock.renderTranslucentBlocks();
     }
 
     @SubscribeEvent

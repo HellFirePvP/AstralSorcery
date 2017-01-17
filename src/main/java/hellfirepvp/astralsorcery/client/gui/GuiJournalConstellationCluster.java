@@ -15,7 +15,10 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -68,6 +71,20 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         this.unlocTitle = unlocTitle;
         this.isDiscovered = discoveredTier;
         this.constellations = constellations;
+    }
+
+    public static GuiScreenJournal getConstellationScreen() {
+        PlayerProgress client = ResearchManager.clientProgress;
+        List<IConstellation> constellations = ConstellationRegistry.resolve(client.getKnownConstellations());
+        return new GuiJournalConstellationCluster(1, true, "no.title", constellations);
+
+        /*if(tiersFound.isEmpty()) {
+            return new GuiJournalConstellationCluster(1, false, "gui.journal.c.unmapped", unmapped);
+        } else if(tiersFound.size() == 1) {
+            return new GuiJournalConstellationCluster(1, true, tiersFound.get(0).getUnlocalizedName(), tierMapped.get(tiersFound.get(0)));
+        } else {
+            return new GuiJournalConstellations(unmapped, tiersFound);
+        }*/
     }
 
     @Override
@@ -254,7 +271,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             return;
         }
         if(bookmarkIndex == -1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            Minecraft.getMinecraft().displayGuiScreen(getConstellationScreen());
             return;
         }
         for (Rectangle r : rectCRenderMap.keySet()) {
@@ -264,7 +281,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             }
         }
         if(rectBack != null && rectBack.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            Minecraft.getMinecraft().displayGuiScreen(getConstellationScreen());
             return;
         }
         if(rectPrev != null && rectPrev.contains(p)) {

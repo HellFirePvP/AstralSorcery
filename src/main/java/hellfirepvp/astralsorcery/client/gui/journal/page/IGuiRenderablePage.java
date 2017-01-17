@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -147,23 +148,26 @@ public interface IGuiRenderablePage {
         return Minecraft.getMinecraft().standardGalacticFontRenderer;
     }
 
-    default public String getDescriptionFromStarlightAmount(int amtRequired) {
+    default public String getDescriptionFromStarlightAmount(String locTierTitle, int amtRequired, int maxAmount) {
         String base = "astralsorcery.journal.recipe.amt.";
         String ext;
-        if(amtRequired <= 100) {
+        float perc = ((float) amtRequired) / ((float) maxAmount);
+        if(perc <= 0.1) {
             ext = "lowest";
-        } else if(amtRequired <= 500) {
+        } else if(perc <= 0.4) {
             ext = "low";
-        } else if(amtRequired <= 1000) {
+        } else if(perc <= 0.7) {
             ext = "avg";
-        } else if(amtRequired <= 2500) {
+        } else if(perc <= 0.8) {
             ext = "more";
-        } else if(amtRequired <= 4000) {
+        } else if(perc <= 0.9) {
             ext = "high";
+        } else if(perc > 1) {
+            ext = "toomuch";
         } else {
             ext = "highest";
         }
-        return base + ext;
+        return String.format("%s: %s", locTierTitle, I18n.format(String.format("%s%s", base, ext)));
     }
 
 }

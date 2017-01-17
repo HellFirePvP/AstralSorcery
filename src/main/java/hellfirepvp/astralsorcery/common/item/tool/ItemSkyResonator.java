@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,8 +40,9 @@ public class ItemSkyResonator extends Item {
         if(!worldIn.isRemote && worldIn.getTotalWorldTime() % 20 == 0) {
             Optional<Float> distr = SkyNoiseCalculator.getDistributionClient(worldIn, entityIn.getPosition());
             if(distr.isPresent()) {
-                entityIn.addChatMessage(new TextComponentString(distr.get().toString()));
+                //entityIn.addChatMessage(new TextComponentString(distr.get().toString()));
             }
         }
     }
+
 }

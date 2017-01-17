@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -28,8 +29,10 @@ import hellfirepvp.astralsorcery.common.event.ClientKeyboardInputEvent;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -45,6 +48,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -85,6 +89,19 @@ public class ClientRenderEventHandler {
             if (!(world.provider.getSkyRenderer() instanceof RenderRiftSkybox)) {
                 world.provider.setSkyRenderer(new RenderRiftSkybox());
             }
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onOpen(GuiOpenEvent event) {
+        if(event.getGui() instanceof GuiScreenJournal) {
+            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
+        }
+        if(Minecraft.getMinecraft().currentScreen != null &&
+                Minecraft.getMinecraft().currentScreen instanceof GuiScreenJournal &&
+                (event.getGui() == null || !(event.getGui() instanceof GuiScreenJournal))) {
+            SoundHelper.playSoundClient(Sounds.bookClose, 1F, 1F);
         }
     }
 

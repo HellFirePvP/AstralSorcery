@@ -34,6 +34,8 @@ import net.minecraft.item.ItemStack;
 @JEIPlugin
 public class ModIntegrationJEI implements IModPlugin {
 
+    public static boolean jeiRegistrationPhase = true;
+
     public static final String idInfuser = "astralsorcery.infuser";
 
     public static IStackHelper stackHelper;
@@ -59,7 +61,6 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeHandlers(new InfuserRecipeHandler());
 
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
-
         registry.addRecipes(InfusionRecipeRegistry.recipes);
         registry.addRecipes(Lists.newArrayList(
                 RegistryRecipes.rRJournal      .makeNative(),
@@ -70,16 +71,21 @@ public class ModIntegrationJEI implements IModPlugin {
                 RegistryRecipes.rMarbleEngraved.makeNative(),
                 RegistryRecipes.rMarblePillar  .makeNative(),
                 RegistryRecipes.rMarbleRuned   .makeNative()));
+
+        jeiRegistrationPhase = false;
     }
 
     private void hideItems(IItemBlacklist blacklist) {
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
+        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
     }
 
     @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {}
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+
+    }
 
 }

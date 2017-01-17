@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -43,10 +45,11 @@ public class InfuserRecipeHandler implements IRecipeHandler<AbstractInfusionReci
         return new InfuserRecipeWrapper(recipe);
     }
 
-    //Would crash way earlier if that was ever false.
     @Override
     public boolean isRecipeValid(AbstractInfusionRecipe recipe) {
-        return true;
+        //return ModIntegrationJEI.jeiRegistrationPhase ||
+        //        ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT);
+        return true; //TODO uhm ^
     }
 
 }

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
@@ -44,6 +45,7 @@ public class ItemsAS {
     public static ItemLinkingTool linkingTool;
     public static ItemJournal journal;
     public static ItemHandTelescope handTelescope;
+    public static ItemIlluminationWand illuminationWand;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

@@ -30,6 +30,8 @@ public class RegistrySounds {
         clipSwitch = registerSound("clipSwitch", SoundCategory.BLOCKS);
         attunement = registerSound("attunement", SoundCategory.MASTER);
         craftFinish = registerSound("craftFinish", SoundCategory.BLOCKS);
+        bookClose = registerSound("bookClose", SoundCategory.MASTER);
+        bookFlip = registerSound("bookFlip", SoundCategory.MASTER);
     }
 
     /*private static <T extends SoundEvent> T registerSound(String jsonName, SoundCategory predefinedCategory) {

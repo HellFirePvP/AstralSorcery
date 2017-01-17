@@ -61,6 +61,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
     @Override
     public void onGuiClosed() {
+        super.onGuiClosed();
         rescaleAndRefresh = false;
     }
 
@@ -157,7 +158,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
         Point p = new Point(mouseX, mouseY);
         if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
             resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+            Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
             return;
         }
         if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {

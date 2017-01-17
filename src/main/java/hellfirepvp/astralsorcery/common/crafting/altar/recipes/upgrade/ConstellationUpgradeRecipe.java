@@ -75,7 +75,6 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
         setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                 AltarSlot.UPPER_RIGHT,
                 AltarSlot.UPPER_LEFT);
-        setPassiveStarlightRequirement(3000);
     }
 
     @Override

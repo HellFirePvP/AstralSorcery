@@ -21,10 +21,17 @@ import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
@@ -51,7 +58,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(recipeToRender);
+        return new Render(recipeToRender, TileAltar.AltarLevel.DISCOVERY);
     }
 
     public static class Render implements IGuiRenderablePage {
@@ -59,13 +66,15 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc");
 
         private final DiscoveryRecipe recipe;
+        private final TileAltar.AltarLevel altarLevel;
         protected BindableResource gridTexture;
 
         private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
 
-        public Render(DiscoveryRecipe recipe) {
+        public Render(DiscoveryRecipe recipe, TileAltar.AltarLevel correspondingAltarLevel) {
             this.recipe = recipe;
             this.gridTexture = texGrid;
+            this.altarLevel = correspondingAltarLevel;
         }
 
         @Override
@@ -133,10 +142,23 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
 
         public void addTooltip(List<String> out) {
             if(recipe.getPassiveStarlightRequired() > 0) {
-                String displReq = getDescriptionFromStarlightAmount(recipe.getPassiveStarlightRequired());
-                displReq = I18n.format(displReq);
-                String dsc = I18n.format("astralsorcery.journal.recipe.amt.desc", displReq);
+                TileAltar.AltarLevel highestPossible = altarLevel;
+                ProgressionTier reached = ResearchManager.clientProgress.getTierReached();
+                if (reached.isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT)) {
+                    highestPossible = TileAltar.AltarLevel.CONSTELLATION_CRAFT;
+                } else if(reached.isThisLaterOrEqual(ProgressionTier.ATTUNEMENT)) {
+                    highestPossible = TileAltar.AltarLevel.ATTUNEMENT;
+                }
+                long indexSel = (ClientScheduler.getClientTick() / 30) % (highestPossible.ordinal() + 1);
+                TileAltar.AltarLevel levelSelected = TileAltar.AltarLevel.values()[((int) indexSel)];
+                int max = levelSelected.getStarlightMaxStorage();
+                Item i = Item.getItemFromBlock(BlocksAS.blockAltar);
+                String locTier = Item.getItemFromBlock(BlocksAS.blockAltar).getUnlocalizedName(new ItemStack(i, 1, levelSelected.ordinal()));
+                locTier = I18n.format(locTier + ".name");
+                String displReq = "  " + getDescriptionFromStarlightAmount(locTier, recipe.getPassiveStarlightRequired(), max);
+                String dsc = I18n.format("astralsorcery.journal.recipe.amt.desc");
                 out.add(dsc);
+                out.add(displReq);
             }
             if(recipe instanceof INighttimeRecipe) {
                 out.add(I18n.format("astralsorcery.journal.recipe.nighttime"));

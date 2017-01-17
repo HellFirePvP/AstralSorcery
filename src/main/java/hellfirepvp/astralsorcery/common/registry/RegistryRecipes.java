@@ -76,6 +76,7 @@ public class RegistryRecipes {
     public static AttunementAltarRecipe rAttunementAltar;
     public static AttunementRecipe rStarlightInfuser;
     public static AttunementRecipe rTreeBeacon;
+    public static ConstellationRecipe rIlluminationWand;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -248,6 +249,7 @@ public class RegistryRecipes {
         rRitualPedestal = registerAltarRecipe(new RecipeRitualPedestal());
 
         rLens = registerAltarRecipe(new LensRecipe());
+        rLens.setPassiveStarlightRequirement(1700);
 
         rPrism = registerAltarRecipe(new PrismLensRecipe());
 
@@ -258,6 +260,23 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rIlluminationWand = registerConstellationRecipe(new ShapedRecipe(ItemsAS.illuminationWand)
+                .addPart(Items.NETHER_STAR,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT));
+        rIlluminationWand.setCstItem(ItemHandle.getCrystalVariant(false, false),
+                ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT);
+        rIlluminationWand.setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
+        rIlluminationWand.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                AttunementRecipe.AltarSlot.LOWER_LEFT);
 
         rSkyResonator = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.skyResonator)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -432,6 +451,7 @@ public class RegistryRecipes {
                 ConstellationRecipe.AltarAdditionalSlot.UP_UP_RIGHT,
                 ConstellationRecipe.AltarAdditionalSlot.UP_RIGHT_RIGHT);
         rLinkTool.setAttItem(OreDictAlias.BLOCK_WOOD_LOGS, AttunementRecipe.AltarSlot.LOWER_LEFT);
+        rLinkTool.setPassiveStarlightRequirement(1500);
 
         rLightwell = registerDiscoveryRecipe(new ShapedRecipe(BlocksAS.blockWell)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),

@@ -69,7 +69,7 @@ public class ConstellationRecipe extends AttunementRecipe {
 
     public ConstellationRecipe(IAccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.CONSTELLATION_CRAFT, recipe);
-        setPassiveStarlightRequirement(3700);
+        setPassiveStarlightRequirement(3200);
     }
 
     public ConstellationRecipe setCstItem(Item i, AltarAdditionalSlot... slots) {

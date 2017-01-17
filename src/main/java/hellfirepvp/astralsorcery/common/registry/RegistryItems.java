@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -114,10 +115,11 @@ public class RegistryItems {
         tunedCelestialCrystal = registerItem(new ItemTunedCelestialCrystal());
 
         //entityPlacer = registerItem(new ItemEntityPlacer());
-        linkingTool = registerItem(new ItemLinkingTool());
         journal = registerItem(new ItemJournal());
         handTelescope = registerItem(new ItemHandTelescope());
+        linkingTool = registerItem(new ItemLinkingTool());
         wand = registerItem(new ItemWand());
+        illuminationWand = registerItem(new ItemIlluminationWand());
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
 

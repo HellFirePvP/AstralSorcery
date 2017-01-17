@@ -25,5 +25,27 @@
 	            "stream": false
 	        }
 	    ]
+	},
+	"bookClose": {
+	    "category": "master",
+	    "sounds": [
+	        {
+	            "name": "astralsorcery:book_close",
+	            "stream": false
+	        }
+	    ]
+	},
+	"bookFlip": {
+	    "category": "master",
+	    "sounds": [
+	        {
+	            "name": "astralsorcery:book_turn1",
+	            "stream": false
+	        },
+	        {
+	            "name": "astralsorcery:book_turn2",
+	            "stream": false
+	        }
+	    ]
 	}
 }

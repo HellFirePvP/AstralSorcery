@@ -22,5 +22,7 @@ public class Sounds {
     public static SoundUtils.CategorizedSoundEvent clipSwitch;
     public static SoundUtils.CategorizedSoundEvent craftFinish;
     public static SoundUtils.CategorizedSoundEvent attunement;
+    public static SoundUtils.CategorizedSoundEvent bookClose;
+    public static SoundUtils.CategorizedSoundEvent bookFlip;
 
 }

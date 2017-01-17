@@ -443,7 +443,7 @@ public class GuiProgressionRenderer {
     }
 
     private void drawBlendedStarfieldOverlay(float zLevel, double scalePosX, double scalePosY, double scaleFactor) {
-        GL11.glColor4f(0.8F, 0.8F, 0.8F, 0.4F);
+        GL11.glColor4f(1F, 1F, 1F, 0.15F);
         GL11.glPushMatrix();
         GL11.glScaled(scaleFactor, scaleFactor, scaleFactor);
         textureResOVL.bind();
@@ -461,7 +461,7 @@ public class GuiProgressionRenderer {
         vb.pos(0,               realRenderHeight, zLevel).tex(lowU,  highV).endVertex();
         vb.pos(realRenderWidth, realRenderHeight, zLevel).tex(highU, highV).endVertex();
         vb.pos(realRenderWidth, 0,                zLevel).tex(highU, lowV) .endVertex();
-        vb.pos(0,               0,                zLevel).tex(lowU,  lowV) .endVertex();
+        vb.pos(0,               0,                zLevel).tex(lowU, lowV) .endVertex();
         Tessellator.getInstance().draw();
         GL11.glPopMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);

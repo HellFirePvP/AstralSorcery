@@ -48,7 +48,7 @@ public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe
 
     public DiscoveryRecipe(IAccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.DISCOVERY, recipe);
-        setPassiveStarlightRequirement(600);
+        setPassiveStarlightRequirement(700);
     }
 
     @Override

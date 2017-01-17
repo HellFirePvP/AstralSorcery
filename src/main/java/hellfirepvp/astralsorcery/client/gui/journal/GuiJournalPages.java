@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellations;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalConstellationCluster;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
@@ -19,10 +19,11 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -109,6 +110,7 @@ public class GuiJournalPages extends GuiScreenJournal {
 
     @Override
     public void onGuiClosed() {
+        super.onGuiClosed();
         if(origin != null) {
             if(saveSite) {
                 openGuiInstance = this;
@@ -321,7 +323,7 @@ public class GuiJournalPages extends GuiScreenJournal {
             }
             if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
                 saveSite = false;
-                Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellations.getConstellationScreen());
+                Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
                 return;
             }
             if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
@@ -344,10 +346,12 @@ public class GuiJournalPages extends GuiScreenJournal {
         }
         if(rectPrev != null && rectPrev.contains(p)) {
             this.currentPageOffset -= 1;
+            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
         if(rectNext != null && rectNext.contains(p)) {
             this.currentPageOffset += 1;
+            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
 

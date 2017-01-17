@@ -43,12 +43,7 @@ public class ItemRendererModelDummy implements IModel {
         this.parent = parent;
     }
 
-    private static final IModelState NO_STATE = new IModelState() {
-        @Override
-        public Optional<TRSRTransformation> apply(Optional<? extends IModelPart> part) {
-            return Optional.absent();
-        }
-    };
+    private static final IModelState NO_STATE = part -> Optional.absent();
 
     @Override
     public Collection<ResourceLocation> getDependencies() {

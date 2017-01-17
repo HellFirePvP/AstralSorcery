@@ -82,6 +82,10 @@ public class RegistryResearch {
         ResearchNode resStarResult = new ResearchNode(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), "STARMETAL_RES", 3, 2);
         resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
 
+        ResearchNode resIllWand = new ResearchNode(new ItemStack(ItemsAS.illuminationWand), "ILLUMINATION_WAND", 5, 1);
+        resIllWand.addPage(getTextPage("ILLUMINATION_WAND.1"));
+        resIllWand.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rIlluminationWand));
+
         ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 2, 3);
         resPrism.addPage(getTextPage("PRISM.1"));
         resPrism.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rPrism));
@@ -111,6 +115,7 @@ public class RegistryResearch {
         registerItemLookup(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),                   resStarResult,        0, ResearchProgression.CONSTELLATION);
         registerItemLookup(ItemCraftingComponent.MetaType.STARDUST.asStack(),                          resStarResult,        0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(ItemsAS.coloredLens, 1, OreDictionary.WILDCARD_VALUE),        resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.illuminationWand, 1, OreDictionary.WILDCARD_VALUE),   resIllWand,           0, ResearchProgression.CONSTELLATION);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
@@ -120,6 +125,7 @@ public class RegistryResearch {
         resPrism.addSourceConnectionFrom(resStarResult);
         resStarResult.addSourceConnectionFrom(resStarOre);
         resCollCrystal.addSourceConnectionFrom(resStarResult);
+        resIllWand.addSourceConnectionFrom(resStarResult);
         resCelCrystalCluster.addSourceConnectionFrom(resStarResult);
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
 
@@ -133,6 +139,7 @@ public class RegistryResearch {
         regConstellation.register(resCelCrystalCluster);
         regConstellation.register(resCelCrystals);
         regConstellation.register(resRitualAccel);
+        regConstellation.register(resIllWand);
     }
 
     private static void initAttunement() {

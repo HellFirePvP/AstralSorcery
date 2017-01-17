@@ -60,7 +60,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
     public AttunementRecipe(IAccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.ATTUNEMENT, recipe);
-        setPassiveStarlightRequirement(2000);
+        setPassiveStarlightRequirement(1400);
     }
 
     public AttunementRecipe setAttItem(Block b, AltarSlot... slots) {

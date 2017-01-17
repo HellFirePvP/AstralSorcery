@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -45,6 +46,7 @@ public class GuiJournalContainer extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         texJournalContainer.bind();
         drawRect(guiLeft, guiTop, xSize, ySize);
+        TextureHelper.refreshTextureBindState();
     }
 
     protected void drawRect(int offsetX, int offsetY, int width, int height) {

@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
 import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.block.BlockTreeBeacon;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
@@ -48,6 +49,7 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
+import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -143,6 +145,8 @@ public class RegistryBlocks {
 
         treeBeacon = registerBlock(new BlockTreeBeacon());
         queueDefaultItemBlock(treeBeacon);
+        translucentBlock = registerBlock(new BlockTranslucentBlock());
+        queueDefaultItemBlock(translucentBlock);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -189,6 +193,7 @@ public class RegistryBlocks {
         registerTile(TileStarlightInfuser.class);
         registerTile(TileTreeBeacon.class);
         registerTile(TileRitualLink.class);
+        registerTile(TileTranslucent.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);
