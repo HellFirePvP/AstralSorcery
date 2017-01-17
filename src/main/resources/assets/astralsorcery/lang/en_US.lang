@@ -94,6 +94,10 @@ astralsorcery.journal.ALTAR2.1.text=[WIP]<NL>Altar upgrading recipe. Advance to 
 research.WELL.name=[WIP]Lightwell
 astralsorcery.journal.WELL.1.text=[WIP]<NL>Well that collects liquid starlight. Collects more during nighttime. Needs a catalyst (Aquamarine, rock crystal, celestial crystal). Catalysts have different lifetime expectations and collection multipliers (Aquamarine < rock crystal < celestial crystal). Liquid starlight can be extracted by rightclicking with a bucket. Liquid starlight as fluid on the ground provides nightvision.
 
+research.SKY_RESO.name=Sky Wave Resonator
+astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky it seems like any star is like the other. However the light they send varies from position to position; the light of one star overlays with others causing it to either amplify in strength or just vanish entirely.<NL>Placing your altar and whatever construct you come up with in the future to potentially collect this volatile light at positions where the light is amplified, might be very important.
+astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualizes those overlaying light waves would be most convenient... Surely this liquified form of that starlight would come in handy.
+
 research.ILLUMINATOR.name=[WIP]Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=[WIP]<NL>Cave Illuminator. Once placed down, it'll try and light the caves below it. conditions for 'light' to spawn: must be dark (<8 light, <6 skylight) must not see sky. Places light from its x,z pos outwards on ylevels below it. light spawned acts like air and can be replaced, but not broken.
 
@@ -103,6 +107,9 @@ astralsorcery.journal.ATT_PLAYER.1.text=[WIP]
 research.ATT_CRYSTAL.name=[WIP]Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=[WIP]
 astralsorcery.journal.ATT_CRYSTAL.2.text=[WIP]
+
+research.RESO_GEM_POOL.name=Starlight Infusion
+astralsorcery.journal.RESO_GEM_POOL.1.text=Liquid starlight can have multiple effects on items when they are thrown into it.<NL>While rock crystals grow overtime when they're exposed to it, aquamarine seems to react to it as well and stars shimmering. However, all of those things take very long and completely consume the liquid starlight.<NL>There has to be a faster way at least.
 
 research.INFUSER.name=[WIP]Starlight Infuser
 astralsorcery.journal.INFUSER.1.text=[WIP]
@@ -194,6 +201,7 @@ item.ItemCrystalAxe.name=Crystal Axe
 item.ItemCrystalSword.name=Crystal Sword
 item.ItemColoredLens.name=Colored Lens
 item.ItemHandTelescope.name=Hand Telescope
+item.ItemSkyResonator.name=Sky Wave Resonator
 
 item.ItemColoredLens.effect.fire.name=Ignition
 item.ItemColoredLens.effect.break.name=Break
@@ -204,7 +212,7 @@ item.ItemColoredLens.effect.night.name=Night Vision
 
 inventory.altar.0=Luminous Crafting Table
 inventory.altar.1=Starlight Crafting Altar
-inventory.altar.2=[NoName-ConstellationCraft] Altar
+inventory.altar.2=Celestial Altar
 inventory.altar.3=[NoName-TraitCraft] Altar
 inventory.altar.4=[NoName-Endgame] Altar
 
@@ -262,7 +270,7 @@ astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=Being exposed to focused light of this constellation, flowers and plants close to the source are flourishing and grow much faster.
 astralsorcery.constellation.mineralis=Mineralis
 astralsorcery.constellation.mineralis.info=Mineral
-astralsorcery.constellation.mineralis.effect=Standing in the light of this constellation, the stone in your pocket seems to strangely glow and its compo.
+astralsorcery.constellation.mineralis.effect=Standing in the light of this constellation, the stone in your pocket seems to strangely glow and its shape seems to change ever so slightly.
 astralsorcery.constellation.lucerna=Lucerna
 astralsorcery.constellation.lucerna.info=Light
 astralsorcery.constellation.lucerna.effect=The light of this constellation seems way brighter than the light of any other constellation, eventhough it's further away from you than other constellations.

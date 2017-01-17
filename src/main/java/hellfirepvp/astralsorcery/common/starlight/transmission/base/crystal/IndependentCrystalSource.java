@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileNetworkSkybound;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -41,6 +42,8 @@ import java.util.function.Function;
 public class IndependentCrystalSource extends SimpleIndependentSource {
 
     public static final double MIN_DST = 16;
+
+    private float posDistribution = -1;
 
     private CrystalProperties crystalProperties;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
@@ -63,9 +66,13 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         if(!doesSeeSky || handle == null) {
             return 0F;
         }
+        if(posDistribution == -1) {
+            posDistribution = SkyNoiseCalculator.getDistribution(world, pos);
+        }
         Function<Float, Float> distrFunction = getDistributionFunc();
         double perc = distrFunction.apply(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
+        perc *= (0.2 + (0.8 * posDistribution));
         return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(getStarlightType(), distrFunction)));
     }
 

@@ -19,10 +19,10 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
+import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import net.minecraft.item.ItemStack;
 
@@ -51,6 +51,7 @@ public class ItemsAS {
     public static ItemCrystalSword crystalSword;
     public static ItemWand wand;
     public static ItemColoredLens coloredLens;
+    public static ItemSkyResonator skyResonator;
 
     public static ItemStack itemBucketLiquidStarlight;
 

@@ -45,7 +45,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
-    public int progressTier = 0, alignmentCharge = 0;
+    public int progressTier = 0;
+    public double alignmentCharge = 0.0;
 
     public PktSyncKnowledge() {}
 
@@ -111,7 +112,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         }
 
         this.progressTier = buf.readInt();
-        this.alignmentCharge = buf.readInt();
+        this.alignmentCharge = buf.readDouble();
     }
 
     @Override
@@ -154,7 +155,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         }
 
         buf.writeInt(this.progressTier);
-        buf.writeInt(this.alignmentCharge);
+        buf.writeDouble(this.alignmentCharge);
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 /**
@@ -45,6 +46,21 @@ public class WorldBlockPos extends BlockPos {
 
     public IBlockState getStateAt() {
         return world.getBlockState(this);
+    }
+
+    @Override
+    public WorldBlockPos add(int x, int y, int z) {
+        return wrap(world, super.add(x, y, z));
+    }
+
+    @Override
+    public WorldBlockPos add(double x, double y, double z) {
+        return wrap(world, super.add(x, y, z));
+    }
+
+    @Override
+    public WorldBlockPos add(Vec3i vec) {
+        return wrap(world, super.add(vec));
     }
 
     public <T extends TileEntity> T getTileAt(Class<T> tileClass, boolean forceChunkLoad) {

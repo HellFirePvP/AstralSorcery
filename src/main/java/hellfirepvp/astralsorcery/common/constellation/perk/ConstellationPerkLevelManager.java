@@ -37,7 +37,7 @@ public class ConstellationPerkLevelManager {
 
     //0 to 8 for now.
     public static int getAlignmentLevel(PlayerProgress progress) {
-        int charge = progress.getAlignmentCharge();
+        double charge = progress.getAlignmentCharge();
         if(charge >= levelsRequired[levelsRequired.length - 1]) {
             return levelsRequired.length;
         }

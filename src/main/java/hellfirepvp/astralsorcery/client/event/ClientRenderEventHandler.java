@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
@@ -18,6 +19,11 @@ import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.ClientKeyboardInputEvent;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
@@ -70,8 +76,15 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
-        if (world.provider.getDimension() == 0 && !(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-            world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
+        if (((DataWorldSkyHandlers) SyncDataHolder.getDataClient(SyncDataHolder.DATA_SKY_HANDLERS)).hasWorldHandler(world)) {
+            if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
+                world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
+            }
+        }
+        if(world.provider.getDimension() == Config.dimensionIdSkyRift) {
+            if (!(world.provider.getSkyRenderer() instanceof RenderRiftSkybox)) {
+                world.provider.setSkyRenderer(new RenderRiftSkybox());
+            }
         }
     }
 

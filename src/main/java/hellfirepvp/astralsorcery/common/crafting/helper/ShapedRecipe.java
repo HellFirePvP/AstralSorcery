@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -112,6 +113,11 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
     @Override
     public AccessibleRecipeAdapater make() {
         return new AccessibleRecipeAdapater(RecipeHelper.getShapedOredictRecipe(getOutput(), getNativeObjOutArray()), this);
+    }
+
+    @Override
+    public IRecipe makeNative() {
+        return RecipeHelper.getShapedOredictRecipe(getOutput(), getNativeObjOutArray());
     }
 
     public ShapedLightProximityRecipe makeLightProximityRecipe() {

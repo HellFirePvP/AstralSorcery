@@ -63,6 +63,6 @@ public class BasicInfusionRecipe extends AbstractInfusionRecipe {
         from.add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
         Vector3 dir = new Vector3(infuser).add(0.5, 1.6, 0.5).subtract(from);
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-        p.setColor(Color.WHITE).scale(0.3F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
+        p.setColor(Color.WHITE).scale(0.2F + rand.nextFloat() * 0.1F).gravity(0.004).motion(dir.getX() / 40D, dir.getY() / 40D, dir.getZ() / 40D);
     }
 }

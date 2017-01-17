@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.world;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeAquamarine;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeMarble;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeRockCrystals;
@@ -18,6 +20,7 @@ import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
 import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -77,10 +80,21 @@ public class AstralWorldGenerator implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+        if(world.getWorldType().equals(WorldType.FLAT)) return;
+
         if(Config.enableChunkVersioning) {
             getVersionBuffer(world).markChunkGeneration(new ChunkPos(chunkX, chunkZ));
         }
         generateWithLastKnownVersion(chunkX, chunkZ, world, 0);
+
+        /*for (int xx = 0; xx < 16; xx++) {
+            for (int zz = 0; zz < 16; zz++) {
+                BlockPos pos = new BlockPos((chunkX * 16) + xx, 0, (chunkZ * 16) + zz);
+                float distr = SkyNoiseCalculator.getDistribution(world, pos);
+                int y = (int) (35 + distr * 40);
+                world.setBlockState(new BlockPos(pos.getX(), y, pos.getZ()), Blocks.GLASS.getDefaultState(), 2);
+            }
+        }*/
     }
 
     private void generateWithLastKnownVersion(int chunkX, int chunkZ, World world, int lastKnownChunkVersion) {

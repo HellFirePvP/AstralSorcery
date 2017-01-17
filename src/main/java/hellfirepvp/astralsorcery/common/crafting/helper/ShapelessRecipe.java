@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -99,6 +100,20 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
             }
         }
         return new AccessibleRecipeAdapater(RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts), this);
+    }
+
+    @Override
+    public IRecipe makeNative() {
+        Object[] parts = new Object[contentCounter];
+        for (int i = 0; i < parts.length; i++) {
+            Object obj = parts[i];
+            if(obj instanceof ItemHandle) {
+                parts[i] = contents[i].getObjectForRecipe();
+            } else {
+                parts[i] = contents[i];
+            }
+        }
+        return RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts);
     }
 
     @Nullable

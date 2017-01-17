@@ -162,11 +162,13 @@ public class RegistryResearch {
         resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
+        ResearchNode resResoGem = new ResearchNode(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), "RESO_GEM_POOL", 2, -2);
+        resResoGem.addPage(getTextPage("RESO_GEM_POOL.1"));
+
         ResearchNode resInfuser = new ResearchNode(new ItemStack(BlocksAS.starlightInfuser), "INFUSER", 3, -1);
         resInfuser.addPage(getTextPage("INFUSER.1"));
         resInfuser.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rStarlightInfuser));
         resInfuser.addPage(new JournalPageStructure(MultiBlockArrays.patternStarlightInfuser));
-        //TODO add reso gem infusion recipe
 
         ResearchNode resTreeBeacon = new ResearchNode(new ItemStack(BlocksAS.treeBeacon), "TREEBEACON", 4, 1);
         resTreeBeacon.addPage(getTextPage("TREEBEACON.1"));
@@ -181,7 +183,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.tunedCelestialCrystal, 1, OreDictionary.WILDCARD_VALUE), resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),     resInfuser,              1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),           resTreeBeacon,           1, ResearchProgression.ATTUNEMENT);
-        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                             resInfuser,              1, ResearchProgression.ATTUNEMENT); //TODO change to 2 after adding recipe gui
+        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                             resInfuser,              1, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resIlluminator);
         regAttunement.register(resPlayerAtt);
@@ -190,11 +192,13 @@ public class RegistryResearch {
         regAttunement.register(resConstellationUpgrade);
         regAttunement.register(resInfuser);
         regAttunement.register(resTreeBeacon);
+        regAttunement.register(resResoGem);
 
         resRitPedestal.addSourceConnectionFrom(resCrystalAtt);
         resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
         resConstellationUpgrade.addSourceConnectionFrom(resCrystalAtt);
         resTreeBeacon.addSourceConnectionFrom(resInfuser);
+        resInfuser.addSourceConnectionFrom(resResoGem);
     }
 
     private static void initCrafting() {
@@ -209,6 +213,11 @@ public class RegistryResearch {
         ResearchNode resWell = new ResearchNode(new ItemStack(BlocksAS.blockWell), "WELL", 1, 1);
         resWell.addPage(getTextPage("WELL.1"));
         resWell.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rLightwell));
+
+        ResearchNode resResonator = new ResearchNode(new ItemStack(ItemsAS.skyResonator), "SKY_RESO", 2, -1);
+        resResonator.addPage(getTextPage("SKY_RESO.1"));
+        resResonator.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rSkyResonator));
+        resResonator.addPage(getTextPage("SKY_RESO.3"));
 
         ResearchNode resGrindstone = new ResearchNode(BlockMachine.MachineType.GRINDSTONE.asStack(), "GRINDSTONE", 0, 2);
         resGrindstone.addPage(getTextPage("GRINDSTONE.1"));
@@ -239,15 +248,19 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.blockWell,     1, OreDictionary.WILDCARD_VALUE),           resWell,                    1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),                              resTelescope,               1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(ItemsAS.handTelescope,  1, OreDictionary.WILDCARD_VALUE),           resTelescope,               2, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(new ItemStack(ItemsAS.skyResonator,   1, OreDictionary.WILDCARD_VALUE),           resResonator,               1, ResearchProgression.BASIC_CRAFT);
 
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);
         regCrafting.register(resTools);
         regCrafting.register(resWell);
         regCrafting.register(resAltarUpgradeAttenuation);
+        regCrafting.register(resResonator);
 
         resGrindstone.addSourceConnectionFrom(resTools);
         resAltarUpgradeAttenuation.addSourceConnectionFrom(resWell);
+        resResonator.addSourceConnectionFrom(resWell);
+        resResonator.addSourceConnectionFrom(resTelescope);
     }
 
     private static void initDiscovery() {

@@ -53,7 +53,8 @@ public class GenAttributeAquamarine extends WorldGenAttribute {
                 BlockPos check = pos.offset(EnumFacing.UP, yy);
                 IBlockState bs = world.getBlockState(check);
                 Block block = bs.getBlock();
-                if(block instanceof BlockLiquid && bs.getMaterial() == Material.WATER) {
+                if((block instanceof BlockLiquid && bs.getMaterial() == Material.WATER) ||
+                        block.equals(Blocks.ICE) || block.equals(Blocks.PACKED_ICE) || block.equals(Blocks.FROSTED_ICE)) {
                     foundWater = true;
                     break;
                 }

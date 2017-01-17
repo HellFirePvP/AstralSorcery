@@ -45,7 +45,7 @@ public class PlayerProgress {
     private Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>(); //Perk -> Level Of Unlock
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
-    private int alignmentCharge = 0;
+    private double alignmentCharge = 0.0;
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
@@ -53,7 +53,7 @@ public class PlayerProgress {
         appliedPerks.clear();
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
-        alignmentCharge = 0;
+        alignmentCharge = 0.0;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -96,7 +96,7 @@ public class PlayerProgress {
         }
 
         if(compound.hasKey("alignmentCharge")) {
-            this.alignmentCharge = compound.getInteger("alignmentCharge");
+            this.alignmentCharge = compound.getDouble("alignmentCharge");
         }
     }
 
@@ -124,7 +124,7 @@ public class PlayerProgress {
             list.appendTag(tag);
         }
         cmp.setTag("listPerks", list);
-        cmp.setInteger("alignmentCharge", alignmentCharge);
+        cmp.setDouble("alignmentCharge", alignmentCharge);
     }
 
     protected boolean forceGainResearch(ResearchProgression progression) {
@@ -206,7 +206,7 @@ public class PlayerProgress {
         return level > highestFound;*/
     }
 
-    public int getAlignmentCharge() {
+    public double getAlignmentCharge() {
         return alignmentCharge;
     }
 

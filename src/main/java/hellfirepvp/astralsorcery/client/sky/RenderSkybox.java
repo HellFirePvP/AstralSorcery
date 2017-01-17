@@ -41,7 +41,9 @@ public class RenderSkybox extends IRenderHandler {
         if (otherSkyRenderer != null) {
             //Expecting a world renderer that does not render the whole sky, only a part of it.
             //Its the overworld after all. The sky "should" not be changed Kappa
-            otherSkyRenderer.render(partialTicks, world, mc);
+
+            //TODO eventually add integrations for other skyboxes...
+            //otherSkyRenderer.render(partialTicks, world, mc);
         }
 
         /*PlayerProgress progr = ResearchManager.clientProgress;

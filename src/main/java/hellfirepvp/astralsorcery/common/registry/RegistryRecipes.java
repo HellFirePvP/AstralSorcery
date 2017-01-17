@@ -31,7 +31,6 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
-import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -64,7 +63,6 @@ public class RegistryRecipes {
     public static ShapedRecipe rLPRWand;
     public static ShapedRecipe rRJournal;
 
-    //Ugh. Important machines/stuff
     public static DiscoveryRecipe rJournal;
     public static DiscoveryRecipe rHandTelescope;
     public static TelescopeRecipe rTelescope;
@@ -72,6 +70,7 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rAltar;
     public static RecipeRitualPedestal rRitualPedestal;
     public static DiscoveryRecipe rLightwell;
+    public static DiscoveryRecipe rSkyResonator;
     public static AttunementRecipe rIlluminator;
     public static AttunementRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltar;
@@ -217,6 +216,7 @@ public class RegistryRecipes {
 
         manager.addRecipe(rLPRAltar.makeLightProximityRecipe());
         manager.addRecipe(rLPRWand.makeLightProximityRecipe());
+        rRJournal.register();
         manager.addRecipe(rRJournal.make());
 
         manager.addRecipe(rBlackMarbleRaw.make());
@@ -258,6 +258,17 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rSkyResonator = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.skyResonator)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.LOWER_CENTER));
 
         rTreeBeacon = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),

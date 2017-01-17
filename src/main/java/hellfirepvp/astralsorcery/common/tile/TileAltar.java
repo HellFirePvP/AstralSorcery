@@ -40,6 +40,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
@@ -71,6 +72,8 @@ import java.util.UUID;
 public class TileAltar extends TileReceiverBaseInventory implements IWandInteract {
 
     private static final Random rand = new Random();
+
+    private float posDistribution = -1;
 
     private ActiveCraftingTask craftingTask = null;
     private Object clientCraftSound = null;
@@ -351,14 +354,32 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     private boolean starlightPassive(boolean needUpdate) {
         if(starlightStored > 0) needUpdate = true;
-        starlightStored *= getAltarLevel().ordinal() != 0 ? 0.995 : 0.95;
+        starlightStored *= 0.95;
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
         if(doesSeeSky() && handle != null) {
-            int collect = getAltarLevel().ordinal() != 0 ? 60 : getPos().getY() / 2;
-            double perc =  0.2 + (0.8 * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld()));
-            starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (collect * perc)));
-            return true;
+            int yLevel = getPos().getY();
+            if(yLevel > 40) {
+                float collect = 60;
+
+                float dstr;
+                if(yLevel > 140) {
+                    dstr = 1F;
+                } else {
+                    dstr = (yLevel - 40) / 100F;
+                }
+
+                if(posDistribution == -1) {
+                    posDistribution = SkyNoiseCalculator.getDistribution(world, pos);
+                }
+
+                collect *= dstr;
+                collect *= posDistribution;
+                collect *= 0.2 + (0.8 * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld()));
+
+                starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + collect));
+                return true;
+            }
         }
         return needUpdate;
     }

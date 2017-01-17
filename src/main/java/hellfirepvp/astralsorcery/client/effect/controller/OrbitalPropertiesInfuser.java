@@ -52,7 +52,7 @@ public class OrbitalPropertiesInfuser implements OrbitalEffectController.OrbitPe
                  (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
                  (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
         p.setMaxAge(25);
-        p.scale(0.3F).gravity(0.004);
+        p.scale(0.2F).gravity(0.004);
 
         if(rand.nextBoolean()) {
             p = EffectHelper.genericFlareParticle(
@@ -70,7 +70,7 @@ public class OrbitalPropertiesInfuser implements OrbitalEffectController.OrbitPe
                     pos.getZ());
             p.motion(0, 0.03 + (rand.nextFloat() * 0.04F), 0);
             p.setMaxAge(35);
-            p.scale(0.25F).gravity(0.004).setColor(Color.WHITE);
+            p.scale(0.15F).gravity(0.004).setColor(Color.WHITE);
         }
     }
 

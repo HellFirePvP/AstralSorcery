@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -96,6 +97,17 @@ public class ConstellationSkyHandler implements ITickHandler {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public Optional<Long> getSeedIfPresent(World world) {
+        int dim = world.provider.getDimension();
+        if(!cacheSeedLookup.containsKey(dim)) {
+            PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+            PacketChannel.CHANNEL.sendToServer(req);
+            return Optional.empty();
+        }
+        return Optional.of(cacheSeedLookup.get(dim));
+    }
+
     //Convenience method
     public float getCurrentDaytimeDistribution(World world) {
         float dayPart = world.getWorldTime() % 24000;
@@ -133,6 +145,7 @@ public class ConstellationSkyHandler implements ITickHandler {
     public void informWorldUnload(World world) {
         worldHandlersServer.remove(world.provider.getDimension());
         worldHandlersClient.remove(world.provider.getDimension());
+        cacheSeedLookup    .remove(world.provider.getDimension());
     }
 
     @Override

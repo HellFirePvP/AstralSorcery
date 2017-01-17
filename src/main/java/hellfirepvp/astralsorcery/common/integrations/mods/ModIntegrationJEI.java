@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryInfuser;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.InfuserRecipeHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -59,6 +61,15 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
 
         registry.addRecipes(InfusionRecipeRegistry.recipes);
+        registry.addRecipes(Lists.newArrayList(
+                RegistryRecipes.rRJournal      .makeNative(),
+                RegistryRecipes.rBlackMarbleRaw.makeNative(),
+                RegistryRecipes.rMarbleArch    .makeNative(),
+                RegistryRecipes.rMarbleBricks  .makeNative(),
+                RegistryRecipes.rMarbleChiseled.makeNative(),
+                RegistryRecipes.rMarbleEngraved.makeNative(),
+                RegistryRecipes.rMarblePillar  .makeNative(),
+                RegistryRecipes.rMarbleRuned   .makeNative()));
     }
 
     private void hideItems(IItemBlacklist blacklist) {

@@ -30,6 +30,8 @@ public abstract class AbstractCacheableRecipe extends AbstractRecipe {
 
     public abstract IAccessibleRecipe make();
 
+    public abstract IRecipe makeNative();
+
     @Nullable
     public abstract ItemHandle getExpectedStack(int row, int column);
 
