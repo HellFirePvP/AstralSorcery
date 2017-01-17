@@ -21,23 +21,23 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: SkyNoiseCalculator
+ * Class: SkyCollectionHelper
  * Created by HellFirePvP
  * Date: 15.01.2017 / 16:31
  */
-public class SkyNoiseCalculator {
+public class SkyCollectionHelper {
 
     private static final int accuracy = 32;
     private static final Random sharedRand = new Random();
 
     @SideOnly(Side.CLIENT)
-    public static Optional<Float> getDistributionClient(World world, BlockPos pos) {
+    public static Optional<Float> getSkyNoiseDistributionClient(World world, BlockPos pos) {
         Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
         if(!testSeed.isPresent()) return Optional.empty();
         return Optional.of(getDistributionInternal(testSeed.get(), pos));
     }
 
-    public static float getDistribution(World world, BlockPos pos) {
+    public static float getSkyNoiseDistribution(World world, BlockPos pos) {
         return getDistributionInternal(world.getSeed(), pos);
     }
 

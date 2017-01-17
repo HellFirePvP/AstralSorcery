@@ -14,7 +14,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
-import static hellfirepvp.astralsorcery.common.block.BlockMarble.*;
+import static hellfirepvp.astralsorcery.common.block.BlockMarble.MARBLE_TYPE;
+import static hellfirepvp.astralsorcery.common.block.BlockMarble.MarbleBlockType;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -132,6 +132,9 @@ astralsorcery.journal.LENSES_EFFECTS.1.text=Due to the nature of starlight, bend
 research.LINKTOOL.name=[WIP] Linking Tool
 astralsorcery.journal.LINKTOOL.1.text=[WIP]<NL>Can be used to link 1 block of the starlight network to another or onto a block. Right-click selects something, deselect by switching the item held in your hand to another item. To link to something, right-click in select mode; un-link with shift-right-click
 
+research.ILLUMINATION_WAND.name=Illumination Wand
+astralsorcery.journal.ILLUMINATION_WAND.1.text=[WIP]
+
 research.STARMETAL_ORE.name=[WIP] Ore Transmutation
 astralsorcery.journal.STARMETAL_ORE.1.text=[WIP]<NL>Use lens + linking tool to link the collector crystal in one of the structures to an iron ore. Remember the collector crystal needs to see the sky to collect starlight. Also: This process might take a while.
 
@@ -176,9 +179,9 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
-entity.astralsorcery.EntityTelescope.name=Telescope
-entity.astralsorcery.EntityGrindstone.name=Grindstone
 entity.astralsorcery.EntityStardust.name=Stardust
+entity.astralsorcery.EntityAquamarine.name=Aquamarine
+entity.astralsorcery.EntityCrystal.name=Crystal
 
 item.ItemCraftingComponent.aquamarine.name=Aquamarine
 item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot
@@ -191,8 +194,6 @@ item.ItemRockCrystalSimple.name=Rock Crystal
 item.ItemTunedRockCrystal.name=Attuned Rock Crystal
 item.ItemTunedCelestialCrystal.name=Attuned Celestial Crystal
 item.ItemCelestialCrystal.name=Celestial Crystal
-item.ItemEntityPlacer.telescope.name=Telescope
-item.ItemEntityPlacer.grindstone.name=Grindstone
 item.ItemLinkingTool.name=Linking Tool
 item.ItemJournal.name=Journal
 item.ItemWand.name=Astral Attunement Rod

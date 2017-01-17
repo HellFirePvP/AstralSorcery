@@ -12,11 +12,11 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -62,7 +62,7 @@ public class GuiProgressionClusterRenderer {
     public GuiProgressionClusterRenderer(ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
         this.progression = progression;
         this.partSizeHandler = new PartSizeHandler(progression, guiHeight, guiWidth);
-        this.partSizeHandler.setMaxScale(1.0D);
+        this.partSizeHandler.setMaxScale(1.1D);
         this.partSizeHandler.setMinScale(0.1D);
         this.partSizeHandler.setScaleSpeed(0.9D / 20D);
         this.partSizeHandler.updateSize();

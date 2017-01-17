@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 
 import javax.annotation.Nullable;

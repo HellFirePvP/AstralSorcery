@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.util.data;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.HashMap;

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;

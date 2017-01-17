@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
@@ -17,9 +16,9 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesAttun
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.client.util.camera.ClientCameraFlightHelper;
 import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.client.util.camera.ClientCameraFlightHelper;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
@@ -59,18 +58,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;

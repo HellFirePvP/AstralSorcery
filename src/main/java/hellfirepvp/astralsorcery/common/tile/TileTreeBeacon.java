@@ -13,11 +13,11 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
@@ -87,23 +87,26 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-
-            BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
-            if(randPos != null) {
-                TileFakeTree tft = MiscUtils.getTileAt(world, randPos, TileFakeTree.class, false);
-                if(tft != null && tft.getFakedState() != null) {
-                    IBlockState fake = tft.getFakedState();
-                    if(tryHarvestBlock(world, pos, randPos, fake)) { //True, if block disappeared.
-                        world.setBlockToAir(randPos);
+            int runs = MathHelper.ceil(starlightCharge / 20D);
+            starlightCharge = 0D;
+            for (int i = 0; i < runs; i++) {
+                BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
+                if(randPos != null) {
+                    TileFakeTree tft = MiscUtils.getTileAt(world, randPos, TileFakeTree.class, false);
+                    if(tft != null && tft.getFakedState() != null) {
+                        IBlockState fake = tft.getFakedState();
+                        if(tryHarvestBlock(world, pos, randPos, fake)) { //True, if block disappeared.
+                            world.setBlockToAir(randPos);
+                            if(treePositions.removeElement(randPos)) {
+                                changed = true;
+                            }
+                        }
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, randPos);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, randPos, 32));
+                    } else {
                         if(treePositions.removeElement(randPos)) {
                             changed = true;
                         }
-                    }
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, randPos);
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, randPos, 32));
-                } else {
-                    if(treePositions.removeElement(randPos)) {
-                        changed = true;
                     }
                 }
             }
@@ -293,7 +296,10 @@ public class TileTreeBeacon extends TileReceiverBase {
     }
 
     private void receiveStarlight(IWeakConstellation type, double amount) {
-
+        this.starlightCharge += amount;
+        if(type == Constellations.aevitas) {
+            this.starlightCharge += amount * 2;
+        }
     }
 
     public static class TransmissionReceiverTreeBeacon extends SimpleTransmissionReceiver {

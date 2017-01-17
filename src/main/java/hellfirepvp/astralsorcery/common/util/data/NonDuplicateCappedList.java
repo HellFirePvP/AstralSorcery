@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
-import net.minecraft.util.math.BlockPos;
-
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;

@@ -8,13 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
-import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;

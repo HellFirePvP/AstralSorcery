@@ -9,16 +9,9 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

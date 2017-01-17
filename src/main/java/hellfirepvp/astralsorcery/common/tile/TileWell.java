@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -28,16 +27,15 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -51,7 +49,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Random;
-import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -64,6 +61,8 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
     private static final Random rand = new Random();
     private static final int MAX_CAPACITY = 2000;
+
+    private float posDistribution = -1F;
 
     private double mbStarlightAmount = 0;
     private double starlightBuffer = 0;
@@ -83,7 +82,20 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
         if(!world.isRemote) {
             if(world.canSeeSky(getPos())) {
-                starlightBuffer += Math.max(0.0001, ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
+                double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
+                if(posDistribution == -1) {
+                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
+                }
+                sbDayDistribution *= posDistribution;
+                int yLevel = getPos().getY();
+                float dstr;
+                if(yLevel > 140) {
+                    dstr = 1F;
+                } else {
+                    dstr = yLevel / 140F;
+                }
+                sbDayDistribution *= dstr;
+                starlightBuffer += Math.max(0.0001, sbDayDistribution);
             }
 
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
@@ -214,25 +226,21 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
-        if(mbStarlightAmount >= 1000) {
-            if(doDrain) {
-                mbStarlightAmount -= 1000;
-            }
-            return new FluidStack(BlocksAS.fluidLiquidStarlight, 1000);
+        int drainPotential = MathHelper.floor(Math.min(1000D, mbStarlightAmount));
+        if(doDrain) {
+            mbStarlightAmount -= drainPotential;
         }
-        return null;
+        return new FluidStack(BlocksAS.fluidLiquidStarlight, drainPotential);
     }
 
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        if(mbStarlightAmount >= 1000 && maxDrain >= 1000) {
-            if(doDrain) {
-                mbStarlightAmount -= 1000;
-            }
-            return new FluidStack(BlocksAS.fluidLiquidStarlight, 1000);
+        int drainPotential = MathHelper.floor(MathHelper.clamp(mbStarlightAmount, 0, Math.min(1000D, maxDrain)));
+        if(doDrain) {
+            mbStarlightAmount -= drainPotential;
         }
-        return null;
+        return new FluidStack(BlocksAS.fluidLiquidStarlight, drainPotential);
     }
 
     @Nullable

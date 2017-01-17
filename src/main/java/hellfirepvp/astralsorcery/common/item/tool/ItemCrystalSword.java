@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;

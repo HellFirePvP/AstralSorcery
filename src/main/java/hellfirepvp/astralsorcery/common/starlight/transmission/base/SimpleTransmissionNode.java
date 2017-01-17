@@ -14,8 +14,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;

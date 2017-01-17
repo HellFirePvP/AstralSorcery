@@ -9,8 +9,6 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;

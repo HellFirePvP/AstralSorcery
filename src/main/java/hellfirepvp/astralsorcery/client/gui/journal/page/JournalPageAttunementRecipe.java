@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

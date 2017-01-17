@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;

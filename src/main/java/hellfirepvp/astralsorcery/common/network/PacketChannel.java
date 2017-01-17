@@ -16,26 +16,19 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateReach;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktWorldHandlerSyncEarly;
-import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -10,9 +10,6 @@ package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 
 /**

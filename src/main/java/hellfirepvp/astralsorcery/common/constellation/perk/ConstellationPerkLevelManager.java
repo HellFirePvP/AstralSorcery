@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod

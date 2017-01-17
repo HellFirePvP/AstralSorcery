@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.crafting.infusion;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
-import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;

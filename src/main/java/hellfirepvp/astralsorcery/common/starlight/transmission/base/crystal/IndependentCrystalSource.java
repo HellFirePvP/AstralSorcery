@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
@@ -23,7 +22,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileNetworkSkybound;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,7 +66,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
             return 0F;
         }
         if(posDistribution == -1) {
-            posDistribution = SkyNoiseCalculator.getDistribution(world, pos);
+            posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
         }
         Function<Float, Float> distrFunction = getDistributionFunc();
         double perc = distrFunction.apply(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));

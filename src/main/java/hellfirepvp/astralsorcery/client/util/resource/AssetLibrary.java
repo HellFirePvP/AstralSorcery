@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.util.resource;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import net.minecraft.client.resources.IResourceManager;

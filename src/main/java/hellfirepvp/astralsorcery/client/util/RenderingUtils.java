@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
@@ -27,7 +28,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -265,6 +265,10 @@ public class RenderingUtils {
                 if (width > esWidth)
                     esWidth = width;
             }
+            ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+            if(x + 15 + esWidth > sr.getScaledWidth()) {
+                x -= esWidth + 24;
+            }
             int pX = x + 12;
             int pY = y - 12;
             int sumLineHeight = 8;
@@ -328,6 +332,10 @@ public class RenderingUtils {
                 int width = fontRenderer.getStringWidth(toolTip);
                 if (width > esWidth)
                     esWidth = width;
+            }
+            ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+            if(x + 15 + esWidth > sr.getScaledWidth()) {
+                x -= esWidth + 24;
             }
             int pX = x + 12;
             int pY = y - 12;

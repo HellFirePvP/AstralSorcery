@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectArmara;

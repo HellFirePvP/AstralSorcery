@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.impl;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;

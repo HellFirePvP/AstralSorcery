@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
-import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;

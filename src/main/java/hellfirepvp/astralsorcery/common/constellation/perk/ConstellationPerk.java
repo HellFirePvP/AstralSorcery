@@ -10,18 +10,15 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 

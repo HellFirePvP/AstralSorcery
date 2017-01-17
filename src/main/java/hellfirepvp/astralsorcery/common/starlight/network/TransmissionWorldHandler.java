@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;

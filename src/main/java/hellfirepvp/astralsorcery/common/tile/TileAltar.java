@@ -40,7 +40,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
@@ -368,7 +368,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
 
                 if(posDistribution == -1) {
-                    posDistribution = SkyNoiseCalculator.getDistribution(world, pos);
+                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
                 }
 
                 collect *= dstr;

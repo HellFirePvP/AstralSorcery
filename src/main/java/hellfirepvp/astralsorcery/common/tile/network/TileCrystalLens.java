@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -22,7 +21,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Crys
 import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

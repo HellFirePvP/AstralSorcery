@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;

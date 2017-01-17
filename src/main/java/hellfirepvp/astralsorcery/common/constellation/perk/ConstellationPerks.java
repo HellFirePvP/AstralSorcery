@@ -22,10 +22,10 @@ import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveDam
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveDamageReduction;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveElemental;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveNoArmor;
+import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveReduceFall;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelLavaProtection;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelMovespeed;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelPlaceLight;
-import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkDefensiveReduceFall;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelReduceFoodNeed;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkTravelWaterMovement;
 import hellfirepvp.astralsorcery.common.data.config.Config;

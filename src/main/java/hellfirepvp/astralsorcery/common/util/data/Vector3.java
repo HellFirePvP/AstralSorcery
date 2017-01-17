@@ -15,8 +15,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
-import java.util.Formatter;
-import java.util.Locale;
 import java.util.Random;
 
 /**

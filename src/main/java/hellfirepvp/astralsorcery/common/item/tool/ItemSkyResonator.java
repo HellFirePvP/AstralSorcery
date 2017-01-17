@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.util.SkyNoiseCalculator;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,7 +38,7 @@ public class ItemSkyResonator extends Item {
     @SideOnly(Side.CLIENT)
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if(!worldIn.isRemote && worldIn.getTotalWorldTime() % 20 == 0) {
-            Optional<Float> distr = SkyNoiseCalculator.getDistributionClient(worldIn, entityIn.getPosition());
+            Optional<Float> distr = SkyCollectionHelper.getSkyNoiseDistributionClient(worldIn, entityIn.getPosition());
             if(distr.isPresent()) {
                 //entityIn.addChatMessage(new TextComponentString(distr.get().toString()));
             }

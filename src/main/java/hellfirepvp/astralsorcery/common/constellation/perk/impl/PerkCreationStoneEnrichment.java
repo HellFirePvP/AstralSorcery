@@ -9,9 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.impl;
 
 import hellfirepvp.astralsorcery.common.base.OreTypes;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;

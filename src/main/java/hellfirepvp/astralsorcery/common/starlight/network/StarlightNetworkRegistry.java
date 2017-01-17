@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.StarmetalFormHandler;
 import net.minecraft.block.Block;
@@ -21,8 +20,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 

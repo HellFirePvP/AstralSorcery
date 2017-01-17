@@ -14,18 +14,18 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CollectorCrystalRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.LensRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.PrismLensRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.RecipeRitualPedestal;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -44,7 +44,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
-import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.*;
+import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerBasicInfusion;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -307,7 +307,7 @@ public class RegistryRecipes {
         rTreeBeacon.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
-        rTreeBeacon.setPassiveStarlightRequirement(3500);
+        rTreeBeacon.setPassiveStarlightRequirement(2000);
 
         rStarlightInfuser = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
@@ -331,7 +331,6 @@ public class RegistryRecipes {
         rStarlightInfuser.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
-        rStarlightInfuser.setPassiveStarlightRequirement(3700);
 
         rHandTelescope = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.handTelescope)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -466,7 +465,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
-        rLightwell.setPassiveStarlightRequirement(800);
+        rLightwell.setPassiveStarlightRequirement(300);
 
         rIlluminator = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),

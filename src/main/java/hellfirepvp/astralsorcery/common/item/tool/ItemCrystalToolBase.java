@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
-import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;

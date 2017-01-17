@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
-import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;

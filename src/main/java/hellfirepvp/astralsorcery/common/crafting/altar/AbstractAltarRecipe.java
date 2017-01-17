@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;

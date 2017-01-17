@@ -8,17 +8,17 @@
 
 package hellfirepvp.astralsorcery.client.sky;
 
-import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
-import hellfirepvp.astralsorcery.client.util.TextureHelper;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;

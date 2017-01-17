@@ -34,7 +34,7 @@ public class RenderSkybox extends IRenderHandler {
     @Override
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
 
-        if (!astralSky.isInitialized() && world.provider.getDimension() == 0 && !AssetLibrary.reloading) { //DimID == 0 should always be the case tho.
+        if (!astralSky.isInitialized() && !AssetLibrary.reloading) { //DimID == 0 should always be the case tho.
             astralSky.setInitialized(world.getWorldInfo().getSeed());
         }
 

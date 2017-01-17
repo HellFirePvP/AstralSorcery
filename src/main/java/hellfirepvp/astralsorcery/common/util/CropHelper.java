@@ -10,12 +10,9 @@ package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
-import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockReed;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;

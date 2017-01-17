@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -9,10 +9,6 @@
 package hellfirepvp.astralsorcery.common.starlight.network;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
-import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 

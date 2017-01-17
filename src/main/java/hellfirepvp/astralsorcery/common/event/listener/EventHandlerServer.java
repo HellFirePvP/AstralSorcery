@@ -24,8 +24,6 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
-import hellfirepvp.astralsorcery.common.item.ItemEntityPlacer;
-import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;

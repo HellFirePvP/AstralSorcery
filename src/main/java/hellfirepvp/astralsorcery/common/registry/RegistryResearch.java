@@ -32,7 +32,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.*;
+import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
 /**
  * This class is part of the Astral Sorcery Mod

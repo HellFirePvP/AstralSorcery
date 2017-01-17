@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;

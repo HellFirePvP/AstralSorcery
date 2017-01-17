@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.world;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import net.minecraft.entity.Entity;

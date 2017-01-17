@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;

@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import net.minecraft.nbt.NBTTagCompound;

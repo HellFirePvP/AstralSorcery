@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Arrays;
 import java.util.Collections;

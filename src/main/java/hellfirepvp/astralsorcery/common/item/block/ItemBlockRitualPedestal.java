@@ -9,9 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.block;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod

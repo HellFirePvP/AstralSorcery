@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.data;
 
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChain;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;

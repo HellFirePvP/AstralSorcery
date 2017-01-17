@@ -13,7 +13,6 @@ import com.google.common.reflect.ClassPath;
 import hellfirepvp.astralsorcery.core.ASMTransformationException;
 import hellfirepvp.astralsorcery.core.ClassPatch;
 import hellfirepvp.astralsorcery.core.SubClassTransformer;
-import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.tree.ClassNode;
 

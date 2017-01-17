@@ -9,15 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
