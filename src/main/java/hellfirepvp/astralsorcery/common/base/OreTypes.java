@@ -80,6 +80,7 @@ public class OreTypes {
             if(Block.getBlockFromItem(stack.getItem()) == null) continue;
             String className = stack.getItem().getClass().getName();
             if(!className.toLowerCase().contains("greg")) {
+                if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) stack.setItemDamage(0);
                 return stack;
             }
         }

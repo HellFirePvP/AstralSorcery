@@ -35,11 +35,13 @@ public class PerkTravelWaterMovement extends ConstellationPerk {
                 player.motionX *= swimSpeedMultiplier;
                 player.motionY *= swimSpeedMultiplier;
                 player.motionZ *= swimSpeedMultiplier;
+                addAlignmentCharge(player, 0.02);
             }
             if(player.isInLava()) {
                 player.motionX *= 1.4F * swimSpeedMultiplier;
                 player.motionY *= 1.2F * swimSpeedMultiplier;
                 player.motionZ *= 1.4F * swimSpeedMultiplier;
+                addAlignmentCharge(player, 0.4);
             }
         }
     }

@@ -267,7 +267,9 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;
 
-        progress.modifyCharge(MathHelper.floor(charge));
+        progress.modifyCharge(charge);
+
+        //AstralSorcery.log.info("NewCharge: " + player.getName() + " - " + progress.getAlignmentCharge());
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);

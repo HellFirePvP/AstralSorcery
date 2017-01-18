@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
@@ -20,8 +21,14 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -47,7 +54,6 @@ import java.util.Random;
 public final class EffectHandler {
 
     public static final Random STATIC_EFFECT_RAND = new Random();
-    private static int clientEffectTick = 0;
     public static final EffectHandler instance = new EffectHandler();
 
     private static boolean acceptsNewParticles = true, cleanRequested = false;
@@ -127,6 +133,16 @@ public final class EffectHandler {
         if (event.phase != TickEvent.Phase.END) return;
 
         tick();
+
+        /*if(Minecraft.getMinecraft().player == null) return;
+        if(ClientScheduler.getClientTick() % 10 != 0) return;
+        ItemStack main = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+        if(main != null && main.getItem() instanceof ItemIlluminationWand) {
+            RayTraceResult res = MiscUtils.rayTraceLook(Minecraft.getMinecraft().player, 60);
+            if(res != null && res.typeOfHit == RayTraceResult.Type.BLOCK) {
+                EffectLightning.buildAndRegisterLightning(new Vector3(res.getBlockPos()).addY(7), new Vector3(res.getBlockPos()));
+            }
+        }*/
     }
 
     public EntityComplexFX registerFX(EntityComplexFX entityComplexFX) {
@@ -188,8 +204,6 @@ public final class EffectHandler {
     }
 
     public void tick() {
-        clientEffectTick++;
-
         if(cleanRequested) {
             for (IComplexEffect.RenderTarget t : IComplexEffect.RenderTarget.values()) {
                 for (int i = 0; i <= 2; i++) {
@@ -247,10 +261,6 @@ public final class EffectHandler {
     public static boolean mayAcceptParticle(IComplexEffect effect) {
         if(effect instanceof IComplexEffect.PreventRemoval || Config.particleAmount == 2) return true;
         return Config.particleAmount == 1 && STATIC_EFFECT_RAND.nextInt(4) == 0;
-    }
-
-    public static int getClientEffectTick() {
-        return clientEffectTick;
     }
 
     static {

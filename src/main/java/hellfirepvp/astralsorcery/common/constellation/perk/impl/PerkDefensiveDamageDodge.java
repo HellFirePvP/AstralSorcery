@@ -33,6 +33,7 @@ public class PerkDefensiveDamageDodge extends ConstellationPerk {
         if(source.canHarmInCreative()) return dmgIn;
 
         if(rand.nextInt(chanceDodgeDamage) == 0) {
+            addAlignmentCharge(hurt, 0.7);
             return 0F;
         }
         return dmgIn;

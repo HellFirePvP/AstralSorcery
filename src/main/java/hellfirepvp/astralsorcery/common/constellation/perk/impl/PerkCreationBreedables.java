@@ -45,12 +45,14 @@ public class PerkCreationBreedables extends ConstellationPerk {
             if(!animal.isDead) {
                 if(animal.getGrowingAge() < 0 && rand.nextInt(chanceToAge) == 0) {
                     animal.setGrowingAge(0);
+                    addAlignmentCharge(player, 0.1);
                 }
                 if(animal.getGrowingAge() > 0 && rand.nextInt(chanceToBreed) == 0) {
                     EntityAgeable child = animal.createChild(animal);
                     child.setGrowingAge(-24000);
                     child.setLocationAndAngles(animal.posX, animal.posY, animal.posZ, 0.0F, 0.0F);
                     player.getEntityWorld().spawnEntityInWorld(child);
+                    addAlignmentCharge(player, 0.2);
                 }
             }
         }

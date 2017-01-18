@@ -212,7 +212,7 @@ public class PlayerProgress {
         return ConstellationPerkLevelManager.getAlignmentLevel(this);
     }
 
-    protected void modifyCharge(int charge) {
+    protected void modifyCharge(double charge) {
         this.alignmentCharge = Math.max(0, this.alignmentCharge + charge);
     }
 

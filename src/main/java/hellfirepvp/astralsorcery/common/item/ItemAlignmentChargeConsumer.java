@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,6 +24,12 @@ public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer
 
     default public void modifyAlignmentCharge(EntityPlayer player, double charge) {
         ResearchManager.modifyAlignmentCharge(player, charge);
+    }
+
+    default public double getCharge(EntityPlayer player, Side side) {
+        PlayerProgress progress = ResearchManager.getProgress(player, side);
+        if(progress == null) return 0.0D;
+        return progress.getAlignmentCharge();
     }
 
 }

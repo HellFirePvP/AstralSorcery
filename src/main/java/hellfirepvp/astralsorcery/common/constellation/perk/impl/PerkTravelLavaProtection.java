@@ -39,6 +39,7 @@ public class PerkTravelLavaProtection extends ConstellationPerk {
         }
         if(cd > ticksUntilProtectionWorksAgain) {
             if(source.isFireDamage() || hurt.isInLava()) {
+                addAlignmentCharge(hurt, 0.2);
                 dmgIn = 0;
             }
         }

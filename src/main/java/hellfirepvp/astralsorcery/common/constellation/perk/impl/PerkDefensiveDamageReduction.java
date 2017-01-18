@@ -30,6 +30,7 @@ public class PerkDefensiveDamageReduction extends ConstellationPerk {
 
     @Override
     public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
+        addAlignmentCharge(hurt, 0.02);
         return dmgIn * dmgReductionMultiplier;
     }
 

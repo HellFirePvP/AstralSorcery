@@ -50,6 +50,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
                 if(plant != null) {
                     if(plant.tryGrow(w, rand)) {
                         pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                        addAlignmentCharge(player, 0.3);
                     }
                 } else {
                     IBlockState at = w.getBlockState(pos);
@@ -61,6 +62,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
                     } else*/ if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
                         w.setBlockState(pos, Blocks.GRASS.getDefaultState());
                         pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
+                        addAlignmentCharge(player, 0.7);
                     }
                 }
                 if(pkt != null) {

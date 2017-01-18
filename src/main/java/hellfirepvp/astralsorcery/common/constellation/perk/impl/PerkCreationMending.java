@@ -36,6 +36,7 @@ public class PerkCreationMending extends ConstellationPerk {
                 if(rand.nextInt(chanceToRepair) != 0) continue;
                 if(armor != null && armor.isItemStackDamageable() && armor.isItemDamaged()) {
                     armor.setItemDamage(armor.getItemDamage() - 1);
+                    addAlignmentCharge(player, 0.1);
                 }
             }
         }

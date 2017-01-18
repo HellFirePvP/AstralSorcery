@@ -34,6 +34,7 @@ public class PerkTravelReduceFoodNeed extends ConstellationPerk {
         if(side == Side.SERVER) {
             FoodStats stats = player.getFoodStats();
             if(stats.foodExhaustionLevel > -50F) {
+                addAlignmentCharge(player, 0.001);
                 stats.addExhaustion(-tickExhaustionReduction);
             }
         }

@@ -31,6 +31,7 @@ public class PerkDefensiveReduceFall extends ConstellationPerk {
     @Override
     public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
         if(source.getDamageType().toLowerCase().contains("fall")) {
+            addAlignmentCharge(hurt, 0.09);
             dmgIn *= fallDmgReduction;
         }
         return dmgIn;

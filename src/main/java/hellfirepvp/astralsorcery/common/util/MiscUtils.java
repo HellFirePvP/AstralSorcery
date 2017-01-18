@@ -25,9 +25,11 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,6 +55,17 @@ public class MiscUtils {
     public static <T> T getRandomEntry(List<T> list, Random rand) {
         if(list == null || list.isEmpty()) return null;
         return list.get(rand.nextInt(list.size()));
+    }
+
+    public static <T, V extends Comparable<V>> V getMaxEntry(Collection<T> elements, Function<T, V> valueFunction) {
+        V max = null;
+        for (T element : elements) {
+            V val = valueFunction.apply(element);
+            if(max == null || max.compareTo(val) < 0) {
+                max = val;
+            }
+        }
+        return max;
     }
 
     @Nullable

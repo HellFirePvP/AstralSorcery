@@ -284,7 +284,7 @@ public class GuiProgressionClusterRenderer {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 
-        long clientTicks = EffectHandler.getClientEffectTick();
+        long clientTicks = ClientScheduler.getClientTick();
 
         Vector3 origin = new Vector3(originX, originY, 0);
         Vector3 line = origin.vectorFromHereTo(targetX, targetY, 0);

@@ -35,6 +35,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -127,33 +128,17 @@ public class ClientRenderEventHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public void onOverlay(TickEvent.RenderTickEvent event) {
-        if(event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().gameSettings.hideGUI &&
-                Minecraft.isGuiEnabled() && Minecraft.getMinecraft().inGameHasFocus && visibility > 0) {
-            renderAlignmentChargeOverlay(event.renderTickTime);
+    public void onOverlay(RenderGameOverlayEvent.Post event) {
+        if(event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+            if(visibility > 0) {
+                renderAlignmentChargeOverlay(event.getPartialTicks());
+            }
         }
     }
 
     private void renderAlignmentChargeOverlay(float partialTicks) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, res.getScaledHeight_double(), res.getScaledHeight_double(), 0, 1000D, 3000D);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
-        GL11.glTranslated(0, 0, -2000);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-
-        //TODO rendering
-
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
 
         GL11.glPopMatrix();
         GL11.glPopAttrib();

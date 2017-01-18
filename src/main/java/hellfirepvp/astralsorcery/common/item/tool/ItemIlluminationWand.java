@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
+import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
@@ -34,7 +35,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 17.01.2017 / 15:09
  */
-public class ItemIlluminationWand extends Item {
+public class ItemIlluminationWand extends Item implements ItemAlignmentChargeConsumer {
 
     public ItemIlluminationWand() {
         setMaxDamage(0);

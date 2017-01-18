@@ -30,6 +30,7 @@ public class PerkDamageIncrease extends ConstellationPerk {
 
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
+        addAlignmentCharge(attacker, 0.04);
         return dmgIn * dmgMultiplier;
     }
 
