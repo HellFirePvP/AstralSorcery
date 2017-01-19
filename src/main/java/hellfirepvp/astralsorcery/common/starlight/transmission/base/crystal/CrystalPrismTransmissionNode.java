@@ -33,12 +33,12 @@ public class CrystalPrismTransmissionNode extends SimplePrismTransmissionNode {
     private CrystalProperties properties;
     private float additionalLoss = 1F;
 
-    public CrystalPrismTransmissionNode(@Nonnull BlockPos thisPos, CrystalProperties properties) {
+    public CrystalPrismTransmissionNode(BlockPos thisPos, CrystalProperties properties) {
         super(thisPos);
         this.properties = properties;
     }
 
-    public CrystalPrismTransmissionNode(@Nonnull BlockPos thisPos) {
+    public CrystalPrismTransmissionNode(BlockPos thisPos) {
         super(thisPos);
     }
 

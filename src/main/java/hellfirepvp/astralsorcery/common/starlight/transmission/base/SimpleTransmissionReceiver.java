@@ -38,7 +38,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     private Set<BlockPos> sourcesToThis = new HashSet<>();
 
-    public SimpleTransmissionReceiver(@Nonnull BlockPos thisPos) {
+    public SimpleTransmissionReceiver(BlockPos thisPos) {
         this.thisPos = thisPos;
     }
 

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.TexturePreloader;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class AssetLibrary implements IResourceManagerReloadListener {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(@Nullable IResourceManager resourceManager) {
         if(reloading) return;
         reloading = true;
         AstralSorcery.log.info("[AstralSorcery] Refreshing and Invalidating Resources");

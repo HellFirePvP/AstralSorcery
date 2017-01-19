@@ -304,7 +304,7 @@ public class TileTreeBeacon extends TileReceiverBase {
 
     public static class TransmissionReceiverTreeBeacon extends SimpleTransmissionReceiver {
 
-        public TransmissionReceiverTreeBeacon(@Nonnull BlockPos thisPos) {
+        public TransmissionReceiverTreeBeacon(BlockPos thisPos) {
             super(thisPos);
         }
 

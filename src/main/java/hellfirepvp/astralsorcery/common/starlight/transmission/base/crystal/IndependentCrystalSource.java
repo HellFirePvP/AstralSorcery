@@ -51,7 +51,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private boolean enhanced = false;
 
-    public IndependentCrystalSource(@Nonnull CrystalProperties properties, @Nonnull IWeakConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, @Nonnull BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public IndependentCrystalSource(CrystalProperties properties, IWeakConstellation constellation, boolean seesSky, boolean hasBeenLinkedBefore, BlockCollectorCrystalBase.CollectorCrystalType type) {
         super(constellation);
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;

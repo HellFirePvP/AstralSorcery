@@ -101,7 +101,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         long chunkSeed = (xSeed * chunkX + zSeed * chunkZ) ^ worldSeed;
 
         for (WorldGenAttribute attribute : worldGenAttributes) {
-            if(attribute.attributeVersion >= lastKnownChunkVersion) {
+            if(attribute.attributeVersion > lastKnownChunkVersion) {
                 rand.setSeed(chunkSeed);
                 attribute.generate(rand, chunkX, chunkZ, world);
             }

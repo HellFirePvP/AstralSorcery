@@ -468,7 +468,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private double collectionChannelBuffer = 0D, collectionTraitBuffer = 0D;
         private boolean doesWorkBuffer = false;
 
-        public TransmissionReceiverRitualPedestal(@Nonnull BlockPos thisPos, boolean doesSeeSky) {
+        public TransmissionReceiverRitualPedestal(BlockPos thisPos, boolean doesSeeSky) {
             super(thisPos);
             this.doesSeeSky = doesSeeSky;
         }

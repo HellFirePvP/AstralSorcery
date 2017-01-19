@@ -601,7 +601,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static class TransmissionReceiverAltar extends SimpleTransmissionReceiver {
 
-        public TransmissionReceiverAltar(@Nonnull BlockPos thisPos) {
+        public TransmissionReceiverAltar(BlockPos thisPos) {
             super(thisPos);
         }
 

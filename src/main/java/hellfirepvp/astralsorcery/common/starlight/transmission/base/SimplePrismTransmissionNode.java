@@ -44,7 +44,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     private Set<BlockPos> sourcesToThis = new HashSet<>();
 
-    public SimplePrismTransmissionNode(@Nonnull BlockPos thisPos) {
+    public SimplePrismTransmissionNode(BlockPos thisPos) {
         this.thisPos = thisPos;
     }
 

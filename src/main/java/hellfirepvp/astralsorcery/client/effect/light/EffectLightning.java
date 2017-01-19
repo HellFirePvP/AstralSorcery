@@ -48,8 +48,8 @@ public class EffectLightning extends EntityComplexFX {
 
     private static final float optimalLightningLength = 7F;
 
-    private static final float growSpeed = 0.15F;
-    private static final float fadeTime = 0.01F;
+    private static final float growSpeed = 0.09F;
+    private static final float fadeTime = 0.03F;
     private static final float defaultMinJitterDst = 0.2F;
     private static final float defaultMaxJitterDst = 0.7F;
     private static final float defaultForkChance = 1F;

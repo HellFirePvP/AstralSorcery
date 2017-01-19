@@ -26,7 +26,7 @@ public abstract class SimpleIndependentSource implements IIndependentStarlightSo
 
     private IWeakConstellation starlightType;
 
-    public SimpleIndependentSource(@Nonnull IWeakConstellation constellation) {
+    public SimpleIndependentSource(IWeakConstellation constellation) {
         this.starlightType = constellation;
     }
 

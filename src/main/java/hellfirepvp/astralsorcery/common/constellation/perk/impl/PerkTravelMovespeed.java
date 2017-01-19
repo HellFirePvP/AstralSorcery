@@ -45,7 +45,7 @@ public class PerkTravelMovespeed extends ConstellationPerk {
             if(!instance.hasModifier(modMovespeedIncrease)) {
                 instance.applyModifier(modMovespeedIncrease);
             }
-            addAlignmentCharge(player, 0.001);
+            addAlignmentCharge(player, 0.0001);
             setCooldownActiveForPlayer(player, 20);
         }
     }

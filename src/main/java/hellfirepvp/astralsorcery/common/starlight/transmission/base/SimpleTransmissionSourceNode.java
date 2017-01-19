@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
  */
 public class SimpleTransmissionSourceNode extends SimplePrismTransmissionNode implements ITransmissionSource {
 
-    public SimpleTransmissionSourceNode(@Nonnull BlockPos thisPos) {
+    public SimpleTransmissionSourceNode(BlockPos thisPos) {
         super(thisPos);
     }
 

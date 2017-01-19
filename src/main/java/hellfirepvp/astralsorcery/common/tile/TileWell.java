@@ -296,7 +296,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
     public static class TransmissionReceiverWell extends SimpleTransmissionReceiver {
 
-        public TransmissionReceiverWell(@Nonnull BlockPos thisPos) {
+        public TransmissionReceiverWell(BlockPos thisPos) {
             super(thisPos);
         }
 

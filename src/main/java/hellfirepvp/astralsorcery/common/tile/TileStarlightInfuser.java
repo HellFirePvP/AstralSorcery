@@ -340,7 +340,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
     public static class TransmissionReceiverStarlightInfuser extends SimpleTransmissionReceiver {
 
-        public TransmissionReceiverStarlightInfuser(@Nonnull BlockPos thisPos) {
+        public TransmissionReceiverStarlightInfuser(BlockPos thisPos) {
             super(thisPos);
         }
 

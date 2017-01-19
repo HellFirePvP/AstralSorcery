@@ -46,7 +46,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     private Set<BlockPos> sourcesToThis = new HashSet<>();
 
-    public SimpleTransmissionNode(@Nonnull BlockPos thisPos) {
+    public SimpleTransmissionNode(BlockPos thisPos) {
         this.thisPos = thisPos;
     }
 

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
+import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -38,6 +39,7 @@ public class RetroGenController {
             AstralSorcery.log.info("[RetroGen] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
             return;
         }
+        AstralSorcery.log.info("[RetroGen] Attempting AstralSorcery retrogen for chunk " + pos.toString() + " - Version " + chunkVersion + " -> " + AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION);
         CommonProxy.worldGenerator.handleRetroGen(event.getWorld(), pos, chunkVersion);
     }
 

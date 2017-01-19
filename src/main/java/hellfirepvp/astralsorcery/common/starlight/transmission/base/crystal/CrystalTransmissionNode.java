@@ -33,12 +33,12 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
     private CrystalProperties properties;
     private float additionalLoss = 1F;
 
-    public CrystalTransmissionNode(@Nonnull BlockPos thisPos, CrystalProperties properties) {
+    public CrystalTransmissionNode(BlockPos thisPos, CrystalProperties properties) {
         super(thisPos);
         this.properties = properties;
     }
 
-    public CrystalTransmissionNode(@Nonnull BlockPos thisPos) {
+    public CrystalTransmissionNode(BlockPos thisPos) {
         super(thisPos);
     }
 
