@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.entities.EntityGrindstone;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.client.Minecraft;
@@ -83,8 +82,8 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
 
     private void renderModel(TileGrindstone te, float partialTicks) {
         texGrindstone.bind();
-        double oldDeg = (((double) te.prevTickWheelAnimation) / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
-        double newDeg = (((double) te.tickWheelAnimation)     / ((double) EntityGrindstone.TICKS_WHEEL_ROTATION) * 360) % 360;
+        double oldDeg = (((double) te.prevTickWheelAnimation) / (20D) * 360) % 360;
+        double newDeg = (((double) te.tickWheelAnimation)     / (20D) * 360) % 360;
         modelGrindstone.render(null, (float) RenderingUtils.interpolate(oldDeg, newDeg, partialTicks), 0, 0, 0, 0, 1);
     }
 
