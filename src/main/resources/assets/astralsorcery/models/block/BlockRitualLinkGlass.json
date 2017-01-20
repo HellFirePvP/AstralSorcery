@@ -3,8 +3,8 @@
 	"parent": "block/block",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "models/ritual/rituallink",
-		"texture": "models/ritual/rituallink"
+		"particle": "astralsorcery:models/ritual/rituallink",
+		"texture": "astralsorcery:models/ritual/rituallink"
 	},
 	"elements": [
 		{
