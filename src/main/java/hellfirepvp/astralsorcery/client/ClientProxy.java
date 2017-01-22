@@ -44,6 +44,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
+import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -62,6 +63,7 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -77,6 +79,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -105,6 +108,7 @@ public class ClientProxy extends CommonProxy {
             AssetLibrary.resReloadInstance.onResourceManagerReload(null);
         }
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
+        OBJLoader.INSTANCE.addDomain(AstralSorcery.MODID);
 
         super.preInit();
 
@@ -236,11 +240,30 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerDisplayInformationInit() {
+        ItemModelMesher imm = MeshRegisterHelper.getIMM();
         for (RenderInfoItem modelEntry : itemRegister) {
             if (modelEntry.variant) {
                 registerVariantName(modelEntry.item, modelEntry.name);
             }
-            MeshRegisterHelper.getIMM().register(modelEntry.item, modelEntry.metadata, new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+            if(modelEntry.item instanceof IOBJItem) {
+                if(!((IOBJItem) modelEntry.item).hasOBJAsSubmodelDefinition()) {
+                    String[] models = ((IOBJItem) modelEntry.item).getOBJModelNames();
+                    if(models != null) {
+                        for (String modelDef : models) {
+                            ModelResourceLocation mrl = new ModelResourceLocation(AstralSorcery.MODID + ":obj/" + modelDef + ".obj", "inventory");
+                            ModelBakery.registerItemVariants(modelEntry.item, mrl);
+                            imm.register(modelEntry.item, modelEntry.metadata, mrl);
+                        }
+                    }
+                } else { //We expect a wrapper in the blockstates..
+                    ModelResourceLocation mrl = new ModelResourceLocation(AstralSorcery.MODID + ":obj/" + modelEntry.name, "inventory");
+                    ModelBakery.registerItemVariants(modelEntry.item, mrl);
+                    imm.register(modelEntry.item, modelEntry.metadata, mrl);
+                }
+            } else {
+                imm.register(modelEntry.item, modelEntry.metadata,
+                        new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+            }
         }
 
         registerPendingIBlockColorBlocks();
@@ -264,9 +287,7 @@ public class ClientProxy extends CommonProxy {
             return;
         }
         List<ItemStack> list = new ArrayList<>();
-        item.getSubItems(item, RegistryItems.creativeTabAstralSorcery, list);
-        item.getSubItems(item, RegistryItems.creativeTabAstralSorceryPapers, list);
-        item.getSubItems(item, RegistryItems.creativeTabAstralSorceryTunedCrystals, list);
+        item.getSubItems(item, item.getCreativeTab(), list);
         if (list.size() > 0) {
             for (ItemStack i : list) {
                 registerItemRender(item, i.getItemDamage(), name);

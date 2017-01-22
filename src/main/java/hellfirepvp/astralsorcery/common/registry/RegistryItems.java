@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
+import hellfirepvp.astralsorcery.common.item.tool.ItemRoseBranchBow;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -122,6 +123,7 @@ public class RegistryItems {
         illuminationWand = registerItem(new ItemIlluminationWand());
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
+        roseBranchBow = registerItem(new ItemRoseBranchBow());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

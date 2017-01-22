@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryInfuser;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.InfuserRecipeHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiRuntime;
@@ -81,6 +82,7 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
+        blacklist.addItemToBlacklist(new ItemStack(ItemsAS.roseBranchBow));
     }
 
     @Override

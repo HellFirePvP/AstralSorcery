@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,8 +37,10 @@ public class RecipeRitualPedestal extends AttunementRecipe {
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER));
-        setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+        setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
                 AttunementRecipe.AltarSlot.UPPER_LEFT,
                 AttunementRecipe.AltarSlot.UPPER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),

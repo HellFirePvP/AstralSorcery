@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
+import hellfirepvp.astralsorcery.common.item.tool.ItemRoseBranchBow;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,7 @@ public class ItemsAS {
     public static ItemJournal journal;
     public static ItemHandTelescope handTelescope;
     public static ItemIlluminationWand illuminationWand;
+    public static ItemRoseBranchBow roseBranchBow;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;
