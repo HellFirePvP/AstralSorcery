@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -85,6 +86,7 @@ public class AstralSorcery {
         ResearchManager.saveAndClearServerCache();
 
         ServerData.writeData();
+        EventHandlerServer.isDataInitialized = false; //Fix for SP stuffs
     }
 
     @Mod.EventHandler

@@ -94,7 +94,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
 
             RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL);
             ChunkPos pos = new ChunkPos(entityIn.getPosition());
-            List<BlockPos> posList = buf.collectPositions(pos, 2);
+            List<BlockPos> posList = buf.collectPositions(pos, 4);
             for (BlockPos rPos : posList) {
                 BlockPos p = worldIn.getTopSolidOrLiquidBlock(rPos).up();
                 double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);

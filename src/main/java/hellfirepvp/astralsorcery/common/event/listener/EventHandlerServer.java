@@ -85,7 +85,7 @@ import java.util.Map;
  */
 public class EventHandlerServer {
 
-    private static boolean isDataInitialized = false;
+    public static boolean isDataInitialized = false;
 
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);

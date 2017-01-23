@@ -81,7 +81,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         if(Config.enableChunkVersioning) {
             getVersionBuffer(world).markChunkGeneration(new ChunkPos(chunkX, chunkZ));
         }
-        generateWithLastKnownVersion(chunkX, chunkZ, world, 0);
+        generateWithLastKnownVersion(chunkX, chunkZ, world, -1);
 
         /*for (int xx = 0; xx < 16; xx++) {
             for (int zz = 0; zz < 16; zz++) {
