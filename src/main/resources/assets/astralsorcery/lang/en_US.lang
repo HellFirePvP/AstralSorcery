@@ -107,7 +107,7 @@ research.ILLUMINATOR.name=Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=When combining glowstone and aquamarine, little flame-like flares start appearing close to you and vanish again soon afterwards. An idea has hit you that this might be a solution to your previous problems with torches and the like, to light up the cave you want to explore.<NL>Additionally focusing the light from the glowstone with some rock crystals, you manage to contain those flares. With a proper casing you feel like you could make a machine that directs that light into the terrain below it, lighting up caves and other dark places.
 
 research.ATT_PLAYER.name=Attunement
-astralsorcery.journal.ATT_PLAYER.1.text=[WIP]
+astralsorcery.journal.ATT_PLAYER.1.text=Crafting things with starlight and liquid starlight might be fine and all, but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific patterns of starlight have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as you attune yourself to a constellation, you can also attune rock crystals to a constellation. It will react stronger to that constellation and channel its effects.<NL>You are not sure what to use it for, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it comes to mind. Maybe you could use its focusing properties for some other things aswell?

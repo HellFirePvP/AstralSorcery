@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -57,6 +58,9 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
 
+    private static final float mouseHoverMerge = 0.03F;
+    private float mouseHoverPerc = 0F;
+
     private static final double widthHeight = 70;
     private Map<ConstellationPerks, Long> unlockPlayMap = new HashMap<>();
 
@@ -67,29 +71,27 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
     public GuiJournalPerkMap() {
         super(2);
+
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
-        if(attuned != null) {
+        if (attuned != null) {
             ConstellationPerkMap map = attuned.getPerkMap();
-            if(map != null) {
+            if (map != null) {
                 this.mapToDisplay = map;
                 this.attunedConstellation = attuned;
             }
         }
-        /*this.attunedConstellation = Constellations.armara;
-
-        this.mapToDisplay = new ConstellationPerkMap();
-        //Goes from 0,0 -> 14,14 max.
-        this.mapToDisplay.addPerk(ConstellationPerks.DEF_DMGREDUCTION,  ConstellationPerkMap.PerkOrder.DEFAULT,  5,  0);
-        this.mapToDisplay.addPerk(ConstellationPerks.DEF_ELEMENTAL,     ConstellationPerkMap.PerkOrder.DEFAULT, 11,  2, ConstellationPerks.DEF_DMGREDUCTION);
-        this.mapToDisplay.addPerk(ConstellationPerks.DEF_FALLREDUCTION, ConstellationPerkMap.PerkOrder.DEFAULT,  2,  6, ConstellationPerks.DEF_DMGREDUCTION);
-        this.mapToDisplay.addPerk(ConstellationPerks.DEF_NOARMOR,       ConstellationPerkMap.PerkOrder.DEFAULT,  4, 13, ConstellationPerks.DEF_FALLREDUCTION);
-        this.mapToDisplay.addPerk(ConstellationPerks.DEF_DODGE,         ConstellationPerkMap.PerkOrder.DEFAULT, 13, 11, ConstellationPerks.DEF_ELEMENTAL, ConstellationPerks.DEF_FALLREDUCTION);*/
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.thisFramePerks.clear();
+
+        Rectangle rectHover = new Rectangle(guiLeft + 10, guiTop + 5, guiWidth - 20, guiHeight - 10);
+        if(rectHover.contains(mouseX, mouseY)) {
+            mouseHoverPerc = Math.min(1F, mouseHoverPerc + mouseHoverMerge);
+        } else {
+            mouseHoverPerc = Math.max(0F, mouseHoverPerc - mouseHoverMerge);
+        }
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
@@ -100,12 +102,12 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         drawDefault(textureResShell);
         drawBaseBackground(zLevel - 50);
 
-        if(attunedConstellation != null) {
-            drawOverlayTexture(attunedConstellation);
-        }
-
         if(mapToDisplay != null) {
             drawPerkMap(mapToDisplay, new Point(mouseX, mouseY));
+        }
+
+        if(attunedConstellation != null) {
+            drawOverlayTexture(attunedConstellation);
         }
 
         drawUnlockEffects();
@@ -147,7 +149,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             int starX = position.x;
             int starY = position.y;
 
-            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glColor4f(1F, 1F, 1F, 1F * mouseHoverPerc);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
 
@@ -171,6 +173,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     private void drawPerkMap(ConstellationPerkMap mapToDisplay, Point mouse) {
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
         double whStar = 12;
         double whBetweenStars = widthHeight / 7D;
 
@@ -213,6 +216,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
         }
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
 
     private boolean mayUnlockClient(PlayerProgress prog, ConstellationPerk perk) {
@@ -278,7 +282,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                     rB *= (overlay.getBlue()  / 255F);
                     rA *= (overlay.getAlpha() / 255F);
                 }
-                GL11.glColor4f(rR, rG, rB, rA);
+                GL11.glColor4f(rR, rG, rB, rA * mouseHoverPerc);
 
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -341,7 +345,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 rB *= (overlay.getBlue()  / 255F);
                 rA *= (overlay.getAlpha() / 255F);
             }*/
-            GL11.glColor4f(rR, rG, rB, rA);
+            GL11.glColor4f(rR, rG, rB, rA * mouseHoverPerc);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
             Point upperLeft = new Point(starVec.getBlockX(), starVec.getBlockY());
@@ -369,20 +373,27 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private void drawOverlayTexture(IMajorConstellation attunedConstellation) {
         BindableResource overlayTex = ClientPerkTextureMapping.getOverlayTexture(attunedConstellation);
         if(overlayTex == null) return;
+        GL11.glColor4f(255F / 255F, 222F / 255F, 0F, 0.3F * (1F - mouseHoverPerc));
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
 
-        double cX = guiLeft + guiWidth / 2D - widthHeight;
-        double cY = guiTop + guiHeight / 2D - widthHeight;
+        double overlayWH = 90;
+        double cX = guiLeft + guiWidth / 2D - overlayWH;
+        double cY = guiTop + guiHeight / 2D - overlayWH;
 
         overlayTex.bind();
 
         VertexBuffer vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        vb.pos(cX,                   cY + widthHeight * 2, zLevel).tex(0, 1).endVertex();
-        vb.pos(cX + widthHeight * 2, cY + widthHeight * 2, zLevel).tex(1, 1).endVertex();
-        vb.pos(cX + widthHeight * 2, cY,                   zLevel).tex(1, 0).endVertex();
-        vb.pos(cX,                   cY,                   zLevel).tex(0, 0).endVertex();
+        vb.pos(cX,                 cY + overlayWH * 2, zLevel).tex(0, 1).endVertex();
+        vb.pos(cX + overlayWH * 2, cY + overlayWH * 2, zLevel).tex(1, 1).endVertex();
+        vb.pos(cX + overlayWH * 2, cY,                 zLevel).tex(1, 0).endVertex();
+        vb.pos(cX,                 cY,                 zLevel).tex(0, 0).endVertex();
         Tessellator.getInstance().draw();
 
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
