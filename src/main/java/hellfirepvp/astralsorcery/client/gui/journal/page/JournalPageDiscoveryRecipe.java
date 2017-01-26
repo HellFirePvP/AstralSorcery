@@ -190,17 +190,6 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
 
-            List<String> out = Lists.newLinkedList();
-            addTooltip(out);
-            if(!out.isEmpty()) {
-                float widthHeightStar = 15F;
-                Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
-                if(r.contains(mouseX, mouseY)) {
-                    RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
-                            out, getStandardFontRenderer());
-                }
-            }
-
             renderStandartRecipeGrid(offsetX, offsetY, zLevel, gridTexture);
 
             renderOutputOnGrid(offsetX, offsetY, zLevel);
@@ -218,6 +207,17 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             GL11.glDisable(GL11.GL_DEPTH_TEST);
 
             List<String> out = Lists.newLinkedList();
+            addTooltip(out);
+            if(!out.isEmpty()) {
+                float widthHeightStar = 15F;
+                Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
+                if(r.contains(mouseX, mouseY)) {
+                    RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
+                            out, getStandardFontRenderer());
+                }
+            }
+
+            out = Lists.newLinkedList();
             addStackTooltip(mouseX, mouseY, out);
             if(!out.isEmpty()) {
                 RenderingUtils.renderBlueTooltip((int) (mouseX), (int) (mouseY),

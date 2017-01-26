@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -110,6 +111,7 @@ public class BlockWell extends BlockStarlightNetwork {
                 }
 
                 if(FluidUtil.tryFillContainerAndStow(heldItem, tw, new InvWrapper(playerIn.inventory), 1000, playerIn)) {
+                    SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
                     tw.markForUpdate();
                 }
             }

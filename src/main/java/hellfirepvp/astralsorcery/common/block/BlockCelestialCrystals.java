@@ -203,14 +203,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-        int stage = state.getValue(STAGE);
-        if(stage == 4 && !worldIn.isRemote) {
-            player.addStat(RegistryAchievements.achvCelestialCrystal);
-        }
-    }
-
-    @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileCelestialCrystals te = MiscUtils.getTileAt(worldIn, pos, TileCelestialCrystals.class, true);
         if(te != null && !worldIn.isRemote) {

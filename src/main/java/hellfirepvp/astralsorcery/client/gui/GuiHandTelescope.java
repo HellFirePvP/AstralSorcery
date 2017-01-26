@@ -111,7 +111,7 @@ public class GuiHandTelescope extends GuiWHScreen {
                         bestGuess.canDiscover(ResearchManager.clientProgress)) {
                     topFound = bestGuess;
                     selectedYaw = (random.nextFloat() * 360F) - 180F;
-                    selectedPitch = -90F + random.nextFloat() * 45F;
+                    selectedPitch = -90F + random.nextFloat() * 25F;
                 }
             }
         }
@@ -162,7 +162,7 @@ public class GuiHandTelescope extends GuiWHScreen {
     }
 
     private void handleMouseMovement(float pticks) {
-        boolean ctrl = isCtrlKeyDown();
+        boolean ctrl = isShiftKeyDown();
         if(grabCursor && !ctrl) {
             Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
             grabCursor = false;

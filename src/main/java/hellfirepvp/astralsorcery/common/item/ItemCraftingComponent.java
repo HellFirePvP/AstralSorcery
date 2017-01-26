@@ -103,7 +103,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     public double collectionMultiplier(@Nonnull ItemStack stack) {
         int meta = stack.getItemDamage();
         if(meta == MetaType.AQUAMARINE.getMeta()) {
-            return 0.1666;
+            return 0.3;
         }
         if(meta == MetaType.RESO_GEM.getMeta()) {
             return 0.4333;

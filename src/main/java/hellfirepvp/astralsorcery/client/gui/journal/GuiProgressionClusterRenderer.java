@@ -62,7 +62,7 @@ public class GuiProgressionClusterRenderer {
     public GuiProgressionClusterRenderer(ResearchProgression progression, int guiHeight, int guiWidth, int guiLeft, int guiTop) {
         this.progression = progression;
         this.partSizeHandler = new PartSizeHandler(progression, guiHeight, guiWidth);
-        this.partSizeHandler.setMaxScale(1.1D);
+        this.partSizeHandler.setMaxScale(1.2D);
         this.partSizeHandler.setMinScale(0.1D);
         this.partSizeHandler.setScaleSpeed(0.9D / 20D);
         this.partSizeHandler.updateSize();

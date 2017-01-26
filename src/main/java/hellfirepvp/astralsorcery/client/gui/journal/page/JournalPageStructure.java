@@ -90,14 +90,13 @@ public class JournalPageStructure implements IJournalPage {
                 renderHeadline(offsetX + shift, offsetY + 5, unlocName);
             }
 
-            drawBlockInformations(offsetX, offsetY, zLevel, pTicks, mouseX, mouseY);
-
             GL11.glPopMatrix();
             GL11.glPopAttrib();
         }
 
-        private void drawBlockInformations(float offsetX, float offsetY, float offsetZ, float pTicks, float mouseX, float mouseY) {
-            Rectangle rect = drawInfoStar(offsetX + 160, offsetY + 10, offsetZ, 15, pTicks);
+        @Override
+        public void postRender(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
+            Rectangle rect = drawInfoStar(offsetX + 160, offsetY + 10, zLevel, 15, pTicks);
             if(rect.contains(mouseX, mouseY)) {
                 /*List<Tuple<ItemStack, String>> localized = new LinkedList<>();
                 for (Tuple<ItemStack, String> entry : descriptionStacks) {

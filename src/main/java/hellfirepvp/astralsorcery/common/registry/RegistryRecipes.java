@@ -245,6 +245,7 @@ public class RegistryRecipes {
 
         rTelescope = registerAltarRecipe(new TelescopeRecipe());
         rGrindstone = registerAltarRecipe(new GrindstoneRecipe());
+        rGrindstone.setPassiveStarlightRequirement(150);
 
         rRitualPedestal = registerAltarRecipe(new RecipeRitualPedestal());
 
@@ -281,13 +282,14 @@ public class RegistryRecipes {
         rSkyResonator = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.skyResonator)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LOWER_CENTER));
+        rSkyResonator.setPassiveStarlightRequirement(100);
 
         rTreeBeacon = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
@@ -465,7 +467,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
-        rLightwell.setPassiveStarlightRequirement(300);
+        rLightwell.setPassiveStarlightRequirement(200);
 
         rIlluminator = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.blockIlluminator)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
@@ -480,7 +482,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
                 .setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AltarSlot.values());
-        rIlluminator.setPassiveStarlightRequirement(3700);
+        rIlluminator.setPassiveStarlightRequirement(1500);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.wand)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),

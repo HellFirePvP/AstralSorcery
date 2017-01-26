@@ -272,7 +272,7 @@ public class GuiTelescope extends GuiWHScreen {
                             zLevel,
                             ((int) widthHeight),
                             ((int) widthHeight),
-                            2,
+                            2.5,
                             new RenderConstellation.BrightnessFunction() {
                                 @Override
                                 public float getBrightness() {

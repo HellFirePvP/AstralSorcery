@@ -156,7 +156,6 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glScaled(1.3, 1.3, 1.3);
             GL11.glTranslated(-(width / 2), 0, 0);
             fontRendererObj.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
-            //fontRendererObj.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
             GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glPopMatrix();
 

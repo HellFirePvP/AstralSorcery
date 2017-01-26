@@ -83,10 +83,10 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         if(!world.isRemote) {
             if(world.canSeeSky(getPos())) {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
-                if(posDistribution == -1) {
-                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
-                }
-                sbDayDistribution *= posDistribution;
+                //if(posDistribution == -1) {
+                //    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
+                //}
+                //sbDayDistribution *= posDistribution;
                 int yLevel = getPos().getY();
                 float dstr;
                 if(yLevel > 140) {
@@ -121,6 +121,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                         }
                     }
                 }
+                starlightBuffer = 0;
             } else {
                 starlightBuffer = 0;
             }

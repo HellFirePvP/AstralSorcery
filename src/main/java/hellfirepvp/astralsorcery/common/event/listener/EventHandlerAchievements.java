@@ -8,13 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
-import net.minecraft.block.Block;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,15 +25,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventHandlerAchievements {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onBreak(BlockEvent.BreakEvent event) {
-        if(event.isCanceled() || event.getState() == null)
-            return;
-
-        Block broken = event.getState().getBlock();
-        if (broken != null && broken.equals(BlocksAS.customOre)) {
-            BlockCustomOre.OreType ot = event.getState().getValue(BlockCustomOre.ORE_TYPE);
-            if(ot != null && ot.equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
-                event.getPlayer().addStat(RegistryAchievements.achvRockCrystal);
+    public void onPick(PlayerEvent.ItemPickupEvent event) {
+        if(!event.isCanceled()) {
+            if(event.pickedUp != null && event.pickedUp.getEntityItem() != null &&
+                    event.pickedUp.getEntityItem().getItem() instanceof ItemRockCrystalBase) {
+                event.player.addStat(RegistryAchievements.achvRockCrystal);
+                if(event.pickedUp.getEntityItem().getItem() instanceof ItemCelestialCrystal) {
+                    event.player.addStat(RegistryAchievements.achvCelestialCrystal);
+                }
             }
         }
     }

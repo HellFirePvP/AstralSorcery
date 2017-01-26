@@ -133,14 +133,6 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glPushMatrix();
 
-            float widthHeightStar = 15F;
-            Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
-            if(r.contains(mouseX, mouseY)) {
-                RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
-                        Lists.newArrayList(I18n.format("astralsorcery.journal.recipe.starlight")),
-                        Minecraft.getMinecraft().fontRendererObj);
-            }
-
             renderStandartRecipeGrid(offsetX, offsetY, zLevel, texGrid);
 
             renderOutputOnGrid(offsetX, offsetY, zLevel);
@@ -172,6 +164,14 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
             GL11.glColor4f(1F, 1F, 1F, 1F);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+            float widthHeightStar = 15F;
+            Rectangle r = drawInfoStar(offsetX + 140, offsetY + 20, zLevel, widthHeightStar, pTicks);
+            if(r.contains(mouseX, mouseY)) {
+                RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
+                        Lists.newArrayList(I18n.format("astralsorcery.journal.recipe.starlight")),
+                        Minecraft.getMinecraft().fontRendererObj);
+            }
 
             java.util.List<String> out = Lists.newLinkedList();
             addStackTooltip(mouseX, mouseY, out);

@@ -102,8 +102,8 @@ public final class EffectHandler {
     public void onDebugText(RenderGameOverlayEvent.Text event) {
         if(Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             event.getLeft().add("");
-            event.getLeft().add("[AstralSorcery] EffectHandler:");
-            event.getLeft().add("[AstralSorcery] > Complex effects: " + getDebugEffectCount());
+            event.getLeft().add("§9[AstralSorcery]§r EffectHandler:");
+            event.getLeft().add("§9[AstralSorcery]§r > Complex effects: " + getDebugEffectCount());
         }
     }
 

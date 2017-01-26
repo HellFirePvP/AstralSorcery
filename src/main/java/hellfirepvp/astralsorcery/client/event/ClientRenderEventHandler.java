@@ -146,12 +146,16 @@ public class ClientRenderEventHandler {
 
         float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
         if(nightPerc >= 0.05) {
-            Color c = new Color(0, 18, 174); //TODO do some color changes..
+            Color c = new Color(0, 6, 58);
             BlockPos center = Minecraft.getMinecraft().player.getPosition();
+            int offsetX = center.getX();
+            int offsetZ = center.getZ();
+            BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain(center);
+
             for (int xx = -30; xx <= 30; xx++) {
                 for (int zz = -30; zz <= 30; zz++) {
 
-                    BlockPos top = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(center.add(xx, 0, zz));
+                    BlockPos top = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(pos.setPos(offsetX + xx, 0, offsetZ + zz));
                     //Can be force unwrapped since statement 2nd Line prevents non-present values.
                     Float opF = SkyCollectionHelper.getSkyNoiseDistributionClient(Minecraft.getMinecraft().world, top).get();
 
@@ -175,6 +179,8 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
+
+            pos.release();
         }
     }
 

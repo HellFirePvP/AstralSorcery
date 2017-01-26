@@ -36,7 +36,7 @@ achievement.astralsorcery.seeconstellation=What a beautiful pattern
 achievement.astralsorcery.seeconstellation.desc=Discover a constellation
 achievement.astralsorcery.buildtelescope.2=Looking further
 achievement.astralsorcery.buildtelescope.2.desc=Build an actual telescope
-achievement.astralsorcery.liquidstarlight=Liquified Light
+achievement.astralsorcery.liquidstarlight=Liquefied Light
 achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
 achievement.astralsorcery.playerAttunement=Alignment with the stars
 achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation
@@ -68,60 +68,70 @@ astralsorcery.journal.ORES.1.text=§7§nRock Crystal Ore:§r In the deepest reac
 astralsorcery.journal.ORES.2.text=§1§nAquamarine Shale:§r Shaped by the continuous flow of water and starlight over fragmented rock crystal, these small and fragile gems form in the sands of riverbeds. Usually they can be found close to the surface buried in patches of sand.
 
 research.ALTAR1.name=Luminous Crafting Table
-astralsorcery.journal.ALTAR1.1.text=Using a regular crafting table to interact with the starlight emitted by the crystal seems to be rather inefficient. The table was able to receive only a small amount of starlight from the crystal. Not only that, but the table must be in very close proximity to the crystal in order to receive any light at all.
-astralsorcery.journal.ALTAR1.3.text=The Luminous Crafting table solves both issues perfectly. The luminous crafting table is able to absorb and utilize a much larger amount of starlight than the crafting table in the ruins. Unlike the makeshift crafting table though, it does not require a connection to the crystal to collect starlight at all.<NL>The Luminous crafting table is not without its drawbacks though. Firstly, it needs to be placed somewhere above the ground with an unobstructed view of the sky in order to collect starlight. Its collection process also seems to be slightly inefficient, even on the clearest of nights.
-astralsorcery.journal.ALTAR1.4.text=Placing the table closer to the sky allows it to collect more starlight. Additionally, it collects considerably more starlight during the nighttime.<NL>In order to craft with the Luminous crafting table, the table must be right clicked with a resonating wand after the items used in the recipe are placed on it. When the item is done crafting, the item will be dropped either into an adjacent inventory or directly on top of the table if no inventory space is avalible.
+astralsorcery.journal.ALTAR1.1.text=Using a regular crafting table to interact with the starlight emitted by the crystal seems to be rather inefficient. The table was able to receive only a small amount of starlight from the crystal. Not only that, but the table must be in very close proximity to the crystal in order to receive any light at all.<NL>The Luminous Crafting table solves both issues perfectly. It is able to absorb and utilize a much larger amount of starlight than the crafting table in the ruins. Also, it does not require a connection to the crystal to collect starlight at all.
+astralsorcery.journal.ALTAR1.3.text=The Luminous crafting table is not without its drawbacks though. Firstly, it needs to be placed somewhere above the ground with an unobstructed view of the sky in order to collect starlight. Its collection process also seems to be inefficient, even on the clearest of days.<NL>Placing the table closer to the sky allows it to collect more starlight. Additionally, it collects considerably more starlight during the nighttime. To get a better idea of how much starlight it currently has, you added a bar to indicate that.
+astralsorcery.journal.ALTAR1.4.text=In order to craft with the Luminous crafting table, the table must be right clicked with a resonating wand after the items used in the recipe are placed on it. When the item is done crafting, the item will be dropped onto the altar.<NL>The rate at which it collects starlight varies heavily from position to position, ranging from almost no starlight at all to vast amounts.
 
-research.HAND_TELESCOPE.name=[WIP]Hand Telescope
-astralsorcery.journal.HAND_TELESCOPE.1.text=[WIP]<NL>Constellations may only be discovered during nighttime.<NL>You may only discover constellations whose constellation paper you currently have in your inventory.<NL>Connect lines from the 'slightly bigger' stars to discover. Click/draw on another square to clear all lines in the old square.
-astralsorcery.journal.HAND_TELESCOPE.4.text=[WIP]<NL>No content.
+research.HAND_TELESCOPE.name=Hand Telescope
+astralsorcery.journal.HAND_TELESCOPE.1.text=The starlight you observe seems to act differently each night and where you stand. Maybe there is more to it than just 'simple light' that's coming from the stars?<NL><NL>You found some scrolls showing patterns in stars, so called "constellations". Finding such patterns could become useful, so you decided to build some sort of looking glass, a small telescope, to investigate the night sky.
+astralsorcery.journal.HAND_TELESCOPE.4.text=You should obviously have a clear view of the sky and those constellation papers at hand when trying to find one of those constellations.<NL>Once you find some stars that might fit the pattern, you can fixate your current view angle by sneaking and then connect the stars that you think belong to the constellation by drawing lines between the stars with left-click.
 
-research.GRINDSTONE.name=[WIP]Grindstone
-astralsorcery.journal.GRINDSTONE.1.text=[WIP]<NL>Put a grindable item (any tool, rock crystal, starmetal ingot, celestial crystal) onto it. Rightclick to 'grind', Shift-rightclick: pickup item on grindstone and without item pickup grindstone as item. grinding generally on anything crystal-ish: reduces 'size', gain 'cutting'.
+research.GRINDSTONE.name=Grindstone
+astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly deform an object you feel like you need something else. A grindstone with a marble grinding wheel comes to your mind. I might not be exactly round, but it seems good enough.<NL>An item that can be grinded can be put on it and then grinded by right-clicking. An item on it can be removed by right-clicking while sneaking.
+astralsorcery.journal.GRINDSTONE.3.text=You are sure you're handling your rock crystals properly when trying to increase their shape into a more fitting form. You're sure you inspect them often when doing so, so you don't grind them until nothing is left of them.
 
-research.TOOLS.name=[WIP]Crystal Tools
-astralsorcery.journal.TOOLS.1.text=[WIP]<NL>Durability defined by 'size'. Effectivity/Damage defiend by 'Cutting'. Cutting goes down when using. Can be 'resharpened' on the grindstone. The higher the purity, the slower cutting will decrease and the less size it takes to 'resharpen'.
+research.TOOLS.name=Crystal Tools
+astralsorcery.journal.TOOLS.1.text=After finding a few of those rock crystals, you are certain that you can create very unique tools out of them, much more durable than normal tools.<NL>Other than normal tools, crystal tools change their physical properties rather than loosing what you know as "durability". Namely, the tool head will become dull the more you use it. Resharpening it on some sort of grindstone helps, but it becomes smaller in that process.
 
-research.MARBLETYPES.name=[WIP]Marble Types
-astralsorcery.journal.MARBLETYPES.1.text=[WIP]<NL>Different marble types, because why not.
+research.ROCK_CRYSTALS.name=Rock Crystal Properties
+astralsorcery.journal.ROCK_CRYSTALS.1.text=After digging a few of those rock crystals out of the ground, you notice that almost every crystal looks different than the one before. Varying in size, purity and shape.<NL>While you seem to be unable to change size and purity of them at the moment, you are sure that you could grind off a bit of size to form it into a more suitable shape. Maybe a grindstone of some sorts would be of help?
 
-research.SOOTYMARBLE.name=[WIP]Sooty Marble
-astralsorcery.journal.SOOTYMARBLE.1.text=[WIP]<NL>Black marble. Might get all different types at some point too. (Like the normal marble)
+research.MARBLETYPES.name=Marble
+astralsorcery.journal.MARBLETYPES.1.text=You notice clean, light-reflecting marble from time to time while mining through the ground. Maybe you could utilize its reflective capabilities in the future? Different shapes could come in pretty handy.
 
-research.ALTAR2.name=[WIP]Starlight Crafting Altar
-astralsorcery.journal.ALTAR2.1.text=[WIP]<NL>Altar upgrading recipe. Advance to AttenuationCraft stage. Can only be done during nighttime. Requires multiblock (See next page.)
+research.SOOTYMARBLE.name=Sooty Marble
+astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of the marble you found, with a very dark material such as coal, it changes its capabilities from being reflective to being collective. It collects the sunlight and heats up during the day and radiates its heat away during the night. You are sure you can use for similar things.
 
-research.WELL.name=[WIP]Lightwell
-astralsorcery.journal.WELL.1.text=[WIP]<NL>Well that collects liquid starlight. Collects more during nighttime. Needs a catalyst (Aquamarine, rock crystal, celestial crystal). Catalysts have different lifetime expectations and collection multipliers (Aquamarine < rock crystal < celestial crystal). Liquid starlight can be extracted by rightclicking with a bucket. Liquid starlight as fluid on the ground provides nightvision.
+research.ALTAR2.name=Starlight Crafting Altar
+astralsorcery.journal.ALTAR2.1.text=In your ongoing endeavours, you feel like the luminous crafting table is not enough. Its capacity of storing starlight and its ability of focusing the light is just not enough.<NL>You'll need more space and a structure of marble around it that helps you focusing the light.<NL>To avoid problems when trying to craft with it while the structure is wrong, you're using some spare liquid starlight to make the bar glow red until the structure is complete.
+
+research.WELL.name=Lightwell
+astralsorcery.journal.WELL.1.text=Holding aquamarine or rock crystals in the hand during the night you can feel bits of something... water-like dripping off of them.<NL>Strangely, it doesn't do that if you hide it from starlight, so the liquid might be a form of that starlight, but... liquefied? It emits a bright light, feels very cold and even a bucket full of it almost weighs nothing.
+astralsorcery.journal.WELL.3.text=Some sort of tank that could hold the item above it while letting the liquid accumulate on the bottom would be the easiest way of getting a hold of that liquid.<NL>You've built a prototype of that tank which seems to work, but the gem used as catalyst already has several cracks shortly after you've placed it. That makes it completely worthless for any other crafting, so you might aswell leave it in there until it completely shatters.
 
 research.SKY_RESO.name=Sky Wave Resonator
 astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky it seems like any star is like the other. However the light they send varies from position to position; the light of one star overlays with others causing it to either amplify in strength or just vanish entirely.<NL>Placing your altar and whatever construct you come up with in the future to potentially collect this volatile light at positions where the light is amplified, might be very important.
-astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualizes those overlaying light waves would be most convenient... Surely this liquified form of that starlight would come in handy.
+astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualize those overlaying light waves would be most convenient.
 
-research.ILLUMINATOR.name=[WIP]Cave Illuminator
-astralsorcery.journal.ILLUMINATOR.1.text=[WIP]<NL>Cave Illuminator. Once placed down, it'll try and light the caves below it. conditions for 'light' to spawn: must be dark (<8 light, <6 skylight) must not see sky. Places light from its x,z pos outwards on ylevels below it. light spawned acts like air and can be replaced, but not broken.
+research.ILLUMINATOR.name=Cave Illuminator
+astralsorcery.journal.ILLUMINATOR.1.text=When combining glowstone and aquamarine, little flame-like flares start appearing close to you and vanish again soon afterwards. An idea has hit you that this might be a solution to your previous problems with torches and the like, to light up the cave you want to explore.<NL>Additionally focusing the light from the glowstone with some rock crystals, you manage to contain those flares. With a proper casing you feel like you could make a machine that directs that light into the terrain below it, lighting up caves and other dark places.
 
 research.ATT_PLAYER.name=Attunement
 astralsorcery.journal.ATT_PLAYER.1.text=[WIP]
 
-research.ATT_CRYSTAL.name=[WIP]Crystal Attunement
-astralsorcery.journal.ATT_CRYSTAL.1.text=[WIP]
-astralsorcery.journal.ATT_CRYSTAL.2.text=[WIP]
+research.ATT_CRYSTAL.name=Crystal Attunement
+astralsorcery.journal.ATT_CRYSTAL.1.text=Just as you attune yourself to a constellation, you can also attune rock crystals to a constellation. It will react stronger to that constellation and channel its effects.<NL>You are not sure what to use it for, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it comes to mind. Maybe you could use its focusing properties for some other things aswell?
 
 research.RESO_GEM_POOL.name=Starlight Infusion
-astralsorcery.journal.RESO_GEM_POOL.1.text=Liquid starlight can have multiple effects on items when they are thrown into it.<NL>While rock crystals grow overtime when they're exposed to it, aquamarine seems to react to it as well and stars shimmering. However, all of those things take very long and completely consume the liquid starlight.<NL>There has to be a faster way at least.
+astralsorcery.journal.RESO_GEM_POOL.1.text=Seems like liquid starlight can have multiple effects on items when they are thrown into it.<NL>While rock crystals seem to grow in size when they're exposed to it, aquamarine seems to react to it as well and starts shimmering. However, all of those things take very long and completely consume the liquid starlight.<NL>There has to be a faster way at least.
 
-research.INFUSER.name=[WIP]Starlight Infuser
-astralsorcery.journal.INFUSER.1.text=[WIP]
+research.INFUSER.name=Starlight Infuser
+astralsorcery.journal.INFUSER.1.text=It seems you found at least a faster way and one that allows for more generic applications: The starlight infuser.<NL>And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.
+astralsorcery.journal.INFUSER.4.text=The process in the infuser is way faster than the manual process, but it might instead of consuming just 1 bucket consume more. Sometimes it also doesn't consume any.<NL>Due to the nature of liquid starlight, you might now in this more organized process infuse many more things.<NL>However, it seems incapable of reproducing the effect that liquid starlight itself had on rock crystals by throwing them inside a pool of it.
 
-research.TREEBEACON.name=[WIP]Tree Beacon
-astralsorcery.journal.TREEBEACON.1.text=[WIP]
+research.TREEBEACON.name=Tree Beacon
+astralsorcery.journal.TREEBEACON.1.text=Remembering the properties of the resonant gem, specifically its draining effects on liquid starlight, you wonder how you could apply that for your benefit.<NL>You came up with the idea of infusing trees just before they grow with liquid starlight so the resonant gem drains bits and bits from the tree when its grown. You came up with a tree, designed to distribute that liquid into nearby saplings.
+astralsorcery.journal.TREEBEACON.3.text=It also has its limits: Due to the nature of this harvesting process, the trees infused with starlight will be slowly consumed overtime.<NL>Additionally, there's only so many trees your tree-construct can support before it simply won't infuse them with liquid starlight because it doesn't have enough left.<NL>After breaking your artificial tree, all the previously infused ones turn back into normal trees.
 
-research.RIT_PEDESTAL.name=[WIP]Ritual Pedestal
-astralsorcery.journal.RIT_PEDESTAL.1.text=[WIP]<NL>Can be used to create an AOE effect based on the constellation-attunement of the rock crystal. Different constellations have different effects and sizes/range.<NL>If the ritual pedestal receives starlight of the starlight network with the same constellation-type as it is attuned to, it'll greatly speed up. Also it will, over time, create rays of light coming out of it. Reflect those lights back onto it (starlight network again) with lenses and it'll speed up even more. (Current effects: only fertilitas)
+research.RIT_PEDESTAL.name=Ritual Pedestal
+astralsorcery.journal.RIT_PEDESTAL.1.text=Just as you suspected, the attuned crystal seems already almost strong enough to make its effects manifest in the world. To be actually useful you should put a pedestal for it with another rock crystal to help focus enough starlight.<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, you should add some liquid starlight aswell, to fill them like they appear.
 
-research.ALTAR3.name=[WIP]Celestial Altar
-astralsorcery.journal.ALTAR3.1.text=[WIP]<NL>Altar upgraging recipe. Advance to CosntellationCraft stage. Can only be done during nighttime. Next stage requires multiblock (See next page.)
+research.TELESCOPE.name=Telescope
+astralsorcery.journal.TELESCOPE.1.text=The hand telescope was all good and fine, but holding still all the time is exhausting and doesn't give you a good view. Additionally, you can only make out one constellation at a time at one night, so discovering everything those constellation papers show you would take forever.<NL>You're going to need a fixture for this. That way, you might be able to look deeper into the sky, finding stars and constellations that are even further away.
+astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the same as with the hand telescope. You have to have a clear view to the sky when looking through it.<NL>You can only look at a section of the sky at one time with it. But you can rotate the telescope's direction with the arrows on the left and right. Drawing outside the telescope frame or rotating the telescope erases all drawn lines.
+
+research.ALTAR3.name=Celestial Altar
+astralsorcery.journal.ALTAR3.1.text=Other than adding some more space, the starlight crafting altar wasn't really what you were looking for. You might just need a stronger starlight focus and a bigger table.<NL>The attuned rock crystal you made seems to fit that perfectly. Just to make sure you add another glass lens and you decide to further expand the complex.
 
 research.LENS.name=[WIP] Crystal Lens
 astralsorcery.journal.LENS.1.text=[WIP]<NL>Can be linked to 1 other point in a 16 blocks radius. Requires line of sight to the target to transmit starlight to it. Can have N inputs, 1 output. Transmission loss depends on the crystal properties of the lens. It copies the properties of the crystal used in crafting.
@@ -151,9 +161,8 @@ research.CEL_CRYSTAL_GROW.name=[WIP] Celestial Crystal Clusters
 astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=[WIP]<NL>Rock crystal + Stardust in sourceblock of liquid starlight -> Celestial crystal cluster. Takes time to grow. Can be accelerated by linking some starlight onto it. Placing it on top of starmetal ore also helps, may turn the ore back into iron ore.
 astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=[WIP]<NL>Nothing here.
 
-research.CEL_CRYSTALS.name=[WIP] Celestial Crystals
-astralsorcery.journal.CEL_CRYSTALS.1.text=[WIP]<NL>"Better version" of rock crystals. Bigger, higher overall purity, higher overall cutting. May be used in any recipe that required rock crystals before to get better results.
-astralsorcery.journal.CEL_CRYSTALS.2.text=[WIP]<NL>Nothing here.
+research.CEL_CRYSTALS.name=Celestial Crystals
+astralsorcery.journal.CEL_CRYSTALS.1.text=These crystals seem to share the same properties as rock crystals, but are way bigger and more robust than their white counterparts. [TODO]
 
 research.PED_ACCEL.name=[WIP] Ritual Pedestal Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=[WIP]<NL>Link starlight of the type of the ritual onto the pedestal. Over time the crystal channeling the ritual will shatter bit by bit, sending starlight off via beams. Place a lens or prism at the position the light is emitting to and link those beams back onto the pedestal via lens or prism. The efficiency of the ritual is greatly increased whenever you do this.

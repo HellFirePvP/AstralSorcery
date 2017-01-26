@@ -42,14 +42,13 @@ public class RegistryAchievements {
                 ItemsAS.celestialCrystal, achvRockCrystal);
         achvLiqStarlight = new Achievement("achievement.as.liquidstarlight", "astralsorcery.liquidstarlight", 0, 0,
                 UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, BlocksAS.fluidLiquidStarlight), achvRockCrystal);
+
         achvBuildHandTelescope = new Achievement("achievement.as.buildtelescope.1", "astralsorcery.buildtelescope.1", 2, 1,
-                //new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), null);
                 ItemsAS.handTelescope, null);
         achvDiscoverConstellation = new Achievement("achievement.as.seeconstellation", "astralsorcery.seeconstellation", 2, -1,
-                //new ItemStack(ItemsAS.entityPlacer, 1, ItemEntityPlacer.PlacerType.TELESCOPE.getMeta()), achvBuildHandTelescope);
                 BlockMachine.MachineType.TELESCOPE.asStack(), achvBuildHandTelescope);
-        achvBuildActTelescope = new Achievement("achievement.as.buildtelescope.2", "astralsorcery.buildtelescope.2", 4, -2,
-                BlockMachine.MachineType.TELESCOPE.asStack(), achvDiscoverConstellation);
+        achvBuildActTelescope = new Achievement("achievement.as.buildtelescope.2", "astralsorcery.buildtelescope.2", 4, 0,
+                BlockMachine.MachineType.TELESCOPE.asStack(), achvBuildHandTelescope);
         achvPlayerAttunement = new Achievement("achievement.as.playerAttunement", "astralsorcery.playerAttunement", 1, -3,
                 BlocksAS.attunementAltar, achvDiscoverConstellation);
 
