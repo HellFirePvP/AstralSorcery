@@ -268,7 +268,6 @@ public class ClientProxy extends CommonProxy {
 
         registerPendingIBlockColorBlocks();
         registerPendingIItemColorItems();
-        //registerAdditionalItemRenderers();
 
         for (RenderInfoBlock modelEntry : blockRegister) {
             MeshRegisterHelper.registerBlock(modelEntry.block, modelEntry.metadata, AstralSorcery.MODID + ":" + modelEntry.name);

@@ -25,6 +25,7 @@ public class OreDictAlias {
     public static String ITEM_SUGARCANE = "sugarcane";
     public static String ITEM_CARROT = "cropCarrot";
     public static String ITEM_STICKS = "stickWood";
+    public static String ITEM_GOLD_NUGGET = "nuggetGold";
 
     public static String BLOCK_CRAFTING_TABLE = "workbench";
     public static String BLOCK_MARBLE = "blockMarble";

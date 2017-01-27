@@ -117,6 +117,7 @@ public class GuiJournalPages extends GuiScreenJournal {
                 GuiJournalProgression.getJournalInstance().rescaleAndRefresh = false;
             } else {
                 saveSite = true;
+                openGuiInstance = null;
             }
         }
         if(previous != null) {

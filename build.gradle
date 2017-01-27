@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.5-indev"
+version = "0.7-indev"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 

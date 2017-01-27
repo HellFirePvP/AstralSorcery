@@ -149,7 +149,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             int starX = position.x;
             int starY = position.y;
 
-            GL11.glColor4f(1F, 1F, 1F, 1F * mouseHoverPerc);
+            GL11.glColor4f(1F, 1F, 1F, 0.2F + 0.8F * mouseHoverPerc);
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
 
@@ -282,7 +282,8 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                     rB *= (overlay.getBlue()  / 255F);
                     rA *= (overlay.getAlpha() / 255F);
                 }
-                GL11.glColor4f(rR, rG, rB, rA * mouseHoverPerc);
+                float aPart = 0.15F * rA;
+                GL11.glColor4f(rR, rG, rB, aPart + (rA * 0.85F * mouseHoverPerc));
 
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -345,7 +346,8 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                 rB *= (overlay.getBlue()  / 255F);
                 rA *= (overlay.getAlpha() / 255F);
             }*/
-            GL11.glColor4f(rR, rG, rB, rA * mouseHoverPerc);
+            float aPart = 0.2F * rA;
+            GL11.glColor4f(rR, rG, rB, aPart + (rA * 0.8F * mouseHoverPerc));
 
             Vector3 starVec = offset.clone().addX(starX * whBetweenStars - whStar).addY(starY * whBetweenStars - whStar);
             Point upperLeft = new Point(starVec.getBlockX(), starVec.getBlockY());
@@ -373,7 +375,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private void drawOverlayTexture(IMajorConstellation attunedConstellation) {
         BindableResource overlayTex = ClientPerkTextureMapping.getOverlayTexture(attunedConstellation);
         if(overlayTex == null) return;
-        GL11.glColor4f(255F / 255F, 222F / 255F, 0F, 0.3F * (1F - mouseHoverPerc));
+        GL11.glColor4f(255F / 255F, 222F / 255F, 0F, 0.05F + 0.35F * (1F - mouseHoverPerc));
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();

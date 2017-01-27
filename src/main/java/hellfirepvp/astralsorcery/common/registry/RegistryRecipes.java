@@ -422,7 +422,7 @@ public class RegistryRecipes {
                 AttunementRecipe.AltarSlot.UPPER_LEFT);
 
         rAttenuationAltarRelay = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.attunementRelay)
-                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
@@ -432,6 +432,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER));
+        rAttenuationAltarRelay.setPassiveStarlightRequirement(400);
 
         rLinkTool = registerConstellationRecipe(new ShapedRecipe(ItemsAS.linkingTool)
                 .addPart(OreDictAlias.BLOCK_WOOD_LOGS,

@@ -79,7 +79,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case AQUAMARINE:
-                int f = fortune + 1;
+                int f = fortune + 3;
                 int i = rand.nextInt(f * 2) - 1;
                 if(i < 0) {
                     i = 0;

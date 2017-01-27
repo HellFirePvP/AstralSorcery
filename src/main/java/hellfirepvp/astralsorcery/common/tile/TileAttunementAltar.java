@@ -371,8 +371,7 @@ public class TileAttunementAltar extends TileEntityTick {
             }
         }
         if(match != null) {
-            if(wsh.getActiveConstellations().contains(match) &&
-                    wsh.getCurrentDistribution(match, (f) -> f) >= 0.65) {
+            if(wsh.getActiveConstellations().contains(match)) {
                 activeFound = match;
                 markForUpdate();
             }
@@ -531,13 +530,14 @@ public class TileAttunementAltar extends TileEntityTick {
 
             spawnAmbientParticles();
             if(highlight != null && highlightActive > 0) {
+                float night = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
                 List<BlockPos> positions = translateConstellationPositions(highlight);
                 for (BlockPos pos : positions) {
                     if(rand.nextBoolean()) continue;
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).gravity(0.01);
                     p.offset(rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.7 * (rand.nextBoolean() ? 1 : -1));
                     p.scale(0.4F + rand.nextFloat() * 0.1F);
-                    p.setAlphaMultiplier(0.5F);
+                    p.setAlphaMultiplier(0.5F * night);
                 }
             }
         } else {
