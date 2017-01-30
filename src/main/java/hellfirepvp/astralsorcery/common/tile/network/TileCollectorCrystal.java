@@ -139,7 +139,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.playerMade = player;
         this.usedCrystalProperties = properties;
         this.type = type;
-        setEnhanced(true);
+        //setEnhanced(true);
         markDirty();
     }
 

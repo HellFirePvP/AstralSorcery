@@ -65,7 +65,7 @@ public abstract class AbstractAltarRecipe {
 
     @Nonnull
     public ItemStack getOutputForRender() {
-        return out;
+        return ItemUtils.copyStackWithSize(out, out.stackSize);
     }
 
     public IAccessibleRecipe getNativeRecipe() {
@@ -74,7 +74,7 @@ public abstract class AbstractAltarRecipe {
 
     @Nullable
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        return out;
+        return ItemUtils.copyStackWithSize(out, out.stackSize);
     }
 
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {

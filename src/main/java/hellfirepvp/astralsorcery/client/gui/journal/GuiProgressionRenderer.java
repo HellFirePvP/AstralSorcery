@@ -69,11 +69,14 @@ public class GuiProgressionRenderer {
     public GuiProgressionRenderer(GuiJournalProgression gui, int guiHeight, int guiWidth) {
         this.parentGui = gui;
         this.sizeHandler = new GalaxySizeHandler(guiHeight, guiWidth);
+        refreshSize();
         this.mousePointScaled = ScalingPoint.createPoint(
                 this.sizeHandler.clampX(this.sizeHandler.getMidX()),
                 this.sizeHandler.clampY(this.sizeHandler.getMidY()),
                 this.sizeHandler.getScalingFactor(),
                 false);
+        this.moveMouse(this.sizeHandler.getTotalWidth() / 2, this.sizeHandler.getTotalHeight() / 2);
+        applyMovedMouseOffset();
     }
 
     public void refreshSize() {
@@ -123,7 +126,7 @@ public class GuiProgressionRenderer {
     }
 
     public void centerMouse() {
-        moveMouse(sizeHandler.getMidX(), sizeHandler.getMidY());
+        this.moveMouse(parentGui.getGuiLeft() + this.sizeHandler.getMidX(), parentGui.getGuiTop() + this.sizeHandler.getMidY());
     }
 
     public void updateMouseState() {

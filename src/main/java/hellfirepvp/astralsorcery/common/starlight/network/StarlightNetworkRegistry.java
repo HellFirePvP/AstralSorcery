@@ -8,19 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.StarmetalFormHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -32,58 +31,33 @@ import java.util.Random;
  */
 public class StarlightNetworkRegistry {
 
-    private static Map<Block, Map<Integer, IStarlightBlockHandler>> validEndpoints = new HashMap<>();
+    //private static Map<Block, Map<Integer, IStarlightBlockHandler>> validEndpoints = new HashMap<>();
+    private static List<IStarlightBlockHandler> dynamicBlockHandlers = new LinkedList<>();
 
     @Nullable
-    public static IStarlightBlockHandler getStarlightHandler(IBlockState state) {
+    public static IStarlightBlockHandler getStarlightHandler(World world, BlockPos pos, IBlockState state) {
         Block b = state.getBlock();
         if(b instanceof IBlockStarlightRecipient) return null;
-        if(!validEndpoints.containsKey(b)) return null;
-        Map<Integer, IStarlightBlockHandler> handlerMap = validEndpoints.get(b);
-        if(handlerMap == null || handlerMap.isEmpty()) return null;
-
-        if(handlerMap.containsKey(-1)) {
-            return handlerMap.get(-1);
+        for (IStarlightBlockHandler handler : dynamicBlockHandlers) {
+            if(handler.isApplicable(world, pos, state)) return handler;
         }
-        return handlerMap.get(b.getMetaFromState(state));
+        return null;
     }
 
-    public static void registerEndpoint(IBlockState state, IStarlightBlockHandler handler) {
-        registerEndpoint(state.getBlock(), state.getBlock().getMetaFromState(state), handler);
-    }
-
-    public static void registerEndpoint(Block block, IStarlightBlockHandler handler) {
-        registerEndpoint(block, -1, handler);
-    }
-
-    public static void registerEndpoint(Block block, int meta, IStarlightBlockHandler handler) {
-        if(!validEndpoints.containsKey(block)) {
-            validEndpoints.put(block, new HashMap<>());
-        }
-        Map<Integer, IStarlightBlockHandler> handlerMap = validEndpoints.get(block);
-        if(handlerMap.containsKey(-1)) {
-            AstralSorcery.log.warn("[AstralSorcery] Tried to register Special StarlightBlockHandler for wildcard registered block.");
-            AstralSorcery.log.warn("[AstralSorcery] Won't clear handlerMap, ignoring wildcard handler instead....");
-        } else {
-            if(!handlerMap.isEmpty()) {
-                if(meta == -1) {
-                    AstralSorcery.log.warn("[AstralSorcery] Tried to register wildcard Special StarlightBlockHandler for a block that already has special handling! Ignoring and proceeding...");
-                }
-                handlerMap.clear();
-                handlerMap.put(-1, handler);
-            } else {
-                handlerMap.put(meta, handler);
-            }
-        }
+    public static void registerEndpoint(IStarlightBlockHandler handler) {
+        dynamicBlockHandlers.add(handler);
     }
 
     public static void setupRegistry() {
-        registerEndpoint(Blocks.IRON_ORE, new StarmetalFormHandler());
+        registerEndpoint(new StarmetalFormHandler());
+        registerEndpoint(new BlockTransmutationHandler());
     }
 
     //1 instance is/should be created for 1 type of block+meta pair
     //This is NOT suggested as "first choice" - please implement IBlockStarlightRecipient instead if possible.
     public static interface IStarlightBlockHandler {
+
+        public boolean isApplicable(World world, BlockPos pos, IBlockState state);
 
         public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount);
 

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -22,8 +23,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -31,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,13 +85,27 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
+    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+        OreType type = state.getValue(ORE_TYPE);
+        if(type != OreType.ROCK_CRYSTAL || (securityCheck(worldIn, pos, player) && checkSafety(worldIn, pos))) {
+            super.harvestBlock(worldIn, player, pos, state, te, stack);
+        }
+    }
+
+    @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         OreType type = state.getValue(ORE_TYPE);
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case ROCK_CRYSTAL:
-                if(world != null && world instanceof World && checkSafety((World) world, pos)) {
+                if(world != null && world instanceof World && checkSafety((World) world, pos) && securityCheck((World) world, pos, harvesters.get())) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                    if(((World) world).rand.nextBoolean()) {
+                        drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                    }
+                    if(((World) world).rand.nextBoolean()) {
+                        drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                    }
                 }
                 break;
             case STARMETAL:
@@ -95,6 +113,10 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
                 break;
         }
         return drops;
+    }
+
+    private boolean securityCheck(World world, BlockPos pos, EntityPlayer player) {
+        return !world.isRemote && player != null && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player);
     }
 
     private boolean checkSafety(World world, BlockPos pos) {

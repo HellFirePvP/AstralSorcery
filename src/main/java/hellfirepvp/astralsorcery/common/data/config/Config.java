@@ -37,7 +37,7 @@ public class Config {
     //public static boolean stopOnIllegalState = true;
     public static boolean spawnRockCrystalOres = true;
     public static int crystalDensity = 15;
-    public static int aquamarineAmount = 32;
+    public static int aquamarineAmount = 64;
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
@@ -55,6 +55,9 @@ public class Config {
 
     @Sync
     public static double swordSharpMultiplier = 0.1;
+
+    @Sync
+    public static double illuminationWandUseCost = 0.5;
 
     @Sync
     public static int dimensionIdSkyRift = -81;
@@ -101,6 +104,7 @@ public class Config {
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
+        illuminationWandUseCost = latestConfig.getFloat("illuminationWandActionCost", "general", 0.5F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");
@@ -114,7 +118,7 @@ public class Config {
         crystalDensity = latestConfig.getInt("crystalDensity", "worldgen", 15, 0, 40, "Defines how frequently rock-crystals will spawn underground. The lower the number, the more frequent crystals will spawn. (onWorldGen: random.nextInt(crystalDensity) == 0 -> gen 1 ore in that chunk)");
         marbleAmount = latestConfig.getInt("generateMarbleAmount", "worldgen", 4, 0, 32, "Defines how many marble veins are generated per chunk. 0 = disabled");
         marbleVeinSize = latestConfig.getInt("generateMarbleVeinSize", "worldgen", 20, 1, 32, "Defines how big generated marble veins are.");
-        aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 32, 0, 512, "Defines how many aquamarine ores it'll attempt to generate in per chunk. 0 = disabled");
+        aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 64, 0, 2048, "Defines how many aquamarine ores it'll attempt to generate in per chunk. 0 = disabled");
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
 

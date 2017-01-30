@@ -101,7 +101,7 @@ astralsorcery.journal.WELL.3.text=Some sort of tank that could hold the item abo
 
 research.SKY_RESO.name=Sky Wave Resonator
 astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky it seems like any star is like the other. However the light they send varies from position to position; the light of one star overlays with others causing it to either amplify in strength or just vanish entirely.<NL>Placing your altar and whatever construct you come up with in the future to potentially collect this volatile light at positions where the light is amplified, might be very important.
-astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualize those overlaying light waves would be most convenient.
+astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualize those overlaying light waves would be most convenient. It does not replace the need for exploring to find a suitable place, but should make them much easier to spot in the night.
 
 research.ILLUMINATOR.name=Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=When combining glowstone and aquamarine, little flame-like flares start appearing close to you and vanish again soon afterwards. An idea has hit you that this might be a solution to your previous problems with torches and the like, to light up the cave you want to explore.<NL>Additionally focusing the light from the glowstone with some rock crystals, you manage to contain those flares. With a proper casing you feel like you could make a machine that directs that light into the terrain below it, lighting up caves and other dark places.
@@ -141,39 +141,48 @@ astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the 
 research.ALTAR3.name=Celestial Altar
 astralsorcery.journal.ALTAR3.1.text=Other than adding some more space, the starlight crafting altar wasn't really what you were looking for. You might just need a stronger starlight focus and a bigger table.<NL>The attuned rock crystal you made seems to fit that perfectly. Just to make sure you add another glass lens and you decide to further expand the complex.
 
-research.LENS.name=[WIP] Crystal Lens
-astralsorcery.journal.LENS.1.text=[WIP]<NL>Can be linked to 1 other point in a 16 blocks radius. Requires line of sight to the target to transmit starlight to it. Can have N inputs, 1 output. Transmission loss depends on the crystal properties of the lens. It copies the properties of the crystal used in crafting.
+research.LENS.name=Crystal Lens
+astralsorcery.journal.LENS.1.text=Bending starlight simply from a source to a location might not be enough... The source might be at an unfitting place or the destination you want to direct starlight to is just too far away.<NL>A brilliant, yet seemingly obvious idea strikes your mind: Redirecting and refocusing the starlight via a network of lenses might provide enough reach to direct it wherever you need.
+astralsorcery.journal.LENS.3.text=Constantly shifting the light into different directions over long distances takes its toll. The further the light travels the weaker it will get.<NL>Additionally, since the crystal used to construct a lens that is capable of redirecting this volatile light makes up most of the lens, the properties it had will affect the transmission rate significantly. A very impure crystal will most likely block starlight passing through by the inclusions of dust and other material it has. But also, the bigger the used crystal is, the more lenses you are able to craft from it.
+astralsorcery.journal.LENS.4.text=Bound by its physicality, a lens might accept starlight from multiple directions, however it's only able to direct the light into one direction. So wherever you bend the outgoing starlight to, the lens will rotate to direct it there. To make the starlight pass through without a problem, the lens has to have clear line of sight to its destination.
 
 research.LENSES_EFFECTS.name=Colored Lenses
-astralsorcery.journal.LENSES_EFFECTS.1.text=Due to the nature of starlight, bending reducing its spectrum to down to different colors might yield more useful effects than the perfectly balanced white starlight.<NL>Using aquamarine and some other ingredients you might be able to have it do the effects you want.
+astralsorcery.journal.LENSES_EFFECTS.1.text=Starlight itself seems to have a vast spectrum of underlying effects along with the energies of the constellation that created it. Under normal circumstances, those balance each other out and form almost neutral light.<NL>Filtering this light to discard other parts of the spectrum and let only the light pass that grants a possibly desired aspect might end up being really useful.
+astralsorcery.journal.LENSES_EFFECTS.2.text=By fusing mundane aquamarine gems and other materials together into a glass lens, you might be able to create such colored beams when putting the result onto your newly crafted Crystal Lenses.<NL>This is not without a price though, as an additional lens that is also discarding parts of the light itself is placed onto a lens blocks more starlight than the crystal lens alone.
 
-research.LINKTOOL.name=[WIP] Linking Tool
-astralsorcery.journal.LINKTOOL.1.text=[WIP]<NL>Can be used to link 1 block of the starlight network to another or onto a block. Right-click selects something, deselect by switching the item held in your hand to another item. To link to something, right-click in select mode; un-link with shift-right-click
+research.LINKTOOL.name=Linking Tool
+astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects a resonant gem had on liquid starlight, having multiple of those condensed into one crystal might provide enough to direct and focus the raw rays of starlight in a more organized manner.<NL>Fusing them together with a rock crystal might prove a bit tedious if you don't have sufficient starlight. Luckily your newly upgraded altar might help a bit on that end.<NL>Additionally, holding the created crystal with your bare hands seems unreasonable.
+astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of resonant gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
 
 research.ILLUMINATION_WAND.name=Illumination Wand
 astralsorcery.journal.ILLUMINATION_WAND.1.text=[WIP]
 
-research.STARMETAL_ORE.name=[WIP] Ore Transmutation
-astralsorcery.journal.STARMETAL_ORE.1.text=[WIP]<NL>Use lens + linking tool to link the collector crystal in one of the structures to an iron ore. Remember the collector crystal needs to see the sky to collect starlight. Also: This process might take a while.
+research.STARMETAL_ORE.name=Iron Transmutation
+astralsorcery.journal.STARMETAL_ORE.1.text=You feel like these beams of light could have other uses than look pretty and have their effects on the world generally. How about focusing the light directly onto one mundane iron ore?<NL>Seems like the iron reflects it back and shimmers slightly blue... Maybe something might change over time?
 
-research.STARMETAL_RES.name=[WIP] Starmetal
-astralsorcery.journal.STARMETAL_RES.1.text=[WIP]<NL>Wohoo. you discovered starmetal. smelt ore into ingots, grind starmetal ingots on grindstone to get stardust.
+research.TRANSMUTATION_ORES.name=Block Transmutation
+astralsorcery.journal.TRANSMUTATION_ORES.1.text=Maybe iron ore is not the only block that reacts to those focused rays of starlight? You should try some other things as well...
 
-research.PRISM.name=[WIP] Crystal Prism
-astralsorcery.journal.PRISM.1.text=[WIP]<NL>Same as lens, but: N inputs, M outputs. The starlight output is evenly split across all receivers. If starlight cannot be transferred due to a broken line of sight, that starlight is voided.
+research.STARMETAL_RES.name=Starmetal
+astralsorcery.journal.STARMETAL_RES.1.text=Shimmering blue, ice cold and sparkling as the night sky above you; The iron ore fused with the blue effect it gave off from the very beginning and formed a shimmering metal from the plain, grey iron.
+astralsorcery.journal.STARMETAL_RES.2.text=On most occasions, it seems to still behave almost like iron. Exposing an ingot of it to the night sky makes it sparkle and look almost like a mirror of it.<NL>The ingot itself however seems to be rather mundane and not reactive to anything besides looking pretty. Maybe you should grind the ingot down into its dust and see what happens?
 
-research.COLL_CRYSTAL.name=[WIP] Collector Crystal
+research.PRISM.name=Crystal Prism
+astralsorcery.journal.PRISM.1.text=While crystal lenses are useful and all, sometimes you just want to direct the light onto multiple locations other than just one.<NL>You conclude on having a crystal acting as prism and splitting the outgoing starlight evenly across them would be the central part. Other than that it would most likely work the same way like the crystal lens.
+
+research.COLL_CRYSTAL.name=Collector Crystal
 astralsorcery.journal.COLL_CRYSTAL.1.text=[WIP]<NL>You discovered how to create your own collector crystals. They will copy over the crystal properties and the constellation from the attuned crystal that was used to craft them had. Needs to see the sky to collect starlight. Starlight collected depends on time of the day, as well as the current constellations in the sky. Starlight type is the type of the constellation the crystal was attuned to.
 
-research.CEL_CRYSTAL_GROW.name=[WIP] Celestial Crystal Clusters
-astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=[WIP]<NL>Rock crystal + Stardust in sourceblock of liquid starlight -> Celestial crystal cluster. Takes time to grow. Can be accelerated by linking some starlight onto it. Placing it on top of starmetal ore also helps, may turn the ore back into iron ore.
-astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=[WIP]<NL>Nothing here.
+research.CEL_CRYSTAL_GROW.name=Crystal Clusters
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way better material to mess with. Its little grains occasionally flash with light and sparkle while running like sand through your hands.<NL>Accidentally, some of it dropped onto your crystals. You could hard get it off of them... They stick to the surface of them like a thin coating.
+astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Maybe you don't want to remove the coating but rather have it somehow fuse into the crystal? Throwing them both into liquid starlight and wait for them to fuse together might be one approach to that.<NL>After waiting a while you notice that they did indeed fuse together into a cluster of small blue crystals, consuming the liquid in the process.<NL>They still seem to grow a bit. Maybe you should just leave them like that for a while until they stop growing. Focusing some additional starlight onto them might also help.
 
 research.CEL_CRYSTALS.name=Celestial Crystals
-astralsorcery.journal.CEL_CRYSTALS.1.text=These crystals seem to share the same properties as rock crystals, but are way bigger and more robust than their white counterparts.<NL>Studying them further, they seem to resemble the rock crystals in many parts, but excel them in almost every aspect.
+astralsorcery.journal.CEL_CRYSTALS.1.text=After having the stardust completely fuse and tint these blue-ish crystals, they still seem to share the same properties as rock crystals, but are way bigger and more robust than their white counterparts.<NL>Studying them further, they seem to resemble the rock crystals in many parts, but excel them in almost every aspect. Using them instead of the smaller ones might be very advantageous.
 
-research.PED_ACCEL.name=[WIP] Ritual Pedestal Acceleration
-astralsorcery.journal.PED_ACCEL.1.text=[WIP]<NL>Link starlight of the type of the ritual onto the pedestal. Over time the crystal channeling the ritual will shatter bit by bit, sending starlight off via beams. Place a lens or prism at the position the light is emitting to and link those beams back onto the pedestal via lens or prism. The efficiency of the ritual is greatly increased whenever you do this.
+research.PED_ACCEL.name=Ritual Acceleration
+astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up some time ago is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
+astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the crystal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime

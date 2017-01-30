@@ -43,6 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
@@ -200,7 +201,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCollectorCrystal te = MiscUtils.getTileAt(worldIn, pos, TileCollectorCrystal.class, true);
         if(te != null && !worldIn.isRemote) {
             PktParticleEvent event = new PktParticleEvent(PktParticleEvent.ParticleEventType.COLLECTOR_BURST,
@@ -208,7 +209,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
             PacketChannel.CHANNEL.sendToAllAround(event, PacketChannel.pointFromPos(worldIn, pos, 32));
             TileCollectorCrystal.breakDamage(worldIn, pos);
 
-            if(te.isPlayerMade()) {
+            if(te.isPlayerMade() && !player.isCreative()) {
                 ItemStack drop = new ItemStack(te.getType() == CollectorCrystalType.ROCK_CRYSTAL ? BlocksAS.collectorCrystal : BlocksAS.celestialCollectorCrystal);
                 CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
                 ItemCollectorCrystal.setType(drop, te.getType());
@@ -216,7 +217,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
                 ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
             }
         }
-        super.breakBlock(worldIn, pos, state);
+        super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     public static enum CollectorCrystalType {

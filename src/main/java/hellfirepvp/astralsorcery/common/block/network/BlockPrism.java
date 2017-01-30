@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -117,9 +118,9 @@ public class BlockPrism extends BlockStarlightNetwork {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCrystalPrismLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalPrismLens.class, true);
-        if(lens != null) {
+        if(lens != null && !worldIn.isRemote && !player.isCreative()) {
             ItemStack drop;
             if(lens.getLensColor() != null) {
                 drop = lens.getLensColor().asStack();
@@ -131,7 +132,7 @@ public class BlockPrism extends BlockStarlightNetwork {
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
         }
 
-        super.breakBlock(worldIn, pos, state);
+        super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     @Override

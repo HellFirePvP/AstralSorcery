@@ -20,6 +20,8 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowu
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -63,6 +65,11 @@ public class GuiConstellationPaper extends GuiWHScreen {
                 }
             }
         }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
     }
 
     @Override

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
+import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
@@ -103,6 +104,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CELESTIAL_CRYSTAL_FORM,
         CRAFT_FINISH_BURST,
         STARMETAL_ORE_CHARGE,
+        TRANSMUTATION_CHARGE,
         WELL_CATALYST_BREAK,
         WAND_CRYSTAL_HIGHLIGHT,
         PHOENIX_PROC,
@@ -132,6 +134,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileAltar::finishBurst;
                 case STARMETAL_ORE_CHARGE:
                     return BlockCustomOre::playStarmetalOreEffects;
+                case TRANSMUTATION_CHARGE:
+                    return BlockTransmutationHandler::playTransmutationEffects;
                 case WELL_CATALYST_BREAK:
                     return TileWell::catalystBurst;
                 case WAND_CRYSTAL_HIGHLIGHT:

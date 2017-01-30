@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -27,6 +28,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,23 +55,25 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if (!block.isReplaceable(worldIn, pos)) {
                     pos = pos.offset(facing);
                 }
-                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, null, stack)) {
+                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, null, stack) &&
+                        getCharge(playerIn, Side.SERVER) >= Config.illuminationWandUseCost) {
                     if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                         worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                        --stack.stackSize;
+                        modifyAlignmentCharge(playerIn, -Config.illuminationWandUseCost);
                     }
                 }
             } else {
                 if(at.isNormalCube()) {
                     TileEntity te = worldIn.getTileEntity(pos);
-                    if(te == null && !at.getBlock().hasTileEntity(at)) {
+                    if(te == null && !at.getBlock().hasTileEntity(at) && getCharge(playerIn, Side.SERVER) >= Config.illuminationWandUseCost) {
                         worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3);
                         TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
                         if(tt == null) {
                             worldIn.setBlockState(pos, at, 3);
                         } else {
                             tt.setFakedState(at);
+                            modifyAlignmentCharge(playerIn, -Config.illuminationWandUseCost);
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

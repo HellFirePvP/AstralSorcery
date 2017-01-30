@@ -143,9 +143,9 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         TileCrystalLens lens = MiscUtils.getTileAt(worldIn, pos, TileCrystalLens.class, true);
-        if(lens != null) {
+        if(lens != null && !worldIn.isRemote && !player.isCreative()) {
             ItemStack drop;
             if(lens.getLensColor() != null) {
                 drop = lens.getLensColor().asStack();
@@ -157,7 +157,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
         }
 
-        super.breakBlock(worldIn, pos, state);
+        super.onBlockHarvested(worldIn, pos, state, player);
     }
 
     @Override

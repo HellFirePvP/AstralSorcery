@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
@@ -96,6 +97,11 @@ public class ItemWand extends Item implements ISpecialInteractItem {
             ChunkPos pos = new ChunkPos(entityIn.getPosition());
             List<BlockPos> posList = buf.collectPositions(pos, 4);
             for (BlockPos rPos : posList) {
+                IBlockState state = worldIn.getBlockState(rPos);
+                if(!(state.getBlock() instanceof BlockCustomOre) || state.getValue(BlockCustomOre.ORE_TYPE) != BlockCustomOre.OreType.ROCK_CRYSTAL) {
+                    buf.removeOre(rPos);
+                    continue;
+                }
                 BlockPos p = worldIn.getTopSolidOrLiquidBlock(rPos).up();
                 double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
                 if(dstr > 1E-4) {
@@ -109,18 +115,18 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     @SideOnly(Side.CLIENT)
     public static void highlightEffects(PktParticleEvent event) {
         BlockPos pos = event.getVec().toBlockPos();
-        double x = pos.getX() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
-        double y = pos.getY() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
-        double z = pos.getZ() + rand.nextFloat() * (rand.nextBoolean() ? 4 : -4);
+        double x = pos.getX() + rand.nextFloat() * (rand.nextBoolean() ? 2 : -2);
+        double y = pos.getY() + rand.nextFloat() * (rand.nextBoolean() ? 2 : -2);
+        double z = pos.getZ() + rand.nextFloat() * (rand.nextBoolean() ? 2 : -2);
         double velX = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
-        double velY = rand.nextFloat() * 0.2F;
+        double velY = rand.nextFloat() * 0.3F;
         double velZ = rand.nextFloat() * 0.01F * (rand.nextBoolean() ? 1 : -1);
         double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
         for (int i = 0; i < 10; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(x, y, z);
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-            particle.motion(velX * (0.2 + 0.8 * rand.nextFloat()), velY * (0.2 + 0.8 * rand.nextFloat()), velZ * (0.2 + 0.8 * rand.nextFloat()));
-            particle.scale(0.4F);
+            particle.motion(velX * (0.2 + 0.8 * rand.nextFloat()), velY * (0.4 + 0.6 * rand.nextFloat()), velZ * (0.2 + 0.8 * rand.nextFloat()));
+            particle.scale(0.7F).setMaxAge(70);
             particle.enableAlphaFade().setAlphaMultiplier((float) ((150 * dstr) / 255F));
         }
 

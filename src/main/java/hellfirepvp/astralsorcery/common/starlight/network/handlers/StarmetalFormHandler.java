@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,6 +34,11 @@ import java.util.Random;
 public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlightBlockHandler {
 
     private static Map<BlockPos, IronOreReceiverNode> turningIrons = new HashMap<>();
+
+    @Override
+    public boolean isApplicable(World world, BlockPos pos, IBlockState state) {
+        return state.getBlock().equals(Blocks.IRON_ORE);
+    }
 
     @Override
     public void receiveStarlight(World world, Random rand, BlockPos pos, @Nullable IWeakConstellation starlightType, double amount) {

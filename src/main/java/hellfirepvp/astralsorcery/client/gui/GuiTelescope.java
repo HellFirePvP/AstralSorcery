@@ -721,7 +721,7 @@ public class GuiTelescope extends GuiWHScreen {
 
     public static class SkyConstellationDistribution {
 
-        private static final float constellationWH = 120;
+        private static final float constellationWH = 150;
         private final Map<TileTelescope.TelescopeRotation, RotationConstellationInformation> informationMap = new HashMap<>();
 
     }

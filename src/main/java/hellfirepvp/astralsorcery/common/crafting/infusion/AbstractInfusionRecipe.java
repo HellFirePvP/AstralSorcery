@@ -76,11 +76,11 @@ public abstract class AbstractInfusionRecipe {
 
     @SideOnly(Side.CLIENT)
     public ItemStack getOutputForRender() {
-        return output;
+        return ItemUtils.copyStackWithSize(output, output.stackSize);
     }
 
     public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
-        return output;
+        return ItemUtils.copyStackWithSize(output, output.stackSize);
     }
 
     @Nonnull

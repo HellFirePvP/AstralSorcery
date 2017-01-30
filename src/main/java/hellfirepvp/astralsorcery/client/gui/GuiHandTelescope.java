@@ -84,12 +84,16 @@ public class GuiHandTelescope extends GuiWHScreen {
     public GuiHandTelescope() {
         super(216, 216);
 
-        setupInitialStars();
+        Optional<Long> currSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
+        if(currSeed.isPresent()) {
+            setupInitialStars(currSeed.get());
+        }
     }
 
-    private void setupInitialStars() {
+    private void setupInitialStars(long seed) {
         int offsetX = 6, offsetY = 6;
         int width = guiWidth - 6, height = guiHeight - 6;
+        random.setSeed(seed);
 
         for (int i = 0; i < randomStars; i++) {
             usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
@@ -152,9 +156,20 @@ public class GuiHandTelescope extends GuiWHScreen {
         }
         boolean canSeeSky = canTelescopeSeeSky(w);
 
-        zLevel -= 5;
-        drawCellWithEffects(partialTicks, canSeeSky, transparency);
-        zLevel += 5;
+        if(usedStars.isEmpty()) {
+            Optional<Long> currSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
+            if(currSeed.isPresent()) {
+                setupInitialStars(currSeed.get());
+
+                zLevel -= 5;
+                drawCellWithEffects(partialTicks, canSeeSky, transparency);
+                zLevel += 5;
+            }
+        } else {
+            zLevel -= 5;
+            drawCellWithEffects(partialTicks, canSeeSky, transparency);
+            zLevel += 5;
+        }
 
         TextureHelper.refreshTextureBindState();
         GL11.glPopMatrix();

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
@@ -35,11 +36,12 @@ public class LensRecipe extends ConstellationRecipe {
         super(new ShapedRecipe(new ItemStack(BlocksAS.lens))
                 .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
                         ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
@@ -64,8 +66,10 @@ public class LensRecipe extends ConstellationRecipe {
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack lens = super.getOutput(centralGridMap, altar);
+        lens = ItemUtils.copyStackWithSize(lens, 1);
         CrystalProperties crystalProp = CrystalProperties.getCrystalProperties(centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0));
         CrystalProperties.applyCrystalProperties(lens, crystalProp);
+        lens.stackSize = Math.max(1, crystalProp.getSize() / 80);
         return lens;
     }
 

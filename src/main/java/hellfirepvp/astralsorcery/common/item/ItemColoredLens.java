@@ -165,19 +165,19 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
         public void onLivingEntityInBeam(EntityLivingBase living, float percStrength) {
             switch (this) {
                 case FIRE:
-                    if(living.getEntityWorld().rand.nextFloat() > percStrength) return;
+                    if(itemRand.nextFloat() > percStrength) return;
                     living.setFire(1);
                     break;
                 case DAMAGE:
-                    if(living.getEntityWorld().rand.nextFloat() > percStrength) return;
+                    if(itemRand.nextFloat() > percStrength) return;
                     living.attackEntityFrom(CommonProxy.dmgSourceStellar, 0.6F);
                     break;
                 case REGEN:
-                    if(living.getEntityWorld().rand.nextFloat() > percStrength) return;
+                    if(itemRand.nextFloat() > percStrength) return;
                     living.heal(0.6F);
                     break;
                 case NIGHT:
-                    if(living.getEntityWorld().rand.nextFloat() > percStrength) return;
+                    if(itemRand.nextFloat() > percStrength) return;
                     living.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
                     break;
             }
@@ -188,7 +188,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 case BREAK:
                     float hardness = state.getBlockHardness(world, at);
                     if(hardness < 0) return;
-                    hardness *= 10F;
+                    hardness *= 3F;
                     addProgress(world, at, hardness, percStrength);
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, at);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at, 16));
@@ -197,7 +197,9 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, at);
                     if(plant != null) {
-                        plant.tryGrow(world, world.rand);
+                        if(itemRand.nextInt(7) == 0) {
+                            plant.tryGrow(world, world.rand);
+                        }
                         PktParticleEvent packet = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
