@@ -80,7 +80,7 @@ public class GuiTelescope extends GuiWHScreen {
     private SkyConstellationDistribution currentInformation = null;
 
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
-        super(245, 500);
+        super(280, 280);
         this.owningPlayer = player;
         this.guiOwner = e;
         this.rotation = e.getRotation();

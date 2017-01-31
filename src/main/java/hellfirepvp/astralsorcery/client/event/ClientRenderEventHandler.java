@@ -187,7 +187,7 @@ public class ClientRenderEventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
-        if(event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+        if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             if(visibility > 0) {
                 renderAlignmentChargeOverlay(event.getPartialTicks());
             }
