@@ -28,12 +28,12 @@ public class LightOreTransmutations {
     private static List<Transmutation> registeredTransmutations = new LinkedList<>();
 
     public static void init() {
-        registerTransmutation(new Transmutation(Blocks.COAL_BLOCK.getDefaultState(),         Blocks.OBSIDIAN.getDefaultState(),    2000.0D));
-        registerTransmutation(new Transmutation(Blocks.SAND.getDefaultState(),               Blocks.CLAY.getDefaultState(),        2000.0D));
-        registerTransmutation(new Transmutation(Blocks.DIAMOND_ORE.getDefaultState(),        Blocks.EMERALD_ORE.getDefaultState(), 2000.0D));
-        registerTransmutation(new Transmutation(Blocks.NETHER_WART_BLOCK.getDefaultState(),  Blocks.SOUL_SAND.getDefaultState(),   2000.0D));
+        registerTransmutation(new Transmutation(Blocks.COAL_BLOCK.getDefaultState(),         Blocks.OBSIDIAN.getDefaultState(),     400.0D));
+        registerTransmutation(new Transmutation(Blocks.SAND.getDefaultState(),               Blocks.CLAY.getDefaultState(),         200.0D));
+        registerTransmutation(new Transmutation(Blocks.DIAMOND_ORE.getDefaultState(),        Blocks.EMERALD_ORE.getDefaultState(), 3000.0D));
+        registerTransmutation(new Transmutation(Blocks.NETHER_WART_BLOCK.getDefaultState(),  Blocks.SOUL_SAND.getDefaultState(),    200.0D));
         registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(),            Blocks.CAKE.getDefaultState(),        2000.0D));
-        registerTransmutation(new Transmutation(Blocks.SEA_LANTERN.getDefaultState(),        Blocks.LAPIS_BLOCK.getDefaultState(), 2000.0D));
+        registerTransmutation(new Transmutation(Blocks.SEA_LANTERN.getDefaultState(),        Blocks.LAPIS_BLOCK.getDefaultState(),  200.0D));
     }
 
     public static void registerTransmutation(Transmutation tr) {
@@ -47,8 +47,8 @@ public class LightOreTransmutations {
             AstralSorcery.log.warn("Tried to register Transmutation with null input - Skipping!");
             return;
         }
-        if(tr.input.getBlock().equals(Blocks.IRON_ORE)) {
-            AstralSorcery.log.warn("Cannot register Transmutation of iron ore -> something. By default occupied by the transmutation to starmetal which is handled differently.");
+        if(tr.input.getBlock().equals(Blocks.IRON_ORE) || tr.input.getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            AstralSorcery.log.warn("Cannot register Transmutation of iron ore/workbench -> something. By default occupied by the transmutation to starmetal or general crafting which is handled differently.");
             return;
         }
         if(tr.output == null) {

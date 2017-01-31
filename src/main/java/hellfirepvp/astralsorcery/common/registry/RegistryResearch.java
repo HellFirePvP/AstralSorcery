@@ -54,7 +54,7 @@ public class RegistryResearch {
     private static void initConstellation() {
         ResearchProgression.Registry regConstellation = ResearchProgression.CONSTELLATION.getRegistry();
 
-        ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 1);
+        ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 2);
         resLens.addPage(getTextPage("LENS.1"));
         resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLens));
         resLens.addPage(getTextPage("LENS.3"));
@@ -116,9 +116,8 @@ public class RegistryResearch {
 
         ResearchNode resCelCrystals = new ResearchNode(new ItemStack(ItemsAS.celestialCrystal), "CEL_CRYSTALS", 1, 5);
         resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.1"));
-        resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.2"));
 
-        ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", 0, 3);
+        ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", 0, 0);
         resRitualAccel.addPage(getTextPage("PED_ACCEL.1"));
         resRitualAccel.addPage(getTextPage("PED_ACCEL.2"));
 
@@ -138,7 +137,6 @@ public class RegistryResearch {
         resStarOre.addSourceConnectionFrom(resLens);
         resColoredLenses.addSourceConnectionFrom(resLens);
         resRitualAccel.addSourceConnectionFrom(resLens);
-        resRitualAccel.addSourceConnectionFrom(resLinkTool);
         resPrism.addSourceConnectionFrom(resStarResult);
         resStarResult.addSourceConnectionFrom(resStarOre);
         resCollCrystal.addSourceConnectionFrom(resStarResult);
@@ -199,6 +197,7 @@ public class RegistryResearch {
         resMountedTelescope.addPage(getTextPage("TELESCOPE.1"));
         resMountedTelescope.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rTelescope));
         resMountedTelescope.addPage(getTextPage("TELESCOPE.3"));
+        resMountedTelescope.addPage(getTextPage("TELESCOPE.4"));
 
         ResearchNode resResoGem = new ResearchNode(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), "RESO_GEM_POOL", 3, 1);
         resResoGem.addPage(getTextPage("RESO_GEM_POOL.1"));

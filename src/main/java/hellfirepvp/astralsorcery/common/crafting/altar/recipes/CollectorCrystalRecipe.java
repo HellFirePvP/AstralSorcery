@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -42,8 +43,11 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
                 .addPart((celestial ? ItemsAS.tunedCelestialCrystal : ItemsAS.tunedRockCrystal),
                         ShapedRecipeSlot.CENTER)
                 .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LOWER_CENTER));
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT));
         setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AltarSlot.values());
         this.celestial = celestial;
         ItemStack stack = new ItemStack(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);

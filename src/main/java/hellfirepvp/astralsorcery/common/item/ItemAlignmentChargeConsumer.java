@@ -22,7 +22,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer {
 
-    default public void modifyAlignmentCharge(EntityPlayer player, double charge) {
+    default public void drainCharge(EntityPlayer player, double charge) {
+        if(player.isCreative()) return;
         ResearchManager.modifyAlignmentCharge(player, charge);
     }
 
@@ -30,6 +31,10 @@ public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if(progress == null) return 0.0D;
         return progress.getAlignmentCharge();
+    }
+
+    default public boolean hasAtLeastCharge(EntityPlayer player, Side side, double required) {
+        return player.isCreative() || getCharge(player, side) >= required;
     }
 
 }

@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +33,7 @@ public class PlayerPerkHandler implements ITickHandler {
         EntityPlayer ticked = (EntityPlayer) context[0];
         PlayerProgress prog = ResearchManager.getProgress(ticked, (Side) context[1]);
         if(prog != null) {
-            Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+            Map<ConstellationPerk, Integer> perks = new HashMap<>(prog.getAppliedPerks());
             for (ConstellationPerk perk : perks.keySet()) {
                 if(!prog.isPerkActive(perk)) continue;
                 if(perk.mayExecute(ConstellationPerk.Target.PLAYER_TICK)) {

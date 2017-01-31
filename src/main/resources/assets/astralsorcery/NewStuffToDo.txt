@@ -4,7 +4,7 @@ Graphical next:
 [+] - Starlight infuser block model (may hold 1 item on top of it, some 'sort' of pedestal?)
 - Item idea/model for skyWaveResonator
 - Alignment charge overlay/bar
-- [Maybe] Lightwell model change
+[+] - [Maybe] Lightwell model change
 
 Code-Wise next:
 
@@ -15,7 +15,7 @@ Code-Wise next:
 [+] - Add RetroGen cache and versioning to that to enable version-changing retro-gen without bigger issues.
 [+] - Add additional (config-enable/disable) checks for network integrity and safe-fail remove if necessary. (be verbose!)
 [+] - Add make starlight collection in altars based on noise maps instead of build height or random numbers.
-- Add item that lets you 'see' those noise maps in some way.
+[+] - Add item that lets you 'see' those noise maps in some way.
 [+] - Add a multiplier of said noise maps to starlight collection via crystals
 [+] - Add a crystal-item representation to the ItemHandle
 - [TBA]
