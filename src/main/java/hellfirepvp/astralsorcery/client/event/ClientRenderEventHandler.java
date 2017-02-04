@@ -11,18 +11,26 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
+import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.ClientKeyboardInputEvent;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeRevealer;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
@@ -33,6 +41,10 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -64,8 +76,11 @@ import java.util.zip.GZIPInputStream;
  */
 public class ClientRenderEventHandler {
 
+    private static final BindableResource texChargeFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame");
+    private static final BindableResource texChargeCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge");
+
     private static final Random rand = new Random();
-    private static final int fadeTicks = 30;
+    private static final int fadeTicks = 15;
     private static final float visibilityChange = 1F / ((float) fadeTicks);
 
     private static int chargeRevealTicks = 0;
@@ -119,13 +134,17 @@ public class ClientRenderEventHandler {
                 Item i = inHand.getItem();
                 if(i instanceof ItemAlignmentChargeRevealer) {
                     if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
-                        requestChargeReveal(100);
+                        requestChargeReveal(20);
                     }
                 }
                 if(i instanceof ItemSkyResonator) {
                     spawnSurfaceParticles();
                 }
             }
+            if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
+                requestChargeReveal(20);
+            }
+            chargeRevealTicks--;
 
             if((chargeRevealTicks - fadeTicks) < 0) {
                 if(visibility > 0) {
@@ -198,7 +217,63 @@ public class ClientRenderEventHandler {
     private void renderAlignmentChargeOverlay(float partialTicks) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
 
+        float height  = 128F;
+        float width   =  32F;
+        float offsetX =  10F;
+        float offsetY =  15F;
+
+        texChargeFrame.bind();
+        GL11.glColor4f(1F, 1F, 1F, visibility * 0.9F);
+
+        //Draw hud itself
+        Tessellator tes = Tessellator.getInstance();
+        VertexBuffer vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
+        vb.pos(offsetX + width, offsetY + height, 10).tex(1, 1).endVertex();
+        vb.pos(offsetX + width, offsetY,          10).tex(1, 0).endVertex();
+        vb.pos(offsetX,         offsetY,          10).tex(0, 0).endVertex();
+        tes.draw();
+
+        //Draw charge
+        float filled = ConstellationPerkLevelManager.getPercToNextLevel(ResearchManager.clientProgress);
+        height = 78F;
+        offsetY = 37.5F + (1F - filled) * height;
+        GL11.glColor4f(92F / 255F, 0F, 229F / 255F, visibility * 0.7F);
+        texChargeCharge.bind();
+        height *= filled;
+
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX,         offsetY + height, 10).tex(0,           1).endVertex();
+        vb.pos(offsetX + width, offsetY + height, 10).tex(1,           1).endVertex();
+        vb.pos(offsetX + width, offsetY,          10).tex(1, 1F - filled).endVertex();
+        vb.pos(offsetX,         offsetY,          10).tex(0, 1F - filled).endVertex();
+        tes.draw();
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        TextureHelper.refreshTextureBindState();
+        //Draw level
+        int level = ResearchManager.clientProgress.getAlignmentLevel();
+        GL11.glColor4f(0.86F, 0.86F, 0.86F, visibility);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glPushMatrix();
+        GL11.glTranslated(offsetX + 13, 104, 0);
+        GL11.glScaled(1.2, 1.2, 1.2);
+        int c = 0x00DDDDDD;
+        c |= ((int) (255F * visibility)) << 24;
+        if(visibility > 0.1E-4) {
+            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(String.valueOf(level), 0, 0, c);
+        }
+        GL11.glPopMatrix();
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        TextureHelper.refreshTextureBindState();
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }

@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
@@ -236,10 +237,31 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
-        //ofr.drawString(name, guiLeft + offsetX, guiTop + 15, zLevel, null, 0.7F, 0);
+        String dstInfo = "astralsorcery.journal.constellation.dst.";
+        if(constellation instanceof IMajorConstellation) {
+            dstInfo += "major";
+        } else if(constellation instanceof IWeakConstellation) {
+            dstInfo += "weak";
+        } else {
+            dstInfo += "minor";
+        }
+        dstInfo = I18n.format(dstInfo);
+        width = fr.getStringWidth(dstInfo);
+        offsetX = 110 - (width * 1.25 / 2);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glTranslated(guiLeft + offsetX, guiTop + 46, 0);
+        GL11.glScaled(1.25, 1.25, 1.25);
+        fr.drawString(dstInfo, 0, 0, 0xCCDDDDDD, true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(br, br, br, 0.8F);
+        TextureHelper.refreshTextureBindState();
+
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
-        RenderConstellation.renderConstellationIntoGUI(new Color(0xDDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 2F, new RenderConstellation.BrightnessFunction() {
+        RenderConstellation.renderConstellationIntoGUI(new Color(0x00DDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 2F, new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
                 return 0.5F;

@@ -45,6 +45,22 @@ public class ConstellationPerkLevelManager {
         return i;
     }
 
+    public static float getPercToNextLevel(PlayerProgress progress) {
+        double current = progress.getAlignmentCharge();
+        int level = progress.getAlignmentLevel();
+        if(level >= levelsRequired.length) return 1F;
+        if(level < 0) return 0F;
+
+        double left = current - (level - 1 < 0 ? 0 : levelsRequired[level - 1]);
+        double reqNext;
+        if(level >= levelsRequired.length) {
+            return 1F;
+        } else {
+            reqNext = levelsRequired[level] - (level - 1 < 0 ? 0 : levelsRequired[level - 1]);
+        }
+        return (float) (left / reqNext);
+    }
+
     /*public static int getExpNeededForNext(PlayerProgress progress) {
         if(progress == null) return -1;
         int perks = progress.getAppliedPerks().size();

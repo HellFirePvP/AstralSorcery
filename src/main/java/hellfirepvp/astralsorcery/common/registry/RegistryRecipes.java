@@ -280,7 +280,7 @@ public class RegistryRecipes {
                 AttunementRecipe.AltarSlot.LOWER_LEFT);
 
         rSkyResonator = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.skyResonator)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.LEFT,
