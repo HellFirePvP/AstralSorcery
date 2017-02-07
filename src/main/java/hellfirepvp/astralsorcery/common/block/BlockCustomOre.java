@@ -116,7 +116,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     private boolean securityCheck(World world, BlockPos pos, EntityPlayer player) {
-        return !world.isRemote && player != null && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player);
+        return !world.isRemote && player != null && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player);
     }
 
     private boolean checkSafety(World world, BlockPos pos) {

@@ -15,8 +15,9 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -60,8 +61,9 @@ public class PktDiscoverConstellation implements IMessage, IMessageHandler<PktDi
             if(prog != null && received.canDiscover(prog)) {
                 ResearchManager.discoverConstellation(received, ctx.getServerHandler().playerEntity);
                 ctx.getServerHandler().playerEntity.addChatMessage(
-                        new TextComponentString("§aDiscovered constellation " +
-                                I18n.format(message.discoveredConstellation) + "!"));
+                        new TextComponentTranslation("progress.discover.constellation.chat",
+                                new TextComponentTranslation(message.discoveredConstellation))
+                                .setStyle(new Style().setColor(TextFormatting.GREEN)));
             }
         }
         return null;

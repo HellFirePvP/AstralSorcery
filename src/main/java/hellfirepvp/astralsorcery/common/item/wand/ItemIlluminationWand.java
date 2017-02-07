@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.tool;
+package hellfirepvp.astralsorcery.common.item.wand;
 
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.data.config.Config;

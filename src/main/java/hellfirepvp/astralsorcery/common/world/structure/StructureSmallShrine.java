@@ -53,6 +53,8 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {
+        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+
         Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;

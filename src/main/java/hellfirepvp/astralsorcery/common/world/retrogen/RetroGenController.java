@@ -15,8 +15,13 @@ import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,6 +32,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class RetroGenController {
 
+    private static List<ChunkPos> retroGenActive = new LinkedList<>();
+
     public ChunkVersionBuffer getVersionBuffer(World world) {
         return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
     }
@@ -34,13 +41,21 @@ public class RetroGenController {
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         ChunkPos pos = event.getChunk().getChunkCoordIntPair();
-        Integer chunkVersion = getVersionBuffer(event.getWorld()).getGenerationVersion(pos);
-        if(chunkVersion == null) {
-            AstralSorcery.log.info("[RetroGen] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
-            return;
+        if(event.getWorld().isRemote || retroGenActive.contains(pos)) return;
+        Integer chunkVersion = -1;
+        if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.chunkXPos, pos.chunkZPos)) {
+            chunkVersion = getVersionBuffer(event.getWorld()).getGenerationVersion(pos);
+            if(chunkVersion == null) {
+                AstralSorcery.log.info("[RetroGen] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
+                return;
+            }
         }
         AstralSorcery.log.info("[RetroGen] Attempting AstralSorcery retrogen for chunk " + pos.toString() + " - Version " + chunkVersion + " -> " + AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION);
+        retroGenActive.add(pos);
+        AstralSorcery.log.info("RetroGenStack: " + retroGenActive.size());
         CommonProxy.worldGenerator.handleRetroGen(event.getWorld(), pos, chunkVersion);
+        AstralSorcery.log.info("RetroGen completed");
+        retroGenActive.remove(pos);
     }
 
 }

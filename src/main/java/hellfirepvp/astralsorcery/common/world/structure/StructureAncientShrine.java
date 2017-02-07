@@ -36,7 +36,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
-        if(!isMountainBiome(world, pos)) return false;
+        if(!isMountainBiome(world, pos) && !isSnowyBiome(world, pos)) return false;
         if(!canSpawnShrineCorner(world, pos.add(-7, 0,  7))) return false;
         if(!canSpawnShrineCorner(world, pos.add( 7, 0, -7))) return false;
         if(!canSpawnShrineCorner(world, pos.add( 7, 0,  7))) return false;
@@ -58,6 +58,8 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     }
 
     private boolean isSnowyBiome(World world, BlockPos pos) {
+        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+
         Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;
@@ -69,6 +71,8 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     }
 
     private boolean isMountainBiome(World world, BlockPos pos) {
+        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+
         Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;

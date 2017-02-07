@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologi
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -109,6 +110,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         WAND_CRYSTAL_HIGHLIGHT,
         PHOENIX_PROC,
         TREE_VORTEX,
+        ARCHITECT_PLACE,
 
         CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
@@ -144,6 +146,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return PotionCheatDeath::playEntityDeathEffect;
                 case CE_CROP_INTERACT:
                     return CEffectAevitas::playParticles;
+                case ARCHITECT_PLACE:
+                    return ItemArchitectWand::playArchitectPlaceEvent;
                 //case CE_MELT_BLOCK:
                 //    return CEffectFornax::playParticles;
                 case CE_ACCEL_TILE:

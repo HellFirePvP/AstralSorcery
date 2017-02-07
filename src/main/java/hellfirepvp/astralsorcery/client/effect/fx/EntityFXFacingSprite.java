@@ -53,6 +53,13 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         this.maxAge = spriteSheet.getFrameCount();
     }
 
+    public EntityFXFacingSprite updatePosition(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return this;
+    }
+
     public static EntityFXFacingSprite fromSpriteSheet(SpriteSheetResource res, double x, double y, double z, float scale, int rLayer) {
         return new EntityFXFacingSprite(res, x, y, z, scale) {
 
@@ -118,6 +125,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDepthMask(false);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         int frame = getAgeBasedFrame();

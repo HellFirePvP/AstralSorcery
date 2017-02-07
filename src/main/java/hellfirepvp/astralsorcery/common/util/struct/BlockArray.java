@@ -58,6 +58,10 @@ public class BlockArray {
         tileCallbacks.put(pos, callback);
     }
 
+    public boolean isEmpty() {
+        return pattern.isEmpty();
+    }
+
     public Vec3i getMax() {
         return max;
     }

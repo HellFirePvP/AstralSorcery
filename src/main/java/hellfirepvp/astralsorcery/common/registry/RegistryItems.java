@@ -29,7 +29,9 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
-import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.tool.ItemRoseBranchBow;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
@@ -124,6 +126,8 @@ public class RegistryItems {
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
         roseBranchBow = registerItem(new ItemRoseBranchBow());
+        architectWand = registerItem(new ItemArchitectWand());
+        exchangeWand = registerItem(new ItemExchangeWand());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

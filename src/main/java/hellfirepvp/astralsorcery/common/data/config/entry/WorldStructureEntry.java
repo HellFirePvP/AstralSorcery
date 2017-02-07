@@ -23,6 +23,7 @@ public class WorldStructureEntry extends ConfigEntry {
 
     private int generationChance = Integer.MAX_VALUE;
     private boolean doGenerate = false;
+    private boolean doIgnoreBiomeSpecifications = false;
 
     public WorldStructureEntry(String key) {
         super(Section.WORLDGEN, key);
@@ -31,11 +32,16 @@ public class WorldStructureEntry extends ConfigEntry {
     @Override
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean(getKey(), getConfigurationSection(), true, "Generate " + getKey());
+        doIgnoreBiomeSpecifications = cfg.getBoolean(getKey() + "IgnoreBiomes", getConfigurationSection(), false, "Ignore Biome specifications when trything to generate " + getKey());
         generationChance = cfg.getInt(getKey() + "Chance", getConfigurationSection(), 140, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
     }
 
     public boolean shouldGenerate() {
         return doGenerate;
+    }
+
+    public boolean shouldIgnoreBiomeSpecifications() {
+        return doIgnoreBiomeSpecifications;
     }
 
     public boolean tryGenerate(Random random) {

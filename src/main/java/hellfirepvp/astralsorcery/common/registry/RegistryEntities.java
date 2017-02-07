@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.entities.EntityAquamarine;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import net.minecraft.entity.Entity;
@@ -36,6 +37,7 @@ public class RegistryEntities {
         registerEntity(EntityItemStardust.class, "EntityStardust", modEid++, 64, 20, true);
         registerEntity(EntityCrystal.class, "EntityCrystal", modEid++, 64, 20, true);
         registerEntity(EntityAquamarine.class, "EntityAquamarine", modEid++, 64, 20, true);
+        registerEntity(EntityFlare.class, "EntityFlare", modEid++, 64, 2, true);
     }
 
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFreq, boolean sendVelUpdates) {

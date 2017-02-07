@@ -81,7 +81,15 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
         world.setBlockToAir(getPosition());
         List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectEntities(Entity.class));
         if(foundItems.size() <= 0) {
-            setDead();
+            if(getEntityItem() != null) {
+                if(getEntityItem().stackSize > 1) {
+                    getEntityItem().stackSize--;
+                } else {
+                    setDead();
+                }
+            } else {
+                setDead();
+            }
             ItemUtils.dropItemNaturally(world, posX, posY, posZ, ItemCraftingComponent.MetaType.RESO_GEM.asStack());
         }
     }

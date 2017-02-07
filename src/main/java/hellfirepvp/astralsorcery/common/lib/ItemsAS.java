@@ -21,7 +21,9 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
-import hellfirepvp.astralsorcery.common.item.tool.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
 import hellfirepvp.astralsorcery.common.item.tool.ItemRoseBranchBow;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
@@ -48,6 +50,8 @@ public class ItemsAS {
     public static ItemHandTelescope handTelescope;
     public static ItemIlluminationWand illuminationWand;
     public static ItemRoseBranchBow roseBranchBow;
+    public static ItemArchitectWand architectWand;
+    public static ItemExchangeWand exchangeWand;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

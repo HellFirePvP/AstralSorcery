@@ -24,22 +24,21 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.ClientKeyboardInputEvent;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeRevealer;
+import hellfirepvp.astralsorcery.common.item.ItemHudRender;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
+import hellfirepvp.astralsorcery.common.item.ItemHandRender;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -63,7 +62,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
@@ -78,6 +80,9 @@ public class ClientRenderEventHandler {
 
     private static final BindableResource texChargeFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame");
     private static final BindableResource texChargeCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge");
+    public static final BindableResource texHUDItemFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame");
+
+    private static final Map<ItemHudRender, ItemStackHudRenderInstance> ongoingItemRenders = new HashMap<>();
 
     private static final Random rand = new Random();
     private static final int fadeTicks = 15;
@@ -98,6 +103,29 @@ public class ClientRenderEventHandler {
         if(world.provider.getDimension() == Config.dimensionIdSkyRift) {
             if (!(world.provider.getSkyRenderer() instanceof RenderRiftSkybox)) {
                 world.provider.setSkyRenderer(new RenderRiftSkybox());
+            }
+        }
+
+        EnumHand search = EnumHand.MAIN_HAND;
+        ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(search);
+        if(inHand == null) {
+            search = EnumHand.OFF_HAND;
+            Minecraft.getMinecraft().player.getHeldItem(search);
+        }
+        if(inHand != null && inHand.getItem() != null) {
+            Item i = inHand.getItem();
+            if(i instanceof ItemHandRender) {
+                ((ItemHandRender) i).onRenderWhileInHand(inHand, search, event.getPartialTicks());
+            }
+            if(i instanceof ItemHudRender) {
+                if(((ItemHudRender) i).hasFadeIn()) {
+                    if(!ongoingItemRenders.containsKey(i)) {
+                        ongoingItemRenders.put((ItemHudRender) i, new ItemStackHudRenderInstance(inHand, 1F / ((float) ((ItemHudRender) i).getFadeInTicks())));
+                    }
+                    ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
+                    instance.active = true;
+                    instance.stack = inHand;
+                }
             }
         }
     }
@@ -140,6 +168,14 @@ public class ClientRenderEventHandler {
                 if(i instanceof ItemSkyResonator) {
                     spawnSurfaceParticles();
                 }
+                if(i instanceof ItemHudRender) {
+                    ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
+                    if(instance != null) {
+                        if(instance.visibility < 1) {
+                            instance.visibility = Math.min(1, instance.visibility + instance.visibilityChange);
+                        }
+                    }
+                }
             }
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
                 requestChargeReveal(20);
@@ -153,6 +189,21 @@ public class ClientRenderEventHandler {
             } else {
                 if(visibility < 1) {
                     visibility = Math.min(1, visibility + visibilityChange);
+                }
+            }
+
+            Iterator<Map.Entry<ItemHudRender, ItemStackHudRenderInstance>> iterator = ongoingItemRenders.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<ItemHudRender, ItemStackHudRenderInstance> entry = iterator.next();
+                ItemStackHudRenderInstance instance = entry.getValue();
+                if(instance.active) {
+                    instance.active = false;
+                } else {
+                    if(instance.visibility <= 0) {
+                        iterator.remove();
+                    } else {
+                        instance.visibility = Math.max(0, instance.visibility - instance.visibilityChange);
+                    }
                 }
             }
         }
@@ -210,6 +261,25 @@ public class ClientRenderEventHandler {
             if(visibility > 0) {
                 renderAlignmentChargeOverlay(event.getPartialTicks());
             }
+            if(!ongoingItemRenders.isEmpty()) {
+                for (Map.Entry<ItemHudRender, ItemStackHudRenderInstance> entry : new HashSet<>(ongoingItemRenders.entrySet())) {
+                    if(!entry.getKey().hasFadeIn()) {
+                        entry.getKey().onRenderInHandHUD(entry.getValue().stack, 1F, event.getPartialTicks());
+                    } else {
+                        entry.getKey().onRenderInHandHUD(entry.getValue().stack, entry.getValue().visibility, event.getPartialTicks());
+                    }
+                }
+            }
+            ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+            if(inHand == null) Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
+            if(inHand != null && inHand.getItem() != null) {
+                Item i = inHand.getItem();
+                if (i instanceof ItemHudRender) {
+                    if(!((ItemHudRender) i).hasFadeIn()) {
+                        ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                    }
+                }
+            }
         }
     }
 
@@ -223,8 +293,8 @@ public class ClientRenderEventHandler {
 
         float height  = 128F;
         float width   =  32F;
-        float offsetX =  10F;
-        float offsetY =  15F;
+        float offsetX =  0F;
+        float offsetY =  5F;
 
         texChargeFrame.bind();
         GL11.glColor4f(1F, 1F, 1F, visibility * 0.9F);
@@ -242,8 +312,8 @@ public class ClientRenderEventHandler {
         //Draw charge
         float filled = ConstellationPerkLevelManager.getPercToNextLevel(ResearchManager.clientProgress);
         height = 78F;
-        offsetY = 37.5F + (1F - filled) * height;
-        GL11.glColor4f(92F / 255F, 0F, 229F / 255F, visibility * 0.7F);
+        offsetY = 27.5F + (1F - filled) * height;
+        GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibility * 0.9F);
         texChargeCharge.bind();
         height *= filled;
 
@@ -261,7 +331,7 @@ public class ClientRenderEventHandler {
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibility);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetX + 13, 104, 0);
+        GL11.glTranslated(offsetX + 13, 94, 0);
         GL11.glScaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibility)) << 24;
@@ -272,6 +342,7 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
+        Blending.DEFAULT.apply();
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glPopMatrix();
@@ -347,6 +418,19 @@ public class ClientRenderEventHandler {
         GL11.glCallList(dList + 1);
         GL11.glPopMatrix();
         GL11.glPopMatrix();
+    }
+
+    private static class ItemStackHudRenderInstance {
+
+        private ItemStack stack;
+        private float visibility = 0;
+        private float visibilityChange;
+        private boolean active = true;
+
+        private ItemStackHudRenderInstance(ItemStack stack, float visibilityChange) {
+            this.stack = stack;
+            this.visibilityChange = visibilityChange;
+        }
     }
 
 }

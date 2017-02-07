@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityFlare;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
 import hellfirepvp.astralsorcery.client.render.tile.TESRAttunementAltar;
@@ -41,6 +42,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
@@ -237,6 +239,7 @@ public class ClientProxy extends CommonProxy {
         //RenderingRegistry.registerEntityRenderingHandler(EntityTelescope.class, new RenderEntityTelescope.Factory());
         //RenderingRegistry.registerEntityRenderingHandler(EntityGrindstone.class, new RenderEntityGrindstone.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityFlare.Factory());
     }
 
     public void registerDisplayInformationInit() {

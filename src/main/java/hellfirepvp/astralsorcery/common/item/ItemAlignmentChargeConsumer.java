@@ -24,7 +24,7 @@ public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer
 
     default public void drainCharge(EntityPlayer player, double charge) {
         if(player.isCreative()) return;
-        ResearchManager.modifyAlignmentCharge(player, charge);
+        ResearchManager.modifyAlignmentCharge(player, -charge);
     }
 
     default public double getCharge(EntityPlayer player, Side side) {

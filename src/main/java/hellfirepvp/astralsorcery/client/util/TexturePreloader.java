@@ -51,7 +51,8 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG")             .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge")    .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")   .allocateGlId();
@@ -90,6 +91,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActive")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActivateable").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare1")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full")              .allocateGlId();

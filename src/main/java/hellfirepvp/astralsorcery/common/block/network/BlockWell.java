@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -107,6 +108,9 @@ public class BlockWell extends BlockStarlightNetwork {
                         if(heldItem.stackSize <= 0) {
                             playerIn.setHeldItem(hand, null);
                         }
+
+                        EntityFlare flare = new EntityFlare(worldIn, pos.getX() + 0.5, pos.getY() + 3, pos.getZ() + 0.5);
+                        worldIn.spawnEntityInWorld(flare);
                     }
                 }
 

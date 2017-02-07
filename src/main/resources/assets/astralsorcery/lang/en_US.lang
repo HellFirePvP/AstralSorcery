@@ -44,6 +44,7 @@ achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constella
 progress.missing.knowledge=Something seems to be here, but you can’t tell what it is yet...
 progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
+progress.discover.constellation.chat=Discovered constellation %s!
 
 astralsorcery.journal.cluster.discovery.name=Discovery
 astralsorcery.journal.cluster.basic_craft.name=Exploration
@@ -65,7 +66,7 @@ astralsorcery.journal.CPAPER.3.text=On further inspection, it seems as though th
 
 research.WAND.name=Resonating Wand
 astralsorcery.journal.WAND.1.text=When using a crafting table near one of the strange crystals in the scattered ancient ruins, the crystal will focus a single ray of light onto the table. The light is dim, yet it has a definite effect on the malleability and density of certain materials.<NL>Because of this, various crafting recipes that are not normally possible are made quite easy. The simplest object that can be crafted is a basic wand that can be used to interact with various types of starlight manipulating devices.
-astralsorcery.journal.WAND.3.text=The resonating wand also has some other... unusual properties. When it is held in either hand at night, it vibrates and emits energetic sparks of light that gather in seemingly random locations around the surface of the land. Nothing seems out of place or special on the surface though... §3Maybe there's something deep underground?§r
+astralsorcery.journal.WAND.3.text=The resonating wand also has some other... unusual properties. When it is held in either hand at night, it vibrates and emits energetic sparks of light that gather in seemingly random locations around the surface of the land. Nothing seems out of place or special on the surface though... §3Maybe there's §3something deep underground?§r
 
 research.ORES.name=Ores
 astralsorcery.journal.ORES.1.text=§7§nRock Crystal Ore:§r In the deepest reaches of the world, intense heat and pressure form incredibly rare and fragile crystals. These crystals each have their own unique properties, and they seem to take in starlight with unusual ease. Due to the fragility of rock crystals they must be mined by hand.
@@ -81,7 +82,7 @@ astralsorcery.journal.HAND_TELESCOPE.1.text=Despite the night sky constantly shi
 astralsorcery.journal.HAND_TELESCOPE.4.text=The hand telescope, despite being a rather rudimentary device, goes a long way toward easing the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary. Also, constellation papers of the desired constellations need to be on hand.<NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
 
 research.GRINDSTONE.name=Grindstone
-astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly manipulate certain materials, a more specialized tool is required. A grindstone with a marble grinding wheel does exactly that. It allows for manipulation of different types of crystals, as well asbeing able to grind certain types of materials into dust, .<NL>A material or object can be placed on to it and then ground by right-clicking. Right-clicking while sneaking will remove the item.
+astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly manipulate certain materials, a more specialized tool is required. A grindstone with a marble grinding wheel does exactly that. It allows for manipulation of different types of crystals, as well as being able to grind certain types of materials into dust, .<NL>A material or object can be placed on to it and then ground by right-clicking. Right-clicking while sneaking will remove the item.
 astralsorcery.journal.GRINDSTONE.3.text=Handling rock crystals properly when trying to shape them into a more fitting form is a bit of a tedious process. Frequent inspection when doing so is highly advisable, as unattentive grinding can end up reducing one to nothing.
 
 research.TOOLS.name=Crystal Tools
@@ -97,7 +98,8 @@ research.SOOTYMARBLE.name=Sooty Marble
 astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of marble with a very dark material such as coal will change its innate reflective properties into strong absorbative properties. Sooty marble collects sunlight and heats up during the day and radiates its heat away during the night. This new type of marble may prove to be just as useful as regular marble in the future.
 
 research.ALTAR2.name=Starlight Crafting Altar
-astralsorcery.journal.ALTAR2.1.text=The starlight capacity and focusing abilities of the luminous crafting table are admirable compared to a regular crafting table, but they can be greatly inproved apon. Engineering additional reinforcements and extensions to make the table larger are not quite enough on their own though.<NL>In order to focus enough starlight to actually make use of the extensions, a large starlight collection structure made of various types of marble is required.<NL> The Starlight Crafting Altar has a built in collection vessel that turns red if the collector it relies apon is not assembled correctly.
+astralsorcery.journal.ALTAR2.1.text=The starlight capacity and focusing abilities of the luminous crafting table are admirable compared to a regular crafting table, but they can be greatly inproved apon. Engineering additional reinforcements and extensions to make the table larger are not quite enough on their own though.<NL>In order to focus enough starlight to actually make use of the extensions, a large starlight collection structure made of various types of marble is required.
+astralsorcery.journal.ALTAR2.4.text=The Starlight Crafting Altar has a built in collection vessel that turns red if the collector it relies upon is not assembled correctly.
 
 research.WELL.name=Lightwell
 astralsorcery.journal.WELL.1.text=At night, a strange water-like substance seems to collect on aquamarine gems and rock crystals.<NL> A carefully carved basin of marble makes the collection of this liquid quite easy. On closer examination, the liquid seems to be a condensate of pure starlight. It emits a bright light, feels very cold and even a bucket full of it almost weighs nothing.
@@ -214,6 +216,7 @@ crystal.collect.type=Collects starlight from
 entity.astralsorcery.EntityStardust.name=Stardust
 entity.astralsorcery.EntityAquamarine.name=Aquamarine
 entity.astralsorcery.EntityCrystal.name=Crystal
+entity.astralsorcery.EntityFlare.name=Flare
 
 item.ItemCraftingComponent.aquamarine.name=Aquamarine
 item.ItemCraftingComponent.starmetal_ingot.name=Starmetal Ingot

@@ -28,7 +28,7 @@ import java.util.Random;
  */
 public abstract class WorldGenAttributeStructure extends WorldGenAttribute {
 
-    private final WorldStructureEntry cfgEntry;
+    protected final WorldStructureEntry cfgEntry;
     private StructureQuery query;
 
     public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query) {
