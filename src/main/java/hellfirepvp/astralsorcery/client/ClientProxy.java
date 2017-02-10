@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
@@ -63,6 +64,7 @@ import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -87,6 +89,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -274,6 +277,14 @@ public class ClientProxy extends CommonProxy {
 
         for (RenderInfoBlock modelEntry : blockRegister) {
             MeshRegisterHelper.registerBlock(modelEntry.block, modelEntry.metadata, AstralSorcery.MODID + ":" + modelEntry.name);
+        }
+    }
+
+    @Override
+    public void fireLightning(World world, Vector3 from, Vector3 to, Color overlay) {
+        EffectLightning lightning = EffectHandler.getInstance().lightning(from, to);
+        if(overlay != null) {
+            lightning.setOverlayColor(overlay);
         }
     }
 

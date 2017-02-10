@@ -36,6 +36,7 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
@@ -61,6 +62,7 @@ import hellfirepvp.astralsorcery.common.util.LootTableUtil;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
 import net.minecraft.block.Block;
@@ -77,6 +79,8 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -209,6 +213,18 @@ public class CommonProxy implements IGuiHandler {
 
     public void scheduleClientside(Runnable r) {
         scheduleClientside(r, 0);
+    }
+
+    public void fireLightning(World world, Vector3 from, Vector3 to) {
+        fireLightning(world, from, to, null);
+    }
+
+    public void fireLightning(World world, Vector3 from, Vector3 to, Color overlay) {
+        PktLightningEffect effect = new PktLightningEffect(from, to);
+        if(overlay != null) {
+            effect.setColorOverlay(overlay);
+        }
+        PacketChannel.CHANNEL.sendToAllAround(effect, PacketChannel.pointFromPos(world, from.toBlockPos(), 40));
     }
 
     @Override

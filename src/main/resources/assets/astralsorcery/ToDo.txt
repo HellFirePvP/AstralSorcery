@@ -1,0 +1,8 @@
+For Alpha 1.1:
+
+- Proper API package + interfacing
+- Deeper JEI integration
+- Options to tweak/add/remove recipes
+- Balance out 'numbers' a bit more.
+(- Port to 1.11.2?)
+- ...

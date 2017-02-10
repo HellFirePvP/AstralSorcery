@@ -33,6 +33,7 @@ public class PerkDamageDistance extends ConstellationPerk {
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
         double dst = attacker.getDistanceSqToEntity(attacked);
         float perc = (float) (dst / maxRelevantSqDistance);
+        addAlignmentCharge(attacker, perc * 2 * Math.max(0, dmgIn));
         return dmgIn * (Math.max(1, 1 + (maxMultiplier * (perc > 1 ? 1 : perc))));
     }
 

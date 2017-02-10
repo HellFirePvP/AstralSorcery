@@ -46,6 +46,5 @@ public class RecipeRitualPedestal extends AttunementRecipe {
         setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AltarSlot.LOWER_LEFT,
                 AttunementRecipe.AltarSlot.LOWER_RIGHT);
-        setPassiveStarlightRequirement(3000);
     }
 }

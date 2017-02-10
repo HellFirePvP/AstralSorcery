@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -143,6 +144,10 @@ public final class EffectHandler {
         return entityComplexFX;
     }
 
+    public EffectLightning lightning(Vector3 from, Vector3 to) {
+        return EffectLightning.buildAndRegisterLightning(from, to);
+    }
+
     public OrbitalEffectController orbital(OrbitalEffectController.OrbitPointEffect pointEffect, @Nullable OrbitalEffectController.OrbitPersistence persistence, @Nullable OrbitalEffectController.OrbitTickModifier tickModifier) {
         OrbitalEffectController ctrl = new OrbitalEffectController(pointEffect, persistence, tickModifier);
         register(ctrl);
@@ -174,7 +179,7 @@ public final class EffectHandler {
     }
 
     private void register(final IComplexEffect effect) {
-        if(AssetLibrary.reloading || Minecraft.getMinecraft().isGamePaused()) return;
+        if(AssetLibrary.reloading || effect == null || Minecraft.getMinecraft().isGamePaused()) return;
 
         if(acceptsNewParticles) {
             registerUnsafe(effect);
@@ -224,23 +229,27 @@ public final class EffectHandler {
                 }
             }
         }
-        //Ugh NPE
-        Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
-        while (iterator.hasNext()) {
-            EntityFXFacingParticle effect = iterator.next();
+        //Ugh NPE FIXME eventually.
+        for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
+            if(effect == null) {
+                fastRenderParticles.remove(effect);
+                continue;
+            }
             effect.tick();
-            if(effect.canRemove()) {
+            if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                iterator.remove();
+                fastRenderParticles.remove(effect);
             }
         }
-        Iterator<EffectLightning> it = fastRenderLightnings.iterator();
-        while (it.hasNext()) {
-            EffectLightning effect = it.next();
+        for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {
+            if(effect == null) {
+                fastRenderLightnings.remove(effect);
+                continue;
+            }
             effect.tick();
-            if(effect.canRemove()) {
+            if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                it.remove();
+                fastRenderLightnings.remove(effect);
             }
         }
         acceptsNewParticles = true;

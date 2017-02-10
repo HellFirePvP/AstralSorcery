@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
@@ -32,6 +34,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -387,8 +390,17 @@ public class ResearchManager {
     }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
+        int currentLvl = clientProgress == null ? 0 : ConstellationPerkLevelManager.getAlignmentLevel(clientProgress);
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
+        if(ConstellationPerkLevelManager.getAlignmentLevel(clientProgress) > currentLvl) {
+            showBar();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void showBar() {
+        ClientRenderEventHandler.requestChargeReveal(200);
     }
 
     public static void informCraftingGridCompletion(EntityPlayer player, ItemStack out) {

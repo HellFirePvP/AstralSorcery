@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
@@ -58,6 +59,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktSyncAlignmentLevels.class, PktSyncAlignmentLevels.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktLightningEffect.class, PktLightningEffect.class, id++, Side.CLIENT);
 
         //(client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);

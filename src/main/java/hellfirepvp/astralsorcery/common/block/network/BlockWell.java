@@ -108,9 +108,6 @@ public class BlockWell extends BlockStarlightNetwork {
                         if(heldItem.stackSize <= 0) {
                             playerIn.setHeldItem(hand, null);
                         }
-
-                        EntityFlare flare = new EntityFlare(worldIn, pos.getX() + 0.5, pos.getY() + 3, pos.getZ() + 0.5);
-                        worldIn.spawnEntityInWorld(flare);
                     }
                 }
 

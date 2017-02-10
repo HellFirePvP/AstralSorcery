@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationReci
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -290,6 +291,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
             ResearchManager.informCraftingAltarCompletion(this, craftingTask);
             SoundHelper.playSoundAround(Sounds.craftFinish, world, getPos(), 1F, 1.7F);
+            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
             craftingTask = null;
         }
         markForUpdate();

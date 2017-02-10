@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
@@ -166,11 +167,13 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         for (BlockPos offset : offsetsLiquidStarlight) {
             if(world.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
                 world.setBlockToAir(getPos().add(offset));
+                EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
             }
         }
         craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);
         ResearchManager.informCraftingInfusionCompletion(this, craftingTask);
         SoundHelper.playSoundAround(Sounds.craftFinish, world, getPos(), 1F, 1.7F);
+        EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
         craftingTask = null;
     }
 

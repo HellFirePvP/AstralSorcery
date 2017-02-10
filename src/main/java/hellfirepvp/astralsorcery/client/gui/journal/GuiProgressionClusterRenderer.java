@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -170,6 +171,7 @@ public class GuiProgressionClusterRenderer {
         double midY = renderGuiHeight / 2;
         Map<ResearchNode, double[]> displayPositions = new HashMap<>();
         for (ResearchNode node : progression.getResearchNodes()) {
+            if(!node.canSee(ResearchManager.clientProgress)) continue;
             int absX = node.renderPosX;
             int absZ = node.renderPosZ;
             double lX = midX + (absX * (partSizeHandler.getZoomedWHNode() + partSizeHandler.getZoomedSpaceBetweenNodes()));

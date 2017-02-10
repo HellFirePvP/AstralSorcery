@@ -133,7 +133,7 @@ public class EventHandlerServer {
         }
 
         DamageSource source = event.getSource();
-        if(source.getSourceOfDamage() != null) {
+        lblIn: if(source.getSourceOfDamage() != null) {
             EntityPlayer p;
             if(source.getSourceOfDamage() instanceof EntityPlayer) {
                 p = (EntityPlayer) source.getSourceOfDamage();
@@ -142,10 +142,10 @@ public class EventHandlerServer {
                 if(shooter != null && shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
-                    return;
+                    break lblIn;
                 }
             } else {
-                return;
+                break lblIn;
             }
             PlayerProgress prog = ResearchManager.getProgress(p);
             if(prog != null) {
@@ -159,7 +159,8 @@ public class EventHandlerServer {
                 }
                 event.setAmount(dmg);
             }
-        } else if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
+        }
+        if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer hurt = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(hurt);
             if(prog != null) {

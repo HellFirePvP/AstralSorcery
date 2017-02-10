@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesIlluminator;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
@@ -118,6 +119,9 @@ public class TileIlluminator extends TileSkybound {
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
             if(illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
                 world.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
+                if(rand.nextInt(4) == 0) {
+                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));
+                }
             }
         }
         return needsRecalc;

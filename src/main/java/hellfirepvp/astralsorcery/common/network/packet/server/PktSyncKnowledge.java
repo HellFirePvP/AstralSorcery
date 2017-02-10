@@ -46,6 +46,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public IMajorConstellation attunedConstellation = null;
     public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
     public int progressTier = 0;
+    public boolean wasOnceAttuned = false;
     public double alignmentCharge = 0.0;
 
     public PktSyncKnowledge() {}
@@ -61,6 +62,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.attunedConstellation = progress.getAttunedConstellation();
         this.appliedPerks = progress.getAppliedPerks();
         this.alignmentCharge = progress.getAlignmentCharge();
+        this.wasOnceAttuned = progress.wasOnceAttuned();
     }
 
     @Override
@@ -111,6 +113,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             this.appliedPerks = new HashMap<>();
         }
 
+        this.wasOnceAttuned = buf.readBoolean();
         this.progressTier = buf.readInt();
         this.alignmentCharge = buf.readDouble();
     }
@@ -154,6 +157,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeInt(-1);
         }
 
+        buf.writeBoolean(this.wasOnceAttuned);
         buf.writeInt(this.progressTier);
         buf.writeDouble(this.alignmentCharge);
     }

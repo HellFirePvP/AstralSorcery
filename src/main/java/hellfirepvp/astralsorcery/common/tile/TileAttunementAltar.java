@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -219,6 +220,8 @@ public class TileAttunementAltar extends TileEntityTick {
 
                             ItemUtils.dropItem(world, crystalHoverPos.getX(), crystalHoverPos.getY(), crystalHoverPos.getZ(), tunedStack);
                             setAttunementState(0, null);
+                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             SoundHelper.playSoundAround(Sounds.craftFinish, world, pos, 2.5F, 1.6F);
                         }
                     }
@@ -381,6 +384,7 @@ public class TileAttunementAltar extends TileEntityTick {
     public void markPlayerStartCameraFlight(EntityPlayer pl) {
         if(mode == 0) {
             setAttunementState(1, pl);
+            pl.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
             this.playerAttunementWaitTick = TICKS_PLAYER_ATTUNEMENT + 200; //Depends on the camera flight... awkwardly enough.. client has a bit more time to answer too.
         }
     }
@@ -392,6 +396,10 @@ public class TileAttunementAltar extends TileEntityTick {
                     prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&
                     prog.getKnownConstellations().contains(cst.getUnlocalizedName())) {
                 ResearchManager.setAttunedConstellation(playerEntity, cst);
+
+                for (int i = 0; i < 6; i++) {
+                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                }
             }
         }
         setAttunementState(0, null);
@@ -475,7 +483,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
         if(activeFound == null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
-            if(player != null && player.getDistanceSq(getPos()) <= 100) {
+            if(player != null && player.getDistanceSq(getPos()) <= 250) {
                 IWeakConstellation held = null;
                 if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemMainhand());
@@ -489,7 +497,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         held = (IWeakConstellation) cst;
                     }
                 }
-                if(held != null) {
+                if(held != null && held.canDiscover(ResearchManager.clientProgress)) {
                     highlightConstellation(held);
                 }
             }

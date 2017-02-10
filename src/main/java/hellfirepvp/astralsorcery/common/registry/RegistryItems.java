@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
@@ -125,9 +126,10 @@ public class RegistryItems {
         illuminationWand = registerItem(new ItemIlluminationWand());
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
-        roseBranchBow = registerItem(new ItemRoseBranchBow());
-        architectWand = registerItem(new ItemArchitectWand());
-        exchangeWand = registerItem(new ItemExchangeWand());
+        shiftingStar = registerItem(new ItemShiftingStar());
+        //roseBranchBow = registerItem(new ItemRoseBranchBow());
+        //architectWand = registerItem(new ItemArchitectWand());
+        //exchangeWand = registerItem(new ItemExchangeWand());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

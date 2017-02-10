@@ -680,6 +680,7 @@ public class GuiHandTelescope extends GuiWHScreen {
 
         List<StarConnection> sc = c.getStarConnections();
         if (sc.size() != drawnLines.size()) return; //Can't match otherwise anyway.
+        if (!c.canDiscover(ResearchManager.clientProgress)) return;
 
         for (StarConnection connection : sc) {
             Rectangle fromRect = drawnStars.get(connection.from);

@@ -31,7 +31,7 @@ public class PerkDefensiveElemental extends ConstellationPerk {
     @Override
     public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
         if(source.isFireDamage() || source.isExplosion() || source.isMagicDamage()) {
-            addAlignmentCharge(hurt, 0.07);
+            addAlignmentCharge(hurt, 0.2 * Math.max(0 ,dmgIn));
             dmgIn *= multiplierElementalReduction;
         }
         return dmgIn;

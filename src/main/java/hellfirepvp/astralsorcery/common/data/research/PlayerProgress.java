@@ -40,6 +40,7 @@ public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
+    private boolean wasOnceAttuned = false;
     private Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>(); //Perk -> Level Of Unlock
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
@@ -52,6 +53,7 @@ public class PlayerProgress {
         attunedConstellation = null;
         tierReached = ProgressionTier.DISCOVERY;
         alignmentCharge = 0.0;
+        wasOnceAttuned = false;
 
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
@@ -93,6 +95,8 @@ public class PlayerProgress {
             }
         }
 
+        this.wasOnceAttuned = compound.getBoolean("wasAttuned");
+
         if(compound.hasKey("alignmentCharge")) {
             this.alignmentCharge = compound.getDouble("alignmentCharge");
         }
@@ -105,6 +109,7 @@ public class PlayerProgress {
         }
         cmp.setTag("constellations", list);
         cmp.setInteger("tierReached", tierReached.ordinal());
+        cmp.setBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];
         for (int i = 0; i < researchProgression.size(); i++) {
             ResearchProgression progression = researchProgression.get(i);
@@ -135,6 +140,7 @@ public class PlayerProgress {
 
     protected void setAttunedConstellation(IMajorConstellation constellation) {
         this.attunedConstellation = constellation;
+        this.wasOnceAttuned = true;
     }
 
     public void addPerk(ConstellationPerk singleInstance, Integer alignmentLevelUnlocked) {
@@ -155,6 +161,10 @@ public class PlayerProgress {
 
     public IMajorConstellation getAttunedConstellation() {
         return attunedConstellation;
+    }
+
+    public boolean wasOnceAttuned() {
+        return wasOnceAttuned;
     }
 
     public Map<ConstellationPerk, Integer> getAppliedPerks() {
@@ -251,6 +261,7 @@ public class PlayerProgress {
         this.attunedConstellation = message.attunedConstellation;
         this.appliedPerks = message.appliedPerks;
         this.alignmentCharge = message.alignmentCharge;
+        this.wasOnceAttuned = message.wasOnceAttuned;
     }
 
 }

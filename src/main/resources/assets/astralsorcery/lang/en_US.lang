@@ -45,6 +45,7 @@ progress.missing.knowledge=Something seems to be here, but you can’t tell what
 progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
 progress.discover.constellation.chat=Discovered constellation %s!
+progress.remove.attunement=Your power fades...
 
 astralsorcery.journal.cluster.discovery.name=Discovery
 astralsorcery.journal.cluster.basic_craft.name=Exploration
@@ -69,7 +70,7 @@ astralsorcery.journal.WAND.1.text=When using a crafting table near one of the st
 astralsorcery.journal.WAND.3.text=The resonating wand also has some other... unusual properties. When it is held in either hand at night, it vibrates and emits energetic sparks of light that gather in seemingly random locations around the surface of the land. Nothing seems out of place or special on the surface though... §3Maybe there's §3something deep underground?§r
 
 research.ORES.name=Ores
-astralsorcery.journal.ORES.1.text=§7§nRock Crystal Ore:§r In the deepest reaches of the world, intense heat and pressure form incredibly rare and fragile crystals. These crystals each have their own unique properties, and they seem to take in starlight with unusual ease. Due to the fragility of rock crystals they must be mined by hand.
+astralsorcery.journal.ORES.1.text=§7§nRock Crystal Ore:§r In the deepest reaches of the world, intense heat and pressure form incredibly rare and fragile crystals. These crystals each have their own unique properties, and they seem to take in starlight with unusual ease. Due to the fragility of rock crystals mechanical hands are not careful enough when handling these ores.
 astralsorcery.journal.ORES.2.text=§1§nAquamarine Shale:§r Shaped by the continuous flow of water and starlight over fragmented rock crystal, these small and fragile gems form in the sands of riverbeds. Usually they can be found close to the surface buried in patches of sand.
 
 research.ALTAR1.name=Luminous Crafting Table
@@ -164,6 +165,9 @@ astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of
 research.ILLUMINATION_WAND.name=Illumination Wand
 astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage. Given sufficient charge, right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form. Shift-right-clicking will create a small flare.
 
+research.SHIFT_STAR.name=Shifting Star
+astralsorcery.journal.SHIFT_STAR.1.text=Blinded by your discovery and the appeal of the powers an attunement to a constellation grants, you missed out on all the possibilities the other constellations offer that you've discovered now.<NL>You quickly come up with an idea to dissipate your current powers into your surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy left your body.
+
 research.STARMETAL_ORE.name=Iron Transmutation
 astralsorcery.journal.STARMETAL_ORE.1.text=You feel like these beams of light could have other uses than look pretty and have their effects on the world generally. How about focusing the light directly onto one mundane iron ore? As source of that focused light you might aswell use one of those floating crystals in the shrines you found. Giving that one a clear view to the sky might help too.<NL>Seems like the iron reflects it back and shimmers slightly blue... Maybe something might change over time?
 
@@ -241,6 +245,7 @@ item.ItemColoredLens.name=Colored Lens
 item.ItemHandTelescope.name=Hand Telescope
 item.ItemSkyResonator.name=Sky Wave Resonator
 item.ItemIlluminationWand.name=Illumination Wand
+item.ItemShiftingStar.name=Shifting Star
 
 item.ItemColoredLens.effect.fire.name=Ignition
 item.ItemColoredLens.effect.break.name=Break

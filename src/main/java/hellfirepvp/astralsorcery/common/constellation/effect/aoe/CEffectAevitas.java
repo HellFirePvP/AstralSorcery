@@ -93,6 +93,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         }
 
         if(findNewPosition(world, pos)) changed = true;
+        if(findNewPosition(world, pos)) changed = true;
 
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(searchRange));
         for (EntityLivingBase entity : entities) {

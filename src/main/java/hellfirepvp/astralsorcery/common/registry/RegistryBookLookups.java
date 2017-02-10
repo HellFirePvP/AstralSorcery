@@ -43,7 +43,7 @@ public class RegistryBookLookups {
                 LookupInfo info = lookupMap.get(compare);
                 PlayerProgress prog = ResearchManager.getProgress(querying, side);
                 if(prog != null) {
-                    if(prog.getResearchProgression().contains(info.neededKnowledge)) {
+                    if(prog.getResearchProgression().contains(info.neededKnowledge) && info.node.canSee(prog)) {
                         return info;
                     }
                 }

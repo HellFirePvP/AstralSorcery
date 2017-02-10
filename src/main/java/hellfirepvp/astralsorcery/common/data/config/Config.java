@@ -53,16 +53,17 @@ public class Config {
 
     public static int particleAmount = 2;
 
-    @Sync
-    public static double swordSharpMultiplier = 0.1;
+    public static int ambientFlareChance = 20;
+    public static boolean flareKillsBats = true;
+
+    @Sync public static double swordSharpMultiplier = 0.1;
 
     @Sync public static double illuminationWandUseCost = 1;
     @Sync public static double architectWandUseCost = 0.4;
     @Sync public static double builderWandUseCost = 0.2;
     @Sync public static double exchangeWandUseCost = 0.3;
 
-    @Sync
-    public static int dimensionIdSkyRift = -81;
+    @Sync public static int dimensionIdSkyRift = -81;
 
     public static Integer[] constellationSkyDimWhitelist = new Integer[0];
     public static boolean performNetworkIntegrityCheck = false;
@@ -107,10 +108,13 @@ public class Config {
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
 
-        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "general", 1F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
-        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "general", 0.4F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
-        builderWandUseCost = latestConfig.getFloat("wandCost_builder", "general", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
-        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "general", 0.3F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
+        ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 6, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
+        flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
+
+        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "wands", 1F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
+        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "wands", 0.4F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
+        builderWandUseCost = latestConfig.getFloat("wandCost_builder", "wands", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
+        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "wands", 0.3F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");

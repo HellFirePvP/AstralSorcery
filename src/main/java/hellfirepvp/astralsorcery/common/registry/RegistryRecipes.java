@@ -77,6 +77,7 @@ public class RegistryRecipes {
     public static AttunementRecipe rStarlightInfuser;
     public static AttunementRecipe rTreeBeacon;
     public static ConstellationRecipe rIlluminationWand;
+    public static ConstellationRecipe rShiftStar;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -261,6 +262,22 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rShiftStar = registerConstellationRecipe(new ShapedRecipe(ItemsAS.shiftingStar)
+                .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rShiftStar.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(), ConstellationRecipe.AltarAdditionalSlot.values());
 
         rIlluminationWand = registerConstellationRecipe(new ShapedRecipe(ItemsAS.illuminationWand)
                 .addPart(Items.NETHER_STAR,

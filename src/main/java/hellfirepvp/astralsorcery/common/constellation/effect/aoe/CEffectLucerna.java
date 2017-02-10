@@ -39,7 +39,7 @@ public class CEffectLucerna extends ConstellationEffect {
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
-    public static double range = 64;
+    public static double range = 128;
 
     private int rememberedTimeout = 0;
 
@@ -106,7 +106,7 @@ public class CEffectLucerna extends ConstellationEffect {
     @Override
     public void loadFromConfig(Configuration cfg) {
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
-        range = cfg.getFloat(getKey() + "DenyRange", getConfigurationSection(), 64, 2, 2048, "Defines the range in which the ritual will prevent mobspawning.");
+        range = cfg.getFloat(getKey() + "DenyRange", getConfigurationSection(), 128, 2, 2048, "Defines the range in which the ritual will prevent mobspawning.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 }

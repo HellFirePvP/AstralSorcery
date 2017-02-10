@@ -82,7 +82,7 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
-        blacklist.addItemToBlacklist(new ItemStack(ItemsAS.roseBranchBow));
+        //blacklist.addItemToBlacklist(new ItemStack(ItemsAS.roseBranchBow));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.ritualLink));
     }
 

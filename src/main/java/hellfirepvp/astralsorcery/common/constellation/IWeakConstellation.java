@@ -28,7 +28,7 @@ public interface IWeakConstellation extends IConstellation {
 
     @Override
     default boolean canDiscover(PlayerProgress progress) {
-        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) && progress.getAttunedConstellation() != null;
+        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT) && progress.wasOnceAttuned();
     }
 
 }

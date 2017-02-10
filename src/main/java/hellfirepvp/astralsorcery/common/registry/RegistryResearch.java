@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
@@ -32,6 +33,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
 
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
@@ -54,7 +57,7 @@ public class RegistryResearch {
     private static void initConstellation() {
         ResearchProgression.Registry regConstellation = ResearchProgression.CONSTELLATION.getRegistry();
 
-        ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 2);
+        ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 1, 2);
         resLens.addPage(getTextPage("LENS.1"));
         resLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLens));
         resLens.addPage(getTextPage("LENS.3"));
@@ -76,7 +79,7 @@ public class RegistryResearch {
         resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensRegeneration));
         resColoredLenses.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGlassLensNightvision));
 
-        ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 2);
+        ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 0, 3);
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
         resLinkTool.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rLinkTool));
         resLinkTool.addPage(getTextPage("LINKTOOL.3"));
@@ -97,6 +100,15 @@ public class RegistryResearch {
         ResearchNode resStarResult = new ResearchNode(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), "STARMETAL_RES", 3, 2);
         resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
         resStarResult.addPage(getTextPage("STARMETAL_RES.2"));
+
+        ResearchNode resShiftStar = new ResearchNode(new ItemStack(ItemsAS.shiftingStar), "SHIFT_STAR", 5, 2) {
+            @Override
+            public boolean canSee(@Nullable PlayerProgress progress) {
+                return super.canSee(progress) && progress != null && progress.wasOnceAttuned();
+            }
+        };
+        resShiftStar.addPage(getTextPage("SHIFT_STAR.1"));
+        resShiftStar.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rShiftStar));
 
         ResearchNode resIllWand = new ResearchNode(new ItemStack(ItemsAS.illuminationWand), "ILLUMINATION_WAND", 5, 1);
         resIllWand.addPage(getTextPage("ILLUMINATION_WAND.1"));
@@ -132,8 +144,9 @@ public class RegistryResearch {
         registerItemLookup(ItemCraftingComponent.MetaType.STARDUST.asStack(),                          resStarResult,        0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(ItemsAS.coloredLens, 1, OreDictionary.WILDCARD_VALUE),        resColoredLenses,     0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(ItemsAS.illuminationWand, 1, OreDictionary.WILDCARD_VALUE),   resIllWand,           0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),       resShiftStar,         0, ResearchProgression.CONSTELLATION);
 
-        resStarOre.addSourceConnectionFrom(resLinkTool);
+        resLens.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
         resColoredLenses.addSourceConnectionFrom(resLens);
         resRitualAccel.addSourceConnectionFrom(resLens);
@@ -144,6 +157,7 @@ public class RegistryResearch {
         resCelCrystalCluster.addSourceConnectionFrom(resStarResult);
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resOtherOres.addSourceConnectionFrom(resStarOre);
+        resShiftStar.addSourceConnectionFrom(resStarResult);
 
         regConstellation.register(resLens);
         regConstellation.register(resColoredLenses);
@@ -157,6 +171,7 @@ public class RegistryResearch {
         regConstellation.register(resRitualAccel);
         regConstellation.register(resIllWand);
         regConstellation.register(resOtherOres);
+        regConstellation.register(resShiftStar);
     }
 
     private static void initAttunement() {
@@ -193,7 +208,12 @@ public class RegistryResearch {
         resConstellationUpgrade.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAltarUpgradeConstellation));
         resConstellationUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarConstellation));
 
-        ResearchNode resMountedTelescope = new ResearchNode(BlockMachine.MachineType.TELESCOPE.asStack(), "TELESCOPE", 3, 3);
+        ResearchNode resMountedTelescope = new ResearchNode(BlockMachine.MachineType.TELESCOPE.asStack(), "TELESCOPE", 3, 3) {
+            @Override
+            public boolean canSee(@Nullable PlayerProgress progress) {
+                return super.canSee(progress) && progress != null && progress.wasOnceAttuned();
+            }
+        };
         resMountedTelescope.addPage(getTextPage("TELESCOPE.1"));
         resMountedTelescope.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rTelescope));
         resMountedTelescope.addPage(getTextPage("TELESCOPE.3"));
@@ -240,6 +260,7 @@ public class RegistryResearch {
         resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
         resAttPerks.addSourceConnectionFrom(resPlayerAtt);
         resConstellationUpgrade.addSourceConnectionFrom(resCrystalAtt);
+        resMountedTelescope.addSourceConnectionFrom(resPlayerAtt);
         resTreeBeacon.addSourceConnectionFrom(resInfuser);
         resInfuser.addSourceConnectionFrom(resResoGem);
     }

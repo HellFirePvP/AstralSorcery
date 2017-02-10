@@ -76,10 +76,9 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glScaled(0.0625, 0.0625, 0.0625);
-        float h = (float) (Math.sin(jump) * 1.25);
 
         texAltar3.bind();
-        modelAltar3.render(null, h, 0, 0, 0, 0, 1F);
+        modelAltar3.render(null, (float) jump, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -94,7 +93,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         float h = (float) (Math.sin(jump) * 0.625);
 
         texAltar2.bind();
-        modelAltar2.render(null, h, 0, 0, 0, 0, 1F);
+        modelAltar2.render(null, (float) jump, 0, 0, 0, 0, 1F);
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }

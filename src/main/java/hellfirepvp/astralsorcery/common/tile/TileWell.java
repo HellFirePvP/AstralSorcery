@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -29,6 +30,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
@@ -113,10 +115,14 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                                     markForUpdate();
                                 }
                                 fillAndDiscardRest(gain);
+                                if(rand.nextInt(2000) == 0) {
+                                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                                }
                             }
                             starlightBuffer = 0;
                             if(rand.nextInt(1 + (int) (1000 * catalyst.getShatterChanceMultiplier(stack))) == 0) {
                                 breakCatalyst();
+                                EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             }
                         }
                     }

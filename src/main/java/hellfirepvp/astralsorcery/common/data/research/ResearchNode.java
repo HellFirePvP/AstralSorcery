@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,6 +79,10 @@ public class ResearchNode {
     public ResearchNode addPage(IJournalPage page) {
         pages.add(page);
         return this;
+    }
+
+    public boolean canSee(@Nullable PlayerProgress progress) {
+        return true;
     }
 
     /*public ResearchNode setSpecial() {

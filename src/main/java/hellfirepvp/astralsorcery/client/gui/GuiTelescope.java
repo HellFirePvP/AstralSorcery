@@ -100,6 +100,9 @@ public class GuiTelescope extends GuiWHScreen {
         }
         if(handle != null) {
             List<IConstellation> constellations = handle.getActiveConstellations();
+            for (IConstellation c : constellations) {
+
+            }
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
             for (IConstellation c : constellations) {
                 if(c instanceof IWeakConstellation) {
@@ -656,6 +659,7 @@ public class GuiTelescope extends GuiWHScreen {
 
             List<StarConnection> sc = c.getStarConnections();
             if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
+            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
 
             Map<StarLocation, Rectangle> stars = info.starRectangles;
 

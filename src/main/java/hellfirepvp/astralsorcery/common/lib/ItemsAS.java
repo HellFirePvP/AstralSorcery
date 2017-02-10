@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
@@ -49,9 +50,10 @@ public class ItemsAS {
     public static ItemJournal journal;
     public static ItemHandTelescope handTelescope;
     public static ItemIlluminationWand illuminationWand;
-    public static ItemRoseBranchBow roseBranchBow;
-    public static ItemArchitectWand architectWand;
-    public static ItemExchangeWand exchangeWand;
+    public static ItemShiftingStar shiftingStar;
+    //public static ItemRoseBranchBow roseBranchBow;
+    //public static ItemArchitectWand architectWand;
+    //public static ItemExchangeWand exchangeWand;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

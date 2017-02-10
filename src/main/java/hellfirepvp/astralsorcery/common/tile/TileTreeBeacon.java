@@ -89,7 +89,7 @@ public class TileTreeBeacon extends TileReceiverBase {
             }
             int runs = MathHelper.ceil(starlightCharge / 20D);
             starlightCharge = 0D;
-            for (int i = 0; i < runs; i++) {
+            for (int i = 0; i < Math.max(1, runs); i++) {
                 BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
                 if(randPos != null) {
                     TileFakeTree tft = MiscUtils.getTileAt(world, randPos, TileFakeTree.class, false);

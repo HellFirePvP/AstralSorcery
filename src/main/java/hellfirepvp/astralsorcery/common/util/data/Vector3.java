@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -344,6 +345,16 @@ public class Vector3 {
         this.y = 0.0D;
         this.z = 0.0D;
         return this;
+    }
+
+    public void toBytes(ByteBuf buf) {
+        buf.writeDouble(this.x);
+        buf.writeDouble(this.y);
+        buf.writeDouble(this.z);
+    }
+
+    public static Vector3 fromBytes(ByteBuf buf) {
+        return new Vector3(buf.readDouble(), buf.readDouble(), buf.readDouble());
     }
 
     public static Vector3 random() {

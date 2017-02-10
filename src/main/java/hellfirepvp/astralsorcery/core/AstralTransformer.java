@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.core;
 
 import hellfirepvp.astralsorcery.core.transform.AstralPatchTransformer;
+import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.asm.transformers.AccessTransformer;
 import org.objectweb.asm.ClassReader;
@@ -28,7 +29,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 02:56
  */
-public class AstralTransformer extends AccessTransformer {
+public class AstralTransformer implements IClassTransformer {
 
     private static List<SubClassTransformer> subTransformers = new LinkedList<>();
 

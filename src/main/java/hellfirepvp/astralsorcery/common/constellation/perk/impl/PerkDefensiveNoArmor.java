@@ -40,7 +40,7 @@ public class PerkDefensiveNoArmor extends ConstellationPerk {
             }
         }
         if(eq <= 2) {
-            addAlignmentCharge(hurt, 0.2);
+            addAlignmentCharge(hurt, 0.3 * Math.max(0 ,dmgIn));
             dmgIn *= multiplierDamageReduction;
         }
         return dmgIn;
