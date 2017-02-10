@@ -1,6 +1,8 @@
 For Alpha 1.1:
 
 - Proper API package + interfacing
+- Add Wands (Exchange, Architect)
+- Design & Add Tier 4 of crafting & progression
 - Deeper JEI integration
 - Options to tweak/add/remove recipes
 - Balance out 'numbers' a bit more.
