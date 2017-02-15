@@ -22,7 +22,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +48,7 @@ public class EntityFlare extends EntityFlying {
 
     public Object texSprite = null;
     private BlockPos moveTarget = null;
+    private boolean isAmbient = true;
 
     public EntityFlare(World worldIn) {
         super(worldIn);
@@ -58,12 +61,17 @@ public class EntityFlare extends EntityFlying {
         setSize(0.7F, 0.7F);
     }
 
+    public EntityFlare setAmbient(boolean ambient) {
+        this.isAmbient = ambient;
+        return this;
+    }
+
     public static void spawnAmbient(World world, Vector3 at) {
         if(world.isRemote) return;
         if(Config.ambientFlareChance <= 0) return;
         float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
         if(world.rand.nextInt(Config.ambientFlareChance) == 0 && world.isAirBlock(at.toBlockPos()) && world.rand.nextFloat() < nightPerc) {
-            world.spawnEntityInWorld(new EntityFlare(world, at.getX(), at.getY(), at.getZ()));
+            world.spawnEntityInWorld(new EntityFlare(world, at.getX(), at.getY(), at.getZ()).setAmbient(true));
         }
     }
 
@@ -153,24 +161,23 @@ public class EntityFlare extends EntityFlying {
 
     @Override
     protected void onDeathUpdate() {
-        /*++this.deathTime;
-
-        if(deathTime == 7) {
-
-            setDead();
-
-            if(world.isRemote) {
-                deathEffectsEnd();
-            }
-        }*/
         setDead();
 
         if(world.isRemote) {
             deathEffectsEnd();
         }
-        /*if(world.isRemote) {
-            deathEffectsOngoing();
-        }*/
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setBoolean("isSpawnedAmbient", this.isAmbient);
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.isAmbient = compound.getBoolean("isSpawnedAmbient");
     }
 
     @SideOnly(Side.CLIENT)

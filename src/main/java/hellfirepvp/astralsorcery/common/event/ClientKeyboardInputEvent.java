@@ -26,8 +26,7 @@ import java.lang.reflect.Method;
 @Cancelable
 public class ClientKeyboardInputEvent extends Event {
 
-    private static final Method runKeyboardTick = ReflectionHelper.findMethod(Minecraft.class, Minecraft.getMinecraft(),
-            new String[]{"runTickKeyboard", "func_184118_az"});
+    private static final Method runKeyboardTick;
 
     public static void fireKeyboardEvent(Minecraft calling) {
         ClientKeyboardInputEvent ev = new ClientKeyboardInputEvent();
@@ -42,6 +41,21 @@ public class ClientKeyboardInputEvent extends Event {
     }
 
     static {
+        Method buf = null;
+        try {
+            buf = ReflectionHelper.findMethod(Minecraft.class, Minecraft.getMinecraft(), new String[] { "runTickKeyboard", "func_184118_az" });
+        } catch (Exception exc) {
+            buf = null;
+        } finally {
+            runKeyboardTick = buf;
+        }
+
+        if(runKeyboardTick == null) {
+            throw new IllegalStateException("Could not find method for bridging keyboard input.\n" +
+                    "This is a severe problem and you would not be able to play properly, even if it'd launch normally.\n" +
+                    "This might be caused because you tried to run AstralSorcery on a minecraft version it is not supported for.\n" +
+                    "If you think that you're playing a version it is supported for, please report that this happened.");
+        }
         runKeyboardTick.setAccessible(true);
     }
 

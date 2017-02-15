@@ -342,7 +342,7 @@ public class ResearchManager {
     }
 
     private static void wipeFile(EntityPlayer player) {
-        new File(getPlayerDirectory(), player.getUniqueID().toString() + ".astral").delete();
+        getPlayerFile(player).delete();
     }
 
     public static void savePlayerKnowledge(EntityPlayer p) {
@@ -351,9 +351,7 @@ public class ResearchManager {
 
     public static void savePlayerKnowledge(UUID pUUID) {
         if (playerProgressServer.get(pUUID) == null) return;
-        String uuidStr = pUUID.toString();
-        File dir = getPlayerDirectory();
-        File playerFile = new File(dir, uuidStr + ".astral");
+        File playerFile = getPlayerFile(pUUID);
         try {
             NBTTagCompound cmp = new NBTTagCompound();
             playerProgressServer.get(pUUID).store(cmp);
@@ -366,9 +364,7 @@ public class ResearchManager {
     }
 
     public static void loadPlayerKnowledge(UUID pUUID) {
-        String uuidStr = pUUID.toString();
-        File dir = getPlayerDirectory();
-        File playerFile = new File(dir, uuidStr + ".astral");
+        File playerFile = getPlayerFile(pUUID);
         try {
             NBTTagCompound compound = CompressedStreamTools.read(playerFile);
             PlayerProgress progress = new PlayerProgress();
@@ -379,6 +375,14 @@ public class ResearchManager {
 
             playerProgressServer.put(pUUID, progress);
         } catch (IOException e) {}
+    }
+
+    public static File getPlayerFile(EntityPlayer player) {
+        return getPlayerFile(player.getUniqueID());
+    }
+
+    public static File getPlayerFile(UUID pUUID) {
+        return new File(getPlayerDirectory(), pUUID.toString() + ".astral");
     }
 
     private static File getPlayerDirectory() {

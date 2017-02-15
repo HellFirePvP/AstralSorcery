@@ -12,13 +12,10 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 
 /**
- * This class is part of the 1.11.2 port of Reika's mods.
- * Original code for this project on Minecraft 1.7.10
- * is available under the same licence on Github:
- * https://github.com/ReikaKalseki/DragonAPI
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
  * Class: CraftingAccessManager
- * Author: HellFirePvP
- * Owner & Author: Reika Kalseki
+ * Created by HellFirePvP
  * Date: 15.02.2017 / 14:23
  */
 public class CraftingAccessManager {

@@ -73,6 +73,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -320,15 +321,15 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onFirst(PlayerEvent.PlayerLoggedInEvent event) {
+    public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if(Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
-            NBTTagCompound cmp = NBTHelper.getPersistentData(pl);
-            if(!cmp.hasKey("joined") || !cmp.getBoolean("joined")) {
-                cmp.setBoolean("joined", true);
+            if(!ResearchManager.getPlayerFile(pl).exists()) {
                 pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
             }
         }
+        ResearchManager.loadPlayerKnowledge(event.player);
+        ResearchManager.savePlayerKnowledge(event.player);
     }
 
     @SubscribeEvent
