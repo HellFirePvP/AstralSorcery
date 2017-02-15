@@ -77,8 +77,8 @@ public abstract class AbstractAltarRecipe {
         return ItemUtils.copyStackWithSize(out, out.stackSize);
     }
 
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
-        if(altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
+        if(!ignoreStarlightRequirement && altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
         if(this instanceof IGatedRecipe) {
             if(altar.getWorld().isRemote) {

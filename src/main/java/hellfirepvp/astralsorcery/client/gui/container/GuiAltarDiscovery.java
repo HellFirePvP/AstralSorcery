@@ -84,6 +84,9 @@ public class GuiAltarDiscovery extends GuiAltarBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+        texBlack.bind();
+        drawRect(guiLeft + 6, guiTop + 69, 165, 10);
+
         float percFilled;
         if(containerAltarBase.tileAltar.getMultiblockState()) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -93,9 +96,6 @@ public class GuiAltarDiscovery extends GuiAltarBase {
             percFilled = 1.0F;
         }
 
-        texBlack.bind();
-        drawRect(guiLeft + 6, guiTop + 69, 165, 10);
-
         if(percFilled > 0) {
             SpriteSheetResource spriteStarlight = SpriteLibrary.spriteStarlight;
             spriteStarlight.getResource().bind();
@@ -103,7 +103,24 @@ public class GuiAltarDiscovery extends GuiAltarBase {
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
             drawRect(guiLeft + 6, guiTop + 69, (int) (165 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
-                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
+                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());
+
+            AbstractAltarRecipe aar = findCraftableRecipe(true);
+            if(aar != null) {
+                int req = aar.getPassiveStarlightRequired();
+                int has = containerAltarBase.tileAltar.getStarlightStored();
+                if(has < req) {
+                    int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
+                    float percReq = (float) req / (float) max;
+                    int from = (int) (165 * percFilled);
+                    int to = (int) (165 * percReq);
+                    GL11.glColor4f(0.2F, 0.5F, 1.0F, 0.4F);
+
+                    drawRect(guiLeft + 6 + from, guiTop + 69, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
+                }
+            }
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

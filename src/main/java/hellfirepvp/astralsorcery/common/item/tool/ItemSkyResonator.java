@@ -34,15 +34,4 @@ public class ItemSkyResonator extends Item {
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(!worldIn.isRemote && worldIn.getTotalWorldTime() % 20 == 0) {
-            Optional<Float> distr = SkyCollectionHelper.getSkyNoiseDistributionClient(worldIn, entityIn.getPosition());
-            if(distr.isPresent()) {
-                //entityIn.addChatMessage(new TextComponentString(distr.get().toString()));
-            }
-        }
-    }
-
 }

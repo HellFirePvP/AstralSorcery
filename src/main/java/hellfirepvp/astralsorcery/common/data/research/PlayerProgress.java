@@ -167,6 +167,10 @@ public class PlayerProgress {
         return wasOnceAttuned;
     }
 
+    protected void setAttunedBefore(boolean attuned) {
+        this.wasOnceAttuned = attuned;
+    }
+
     public Map<ConstellationPerk, Integer> getAppliedPerks() {
         /*Map<ConstellationPerk, Integer> perks = new HashMap<>();
         for (ConstellationPerks c : ConstellationPerks.values()) {

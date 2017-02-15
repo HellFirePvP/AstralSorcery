@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 
 import javax.annotation.Nullable;
@@ -80,11 +81,14 @@ public class AltarRecipeRegistry {
     public static <T extends AbstractAltarRecipe> T registerAltarRecipe(T recipe) {
         TileAltar.AltarLevel level = recipe.getNeededLevel();
         recipes.get(level).add(recipe);
+        if(CraftingAccessManager.hasCompletedSetup()) {
+            CraftingAccessManager.compile();
+        }
         return recipe;
     }
 
     @Nullable
-    public static AbstractAltarRecipe findMatchingRecipe(TileAltar ta) {
+    public static AbstractAltarRecipe findMatchingRecipe(TileAltar ta, boolean ignoreStarlightRequirement) {
         TileAltar.AltarLevel lowestAllowed = TileAltar.AltarLevel.DISCOVERY;
         for (int i = ta.getAltarLevel().ordinal(); i >= 0; i--) {
             TileAltar.AltarLevel lvl = TileAltar.AltarLevel.values()[i];
@@ -98,7 +102,7 @@ public class AltarRecipeRegistry {
             List<AbstractAltarRecipe> validRecipes = recipes.get(lvl);
             if(validRecipes != null) {
                 for (AbstractAltarRecipe rec : validRecipes) {
-                    if(rec.matches(ta, ta.getInventoryHandler())) {
+                    if(rec.matches(ta, ta.getInventoryHandler(), ignoreStarlightRequirement)) {
                         return rec;
                     }
                 }

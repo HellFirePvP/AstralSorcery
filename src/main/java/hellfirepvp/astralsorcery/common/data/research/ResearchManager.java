@@ -214,6 +214,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean setAttunedBefore(EntityPlayer player, boolean wasAttunedBefore) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.setAttunedBefore(wasAttunedBefore);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;

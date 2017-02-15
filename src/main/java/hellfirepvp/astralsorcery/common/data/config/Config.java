@@ -108,7 +108,7 @@ public class Config {
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
 
-        ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 6, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
+        ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
         illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "wands", 1F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");

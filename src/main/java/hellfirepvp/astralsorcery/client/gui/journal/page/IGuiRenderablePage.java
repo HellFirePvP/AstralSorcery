@@ -153,11 +153,11 @@ public interface IGuiRenderablePage {
         float perc = ((float) amtRequired) / ((float) maxAmount);
         if(perc <= 0.1) {
             ext = "lowest";
-        } else if(perc <= 0.4) {
+        } else if(perc <= 0.25) {
             ext = "low";
-        } else if(perc <= 0.7) {
+        } else if(perc <= 0.5) {
             ext = "avg";
-        } else if(perc <= 0.8) {
+        } else if(perc <= 0.75) {
             ext = "more";
         } else if(perc <= 0.9) {
             ext = "high";

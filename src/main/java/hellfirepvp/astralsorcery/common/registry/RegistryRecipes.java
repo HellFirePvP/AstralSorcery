@@ -45,6 +45,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerBasicInfusion;
+import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -112,22 +113,22 @@ public class RegistryRecipes {
         registerBasicInfusion(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
         registerBasicInfusion(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),         new ItemStack(Blocks.GLASS_PANE, 1, 0));
 
-        registerBasicInfusion(new ItemStack(Blocks.CLAY, 1, 0),           new ItemStack(Blocks.SAND, 1, 0));
-        registerBasicInfusion(new ItemStack(Blocks.GRASS, 1, 0),          new ItemStack(Blocks.DIRT, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.ENDER_EYE, 1, 0),       new ItemStack(Items.ENDER_PEARL, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.GLOWSTONE_DUST, 1, 0),  new ItemStack(Items.GUNPOWDER, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.DYE, 4, 15),            new ItemStack(Items.BONE, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.BLAZE_POWDER, 4, 0),    new ItemStack(Items.BLAZE_ROD, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.MAGMA_CREAM, 1, 0),     new ItemStack(Items.SLIME_BALL, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.GOLDEN_CARROT, 1, 0),   new ItemStack(Items.CARROT, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.SPECKLED_MELON, 1, 0),  new ItemStack(Items.MELON, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.IRON_INGOT, 2, 0),      new ItemStack(Blocks.IRON_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.GOLD_INGOT, 2, 0),      new ItemStack(Blocks.GOLD_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Blocks.LAPIS_BLOCK, 1, 0),    new ItemStack(Blocks.LAPIS_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Blocks.REDSTONE_BLOCK, 1, 0), new ItemStack(Blocks.REDSTONE_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.DIAMOND, 2, 0),         new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Items.EMERALD, 2, 0),         new ItemStack(Blocks.EMERALD_ORE, 1, 0));
-        registerBasicInfusion(new ItemStack(Blocks.ICE, 1, 0),            new ItemStack(Blocks.GLASS, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Blocks.CLAY, 1, 0), new ItemStack(Blocks.SAND, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Blocks.GRASS, 1, 0), new ItemStack(Blocks.DIRT, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.ENDER_EYE, 1, 0), new ItemStack(Items.ENDER_PEARL, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.GLOWSTONE_DUST, 1, 0), new ItemStack(Items.GUNPOWDER, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.DYE, 4, 15), new ItemStack(Items.BONE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.BLAZE_POWDER, 4, 0), new ItemStack(Items.BLAZE_ROD, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.MAGMA_CREAM, 1, 0), new ItemStack(Items.SLIME_BALL, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.GOLDEN_CARROT, 1, 0), new ItemStack(Items.CARROT, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.SPECKLED_MELON, 1, 0), new ItemStack(Items.MELON, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.IRON_INGOT, 2, 0), new ItemStack(Blocks.IRON_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.GOLD_INGOT, 2, 0), new ItemStack(Blocks.GOLD_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Blocks.LAPIS_BLOCK, 1, 0), new ItemStack(Blocks.LAPIS_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Blocks.REDSTONE_BLOCK, 1, 0), new ItemStack(Blocks.REDSTONE_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 2, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 2, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Blocks.ICE, 1, 0), new ItemStack(Blocks.GLASS, 1, 0));
     }
 
     public static void initVanillaRecipes() {

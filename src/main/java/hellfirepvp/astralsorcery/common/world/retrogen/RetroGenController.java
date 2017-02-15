@@ -41,20 +41,21 @@ public class RetroGenController {
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         ChunkPos pos = event.getChunk().getChunkCoordIntPair();
-        if(event.getWorld().isRemote || retroGenActive.contains(pos)) return;
+        if(event.getWorld().isRemote || !event.getChunk().isTerrainPopulated() || retroGenActive.contains(pos)) return;
+
         Integer chunkVersion = -1;
         if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.chunkXPos, pos.chunkZPos)) {
             chunkVersion = getVersionBuffer(event.getWorld()).getGenerationVersion(pos);
             if(chunkVersion == null) {
-                AstralSorcery.log.info("[RetroGen] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
+                AstralSorcery.log.info("[AstralSorcery] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
                 return;
             }
         }
-        AstralSorcery.log.info("[RetroGen] Attempting AstralSorcery retrogen for chunk " + pos.toString() + " - Version " + chunkVersion + " -> " + AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION);
+        AstralSorcery.log.info("[AstralSorcery] Attempting AstralSorcery retrogen for chunk "+ pos.toString() +
+                " - Version " + chunkVersion + " -> " + AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION +
+                " - Stack: " + retroGenActive.size());
         retroGenActive.add(pos);
-        AstralSorcery.log.info("RetroGenStack: " + retroGenActive.size());
         CommonProxy.worldGenerator.handleRetroGen(event.getWorld(), pos, chunkVersion);
-        AstralSorcery.log.info("RetroGen completed");
         retroGenActive.remove(pos);
     }
 

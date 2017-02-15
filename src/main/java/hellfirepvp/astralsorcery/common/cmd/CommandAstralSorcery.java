@@ -228,6 +228,9 @@ public class CommandAstralSorcery extends CommandBase {
         } else {
             sender.addChatMessage(new TextComponentString("§aMaximized ResearchProgression for " + otherPlayerName + " !"));
         }
+        if(!ResearchManager.setAttunedBefore(other, true)) {
+            sender.addChatMessage(new TextComponentString("§cFailed! Could not set attuned-before for (" + otherPlayerName + ") !"));
+        }
         sender.addChatMessage(new TextComponentString("§aSuccess!"));
     }
 

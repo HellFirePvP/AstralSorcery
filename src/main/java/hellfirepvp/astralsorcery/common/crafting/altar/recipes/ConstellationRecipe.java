@@ -131,7 +131,7 @@ public class ConstellationRecipe extends AttunementRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         if(skyConstellationNeeded != null) {
             DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
             Collection<IConstellation> activeConstellations = cel.getActiveConstellations(altar.getWorld().provider.getDimension());
@@ -148,7 +148,7 @@ public class ConstellationRecipe extends AttunementRecipe {
                 if(invHandler.getStackInSlot(slot.slotId) != null) return false;
             }
         }
-        return super.matches(altar, invHandler);
+        return super.matches(altar, invHandler, ignoreStarlightRequirement);
     }
 
     @Override

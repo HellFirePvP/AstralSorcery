@@ -141,7 +141,24 @@ public class GuiAltarAttunement extends GuiAltarBase {
             Tuple<Double, Double> uvOffset = spriteStarlight.getUVOffset(t);
             drawRect(guiLeft + 11, guiTop + 104, (int) (232 * percFilled), 10,
                     uvOffset.key, uvOffset.value,
-                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength() * percFilled);
+                    spriteStarlight.getULength() * percFilled, spriteStarlight.getVLength());
+
+            AbstractAltarRecipe aar = findCraftableRecipe(true);
+            if(aar != null) {
+                int req = aar.getPassiveStarlightRequired();
+                int has = containerAltarBase.tileAltar.getStarlightStored();
+                if(has < req) {
+                    int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
+                    float percReq = (float) req / (float) max;
+                    int from = (int) (232 * percFilled);
+                    int to = (int) (232 * percReq);
+                    GL11.glColor4f(0.2F, 0.5F, 1.0F, 0.4F);
+
+                    drawRect(guiLeft + 11 + from, guiTop + 104, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
+                }
+            }
         }
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

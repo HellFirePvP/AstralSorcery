@@ -88,8 +88,8 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler);
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
+        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
     }
 
     @Nullable

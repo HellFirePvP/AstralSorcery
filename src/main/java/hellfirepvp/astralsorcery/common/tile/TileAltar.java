@@ -203,7 +203,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private boolean doTryCraft(boolean needUpdate) {
         if(craftingTask == null) return needUpdate;
         AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-        if(!altarRecipe.matches(this, getInventoryHandler())) {
+        if(!altarRecipe.matches(this, getInventoryHandler(), false)) {
             abortCrafting();
             return true;
         }
@@ -282,7 +282,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
-        if (!recipe.allowsForChaining() || !recipe.matches(this, getInventoryHandler()) || !matchDownMultiblocks(recipe.getNeededLevel())) {
+        if (!recipe.allowsForChaining() || !recipe.matches(this, getInventoryHandler(), false) || !matchDownMultiblocks(recipe.getNeededLevel())) {
             if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
                 Vector3 pos = new Vector3(getPos()).add(0.5, 0, 0.5);
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CRAFT_FINISH_BURST, pos.getX(), pos.getY() + 0.05, pos.getZ());
@@ -414,7 +414,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(!world.isRemote) {
             if(getActiveCraftingTask() != null) {
                 AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-                if(!matchDownMultiblocks(altarRecipe.getNeededLevel()) || !altarRecipe.matches(this, getInventoryHandler())) {
+                if(!matchDownMultiblocks(altarRecipe.getNeededLevel()) || !altarRecipe.matches(this, getInventoryHandler(), false)) {
                     abortCrafting();
                     return;
                 }
@@ -435,7 +435,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private void findRecipe(EntityPlayer crafter) {
         if(craftingTask != null) return;
 
-        AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this);
+        AbstractAltarRecipe recipe = AltarRecipeRegistry.findMatchingRecipe(this, false);
         if(recipe instanceof IGatedRecipe) {
             if(!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }

@@ -112,7 +112,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
     }
 
     @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler) {
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         for (AltarSlot slot : AltarSlot.values()) {
             ItemHandle expected = additionalSlots.get(slot);
             if(expected != null) {
@@ -125,7 +125,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
             }
         }
 
-        return super.matches(altar, invHandler);
+        return super.matches(altar, invHandler, ignoreStarlightRequirement);
     }
 
     @Override

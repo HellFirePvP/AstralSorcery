@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
@@ -38,8 +39,13 @@ public abstract class GuiAltarBase extends GuiContainer {
         this.containerAltarBase = (ContainerAltarBase) super.inventorySlots;
     }
 
-    public AbstractAltarRecipe findCraftableRecipe() {
-        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar);
+    public  AbstractAltarRecipe findCraftableRecipe() {
+        return findCraftableRecipe(false);
+    }
+
+    public AbstractAltarRecipe findCraftableRecipe(boolean ignoreStarlightRequirement) {
+        if(!containerAltarBase.tileAltar.getMultiblockState()) return null;
+        AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar, ignoreStarlightRequirement);
         if(rec != null) {
             if(rec instanceof IGatedRecipe) {
                 if(((IGatedRecipe) rec).hasProgressionClient()) {
@@ -61,6 +67,7 @@ public abstract class GuiAltarBase extends GuiContainer {
     @Override
     protected final void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         renderGuiBackground(partialTicks, mouseX, mouseY);
+        TextureHelper.refreshTextureBindState();
     }
 
     public abstract void renderGuiBackground(float partialTicks, int mouseX, int mouseY);

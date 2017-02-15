@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.crafting.infusion;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
+import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.LowConsumptionInfusionRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import net.minecraft.item.ItemStack;
 
@@ -54,8 +56,15 @@ public class InfusionRecipeRegistry {
         return registerInfusionRecipe(new BasicInfusionRecipe(output, input));
     }
 
+    public static LowConsumptionInfusionRecipe registerLowConsumptionInfusion(ItemStack output, ItemStack input) {
+        return registerInfusionRecipe(new LowConsumptionInfusionRecipe(output, input));
+    }
+
     public static <T extends AbstractInfusionRecipe> T registerInfusionRecipe(T recipe) {
         recipes.add(recipe);
+        if(CraftingAccessManager.hasCompletedSetup()) {
+            CraftingAccessManager.compile();
+        }
         return recipe;
     }
 

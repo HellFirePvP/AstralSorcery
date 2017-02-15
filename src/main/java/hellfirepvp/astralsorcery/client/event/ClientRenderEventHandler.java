@@ -106,28 +106,8 @@ public class ClientRenderEventHandler {
             }
         }
 
-        EnumHand search = EnumHand.MAIN_HAND;
-        ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(search);
-        if(inHand == null) {
-            search = EnumHand.OFF_HAND;
-            Minecraft.getMinecraft().player.getHeldItem(search);
-        }
-        if(inHand != null && inHand.getItem() != null) {
-            Item i = inHand.getItem();
-            if(i instanceof ItemHandRender) {
-                ((ItemHandRender) i).onRenderWhileInHand(inHand, search, event.getPartialTicks());
-            }
-            if(i instanceof ItemHudRender) {
-                if(((ItemHudRender) i).hasFadeIn()) {
-                    if(!ongoingItemRenders.containsKey(i)) {
-                        ongoingItemRenders.put((ItemHudRender) i, new ItemStackHudRenderInstance(inHand, 1F / ((float) ((ItemHudRender) i).getFadeInTicks())));
-                    }
-                    ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
-                    instance.active = true;
-                    instance.stack = inHand;
-                }
-            }
-        }
+        playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND), EnumHand.MAIN_HAND, event.getPartialTicks());
+        playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND),  EnumHand.OFF_HAND,  event.getPartialTicks());
     }
 
     @SubscribeEvent
@@ -156,27 +136,9 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onTick(TickEvent.ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
-            ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-            if(inHand == null) Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
-            if(inHand != null && inHand.getItem() != null) {
-                Item i = inHand.getItem();
-                if(i instanceof ItemAlignmentChargeRevealer) {
-                    if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
-                        requestChargeReveal(20);
-                    }
-                }
-                if(i instanceof ItemSkyResonator) {
-                    spawnSurfaceParticles();
-                }
-                if(i instanceof ItemHudRender) {
-                    ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
-                    if(instance != null) {
-                        if(instance.visibility < 1) {
-                            instance.visibility = Math.min(1, instance.visibility + instance.visibilityChange);
-                        }
-                    }
-                }
-            }
+            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
+            playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
+
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
                 requestChargeReveal(20);
             }
@@ -203,6 +165,49 @@ public class ClientRenderEventHandler {
                         iterator.remove();
                     } else {
                         instance.visibility = Math.max(0, instance.visibility - instance.visibilityChange);
+                    }
+                }
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playHandAndHudRenders(ItemStack inHand, EnumHand hand, float pTicks) {
+        if(inHand != null && inHand.getItem() != null) {
+            Item i = inHand.getItem();
+            if(i instanceof ItemHandRender) {
+                ((ItemHandRender) i).onRenderWhileInHand(inHand, hand, pTicks);
+            }
+            if(i instanceof ItemHudRender) {
+                if(((ItemHudRender) i).hasFadeIn()) {
+                    if(!ongoingItemRenders.containsKey(i)) {
+                        ongoingItemRenders.put((ItemHudRender) i, new ItemStackHudRenderInstance(inHand, 1F / ((float) ((ItemHudRender) i).getFadeInTicks())));
+                    }
+                    ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
+                    instance.active = true;
+                    instance.stack = inHand;
+                }
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playItemEffects(ItemStack inHand) {
+        if(inHand != null && inHand.getItem() != null) {
+            Item i = inHand.getItem();
+            if(i instanceof ItemAlignmentChargeRevealer) {
+                if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
+                    requestChargeReveal(20);
+                }
+            }
+            if(i instanceof ItemSkyResonator) {
+                spawnSurfaceParticles();
+            }
+            if(i instanceof ItemHudRender) {
+                ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
+                if(instance != null) {
+                    if(instance.visibility < 1) {
+                        instance.visibility = Math.min(1, instance.visibility + instance.visibilityChange);
                     }
                 }
             }
@@ -271,7 +276,15 @@ public class ClientRenderEventHandler {
                 }
             }
             ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-            if(inHand == null) Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
+            if(inHand != null && inHand.getItem() != null) {
+                Item i = inHand.getItem();
+                if (i instanceof ItemHudRender) {
+                    if(!((ItemHudRender) i).hasFadeIn()) {
+                        ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                    }
+                }
+            }
+            inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
             if(inHand != null && inHand.getItem() != null) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
