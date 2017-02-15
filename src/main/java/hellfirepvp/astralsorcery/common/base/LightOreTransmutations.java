@@ -35,6 +35,8 @@ public class LightOreTransmutations {
         registerTransmutation(new Transmutation(Blocks.NETHER_WART_BLOCK.getDefaultState(),  Blocks.SOUL_SAND.getDefaultState(),    200.0D));
         registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(),            Blocks.CAKE.getDefaultState(),        2000.0D));
         registerTransmutation(new Transmutation(Blocks.SEA_LANTERN.getDefaultState(),        Blocks.LAPIS_BLOCK.getDefaultState(),  200.0D));
+        registerTransmutation(new Transmutation(Blocks.SANDSTONE.getDefaultState(),          Blocks.END_STONE.getDefaultState(),    200.0D));
+        registerTransmutation(new Transmutation(Blocks.NETHERRACK.getDefaultState(),         Blocks.NETHER_BRICK.getDefaultState(), 200.0D));
     }
 
     public static void registerTransmutation(Transmutation tr) {

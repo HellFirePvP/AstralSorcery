@@ -6,17 +6,16 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.integrations.mods.jei;
+package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,27 +23,33 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: TransmutationRecipeWrapper
+ * Class: AltarAttunementRecipeWrapper
  * Created by HellFirePvP
- * Date: 15.02.2017 / 15:57
+ * Date: 15.02.2017 / 18:12
  */
-public class TransmutationRecipeWrapper extends JEIBaseWrapper {
+public class AltarAttunementRecipeWrapper extends JEIBaseWrapper {
 
-    private LightOreTransmutations.Transmutation transmutation;
+    private AttunementRecipe recipe;
 
-    public TransmutationRecipeWrapper(LightOreTransmutations.Transmutation transmutation) {
-        this.transmutation = transmutation;
+    public AltarAttunementRecipeWrapper(AttunementRecipe recipe) {
+        this.recipe = recipe;
     }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ItemStack in = ItemUtils.createBlockStack(transmutation.input);
-        ItemStack out = ItemUtils.createBlockStack(transmutation.output);
+        IAccessibleRecipe underlyingRecipe = recipe.getNativeRecipe();
 
-        if(in != null && out != null) {
-            ingredients.setInput(ItemStack.class, in);
-            ingredients.setOutput(ItemStack.class, out);
+        List<List<ItemStack>> stackList = Lists.newArrayList();
+        for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
+            List<ItemStack> stacks = underlyingRecipe.getExpectedStackForRender(srs);
+            stackList.add(stacks == null ? Lists.newArrayList() : stacks);
         }
+        for (AttunementRecipe.AltarSlot as : AttunementRecipe.AltarSlot.values()) {
+            stackList.add(recipe.getAttItems(as));
+        }
+        ingredients.setInputLists(ItemStack.class, stackList);
+
+        ingredients.setOutput(ItemStack.class, recipe.getOutputForRender());
     }
 
     @Override
@@ -63,4 +68,5 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
     public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
     }
+
 }

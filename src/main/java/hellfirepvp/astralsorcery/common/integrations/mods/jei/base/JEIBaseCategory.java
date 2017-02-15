@@ -1,0 +1,47 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.integrations.mods.jei.base;
+
+import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.resources.I18n;
+
+/**
+ * This class is part of the Astral Sorcery Mod
+ * The complete source code for this mod can be found on github.
+ * Class: JEIBaseCategory
+ * Created by HellFirePvP
+ * Date: 15.02.2017 / 17:00
+ */
+public abstract class JEIBaseCategory<T extends IRecipeWrapper> implements IRecipeCategory<T> {
+
+    private final String locTitle, uid;
+
+    public JEIBaseCategory(String unlocTitle, String uid) {
+        this.locTitle = I18n.format(unlocTitle);
+        this.uid = uid;
+    }
+
+    @Override
+    public String getUid() {
+        return uid;
+    }
+
+    @Override
+    public String getTitle() {
+        return locTitle;
+    }
+
+    @Override
+    @Deprecated
+    public void setRecipe(IRecipeLayout recipeLayout, T recipeWrapper) {
+
+    }
+}

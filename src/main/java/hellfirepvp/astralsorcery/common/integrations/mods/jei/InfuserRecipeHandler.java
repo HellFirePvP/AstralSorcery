@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -20,17 +21,11 @@ import mezz.jei.api.recipe.IRecipeWrapper;
  * Created by HellFirePvP
  * Date: 11.01.2017 / 00:58
  */
-public class InfuserRecipeHandler implements IRecipeHandler<AbstractInfusionRecipe> {
+public class InfuserRecipeHandler extends JEIBaseHandler<AbstractInfusionRecipe> {
 
     @Override
     public Class<AbstractInfusionRecipe> getRecipeClass() {
         return AbstractInfusionRecipe.class;
-    }
-
-    @Override
-    @Deprecated
-    public String getRecipeCategoryUid() {
-        return ModIntegrationJEI.idInfuser;
     }
 
     @Override

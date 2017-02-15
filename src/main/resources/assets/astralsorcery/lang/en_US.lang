@@ -4,6 +4,9 @@ itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 jei.category.infuser=Starlight Infusion
 jei.category.transmutation=Starlight Transmutation
+jei.category.altar.discovery=Luminous Crafting Table
+jei.category.altar.attunement=Starlight Crafting Altar
+jei.category.altar.constellation=Celestial Altar
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe

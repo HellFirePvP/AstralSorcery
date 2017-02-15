@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -22,16 +23,11 @@ import net.minecraft.item.ItemStack;
  * Created by HellFirePvP
  * Date: 15.02.2017 / 16:00
  */
-public class TransmutationRecipeHandler implements IRecipeHandler<LightOreTransmutations.Transmutation> {
+public class TransmutationRecipeHandler extends JEIBaseHandler<LightOreTransmutations.Transmutation> {
 
     @Override
     public Class<LightOreTransmutations.Transmutation> getRecipeClass() {
         return LightOreTransmutations.Transmutation.class;
-    }
-
-    @Override
-    public String getRecipeCategoryUid() {
-        return ModIntegrationJEI.idTransmutation;
     }
 
     @Override

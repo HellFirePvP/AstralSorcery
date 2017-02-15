@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.integrations.mods.jei;
+package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
@@ -21,18 +21,18 @@ import net.minecraft.util.ResourceLocation;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CategoryTransmutation
+ * Class: CategoryAltarDiscovery
  * Created by HellFirePvP
- * Date: 15.02.2017 / 15:54
+ * Date: 15.02.2017 / 16:54
  */
-public class CategoryTransmutation extends JEIBaseCategory<TransmutationRecipeWrapper> {
+public class CategoryAltarDiscovery extends JEIBaseCategory<AltarDiscoveryRecipeWrapper> {
 
     private final IDrawable background;
 
-    public CategoryTransmutation(IGuiHelper guiHelper) {
-        super("jei.category.transmutation", ModIntegrationJEI.idTransmutation);
-        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateTransmutation.png");
-        background = guiHelper.createDrawable(location, 0, 0, 116, 54);
+    public CategoryAltarDiscovery(IGuiHelper guiHelper) {
+        super("jei.category.altar.discovery", ModIntegrationJEI.idAltarDiscovery);
+        ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateAltarDiscovery.png");
+        background = guiHelper.createDrawable(location, 0, 0, 116, 162);
     }
 
     @Override
@@ -47,10 +47,18 @@ public class CategoryTransmutation extends JEIBaseCategory<TransmutationRecipeWr
     public void drawAnimations(Minecraft minecraft) {}
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, TransmutationRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, AltarDiscoveryRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
-        group.init(0, true, 22, 17);
-        group.init(1, false, 94, 18);
+        group.init(0, false, 48, 18);
+        group.init(1, true, 22, 70);
+        group.init(2, true, 49, 70);
+        group.init(3, true, 76, 70);
+        group.init(4, true, 22, 97);
+        group.init(5, true, 49, 97);
+        group.init(6, true, 76, 97);
+        group.init(7, true, 22, 124);
+        group.init(8, true, 49, 124);
+        group.init(9, true, 76, 124);
 
         group.set(ingredients);
     }

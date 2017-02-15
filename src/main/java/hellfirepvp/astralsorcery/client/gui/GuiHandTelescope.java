@@ -127,6 +127,13 @@ public class GuiHandTelescope extends GuiWHScreen {
     }
 
     @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
+        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+    }
+
+    @Override
     public void initGui() {
         super.initGui();
 

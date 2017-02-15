@@ -126,8 +126,8 @@ public class RegistryRecipes {
         registerLowConsumptionInfusion(new ItemStack(Items.GOLD_INGOT, 2, 0), new ItemStack(Blocks.GOLD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.LAPIS_BLOCK, 1, 0), new ItemStack(Blocks.LAPIS_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.REDSTONE_BLOCK, 1, 0), new ItemStack(Blocks.REDSTONE_ORE, 1, 0));
-        registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 2, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
-        registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 2, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 4, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 4, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.ICE, 1, 0), new ItemStack(Blocks.GLASS, 1, 0));
     }
 

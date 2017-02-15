@@ -38,6 +38,8 @@ import java.awt.*;
  */
 public interface IGuiRenderablePage {
 
+    public static final IGuiRenderablePage GUI_INTERFACE = (offsetX, offsetY, pTicks, zLevel, mouseX, mouseY) -> {};
+
     static final BindableResource resStar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
 
     public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY);

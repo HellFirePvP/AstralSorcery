@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -26,25 +27,14 @@ import net.minecraft.util.ResourceLocation;
  * Created by HellFirePvP
  * Date: 11.01.2017 / 00:10
  */
-public class CategoryInfuser implements IRecipeCategory<InfuserRecipeWrapper> {
+public class CategoryInfuser extends JEIBaseCategory<InfuserRecipeWrapper> {
 
     private final IDrawable background;
-    private final String locInfuser;
 
     public CategoryInfuser(IGuiHelper guiHelper) {
+        super("jei.category.infuser", ModIntegrationJEI.idInfuser);
         ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateInfusion.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 54);
-        locInfuser = I18n.format("jei.category.infuser");
-    }
-
-    @Override
-    public String getUid() {
-        return ModIntegrationJEI.idInfuser;
-    }
-
-    @Override
-    public String getTitle() {
-        return locInfuser;
     }
 
     @Override
@@ -57,9 +47,6 @@ public class CategoryInfuser implements IRecipeCategory<InfuserRecipeWrapper> {
 
     @Override
     public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, InfuserRecipeWrapper recipeWrapper) {}
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, InfuserRecipeWrapper recipeWrapper, IIngredients ingredients) {
