@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,6 +57,10 @@ public class LightOreTransmutations {
             return;
         }
         registeredTransmutations.add(tr);
+    }
+
+    public static List<Transmutation> getRegisteredTransmutations() {
+        return Collections.unmodifiableList(registeredTransmutations);
     }
 
     @Nullable

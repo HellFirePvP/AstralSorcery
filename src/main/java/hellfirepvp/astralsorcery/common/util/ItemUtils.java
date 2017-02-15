@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -61,6 +63,14 @@ public class ItemUtils {
         item.motionX = rand.nextFloat() * 0.3F - 0.15D;
         item.motionY = rand.nextFloat() * 0.3F - 0.15D;
         item.motionZ = rand.nextFloat() * 0.3F - 0.15D;
+    }
+
+    @Nullable
+    public static ItemStack createBlockStack(IBlockState state) {
+        Item i = Item.getItemFromBlock(state.getBlock());
+        if(i == null) return null;
+        int meta = state.getBlock().getMetaFromState(state);
+        return new ItemStack(i, 1, meta);
     }
 
     public static List<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {

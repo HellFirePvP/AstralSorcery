@@ -3,6 +3,7 @@ itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 jei.category.infuser=Starlight Infusion
+jei.category.transmutation=Starlight Transmutation
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe

@@ -9,12 +9,17 @@
 package hellfirepvp.astralsorcery.common.integrations.mods;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryInfuser;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryTransmutation;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.InfuserRecipeHandler;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.TransmutationRecipeHandler;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
+import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IItemBlacklist;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
@@ -23,7 +28,10 @@ import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +46,7 @@ public class ModIntegrationJEI implements IModPlugin {
     public static boolean jeiRegistrationPhase = true;
 
     public static final String idInfuser = "astralsorcery.infuser";
+    public static final String idTransmutation = "astralsorcery.lightTransmutation";
 
     public static IStackHelper stackHelper;
 
@@ -55,14 +64,24 @@ public class ModIntegrationJEI implements IModPlugin {
     public void register(IModRegistry registry) {
         stackHelper = registry.getJeiHelpers().getStackHelper();
         hideItems(registry.getJeiHelpers().getItemBlacklist());
+        IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
+        registry.addRecipeCategories(
+                new CategoryInfuser(guiHelper),
+                new CategoryTransmutation(guiHelper));
 
-        registry.addRecipeCategories(new CategoryInfuser(registry.getJeiHelpers().getGuiHelper()));
-
-        registry.addRecipeHandlers(new InfuserRecipeHandler());
+        registry.addRecipeHandlers(
+                new InfuserRecipeHandler(),
+                new TransmutationRecipeHandler());
 
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lens), idTransmutation);
+
         registry.addRecipes(InfusionRecipeRegistry.recipes);
+        List<LightOreTransmutations.Transmutation> transmutations = Lists.newArrayList(LightOreTransmutations.getRegisteredTransmutations());
+        transmutations.add(new LightOreTransmutations.Transmutation(Blocks.IRON_ORE.getDefaultState(), BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL), 200));
+        registry.addRecipes(transmutations);
+
         registry.addRecipes(Lists.newArrayList(
                 RegistryRecipes.rRJournal      .makeNative(),
                 RegistryRecipes.rBlackMarbleRaw.makeNative(),
@@ -82,7 +101,6 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
-        //blacklist.addItemToBlacklist(new ItemStack(ItemsAS.roseBranchBow));
         blacklist.addItemToBlacklist(new ItemStack(BlocksAS.ritualLink));
     }
 
