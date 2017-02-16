@@ -164,6 +164,13 @@ public class Vector3 {
         return this;
     }
 
+    public Vector3 negate() {
+        this.x *= -1;
+        this.y *= -1;
+        this.z *= -1;
+        return this;
+    }
+
     public Vector3 copy(Vector3 vec) {
         this.x = vec.x;
         this.y = vec.y;

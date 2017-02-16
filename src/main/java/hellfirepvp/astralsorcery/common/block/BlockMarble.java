@@ -43,8 +43,8 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     public BlockMarble() {
         super(Material.ROCK, MapColor.GRAY);
         setHardness(1.0F);
-        setHarvestLevel("pickaxe", 2);
-        setResistance(10.0F);
+        setHarvestLevel("pickaxe", 1);
+        setResistance(3.0F);
         setSoundType(SoundType.STONE);
         //setTickRandomly(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);

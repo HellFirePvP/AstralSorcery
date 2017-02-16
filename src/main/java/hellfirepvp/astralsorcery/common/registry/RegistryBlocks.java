@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
+import hellfirepvp.astralsorcery.common.block.BlockCelestialOrrery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
@@ -41,6 +42,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialOrrery;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
@@ -145,6 +147,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(treeBeacon);
         translucentBlock = registerBlock(new BlockTranslucentBlock());
         queueDefaultItemBlock(translucentBlock);
+        //celestialOrrery = registerBlock(new BlockCelestialOrrery());
+        //queueDefaultItemBlock(celestialOrrery);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -192,6 +196,7 @@ public class RegistryBlocks {
         registerTile(TileTreeBeacon.class);
         registerTile(TileRitualLink.class);
         registerTile(TileTranslucent.class);
+        //registerTile(TileCelestialOrrery.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

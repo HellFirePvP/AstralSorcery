@@ -385,6 +385,38 @@ public class RenderingUtils {
         GL11.glTranslated(-tx, -ty, -tz);
     }
 
+    public static Vector3 getStandartTranslationRemovalVector(float partialTicks) {
+        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
+        if(rView == null) rView = Minecraft.getMinecraft().player;
+        Entity entity = rView;
+        double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
+        double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
+        double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
+        return new Vector3(-tx, -ty, -tz);
+    }
+
+    public static void renderAngleRotatedTexturedRectVB(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, Color c, int alpha, VertexBuffer vb, float partialTicks) {
+        GL11.glPushMatrix();
+        //removeStandartTranslationFromTESRMatrix(partialTicks);
+        Vector3 shift = getStandartTranslationRemovalVector(partialTicks);
+
+        Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
+
+        Vector3 vec = renderStart.clone().rotate(Math.toRadians(90), axis).normalize().multiply(scale).add(renderOffset);
+        vb.pos(shift.getX() + vec.getX(), shift.getY() + vec.getY(), shift.getZ() + vec.getZ()).tex(u,           v + vLength).color(c.getRed(), c.getGreen(), c.getBlue(), alpha).endVertex();
+
+        vec = renderStart.clone().multiply(-1).normalize().multiply(scale).add(renderOffset);
+        vb.pos(shift.getX() + vec.getX(), shift.getY() + vec.getY(), shift.getZ() + vec.getZ()).tex(u + uLength, v + vLength).color(c.getRed(), c.getGreen(), c.getBlue(), alpha).endVertex();
+
+        vec = renderStart.clone().rotate(Math.toRadians(270), axis).normalize().multiply(scale).add(renderOffset);
+        vb.pos(shift.getX() + vec.getX(), shift.getY() + vec.getY(), shift.getZ() + vec.getZ()).tex(u + uLength, v          ).color(c.getRed(), c.getGreen(), c.getBlue(), alpha).endVertex();
+
+        vec = renderStart.clone().normalize().multiply(scale).add(renderOffset);
+        vb.pos(shift.getX() + vec.getX(), shift.getY() + vec.getY(), shift.getZ() + vec.getZ()).tex(u,           v          ).color(c.getRed(), c.getGreen(), c.getBlue(), alpha).endVertex();
+
+        GL11.glPopMatrix();
+    }
+
     public static void renderAngleRotatedTexturedRect(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float partialTicks) {
         GL11.glPushMatrix();
         removeStandartTranslationFromTESRMatrix(partialTicks);

@@ -55,6 +55,7 @@ astralsorcery.journal.cluster.discovery.name=Discovery
 astralsorcery.journal.cluster.basic_craft.name=Exploration
 astralsorcery.journal.cluster.attunement.name=Attunement
 astralsorcery.journal.cluster.constellation.name=Constellation
+astralsorcery.journal.cluster.radiance.name=Radiance
 
 astralsorcery.journal.constellation.dst.major=Bright
 astralsorcery.journal.constellation.dst.weak=Dim
@@ -239,8 +240,7 @@ item.ItemTunedCelestialCrystal.name=Attuned Celestial Crystal
 item.ItemCelestialCrystal.name=Celestial Crystal
 item.ItemLinkingTool.name=Linking Tool
 item.ItemJournal.name=Journal
-item.ItemWand.name=Astral Attunement Rod
-item.ItemWand.obf.name=Resonating Wand
+item.ItemWand.name=Resonating Wand
 item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe

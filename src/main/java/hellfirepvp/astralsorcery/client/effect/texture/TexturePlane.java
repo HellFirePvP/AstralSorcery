@@ -15,11 +15,17 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,8 +45,6 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private int counter = 0;
     private boolean remove = false;
     private RefreshFunction refreshFunc = null;
-
-    private Blending blendMode = Blending.DEFAULT;
 
     private Color colorOverlay = Color.WHITE;
     private int ticksPerFullRot = 100;
@@ -62,6 +66,18 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     public TexturePlane setPosition(Vector3 pos) {
         this.pos = pos;
+        return this;
+    }
+
+    public TexturePlane setStaticUVOffset(double u, double v) {
+        this.u = u;
+        this.v = v;
+        return this;
+    }
+
+    public TexturePlane setUVLength(double uLength, double vLength) {
+        this.uLength = uLength;
+        this.vLength = vLength;
         return this;
     }
 
@@ -98,11 +114,6 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     public TexturePlane setRefreshFunc(RefreshFunction refreshFunc) {
         this.refreshFunc = refreshFunc;
-        return this;
-    }
-
-    public TexturePlane setBlendMode(@Nonnull Blending blendMode) {
-        this.blendMode = blendMode;
         return this;
     }
 
@@ -194,9 +205,9 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         //removeOldTranslate(rView, partialTicks);
-        GL11.glColor4f(colorOverlay.getRed(), colorOverlay.getGreen(), colorOverlay.getBlue(), alphaGrad);
+        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
         GL11.glEnable(GL11.GL_BLEND);
-        blendMode.apply();
+        Blending.DEFAULT.apply();
         Vector3 axis = this.axis.clone();
         float deg;
         if(ticksPerFullRot >= 0) {
@@ -212,7 +223,6 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         GL11.glDisable(GL11.GL_CULL_FACE);
 
         currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
-        //currRenderAroundAxis(partialTicks, Math.toRadians(360F - deg), axis.clone().multiply(-1)); //From the other side.
 
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -225,7 +235,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
         if(scaleFunc != null) {
-            scale = scaleFunc.getScale(this);
+            scale = scaleFunc.getScale(scale);
         }
         texture.bind();
         RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
@@ -240,7 +250,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     public static interface ScaleFunction {
 
-        public float getScale(TexturePlane plane);
+        public float getScale(float scaleIn);
 
     }
 

@@ -14,6 +14,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -22,6 +24,8 @@ import net.minecraft.tileentity.TileEntity;
  * Date: 11.05.2016 / 18:17
  */
 public abstract class TileEntitySynchronized extends TileEntity {
+
+    protected static final Random rand = new Random();
 
     public final void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);

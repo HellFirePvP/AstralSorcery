@@ -39,8 +39,8 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     public BlockBlackMarble() {
         super(Material.ROCK, MapColor.BLACK);
         setHardness(1.0F);
-        setHarvestLevel("pickaxe", 2);
-        setResistance(10.0F);
+        setHarvestLevel("pickaxe", 1);
+        setResistance(3.0F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.RAW));

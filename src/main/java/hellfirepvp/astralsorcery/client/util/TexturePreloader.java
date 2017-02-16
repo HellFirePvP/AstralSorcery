@@ -102,6 +102,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing1")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing2")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_waxing3")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "smoke")                  .allocateGlId();
 
         SpriteLibrary.init(); //Loads all spritesheets
     }

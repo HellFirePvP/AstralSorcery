@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.lib;
 import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
+import hellfirepvp.astralsorcery.common.block.BlockCelestialOrrery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
@@ -66,6 +67,7 @@ public class BlocksAS {
     public static BlockTreeBeacon treeBeacon;
     public static BlockRitualLink ritualLink;
     public static BlockTranslucentBlock translucentBlock;
+    //public static BlockCelestialOrrery celestialOrrery;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

@@ -70,7 +70,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", 2);
-        setResistance(40.0F);
+        setResistance(30.0F);
         setLightLevel(0.4F);
         setSoundType(SoundType.STONE);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);

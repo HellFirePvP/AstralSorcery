@@ -93,7 +93,7 @@ public class ItemShiftingStar extends Item {
 
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
-        return 40;
+        return 60;
     }
 
     @Override

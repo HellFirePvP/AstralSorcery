@@ -52,6 +52,13 @@ public class RegistryResearch {
         initCrafting();
         initAttunement();
         initConstellation();
+        initRadiance();
+    }
+
+    private static void initRadiance() {
+        ResearchProgression.Registry regRadiance = ResearchProgression.RADIANCE.getRegistry();
+
+
     }
 
     private static void initConstellation() {

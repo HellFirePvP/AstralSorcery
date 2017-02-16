@@ -17,7 +17,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 */
 public enum EnumGatedKnowledge {
 
-    WAND_TYPE(ProgressionTier.ATTUNEMENT),
+    //WAND_TYPE(ProgressionTier.ATTUNEMENT),
 
     //Specifically rock and celestial crystal items
     CRYSTAL_SIZE(ProgressionTier.BASIC_CRAFT),

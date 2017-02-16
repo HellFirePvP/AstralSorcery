@@ -79,15 +79,6 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     }*/
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public String getUnlocalizedName(ItemStack stack) {
-        if(EnumGatedKnowledge.WAND_TYPE.canSee(ResearchManager.clientProgress.getTierReached())) {
-            return super.getUnlocalizedName();
-        }
-        return "item.ItemWand.obf";
-    }
-
-    @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if(!worldIn.isRemote && isSelected && worldIn.getTotalWorldTime() % 20 == 0 && entityIn instanceof EntityPlayerMP) {
             //PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);

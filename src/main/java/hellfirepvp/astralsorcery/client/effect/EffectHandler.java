@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.compound.CompoundEffectSphere;
+import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
@@ -56,6 +58,7 @@ public final class EffectHandler {
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
     public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
+    public static final Map<CompoundObjectEffect.ObjectGroup, List<CompoundObjectEffect>> objects = new HashMap<>();
 
     private EffectHandler() {}
 
@@ -195,6 +198,10 @@ public final class EffectHandler {
             fastRenderLightnings.add((EffectLightning) effect);
         } else if(effect instanceof EntityFXFacingParticle) {
             fastRenderParticles.add((EntityFXFacingParticle) effect);
+        } else if(effect instanceof CompoundObjectEffect) {
+            CompoundObjectEffect.ObjectGroup group = ((CompoundObjectEffect) effect).getGroup();
+            if(!objects.containsKey(group)) objects.put(group, new LinkedList<>());
+            objects.get(group).add((CompoundObjectEffect) effect);
         } else {
             complexEffects.get(effect.getRenderTarget()).get(effect.getLayer()).add(effect);
         }
@@ -210,6 +217,7 @@ public final class EffectHandler {
             }
             fastRenderParticles.clear();
             fastRenderLightnings.clear();
+            objects.clear();
             toAddBuffer.clear();
             cleanRequested = false;
         }
@@ -229,27 +237,53 @@ public final class EffectHandler {
                 }
             }
         }
-        //Ugh NPE FIXME eventually.
-        for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
-            if(effect == null) {
-                fastRenderParticles.remove(effect);
+
+        Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
+        while (iterator.hasNext()) {
+            EntityFXFacingParticle effect = iterator.next();
+            if (effect == null) {
+                iterator.remove();
                 continue;
             }
             effect.tick();
             if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                fastRenderParticles.remove(effect);
+                iterator.remove();
             }
         }
-        for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {
-            if(effect == null) {
-                fastRenderLightnings.remove(effect);
+        Iterator<EffectLightning> it = fastRenderLightnings.iterator();
+        while (it.hasNext()) {
+            EffectLightning effect = it.next();
+            if (effect == null) {
+                it.remove();
                 continue;
             }
             effect.tick();
             if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                fastRenderLightnings.remove(effect);
+                it.remove();
+            }
+        }
+        Iterator<CompoundObjectEffect.ObjectGroup> itGroups = objects.keySet().iterator();
+        while (itGroups.hasNext()) {
+            CompoundObjectEffect.ObjectGroup group = itGroups.next();
+            List<CompoundObjectEffect> effects = objects.get(group);
+            if(effects == null || effects.isEmpty()) {
+                itGroups.remove();
+                continue;
+            }
+            Iterator<CompoundObjectEffect> itObjects = effects.iterator();
+            while (itObjects.hasNext()) {
+                CompoundObjectEffect effect = itObjects.next();
+                if (effect == null) {
+                    itObjects.remove();
+                    continue;
+                }
+                effect.tick();
+                if (effect.canRemove()) {
+                    effect.flagAsRemoved();
+                    itObjects.remove();
+                }
             }
         }
         acceptsNewParticles = true;

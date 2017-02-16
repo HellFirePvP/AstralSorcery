@@ -96,6 +96,7 @@ public class ModIntegrationJEI implements IModPlugin {
 
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lens), idTransmutation);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lensPrism), idTransmutation);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), idAltarDiscovery);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), idAltarAttunement);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
