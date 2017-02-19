@@ -31,6 +31,7 @@ public abstract class AbstractInfusionRecipe {
 
     private int uniqueRecipeId = -1;
     private float consumptionChance = 0.1F;
+    private boolean consumeMultiple = false;
 
     @Nonnull
     private ItemStack output;
@@ -49,6 +50,14 @@ public abstract class AbstractInfusionRecipe {
 
     public float getLiquidStarlightConsumptionChance() {
         return consumptionChance;
+    }
+
+    public void setConsumeMultiple() {
+        this.consumeMultiple = true;
+    }
+
+    public boolean doesConsumeMultiple() {
+        return consumeMultiple;
     }
 
     public final void updateUniqueId(int id) {

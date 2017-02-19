@@ -111,7 +111,7 @@ public class GuiAltarDiscovery extends GuiAltarBase {
                 int has = containerAltarBase.tileAltar.getStarlightStored();
                 if(has < req) {
                     int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
-                    float percReq = (float) req / (float) max;
+                    float percReq = (float) (req - has) / (float) max;
                     int from = (int) (165 * percFilled);
                     int to = (int) (165 * percReq);
                     GL11.glColor4f(0.2F, 0.5F, 1.0F, 0.4F);

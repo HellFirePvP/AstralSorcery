@@ -187,6 +187,8 @@ public class RegistryResearch {
         ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 2, 2);
         resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
         resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminator));
+        resIlluminator.addPage(getTextPage("ILLUMINATOR.3"));
+        resIlluminator.addPage(getTextPage("ILLUMINATOR.4"));
 
         ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 1, 3);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
@@ -302,6 +304,7 @@ public class RegistryResearch {
                         new ItemStack(ItemsAS.crystalAxe), new ItemStack(ItemsAS.crystalShovel)
                 }, "TOOLS", 2, 4);
         resTools.addPage(getTextPage("TOOLS.1"));
+        resTools.addPage(getTextPage("TOOLS.2"));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolSword));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolPick));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolAxe));

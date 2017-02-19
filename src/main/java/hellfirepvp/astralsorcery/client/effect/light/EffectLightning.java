@@ -29,6 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -164,7 +165,7 @@ public class EffectLightning extends EntityComplexFX {
         VertexBuffer buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
-        for (EffectLightning fl : toBeRendered) {
+        for (EffectLightning fl : new ArrayList<>(toBeRendered)) {
             fl.renderF(pTicks, buf);
         }
 

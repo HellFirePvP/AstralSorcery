@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -188,8 +190,15 @@ public class RenderingUtils {
 
             Minecraft.getMinecraft().setIngameFocus();
             Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+
             if(Minecraft.getMinecraft().currentScreen != null) {
                 Minecraft.getMinecraft().displayGuiScreen(null);
+            }
+
+            if (Minecraft.IS_RUNNING_ON_MAC) {
+                Mouse.setGrabbed(false);
+                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
+                Mouse.setGrabbed(true);
             }
         }
     }

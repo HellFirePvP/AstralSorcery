@@ -126,7 +126,9 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
-        if(living != null && !living.isDead && living instanceof EntityPlayer) {
+        if(living == null || living.getEntityWorld().isRemote) return;
+
+        if(!living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
                 event.setCanceled(true);
                 return;
@@ -194,7 +196,9 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onKnockback(EntityKnockbackEvent event) {
         Entity attacker = event.getAttacker();
-        if(attacker != null && attacker instanceof EntityPlayer) {
+        if(attacker == null || attacker.getEntityWorld().isRemote) return;
+
+        if(attacker instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) attacker;
             PlayerProgress prog = ResearchManager.getProgress(p);
             if(prog != null) {
@@ -221,6 +225,8 @@ public class EventHandlerServer {
         if(phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
             event.setCanceled(true);
         } else {
+            if(event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
+
             DamageSource source = event.getSource();
             if(source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
                 EntityPlayer p = (EntityPlayer) source.getEntity();

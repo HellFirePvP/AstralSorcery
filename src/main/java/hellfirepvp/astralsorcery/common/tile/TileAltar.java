@@ -233,7 +233,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
 
         for (int i = 0; i < 9; i++) {
-            ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i % 3, i / 3);
+            ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i / 3, i % 3);
             if(recipe.mayDecrement(this, slot)) {
                 ItemUtils.decrStackInInventory(getInventoryHandler(), i);
             } else {

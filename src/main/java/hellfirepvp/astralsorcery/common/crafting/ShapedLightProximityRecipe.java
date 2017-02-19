@@ -110,6 +110,11 @@ public class ShapedLightProximityRecipe implements IRecipe {
                 itemMap.put(chr, new ItemStack((Block) in, 1, OreDictionary.WILDCARD_VALUE));
             } else if (in instanceof String) {
                 itemMap.put(chr, OreDictionary.getOres((String) in));
+            /*
+             * ADDED CLAUSE TO ALLOW FOR MULTIPLE ITEMSTACK DEFINITIONS
+             */
+            } else if (in instanceof List) {
+                itemMap.put(chr, in);
             } else {
                 String ret = "Invalid shaped ore recipe: ";
                 for (Object tmp : recipe) {

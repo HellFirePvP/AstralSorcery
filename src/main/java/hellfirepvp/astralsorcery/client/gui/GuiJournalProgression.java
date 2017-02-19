@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -146,9 +147,16 @@ public class GuiJournalProgression extends GuiScreenJournal {
         progressionRenderer.drawMouseHighlight(zLevel, mousePoint);
     }
 
-    /*public void updateTick() {
-        progressionRenderer.updateTick();
-    }*/
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+
+        if(Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode())) {
+            progressionRenderer.handleZoomIn();
+        } else if(Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
+            progressionRenderer.handleZoomOut();
+        }
+    }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {

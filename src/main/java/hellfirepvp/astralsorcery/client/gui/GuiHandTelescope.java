@@ -32,17 +32,21 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstel
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -130,14 +134,14 @@ public class GuiHandTelescope extends GuiWHScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+        mc.mouseHelper.grabMouseCursor();
     }
 
     @Override
     public void initGui() {
         super.initGui();
 
-        Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+        mc.mouseHelper.grabMouseCursor();
     }
 
     @Override
@@ -196,6 +200,13 @@ public class GuiHandTelescope extends GuiWHScreen {
         }
 
         if(!ctrl) {
+
+            if(Minecraft.IS_RUNNING_ON_MAC) {
+                Mouse.setGrabbed(false);
+                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
+                Mouse.setGrabbed(true);
+            }
+
             this.mc.mouseHelper.mouseXYChange();
             float f = this.mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;

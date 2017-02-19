@@ -164,10 +164,14 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
-        for (BlockPos offset : offsetsLiquidStarlight) {
+        int size = offsetsLiquidStarlight.length;
+        while (size > 0) {
+            size--;
+            BlockPos offset = offsetsLiquidStarlight[rand.nextInt(offsetsLiquidStarlight.length)];
             if(world.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
                 world.setBlockToAir(getPos().add(offset));
                 EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
+                if(!altarRecipe.doesConsumeMultiple()) break;
             }
         }
         craftingTask.getRecipeToCraft().onCraftServerFinish(this, rand);

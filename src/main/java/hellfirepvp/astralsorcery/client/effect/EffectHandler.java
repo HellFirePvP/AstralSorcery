@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
-import hellfirepvp.astralsorcery.client.effect.compound.CompoundEffectSphere;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -238,30 +237,24 @@ public final class EffectHandler {
             }
         }
 
-        Iterator<EntityFXFacingParticle> iterator = fastRenderParticles.iterator();
-        while (iterator.hasNext()) {
-            EntityFXFacingParticle effect = iterator.next();
+        for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
-                iterator.remove();
                 continue;
             }
             effect.tick();
             if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                iterator.remove();
+                fastRenderParticles.remove(effect);
             }
         }
-        Iterator<EffectLightning> it = fastRenderLightnings.iterator();
-        while (it.hasNext()) {
-            EffectLightning effect = it.next();
+        for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {
             if (effect == null) {
-                it.remove();
                 continue;
             }
             effect.tick();
             if (effect.canRemove()) {
                 effect.flagAsRemoved();
-                it.remove();
+                fastRenderLightnings.remove(effect);
             }
         }
         Iterator<CompoundObjectEffect.ObjectGroup> itGroups = objects.keySet().iterator();

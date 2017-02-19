@@ -58,7 +58,7 @@ public class StarmetalFormHandler implements StarlightNetworkRegistry.IStarlight
         PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.STARMETAL_ORE_CHARGE, pos.getX(), pos.getY(), pos.getZ());
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
 
-        if(node.accCharge >= 13_000) {
+        if(node.accCharge >= 400) {
             turningIrons.remove(pos);
 
             world.setBlockState(pos, BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL));

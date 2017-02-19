@@ -120,7 +120,7 @@ public final class ItemHandle {
         if(fluidTypeAndAmount != null) {
             return UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid());
         }
-        return applicableItems.get(0);
+        return applicableItems;
     }
 
     @SideOnly(Side.CLIENT)
@@ -153,24 +153,26 @@ public final class ItemHandle {
     public boolean matchCrafting(@Nullable ItemStack stack) {
         if(stack == null) return false;
 
-        if(oreDictName != null) {
-            for (int id : OreDictionary.getOreIDs(stack)) {
-                String name = OreDictionary.getOreName(id);
-                if (name != null && name.equals(oreDictName)) {
-                    return true;
+        switch (handleType) {
+            case OREDICT:
+                for (int id : OreDictionary.getOreIDs(stack)) {
+                    String name = OreDictionary.getOreName(id);
+                    if (name != null && name.equals(oreDictName)) {
+                        return true;
+                    }
                 }
-            }
-            return false;
-        } else if(fluidTypeAndAmount != null) {
-            return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false);
-        } else {
-            for (ItemStack applicable : applicableItems) {
-                if(ItemUtils.stackEqualsNonNBT(applicable, stack)) {
-                    return true;
+                return false;
+            case STACK:
+                for (ItemStack applicable : applicableItems) {
+                    if(ItemUtils.stackEqualsNonNBT(applicable, stack)) {
+                        return true;
+                    }
                 }
-            }
-            return false;
+                return false;
+            case FLUID:
+                return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false);
         }
+        return false;
     }
 
     public static enum Type {

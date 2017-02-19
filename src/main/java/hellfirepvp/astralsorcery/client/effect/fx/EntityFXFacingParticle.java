@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -125,7 +126,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         VertexBuffer vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
-        for (EntityFXFacingParticle particle : particles) {
+        for (EntityFXFacingParticle particle : new ArrayList<>(particles)) {
             particle.renderFast(parTicks, vb);
         }
 
