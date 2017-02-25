@@ -95,9 +95,10 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
-        if (((DataWorldSkyHandlers) SyncDataHolder.getDataClient(SyncDataHolder.DATA_SKY_HANDLERS)).hasWorldHandler(world)) {
+        if (((DataWorldSkyHandlers) SyncDataHolder.getDataClient(SyncDataHolder.DATA_SKY_HANDLERS)).hasWorldHandler(world)
+                && world.provider.getDimension() != Config.dimensionIdSkyRift) {
             if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-                world.provider.setSkyRenderer(new RenderSkybox(world.provider.getSkyRenderer()));
+                world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
             }
         }
         if(world.provider.getDimension() == Config.dimensionIdSkyRift) {

@@ -82,6 +82,11 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean causesSuffocation() {
+        return false;
+    }
+
+    @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }

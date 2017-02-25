@@ -69,7 +69,7 @@ public abstract class AbstractInfusionRecipe {
     }
 
     public int craftingTickTime() {
-        return 500;
+        return 200;
     }
 
     public boolean mayDeleteInput(TileStarlightInfuser infuser) {

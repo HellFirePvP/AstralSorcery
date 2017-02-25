@@ -27,6 +27,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -139,6 +140,16 @@ public class EntityFlare extends EntityFlying {
     @Override
     public boolean getCanSpawnHere() {
         return false;
+    }
+
+    @Override
+    public AxisAlignedBB getEntityBoundingBox() {
+        return new AxisAlignedBB(0, 0, 0, 1, 1,1);
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return super.getRenderBoundingBox();
     }
 
     @Override

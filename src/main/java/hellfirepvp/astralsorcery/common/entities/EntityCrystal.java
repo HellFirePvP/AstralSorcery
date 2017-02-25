@@ -95,7 +95,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
             int max = (stack.getItem() instanceof ItemCelestialCrystal ||
                     stack.getItem() instanceof ItemTunedCelestialCrystal) ?
                     CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK;
-            int grow = rand.nextInt(20) + 5;
+            int grow = rand.nextInt(90) + 40;
             max = Math.min(prop.getSize() + grow, max);
             CrystalProperties.applyCrystalProperties(stack,
                     new CrystalProperties(max, prop.getPurity(), prop.getCollectiveCapability()));

@@ -134,7 +134,13 @@ public class GuiHandTelescope extends GuiWHScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        mc.mouseHelper.grabMouseCursor();
+        mc.setIngameFocus();
+
+        if(Minecraft.IS_RUNNING_ON_MAC) {
+            Mouse.setGrabbed(false);
+            Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
+            Mouse.setGrabbed(true);
+        }
     }
 
     @Override
@@ -200,12 +206,6 @@ public class GuiHandTelescope extends GuiWHScreen {
         }
 
         if(!ctrl) {
-
-            if(Minecraft.IS_RUNNING_ON_MAC) {
-                Mouse.setGrabbed(false);
-                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
-                Mouse.setGrabbed(true);
-            }
 
             this.mc.mouseHelper.mouseXYChange();
             float f = this.mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
@@ -423,10 +423,10 @@ public class GuiHandTelescope extends GuiWHScreen {
             float playerYaw = Minecraft.getMinecraft().player.rotationYaw  % 360F;
             float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
 
-            float diffYaw   = (playerYaw + 180F) - (selectedYaw + 180F);
+            float diffYaw   = playerYaw - selectedYaw;
             float diffPitch =  playerPitch       -  selectedPitch;
 
-            if(Math.abs(diffYaw) <= 20F &&
+            if((Math.abs(diffYaw) <= 20F || Math.abs(playerYaw + 360F) <= 20F) &&
                     Math.abs(diffPitch) <= 20F) {
 
                 ScaledResolution res = new ScaledResolution(mc);

@@ -133,11 +133,9 @@ public class RenderDefaultSkybox extends IRenderHandler {
     }
 
     private static void setupSkyVertices(net.minecraft.client.renderer.VertexBuffer vb, float y, boolean invert) {
-        //int i = 64;
-        //int j = 6;
         vb.begin(7, DefaultVertexFormats.POSITION);
 
-        for (int k = -384; k <= 384; k += 64) { //Runs 12 times. wtf. why so complicated...
+        for (int k = -384; k <= 384; k += 64) {
             for (int l = -384; l <= 384; l += 64) {
 
                 float f = (float) k;

@@ -38,6 +38,8 @@ public class MultiBlockArrays {
 
     public static PatternBlockArray patternAltarConstellation;
 
+    public static PatternBlockArray patternAltarTrait;
+
     public static PatternBlockArray patternAttunementFrame;
 
     public static PatternBlockArray patternStarlightInfuser;

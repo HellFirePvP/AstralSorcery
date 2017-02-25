@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.config;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
@@ -15,10 +16,7 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -66,6 +64,7 @@ public class Config {
     @Sync public static int dimensionIdSkyRift = -81;
 
     public static Integer[] constellationSkyDimWhitelist = new Integer[0];
+    public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static boolean performNetworkIntegrityCheck = false;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
@@ -106,6 +105,7 @@ public class Config {
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
+        String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
@@ -136,10 +136,26 @@ public class Config {
         enableChunkVersioning = latestConfig.getBoolean("enableChunkVersioning", "retrogen", true, "WARNING: This keeps track of the 'worldgen-version' of the AstralSorcery worldgen on every chunk. Disabling this might improve server performance, however you will never be able to properly use the retrogen. This can always be disabled later, but isn't re-enableable later in case you disabled it and ran the server once.");
 
         fillWhitelistIDs(dimWhitelist);
+        fillWeakSkyRenders(weakSkyRenders);
 
         for (ConfigEntry ce : dynamicConfigEntries) {
             ce.loadFromConfig(latestConfig);
         }
+    }
+
+    private static void fillWeakSkyRenders(String[] weakSkyRenders) {
+        List<Integer> out = new ArrayList<>();
+        for (String s : weakSkyRenders) {
+            if(s.isEmpty()) continue;
+            try {
+                out.add(Integer.parseInt(s));
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'weakSkyRenders': " + s + " is not a number!");
+            }
+        }
+        weakSkyRendersWhitelist = new ArrayList<>(out.size());
+        weakSkyRendersWhitelist.addAll(out);
+        Collections.sort(weakSkyRendersWhitelist);
     }
 
     private static void fillWhitelistIDs(String[] dimWhitelist) {

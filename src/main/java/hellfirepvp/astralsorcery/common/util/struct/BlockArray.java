@@ -54,6 +54,12 @@ public class BlockArray {
         pattern.put(offset, new BlockInformation(b, state));
         updateSize(offset);
     }
+
+    public void addAll(BlockArray other) {
+        this.pattern.putAll(other.getPattern());
+        this.tileCallbacks.putAll(other.getTileCallbacks());
+    }
+
     public void addTileCallback(BlockPos pos, TileEntityCallback callback) {
         tileCallbacks.put(pos, callback);
     }

@@ -537,8 +537,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         DISCOVERY          (100,   (ta) -> true       ), //Default one...
         ATTUNEMENT         (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttunement), false),
         CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarConstellation), false),
-        TRAIT_CRAFT        (12000, (ta) -> true, false),
-        ENDGAME            (-1,    (ta) -> true       ); //Enhanced version of traitcraft.
+        TRAIT_CRAFT        (12000, new PatternAltarMatcher(MultiBlockArrays.patternAltarTrait), false),
+        ENDGAME            (-1,    (ta) -> true       );
 
         private final int totalExpNeededToLevelUp;
         private final int maxStarlightStorage;

@@ -249,7 +249,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         float f1 = (float) vec3.yCoord;
         float f2 = (float) vec3.zCoord;
 
-        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+        if (!Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
             float f4 = (f * 30.0F + f1 * 70.0F) / 100.0F;
             float f5 = (f * 30.0F + f2 * 70.0F) / 100.0F;
@@ -260,10 +260,13 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
+
         GL11.glDepthMask(false);
         GL11.glEnable(GL11.GL_FOG);
         GL11.glColor4f(f, f1, f2, 1.0F);
+
         GL11.glCallList(glSkyList);
+
         GL11.glDisable(GL11.GL_FOG);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
@@ -281,29 +284,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             GL11.glTranslatef(0.0F, 12.0F, 0.0F);
             GL11.glCallList(glSkyList2);
             GL11.glPopMatrix();
-            float yabs = -((float) (absPlayerHorizon + 65.0D));
-            vb.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            vb.pos(-1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) yabs, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, (double) yabs, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vb.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            tessellator.draw();
         }
 
         if (Minecraft.getMinecraft().world.provider.isSkyColored()) {
@@ -448,7 +428,34 @@ public class RenderAstralSkybox extends IRenderHandler {
         GL11.glPopMatrix();
     }
 
-    private void renderConstellations(final World w, final float partialTicks) {
+    public static void renderConstellationsWrapped(final World w, final float pticks) {
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        RenderHelper.disableStandardItemLighting();
+        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+        GL11.glPushMatrix();
+        float alphaSubRain = 1.0F - Minecraft.getMinecraft().world.getRainStrength(pticks);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, alphaSubRain);
+        GL11.glRotatef(-90F, 0F, 1F, 0F);
+        GL11.glRotatef(Minecraft.getMinecraft().world.getCelestialAngle(pticks) * 360.0F, 1.0F, 0.0F, 0.0F);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDepthMask(false);
+
+        renderConstellations(w, pticks);
+
+        GL11.glDepthMask(true);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_FOG);
+        GL11.glPopMatrix();
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glPopAttrib();
+    }
+
+    private static void renderConstellations(final World w, final float partialTicks) {
         long wTime = w.getWorldTime() % 24000;
         if (wTime < 12000) return; //Daytime.
         float rainDim = 1.0F - w.getRainStrength(partialTicks);
@@ -537,6 +544,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderSunsetToBackground(float[] sunsetColors, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vb = tessellator.getBuffer();
+
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glPushMatrix();
@@ -547,7 +555,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         float f7 = sunsetColors[1];
         float f8 = sunsetColors[2];
 
-        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
+        if (!Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
             float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
             float f11 = (f6 * 30.0F + f8 * 70.0F) / 100.0F;

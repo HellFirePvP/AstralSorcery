@@ -10,6 +10,8 @@ jei.category.altar.constellation=Celestial Altar
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
+misc.journal.info.1=Hover over one of the clusters and zoom in
+misc.journal.info.2=using the scroll wheel or %s and %s
 misc.link.stop=Stopped linking!
 misc.link.start=Selected %s!
 misc.link.link=Linked %s to %s!

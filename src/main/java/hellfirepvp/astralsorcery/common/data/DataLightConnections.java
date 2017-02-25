@@ -31,6 +31,7 @@ public class DataLightConnections extends AbstractData {
 
     private final Object lock = new Object();
 
+    public boolean clientReceivingData = false;
     private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new HashMap<>();
     private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
 
@@ -192,43 +193,48 @@ public class DataLightConnections extends AbstractData {
     public void handleIncomingData(AbstractData serverData) {
         if(!(serverData instanceof DataLightConnections)) return;
 
-        for (String dimStr : ((DataLightConnections) serverData).clientReadBuffer.getKeySet()) {
-            int dimId = Integer.parseInt(dimStr);
-            NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList(dimStr, 10);
-            Map<BlockPos, List<BlockPos>> connectionMap = clientPosBuffer.get(dimId);
-            if(connectionMap == null) {
-                connectionMap = new HashMap<>();
-                clientPosBuffer.put(dimId, connectionMap);
-            }
-            for (int i = 0; i < list.tagCount(); i++) {
-                NBTTagCompound connection = list.getCompoundTagAt(i);
-                if(connection.hasKey("clear")) {
-                    clientPosBuffer.remove(dimId);
-                    break;
+        clientReceivingData = true;
+        try {
+            for (String dimStr : ((DataLightConnections) serverData).clientReadBuffer.getKeySet()) {
+                int dimId = Integer.parseInt(dimStr);
+                NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList(dimStr, 10);
+                Map<BlockPos, List<BlockPos>> connectionMap = clientPosBuffer.get(dimId);
+                if(connectionMap == null) {
+                    connectionMap = new HashMap<>();
+                    clientPosBuffer.put(dimId, connectionMap);
                 }
-
-                BlockPos start = BlockPos.fromLong(connection.getLong("sta"));
-                BlockPos end = BlockPos.fromLong(connection.getLong("end"));
-                boolean set = connection.getBoolean("s");
-                List<BlockPos> to = connectionMap.get(start);
-                if(set) {
-                    if(to == null) {
-                        to = new LinkedList<>();
-                        connectionMap.put(start, to);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    NBTTagCompound connection = list.getCompoundTagAt(i);
+                    if(connection.hasKey("clear")) {
+                        clientPosBuffer.remove(dimId);
+                        break;
                     }
-                    to.add(end);
-                } else {
-                    if(to != null) {
-                        to.remove(end);
-                        if(to.isEmpty()) {
-                            connectionMap.remove(start);
+
+                    BlockPos start = BlockPos.fromLong(connection.getLong("sta"));
+                    BlockPos end = BlockPos.fromLong(connection.getLong("end"));
+                    boolean set = connection.getBoolean("s");
+                    List<BlockPos> to = connectionMap.get(start);
+                    if(set) {
+                        if(to == null) {
+                            to = new LinkedList<>();
+                            connectionMap.put(start, to);
+                        }
+                        to.add(end);
+                    } else {
+                        if(to != null) {
+                            to.remove(end);
+                            if(to.isEmpty()) {
+                                connectionMap.remove(start);
+                            }
                         }
                     }
                 }
+                if(connectionMap.isEmpty()) {
+                    clientPosBuffer.remove(dimId);
+                }
             }
-            if(connectionMap.isEmpty()) {
-                clientPosBuffer.remove(dimId);
-            }
+        } finally {
+            clientReceivingData = false;
         }
     }
 

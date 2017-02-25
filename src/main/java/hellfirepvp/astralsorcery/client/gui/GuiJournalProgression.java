@@ -11,14 +11,19 @@ package hellfirepvp.astralsorcery.client.gui;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiJournalPages;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiProgressionRenderer;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -135,16 +140,33 @@ public class GuiJournalProgression extends GuiScreenJournal {
 
         drawDefault(textureResShell);
 
+        Rectangle guiStar = null;
+        if(!ResearchManager.clientProgress.wasOnceAttuned()) {
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            guiStar = IGuiRenderablePage.GUI_INTERFACE.drawInfoStar( guiLeft + guiWidth - 39, guiTop + 23, zLevel, 15, partialTicks);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+        }
         zLevel += 150;
-        drawMouseHighlight(zLevel, getCurrentMousePoint());
+        drawMouseHighlight(zLevel, getCurrentMousePoint(), guiStar);
         zLevel -= 150;
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
 
-    private void drawMouseHighlight(float zLevel, Point mousePoint) {
+    private void drawMouseHighlight(float zLevel, Point mousePoint, Rectangle starRect) {
         progressionRenderer.drawMouseHighlight(zLevel, mousePoint);
+
+        if(starRect != null && starRect.contains(mousePoint)) {
+            RenderingUtils.renderBlueTooltip(mousePoint.x, mousePoint.y, new LinkedList<String>() {
+                {
+                    add(I18n.format("misc.journal.info.1"));
+                    add(I18n.format("misc.journal.info.2",
+                            Minecraft.getMinecraft().gameSettings.keyBindForward.getDisplayName(),
+                            Minecraft.getMinecraft().gameSettings.keyBindBack.getDisplayName()));
+                }
+            }, IGuiRenderablePage.GUI_INTERFACE.getStandardFontRenderer());
+        }
     }
 
     @Override

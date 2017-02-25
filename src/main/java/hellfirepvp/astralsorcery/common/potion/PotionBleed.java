@@ -36,7 +36,7 @@ public class PotionBleed extends PotionCustomTexture {
     public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
         int preTime = entityLivingBaseIn.hurtResistantTime;
         entityLivingBaseIn.attackEntityFrom(CommonProxy.dmgSourceBleed, 0.5F * (amplifier + 1));
-        entityLivingBaseIn.hurtResistantTime = preTime;
+        entityLivingBaseIn.hurtResistantTime = Math.max(preTime, entityLivingBaseIn.hurtResistantTime);
     }
 
     @Override

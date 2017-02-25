@@ -127,6 +127,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         for (EntityFXFacingParticle particle : new ArrayList<>(particles)) {
+            if(particle == null) continue;
             particle.renderFast(parTicks, vb);
         }
 

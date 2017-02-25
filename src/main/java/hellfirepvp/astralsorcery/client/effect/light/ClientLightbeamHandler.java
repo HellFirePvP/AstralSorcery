@@ -50,10 +50,12 @@ public class ClientLightbeamHandler implements ITickHandler {
             if(rView != null) {
                 int dimId = rView.getEntityWorld().provider.getDimension();
                 DataLightConnections connections = SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS);
+                if(connections.clientReceivingData) return;
+
                 Map<BlockPos, List<BlockPos>> positions = connections.getClientConnections(dimId);
                 if(positions != null) {
                     Iterator<Map.Entry<BlockPos, List<BlockPos>>> iterator = positions.entrySet().iterator();
-                    while (iterator.hasNext()) {
+                    while (iterator.hasNext()) { //TODO cme
                         Map.Entry<BlockPos, List<BlockPos>> entry = iterator.next();
                         BlockPos at = entry.getKey();
                         if (rView.getDistanceSq(at) <= Config.maxEffectRenderDistanceSq) {

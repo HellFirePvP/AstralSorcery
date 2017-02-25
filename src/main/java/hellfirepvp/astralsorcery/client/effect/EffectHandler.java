@@ -239,6 +239,7 @@ public final class EffectHandler {
 
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
+                fastRenderParticles.remove(null);
                 continue;
             }
             effect.tick();
@@ -249,6 +250,7 @@ public final class EffectHandler {
         }
         for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {
             if (effect == null) {
+                fastRenderLightnings.remove(null);
                 continue;
             }
             effect.tick();

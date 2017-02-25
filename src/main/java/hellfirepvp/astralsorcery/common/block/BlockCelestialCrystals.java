@@ -78,6 +78,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    public boolean causesSuffocation() {
+        return false;
+    }
+
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         switch (state.getValue(STAGE)) {
             case 0:

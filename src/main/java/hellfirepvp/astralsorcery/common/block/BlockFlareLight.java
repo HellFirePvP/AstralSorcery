@@ -56,7 +56,12 @@ public class BlockFlareLight extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        return NULL_AABB;
+    }
+
+    @Override
+    public boolean causesSuffocation() {
+        return false;
     }
 
     @Override
@@ -125,6 +130,16 @@ public class BlockFlareLight extends Block {
 
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
         return false;
     }
 

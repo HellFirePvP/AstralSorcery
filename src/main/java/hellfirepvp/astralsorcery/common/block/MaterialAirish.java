@@ -29,6 +29,11 @@ public class MaterialAirish extends Material {
     }
 
     @Override
+    public boolean isSolid() {
+        return false;
+    }
+
+    @Override
     public EnumPushReaction getMobilityFlag() {
         return EnumPushReaction.IGNORE;
     }

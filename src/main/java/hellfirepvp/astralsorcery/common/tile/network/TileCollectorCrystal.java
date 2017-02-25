@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -188,7 +189,13 @@ public class TileCollectorCrystal extends TileSourceBase {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("player", playerMade);
+        if (associatedType == null) {
+            associatedType = ConstellationRegistry.getMajorConstellations().get(rand.nextInt(ConstellationRegistry.getMajorConstellations().size()));
+        }
         associatedType.writeToNBT(compound);
+        if (usedCrystalProperties == null) {
+            usedCrystalProperties = CrystalProperties.createStructural();
+        }
         usedCrystalProperties.writeToNBT(compound);
         compound.setInteger("collectorType", type.ordinal());
         compound.setBoolean("enhanced", enhanced);
