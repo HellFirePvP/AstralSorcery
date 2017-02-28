@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
-import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 

@@ -9,10 +9,9 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
-import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseHandler;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 
@@ -42,8 +41,8 @@ public class TransmutationRecipeHandler extends JEIBaseHandler<LightOreTransmuta
 
     @Override
     public boolean isRecipeValid(LightOreTransmutations.Transmutation recipe) {
-        ItemStack inStack = ItemUtils.createBlockStack(recipe.input);
-        ItemStack outStack = ItemUtils.createBlockStack(recipe.output);
+        ItemStack inStack = recipe.getInputDisplayStack();
+        ItemStack outStack = recipe.getOutputDisplayStack();
         return inStack != null && outStack != null;
     }
 }

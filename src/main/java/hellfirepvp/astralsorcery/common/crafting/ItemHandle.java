@@ -11,7 +11,9 @@ package hellfirepvp.astralsorcery.common.crafting;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,6 +45,13 @@ public final class ItemHandle {
     private List<ItemStack> applicableItems = new LinkedList<>();
     private String oreDictName = null;
     private FluidStack fluidTypeAndAmount = null;
+
+    /*
+     * PLEASE do not use this without populating the respective fields...
+     */
+    private ItemHandle(Type type) {
+        this.handleType = type;
+    }
 
     public ItemHandle(String oreDictName) {
         this.oreDictName = oreDictName;
@@ -173,6 +182,44 @@ public final class ItemHandle {
                 return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false);
         }
         return false;
+    }
+
+    public void serialize(ByteBuf byteBuf) {
+        byteBuf.writeInt(handleType.ordinal());
+        switch (handleType) {
+            case OREDICT:
+                ByteBufUtils.writeString(byteBuf, this.oreDictName);
+                break;
+            case STACK:
+                byteBuf.writeInt(this.applicableItems.size());
+                for (ItemStack applicableItem : this.applicableItems) {
+                    ByteBufUtils.writeItemStack(byteBuf, applicableItem);
+                }
+                break;
+            case FLUID:
+                ByteBufUtils.writeFluidStack(byteBuf, this.fluidTypeAndAmount);
+                break;
+        }
+    }
+
+    public static ItemHandle deserialize(ByteBuf byteBuf) {
+        Type type = Type.values()[byteBuf.readInt()];
+        ItemHandle handle = new ItemHandle(type);
+        switch (type) {
+            case OREDICT:
+                handle.oreDictName = ByteBufUtils.readString(byteBuf);
+                break;
+            case STACK:
+                int amt = byteBuf.readInt();
+                for (int i = 0; i < amt; i++) {
+                    handle.applicableItems.add(ByteBufUtils.readItemStack(byteBuf));
+                }
+                break;
+            case FLUID:
+                handle.fluidTypeAndAmount = ByteBufUtils.readFluidStack(byteBuf);
+                break;
+        }
+        return handle;
     }
 
     public static enum Type {

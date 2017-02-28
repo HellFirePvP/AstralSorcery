@@ -14,12 +14,11 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,8 +29,11 @@ import java.util.Map;
  */
 public class AltarRecipeRegistry {
 
+    public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> mtRecipes = new HashMap<>();
     public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> recipes = new HashMap<>();
     private static AbstractAltarRecipe[] compiledRecipeArray = null;
+
+    private static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> localFallbackCache = new HashMap<>();
 
     //NEVER call this. this should only get called once at post init to compile all recipes for fast access.
     //After this is called, changes to recipe registry might break stuff.
@@ -42,6 +44,10 @@ public class AltarRecipeRegistry {
         for (TileAltar.AltarLevel level : recipes.keySet()) {
             totalNeeded += recipes.get(level).size();
         }
+        for (TileAltar.AltarLevel level : mtRecipes.keySet()) {
+            totalNeeded += mtRecipes.get(level).size();
+        }
+
         int i = 0;
         compiledRecipeArray = new AbstractAltarRecipe[totalNeeded];
         for (TileAltar.AltarLevel l : TileAltar.AltarLevel.values()) {
@@ -51,6 +57,29 @@ public class AltarRecipeRegistry {
                 rec.updateUniqueId(i);
                 i++;
             }
+            recipeList = mtRecipes.get(l);
+            for (AbstractAltarRecipe rec : recipeList) {
+                compiledRecipeArray[i] = rec;
+                rec.updateUniqueId(i);
+                i++;
+            }
+        }
+    }
+
+    public static void cacheLocalRecipes() {
+        if(localFallbackCache.isEmpty()) {
+            for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
+                localFallbackCache.put(al, new LinkedList<>());
+                localFallbackCache.get(al).addAll(recipes.get(al));
+            }
+        }
+    }
+
+    public static void loadFromFallback() {
+        if(!localFallbackCache.isEmpty()) {
+            for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
+                recipes.get(al).addAll(localFallbackCache.get(al));
+            }
         }
     }
 
@@ -58,6 +87,23 @@ public class AltarRecipeRegistry {
     public static AbstractAltarRecipe getRecipe(int id) {
         if(id < 0 || id >= compiledRecipeArray.length) return null;
         return compiledRecipeArray[id];
+    }
+
+    /*
+     * Returns the Recipe that was removed if successful.
+     */
+    @Nullable
+    public static AbstractAltarRecipe removeFindRecipeByOutputAndLevel(ItemStack output, TileAltar.AltarLevel altarLevel) {
+        Iterator<AbstractAltarRecipe> iterator = recipes.get(altarLevel).iterator();
+        while (iterator.hasNext()) {
+            AbstractAltarRecipe rec = iterator.next();
+            ItemStack out = rec.getOutputForMatching();
+            if (out != null && ItemUtils.matchStackLoosely(rec.getOutputForMatching(), output)) {
+                iterator.remove();
+                return rec;
+            }
+        }
+        return null;
     }
 
     public static ConstellationRecipe registerConstellationRecipe(AbstractCacheableRecipe recipe) {
@@ -107,6 +153,14 @@ public class AltarRecipeRegistry {
                     }
                 }
             }
+            validRecipes = mtRecipes.get(lvl);
+            if(validRecipes != null) {
+                for (AbstractAltarRecipe rec : validRecipes) {
+                    if(rec.matches(ta, ta.getInventoryHandler(), ignoreStarlightRequirement)) {
+                        return rec;
+                    }
+                }
+            }
         }
         return null;
         /*List<TileAltar.AltarLevel> levels = new ArrayList<>();
@@ -127,6 +181,7 @@ public class AltarRecipeRegistry {
     static {
         for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
             recipes.put(al, new LinkedList<>());
+            mtRecipes.put(al, new LinkedList<>());
         }
     }
 

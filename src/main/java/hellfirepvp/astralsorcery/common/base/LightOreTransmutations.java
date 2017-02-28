@@ -9,8 +9,14 @@
 package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -26,39 +32,81 @@ import java.util.List;
  */
 public class LightOreTransmutations {
 
+    public static List<Transmutation> mtTransmutations = new LinkedList<>(); //Minetweaker cache
     private static List<Transmutation> registeredTransmutations = new LinkedList<>();
 
+    private static List<Transmutation> localFallback = new LinkedList<>();
+
     public static void init() {
-        registerTransmutation(new Transmutation(Blocks.COAL_BLOCK.getDefaultState(),         Blocks.OBSIDIAN.getDefaultState(),     400.0D));
+        registerTransmutation(new Transmutation(Blocks.MAGMA.getDefaultState(),              Blocks.OBSIDIAN.getDefaultState(),     400.0D));
         registerTransmutation(new Transmutation(Blocks.SAND.getDefaultState(),               Blocks.CLAY.getDefaultState(),         200.0D));
-        registerTransmutation(new Transmutation(Blocks.DIAMOND_ORE.getDefaultState(),        Blocks.EMERALD_ORE.getDefaultState(), 3000.0D));
+        registerTransmutation(new Transmutation(Blocks.DIAMOND_ORE.getDefaultState(),        Blocks.EMERALD_ORE.getDefaultState(), 1000.0D));
         registerTransmutation(new Transmutation(Blocks.NETHER_WART_BLOCK.getDefaultState(),  Blocks.SOUL_SAND.getDefaultState(),    200.0D));
-        registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(),            Blocks.CAKE.getDefaultState(),        2000.0D));
         registerTransmutation(new Transmutation(Blocks.SEA_LANTERN.getDefaultState(),        Blocks.LAPIS_BLOCK.getDefaultState(),  200.0D));
         registerTransmutation(new Transmutation(Blocks.SANDSTONE.getDefaultState(),          Blocks.END_STONE.getDefaultState(),    200.0D));
         registerTransmutation(new Transmutation(Blocks.NETHERRACK.getDefaultState(),         Blocks.NETHER_BRICK.getDefaultState(), 200.0D));
+
+        registerTransmutation(new Transmutation(Blocks.IRON_ORE.getDefaultState(), BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL), 400));
+        registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(), Blocks.CAKE.getDefaultState(), new ItemStack(Blocks.PUMPKIN), new ItemStack(Items.CAKE), 700.0D));
+
+        cacheLocalFallback();
     }
 
-    public static void registerTransmutation(Transmutation tr) {
+    private static void cacheLocalFallback() {
+        if(localFallback.isEmpty()) {
+            localFallback.addAll(registeredTransmutations);
+        }
+    }
+
+    public static void loadFromFallback() {
+        registeredTransmutations.clear();
+        registeredTransmutations.addAll(localFallback);
+    }
+
+    public static Transmutation tryRemoveTransmutation(ItemStack outRemove, boolean matchMeta) {
+        Block b = Block.getBlockFromItem(outRemove.getItem());
+        if(b != null) {
+            for (Transmutation tr : registeredTransmutations) {
+                if(tr.output.getBlock().equals(b)) {
+                    if(!matchMeta || tr.output.getBlock().getMetaFromState(tr.output) == outRemove.getMetadata()) {
+                        registeredTransmutations.remove(tr);
+                        return tr;
+                    }
+                }
+            }
+        }
+        for (Transmutation tr : registeredTransmutations) {
+            if(tr.outStack != null && ItemUtils.matchStackLoosely(tr.outStack, outRemove)) {
+                registeredTransmutations.remove(tr);
+                return tr;
+            }
+        }
+        return null;
+    }
+
+    //Will return itself if successful.
+    @Nullable
+    public static Transmutation registerTransmutation(Transmutation tr) {
         for (Transmutation t : registeredTransmutations) {
             if(t.input.equals(tr.input)) {
                 AstralSorcery.log.warn("Tried to register Transmutation that has the same input as an already existing one.");
-                return;
+                return null;
             }
         }
         if(tr.input == null) {
             AstralSorcery.log.warn("Tried to register Transmutation with null input - Skipping!");
-            return;
+            return null;
         }
-        if(tr.input.getBlock().equals(Blocks.IRON_ORE) || tr.input.getBlock().equals(Blocks.CRAFTING_TABLE)) {
-            AstralSorcery.log.warn("Cannot register Transmutation of iron ore/workbench -> something. By default occupied by the transmutation to starmetal or general crafting which is handled differently.");
-            return;
+        if(tr.input.getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            AstralSorcery.log.warn("Cannot register Transmutation of iron workbench -> something. By default occupied by general crafting which is handled differently.");
+            return null;
         }
         if(tr.output == null) {
             AstralSorcery.log.warn("Tried to register Transmutation with null output - Skipping!");
-            return;
+            return null;
         }
         registeredTransmutations.add(tr);
+        return tr;
     }
 
     public static List<Transmutation> getRegisteredTransmutations() {
@@ -79,10 +127,37 @@ public class LightOreTransmutations {
         public final IBlockState output;
         public final double cost;
 
+        @Nullable
+        public final ItemStack outStack;
+        @Nullable
+        public final ItemStack inStack;
+
         public Transmutation(IBlockState input, IBlockState output, double cost) {
+            this(input, output, null, null, cost);
+        }
+
+        public Transmutation(IBlockState input, IBlockState output, @Nullable ItemStack inputDisplay, @Nullable ItemStack outputDisplay, double cost) {
             this.input = input;
             this.output = output;
             this.cost = cost;
+            this.outStack = outputDisplay;
+            this.inStack = inputDisplay;
+        }
+
+        @Nullable
+        public ItemStack getInputDisplayStack() {
+            if (inStack != null) {
+                return inStack.copy();
+            }
+            return ItemUtils.createBlockStack(input);
+        }
+
+        @Nullable
+        public ItemStack getOutputDisplayStack() {
+            if(outStack != null) {
+                return outStack.copy();
+            }
+            return ItemUtils.createBlockStack(output);
         }
     }
 

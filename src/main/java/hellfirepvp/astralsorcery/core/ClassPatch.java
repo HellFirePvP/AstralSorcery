@@ -37,7 +37,7 @@ public abstract class ClassPatch {
         try {
             patch(node);
         } catch (ASMTransformationException exc) {
-            throw new ASMTransformationException("Failed to apply ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase(), exc);
+            throw new ASMTransformationException("Failed to applyServer ASM Transformation ClassPatch " + getClass().getSimpleName().toUpperCase(), exc);
         }
     }
 

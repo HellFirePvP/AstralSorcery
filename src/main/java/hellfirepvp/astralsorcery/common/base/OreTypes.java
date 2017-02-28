@@ -30,6 +30,9 @@ public class OreTypes {
     private static Map<String, Double> oreDictWeights = new HashMap<>();
     private static double totalWeight = 0D;
 
+    private static Map<String, Double> localFallback = new HashMap<>();
+    private static double fallbackWeight = 0D;
+
     public static void init() {
         //Vanilla
         registerOreEntry("oreCoal",        5200D);
@@ -39,7 +42,7 @@ public class OreTypes {
         registerOreEntry("oreRedstone",     700D);
         registerOreEntry("oreDiamond",      180D);
         registerOreEntry("oreEmerald",      100D);
-        //Modded?
+        //Modded
         registerOreEntry("oreAluminum",     600D);
         registerOreEntry("oreCopper",      1100D);
         registerOreEntry("oreTin",         1500D);
@@ -56,6 +59,29 @@ public class OreTypes {
         registerOreEntry("oreZinc",         300D);
         registerOreEntry("oreSulfur",       600D);
         registerOreEntry("oreOsmium",       950D);
+
+        cacheLocalFallback();
+    }
+
+    private static void cacheLocalFallback() {
+        if(localFallback.isEmpty()) {
+            localFallback.putAll(oreDictWeights);
+            fallbackWeight = totalWeight;
+        }
+    }
+
+    public static void loadFromFallback() {
+        oreDictWeights.clear();
+        totalWeight = fallbackWeight;
+        oreDictWeights.putAll(localFallback);
+    }
+
+    public static void removeOreEntry(String oreDictName) {
+        if(oreDictWeights.containsKey(oreDictName)) {
+            double weight = oreDictWeights.get(oreDictName);
+            oreDictWeights.remove(oreDictName);
+            totalWeight -= weight;
+        }
     }
 
     public static void registerOreEntry(String oreDictName, Double weight) {

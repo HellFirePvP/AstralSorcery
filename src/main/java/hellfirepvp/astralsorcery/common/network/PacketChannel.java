@@ -14,17 +14,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstel
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktAttunementAltarState;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncData;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateReach;
+import hellfirepvp.astralsorcery.common.network.packet.server.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -60,6 +50,8 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktLightningEffect.class, PktLightningEffect.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktSyncMinetweakerChanges.class, PktSyncMinetweakerChanges.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktSyncMinetweakerChanges.Compound.class, PktSyncMinetweakerChanges.Compound.class, id++, Side.CLIENT);
 
         //(client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);

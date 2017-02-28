@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.entities.EntityAquamarine;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
-import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
@@ -24,7 +23,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -35,7 +33,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.08.2016 / 13:10
  */
-public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants, ItemWellCatalyst {
+public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants {
 
     public ItemCraftingComponent() {
         setMaxStackSize(64);
@@ -91,41 +89,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
             return super.getUnlocalizedName(stack) + "." + type.getUnlocalizedName();
         }
         return super.getUnlocalizedName(stack);
-    }
-
-    @Override
-    public boolean isCatalyst(@Nonnull ItemStack stack) {
-        int meta = stack.getItemDamage();
-        return meta == MetaType.AQUAMARINE.getMeta() || meta == MetaType.RESO_GEM.getMeta();
-    }
-
-    @Override
-    public double collectionMultiplier(@Nonnull ItemStack stack) {
-        int meta = stack.getItemDamage();
-        if(meta == MetaType.AQUAMARINE.getMeta()) {
-            return 0.3;
-        }
-        if(meta == MetaType.RESO_GEM.getMeta()) {
-            return 0.4333;
-        }
-        return 0;
-    }
-
-    @Override
-    public Color getCatalystColor(@Nonnull ItemStack stack) {
-        return new Color(0x00, 0x88, 0xDD);
-    }
-
-    @Override
-    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
-        int meta = stack.getItemDamage();
-        if(meta == MetaType.AQUAMARINE.getMeta()) {
-            return 4;
-        }
-        if(meta == MetaType.RESO_GEM.getMeta()) {
-            return 12;
-        }
-        return 0.01;
     }
 
     @Override

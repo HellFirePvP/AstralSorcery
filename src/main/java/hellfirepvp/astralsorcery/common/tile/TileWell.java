@@ -13,13 +13,13 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -28,19 +28,21 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -64,9 +66,10 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     private static final Random rand = new Random();
     private static final int MAX_CAPACITY = 2000;
 
-    private float posDistribution = -1F;
+    private WellLiquefaction.LiquefactionEntry running = null;
 
-    private double mbStarlightAmount = 0;
+    private Fluid heldFluid = null;
+    private double mbFluidAmount = 0;
     private double starlightBuffer = 0;
 
     public TileWell() {
@@ -85,10 +88,6 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         if(!world.isRemote) {
             if(world.canSeeSky(getPos())) {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
-                //if(posDistribution == -1) {
-                //    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, pos);
-                //}
-                //sbDayDistribution *= posDistribution;
                 int yLevel = getPos().getY();
                 float dstr;
                 if(yLevel > 140) {
@@ -105,25 +104,23 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                 if(!world.isAirBlock(getPos().up())) {
                     breakCatalyst();
                 } else {
-                    if(stack.getItem() != null && stack.getItem() instanceof ItemWellCatalyst) {
-                        ItemWellCatalyst catalyst = (ItemWellCatalyst) stack.getItem();
-                        if(catalyst.isCatalyst(stack)) {
-                            double gain = Math.sqrt(starlightBuffer) * catalyst.collectionMultiplier(stack);
-                            //double gain = 200;
-                            if(gain > 0 && mbStarlightAmount <= MAX_CAPACITY) {
-                                if (mbStarlightAmount <= MAX_CAPACITY) {
-                                    markForUpdate();
-                                }
-                                fillAndDiscardRest(gain);
-                                if(rand.nextInt(2000) == 0) {
-                                    EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
-                                }
+                    running = WellLiquefaction.getLiquefactionEntry(stack);
+
+                    if(running != null && stack.getItem() != null) {
+                        double gain = Math.sqrt(starlightBuffer) * running.productionMultiplier;
+                        if(gain > 0 && mbFluidAmount <= MAX_CAPACITY) {
+                            if (mbFluidAmount <= MAX_CAPACITY) {
+                                markForUpdate();
                             }
-                            starlightBuffer = 0;
-                            if(rand.nextInt(1 + (int) (1000 * catalyst.getShatterChanceMultiplier(stack))) == 0) {
-                                breakCatalyst();
+                            fillAndDiscardRest(running, gain);
+                            if(rand.nextInt(2000) == 0) {
                                 EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                             }
+                        }
+                        starlightBuffer = 0;
+                        if(rand.nextInt(1 + (int) (1000 * running.shatterMultiplier)) == 0) {
+                            breakCatalyst();
+                            EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
                         }
                     }
                 }
@@ -133,11 +130,18 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
             }
         } else {
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemWellCatalyst) {
-                Color color = ((ItemWellCatalyst) stack.getItem()).getCatalystColor(stack);
-                doCatalystEffect(color);
+            if(stack != null && stack.getItem() != null) {
+                running = WellLiquefaction.getLiquefactionEntry(stack);
+
+                if(running != null) {
+                    Color color = Color.WHITE;
+                    if(running.catalystColor != null) {
+                        color = running.catalystColor;
+                    }
+                    doCatalystEffect(color);
+                }
             }
-            if(mbStarlightAmount > 0) {
+            if(mbFluidAmount > 0 && heldFluid != null && heldFluid instanceof FluidLiquidStarlight) {
                 doStarlightEffect();
             }
         }
@@ -176,8 +180,13 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         this.starlightBuffer += amount;
     }
 
-    private void fillAndDiscardRest(double gain) {
-        mbStarlightAmount = Math.min(MAX_CAPACITY, mbStarlightAmount + gain);
+    private void fillAndDiscardRest(WellLiquefaction.LiquefactionEntry entry, double gain) {
+        if(heldFluid == null) {
+            heldFluid = entry.producing;
+        } else if(!entry.producing.equals(heldFluid)) {
+            return;
+        }
+        mbFluidAmount = Math.min(MAX_CAPACITY, mbFluidAmount + gain);
     }
 
     @SideOnly(Side.CLIENT)
@@ -198,26 +207,39 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         return new TransmissionReceiverWell(at);
     }
 
-    public double getLiquidStarlightAmount() {
-        return mbStarlightAmount;
+    public double getFluidAmount() {
+        return mbFluidAmount;
+    }
+
+    @Nullable
+    public Fluid getHeldFluid() {
+        return heldFluid;
     }
 
     public float getPercFilled() {
-        return (float) (mbStarlightAmount / MAX_CAPACITY);
+        return (float) (mbFluidAmount / MAX_CAPACITY);
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        compound.setDouble("mbAmount", mbStarlightAmount);
+        compound.setDouble("mbAmount", mbFluidAmount);
+        if (heldFluid != null) {
+            compound.setString("rFluid", FluidRegistry.getFluidName(heldFluid));
+        }
     }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        this.mbStarlightAmount = compound.getDouble("mbAmount");
+        this.mbFluidAmount = compound.getDouble("mbAmount");
+        if(compound.hasKey("rFluid")) {
+            this.heldFluid = FluidRegistry.getFluid(compound.getString("rFluid"));
+        } else {
+            this.heldFluid = null;
+        }
     }
 
     @Override
@@ -233,27 +255,31 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
-        int drainPotential = MathHelper.floor(Math.min(1000D, mbStarlightAmount));
+        if (heldFluid == null) return null;
+        int drainPotential = MathHelper.floor(Math.min(1000D, mbFluidAmount));
         if(doDrain) {
-            mbStarlightAmount -= drainPotential;
+            mbFluidAmount -= drainPotential;
         }
-        return new FluidStack(BlocksAS.fluidLiquidStarlight, drainPotential);
+        return new FluidStack(heldFluid, drainPotential);
     }
 
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        int drainPotential = MathHelper.floor(MathHelper.clamp(mbStarlightAmount, 0, Math.min(1000D, maxDrain)));
+        if (heldFluid == null) return null;
+
+        int drainPotential = MathHelper.floor(MathHelper.clamp(mbFluidAmount, 0, Math.min(1000D, maxDrain)));
         if(doDrain) {
-            mbStarlightAmount -= drainPotential;
+            mbFluidAmount -= drainPotential;
         }
-        return new FluidStack(BlocksAS.fluidLiquidStarlight, drainPotential);
+        return new FluidStack(heldFluid, drainPotential);
     }
 
     @Nullable
     @Override
     public FluidStack getContents() {
-        return new FluidStack(BlocksAS.fluidLiquidStarlight, MathHelper.floor(mbStarlightAmount));
+        if(heldFluid == null) return null;
+        return new FluidStack(heldFluid, MathHelper.floor(mbFluidAmount));
     }
 
     @Override
@@ -278,7 +304,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return fluidStack.getFluid() != null && fluidStack.getFluid() instanceof FluidLiquidStarlight;
+        return heldFluid != null && fluidStack.getFluid() != null && fluidStack.getFluid().equals(heldFluid);
     }
 
     public static class CatalystItemHandler extends ItemHandlerTileFiltered {
@@ -295,8 +321,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         @Override
         public boolean canInsertItem(int slot, ItemStack toAdd, @Nullable ItemStack existing) {
             if(toAdd == null) return true;
-            Item i = toAdd.getItem();
-            return i instanceof ItemWellCatalyst && ((ItemWellCatalyst) i).isCatalyst(toAdd);
+            return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing == null;
         }
 
     }

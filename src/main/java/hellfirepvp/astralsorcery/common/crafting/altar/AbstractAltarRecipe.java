@@ -77,6 +77,11 @@ public abstract class AbstractAltarRecipe {
         return ItemUtils.copyStackWithSize(out, out.stackSize);
     }
 
+    @Nullable
+    public ItemStack getOutputForMatching() {
+        return ItemUtils.copyStackWithSize(out, out.stackSize);
+    }
+
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         if(!ignoreStarlightRequirement && altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
 
@@ -191,7 +196,7 @@ public abstract class AbstractAltarRecipe {
         }
     }
 
-    //Can be used to apply modifications to items on the shapeMap.
+    //Can be used to applyServer modifications to items on the shapeMap.
     public void applyOutputModificationsServer(TileAltar ta, Random rand) {}
 
     public void onCraftServerFinish(TileAltar altar, Random rand) {}

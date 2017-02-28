@@ -11,10 +11,7 @@ package hellfirepvp.astralsorcery.common;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
-import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
-import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
-import hellfirepvp.astralsorcery.common.base.OreTypes;
-import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
+import hellfirepvp.astralsorcery.common.base.*;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -24,9 +21,7 @@ import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
 import hellfirepvp.astralsorcery.common.container.ContainerJournal;
-import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
-import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -34,22 +29,12 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
-import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
-import hellfirepvp.astralsorcery.common.registry.RegistryConstellations;
-import hellfirepvp.astralsorcery.common.registry.RegistryEntities;
-import hellfirepvp.astralsorcery.common.registry.RegistryIntegrations;
-import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.registry.RegistryPerks;
-import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
-import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
-import hellfirepvp.astralsorcery.common.registry.RegistryResearch;
-import hellfirepvp.astralsorcery.common.registry.RegistrySounds;
-import hellfirepvp.astralsorcery.common.registry.RegistryStructures;
+import hellfirepvp.astralsorcery.common.registry.*;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
@@ -76,6 +61,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -147,6 +133,11 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
+        if (RegisteredMods.MINETWEAKER.isLoaded()) {
+            AstralSorcery.log.info("Minetweaker found! Adding recipe handlers...");
+            ModIntegrationCrafttweaker.instance.load();
+        }
+
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
         MinecraftForge.TERRAIN_GEN_BUS.register(TreeCaptureHelper.eventInstance);
@@ -174,6 +165,7 @@ public class CommonProxy implements IGuiHandler {
         OreTypes.init();
         LightOreTransmutations.init();
         HerdableAnimal.init();
+        WellLiquefaction.init();
     }
 
     protected void registerTickHandlers(TickManager manager) {
@@ -195,8 +187,6 @@ public class CommonProxy implements IGuiHandler {
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 
         CraftingAccessManager.compile();
-
-        RegistryIntegrations.init();
     }
 
     public void registerVariantName(Item item, String name) {}

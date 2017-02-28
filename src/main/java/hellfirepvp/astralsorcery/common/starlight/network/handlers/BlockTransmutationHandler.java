@@ -65,7 +65,7 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         }
         ActiveTransmutation node = runningTransmutations.get(pos);
         long diff = ms - node.lastMSrec;
-        if(diff >= 18_000) node.accCharge = 0;
+        if(diff >= 15_000) node.accCharge = 0;
         node.accCharge += amount;
         node.lastMSrec = ms;
 

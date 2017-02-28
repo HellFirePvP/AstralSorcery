@@ -2,6 +2,7 @@ itemGroup.astralsorcery=Astral Sorcery
 itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
+jei.category.well=Lightwell
 jei.category.infuser=Starlight Infusion
 jei.category.transmutation=Starlight Transmutation
 jei.category.altar.discovery=Luminous Crafting Table

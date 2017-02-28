@@ -573,7 +573,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         sprite.setRefreshFunc(() -> {
                             if(isInvalid() || mode != 2 || entityIdActive == -1) return false;
                             Entity ent = world.getEntityByID(entityIdActive);
-                            return ent != null && !ent.isDead && ent instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).apply(ent);
+                            return ent != null && !ent.isDead && ent instanceof EntityItem && EntityUtils.selectItemStack(crystalAcceptor).applyServer(ent);
                         });
                         sprite.setPositionUpdateFunction((v) -> {
                             if(isInvalid() || mode != 2 || entityIdActive == -1) return v;

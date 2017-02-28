@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.starlight.network;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
-import hellfirepvp.astralsorcery.common.starlight.network.handlers.StarmetalFormHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -49,7 +48,6 @@ public class StarlightNetworkRegistry {
     }
 
     public static void setupRegistry() {
-        registerEndpoint(new StarmetalFormHandler());
         registerEndpoint(new BlockTransmutationHandler());
     }
 

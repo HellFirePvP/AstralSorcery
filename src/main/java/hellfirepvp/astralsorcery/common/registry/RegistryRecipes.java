@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CollectorCrystalRecipe;
@@ -31,6 +32,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
+import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -107,6 +109,9 @@ public class RegistryRecipes {
         initAltarRecipes();
 
         initInfusionRecipes();
+
+        InfusionRecipeRegistry.cacheLocalRecipes();
+        AltarRecipeRegistry.cacheLocalRecipes();
     }
 
     public static void initInfusionRecipes() {

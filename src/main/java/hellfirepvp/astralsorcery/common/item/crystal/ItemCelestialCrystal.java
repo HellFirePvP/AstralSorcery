@@ -48,21 +48,6 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
     }
 
     @Override
-    public Color getCatalystColor(@Nonnull ItemStack stack) {
-        return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
-    }
-
-    @Override
-    public double collectionMultiplier(@Nonnull ItemStack stack) {
-        return super.collectionMultiplier(stack) * 2;
-    }
-
-    @Override
-    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
-        return super.getShatterChanceMultiplier(stack) * 2;
-    }
-
-    @Override
     public ItemTunedCrystalBase getTunedItemVariant() {
         return ItemsAS.tunedCelestialCrystal;
     }

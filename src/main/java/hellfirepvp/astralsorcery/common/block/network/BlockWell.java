@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
+import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
@@ -79,6 +79,22 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+        TileWell tw = MiscUtils.getTileAt(world, pos, TileWell.class, true);
+        if(tw != null) {
+            if(tw.getHeldFluid() != null) {
+                return tw.getHeldFluid().getLuminosity();
+            }
+        }
+        return super.getLightValue(state, world, pos);
+    }
+
+    @Override
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return 0;
+    }
+
+    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
 
@@ -86,28 +102,28 @@ public class BlockWell extends BlockStarlightNetwork {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
                 if(tw == null) return false;
 
-                if(heldItem.getItem() instanceof ItemWellCatalyst) {
+                WellLiquefaction.LiquefactionEntry entry = WellLiquefaction.getLiquefactionEntry(heldItem);
+                if(entry != null) {
                     ItemStackHandler handle = tw.getInventoryHandler();
                     if(handle.getStackInSlot(0) != null) return false;
 
-                    ItemWellCatalyst catalyst = (ItemWellCatalyst) heldItem.getItem();
-                    if(catalyst.isCatalyst(heldItem)) {
-                        if(!worldIn.isAirBlock(pos.up())) {
-                            return false;
-                        }
+                    if(!worldIn.isAirBlock(pos.up())) {
+                        return false;
+                    }
 
-                        handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
-                        worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
+                    worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
+                    if(entry.producing instanceof FluidLiquidStarlight) {
                         //Lets assume it starts collecting right away...
                         playerIn.addStat(RegistryAchievements.achvLiqStarlight);
+                    }
 
-                        if(!playerIn.isCreative()) {
-                            heldItem.stackSize--;
-                        }
-                        if(heldItem.stackSize <= 0) {
-                            playerIn.setHeldItem(hand, null);
-                        }
+                    if(!playerIn.isCreative()) {
+                        heldItem.stackSize--;
+                    }
+                    if(heldItem.stackSize <= 0) {
+                        playerIn.setHeldItem(hand, null);
                     }
                 }
 

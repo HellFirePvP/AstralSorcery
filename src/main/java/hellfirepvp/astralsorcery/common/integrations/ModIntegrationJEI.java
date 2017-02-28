@@ -6,18 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.integrations.mods;
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
+package hellfirepvp.astralsorcery.common.integrations;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryInfuser;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.CategoryTransmutation;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.InfuserRecipeHandler;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.TransmutationRecipeHandler;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeHandler;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarConstellationRecipeHandler;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarDiscoveryRecipeHandler;
@@ -28,13 +34,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.IItemBlacklist;
-import mezz.jei.api.IJeiRuntime;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.ISubtypeRegistry;
-import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.init.Blocks;
@@ -54,6 +54,7 @@ public class ModIntegrationJEI implements IModPlugin {
 
     public static boolean jeiRegistrationPhase = true;
 
+    public static final String idWell = "astralsorcery.lightwell";
     public static final String idInfuser = "astralsorcery.infuser";
     public static final String idTransmutation = "astralsorcery.lightTransmutation";
 
@@ -62,25 +63,25 @@ public class ModIntegrationJEI implements IModPlugin {
     public static final String idAltarConstellation = "astralsorcery.altar.constellation";
 
     public static IStackHelper stackHelper;
+    public static IJeiHelpers jeiHelpers;
+    public static IRecipeRegistry recipeRegistry;
 
     @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-
-    }
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {}
 
     @Override
-    public void registerIngredients(IModIngredientRegistration registry) {
-
-    }
+    public void registerIngredients(IModIngredientRegistration registry) {}
 
     @Override
     public void register(IModRegistry registry) {
-        stackHelper = registry.getJeiHelpers().getStackHelper();
+        jeiHelpers = registry.getJeiHelpers();
+        stackHelper = jeiHelpers.getStackHelper();
         hideItems(registry.getJeiHelpers().getItemBlacklist());
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
         //REMINDER: Higher tiers *must* come before lower tiers in this list.
         registry.addRecipeCategories(
+                new CategoryWell(guiHelper),
                 new CategoryInfuser(guiHelper),
                 new CategoryTransmutation(guiHelper),
                 new CategoryAltarConstellation(guiHelper),
@@ -88,12 +89,14 @@ public class ModIntegrationJEI implements IModPlugin {
                 new CategoryAltarDiscovery(guiHelper));
 
         registry.addRecipeHandlers(
+                new WellRecipeHandler(),
                 new InfuserRecipeHandler(),
                 new TransmutationRecipeHandler(),
                 new AltarConstellationRecipeHandler(),
                 new AltarAttunementRecipeHandler(),
                 new AltarDiscoveryRecipeHandler());
 
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockWell), idWell);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lens), idTransmutation);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lensPrism), idTransmutation);
@@ -102,9 +105,9 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
 
         registry.addRecipes(InfusionRecipeRegistry.recipes);
-        List<LightOreTransmutations.Transmutation> transmutations = Lists.newArrayList(LightOreTransmutations.getRegisteredTransmutations());
-        transmutations.add(new LightOreTransmutations.Transmutation(Blocks.IRON_ORE.getDefaultState(), BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL), 200));
-        registry.addRecipes(transmutations);
+        registry.addRecipes(InfusionRecipeRegistry.mtRecipes);
+        registry.addRecipes(LightOreTransmutations.getRegisteredTransmutations());
+        registry.addRecipes(WellLiquefaction.getRegisteredLiquefactions());
 
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.DISCOVERY));
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.ATTUNEMENT));
@@ -134,7 +137,7 @@ public class ModIntegrationJEI implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-
+        recipeRegistry = jeiRuntime.getRecipeRegistry();
     }
 
 }

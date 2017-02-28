@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
-import hellfirepvp.astralsorcery.common.integrations.mods.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;

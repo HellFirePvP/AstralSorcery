@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  */
 public interface IOBJItem {
 
-    //If false is returned, getOBJModelNames will be queried to apply OBJ resource locations directly instead of remotely.
+    //If false is returned, getOBJModelNames will be queried to applyServer OBJ resource locations directly instead of remotely.
     @SideOnly(Side.CLIENT)
     default public boolean hasOBJAsSubmodelDefinition() {
         return false;

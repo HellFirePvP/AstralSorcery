@@ -101,7 +101,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
             GL11.glScaled(0.0625, 0.0625, 0.0625);
             GL11.glRotated(180, 1, 0, 0);
             GL11.glEnable(GL11.GL_BLEND);
-            Blending.DEFAULT.apply();
+            Blending.DEFAULT.applyServer();
             Color c = te.getLensColor().wrappedColor;
             GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
             renderColoredPrism();

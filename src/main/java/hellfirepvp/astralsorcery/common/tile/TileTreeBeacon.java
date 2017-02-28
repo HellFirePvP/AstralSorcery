@@ -87,7 +87,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-            int runs = MathHelper.ceil(starlightCharge / 20D);
+            int runs = MathHelper.ceil(starlightCharge / 6D);
             starlightCharge = 0D;
             for (int i = 0; i < Math.max(1, runs); i++) {
                 BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);

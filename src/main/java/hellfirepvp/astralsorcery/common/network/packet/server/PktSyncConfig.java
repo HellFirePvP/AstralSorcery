@@ -109,7 +109,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
                 field.set(null, tuple.value);
             }
         } catch (Throwable exc) {
-            AstralSorcery.log.error("Could not apply config received from server!");
+            AstralSorcery.log.error("Could not applyServer config received from server!");
             throw new RuntimeException(exc);
         }
         return null;

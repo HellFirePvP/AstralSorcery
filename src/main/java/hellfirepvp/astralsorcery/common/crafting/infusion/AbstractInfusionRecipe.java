@@ -92,6 +92,11 @@ public abstract class AbstractInfusionRecipe {
         return ItemUtils.copyStackWithSize(output, output.stackSize);
     }
 
+    @Nullable
+    public ItemStack getOutputForMatching() {
+        return ItemUtils.copyStackWithSize(output, output.stackSize);
+    }
+
     @Nonnull
     public ItemHandle getInput() {
         return input;

@@ -57,21 +57,6 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase implements I
     }
 
     @Override
-    public Color getCatalystColor(@Nonnull ItemStack stack) {
-        return BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
-    }
-
-    @Override
-    public double collectionMultiplier(@Nonnull ItemStack stack) {
-        return super.collectionMultiplier(stack) * 2;
-    }
-
-    @Override
-    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
-        return super.getShatterChanceMultiplier(stack) * 2;
-    }
-
-    @Override
     public EnumRarity getRarity(ItemStack stack) {
         return RegistryItems.rarityCelestial;
     }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -71,6 +72,13 @@ public class ItemUtils {
         if(i == null) return null;
         int meta = state.getBlock().getMetaFromState(state);
         return new ItemStack(i, 1, meta);
+    }
+
+    @Nullable
+    public static IBlockState createBlockState(ItemStack stack) {
+        Block b = Block.getBlockFromItem(stack.getItem());
+        if(b == null) return null;
+        return b.getStateFromMeta(stack.getMetadata());
     }
 
     public static List<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {
@@ -224,11 +232,16 @@ public class ItemUtils {
         return ItemStack.areItemStackTagsEqual(stack, other);
     }
 
+    public static boolean matchStackLoosely(ItemStack stack, ItemStack other) {
+        if(stack == null) return other == null;
+        return stack.isItemEqual(other);
+    }
+
     public static boolean matchesOreDict(String oreDictKey, ItemStack other) {
         List<ItemStack> stacks = OreDictionary.getOres(oreDictKey);
         for (ItemStack stack : stacks) {
             if(stack == null) continue;
-            if(matchStacks(stack, other))
+            if(matchStackLoosely(stack, other))
                 return true;
         }
         return false;

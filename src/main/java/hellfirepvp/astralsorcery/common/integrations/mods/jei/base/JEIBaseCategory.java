@@ -8,10 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.base;
 
+import com.google.common.collect.Lists;
+import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.resources.I18n;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,9 +44,18 @@ public abstract class JEIBaseCategory<T extends IRecipeWrapper> implements IReci
         return locTitle;
     }
 
+    @Nullable
+    @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        return Lists.newArrayList();
+    }
+
     @Override
     @Deprecated
-    public void setRecipe(IRecipeLayout recipeLayout, T recipeWrapper) {
-
-    }
+    public void setRecipe(IRecipeLayout recipeLayout, T recipeWrapper) {}
 }

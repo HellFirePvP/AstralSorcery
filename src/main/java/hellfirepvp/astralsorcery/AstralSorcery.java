@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
+import hellfirepvp.astralsorcery.common.registry.RegisteredMods;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;

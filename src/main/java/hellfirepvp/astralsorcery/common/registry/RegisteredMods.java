@@ -6,17 +6,36 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.integrations;
+package hellfirepvp.astralsorcery.common.registry;
+
+import net.minecraftforge.fml.common.Loader;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IModIntegration
+ * Class: RegisteredMods
  * Created by HellFirePvP
- * Date: 10.01.2017 / 23:20
+ * Date: 27.02.2017 / 03:30
  */
-public interface IModIntegration {
+public enum  RegisteredMods {
 
-    public void init();
+    MINETWEAKER("MineTweaker3"),
+    JEI("JEI");
+
+    private final String modid;
+    private final boolean isLoaded;
+
+    private RegisteredMods(String modid) {
+        this.modid = modid;
+        this.isLoaded = Loader.isModLoaded(modid);
+    }
+
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public String getModid() {
+        return modid;
+    }
 
 }

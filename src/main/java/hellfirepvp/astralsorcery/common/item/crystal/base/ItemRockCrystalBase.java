@@ -8,11 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
-import hellfirepvp.astralsorcery.common.item.base.ItemWellCatalyst;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -38,7 +36,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 21:38
  */
-public abstract class ItemRockCrystalBase extends Item implements IGrindable, ItemWellCatalyst, ItemHighlighted {
+public abstract class ItemRockCrystalBase extends Item implements IGrindable, ItemHighlighted {
 
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
@@ -86,26 +84,6 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
         crystal.motionY = location.motionY;
         crystal.motionZ = location.motionZ;
         return crystal;
-    }
-
-    @Override
-    public boolean isCatalyst(@Nonnull ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public double collectionMultiplier(@Nonnull ItemStack stack) {
-        return 0.333;
-    }
-
-    @Override
-    public Color getCatalystColor(@Nonnull ItemStack stack) {
-        return BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor;
-    }
-
-    @Override
-    public double getShatterChanceMultiplier(@Nonnull ItemStack stack) {
-        return 12;
     }
 
     @Override

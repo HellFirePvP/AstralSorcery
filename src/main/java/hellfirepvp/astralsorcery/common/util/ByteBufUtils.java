@@ -9,9 +9,19 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.UUID;
 
 /**
@@ -69,6 +79,60 @@ public class ByteBufUtils {
         int y = buf.readInt();
         int z = buf.readInt();
         return new BlockPos(x, y, z);
+    }
+
+    public static void writeItemStack(ByteBuf byteBuf, @Nullable ItemStack stack) {
+        boolean defined = stack != null;
+        byteBuf.writeBoolean(defined);
+        if(defined) {
+            NBTTagCompound tag = new NBTTagCompound();
+            stack.writeToNBT(tag);
+            writeNBTTag(byteBuf, tag);
+        }
+    }
+
+    @Nullable
+    public static ItemStack readItemStack(ByteBuf byteBuf) {
+        boolean defined = byteBuf.readBoolean();
+        if(defined) {
+            return ItemStack.loadItemStackFromNBT(readNBTTag(byteBuf));
+        } else {
+            return null;
+        }
+    }
+
+    public static void writeFluidStack(ByteBuf byteBuf, @Nullable FluidStack stack) {
+        boolean defined = stack != null;
+        byteBuf.writeBoolean(defined);
+        if(defined) {
+            NBTTagCompound tag = new NBTTagCompound();
+            stack.writeToNBT(tag);
+            writeNBTTag(byteBuf, tag);
+        }
+    }
+
+    @Nullable
+    public static FluidStack readFluidStack(ByteBuf byteBuf) {
+        boolean defined = byteBuf.readBoolean();
+        if(defined) {
+            return FluidStack.loadFluidStackFromNBT(readNBTTag(byteBuf));
+        } else {
+            return null;
+        }
+    }
+
+    public static void writeNBTTag(ByteBuf byteBuf, @Nonnull NBTTagCompound tag) {
+        try (DataOutputStream dos = new DataOutputStream(new ByteBufOutputStream(byteBuf))) {
+            CompressedStreamTools.write(tag, dos);
+        } catch (Exception exc) {}
+    }
+
+    @Nonnull
+    public static NBTTagCompound readNBTTag(ByteBuf byteBuf) {
+        try (DataInputStream dis = new DataInputStream(new ByteBufInputStream(byteBuf))) {
+            return CompressedStreamTools.read(dis);
+        } catch (Exception exc) {}
+        throw new IllegalStateException("Could not load NBT Tag from incoming byte buffer!");
     }
 
 }

@@ -38,8 +38,8 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ItemStack in = ItemUtils.createBlockStack(transmutation.input);
-        ItemStack out = ItemUtils.createBlockStack(transmutation.output);
+        ItemStack in = transmutation.getInputDisplayStack();
+        ItemStack out = transmutation.getOutputDisplayStack();
 
         if(in != null && out != null) {
             ingredients.setInput(ItemStack.class, in);
