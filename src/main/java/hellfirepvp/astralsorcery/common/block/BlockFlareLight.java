@@ -56,7 +56,7 @@ public class BlockFlareLight extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return NULL_AABB;
+        return FULL_BLOCK_AABB;
     }
 
     @Override

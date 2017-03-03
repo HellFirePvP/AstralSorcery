@@ -55,7 +55,7 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
                         Block b = Block.getBlockFromItem(blockStack.getItem());
                         if(b != null) {
                             player.getEntityWorld().setBlockState(pos, Block.getBlockFromItem(blockStack.getItem()).getStateFromMeta(blockStack.getItemDamage()));
-                            addAlignmentCharge(player, 0.3);
+                            addAlignmentCharge(player, 0.45);
                         }
                     }
                 }

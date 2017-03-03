@@ -44,7 +44,7 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttribute {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world) {
-        if(canGenerate(chunkX, chunkZ, world, random)) {
+        if(canGenerateAtAll(chunkX, chunkZ, world, random)) {
             BlockPos pos = getGenerationPosition(chunkX, chunkZ, world, random);
             if(fulfillsSpecificConditions(pos, world, random)) {
                 generate(pos, world, random);
@@ -58,7 +58,7 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttribute {
 
     public abstract BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand);
 
-    public boolean canGenerate(int chX, int chZ, World world, Random rand) {
+    public boolean canGenerateAtAll(int chX, int chZ, World world, Random rand) {
         if(!DataWorldSkyHandlers.hasWorldHandler(world, Side.SERVER)) return false;
         return cfgEntry.shouldGenerate() && cfgEntry.tryGenerate(rand);
     }

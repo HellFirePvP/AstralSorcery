@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.gui.base.GuiTileBase;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -65,7 +66,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 23:51
  */
-public class GuiTelescope extends GuiWHScreen {
+public class GuiTelescope extends GuiTileBase {
 
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
     private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");
@@ -80,7 +81,7 @@ public class GuiTelescope extends GuiWHScreen {
     private SkyConstellationDistribution currentInformation = null;
 
     public GuiTelescope(EntityPlayer player, TileTelescope e) {
-        super(280, 280);
+        super(e, 280, 280);
         this.owningPlayer = player;
         this.guiOwner = e;
         this.rotation = e.getRotation();

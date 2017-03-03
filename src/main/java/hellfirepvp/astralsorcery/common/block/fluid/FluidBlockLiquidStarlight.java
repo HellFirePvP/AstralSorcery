@@ -10,21 +10,31 @@ package hellfirepvp.astralsorcery.common.block.fluid;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -62,8 +72,60 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
     }
 
     @Override
-    protected boolean canFlowInto(IBlockAccess world, BlockPos pos) {
-        return super.canFlowInto(world, pos);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+        super.neighborChanged(state, world, pos, neighborBlock);
+
+        interactWithAdjacent(world, pos, state);
+    }
+
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(world, pos, state);
+
+        interactWithAdjacent(world, pos, state);
+    }
+
+    private void interactWithAdjacent(World world, BlockPos pos, IBlockState thisState) {
+        boolean shouldCreateBlock = false;
+        boolean isCold = true;
+
+        for (EnumFacing side : EnumFacing.VALUES) {
+            if (side != EnumFacing.DOWN) {
+                IBlockState offset = world.getBlockState(pos.offset(side));
+                if (offset.getMaterial().isLiquid() && !(offset.getBlock() instanceof FluidBlockLiquidStarlight) && (offset.getBlock() instanceof BlockFluidBase || offset.getBlock() instanceof BlockLiquid)) {
+                    int temp = offset.getBlock() instanceof BlockFluidBase ?
+                            BlockFluidBase.getTemperature(world, pos.offset(side)) :
+                            (offset.getMaterial() == Material.LAVA ? FluidRegistry.LAVA.getTemperature() :
+                                    offset.getMaterial() == Material.WATER ? FluidRegistry.WATER.getTemperature() : 100);
+                    isCold = temp <= 300; //colder or equals water.
+                    shouldCreateBlock = true;
+                    break;
+                }
+            }
+        }
+
+        if (shouldCreateBlock) {
+            if (isCold) {
+                world.setBlockState(pos, Blocks.ICE.getDefaultState());
+            } else {
+                if(world.rand.nextInt(600) == 0) {
+                    world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState().withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));
+                } else {
+                    world.setBlockState(pos, Blocks.SAND.getDefaultState());
+                }
+            }
+
+            world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+            for (int i = 0; i < 10; ++i) {
+                world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, pos.getX() + Math.random(), pos.getY() + Math.random(), pos.getZ() + Math.random(), 0.0D, 0.0D, 0.0D);
+            }
+        }
+
+    }
+
+    @Override
+    public boolean displaceIfPossible(World world, BlockPos pos) {
+        return !world.getBlockState(pos).getMaterial().isLiquid() && super.displaceIfPossible(world, pos);
     }
 
     @Override

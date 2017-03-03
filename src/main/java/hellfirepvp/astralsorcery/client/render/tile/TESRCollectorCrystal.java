@@ -54,7 +54,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         sBase ^= (long) te.getPos().getX();
         sBase ^= (long) te.getPos().getY();
         sBase ^= (long) te.getPos().getZ();
-        Color c = type.displayColor;
+        Color c = type == null ? BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor : type.displayColor;
         if(te.isEnhanced()) {
             RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 1.4F, 50, 25);
             RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, Color.WHITE, sBase, ClientScheduler.getClientTick(), 40, 2, 15, 15);

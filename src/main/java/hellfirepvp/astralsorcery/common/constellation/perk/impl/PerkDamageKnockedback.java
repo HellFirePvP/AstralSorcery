@@ -32,7 +32,7 @@ public class PerkDamageKnockedback extends ConstellationPerk {
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
         if(isCooldownActiveForPlayer(attacker)) {
-            addAlignmentCharge(attacker, 0.2 * Math.max(0, dmgIn));
+            addAlignmentCharge(attacker, 0.4 * Math.max(0, dmgIn));
             dmgIn *= dmgMultiplier;
         }
         return dmgIn;

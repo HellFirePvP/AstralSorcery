@@ -32,7 +32,7 @@ public class PerkDamageOnKill extends ConstellationPerk {
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
         if(isCooldownActiveForPlayer(attacker)) {
-            addAlignmentCharge(attacker, 1);
+            addAlignmentCharge(attacker, 2);
             dmgIn *= dmgMultiplier;
         }
         return dmgIn;

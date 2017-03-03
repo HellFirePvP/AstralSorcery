@@ -71,7 +71,7 @@ public class TileCollectorCrystal extends TileSourceBase {
             }
         }
 
-        if(world.isRemote && enhanced && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+        if(world.isRemote && isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
             playEnhancedEffects();
         }
     }

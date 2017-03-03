@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
+import hellfirepvp.astralsorcery.client.gui.base.GuiInventoryContainerBase;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
 import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
@@ -17,7 +18,6 @@ import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -30,12 +30,12 @@ import net.minecraft.entity.player.InventoryPlayer;
  * Created by HellFirePvP
  * Date: 16.10.2016 / 19:28
  */
-public abstract class GuiAltarBase extends GuiContainer {
+public abstract class GuiAltarBase extends GuiInventoryContainerBase {
 
     public final ContainerAltarBase containerAltarBase;
 
     public GuiAltarBase(InventoryPlayer playerInv, TileAltar tileAltar) {
-        super(buildContainer(playerInv, tileAltar));
+        super(buildContainer(playerInv, tileAltar), tileAltar);
         this.containerAltarBase = (ContainerAltarBase) super.inventorySlots;
     }
 

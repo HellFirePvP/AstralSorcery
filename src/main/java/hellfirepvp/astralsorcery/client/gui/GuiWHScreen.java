@@ -76,6 +76,10 @@ public abstract class GuiWHScreen extends GuiScreen {
 
         if(keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
             Minecraft.getMinecraft().displayGuiScreen(null);
+
+            if(Minecraft.getMinecraft().currentScreen == null) {
+                Minecraft.getMinecraft().setIngameFocus();
+            }
         }
     }
 
@@ -85,6 +89,10 @@ public abstract class GuiWHScreen extends GuiScreen {
 
         if(mouseButton == 1 && !handleRightClickClose(mouseX, mouseY)) {
             Minecraft.getMinecraft().displayGuiScreen(null);
+
+            if(Minecraft.getMinecraft().currentScreen == null) {
+                Minecraft.getMinecraft().setIngameFocus();
+            }
         }
     }
 

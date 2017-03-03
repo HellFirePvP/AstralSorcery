@@ -545,13 +545,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         private final IAltarMatcher matcher;
         private boolean canLevelToByExpGain = true;
 
-        private AltarLevel(int levelExp, IAltarMatcher matcher) {
+        AltarLevel(int levelExp, IAltarMatcher matcher) {
             this.totalExpNeededToLevelUp = levelExp;
             this.matcher = matcher;
             this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
 
-        private AltarLevel(int levelExp, IAltarMatcher matcher, boolean canLevelToByExpGain) {
+        AltarLevel(int levelExp, IAltarMatcher matcher, boolean canLevelToByExpGain) {
             this.totalExpNeededToLevelUp = levelExp;
             this.canLevelToByExpGain = canLevelToByExpGain;
             this.matcher = matcher;
