@@ -128,8 +128,8 @@ public class RegistryItems {
         skyResonator = registerItem(new ItemSkyResonator());
         shiftingStar = registerItem(new ItemShiftingStar());
         //roseBranchBow = registerItem(new ItemRoseBranchBow());
-        //architectWand = registerItem(new ItemArchitectWand());
-        //exchangeWand = registerItem(new ItemExchangeWand());
+        architectWand = registerItem(new ItemArchitectWand());
+        exchangeWand = registerItem(new ItemExchangeWand());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
