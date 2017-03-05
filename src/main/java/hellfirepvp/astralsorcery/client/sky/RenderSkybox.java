@@ -44,6 +44,8 @@ public class RenderSkybox extends IRenderHandler {
             astralSky.setInitialized(world.getWorldInfo().getSeed());
         }
 
+        //if(true) return;
+
         if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
             if(otherSkyRenderer != null) {
                 otherSkyRenderer.render(partialTicks, world, mc);

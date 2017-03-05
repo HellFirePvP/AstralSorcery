@@ -26,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Random;
 
@@ -63,58 +64,150 @@ public class StructureDesertShrine extends StructureBlockArray {
     }
 
     private void placeSand(World world, BlockPos center) {
-        sandWithChanceOffset( 3, 3,  4, world, center, 0.5);
-        sandWithChanceOffset( 4, 3,  3, world, center, 0.5);
-        sandWithChanceOffset( 3, 3,  2, world, center, 0.5);
-        sandWithChanceOffset( 2, 3,  3, world, center, 0.5);
-        sandWithChanceOffset(-3, 3,  4, world, center, 0.5);
-        sandWithChanceOffset(-4, 3,  3, world, center, 0.5);
-        sandWithChanceOffset(-3, 3,  2, world, center, 0.5);
-        sandWithChanceOffset(-2, 3,  3, world, center, 0.5);
-        sandWithChanceOffset( 3, 3, -4, world, center, 0.5);
-        sandWithChanceOffset( 4, 3, -3, world, center, 0.5);
-        sandWithChanceOffset( 3, 3, -2, world, center, 0.5);
-        sandWithChanceOffset( 2, 3, -3, world, center, 0.5);
-        sandWithChanceOffset(-3, 3, -4, world, center, 0.5);
-        sandWithChanceOffset(-4, 3, -3, world, center, 0.5);
-        sandWithChanceOffset(-3, 3, -2, world, center, 0.5);
-        sandWithChanceOffset(-2, 3, -3, world, center, 0.5);
+        Block marble = BlocksAS.blockMarble;
+        IBlockState mch = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
+        IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
 
-        sandWithChanceOffset( 1, 2,  1, world, center, 0.5);
-        sandWithChanceOffset(-1, 2,  1, world, center, 0.5);
-        sandWithChanceOffset( 1, 2, -1, world, center, 0.5);
-        sandWithChanceOffset(-1, 2, -1, world, center, 0.5);
+        placeBlockCube(world, center, -4, 1, -4, 4, 1, 4);
 
-        sandWithChanceOffset( 0, 3,  1, world, center, 0.4);
-        sandWithChanceOffset( 1, 3,  0, world, center, 0.4);
-        sandWithChanceOffset( 0, 3, -1, world, center, 0.4);
-        sandWithChanceOffset(-1, 3,  0, world, center, 0.4);
-        sandWithChanceOffset( 0, 2,  2, world, center, 0.4);
-        sandWithChanceOffset( 2, 2,  0, world, center, 0.4);
-        sandWithChanceOffset( 0, 2, -2, world, center, 0.4);
-        sandWithChanceOffset(-2, 2,  0, world, center, 0.4);
+        world.setBlockState(center.add(0, 1, 0), mpl);
+        world.setBlockState(center.add(0, 2, 0), mch);
 
-        sandWithChanceOffset( 2, 2,  2, world, center, 0.3);
-        sandWithChanceOffset( 4, 2,  2, world, center, 0.3);
-        sandWithChanceOffset( 2, 2,  4, world, center, 0.3);
-        sandWithChanceOffset( 4, 2,  4, world, center, 0.3);
-        sandWithChanceOffset( 2, 2, -2, world, center, 0.3);
-        sandWithChanceOffset( 4, 2, -2, world, center, 0.3);
-        sandWithChanceOffset( 2, 2, -4, world, center, 0.3);
-        sandWithChanceOffset( 4, 2, -4, world, center, 0.3);
-        sandWithChanceOffset(-2, 2,  2, world, center, 0.3);
-        sandWithChanceOffset(-4, 2,  2, world, center, 0.3);
-        sandWithChanceOffset(-2, 2,  4, world, center, 0.3);
-        sandWithChanceOffset(-4, 2,  4, world, center, 0.3);
-        sandWithChanceOffset(-2, 2, -2, world, center, 0.3);
-        sandWithChanceOffset(-4, 2, -2, world, center, 0.3);
-        sandWithChanceOffset(-2, 2, -4, world, center, 0.3);
-        sandWithChanceOffset(-4, 2, -4, world, center, 0.3);
+        world.setBlockState(center.add(3, 1, 3), mpl);
+        world.setBlockState(center.add(3, 2, 3), mpl);
+        world.setBlockState(center.add(3, 3, 3), mch);
+
+        world.setBlockState(center.add(-3, 1,  3), mpl);
+        world.setBlockState(center.add(-3, 2,  3), mpl);
+        world.setBlockState(center.add(-3, 3,  3), mch);
+
+        world.setBlockState(center.add(-3, 1, -3), mpl);
+        world.setBlockState(center.add(-3, 2, -3), mpl);
+        world.setBlockState(center.add(-3, 3, -3), mch);
+
+        world.setBlockState(center.add(3, 1, -3), mpl);
+        world.setBlockState(center.add(3, 2, -3), mpl);
+        world.setBlockState(center.add(3, 3, -3), mch);
+
+        topBlockWithOffset(3, 4, 3, world, center, 1F);
+        topBlockWithOffset(-3, 4,  3, world, center, 1F);
+        topBlockWithOffset( 3, 4, -3, world, center, 1F);
+        topBlockWithOffset(-3, 4, -3, world, center, 1F);
+        topBlockWithOffset( 0, 3,  0, world, center, 1F);
+
+        topBlockWithOffset( 1, 2,  0, world, center, 1F);
+        topBlockWithOffset(-1, 2,  0, world, center, 1F);
+        topBlockWithOffset( 0, 2,  1, world, center, 1F);
+        topBlockWithOffset( 0, 2, -1, world, center, 1F);
+
+        topBlockWithOffset(-3, 2, -4, world, center, 1F);
+        topBlockWithOffset(-4, 2, -3, world, center, 1F);
+        topBlockWithOffset(-3, 2, -2, world, center, 1F);
+        topBlockWithOffset(-2, 2, -3, world, center, 1F);
+        topBlockWithOffset(-3, 2,  4, world, center, 1F);
+        topBlockWithOffset(-4, 2,  3, world, center, 1F);
+        topBlockWithOffset(-3, 2,  2, world, center, 1F);
+        topBlockWithOffset(-2, 2,  3, world, center, 1F);
+        topBlockWithOffset( 3, 2, -4, world, center, 1F);
+        topBlockWithOffset( 4, 2, -3, world, center, 1F);
+        topBlockWithOffset( 3, 2, -2, world, center, 1F);
+        topBlockWithOffset( 2, 2, -3, world, center, 1F);
+        topBlockWithOffset( 3, 2,  4, world, center, 1F);
+        topBlockWithOffset( 4, 2,  3, world, center, 1F);
+        topBlockWithOffset( 3, 2,  2, world, center, 1F);
+        topBlockWithOffset( 2, 2,  3, world, center, 1F);
+
+
+        topBlockWithOffset( 3, 3,  4, world, center, 0.5);
+        topBlockWithOffset( 4, 3,  3, world, center, 0.5);
+        topBlockWithOffset( 3, 3,  2, world, center, 0.5);
+        topBlockWithOffset( 2, 3,  3, world, center, 0.5);
+        topBlockWithOffset(-3, 3,  4, world, center, 0.5);
+        topBlockWithOffset(-4, 3,  3, world, center, 0.5);
+        topBlockWithOffset(-3, 3,  2, world, center, 0.5);
+        topBlockWithOffset(-2, 3,  3, world, center, 0.5);
+        topBlockWithOffset( 3, 3, -4, world, center, 0.5);
+        topBlockWithOffset( 4, 3, -3, world, center, 0.5);
+        topBlockWithOffset( 3, 3, -2, world, center, 0.5);
+        topBlockWithOffset( 2, 3, -3, world, center, 0.5);
+        topBlockWithOffset(-3, 3, -4, world, center, 0.5);
+        topBlockWithOffset(-4, 3, -3, world, center, 0.5);
+        topBlockWithOffset(-3, 3, -2, world, center, 0.5);
+        topBlockWithOffset(-2, 3, -3, world, center, 0.5);
+
+        topBlockWithOffset( 1, 2,  1, world, center, 0.5);
+        topBlockWithOffset(-1, 2,  1, world, center, 0.5);
+        topBlockWithOffset( 1, 2, -1, world, center, 0.5);
+        topBlockWithOffset(-1, 2, -1, world, center, 0.5);
+
+        topBlockWithOffset( 0, 3,  1, world, center, 0.4);
+        topBlockWithOffset( 1, 3,  0, world, center, 0.4);
+        topBlockWithOffset( 0, 3, -1, world, center, 0.4);
+        topBlockWithOffset(-1, 3,  0, world, center, 0.4);
+        topBlockWithOffset( 0, 2,  2, world, center, 0.4);
+        topBlockWithOffset( 2, 2,  0, world, center, 0.4);
+        topBlockWithOffset( 0, 2, -2, world, center, 0.4);
+        topBlockWithOffset(-2, 2,  0, world, center, 0.4);
+
+        topBlockWithOffset( 2, 2,  2, world, center, 0.3);
+        topBlockWithOffset( 4, 2,  2, world, center, 0.3);
+        topBlockWithOffset( 2, 2,  4, world, center, 0.3);
+        topBlockWithOffset( 4, 2,  4, world, center, 0.3);
+        topBlockWithOffset( 2, 2, -2, world, center, 0.3);
+        topBlockWithOffset( 4, 2, -2, world, center, 0.3);
+        topBlockWithOffset( 2, 2, -4, world, center, 0.3);
+        topBlockWithOffset( 4, 2, -4, world, center, 0.3);
+        topBlockWithOffset(-2, 2,  2, world, center, 0.3);
+        topBlockWithOffset(-4, 2,  2, world, center, 0.3);
+        topBlockWithOffset(-2, 2,  4, world, center, 0.3);
+        topBlockWithOffset(-4, 2,  4, world, center, 0.3);
+        topBlockWithOffset(-2, 2, -2, world, center, 0.3);
+        topBlockWithOffset(-4, 2, -2, world, center, 0.3);
+        topBlockWithOffset(-2, 2, -4, world, center, 0.3);
+        topBlockWithOffset(-4, 2, -4, world, center, 0.3);
     }
 
-    private void sandWithChanceOffset(int x, int y, int z, World world, BlockPos center, double chance) {
+    private void topBlockWithOffset(int x, int y, int z, World world, BlockPos center, double chance) {
         if(rand.nextFloat() <= chance) {
-            world.setBlockState(center.add(x, y, z), Blocks.SAND.getDefaultState());
+            BlockPos at = center.add(x, y, z);
+            IBlockState top = world.getBiome(at).topBlock;
+            world.setBlockState(at, top);
+        }
+    }
+
+
+    private void placeBlockCube(World world, BlockPos offset, int ox, int oy, int oz, int tx, int ty, int tz) {
+        int lx, ly, lz;
+        int hx, hy, hz;
+        if(ox < tx) {
+            lx = ox;
+            hx = tx;
+        } else {
+            lx = tx;
+            hx = ox;
+        }
+        if(oy < ty) {
+            ly = oy;
+            hy = ty;
+        } else {
+            ly = ty;
+            hy = oy;
+        }
+        if(oz < tz) {
+            lz = oz;
+            hz = tz;
+        } else {
+            lz = tz;
+            hz = oz;
+        }
+
+        for (int xx = lx; xx <= hx; xx++) {
+            for (int zz = lz; zz <= hz; zz++) {
+                for (int yy = ly; yy <= hy; yy++) {
+                    BlockPos at = offset.add(xx, yy, zz);
+                    world.setBlockState(at, world.getBiome(at).topBlock);
+                }
+            }
         }
     }
 
@@ -163,59 +256,6 @@ public class StructureDesertShrine extends StructureBlockArray {
         addBlock( 3, -3,  0, Blocks.WATER.getDefaultState());
         addBlock( 0, -3, -3, Blocks.WATER.getDefaultState());
         addBlock( 0, -3,  3, Blocks.WATER.getDefaultState());
-
-        addBlockCube(sand, -4, 1, -4,  4, 1,  4);
-
-        addBlock(0, 1, 0, mpl);
-        addBlock(0, 2, 0, mch);
-
-        addBlock( 3, 1,  3, mpl);
-        addBlock( 3, 2,  3, mpl);
-        addBlock( 3, 3,  3, mch);
-
-        addBlock(-3, 1,  3, mpl);
-        addBlock(-3, 2,  3, mpl);
-        addBlock(-3, 3,  3, mch);
-
-        addBlock(-3, 1, -3, mpl);
-        addBlock(-3, 2, -3, mpl);
-        addBlock(-3, 3, -3, mch);
-
-        addBlock( 3, 1, -3, mpl);
-        addBlock( 3, 2, -3, mpl);
-        addBlock( 3, 3, -3, mch);
-
-        addBlock( 3, 4,  3, sand);
-        addBlock(-3, 4,  3, sand);
-        addBlock( 3, 4, -3, sand);
-        addBlock(-3, 4, -3, sand);
-        addBlock( 0, 3,  0, sand);
-
-        addBlock( 1, 2,  0, sand);
-        addBlock(-1, 2,  0, sand);
-        addBlock( 0, 2,  1, sand);
-        addBlock( 0, 2, -1, sand);
-
-
-        addBlock(-3, 2, -4, sand);
-        addBlock(-4, 2, -3, sand);
-        addBlock(-3, 2, -2, sand);
-        addBlock(-2, 2, -3, sand);
-
-        addBlock(-3, 2,  4, sand);
-        addBlock(-4, 2,  3, sand);
-        addBlock(-3, 2,  2, sand);
-        addBlock(-2, 2,  3, sand);
-
-        addBlock( 3, 2, -4, sand);
-        addBlock( 4, 2, -3, sand);
-        addBlock( 3, 2, -2, sand);
-        addBlock( 2, 2, -3, sand);
-
-        addBlock( 3, 2,  4, sand);
-        addBlock( 4, 2,  3, sand);
-        addBlock( 3, 2,  2, sand);
-        addBlock( 2, 2,  3, sand);
 
         TileEntityCallback lootCallback = new TileEntityCallback() {
             @Override

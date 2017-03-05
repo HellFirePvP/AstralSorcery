@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
@@ -63,7 +64,9 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     public void onUpdate() {
         super.onUpdate();
 
-        checkIncreaseConditions();
+        if (Config.craftingLiqCrystalGrowth) {
+            checkIncreaseConditions();
+        }
     }
 
     private void checkIncreaseConditions() {

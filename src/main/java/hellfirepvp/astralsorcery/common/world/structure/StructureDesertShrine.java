@@ -26,7 +26,7 @@ import java.util.Random;
 public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     public StructureDesertShrine() {
-        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine);
+        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, BiomeDictionary.Type.SANDY);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return Math.abs(dY - pos.getY()) <= 2 && isDesertBiome(world, pos);
+        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= 2 && isDesertBiome(world, pos);
     }
 
     private boolean isDesertBiome(World world, BlockPos pos) {
@@ -63,10 +63,10 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         Biome b = world.getBiome(pos);
         BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
         if(types == null || types.length == 0) return false;
-        boolean mountain = false;
+        boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
-            if(t.equals(BiomeDictionary.Type.SANDY)) mountain = true;
+            if (cfgEntry.getTypes().contains(t)) applicable = true;
         }
-        return mountain;
+        return applicable;
     }
 }

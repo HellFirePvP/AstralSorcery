@@ -8,8 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.data.config.entry;
 
+import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -24,16 +30,60 @@ public class WorldStructureEntry extends ConfigEntry {
     private int generationChance = Integer.MAX_VALUE;
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = false;
+    private BiomeDictionary.Type[] defaultBiomeTypes;
+    private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
+    private int minY, maxY;
 
-    public WorldStructureEntry(String key) {
+    public WorldStructureEntry(String key, BiomeDictionary.Type[] defaultBiomeTypes) {
         super(Section.WORLDGEN, key);
+        this.defaultBiomeTypes = defaultBiomeTypes;
+        this.minY = 0;
+        this.maxY = 255;
     }
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        doGenerate = cfg.getBoolean(getKey(), getConfigurationSection(), true, "Generate " + getKey());
-        doIgnoreBiomeSpecifications = cfg.getBoolean(getKey() + "IgnoreBiomes", getConfigurationSection(), false, "Ignore Biome specifications when trything to generate " + getKey());
-        generationChance = cfg.getInt(getKey() + "Chance", getConfigurationSection(), 140, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
+        doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
+        doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), false, "Ignore Biome specifications when trying to generate " + getKey());
+        generationChance = cfg.getInt("Chance", getConfigurationSection(), 140, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
+        minY = cfg.getInt("MinY" , getConfigurationSection(), 0, 0, 255, "Set the minimum Y level to spawn this structure on");
+        maxY = cfg.getInt("MaxY" , getConfigurationSection(), 255, 0, 255, "Set the maximum Y level to spawn this structure on");
+        String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), getDefaultBiomeTypes(), "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
+        List<BiomeDictionary.Type> resolvedTypes = new LinkedList<>();
+        for (String s : strTypes) {
+            try {
+                resolvedTypes.add(BiomeDictionary.Type.valueOf(s));
+            } catch (Exception e) {
+                AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+            }
+        }
+        biomeTypes = Lists.newArrayList(resolvedTypes);
+    }
+
+    @Override
+    public String getConfigurationSection() {
+        return super.getConfigurationSection() + "." + getKey();
+    }
+
+    private String[] getDefaultBiomeTypes() {
+        String[] def = new String[defaultBiomeTypes.length];
+        for (int i = 0; i < defaultBiomeTypes.length; i++) {
+            BiomeDictionary.Type t = defaultBiomeTypes[i];
+            def[i] = t.name();
+        }
+        return def;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public List<BiomeDictionary.Type> getTypes() {
+        return biomeTypes;
     }
 
     public boolean shouldGenerate() {

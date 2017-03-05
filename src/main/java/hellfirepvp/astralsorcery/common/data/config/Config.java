@@ -43,6 +43,10 @@ public class Config {
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
+    @Sync public static boolean craftingLiqResoGem = true;
+    @Sync public static boolean craftingLiqCrystalGrowth = true;
+    @Sync public static boolean craftingLiqCelestialCrystalForm = true;
+
     public static boolean enableRetroGen = false;
     public static boolean enableChunkVersioning = true;
 
@@ -115,6 +119,10 @@ public class Config {
         architectWandUseCost = latestConfig.getFloat("wandCost_architect", "wands", 0.4F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
         builderWandUseCost = latestConfig.getFloat("wandCost_builder", "wands", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
         exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "wands", 0.3F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
+
+        craftingLiqResoGem = latestConfig.getBoolean("liquidStarlightResoGem", "crafting", true, "Set this to false to disable Aquamarine -> Resonant Gem in liquid starlight.");
+        craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
+        craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");

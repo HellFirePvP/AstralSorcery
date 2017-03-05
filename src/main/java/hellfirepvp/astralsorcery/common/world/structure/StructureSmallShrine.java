@@ -26,7 +26,7 @@ import java.util.Random;
 public class StructureSmallShrine extends WorldGenAttributeStructure {
 
     public StructureSmallShrine() {
-        super(0, "smallShrine", () -> MultiBlockArrays.smallShrine);
+        super(0, "smallShrine", () -> MultiBlockArrays.smallShrine, BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        if(Math.abs(dY - pos.getY()) <= 1 && isApplicableBiome(world, pos)) {
+        if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= 1 && isApplicableBiome(world, pos)) {
             return !world.getBlockState(new BlockPos(pos.getX(), dY, pos.getZ())).getMaterial().isLiquid();
         }
         return false;
@@ -60,8 +60,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
         if(types == null || types.length == 0) return false;
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
-            if(t.equals(BiomeDictionary.Type.PLAINS)) applicable = true;
-            if(t.equals(BiomeDictionary.Type.FOREST)) applicable = true;
+            if (cfgEntry.getTypes().contains(t)) applicable = true;
         }
         return applicable;
     }

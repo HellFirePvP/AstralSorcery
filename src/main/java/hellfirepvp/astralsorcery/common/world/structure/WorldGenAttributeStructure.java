@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Random;
@@ -31,9 +32,9 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttribute {
     protected final WorldStructureEntry cfgEntry;
     private StructureQuery query;
 
-    public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query) {
+    public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query, BiomeDictionary.Type... types) {
         super(attributeVersion);
-        this.cfgEntry = new WorldStructureEntry(entry);
+        this.cfgEntry = new WorldStructureEntry(entry, types);
         Config.addDynamicEntry(cfgEntry);
         this.query = query;
     }

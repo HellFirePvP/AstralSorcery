@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.entities;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -57,7 +58,9 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
     public void onUpdate() {
         super.onUpdate();
 
-        checkIncreaseConditions();
+        if (Config.craftingLiqResoGem) {
+            checkIncreaseConditions();
+        }
     }
 
     private void checkIncreaseConditions() {
