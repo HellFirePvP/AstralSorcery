@@ -102,7 +102,7 @@ public class EventHandlerServer {
             ServerData.reloadDataFromSaveHandler(w.getSaveHandler());
             isDataInitialized = true;
         }
-        if(DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER)) {
+        if(DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
             AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");

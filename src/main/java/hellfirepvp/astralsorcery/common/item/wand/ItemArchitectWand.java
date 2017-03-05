@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
+import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.ItemHandRender;
 import hellfirepvp.astralsorcery.common.item.ItemHudRender;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -66,7 +67,7 @@ import java.util.*;
  * Created by HellFirePvP
  * Date: 06.02.2017 / 22:49
  */
-public class ItemArchitectWand extends Item implements ItemHandRender, ItemHudRender, ItemAlignmentChargeConsumer {
+public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRender, ItemHudRender, ItemAlignmentChargeConsumer {
 
     private static final double architectRange = 60.0D;
 
@@ -79,18 +80,13 @@ public class ItemArchitectWand extends Item implements ItemHandRender, ItemHudRe
     @Override
     @SideOnly(Side.CLIENT)
     public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks) {
-        IBlockState stored = getStoredState(lastCacheInstance);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR)) return;
-        Item i = Item.getItemFromBlock(stored.getBlock());
-        if(i == null) return;
-        int dmg = stored.getBlock().getMetaFromState(stored);
+        ItemStack blockStackStored = getStoredStateAsStack(lastCacheInstance);
+        if(blockStackStored == null) return;
 
         int amtFound = 0;
-        java.util.List<ItemStack> stacks = ItemUtils.scanInventoryFor(new InvWrapper(Minecraft.getMinecraft().player.inventory), i);
+        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
-            if(stack.getItemDamage() == dmg) {
-                amtFound += stack.stackSize;
-            }
+            amtFound += stack.stackSize;
         }
 
         int height  =  26;
@@ -121,16 +117,21 @@ public class ItemArchitectWand extends Item implements ItemHandRender, ItemHudRe
 
         RenderHelper.enableGUIStandardItemLighting();
         RenderItem ri = Minecraft.getMinecraft().getRenderItem();
-        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, new ItemStack(i, 1, dmg), offsetX + 5, offsetY + 5);
+        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, blockStackStored, offsetX + 5, offsetY + 5);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.enableAlpha(); //Because Mc item rendering..
 
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetX + 13, offsetY + 16, 0);
+        GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
+        String amtString = String.valueOf(amtFound);
+        GL11.glTranslated(-Minecraft.getMinecraft().fontRendererObj.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
+        if(amtString.length() > 3) {
+            GL11.glScaled(0.9, 0.9, 0.9);
+        }
         int c = 0x00DDDDDD;
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(String.valueOf(amtFound), 0, 0, c);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(amtString, 0, 0, c);
         GlStateManager.color(1F, 1F, 1F, 1F);
         TextureHelper.refreshTextureBindState();
 
@@ -179,13 +180,18 @@ public class ItemArchitectWand extends Item implements ItemHandRender, ItemHudRe
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer playerIn, EnumHand hand) {
         IBlockState stored = getStoredState(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR)) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+        ItemStack consumeStack = getStoredStateAsStack(stack);
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack == null) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
         Deque<BlockPos> placeable = filterBlocksToPlace(playerIn, world, architectRange);
         if(!placeable.isEmpty()) {
             for (BlockPos placePos : placeable) {
-                if(hasAtLeastCharge(playerIn, Side.SERVER, Config.architectWandUseCost)) {
+                if(hasAtLeastCharge(playerIn, Side.SERVER, Config.architectWandUseCost)
+                        && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                     drainCharge(playerIn, Config.architectWandUseCost);
+                    if(!playerIn.isCreative()) {
+                        ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
+                    }
                     world.setBlockState(placePos, stored);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
@@ -195,9 +201,14 @@ public class ItemArchitectWand extends Item implements ItemHandRender, ItemHudRe
         return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
     }
 
-    @Nullable
-    public static IBlockState getStoredState(ItemStack stack) {
-        return Blocks.SAND.getDefaultState();
+    @Override
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(playerIn.isSneaking()) {
+            tryStoreBlock(stack, world, pos);
+            return EnumActionResult.SUCCESS;
+        }
+
+        return super.onItemUse(stack, playerIn, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @SideOnly(Side.CLIENT)

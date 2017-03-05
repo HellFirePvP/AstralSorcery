@@ -15,14 +15,17 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
+import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.ItemHandRender;
 import hellfirepvp.astralsorcery.common.item.ItemHudRender;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -34,21 +37,26 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,7 +65,7 @@ import org.lwjgl.opengl.GL11;
  * Created by HellFirePvP
  * Date: 07.02.2017 / 01:03
  */
-public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRender, ItemAlignmentChargeConsumer {
+public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender, ItemHudRender, ItemAlignmentChargeConsumer {
 
     private static final int searchDepth = 5;
 
@@ -68,20 +76,30 @@ public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRen
     }
 
     @Override
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    public boolean canHarvestBlock(IBlockState blockIn) {
+        return true;
+    }
+
+    @Override
+    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+        return true;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks) {
-        IBlockState stored = getStoredState(lastCacheInstance);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR)) return;
-        Item i = Item.getItemFromBlock(stored.getBlock());
-        if(i == null) return;
-        int dmg = stored.getBlock().getMetaFromState(stored);
+        ItemStack blockStackStored = getStoredStateAsStack(lastCacheInstance);
+        if(blockStackStored == null) return;
 
         int amtFound = 0;
-        java.util.List<ItemStack> stacks = ItemUtils.scanInventoryFor(new InvWrapper(Minecraft.getMinecraft().player.inventory), i);
+        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
-            if(stack.getItemDamage() == dmg) {
-                amtFound += stack.stackSize;
-            }
+            amtFound += stack.stackSize;
         }
 
         int height  =  26;
@@ -111,18 +129,22 @@ public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRen
         TextureHelper.setActiveTextureToAtlasSprite();
 
         RenderHelper.enableGUIStandardItemLighting();
-
         RenderItem ri = Minecraft.getMinecraft().getRenderItem();
-        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, new ItemStack(i, 1, dmg), offsetX + 5, offsetY + 5);
+        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().player, blockStackStored, offsetX + 5, offsetY + 5);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.enableAlpha(); //Because Mc item rendering..
 
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetX + 13, offsetY + 16, 0);
+        GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
+        String amtString = String.valueOf(amtFound);
+        GL11.glTranslated(-Minecraft.getMinecraft().fontRendererObj.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
+        if(amtString.length() > 3) {
+            GL11.glScaled(0.9, 0.9, 0.9);
+        }
         int c = 0x00DDDDDD;
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(String.valueOf(amtFound), 0, 0, c);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(amtString, 0, 0, c);
         GlStateManager.color(1F, 1F, 1F, 1F);
         TextureHelper.refreshTextureBindState();
 
@@ -137,7 +159,8 @@ public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRen
     @SideOnly(Side.CLIENT)
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
         IBlockState stored = getStoredState(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR)) return;
+        ItemStack matchStack = getStoredStateAsStack(stack);
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || matchStack == null) return;
 
         EntityPlayer pl = Minecraft.getMinecraft().player;
         PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
@@ -151,7 +174,12 @@ public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRen
         if(stored.getBlock().equals(atOrigin.getBlock()) && stored.getBlock().getMetaFromState(stored) == atOrigin.getBlock().getMetaFromState(atOrigin)) {
             return;
         }
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth);
+        int amt = 0;
+        for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false).values()) {
+            amt += st.stackSize;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, amt);
+        if(found.isEmpty()) return;
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
@@ -185,28 +213,42 @@ public class ItemExchangeWand extends Item implements ItemHandRender, ItemHudRen
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos origin, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(world.isRemote) return EnumActionResult.SUCCESS;
 
+        if(playerIn.isSneaking()) {
+            tryStoreBlock(stack, world, origin);
+            return EnumActionResult.SUCCESS;
+        }
+
         IBlockState stored = getStoredState(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR)) return EnumActionResult.SUCCESS;
+        ItemStack consumeStack = getStoredStateAsStack(stack);
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack == null) return EnumActionResult.SUCCESS;
         IBlockState atOrigin = world.getBlockState(origin);
         if(stored.getBlock().equals(atOrigin.getBlock()) && stored.getBlock().getMetaFromState(stored) == atOrigin.getBlock().getMetaFromState(atOrigin)) {
             return EnumActionResult.SUCCESS;
         }
 
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth);
+        int amt = 0;
+        for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false).values()) {
+            amt += st.stackSize;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, amt);
+        if (found.isEmpty()) return EnumActionResult.SUCCESS;
+
         for (BlockPos placePos : found.getPattern().keySet()) {
-            if(hasAtLeastCharge(playerIn, Side.SERVER, Config.exchangeWandUseCost)) {
-                drainCharge(playerIn, Config.exchangeWandUseCost);
-                world.setBlockState(placePos, stored);
-                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+            if(hasAtLeastCharge(playerIn, Side.SERVER, Config.exchangeWandUseCost)
+                    && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
+                if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
+                    drainCharge(playerIn, Config.exchangeWandUseCost);
+                    if(!playerIn.isCreative()) {
+                        ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
+                    }
+                    world.setBlockState(placePos, stored);
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                }
             }
         }
 
         return EnumActionResult.SUCCESS;
-    }
-
-    public static IBlockState getStoredState(ItemStack stack) {
-        return Blocks.SAND.getDefaultState();
     }
 
 }

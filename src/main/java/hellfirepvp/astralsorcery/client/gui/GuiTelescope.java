@@ -52,12 +52,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -635,7 +631,7 @@ public class GuiTelescope extends GuiTileBase {
 
             boolean has = false;
             IItemHandler handle = Minecraft.getMinecraft().player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            List<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
+            Collection<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
             for (ItemStack stack : papers) {
                 IConstellation con = ItemConstellationPaper.getConstellation(stack);
                 if(con.equals(c)) {
@@ -644,7 +640,7 @@ public class GuiTelescope extends GuiTileBase {
                 }
             }
             if(!has) {
-                List<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
+                Collection<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
                 lblJournals:
                 for (ItemStack stack : journals) {
                     for (IConstellation con : ItemJournal.getStoredConstellations(stack)) {

@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class BlockDiscoverer {
 
-    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize) {
+    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit) {
         IBlockState toMatch = world.getBlockState(origin);
 
         Block matchBlock = toMatch.getBlock();
@@ -50,6 +50,7 @@ public class BlockDiscoverer {
                     BlockPos search = offsetPos.offset(face);
                     if (visited.contains(search)) continue;
                     if (getCubeDistance(search, origin) > cubeSize) continue;
+                    if (foundArray.pattern.size() > limit) continue;
 
                     visited.add(search);
 
@@ -71,37 +72,6 @@ public class BlockDiscoverer {
     public static int getCubeDistance(BlockPos p1, BlockPos p2) {
         return (int) MathHelper.absMax(MathHelper.absMax(p1.getX() - p2.getX(), p1.getY() - p2.getY()), p1.getZ() - p2.getZ());
     }
-
-    /*public static List<BlockPos> getAdjacent(BlockPos pos, boolean withEdges, boolean withCorners) {
-        int exp = 6 + (withEdges ? 12 : 0) + (withCorners ? 8 : 0);
-        List<BlockPos> positions = new ArrayList<>(exp);
-        for (EnumFacing face : EnumFacing.VALUES) positions.add(pos.offset(face));
-        if (withEdges) {
-            positions.add(pos.add(1, 1, 0));
-            positions.add(pos.add(-1, 1, 0));
-            positions.add(pos.add(0, 1, 1));
-            positions.add(pos.add(0, 1, -1));
-            positions.add(pos.add(-1, 0, 1));
-            positions.add(pos.add(-1, 0, -1));
-            positions.add(pos.add(1, 0, 1));
-            positions.add(pos.add(1, 0, -1));
-            positions.add(pos.add(1, -1, 0));
-            positions.add(pos.add(-1, -1, 0));
-            positions.add(pos.add(0, -1, 1));
-            positions.add(pos.add(0, -1, -1));
-        }
-        if (withCorners) {
-            positions.add(pos.add(-1, 1, 1));
-            positions.add(pos.add(-1, 1, -1));
-            positions.add(pos.add(1, 1, 1));
-            positions.add(pos.add(1, 1, -1));
-            positions.add(pos.add(-1, -1, 1));
-            positions.add(pos.add(-1, -1, -1));
-            positions.add(pos.add(1, -1, 1));
-            positions.add(pos.add(1, -1, -1));
-        }
-        return positions;
-    }*/
 
     public static boolean isExposedToAir(World world, BlockPos pos) {
         for (EnumFacing face : EnumFacing.VALUES) {

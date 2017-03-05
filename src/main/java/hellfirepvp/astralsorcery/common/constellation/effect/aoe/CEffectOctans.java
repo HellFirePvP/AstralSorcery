@@ -116,8 +116,8 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
         maxFishingGrounds = cfg.getInt(getKey() + "Count", getConfigurationSection(), 20, 1, 4000, "Defines the amount of crops the ritual can cache at max. count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
-        minFishTickTime = cfg.getInt(getKey() + "MinFishTickTime", getConfigurationSection(), 1000, 20, Integer.MAX_VALUE, "Defines the minimum default tick-time until a fish may be fished by the ritual. gets reduced internally the more starlight was provided at the ritual.");
-        maxFishTickTime = cfg.getInt(getKey() + "MaxFishTickTime", getConfigurationSection(), 5000, 20, Integer.MAX_VALUE, "Defines the maximum default tick-time until a fish may be fished by the ritual. gets reduced internally the more starlight was provided at the ritual. Has to be bigger as the minimum time; if it isn't it'll be set to the minimum.");
+        minFishTickTime = cfg.getInt(getKey() + "MinFishTickTime", getConfigurationSection(), 100, 20, Integer.MAX_VALUE, "Defines the minimum default tick-time until a fish may be fished by the ritual. gets reduced internally the more starlight was provided at the ritual.");
+        maxFishTickTime = cfg.getInt(getKey() + "MaxFishTickTime", getConfigurationSection(), 500, 20, Integer.MAX_VALUE, "Defines the maximum default tick-time until a fish may be fished by the ritual. gets reduced internally the more starlight was provided at the ritual. Has to be bigger as the minimum time; if it isn't it'll be set to the minimum.");
 
         if(maxFishTickTime < minFishTickTime) {
             maxFishTickTime = minFishTickTime;

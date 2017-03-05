@@ -177,13 +177,16 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
         if(te != null) {
+            if(te.getCrystalProperties() == null || te.getConstellation() == null || te.getType() == null) {
+                return null;
+            }
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
             ItemCollectorCrystal.setConstellation(stack, te.getConstellation());
             ItemCollectorCrystal.setType(stack, te.getType());
             return stack;
         }
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player);
+        return null;
     }
 
     @Override

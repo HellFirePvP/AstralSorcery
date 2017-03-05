@@ -52,8 +52,8 @@ public class ItemsAS {
     public static ItemIlluminationWand illuminationWand;
     public static ItemShiftingStar shiftingStar;
     //public static ItemRoseBranchBow roseBranchBow;
-    //public static ItemArchitectWand architectWand;
-    //public static ItemExchangeWand exchangeWand;
+    public static ItemArchitectWand architectWand;
+    public static ItemExchangeWand exchangeWand;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

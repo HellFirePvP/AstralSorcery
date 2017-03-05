@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.util;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -21,14 +22,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -81,7 +82,7 @@ public class ItemUtils {
         return b.getStateFromMeta(stack.getMetadata());
     }
 
-    public static List<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {
+    public static Collection<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {
         List<ItemStack> out = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
@@ -89,6 +90,51 @@ public class ItemUtils {
                 out.add(copyStackWithSize(s, s.stackSize));
         }
         return out;
+    }
+
+    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, Item i, int meta) {
+        return scanInventoryForMatching(handler, new ItemStack(i, 1, meta), false);
+    }
+
+    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match, boolean strict) {
+        return findItemsInInventory(handler, match, strict).values();
+    }
+
+    public static Map<Integer, ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
+        return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match, strict);
+    }
+
+    public static Map<Integer, ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        Map<Integer, ItemStack> slotsOut = new HashMap<>();
+        for (int j = 0; j < handler.getSlots(); j++) {
+            ItemStack s = handler.getStackInSlot(j);
+            if(strict ? matchStacks(s, match) : matchStackLoosely(s, match))
+                slotsOut.put(j, copyStackWithSize(s, s.stackSize));
+        }
+        return slotsOut;
+    }
+
+    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack toConsume, boolean simulate) {
+        return consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), toConsume, simulate);
+    }
+
+    public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
+        Map<Integer, ItemStack> contents = findItemsInInventory(handler, toConsume, false);
+        if(contents.isEmpty()) return false;
+
+        int cAmt = toConsume.stackSize;
+        for (int slot : contents.keySet()) {
+            ItemStack inSlot = contents.get(slot);
+            int toRemove = cAmt > inSlot.stackSize ? inSlot.stackSize : cAmt;
+            cAmt -= toRemove;
+            if(!simulate) {
+                handler.setStackInSlot(slot, copyStackWithSize(inSlot, inSlot.stackSize - toRemove));
+            }
+            if(cAmt <= 0) {
+                break;
+            }
+        }
+        return cAmt <= 0;
     }
 
     public static void dropInventory(IItemHandler handle, World worldIn, BlockPos pos) {

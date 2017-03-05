@@ -48,7 +48,7 @@ public class CEffectArmara extends ConstellationEffect {
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
-    public static int protectionRange = 16;
+    public static int protectionRange = 32;
 
     private int rememberedTimeout = 0;
     public static int potionAmplifier = 0;
@@ -160,7 +160,7 @@ public class CEffectArmara extends ConstellationEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        protectionRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 16, 1, 32, "Defines the radius (in blocks) in which the ritual will stop mob spawning and projectiles.");
+        protectionRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 32, 1, 128, "Defines the radius (in blocks) in which the ritual will stop mob spawning and projectiles.");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         potionAmplifier = cfg.getInt(getKey() + "ResistanceAmplifier", getConfigurationSection(), 0, 0, Short.MAX_VALUE, "Set the amplifier for the resistance potion effect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
