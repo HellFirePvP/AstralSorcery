@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.client.gui.container;
 
 import hellfirepvp.astralsorcery.client.gui.base.GuiInventoryContainerBase;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarBase;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
+import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -81,7 +78,7 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
             case CONSTELLATION_CRAFT:
                 return new ContainerAltarConstellation(playerInv, tileAltar);
             case TRAIT_CRAFT:
-                break;
+                return new ContainerAltarTrait(playerInv, tileAltar);
             case ENDGAME:
                 break;
         }

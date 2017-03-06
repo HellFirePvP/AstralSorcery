@@ -45,10 +45,10 @@ public class AltarConstellationRecipeWrapper extends JEIBaseWrapper {
             List<ItemStack> stacks = underlyingRecipe.getExpectedStackForRender(srs);
             stackList.add(stacks == null ? Lists.newArrayList() : stacks);
         }
-        for (AttunementRecipe.AltarSlot as : AttunementRecipe.AltarSlot.values()) {
+        for (AttunementRecipe.AttunementAltarSlot as : AttunementRecipe.AttunementAltarSlot.values()) {
             stackList.add(recipe.getAttItems(as));
         }
-        for (ConstellationRecipe.AltarAdditionalSlot as : ConstellationRecipe.AltarAdditionalSlot.values()) {
+        for (ConstellationRecipe.ConstellationAtlarSlot as : ConstellationRecipe.ConstellationAtlarSlot.values()) {
             stackList.add(recipe.getCstItems(as));
         }
         ingredients.setInputLists(ItemStack.class, stackList);

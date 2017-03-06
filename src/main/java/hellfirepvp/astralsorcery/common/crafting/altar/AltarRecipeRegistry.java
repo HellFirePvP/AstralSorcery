@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -104,6 +105,12 @@ public class AltarRecipeRegistry {
             }
         }
         return null;
+    }
+
+    public static TraitRecipe registerTraitRecipe(AbstractCacheableRecipe recipe) {
+        TraitRecipe tr = new TraitRecipe(recipe);
+        registerAltarRecipe(tr);
+        return tr;
     }
 
     public static ConstellationRecipe registerConstellationRecipe(AbstractCacheableRecipe recipe) {

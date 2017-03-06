@@ -55,11 +55,11 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT));
         setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
-                AltarSlot.UPPER_LEFT,
-                AltarSlot.UPPER_RIGHT);
+                AttunementAltarSlot.UPPER_LEFT,
+                AttunementAltarSlot.UPPER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                AltarSlot.LOWER_LEFT,
-                AltarSlot.LOWER_RIGHT);
+                AttunementAltarSlot.LOWER_LEFT,
+                AttunementAltarSlot.LOWER_RIGHT);
     }
 
     @Override

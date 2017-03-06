@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 
 /**
@@ -31,5 +32,10 @@ public class Constellations {
     public static IWeakConstellation bootes;
     public static IWeakConstellation octans;
     public static IWeakConstellation horologium;
+
+    public static IMinorConstellation fornax;
+    public static IMinorConstellation gelu;
+    public static IMinorConstellation ulteria;
+    public static IMinorConstellation alcara;
 
 }

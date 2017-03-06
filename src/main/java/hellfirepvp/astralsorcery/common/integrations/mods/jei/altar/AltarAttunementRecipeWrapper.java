@@ -44,7 +44,7 @@ public class AltarAttunementRecipeWrapper extends JEIBaseWrapper {
             List<ItemStack> stacks = underlyingRecipe.getExpectedStackForRender(srs);
             stackList.add(stacks == null ? Lists.newArrayList() : stacks);
         }
-        for (AttunementRecipe.AltarSlot as : AttunementRecipe.AltarSlot.values()) {
+        for (AttunementRecipe.AttunementAltarSlot as : AttunementRecipe.AttunementAltarSlot.values()) {
             stackList.add(recipe.getAttItems(as));
         }
         ingredients.setInputLists(ItemStack.class, stackList);

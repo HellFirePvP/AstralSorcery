@@ -89,7 +89,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
                         AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_CONSTELLATION, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
                         return true;
                     case TRAIT_CRAFT:
-                        break;
+                        AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.ALTAR_TRAIT, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        return true;
                     case ENDGAME:
                         break;
                 }
@@ -126,7 +127,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
-            if(type == AltarType.ALTAR_4 || type == AltarType.ALTAR_5) continue;
+            if(type == AltarType.ALTAR_5) continue;
             ItemStack stack = new ItemStack(item, 1, type.ordinal());
             NBTTagCompound pers = NBTHelper.getPersistentData(stack);
             pers.setInteger("exp", 0);

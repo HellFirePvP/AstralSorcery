@@ -69,11 +69,11 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER));
         setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                AltarSlot.LOWER_LEFT,
-                AltarSlot.LOWER_RIGHT);
+                AttunementAltarSlot.LOWER_LEFT,
+                AttunementAltarSlot.LOWER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
-                AltarSlot.UPPER_RIGHT,
-                AltarSlot.UPPER_LEFT);
+                AttunementAltarSlot.UPPER_RIGHT,
+                AttunementAltarSlot.UPPER_LEFT);
     }
 
     @Override

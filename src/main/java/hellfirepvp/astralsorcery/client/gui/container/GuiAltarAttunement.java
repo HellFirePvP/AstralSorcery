@@ -8,26 +8,19 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,8 +30,6 @@ import java.util.Random;
  * Date: 16.10.2016 / 17:13
  */
 public class GuiAltarAttunement extends GuiAltarBase {
-
-    private static final Random rand = new Random();
 
     private static final BindableResource texAltarAttenuation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
@@ -81,35 +72,6 @@ public class GuiAltarAttunement extends GuiAltarBase {
             itemRender.zLevel = 0F;
 
             TextureHelper.refreshTextureBindState();
-        }
-
-        IMajorConstellation c = containerAltarBase.tileAltar.getFocusedConstellation();
-        if(c != null && containerAltarBase.tileAltar.getMultiblockState() && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-            rand.setSeed(0x61FF25A5B7C24109L);
-
-            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            GL11.glPushMatrix();
-
-            GL11.glColor4f(1F, 1F, 1F, 1F);
-
-            GL11.glDisable(GL11.GL_ALPHA_TEST);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
-            GL11.glEnable(GL11.GL_BLEND);
-            Blending.DEFAULT.apply();
-
-            RenderConstellation.renderConstellationIntoGUI(c, 10, 20, zLevel, 70, 70, 2, new RenderConstellation.BrightnessFunction() {
-                @Override
-                public float getBrightness() {
-                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getTotalWorldTime(), Minecraft.getMinecraft().getRenderPartialTicks(), 5 + rand.nextInt(5));
-                }
-            }, true, false);
-
-            GL11.glDisable(GL11.GL_BLEND);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-            GL11.glEnable(GL11.GL_ALPHA_TEST);
-
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
         }
     }
 

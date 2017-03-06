@@ -28,7 +28,7 @@ import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 public class RegistryConstellations {
 
     public static void init() {
-        buildMajorConstellations();
+        buildConstellations();
 
         registerConstellations();
 
@@ -48,9 +48,15 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(horologium);
         ConstellationRegistry.registerConstellation(octans);
         ConstellationRegistry.registerConstellation(bootes);
+
+        //Minor
+        ConstellationRegistry.registerConstellation(fornax);
+        ConstellationRegistry.registerConstellation(gelu);
+        ConstellationRegistry.registerConstellation(ulteria);
+        ConstellationRegistry.registerConstellation(alcara);
     }
 
-    private static void buildMajorConstellations() {
+    private static void buildConstellations() {
         StarLocation sl1, sl2, sl3, sl4, sl5, sl6, sl7, sl8, sl9;
 
         discidia = new ConstellationBase.Major("discidia");
@@ -203,6 +209,52 @@ public class RegistryConstellations {
         bootes.addConnection(sl1, sl6);
         bootes.addConnection(sl4, sl5);
         bootes.addConnection(sl5, sl6);
+
+        fornax = new ConstellationBase.Minor("fornax");
+        sl1 = fornax.addStar(4, 9);
+        sl2 = fornax.addStar(13, 13);
+        sl3 = fornax.addStar(27, 8);
+
+        fornax.addConnection(sl1, sl2);
+        fornax.addConnection(sl2, sl3);
+
+        gelu = new ConstellationBase.Minor("gelu");
+        sl1 = gelu.addStar(8, 7);
+        sl2 = gelu.addStar(28, 8);
+        sl3 = gelu.addStar(23, 21);
+        sl4 = gelu.addStar(3, 22);
+        sl5 = gelu.addStar(17, 17);
+        sl6 = gelu.addStar(16, 13);
+
+        gelu.addConnection(sl1, sl2);
+        gelu.addConnection(sl3, sl4);
+        gelu.addConnection(sl2, sl5);
+        gelu.addConnection(sl4, sl6);
+
+        ulteria = new ConstellationBase.Minor("ulteria");
+        sl1 = ulteria.addStar(14, 9);
+        sl2 = ulteria.addStar(17, 16);
+        sl3 = ulteria.addStar(25, 19);
+        sl4 = ulteria.addStar(7, 21);
+        sl5 = ulteria.addStar(22, 25);
+
+        ulteria.addConnection(sl1, sl2);
+        ulteria.addConnection(sl2, sl3);
+        ulteria.addConnection(sl4, sl5);
+
+        alcara = new ConstellationBase.Minor("alcara");
+        sl1 = alcara.addStar(6, 27);
+        sl2 = alcara.addStar(14, 20);
+        sl3 = alcara.addStar(17, 24);
+        sl4 = alcara.addStar(10, 18);
+        sl5 = alcara.addStar(7, 5);
+        sl6 = alcara.addStar(17, 9);
+
+        alcara.addConnection(sl1, sl2);
+        alcara.addConnection(sl2, sl3);
+        alcara.addConnection(sl1, sl4);
+        alcara.addConnection(sl4, sl5);
+        alcara.addConnection(sl4, sl6);
     }
 
 }

@@ -62,7 +62,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     GL11.glPushMatrix();
                     renderCrystalEffects(te, x, y, z, partialTicks, sBase);
                     renderFocusLens(te, x, y, z, partialTicks);
-                    renderConstellation(te, x, y, z, partialTicks);
+                    //renderConstellation(te, x, y, z, partialTicks);
                     GL11.glPopMatrix();
                 }
                 break;
@@ -98,7 +98,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         GL11.glPopAttrib();
     }
 
-    private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {
+    /*private void renderConstellation(TileAltar te, double x, double y, double z, float partialTicks) {
         IConstellation c = te.getFocusedConstellation();
         if(c == null) return;
 
@@ -114,7 +114,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
-    }
+    }*/
 
     private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {
 

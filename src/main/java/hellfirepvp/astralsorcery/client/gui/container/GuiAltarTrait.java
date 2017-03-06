@@ -8,15 +8,21 @@
 
 package hellfirepvp.astralsorcery.client.gui.container;
 
+import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,16 +33,18 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: GuiAltarConstellation
+ * Class: GuiAltarTrait
  * Created by HellFirePvP
- * Date: 02.11.2016 / 14:42
+ * Date: 06.03.2017 / 14:22
  */
-public class GuiAltarConstellation extends GuiAltarBase {
+public class GuiAltarTrait extends GuiAltarBase {
 
-    private static final BindableResource texAltarConstellation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar3");
+    private static final Random rand = new Random();
+
+    private static final BindableResource texAltarTrait = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar4");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
-    public GuiAltarConstellation(InventoryPlayer playerInv, TileAltar tileAltar) {
+    public GuiAltarTrait(InventoryPlayer playerInv, TileAltar tileAltar) {
         super(playerInv, tileAltar);
     }
 
@@ -73,6 +81,64 @@ public class GuiAltarConstellation extends GuiAltarBase {
 
             TextureHelper.refreshTextureBindState();
         }
+
+        float pTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+
+
+        RenderAstralSkybox.TEX_STAR_1.bind();
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        Blending.DEFAULT.apply();
+        rand.setSeed(0x889582997FF29A92L);
+        for (int i = 0; i < 16; i++) {
+
+            int x = rand.nextInt(54);
+            int y = rand.nextInt(54);
+
+            GL11.glPushMatrix();
+            float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), pTicks, 10 + rand.nextInt(20))) * 0.6F;
+            GL11.glColor4f(brightness, brightness, brightness, brightness);
+            drawRect(15 + x, 39 + y, 5, 5);
+            GL11.glColor4f(1, 1, 1, 1);
+            GL11.glPopMatrix();
+        }
+
+        GL11.glPopAttrib();
+        TextureHelper.refreshTextureBindState();
+
+        IConstellation c = containerAltarBase.tileAltar.getFocusedConstellation();
+        if(c != null && containerAltarBase.tileAltar.getMultiblockState() && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+            rand.setSeed(0x61FF25A5B7C24109L);
+
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            GL11.glPushMatrix();
+
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.apply();
+
+            RenderConstellation.renderConstellationIntoGUI(c, 16, 41, zLevel, 58, 58, 2, new RenderConstellation.BrightnessFunction() {
+                @Override
+                public float getBrightness() {
+                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getTotalWorldTime(), pTicks, 5 + rand.nextInt(5));
+                }
+            }, true, false);
+
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+            GL11.glPopMatrix();
+            GL11.glPopAttrib();
+        }
+
+        TextureHelper.setActiveTextureToAtlasSprite();
+        TextureHelper.refreshTextureBindState();
     }
 
     @Override
@@ -125,7 +191,7 @@ public class GuiAltarConstellation extends GuiAltarBase {
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        texAltarConstellation.bind();
+        texAltarTrait.bind();
         drawRect(guiLeft, guiTop, xSize, ySize);
 
         GL11.glPopMatrix();

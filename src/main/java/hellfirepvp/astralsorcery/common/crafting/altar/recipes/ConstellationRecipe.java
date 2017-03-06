@@ -52,8 +52,7 @@ public class ConstellationRecipe extends AttunementRecipe {
             new Vector3(-4, 3, -4)
     };
 
-    private Map<AltarAdditionalSlot, ItemHandle> matchStacks = new HashMap<>();
-    private IConstellation skyConstellationNeeded = null;
+    private Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
 
     protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -72,43 +71,43 @@ public class ConstellationRecipe extends AttunementRecipe {
         setPassiveStarlightRequirement(3200);
     }
 
-    public ConstellationRecipe setCstItem(Item i, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(Item i, ConstellationAtlarSlot... slots) {
         return setCstItem(new ItemStack(i), slots);
     }
 
-    public ConstellationRecipe setCstItem(Block b, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(Block b, ConstellationAtlarSlot... slots) {
         return setCstItem(new ItemStack(b), slots);
     }
 
-    public ConstellationRecipe setCstItem(ItemStack stack, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(ItemStack stack, ConstellationAtlarSlot... slots) {
         return setCstItem(new ItemHandle(stack), slots);
     }
 
-    public ConstellationRecipe setCstItem(String oreDict, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(String oreDict, ConstellationAtlarSlot... slots) {
         return setCstItem(new ItemHandle(oreDict), slots);
     }
 
-    public ConstellationRecipe setCstItem(FluidStack fluid, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(FluidStack fluid, ConstellationAtlarSlot... slots) {
         return setCstItem(new ItemHandle(fluid), slots);
     }
 
-    public ConstellationRecipe setCstItem(Fluid fluid, int mbAmount, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(Fluid fluid, int mbAmount, ConstellationAtlarSlot... slots) {
         return setCstItem(new FluidStack(fluid, mbAmount), slots);
     }
 
-    public ConstellationRecipe setAttItem(Fluid fluid, AltarAdditionalSlot... slots) {
+    public ConstellationRecipe setCstItem(Fluid fluid, ConstellationAtlarSlot... slots) {
         return setCstItem(fluid, 1000, slots);
     }
 
-    public ConstellationRecipe setCstItem(ItemHandle handle, AltarAdditionalSlot... slots) {
-        for (AltarAdditionalSlot slot : slots) {
+    public ConstellationRecipe setCstItem(ItemHandle handle, ConstellationAtlarSlot... slots) {
+        for (ConstellationAtlarSlot slot : slots) {
             matchStacks.put(slot, handle);
         }
         return this;
     }
 
     @Nonnull
-    public List<ItemStack> getCstItems(AltarAdditionalSlot slot) {
+    public List<ItemStack> getCstItems(ConstellationAtlarSlot slot) {
         ItemHandle handle = matchStacks.get(slot);
         if(handle != null) {
             return handle.getApplicableItems();
@@ -117,7 +116,7 @@ public class ConstellationRecipe extends AttunementRecipe {
     }
 
     @Nullable
-    public ItemHandle getCstItemHandle(AltarAdditionalSlot slot) {
+    public ItemHandle getCstItemHandle(ConstellationAtlarSlot slot) {
         return matchStacks.get(slot);
     }
 
@@ -126,18 +125,9 @@ public class ConstellationRecipe extends AttunementRecipe {
         return 500;
     }
 
-    public void setSkyConstellation(IConstellation constellation) {
-        this.skyConstellationNeeded = constellation;
-    }
-
     @Override
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        if(skyConstellationNeeded != null) {
-            DataActiveCelestials cel = SyncDataHolder.getDataServer(SyncDataHolder.DATA_CONSTELLATIONS);
-            Collection<IConstellation> activeConstellations = cel.getActiveConstellations(altar.getWorld().provider.getDimension());
-            if(activeConstellations == null || !activeConstellations.contains(skyConstellationNeeded)) return false;
-        }
-        for (AltarAdditionalSlot slot : AltarAdditionalSlot.values()) {
+        for (ConstellationAtlarSlot slot : ConstellationAtlarSlot.values()) {
             ItemHandle expected = matchStacks.get(slot);
             if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
@@ -173,7 +163,7 @@ public class ConstellationRecipe extends AttunementRecipe {
         return ResearchProgression.CONSTELLATION;
     }
 
-    public static enum AltarAdditionalSlot {
+    public static enum ConstellationAtlarSlot {
 
         UP_UP_LEFT(13),
         UP_UP_RIGHT(14),
@@ -187,7 +177,7 @@ public class ConstellationRecipe extends AttunementRecipe {
 
         private final int slotId;
 
-        AltarAdditionalSlot(int slotId) {
+        ConstellationAtlarSlot(int slotId) {
             this.slotId = slotId;
         }
 

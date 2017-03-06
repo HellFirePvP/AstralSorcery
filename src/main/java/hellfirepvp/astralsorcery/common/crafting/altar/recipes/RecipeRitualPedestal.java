@@ -41,10 +41,10 @@ public class RecipeRitualPedestal extends AttunementRecipe {
                 .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER));
         setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
-                AttunementRecipe.AltarSlot.UPPER_LEFT,
-                AttunementRecipe.AltarSlot.UPPER_RIGHT);
+                AttunementAltarSlot.UPPER_LEFT,
+                AttunementAltarSlot.UPPER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
-                AttunementRecipe.AltarSlot.LOWER_LEFT,
-                AttunementRecipe.AltarSlot.LOWER_RIGHT);
+                AttunementAltarSlot.LOWER_LEFT,
+                AttunementAltarSlot.LOWER_RIGHT);
     }
 }

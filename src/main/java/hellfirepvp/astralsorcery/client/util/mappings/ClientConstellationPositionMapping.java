@@ -35,7 +35,7 @@ public class ClientConstellationPositionMapping {
     //Collection should be sorted: Major ones first, Minor ones later.
     public void updatePositions(LinkedList<IConstellation> activeConstellations) {
         activePositions.clear();
-        for (int i = 0; i < activeConstellations.size(); i++) {
+        for (int i = 0; i < Math.min(activeConstellations.size(), availablePositions.size()); i++) {
             activePositions.put(activeConstellations.get(i), availablePositions.get(i));
         }
     }

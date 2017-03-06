@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 19:47
  */
-public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
+public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase implements ItemConstellationFocus {
 
     protected ItemTunedCrystalBase() {
         setCreativeTab(RegistryItems.creativeTabAstralSorceryTunedCrystals);
@@ -71,6 +73,12 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         }
     }
 
+    @Nullable
+    @Override
+    public IConstellation getFocusConstellation(ItemStack stack) {
+        return getMainConstellation(stack);
+    }
+
     public static void applyTrait(ItemStack stack, IMinorConstellation trait) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return;
 
@@ -78,6 +86,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         cmp.setString("trait", trait.getUnlocalizedName());
     }
 
+    @Nullable
     public static IMinorConstellation getTrait(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 
@@ -92,6 +101,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase {
         constellation.writeToNBT(NBTHelper.getPersistentData(stack));
     }
 
+    @Nullable
     public static IWeakConstellation getMainConstellation(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemTunedCrystalBase)) return null;
 

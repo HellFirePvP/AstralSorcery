@@ -255,6 +255,8 @@ item.ItemColoredLens.name=Colored Lens
 item.ItemHandTelescope.name=Hand Telescope
 item.ItemSkyResonator.name=Sky Wave Resonator
 item.ItemIlluminationWand.name=Illumination Wand
+item.ItemArchitectWand.name=Formation Wand
+item.ItemExchangeWand.name=Transposition Wand
 item.ItemShiftingStar.name=Shifting Star
 
 item.ItemColoredLens.effect.fire.name=Ignition
@@ -338,6 +340,14 @@ astralsorcery.constellation.octans.effect=Reflecting this constellation's light 
 astralsorcery.constellation.bootes=Bootes
 astralsorcery.constellation.bootes.info=Herding
 astralsorcery.constellation.bootes.effect=When exposed to this kind of starlight, animals close to it seem to relax and care a bit less about their resources.
+astralsorcery.constellation.fornax=Fornax
+astralsorcery.constellation.fornax.info=-
+astralsorcery.constellation.gelu=Gelu
+astralsorcery.constellation.gelu.info=-
+astralsorcery.constellation.ulteria=Ulteria
+astralsorcery.constellation.ulteria.info=-
+astralsorcery.constellation.alcara=Alcara
+astralsorcery.constellation.alcara.info=-
 
 perk.info.locked=§7Locked
 perk.info.available=§9Available

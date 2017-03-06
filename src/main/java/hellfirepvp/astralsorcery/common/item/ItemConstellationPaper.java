@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
@@ -63,6 +64,8 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
         subItems.add(new ItemStack(this, 1));
 
         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+            if (c instanceof IMinorConstellation) continue;
+
             ItemStack cPaper = new ItemStack(this, 1);
             setConstellation(cPaper, c);
             subItems.add(cPaper);

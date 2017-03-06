@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
@@ -127,12 +126,12 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
 
                     @Override
-                    public boolean mayDecrement(TileAltar ta, AttunementRecipe.AltarSlot slot) {
-                        return !fluidStacks.contains(slot.slotId);
+                    public boolean mayDecrement(TileAltar ta, AttunementAltarSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotId());
                     }
                 };
-                for (AttunementRecipe.AltarSlot al : AttunementRecipe.AltarSlot.values()) {
-                    if(inputs[al.slotId] != null) rec.setAttItem(inputs[al.slotId], al);
+                for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
+                    if(inputs[al.getSlotId()] != null) rec.setAttItem(inputs[al.getSlotId()], al);
                 }
                 return rec;
             case CONSTELLATION_CRAFT:
@@ -153,19 +152,19 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     }
 
                     @Override
-                    public boolean mayDecrement(TileAltar ta, AttunementRecipe.AltarSlot slot) {
-                        return !fluidStacks.contains(slot.slotId);
+                    public boolean mayDecrement(TileAltar ta, AttunementAltarSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotId());
                     }
 
                     @Override
-                    public boolean mayDecrement(TileAltar ta, ConstellationRecipe.AltarAdditionalSlot slot) {
+                    public boolean mayDecrement(TileAltar ta, ConstellationAtlarSlot slot) {
                         return !fluidStacks.contains(slot.getSlotId());
                     }
                 };
-                for (AttunementRecipe.AltarSlot al : AttunementRecipe.AltarSlot.values()) {
-                    if(inputs[al.slotId] != null) cRec.setAttItem(inputs[al.slotId], al);
+                for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
+                    if(inputs[al.getSlotId()] != null) cRec.setAttItem(inputs[al.getSlotId()], al);
                 }
-                for (ConstellationRecipe.AltarAdditionalSlot al : ConstellationRecipe.AltarAdditionalSlot.values()) {
+                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
                     if(inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
                 }
                 return cRec;

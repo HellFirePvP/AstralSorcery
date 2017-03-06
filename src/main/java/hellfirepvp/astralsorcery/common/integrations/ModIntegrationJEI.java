@@ -35,6 +35,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import mezz.jei.api.*;
+import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.init.Blocks;
@@ -76,7 +77,7 @@ public class ModIntegrationJEI implements IModPlugin {
     public void register(IModRegistry registry) {
         jeiHelpers = registry.getJeiHelpers();
         stackHelper = jeiHelpers.getStackHelper();
-        hideItems(registry.getJeiHelpers().getItemBlacklist());
+        hideItems(registry.getJeiHelpers().getIngredientBlacklist());
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
         //REMINDER: Higher tiers *must* come before lower tiers in this list.
@@ -126,13 +127,13 @@ public class ModIntegrationJEI implements IModPlugin {
         jeiRegistrationPhase = false;
     }
 
-    private void hideItems(IItemBlacklist blacklist) {
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.translucentBlock));
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockStructural));
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
-        blacklist.addItemToBlacklist(new ItemStack(BlocksAS.ritualLink));
+    private void hideItems(IIngredientBlacklist blacklist) {
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.ritualLink));
     }
 
     @Override

@@ -144,14 +144,14 @@ public abstract class AbstractAltarRecipe {
         return handle == null || handle.getFluidTypeAndAmount() == null;
     }
 
-    public boolean mayDecrement(TileAltar ta, AttunementRecipe.AltarSlot slot) {
+    public boolean mayDecrement(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
         if(!(this instanceof AttunementRecipe)) return true;
         AttunementRecipe thisRecipe = (AttunementRecipe) this;
         ItemHandle handle = thisRecipe.getAttItemHandle(slot);
         return handle == null || handle.getFluidTypeAndAmount() == null;
     }
 
-    public boolean mayDecrement(TileAltar ta, ConstellationRecipe.AltarAdditionalSlot slot) {
+    public boolean mayDecrement(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
         if(!(this instanceof ConstellationRecipe)) return true;
         ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);
@@ -170,20 +170,20 @@ public abstract class AbstractAltarRecipe {
         }
     }
 
-    public void handleItemConsumption(TileAltar ta, AttunementRecipe.AltarSlot slot) {
+    public void handleItemConsumption(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
         if(!(this instanceof AttunementRecipe)) return;
         AttunementRecipe thisRecipe = (AttunementRecipe) this;
         ItemHandle handle = thisRecipe.getAttItemHandle(slot);
         if(handle == null) return;
 
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
-        ItemStack stack = inventory.getStackInSlot(slot.slotId);
+        ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(stack != null) {
             ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
         }
     }
 
-    public void handleItemConsumption(TileAltar ta, ConstellationRecipe.AltarAdditionalSlot slot) {
+    public void handleItemConsumption(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
         if(!(this instanceof ConstellationRecipe)) return;
         ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);

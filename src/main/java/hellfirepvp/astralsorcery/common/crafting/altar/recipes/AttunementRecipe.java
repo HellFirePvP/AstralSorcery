@@ -43,7 +43,7 @@ import java.util.Random;
  */
 public class AttunementRecipe extends DiscoveryRecipe {
 
-    private Map<AltarSlot, ItemHandle> additionalSlots = new HashMap<>();
+    private Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
 
     protected AttunementRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
         super(neededLevel, recipe);
@@ -62,43 +62,43 @@ public class AttunementRecipe extends DiscoveryRecipe {
         setPassiveStarlightRequirement(1400);
     }
 
-    public AttunementRecipe setAttItem(Block b, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Block b, AttunementAltarSlot... slots) {
         return this.setAttItem(new ItemStack(b), slots);
     }
 
-    public AttunementRecipe setAttItem(Item i, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Item i, AttunementAltarSlot... slots) {
         return this.setAttItem(new ItemStack(i), slots);
     }
 
-    public AttunementRecipe setAttItem(ItemStack stack, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(ItemStack stack, AttunementAltarSlot... slots) {
         return this.setAttItem(new ItemHandle(stack), slots);
     }
 
-    public AttunementRecipe setAttItem(String oreDict, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(String oreDict, AttunementAltarSlot... slots) {
         return this.setAttItem(new ItemHandle(oreDict), slots);
     }
 
-    public AttunementRecipe setAttItem(FluidStack fluid, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(FluidStack fluid, AttunementAltarSlot... slots) {
         return this.setAttItem(new ItemHandle(fluid), slots);
     }
 
-    public AttunementRecipe setAttItem(Fluid fluid, int mbAmount, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Fluid fluid, int mbAmount, AttunementAltarSlot... slots) {
         return setAttItem(new FluidStack(fluid, mbAmount), slots);
     }
 
-    public AttunementRecipe setAttItem(Fluid fluid, AltarSlot... slots) {
+    public AttunementRecipe setAttItem(Fluid fluid, AttunementAltarSlot... slots) {
         return setAttItem(fluid, 1000, slots);
     }
 
-    public AttunementRecipe setAttItem(ItemHandle handle, AltarSlot... slots) {
-        for (AltarSlot slot : slots) {
+    public AttunementRecipe setAttItem(ItemHandle handle, AttunementAltarSlot... slots) {
+        for (AttunementAltarSlot slot : slots) {
             additionalSlots.put(slot, handle);
         }
         return this;
     }
 
     @Nonnull
-    public List<ItemStack> getAttItems(AltarSlot slot) {
+    public List<ItemStack> getAttItems(AttunementAltarSlot slot) {
         ItemHandle handle = additionalSlots.get(slot);
         if(handle != null) {
             return handle.getApplicableItems();
@@ -107,13 +107,13 @@ public class AttunementRecipe extends DiscoveryRecipe {
     }
 
     @Nullable
-    public ItemHandle getAttItemHandle(AltarSlot slot) {
+    public ItemHandle getAttItemHandle(AttunementAltarSlot slot) {
         return additionalSlots.get(slot);
     }
 
     @Override
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        for (AltarSlot slot : AltarSlot.values()) {
+        for (AttunementAltarSlot slot : AttunementAltarSlot.values()) {
             ItemHandle expected = additionalSlots.get(slot);
             if(expected != null) {
                 ItemStack altarItem = invHandler.getStackInSlot(slot.slotId);
@@ -154,18 +154,23 @@ public class AttunementRecipe extends DiscoveryRecipe {
         return ResearchProgression.ATTUNEMENT;
     }
 
-    public static enum AltarSlot {
+    public static enum AttunementAltarSlot {
 
         UPPER_LEFT(9),
         UPPER_RIGHT(10),
         LOWER_LEFT(11),
         LOWER_RIGHT(12);
 
-        public final int slotId;
+        private final int slotId;
 
-        private AltarSlot(int slotId) {
+        private AttunementAltarSlot(int slotId) {
             this.slotId = slotId;
         }
+
+        public int getSlotId() {
+            return slotId;
+        }
+
     }
 
 }

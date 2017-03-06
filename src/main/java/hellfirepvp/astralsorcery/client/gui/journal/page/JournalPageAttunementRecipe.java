@@ -55,10 +55,10 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
         protected void renderAltarSlots(float offsetX, float offsetY, float zLevel, AttunementRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAltarSlot(offsetX + 30, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AltarSlot.UPPER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AltarSlot.UPPER_RIGHT));
-            renderAltarSlot(offsetX +  30, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AltarSlot.LOWER_LEFT));
-            renderAltarSlot(offsetX + 131, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AltarSlot.LOWER_RIGHT));
+            renderAltarSlot(offsetX + 30, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 78, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT));
+            renderAltarSlot(offsetX +  30, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 178, zLevel, recipe.getAttItems(AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
         }

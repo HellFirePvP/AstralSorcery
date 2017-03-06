@@ -48,7 +48,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
                 .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT));
-        setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AltarSlot.values());
+        setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AttunementAltarSlot.values());
         this.celestial = celestial;
         ItemStack stack = new ItemStack(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);
         ItemCollectorCrystal.setType(stack, celestial ?

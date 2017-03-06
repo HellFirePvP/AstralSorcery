@@ -23,7 +23,6 @@ public enum ProgressionTier {
     CONSTELLATION_CRAFT,
     TRAIT_CRAFT,
     ENDGAME;
-    //PAST_DIM
 
     public boolean hasNextTier() {
         return ordinal() < ProgressionTier.values().length - 1;

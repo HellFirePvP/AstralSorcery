@@ -32,7 +32,7 @@ public enum ResearchProgression {
     BASIC_CRAFT(1, ProgressionTier.BASIC_CRAFT, DISCOVERY),
     ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),
     CONSTELLATION(3, ProgressionTier.CONSTELLATION_CRAFT, ATTUNEMENT),
-    RADIANCE(4, ProgressionTier.CONSTELLATION_CRAFT, CONSTELLATION);
+    RADIANCE(4, ProgressionTier.TRAIT_CRAFT, CONSTELLATION);
 
     private final int progressId;
     private List<ResearchProgression> preConditions = new LinkedList<>();

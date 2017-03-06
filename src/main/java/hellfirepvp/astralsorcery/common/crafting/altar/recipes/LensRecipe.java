@@ -49,17 +49,17 @@ public class LensRecipe extends ConstellationRecipe {
                         ShapedRecipeSlot.CENTER));
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                AltarSlot.LOWER_LEFT,
-                AltarSlot.LOWER_RIGHT);
+                AttunementAltarSlot.LOWER_LEFT,
+                AttunementAltarSlot.LOWER_RIGHT);
         setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                AltarAdditionalSlot.DOWN_DOWN_LEFT,
-                AltarAdditionalSlot.DOWN_DOWN_RIGHT);
+                ConstellationAtlarSlot.DOWN_DOWN_LEFT,
+                ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
         setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
-                AltarAdditionalSlot.DOWN_LEFT_LEFT,
-                AltarAdditionalSlot.DOWN_RIGHT_RIGHT);
+                ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
         setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
-                AltarAdditionalSlot.UP_LEFT_LEFT,
-                AltarAdditionalSlot.UP_RIGHT_RIGHT);
+                ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationAtlarSlot.UP_RIGHT_RIGHT);
     }
 
     @Nullable

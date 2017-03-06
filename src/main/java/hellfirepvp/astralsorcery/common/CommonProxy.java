@@ -17,10 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarAttunement;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarConstellation;
-import hellfirepvp.astralsorcery.common.container.ContainerAltarDiscovery;
-import hellfirepvp.astralsorcery.common.container.ContainerJournal;
+import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -237,6 +234,8 @@ public class CommonProxy implements IGuiHandler {
                 return new ContainerAltarAttunement(player.inventory, (TileAltar) t);
             case ALTAR_CONSTELLATION:
                 return new ContainerAltarConstellation(player.inventory, (TileAltar) t);
+            case ALTAR_TRAIT:
+                return new ContainerAltarTrait(player.inventory, (TileAltar) t);
             case JOURNAL_STORAGE: {
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
                 if(held != null) {
@@ -266,6 +265,7 @@ public class CommonProxy implements IGuiHandler {
         ALTAR_DISCOVERY(TileAltar.class),
         ALTAR_ATTUNEMENT(TileAltar.class),
         ALTAR_CONSTELLATION(TileAltar.class),
+        ALTAR_TRAIT(TileAltar.class),
         JOURNAL,
         JOURNAL_STORAGE;
 

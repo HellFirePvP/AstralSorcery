@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
+import hellfirepvp.astralsorcery.common.item.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -57,6 +58,13 @@ public abstract class ContainerAltarBase extends Container {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
+            if (this instanceof ContainerAltarTrait && index >= 0 && index < 36 &&
+                    itemstack1.getItem() instanceof ItemConstellationFocus &&
+                    ((ItemConstellationFocus) itemstack1.getItem()).getFocusConstellation(itemstack1) != null) {
+                if (this.mergeItemStack(itemstack1, ((ContainerAltarTrait) this).focusSlot.slotNumber, ((ContainerAltarTrait) this).focusSlot.slotNumber + 1, false)) {
+                    return itemstack;
+                }
+            }
             if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
                     return null;

@@ -13,10 +13,7 @@ import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
 import hellfirepvp.astralsorcery.client.gui.GuiHandTelescope;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
-import hellfirepvp.astralsorcery.client.gui.container.GuiAltarAttunement;
-import hellfirepvp.astralsorcery.client.gui.container.GuiAltarConstellation;
-import hellfirepvp.astralsorcery.client.gui.container.GuiAltarDiscovery;
-import hellfirepvp.astralsorcery.client.gui.container.GuiJournalContainer;
+import hellfirepvp.astralsorcery.client.gui.container.*;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -70,6 +67,8 @@ public class ClientGuiHandler {
                 return new GuiAltarAttunement(player.inventory, (TileAltar) t);
             case ALTAR_CONSTELLATION:
                 return new GuiAltarConstellation(player.inventory, (TileAltar) t);
+            case ALTAR_TRAIT:
+                return new GuiAltarTrait(player.inventory, (TileAltar) t);
             case JOURNAL:
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:
