@@ -44,7 +44,7 @@ import java.util.Random;
 public class EffectLightning extends EntityComplexFX {
     //Implementation of lightning generation according to NVIDIA's lightning paper
 
-    private static final BindableResource connection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
+    private static final BindableResource connection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
     private static Random rand = new Random();
 
     private static final float optimalLightningLength = 7F;

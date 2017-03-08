@@ -23,9 +23,8 @@ import java.awt.*;
  * Date: 16.10.2016 / 16:25
  */
 public class EffectHelper {
-
-    //private static final BindableResource starFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStar");
-    private static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic");
+;
+    private static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
 
     public static EntityFXFacingParticle genericFlareParticle(double x, double y, double z) {
         EntityFXFacingParticle p = new EntityFXFacingParticle(x, y, z);

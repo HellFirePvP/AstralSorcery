@@ -47,7 +47,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     //private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
     //private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
 
-    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private static final int width = 80, height = 110;
     private static final Map<Integer, Point> offsetMap = new HashMap<>(); //we put 6 on "1" page/screen

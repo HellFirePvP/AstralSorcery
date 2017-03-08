@@ -56,7 +56,7 @@ import java.util.Map;
  */
 public class GuiJournalPerkMap extends GuiScreenJournal {
 
-    private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
+    private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg");
 
     private static final float mouseHoverMerge = 0.03F;
     private float mouseHoverPerc = 0F;
@@ -257,10 +257,10 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             BindableResource tex;
             Color overlay = null;
             if(prog.hasPerkUnlocked(dep.to)) {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
                 overlay = new Color(0x00EEEE00);
             } else {
-                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
+                tex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
                 overlay = new Color(0xBBBBFF);
             }
 

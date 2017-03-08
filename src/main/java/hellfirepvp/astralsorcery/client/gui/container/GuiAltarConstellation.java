@@ -33,7 +33,7 @@ import java.util.Random;
  */
 public class GuiAltarConstellation extends GuiAltarBase {
 
-    private static final BindableResource texAltarConstellation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar3");
+    private static final BindableResource texAltarConstellation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar3");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarConstellation(InventoryPlayer playerInv, TileAltar tileAltar) {

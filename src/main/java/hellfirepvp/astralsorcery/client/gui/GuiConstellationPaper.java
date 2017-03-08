@@ -42,7 +42,7 @@ import java.util.List;
  */
 public class GuiConstellationPaper extends GuiWHScreen {
 
-    private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiConPaper");
+    private static final BindableResource textureScroll = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiconpaper");
     //private static final OverlayText.OverlayFontRenderer ofr = new OverlayText.OverlayFontRenderer();
 
     private final IConstellation constellation;

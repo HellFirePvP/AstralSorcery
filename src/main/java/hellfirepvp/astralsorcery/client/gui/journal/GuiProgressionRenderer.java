@@ -45,8 +45,8 @@ import java.util.Map;
  */
 public class GuiProgressionRenderer {
 
-    private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiResBG");
-    private static final BindableResource textureResOVL = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJResOverlay");
+    private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg");
+    private static final BindableResource textureResOVL = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijresoverlay");
     //private static final BindableResource black = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     private GalaxySizeHandler sizeHandler;

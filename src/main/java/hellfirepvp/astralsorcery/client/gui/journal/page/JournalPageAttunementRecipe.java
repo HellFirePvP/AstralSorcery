@@ -43,7 +43,7 @@ public class JournalPageAttunementRecipe implements IJournalPage {
 
     public static class Render extends JournalPageDiscoveryRecipe.Render {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridAtt");
+        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridatt");
 
         private final AttunementRecipe recipe;
 

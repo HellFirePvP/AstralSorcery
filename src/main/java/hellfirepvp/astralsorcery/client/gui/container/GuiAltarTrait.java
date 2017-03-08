@@ -41,7 +41,7 @@ public class GuiAltarTrait extends GuiAltarBase {
 
     private static final Random rand = new Random();
 
-    private static final BindableResource texAltarTrait = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar4");
+    private static final BindableResource texAltarTrait = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar4");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarTrait(InventoryPlayer playerInv, TileAltar tileAltar) {

@@ -65,8 +65,8 @@ public class GuiHandTelescope extends GuiWHScreen {
 
     private static final Random random = new Random();
 
-    private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridHandTelescope");
-    private static final BindableResource textureConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionPerks");
+    private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridhandtelescope");
+    private static final BindableResource textureConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
     private static final Rectangle rectDrawing = new Rectangle(6, 6, 210, 210);
 
     private IMajorConstellation drawnConstellation = null;

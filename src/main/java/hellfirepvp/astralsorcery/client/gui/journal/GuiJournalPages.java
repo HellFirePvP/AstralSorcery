@@ -46,7 +46,7 @@ public class GuiJournalPages extends GuiScreenJournal {
     private static boolean saveSite = true;
     //private static OverlayText.OverlayFontRenderer titleFontRenderer = new OverlayText.OverlayFontRenderer();
 
-    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
     private static final BindableResource texUnderline = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline");
 
     @Nullable

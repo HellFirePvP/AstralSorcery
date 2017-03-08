@@ -151,11 +151,11 @@ public class RegistryItems {
     }
 
     private static <T extends Block> void registerCustomNameItemBlock(T block) {
-        registerItem(new ItemBlockCustomName(block), block.getClass().getSimpleName());
+        registerItem(new ItemBlockCustomName(block), block.getClass().getSimpleName().toLowerCase());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block) {
-        registerDefaultItemBlock(block, block.getClass().getSimpleName());
+        registerDefaultItemBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
     private static <T extends Block> void registerDefaultItemBlock(T block, String name) {
@@ -170,9 +170,9 @@ public class RegistryItems {
     }
 
     private static <T extends Item> T registerItem(T item) {
-        String simpleName = item.getClass().getSimpleName();
+        String simpleName = item.getClass().getSimpleName().toLowerCase();
         if (item instanceof ItemBlock) {
-            simpleName = ((ItemBlock) item).getBlock().getClass().getSimpleName();
+            simpleName = ((ItemBlock) item).getBlock().getClass().getSimpleName().toLowerCase();
         }
         return registerItem(item, simpleName);
     }

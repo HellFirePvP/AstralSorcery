@@ -38,10 +38,10 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     private static final Random rand = new Random();
 
     private static final ASaltarT2 modelAltar2 = new ASaltarT2();
-    private static final BindableResource texAltar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarT2");
+    private static final BindableResource texAltar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altart2");
 
     private static final ASaltarT3 modelAltar3 = new ASaltarT3();
-    private static final BindableResource texAltar3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarT3");
+    private static final BindableResource texAltar3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altart3");
 
     @Override
     public void renderTileEntityAt(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage) {

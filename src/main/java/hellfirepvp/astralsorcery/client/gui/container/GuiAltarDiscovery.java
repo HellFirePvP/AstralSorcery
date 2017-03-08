@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class GuiAltarDiscovery extends GuiAltarBase {
 
-    private static final BindableResource texAltarDiscovery = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar1");
+    private static final BindableResource texAltarDiscovery = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar1");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarDiscovery(InventoryPlayer playerInv, TileAltar tileAltar) {

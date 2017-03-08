@@ -46,7 +46,7 @@ import java.util.List;
 public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     //private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
-    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
+    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private IConstellation constellation;
     private GuiJournalConstellationCluster origin;

@@ -29,7 +29,7 @@ import net.minecraft.item.ItemStack;
  */
 public class GuiJournalContainer extends GuiContainer {
 
-    private static BindableResource texJournalContainer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJStorageBook");
+    private static BindableResource texJournalContainer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijstoragebook");
 
     public GuiJournalContainer(InventoryPlayer playerInv, ItemStack journal, int journalIndex) {
         super(new ContainerJournal(playerInv, journal, journalIndex));

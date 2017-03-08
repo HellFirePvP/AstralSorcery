@@ -32,7 +32,7 @@ import java.util.List;
  */
 public final class EntityFXFacingParticle extends EntityComplexFX {
 
-    public static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareStatic");
+    public static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
 
     private double x, y, z;
     private double oldX, oldY, oldZ;

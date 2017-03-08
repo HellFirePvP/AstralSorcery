@@ -25,9 +25,9 @@ public class SpriteLibrary {
     private static final BindableResource texBurst1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1");
     private static final BindableResource texBurst2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2");
     private static final BindableResource texBurst3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3");
-    private static final BindableResource flareActive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActive");
-    private static final BindableResource flareInactive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkInactive");
-    private static final BindableResource flareActivateable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarePerkActivateable");
+    private static final BindableResource flareActive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkactive");
+    private static final BindableResource flareInactive = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkinactive");
+    private static final BindableResource flareActivateable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable");
     private static final BindableResource flareActivate = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk");
     private static final BindableResource texCraftBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1");
     private static final BindableResource texCollectorBurst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2");

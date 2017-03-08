@@ -44,7 +44,7 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
     public static class Render extends JournalPageAttunementRecipe.Render {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridCst");
+        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridcst");
 
         private final ConstellationRecipe recipe;
 

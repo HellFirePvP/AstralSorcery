@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class GuiAltarAttunement extends GuiAltarBase {
 
-    private static final BindableResource texAltarAttenuation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiAltar2");
+    private static final BindableResource texAltarAttenuation = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guialtar2");
     private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
 
     public GuiAltarAttunement(InventoryPlayer playerInv, TileAltar tileAltar) {

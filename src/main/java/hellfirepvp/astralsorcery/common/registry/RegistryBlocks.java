@@ -102,7 +102,9 @@ public class RegistryBlocks {
         FluidRegistry.registerFluid(f);
         fluidLiquidStarlight = FluidRegistry.getFluid(f.getName());
         blockLiquidStarlight = new FluidBlockLiquidStarlight();
-        GameRegistry.register(blockLiquidStarlight.setUnlocalizedName(blockLiquidStarlight.getClass().getSimpleName()).setRegistryName(blockLiquidStarlight.getClass().getSimpleName()));
+        GameRegistry.register(blockLiquidStarlight
+                .setUnlocalizedName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase())
+                .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
         FluidRegistry.addBucketForFluid(BlocksAS.fluidLiquidStarlight);
@@ -219,7 +221,7 @@ public class RegistryBlocks {
     }
 
     private static <T extends Block> T registerBlock(T block) {
-        return registerBlock(block, block.getClass().getSimpleName());
+        return registerBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
     private static void registerBlockRender(Block block) {
@@ -241,7 +243,7 @@ public class RegistryBlocks {
     }
 
     private static void registerTile(Class<? extends TileEntity> tile) {
-        registerTile(tile, tile.getSimpleName());
+        registerTile(tile, tile.getSimpleName().toLowerCase());
     }
 
     public static class FluidCustomModelMapper extends StateMapperBase implements ItemMeshDefinition {
@@ -249,7 +251,7 @@ public class RegistryBlocks {
         private final ModelResourceLocation res;
 
         public FluidCustomModelMapper(Fluid f) {
-            this.res = new ModelResourceLocation(AstralSorcery.MODID.toLowerCase() + ":BlockFluids", f.getName());
+            this.res = new ModelResourceLocation(AstralSorcery.MODID.toLowerCase() + ":blockfluids", f.getName());
         }
 
         @Override

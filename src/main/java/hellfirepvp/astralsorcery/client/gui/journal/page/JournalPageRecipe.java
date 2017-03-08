@@ -55,7 +55,7 @@ public class JournalPageRecipe implements IJournalPage {
 
     public static class Render implements IGuiRenderablePage {
 
-        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridDisc");
+        private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "griddisc");
 
         private final IAccessibleRecipe recipe;
 
