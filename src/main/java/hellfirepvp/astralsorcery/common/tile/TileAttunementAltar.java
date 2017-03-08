@@ -88,7 +88,7 @@ public class TileAttunementAltar extends TileEntityTick {
     private static final Function<ItemStack, Boolean> crystalAcceptor = stack -> {
 
         if(!(stack.getItem() instanceof ItemRockCrystalBase)) return false;
-        if(stack.stackSize != 1) return false;
+        if(stack.getCount() != 1) return false;
 
         IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
         IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);
@@ -485,13 +485,13 @@ public class TileAttunementAltar extends TileEntityTick {
             EntityPlayer player = Minecraft.getMinecraft().player;
             if(player != null && player.getDistanceSq(getPos()) <= 250) {
                 IWeakConstellation held = null;
-                if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
+                if(!player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemMainhand());
                     if(cst != null && cst instanceof IWeakConstellation) {
                         held = (IWeakConstellation) cst;
                     }
                 }
-                if(held == null && player.getHeldItemOffhand() != null && player.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
+                if(held == null && !player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() instanceof ItemConstellationPaper) {
                     IConstellation cst = ItemConstellationPaper.getConstellation(player.getHeldItemOffhand());
                     if(cst != null && cst instanceof IWeakConstellation) {
                         held = (IWeakConstellation) cst;

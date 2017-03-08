@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.util.resource;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -79,8 +80,7 @@ public class BindableResource {
         if (resource == null) {
             allocateGlId();
         }
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, resource.getGlTextureId());
-        //GlStateManager.bindTexture(resource.getGlTextureId());
+        GlStateManager.bindTexture(resource.getGlTextureId());
     }
 
 }

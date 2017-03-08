@@ -73,8 +73,8 @@ public class ClientGuiHandler {
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
-                if(held != null) {
-                    if(held.getItem() != null && held.getItem() instanceof ItemJournal) {
+                if(!held.isEmpty()) {
+                    if(held.getItem() instanceof ItemJournal) {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
                 }

@@ -71,10 +71,10 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
         return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

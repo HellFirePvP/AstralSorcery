@@ -175,7 +175,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void playHandAndHudRenders(ItemStack inHand, EnumHand hand, float pTicks) {
-        if(inHand != null && inHand.getItem() != null) {
+        if(!inHand.isEmpty()) {
             Item i = inHand.getItem();
             if(i instanceof ItemHandRender) {
                 ((ItemHandRender) i).onRenderWhileInHand(inHand, hand, pTicks);
@@ -195,7 +195,7 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void playItemEffects(ItemStack inHand) {
-        if(inHand != null && inHand.getItem() != null) {
+        if(!inHand.isEmpty()) {
             Item i = inHand.getItem();
             if(i instanceof ItemAlignmentChargeRevealer) {
                 if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
@@ -278,7 +278,7 @@ public class ClientRenderEventHandler {
                 }
             }
             ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-            if(inHand != null && inHand.getItem() != null) {
+            if(!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
@@ -287,7 +287,7 @@ public class ClientRenderEventHandler {
                 }
             }
             inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
-            if(inHand != null && inHand.getItem() != null) {
+            if(!inHand.isEmpty()) {
                 Item i = inHand.getItem();
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
@@ -351,7 +351,7 @@ public class ClientRenderEventHandler {
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibility)) << 24;
         if(visibility > 0.1E-4) {
-            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(String.valueOf(level + 1), 0, 0, c);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level + 1), 0, 0, c);
         }
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);

@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +37,7 @@ public class ItemRenderRegistry {
     }
 
     public static boolean shouldHandleItemRendering(ItemStack stack) {
-        if(stack.getItem() == null) return false;
+        if(stack.getItem() == Items.AIR) return false;
         //ResourceLocation entry = stack.getAttItem().getRegistryName();
         ResourceLocation entry = getWrappedLocation(stack.getItem().getRegistryName());
         return entry != null && isRegistered(entry);

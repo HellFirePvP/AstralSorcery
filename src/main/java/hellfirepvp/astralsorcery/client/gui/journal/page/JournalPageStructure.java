@@ -69,9 +69,9 @@ public class JournalPageStructure implements IJournalPage {
             for (ItemStack stack : stacksNeeded) {
                 if(stack.getItem() instanceof UniversalBucket) {
                     FluidStack f = ((UniversalBucket) stack.getItem()).getFluid(stack);
-                    descriptionStacks.add(new Tuple<>(stack, stack.stackSize + "x " + I18n.format(stack.getUnlocalizedName() + ".name", f.getLocalizedName())));
+                    descriptionStacks.add(new Tuple<>(stack, stack.getCount() + "x " + I18n.format(stack.getUnlocalizedName() + ".name", f.getLocalizedName())));
                 } else {
-                    descriptionStacks.add(new Tuple<>(stack, stack.stackSize + "x " + I18n.format(stack.getUnlocalizedName() + ".name")));
+                    descriptionStacks.add(new Tuple<>(stack, stack.getCount() + "x " + I18n.format(stack.getUnlocalizedName() + ".name")));
                 }
             }
         }
@@ -100,7 +100,7 @@ public class JournalPageStructure implements IJournalPage {
             if(rect.contains(mouseX, mouseY)) {
                 /*List<Tuple<ItemStack, String>> localized = new LinkedList<>();
                 for (Tuple<ItemStack, String> entry : descriptionStacks) {
-                    localized.add(new Tuple<>(entry.key, entry.key.stackSize + "x " + I18n.format(entry.value)));
+                    localized.add(new Tuple<>(entry.key, entry.key.getCount() + "x " + I18n.format(entry.value)));
                 }*/
                 RenderingUtils.renderBlueStackTooltip((int) offsetX + 160, (int) offsetY + 10, descriptionStacks,
                         getStandardFontRenderer(), getRenderItem());

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,7 +32,7 @@ import java.util.List;
 public class ItemTunedRockCrystal extends ItemTunedCrystalBase implements ItemGatedVisibility {
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         ItemStack stack;
         for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
             stack = new ItemStack(this);

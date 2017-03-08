@@ -24,7 +24,6 @@ import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,15 +56,15 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         this.renderOutput = stack;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack center = centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0);
-        if(center == null || center.getItem() == null || !(center.getItem() instanceof ItemTunedCrystalBase)) return null;
+        if(center.isEmpty() || !(center.getItem() instanceof ItemTunedCrystalBase)) return ItemStack.EMPTY;
         ItemStack out = super.getOutput(centralGridMap, altar);
         IWeakConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);
         CrystalProperties prop = CrystalProperties.getCrystalProperties(center);
-        if(attuned == null || prop == null) return null;
+        if(attuned == null || prop == null) return ItemStack.EMPTY;
         ItemCollectorCrystal.setConstellation(out, attuned);
         CrystalProperties.applyCrystalProperties(out, prop);
         ItemCollectorCrystal.setType(out, celestial ?

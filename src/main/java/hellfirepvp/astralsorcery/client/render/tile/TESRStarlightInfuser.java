@@ -26,7 +26,7 @@ public class TESRStarlightInfuser extends TileEntitySpecialRenderer<TileStarligh
     @Override
     public void renderTileEntityAt(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage) {
         ItemStack in = te.getInputStack();
-        if(in == null) return;
+        if(in.isEmpty()) return;
         EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, in);
         ei.age = te.getTicksExisted();
         ei.hoverStart = 0;

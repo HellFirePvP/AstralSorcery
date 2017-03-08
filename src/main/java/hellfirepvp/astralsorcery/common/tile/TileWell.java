@@ -100,13 +100,13 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
             }
 
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if(stack != null) {
+            if(!stack.isEmpty()) {
                 if(!world.isAirBlock(getPos().up())) {
                     breakCatalyst();
                 } else {
                     running = WellLiquefaction.getLiquefactionEntry(stack);
 
-                    if(running != null && stack.getItem() != null) {
+                    if(running != null) {
                         double gain = Math.sqrt(starlightBuffer) * running.productionMultiplier;
                         if(gain > 0 && mbFluidAmount <= MAX_CAPACITY) {
                             if (mbFluidAmount <= MAX_CAPACITY) {
@@ -130,7 +130,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
             }
         } else {
             ItemStack stack = getInventoryHandler().getStackInSlot(0);
-            if(stack != null && stack.getItem() != null) {
+            if(!stack.isEmpty()) {
                 running = WellLiquefaction.getLiquefactionEntry(stack);
 
                 if(running != null) {
@@ -148,7 +148,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     }
 
     public void breakCatalyst() {
-        getInventoryHandler().setStackInSlot(0, null);
+        getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.WELL_CATALYST_BREAK, getPos().getX(), getPos().getY(), getPos().getZ());
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPos(), 32));
         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, getWorld(), getPos(), 1F, 1F);
@@ -319,9 +319,9 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         }
 
         @Override
-        public boolean canInsertItem(int slot, ItemStack toAdd, @Nullable ItemStack existing) {
-            if(toAdd == null) return true;
-            return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing == null;
+        public boolean canInsertItem(int slot, @Nonnull ItemStack toAdd, @Nonnull ItemStack existing) {
+            if(toAdd.isEmpty()) return true;
+            return WellLiquefaction.getLiquefactionEntry(toAdd) != null && existing.isEmpty();
         }
 
     }

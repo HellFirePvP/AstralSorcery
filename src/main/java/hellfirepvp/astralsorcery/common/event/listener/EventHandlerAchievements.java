@@ -27,7 +27,7 @@ public class EventHandlerAchievements {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPick(PlayerEvent.ItemPickupEvent event) {
         if(!event.isCanceled()) {
-            if(event.pickedUp != null && event.pickedUp.getEntityItem() != null &&
+            if(event.pickedUp != null && !event.pickedUp.getEntityItem().isEmpty() &&
                     event.pickedUp.getEntityItem().getItem() instanceof ItemRockCrystalBase) {
                 event.player.addStat(RegistryAchievements.achvRockCrystal);
                 if(event.pickedUp.getEntityItem().getItem() instanceof ItemCelestialCrystal) {

@@ -74,7 +74,7 @@ public class PktAttunementAltarState implements IMessage, IMessageHandler<PktAtt
                 World w = DimensionManager.getWorld(message.worldId);
                 TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, true);
                 if(ta != null) {
-                    EntityPlayer pl = ctx.getServerHandler().playerEntity;
+                    EntityPlayer pl = ctx.getServerHandler().player;
                     ta.markPlayerStartCameraFlight(pl);
                 }
             }

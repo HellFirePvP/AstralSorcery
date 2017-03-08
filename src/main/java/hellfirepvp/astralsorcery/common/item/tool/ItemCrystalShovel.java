@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ItemCrystalShovel extends ItemCrystalToolBase {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
         ItemStack stack = new ItemStack(itemIn);
         setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial));

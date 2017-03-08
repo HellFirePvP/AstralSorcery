@@ -72,7 +72,7 @@ public class EntityFlare extends EntityFlying {
         if(Config.ambientFlareChance <= 0) return;
         float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
         if(world.rand.nextInt(Config.ambientFlareChance) == 0 && world.isAirBlock(at.toBlockPos()) && world.rand.nextFloat() < nightPerc) {
-            world.spawnEntityInWorld(new EntityFlare(world, at.getX(), at.getY(), at.getZ()).setAmbient(true));
+            world.spawnEntity(new EntityFlare(world, at.getX(), at.getY(), at.getZ()).setAmbient(true));
         }
     }
 
@@ -103,7 +103,7 @@ public class EntityFlare extends EntityFlying {
             clientUpdate();
         } else {
             if(entityAge > 300 && rand.nextInt(700) == 0) {
-                damageEntity(DamageSource.magic, 20F);
+                damageEntity(DamageSource.MAGIC, 20F);
             }
 
             if(!isDead) {

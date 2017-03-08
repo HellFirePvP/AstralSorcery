@@ -19,10 +19,4 @@ import mezz.jei.api.recipe.IRecipeHandler;
  */
 public abstract class JEIBaseHandler<T> implements IRecipeHandler<T> {
 
-    @Override
-    @Deprecated
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
 }

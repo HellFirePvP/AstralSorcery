@@ -138,7 +138,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
 
         public void clearInventory() {
             for (int i = 0; i < getSlots(); i++) {
-                setStackInSlot(i, null);
+                setStackInSlot(i, ItemStack.EMPTY);
                 onContentsChanged(i);
             }
         }

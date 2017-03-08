@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
         ItemStack stack = new ItemStack(itemIn);
         setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial));
@@ -117,9 +118,9 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
         if(slot == EntityEquipmentSlot.MAINHAND) {
             ToolCrystalProperties prop = getToolProperties(stack);
             if(prop != null) {
-                modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
+                modifiers.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
                         new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1F + (12F * prop.getEfficiencyMultiplier()), 0));
-                modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
+                modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
                         new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1D, 0));
             }
         }

@@ -53,8 +53,7 @@ public class NBTHelper {
     }
 
     public static boolean hasPersistentData(NBTTagCompound base) {
-        NBTBase modData = base.getTag(AstralSorcery.MODID);
-        return modData != null && modData instanceof NBTTagCompound;
+        return base.hasKey(AstralSorcery.MODID) && base.getTag(AstralSorcery.MODID) instanceof NBTTagCompound;
     }
 
 
@@ -95,7 +94,7 @@ public class NBTHelper {
     }
 
     public static ItemStack getStack(NBTTagCompound compound, String tag) {
-        return getStack(compound, tag, null);
+        return getStack(compound, tag, ItemStack.EMPTY);
     }
 
     public static UUID getUUID(NBTTagCompound compound, String tag) {
@@ -105,7 +104,7 @@ public class NBTHelper {
     //Get tags with default value
     public static ItemStack getStack(NBTTagCompound compound, String tag, ItemStack defaultValue) {
         if (compound.hasKey(tag)) {
-            return ItemStack.loadItemStackFromNBT(compound.getCompoundTag(tag));
+            return new ItemStack(compound.getCompoundTag(tag));
         }
         return defaultValue;
     }

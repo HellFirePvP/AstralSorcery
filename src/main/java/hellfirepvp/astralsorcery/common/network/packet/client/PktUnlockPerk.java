@@ -82,7 +82,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     @Override
     public PktUnlockPerk onMessage(PktUnlockPerk message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            EntityPlayer pl = ctx.getServerHandler().playerEntity;
+            EntityPlayer pl = ctx.getServerHandler().player;
             if(pl != null) {
                 if(message.perk != null && message.owningConstellation != null) {
                     ConstellationPerkMap map = message.owningConstellation.getPerkMap();

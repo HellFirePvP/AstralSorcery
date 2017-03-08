@@ -162,8 +162,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 }
             }
             ItemStack crystal = getInventoryHandler().getStackInSlot(0);
-            if(crystal != null && crystal.getItem() != null &&
-                    crystal.getItem() instanceof ItemTunedCrystalBase) {
+            if(!crystal.isEmpty() && crystal.getItem() instanceof ItemTunedCrystalBase) {
                 IWeakConstellation ch = ItemTunedCrystalBase.getMainConstellation(crystal);
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
@@ -243,8 +242,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     @Nullable
     public IWeakConstellation getRitualConstellation() {
         ItemStack crystal = getInventoryHandler().getStackInSlot(0);
-        if(crystal != null && crystal.getItem() != null &&
-                crystal.getItem() instanceof ItemTunedCrystalBase) {
+        if(!crystal.isEmpty() && crystal.getItem() instanceof ItemTunedCrystalBase) {
             return ItemTunedCrystalBase.getMainConstellation(crystal);
         }
         return null;
@@ -303,8 +301,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     protected void onInventoryChanged(int slotChanged) {
         if(!world.isRemote) {
             ItemStack in = getInventoryHandler().getStackInSlot(0);
-            if(in != null && in.getItem() != null &&
-                    in.getItem() instanceof ItemTunedCrystalBase) {
+            if(!in.isEmpty() && in.getItem() instanceof ItemTunedCrystalBase) {
                 CrystalProperties properties = CrystalProperties.getCrystalProperties(in);
                 IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(in);
                 IMinorConstellation trait = ItemTunedCrystalBase.getTrait(in);

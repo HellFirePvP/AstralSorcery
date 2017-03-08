@@ -92,10 +92,10 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
         return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

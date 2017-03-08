@@ -45,8 +45,8 @@ public class RecipeHelper {
     }
 
     public static class ShapelessHandleOreRecipe implements IRecipe {
-        protected ItemStack output = null;
-        protected ArrayList<Object> input = new ArrayList<>();
+        protected ItemStack output = ItemStack.EMPTY;
+        protected NonNullList<Object> input = NonNullList.create();
 
         public ShapelessHandleOreRecipe(Block result, Object... recipe) {
             this(new ItemStack(result), recipe);
@@ -130,7 +130,7 @@ public class RecipeHelper {
             for (int x = 0; x < var1.getSizeInventory(); x++) {
                 ItemStack slot = var1.getStackInSlot(x);
 
-                if (slot != null) {
+                if (!slot.isEmpty()) {
                     boolean inRecipe = false;
                     Iterator<Object> req = required.iterator();
 
@@ -164,7 +164,7 @@ public class RecipeHelper {
             return required.isEmpty();
         }
 
-        public ArrayList<Object> getInput() {
+        public NonNullList<Object> getInput() {
             return this.input;
         }
 
@@ -179,7 +179,7 @@ public class RecipeHelper {
         public static final int MAX_CRAFT_GRID_WIDTH = 3;
         public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-        protected ItemStack output = null;
+        protected ItemStack output = ItemStack.EMPTY;
         protected Object[] input = null;
         protected int width = 0;
         protected int height = 0;
@@ -281,7 +281,7 @@ public class RecipeHelper {
             for (int i = 0; i < input.length; i++) {
                 ItemStack ingredient = recipe.recipeItems[i];
 
-                if (ingredient == null) continue;
+                if (ingredient.isEmpty()) continue;
 
                 input[i] = recipe.recipeItems[i];
 
@@ -368,7 +368,7 @@ public class RecipeHelper {
                         if (!matched) {
                             return false;
                         }
-                    } else if (target == null && slot != null) {
+                    } else if (target == null && !slot.isEmpty()) {
                         return false;
                     }
                 }

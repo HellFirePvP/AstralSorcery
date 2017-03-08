@@ -44,9 +44,6 @@ public class CategortAltarAttunement extends JEIBaseCategory<AltarAttunementReci
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, AltarAttunementRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);

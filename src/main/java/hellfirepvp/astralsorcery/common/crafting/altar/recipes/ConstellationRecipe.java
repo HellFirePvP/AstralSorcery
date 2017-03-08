@@ -135,7 +135,7 @@ public class ConstellationRecipe extends AttunementRecipe {
                     return false;
                 }
             } else {
-                if(invHandler.getStackInSlot(slot.slotId) != null) return false;
+                if(!invHandler.getStackInSlot(slot.slotId).isEmpty()) return false;
             }
         }
         return super.matches(altar, invHandler, ignoreStarlightRequirement);

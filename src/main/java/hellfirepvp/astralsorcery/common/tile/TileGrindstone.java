@@ -19,6 +19,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -32,7 +33,7 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
 
     public static final int TICKS_WHEEL_ROTATION = 20;
 
-    private ItemStack grindingItem = null;
+    private ItemStack grindingItem = ItemStack.EMPTY;
     public int tickWheelAnimation = 0, prevTickWheelAnimation = 0;
     private boolean repeat = false; //Used for repeat after effect went off..~
 
@@ -75,12 +76,12 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
         }
     }
 
-    public void setGrindingItem(@Nullable ItemStack stack) {
+    public void setGrindingItem(@Nonnull ItemStack stack) {
         this.grindingItem = stack;
         markForUpdate();
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getGrindingItem() {
         return grindingItem;
     }
@@ -89,16 +90,14 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        grindingItem = ItemStack.loadItemStackFromNBT(compound);
+        grindingItem = new ItemStack(compound);
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if(grindingItem != null) {
-            grindingItem.writeToNBT(compound);
-        }
+        grindingItem.writeToNBT(compound);
     }
 
 }

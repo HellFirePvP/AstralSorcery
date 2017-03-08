@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -326,10 +327,10 @@ public class ClientCameraManager implements ITickHandler {
             return Collections.emptyList();
         }
 
-        @Nullable
+        @Nonnull
         @Override
         public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         @Override

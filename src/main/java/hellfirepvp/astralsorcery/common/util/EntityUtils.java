@@ -48,7 +48,7 @@ public class EntityUtils {
                 if(entity == null || entity.isDead) return false;
                 if(!(entity instanceof EntityItem)) return false;
                 ItemStack i = ((EntityItem) entity).getEntityItem();
-                if(i == null || i.getItem() == null) return false;
+                if(i.isEmpty()) return false;
                 return itemClass.isAssignableFrom(i.getItem().getClass());
             }
         };
@@ -61,7 +61,7 @@ public class EntityUtils {
                 if(entity == null || entity.isDead) return false;
                 if(!(entity instanceof EntityItem)) return false;
                 ItemStack i = ((EntityItem) entity).getEntityItem();
-                if(i == null || i.getItem() == null) return false;
+                if(i.isEmpty()) return false;
                 return i.getItem().equals(item);
             }
         };
@@ -72,7 +72,7 @@ public class EntityUtils {
             if(entity == null || entity.isDead) return false;
             if(!(entity instanceof EntityItem)) return false;
             ItemStack i = ((EntityItem) entity).getEntityItem();
-            if(i == null || i.getItem() == null) return false;
+            if(i.isEmpty()) return false;
             return acceptor.apply(i);
         };
     }

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
 public class ItemRockCrystalSimple extends ItemRockCrystalBase {
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
         subItems.add(stack);

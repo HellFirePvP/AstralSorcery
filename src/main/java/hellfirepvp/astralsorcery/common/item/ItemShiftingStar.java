@@ -54,9 +54,9 @@ public class ItemShiftingStar extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         playerIn.setActiveHand(hand);
-        return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
+        return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
     @Nullable
@@ -65,7 +65,7 @@ public class ItemShiftingStar extends Item {
         if(!worldIn.isRemote && entityLiving instanceof EntityPlayer) {
             EntityPlayer pl = (EntityPlayer) entityLiving;
             if(ResearchManager.setAttunedConstellation(pl, null)) {
-                pl.addChatMessage(new TextComponentTranslation("progress.remove.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
+                pl.sendMessage(new TextComponentTranslation("progress.remove.attunement").setStyle(new Style().setColor(TextFormatting.BLUE)));
                 SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
             }
         }

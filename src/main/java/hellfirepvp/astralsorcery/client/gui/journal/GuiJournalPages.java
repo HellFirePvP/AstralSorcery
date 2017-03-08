@@ -152,11 +152,11 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             String name = I18n.format(unlocTitle);
-            double width = fontRendererObj.getStringWidth(name);
+            double width = fontRenderer.getStringWidth(name);
             GL11.glTranslated(guiLeft + 117, guiTop + 22, 0);
             GL11.glScaled(1.3, 1.3, 1.3);
             GL11.glTranslated(-(width / 2), 0, 0);
-            fontRendererObj.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
+            fontRenderer.drawString(name, 0, 0, 0x00DDDDDD);//Color.LIGHT_GRAY.getRGB());
             GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glPopMatrix();
 

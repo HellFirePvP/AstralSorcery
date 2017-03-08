@@ -69,7 +69,7 @@ public class LensRecipe extends ConstellationRecipe {
         lens = ItemUtils.copyStackWithSize(lens, 1);
         CrystalProperties crystalProp = CrystalProperties.getCrystalProperties(centralGridMap.get(ShapedRecipeSlot.CENTER).getApplicableItems().get(0));
         CrystalProperties.applyCrystalProperties(lens, crystalProp);
-        lens.stackSize = Math.max(1, crystalProp.getSize() / 80);
+        lens.setCount(Math.max(1, crystalProp.getSize() / 80));
         return lens;
     }
 

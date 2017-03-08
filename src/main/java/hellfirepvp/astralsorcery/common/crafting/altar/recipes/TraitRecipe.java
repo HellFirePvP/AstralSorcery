@@ -119,7 +119,7 @@ public class TraitRecipe extends ConstellationRecipe {
                     return false;
                 }
             } else {
-                if(invHandler.getStackInSlot(slot.getSlotId()) != null) return false;
+                if(!invHandler.getStackInSlot(slot.getSlotId()).isEmpty()) return false;
             }
         }
         return super.matches(altar, invHandler, ignoreStarlightRequirement);

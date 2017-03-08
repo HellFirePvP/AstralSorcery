@@ -193,7 +193,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     @Override
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) return;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
         if(dst > Config.maxEffectRenderDistanceSq) return;
 

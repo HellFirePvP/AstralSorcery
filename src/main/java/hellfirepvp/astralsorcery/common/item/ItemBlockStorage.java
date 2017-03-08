@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.item;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -33,13 +35,13 @@ public abstract class ItemBlockStorage extends Item {
     public static void tryStoreBlock(ItemStack storeIn, World w, BlockPos pos) {
         if(w.getTileEntity(pos) != null) return;
         IBlockState stateToStore = w.getBlockState(pos);
-        if(Item.getItemFromBlock(stateToStore.getBlock()) == null) return; //Can't charge the player anyway.
+        if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
         cmp.setString("storedBlock", stateToStore.getBlock().getRegistryName().toString());
         cmp.setInteger("storedMeta", stateToStore.getBlock().getMetaFromState(stateToStore));
     }
 
-    @Nullable
+    @Nonnull
     public static ItemStack getStoredStateAsStack(ItemStack stack) {
         IBlockState stored = getStoredState(stack);
         if(stored == null) return null; //Guarantees also that the block has an itemblock.
@@ -57,7 +59,7 @@ public abstract class ItemBlockStorage extends Item {
         }
         Block b = ForgeRegistries.BLOCKS.getValue(blockRes);
         if(b == null) return null;
-        if(Item.getItemFromBlock(b) == null) return null; //Can't charge the user properly anyway...
+        if(Item.getItemFromBlock(b) == Items.AIR) return null; //Can't charge the user properly anyway...
 
         boolean hasMeta = persistentTag.hasKey("storedMeta");
         int meta = persistentTag.getInteger("storedMeta");

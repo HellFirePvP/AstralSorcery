@@ -189,9 +189,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
             BlockPos bp = NBTUtils.readBlockPosFromNBT(tag);
-            if(bp != null) {
-                this.occupiedConnections.add(bp);
-            }
+            this.occupiedConnections.add(bp);
         }
     }
 

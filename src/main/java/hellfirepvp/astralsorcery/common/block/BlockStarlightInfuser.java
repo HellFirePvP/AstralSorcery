@@ -75,7 +75,7 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork{
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         if(!worldIn.isRemote) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
-            if(infuser != null && infuser.getInputStack() != null) {
+            if(infuser != null && !infuser.getInputStack().isEmpty()) {
                 ItemUtils.dropItemNaturally(worldIn,
                         infuser.getPos().getX() + 0.5,
                         infuser.getPos().getY() + 1,

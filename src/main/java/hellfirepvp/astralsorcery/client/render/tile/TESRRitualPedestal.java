@@ -86,7 +86,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
     private void renderCrystalStack(TileRitualPedestal te, double x, double y, double z) {
         ItemStack i = te.getInventoryHandler().getStackInSlot(0);
-        if(i != null && i.getItem() != null) {
+        if(!i.isEmpty()) {
             Item it = i.getItem();
             if(it instanceof ItemTunedCrystalBase) {
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

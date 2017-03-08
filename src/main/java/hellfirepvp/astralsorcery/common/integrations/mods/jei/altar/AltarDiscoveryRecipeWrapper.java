@@ -51,16 +51,13 @@ public class AltarDiscoveryRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        /*FontRenderer fr = minecraft.fontRendererObj;
+        /*FontRenderer fr = minecraft.fontRenderer;
         String toWrite = IGuiRenderablePage.GUI_INTERFACE.getDescriptionFromStarlightAmount(I18n.format("astralsorcery.journal.recipe.amt.desc"),
                 recipe.getPassiveStarlightRequired(), TileAltar.AltarLevel.DISCOVERY.getStarlightMaxStorage());
         int w = fr.getStringWidth(toWrite);
         fr.drawString(toWrite, recipeWidth / 2 - w / 2 + 1, recipeHeight + 1, 0xCCCCFF);
         fr.drawString(toWrite, recipeWidth / 2 - w / 2, recipeHeight, 0x0044EE);*/
     }
-
-    @Override
-    public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {}
 
     @Nullable
     @Override

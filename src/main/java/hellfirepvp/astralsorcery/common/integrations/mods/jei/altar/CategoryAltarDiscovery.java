@@ -44,9 +44,6 @@ public class CategoryAltarDiscovery extends JEIBaseCategory<AltarDiscoveryRecipe
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, AltarDiscoveryRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);

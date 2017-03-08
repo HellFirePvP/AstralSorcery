@@ -41,7 +41,7 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
         ItemStack in = transmutation.getInputDisplayStack();
         ItemStack out = transmutation.getOutputDisplayStack();
 
-        if(in != null && out != null) {
+        if(!in.isEmpty() && !out.isEmpty()) {
             ingredients.setInput(ItemStack.class, in);
             ingredients.setOutput(ItemStack.class, out);
         }
@@ -49,9 +49,6 @@ public class TransmutationRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
-
-    @Override
-    public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {}
 
     @Nullable
     @Override

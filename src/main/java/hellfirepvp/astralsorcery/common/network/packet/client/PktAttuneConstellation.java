@@ -64,7 +64,7 @@ public class PktAttuneConstellation implements IMessage, IMessageHandler<PktAttu
             World w = DimensionManager.getWorld(message.worldId);
             TileAttunementAltar ta = MiscUtils.getTileAt(w, message.at, TileAttunementAltar.class, true);
             if(ta != null) {
-                ta.askForAttunement(ctx.getServerHandler().playerEntity, cst);
+                ta.askForAttunement(ctx.getServerHandler().player, cst);
             }
             /*EntityPlayer req = ctx.getServerHandler().playerEntity;
             PlayerProgress prog = ResearchManager.getProgress(req, Side.SERVER);

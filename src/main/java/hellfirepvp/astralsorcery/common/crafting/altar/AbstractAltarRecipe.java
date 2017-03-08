@@ -41,7 +41,7 @@ public abstract class AbstractAltarRecipe {
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
     private final IAccessibleRecipe recipe;
-    private final ItemStack out;
+    private ItemStack out = ItemStack.EMPTY;
 
     private int uniqueRecipeId = -1;
 

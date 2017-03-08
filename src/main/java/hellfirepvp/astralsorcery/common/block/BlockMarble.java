@@ -125,13 +125,13 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     @Override
     public String getIdentifierForMeta(int meta) {
         MarbleBlockType mt = getStateFromMeta(meta).getValue(MARBLE_TYPE);
-        return mt == null ? "null" : mt.getName();
+        return mt.getName();
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
         MarbleBlockType type = state.getValue(MARBLE_TYPE);
-        return type == null ? 0 : type.getMeta();
+        return type.getMeta();
     }
 
     @Override

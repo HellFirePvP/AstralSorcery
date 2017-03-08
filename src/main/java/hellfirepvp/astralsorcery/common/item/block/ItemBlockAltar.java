@@ -36,29 +36,27 @@ public class ItemBlockAltar extends ItemBlockCustomName {
     @Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         BlockAltar.AltarType type = newState.getValue(BlockAltar.ALTAR_TYPE);
-        if(type != null) {
-            switch (type) {
-                case ALTAR_1:
-                    break;
-                case ALTAR_2:
-                case ALTAR_3:
-                    BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
-                    for (int xx = -1; xx <= 1; xx++) {
-                        for (int zz = -1; zz <= 1; zz++) {
-                            mut.setPos(pos.getX() + xx, pos.getY(), pos.getZ() + zz);
-                            if (!world.isAirBlock(mut) && !world.getBlockState(mut).getBlock().isReplaceable(world, mut)) {
-                                mut.release();
-                                return false;
-                            }
+        switch (type) {
+            case ALTAR_1:
+                break;
+            case ALTAR_2:
+            case ALTAR_3:
+                BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
+                for (int xx = -1; xx <= 1; xx++) {
+                    for (int zz = -1; zz <= 1; zz++) {
+                        mut.setPos(pos.getX() + xx, pos.getY(), pos.getZ() + zz);
+                        if (!world.isAirBlock(mut) && !world.getBlockState(mut).getBlock().isReplaceable(world, mut)) {
+                            mut.release();
+                            return false;
                         }
                     }
-                    mut.release();
-                    break;
-                case ALTAR_4:
-                    break;
-                case ALTAR_5:
-                    break;
-            }
+                }
+                mut.release();
+                break;
+            case ALTAR_4:
+                break;
+            case ALTAR_5:
+                break;
         }
 
         return super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);

@@ -65,7 +65,7 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
     @Override
     public int getMetaFromState(IBlockState state) {
         BlockType type = state.getValue(BLOCK_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type.ordinal();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
     @Override
     public String getIdentifierForMeta(int meta) {
         BlockType mt = getStateFromMeta(meta).getValue(BLOCK_TYPE);
-        return mt == null ? "null" : mt.getName();
+        return mt.getName();
     }
 
     public static enum BlockType implements IStringSerializable {

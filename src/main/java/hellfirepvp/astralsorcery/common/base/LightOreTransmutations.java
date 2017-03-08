@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -65,7 +66,7 @@ public class LightOreTransmutations {
 
     public static Transmutation tryRemoveTransmutation(ItemStack outRemove, boolean matchMeta) {
         Block b = Block.getBlockFromItem(outRemove.getItem());
-        if(b != null) {
+        if(b != Blocks.AIR) {
             for (Transmutation tr : registeredTransmutations) {
                 if(tr.output.getBlock().equals(b)) {
                     if(!matchMeta || tr.output.getBlock().getMetaFromState(tr.output) == outRemove.getMetadata()) {
@@ -76,7 +77,7 @@ public class LightOreTransmutations {
             }
         }
         for (Transmutation tr : registeredTransmutations) {
-            if(tr.outStack != null && ItemUtils.matchStackLoosely(tr.outStack, outRemove)) {
+            if(!tr.outStack.isEmpty() && ItemUtils.matchStackLoosely(tr.outStack, outRemove)) {
                 registeredTransmutations.remove(tr);
                 return tr;
             }
@@ -127,16 +128,16 @@ public class LightOreTransmutations {
         public final IBlockState output;
         public final double cost;
 
-        @Nullable
+        @Nonnull
         public final ItemStack outStack;
-        @Nullable
+        @Nonnull
         public final ItemStack inStack;
 
         public Transmutation(IBlockState input, IBlockState output, double cost) {
-            this(input, output, null, null, cost);
+            this(input, output, ItemStack.EMPTY, ItemStack.EMPTY, cost);
         }
 
-        public Transmutation(IBlockState input, IBlockState output, @Nullable ItemStack inputDisplay, @Nullable ItemStack outputDisplay, double cost) {
+        public Transmutation(IBlockState input, IBlockState output, @Nonnull ItemStack inputDisplay, @Nonnull ItemStack outputDisplay, double cost) {
             this.input = input;
             this.output = output;
             this.cost = cost;
@@ -144,17 +145,17 @@ public class LightOreTransmutations {
             this.inStack = inputDisplay;
         }
 
-        @Nullable
+        @Nonnull
         public ItemStack getInputDisplayStack() {
-            if (inStack != null) {
+            if (!inStack.isEmpty()) {
                 return inStack.copy();
             }
             return ItemUtils.createBlockStack(input);
         }
 
-        @Nullable
+        @Nonnull
         public ItemStack getOutputDisplayStack() {
-            if(outStack != null) {
+            if(!outStack.isEmpty()) {
                 return outStack.copy();
             }
             return ItemUtils.createBlockStack(output);

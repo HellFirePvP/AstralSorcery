@@ -34,7 +34,7 @@ public abstract class AbstractInfusionRecipe {
     private boolean consumeMultiple = false;
 
     @Nonnull
-    private ItemStack output;
+    private ItemStack output = ItemStack.EMPTY;
     @Nonnull
     private ItemHandle input;
 
@@ -78,23 +78,25 @@ public abstract class AbstractInfusionRecipe {
 
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
-        if(stack != null) {
+        if(!stack.isEmpty()) {
             ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
         }
     }
 
+    @Nonnull
     @SideOnly(Side.CLIENT)
     public ItemStack getOutputForRender() {
-        return ItemUtils.copyStackWithSize(output, output.stackSize);
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
+    @Nonnull
     public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
-        return ItemUtils.copyStackWithSize(output, output.stackSize);
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getOutputForMatching() {
-        return ItemUtils.copyStackWithSize(output, output.stackSize);
+        return ItemUtils.copyStackWithSize(output, output.getCount());
     }
 
     @Nonnull
@@ -116,6 +118,6 @@ public abstract class AbstractInfusionRecipe {
             }
         }
 
-        return infuser.hasMultiblock() && infuser.getInputStack() != null && input.matchCrafting(infuser.getInputStack());
+        return infuser.hasMultiblock() && !infuser.getInputStack().isEmpty() && input.matchCrafting(infuser.getInputStack());
     }
 }

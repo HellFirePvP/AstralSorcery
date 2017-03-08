@@ -98,13 +98,13 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
         String tr = I18n.format(prog.getUnlocalizedName());
         String out = I18n.format("progress.gain.research.chat", tr);
         out = TextFormatting.AQUA + out;
-        Minecraft.getMinecraft().player.addChatMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
     }
 
     @SideOnly(Side.CLIENT)
     private void addProgressChatMessage(int progId) {
         String out = TextFormatting.BLUE + I18n.format("progress.gain.progress.chat");
-        Minecraft.getMinecraft().player.addChatMessage(new TextComponentString(out));
+        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(out));
     }
 
 }

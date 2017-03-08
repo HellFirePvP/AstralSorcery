@@ -45,6 +45,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -77,25 +78,25 @@ public class RegistryItems {
     public static void setupDefaults() {
         creativeTabAstralSorcery = new CreativeTabs(AstralSorcery.MODID) {
             @Override
-            public Item getTabIconItem() {
-                return ItemsAS.journal;
+            public ItemStack getTabIconItem() {
+                return new ItemStack(ItemsAS.journal);
             }
         };
         creativeTabAstralSorceryPapers = new CreativeTabs(AstralSorcery.MODID + ".papers") {
             @Override
-            public Item getTabIconItem() {
-                return ItemsAS.constellationPaper;
+            public ItemStack getTabIconItem() {
+                return new ItemStack(ItemsAS.constellationPaper);
             }
         };
         creativeTabAstralSorceryTunedCrystals = new CreativeTabs(AstralSorcery.MODID + ".crystals") {
             @Override
-            public Item getTabIconItem() {
-                return ItemsAS.tunedRockCrystal;
+            public ItemStack getTabIconItem() {
+                return new ItemStack(ItemsAS.tunedRockCrystal);
             }
         };
 
         crystalToolMaterial = EnumHelper.addToolMaterial("CRYSTAL", 3, 1000, 20.0F, 5.5F, 40);
-        crystalToolMaterial.customCraftingMaterial = null;
+        crystalToolMaterial.setRepairItem(ItemStack.EMPTY);
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
         materialTransparentReplaceable = new MaterialAirish();

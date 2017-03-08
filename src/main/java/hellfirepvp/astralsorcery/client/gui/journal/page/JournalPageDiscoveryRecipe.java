@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 
@@ -118,7 +119,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
 
-                List<ItemStack> expected = recipe.getExpectedStackForRender(srs);
+                NonNullList<ItemStack> expected = recipe.getExpectedStackForRender(srs);
                 if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null || expected.isEmpty()) continue;
                 long select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);

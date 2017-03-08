@@ -105,7 +105,7 @@ public class MiscUtils {
             return true;
         }
         if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return true;
-        return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList().contains(player);
+        return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().contains(player);
     }
 
     public static List<BlockPos> searchAreaFor(World world, BlockPos center, Block blockToSearch, int metaToSearch, int radius) {

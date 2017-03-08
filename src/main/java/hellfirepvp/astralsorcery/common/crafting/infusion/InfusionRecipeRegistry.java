@@ -84,7 +84,7 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (out != null && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
                 iterator.remove();
                 return recipe;
             }
@@ -93,7 +93,7 @@ public class InfusionRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractInfusionRecipe recipe = iterator.next();
             ItemStack out = recipe.getOutputForMatching();
-            if (out != null && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemUtils.matchStackLoosely(recipe.getOutputForMatching(), output)) {
                 iterator.remove();
                 return recipe;
             }

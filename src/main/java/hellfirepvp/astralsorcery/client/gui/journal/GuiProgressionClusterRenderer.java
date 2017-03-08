@@ -102,7 +102,7 @@ public class GuiProgressionClusterRenderer {
                     GL11.glScaled(partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor(), partSizeHandler.getScalingFactor());
                     String name = clickableNodes.get(r).getUnLocalizedName();
                     name = I18n.format(name);
-                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00100033), new Color(0xf0100010), Color.WHITE, Minecraft.getMinecraft().fontRendererObj);
+                    RenderingUtils.renderTooltip(0, 0, Lists.newArrayList(name), new Color(0x00100033), new Color(0xf0100010), Color.WHITE, Minecraft.getMinecraft().fontRenderer);
                     GL11.glPopMatrix();
                 }
             }

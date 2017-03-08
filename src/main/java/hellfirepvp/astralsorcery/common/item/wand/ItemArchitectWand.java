@@ -82,12 +82,12 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     @SideOnly(Side.CLIENT)
     public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks) {
         ItemStack blockStackStored = getStoredStateAsStack(lastCacheInstance);
-        if(blockStackStored == null) return;
+        if(blockStackStored.isEmpty()) return;
 
         int amtFound = 0;
         Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
-            amtFound += stack.stackSize;
+            amtFound += stack.getCount();
         }
 
         int height  =  26;
@@ -126,13 +126,13 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
         String amtString = String.valueOf(amtFound);
-        GL11.glTranslated(-Minecraft.getMinecraft().fontRendererObj.getStringWidth(amtString) / 3, 0, 0);
+        GL11.glTranslated(-Minecraft.getMinecraft().fontRenderer.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
         if(amtString.length() > 3) {
             GL11.glScaled(0.9, 0.9, 0.9);
         }
         int c = 0x00DDDDDD;
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(amtString, 0, 0, c);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(amtString, 0, 0, c);
         GlStateManager.color(1F, 1F, 1F, 1F);
         TextureHelper.refreshTextureBindState();
 
@@ -179,12 +179,15 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (stack.isEmpty()) return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(hand));
+
         if (world.isRemote) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
         IBlockState stored = getStoredState(stack);
         ItemStack consumeStack = getStoredStateAsStack(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack == null) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
         Deque<BlockPos> placeable = filterBlocksToPlace(playerIn, world, architectRange);
         if(!placeable.isEmpty()) {
@@ -205,7 +208,10 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if(stack.isEmpty()) return EnumActionResult.SUCCESS;
+
         if(playerIn.isSneaking()) {
             tryStoreBlock(stack, world, pos);
             return EnumActionResult.SUCCESS;

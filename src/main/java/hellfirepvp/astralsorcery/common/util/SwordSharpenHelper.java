@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -39,18 +40,18 @@ public class SwordSharpenHelper {
     public static List<Class<?>> otherSharpenableSwordSuperClasses = new LinkedList<>();
     public static List<String> blacklistedSharpenableSwordClassNames = new LinkedList<>();
 
-    public static boolean isSwordSharpened(ItemStack stack) {
-        if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemSword)) return false;
+    public static boolean isSwordSharpened(@Nonnull ItemStack stack) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSword)) return false;
         return NBTHelper.getData(stack).getBoolean("sharp");
     }
 
-    public static void setSwordSharpened(ItemStack stack) {
-        if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemSword)) return;
+    public static void setSwordSharpened(@Nonnull ItemStack stack) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSword)) return;
         NBTHelper.getData(stack).setBoolean("sharp", true);
     }
 
-    public static boolean canBeSharpened(ItemStack stack) {
-        if(stack == null || stack.getItem() == null) return false;
+    public static boolean canBeSharpened(@Nonnull ItemStack stack) {
+        if(stack.isEmpty()) return false;
         Item i = stack.getItem();
         if(blacklistedSharpenableSwordClassNames.contains(i.getClass().getName())) return false;
 
@@ -64,9 +65,9 @@ public class SwordSharpenHelper {
         return false;
     }
 
-    public static void applySharpenModifier(ItemStack stack, EntityEquipmentSlot slot, Multimap<String, AttributeModifier> map) {
+    public static void applySharpenModifier(@Nonnull ItemStack stack, EntityEquipmentSlot slot, Multimap<String, AttributeModifier> map) {
         if(isSwordSharpened(stack) && slot.equals(EntityEquipmentSlot.MAINHAND)) {
-            map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), MODIFIER_SHARPENED);
+            map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), MODIFIER_SHARPENED);
         }
     }
 

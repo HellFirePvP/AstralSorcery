@@ -60,7 +60,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
             NBTTagCompound cmp;
             try {
-                cmp = pb.readNBTTagCompoundFromBuffer();
+                cmp = pb.readCompoundTag();
             } catch (IOException e) {
                 AstralSorcery.log.warn("Provider Compound of " + providerId + " threw an IOException! Skipping...");
                 AstralSorcery.log.warn("Exception message: " + e.getMessage());
@@ -92,7 +92,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
             byte providerId = dat.getProviderID();
             pb.writeByte(providerId);
-            pb.writeNBTTagCompoundToBuffer(cmp);
+            pb.writeCompoundTag(cmp);
         }
     }
 

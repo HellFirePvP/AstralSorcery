@@ -44,9 +44,6 @@ public class CategoryAltarConstellation extends JEIBaseCategory<AltarConstellati
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, AltarConstellationRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, false, 48, 18);

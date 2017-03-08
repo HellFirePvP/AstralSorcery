@@ -49,18 +49,18 @@ public class ItemJournal extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if(worldIn.isRemote && !playerIn.isSneaking()) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL, playerIn, worldIn, 0, 0, 0);
         } else if(!worldIn.isRemote && playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL_STORAGE, playerIn, worldIn, 0, 0, 0);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+        return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
     @Nullable
     public static ContainerJournal getContainer(InventoryPlayer playerInv, ItemStack stack, int journalIndex) {
-        if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemJournal)) return null;
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemJournal)) return null;
         return new ContainerJournal(playerInv, stack, journalIndex);
     }
 

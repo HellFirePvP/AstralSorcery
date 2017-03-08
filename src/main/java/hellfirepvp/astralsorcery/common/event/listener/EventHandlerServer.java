@@ -301,7 +301,7 @@ public class EventHandlerServer {
         if(event.getHand() == EnumHand.OFF_HAND) {
             hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
         }
-        if(hand == null || hand.getItem() == null) return;
+        if(hand.isEmpty()) return;
         if(hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
             if(i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
@@ -318,7 +318,7 @@ public class EventHandlerServer {
 
             Item crafted = event.crafting.getItem();
             Block blockCrafted = Block.getBlockFromItem(crafted);
-            if(blockCrafted != null && blockCrafted instanceof BlockMachine) {
+            if(blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
                 if(event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
                     event.player.addStat(RegistryAchievements.achvBuildActTelescope);
                 }

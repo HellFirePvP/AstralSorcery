@@ -43,6 +43,6 @@ public class TransmutationRecipeHandler extends JEIBaseHandler<LightOreTransmuta
     public boolean isRecipeValid(LightOreTransmutations.Transmutation recipe) {
         ItemStack inStack = recipe.getInputDisplayStack();
         ItemStack outStack = recipe.getOutputDisplayStack();
-        return inStack != null && outStack != null;
+        return !inStack.isEmpty() && !outStack.isEmpty();
     }
 }

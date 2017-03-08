@@ -123,8 +123,8 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     }
 
     @Override
-    public boolean getHasNoSky() {
-        return parentOvrProvider.getHasNoSky();
+    public boolean hasNoSky() {
+        return parentOvrProvider.hasNoSky();
     }
 
     @Override

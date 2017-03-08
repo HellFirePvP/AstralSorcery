@@ -54,7 +54,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
     public EntityCrystal(World worldIn, double x, double y, double z, ItemStack stack) {
         super(worldIn, x, y, z, stack);
         Item i = stack.getItem();
-        if(i != null && i instanceof ItemHighlighted) {
+        if(i instanceof ItemHighlighted) {
             applyColor(((ItemHighlighted) i).getHightlightColor(stack));
         }
         setNoDespawn();

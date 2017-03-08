@@ -121,7 +121,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
                     return false;
                 }
             } else {
-                if(invHandler.getStackInSlot(slot.slotId) != null) return false;
+                if(!invHandler.getStackInSlot(slot.slotId).isEmpty()) return false;
             }
         }
 

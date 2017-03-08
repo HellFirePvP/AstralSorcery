@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -36,7 +37,7 @@ public class ConstellationFocusSlot extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return stack != null && stack.getItem() instanceof ItemConstellationFocus && ((ItemConstellationFocus) stack.getItem()).getFocusConstellation(stack) != null;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationFocus && ((ItemConstellationFocus) stack.getItem()).getFocusConstellation(stack) != null;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ConstellationFocusSlot extends SlotItemHandler {
     }
 
     @Override
-    public void putStack(@Nullable ItemStack stack) {
+    public void putStack(@Nonnull ItemStack stack) {
         ta.setFocusStack(stack);
     }
 

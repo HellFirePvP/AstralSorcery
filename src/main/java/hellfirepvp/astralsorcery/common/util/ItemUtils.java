@@ -180,8 +180,8 @@ public class ItemUtils {
         if(slot < 0 || slot >= stacks.length) return;
         ItemStack st = stacks[slot];
         if(st == null) return;
-        st.stackSize--;
-        if(st.stackSize <= 0) {
+        st.getCount()--;
+        if(st.getCount() <= 0) {
             stacks[slot] = null;
         }
     }*/
@@ -196,11 +196,11 @@ public class ItemUtils {
         }
     }
 
-    public static boolean tryPlaceItemInInventory(ItemStack stack, IItemHandler handler) {
+    public static boolean tryPlaceItemInInventory(@Nonnull ItemStack stack, IItemHandler handler) {
         return tryPlaceItemInInventory(stack, handler, 0, handler.getSlots());
     }
 
-    public static boolean tryPlaceItemInInventory(ItemStack stack, IItemHandler handler, int start, int end) {
+    public static boolean tryPlaceItemInInventory(@Nonnull ItemStack stack, IItemHandler handler, int start, int end) {
         ItemStack toAdd = stack.copy();
         if (!hasInventorySpace(toAdd, handler, start, end)) return false;
         int max = stack.getMaxStackSize();
@@ -226,7 +226,7 @@ public class ItemUtils {
         return stack.getCount() == 0;
     }
 
-    public static boolean hasInventorySpace(ItemStack stack, IItemHandler handler, int rangeMin, int rangeMax) {
+    public static boolean hasInventorySpace(@Nonnull ItemStack stack, IItemHandler handler, int rangeMin, int rangeMax) {
         int size = stack.getCount();
         int max = stack.getMaxStackSize();
         for (int i = rangeMin; i < rangeMax && size > 0; i++) {
@@ -243,7 +243,7 @@ public class ItemUtils {
         return size <= 0;
     }
 
-    public static boolean stackEqualsNonNBT(ItemStack stack, ItemStack other) {
+    public static boolean stackEqualsNonNBT(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
         if (stack.isEmpty() && other.isEmpty())
             return true;
         if (stack.isEmpty() || other.isEmpty())
@@ -260,32 +260,32 @@ public class ItemUtils {
         }
     }
 
-    public static ItemStack copyStackWithSize(ItemStack stack, int amount) {
+    public static ItemStack copyStackWithSize(@Nonnull ItemStack stack, int amount) {
         if (stack.isEmpty() || amount <= 0) return ItemStack.EMPTY;
         ItemStack s = stack.copy();
         s.setCount(amount);
         return s;
     }
 
-    public static boolean matchTags(ItemStack stack, ItemStack other) {
+    public static boolean matchTags(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
         return ItemStack.areItemStackTagsEqual(stack, other);
     }
 
-    public static boolean matchStacksStrict(ItemStack stack, ItemStack other) {
+    public static boolean matchStacksStrict(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
         return ItemStack.areItemStacksEqual(stack, other);
     }
 
-    public static boolean matchStacks(ItemStack stack, ItemStack other) {
+    public static boolean matchStacks(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
         if (!ItemStack.areItemsEqual(stack, other)) return false;
         return ItemStack.areItemStackTagsEqual(stack, other);
     }
 
-    public static boolean matchStackLoosely(ItemStack stack, ItemStack other) {
-        if (stack == null) return other == null;
+    public static boolean matchStackLoosely(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
+        if (stack.isEmpty()) return other.isEmpty();
         return stack.isItemEqual(other);
     }
 
-    public static boolean matchesOreDict(String oreDictKey, ItemStack other) {
+    public static boolean matchesOreDict(String oreDictKey, @Nonnull  ItemStack other) {
         NonNullList<ItemStack> stacks = OreDictionary.getOres(oreDictKey);
         for (ItemStack stack : stacks) {
             if (stack.isEmpty()) continue;

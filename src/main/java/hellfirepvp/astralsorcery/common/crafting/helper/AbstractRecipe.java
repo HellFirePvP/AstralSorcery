@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -19,12 +21,13 @@ import net.minecraft.item.ItemStack;
  */
 public abstract class AbstractRecipe {
 
-    private ItemStack output;
+    private ItemStack output = ItemStack.EMPTY;
 
-    public AbstractRecipe(ItemStack output) {
+    public AbstractRecipe(@Nonnull ItemStack output) {
         this.output = output;
     }
 
+    @Nonnull
     public ItemStack getOutput() {
         return output;
     }

@@ -9,10 +9,12 @@
 package hellfirepvp.astralsorcery.common.base;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +92,7 @@ public class OreTypes {
         totalWeight += weight;
     }
 
-    @Nullable
+    @Nonnull
     public static ItemStack getRandomOre(Random random) {
         String key = null;
         double randWeight = random.nextFloat() * totalWeight;
@@ -101,10 +103,10 @@ public class OreTypes {
                 break;
             }
         }
-        if(key == null) return null;
+        if(key == null) return ItemStack.EMPTY;
         NonNullList<ItemStack> ores = OreDictionary.getOres(key);
         for (ItemStack stack : ores) {
-            if(Block.getBlockFromItem(stack.getItem()) == null) continue;
+            if(stack.isEmpty() || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
             String className = stack.getItem().getClass().getName();
             if(!className.toLowerCase().contains("greg")) {
                 if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) stack.setItemDamage(0);

@@ -52,7 +52,7 @@ public class WorldStructureEntry extends ConfigEntry {
         List<BiomeDictionary.Type> resolvedTypes = new LinkedList<>();
         for (String s : strTypes) {
             try {
-                resolvedTypes.add(BiomeDictionary.Type.valueOf(s));
+                resolvedTypes.add(BiomeDictionary.Type.getType(s));
             } catch (Exception e) {
                 AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
             }
@@ -69,7 +69,7 @@ public class WorldStructureEntry extends ConfigEntry {
         String[] def = new String[defaultBiomeTypes.length];
         for (int i = 0; i < defaultBiomeTypes.length; i++) {
             BiomeDictionary.Type t = defaultBiomeTypes[i];
-            def[i] = t.name();
+            def[i] = t.getName();
         }
         return def;
     }

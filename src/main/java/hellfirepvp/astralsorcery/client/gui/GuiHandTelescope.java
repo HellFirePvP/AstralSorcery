@@ -671,7 +671,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         Collection<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
         for (ItemStack stack : papers) {
             IConstellation con = ItemConstellationPaper.getConstellation(stack);
-            if(con.equals(c)) {
+            if(c.equals(con)) {
                 has = true;
                 break;
             }

@@ -49,33 +49,31 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
         GL11.glPopAttrib();
 
         ItemStack grind = te.getGrindingItem();
-        if(grind != null) {
-            if(grind.getItem() != null) {
-                TextureHelper.refreshTextureBindState();
-                TextureHelper.setActiveTextureToAtlasSprite();
-                if(grind.getItem() instanceof IGrindable) {
-                    IGrindable grindable = (IGrindable) grind.getItem();
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    GL11.glPushMatrix();
-                    GL11.glTranslated(x, y, z);
-                    grindable.applyClientGrindstoneTransforms();
-                    RenderHelper.enableStandardItemLighting();
-                    Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
-                    RenderHelper.disableStandardItemLighting();
-                    GL11.glPopMatrix();
-                    GL11.glPopAttrib();
-                }
-                if(grind.getItem() instanceof ItemSword) {
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    GL11.glPushMatrix();
-                    GL11.glTranslated(x, y, z);
-                    IGrindable.applyDefaultGrindstoneTransforms();
-                    RenderHelper.enableStandardItemLighting();
-                    Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
-                    RenderHelper.disableStandardItemLighting();
-                    GL11.glPopMatrix();
-                    GL11.glPopAttrib();
-                }
+        if(!grind.isEmpty()) {
+            TextureHelper.refreshTextureBindState();
+            TextureHelper.setActiveTextureToAtlasSprite();
+            if(grind.getItem() instanceof IGrindable) {
+                IGrindable grindable = (IGrindable) grind.getItem();
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                GL11.glPushMatrix();
+                GL11.glTranslated(x, y, z);
+                grindable.applyClientGrindstoneTransforms();
+                RenderHelper.enableStandardItemLighting();
+                Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
+                RenderHelper.disableStandardItemLighting();
+                GL11.glPopMatrix();
+                GL11.glPopAttrib();
+            }
+            if(grind.getItem() instanceof ItemSword) {
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                GL11.glPushMatrix();
+                GL11.glTranslated(x, y, z);
+                IGrindable.applyDefaultGrindstoneTransforms();
+                RenderHelper.enableStandardItemLighting();
+                Minecraft.getMinecraft().getRenderItem().renderItem(grind, ItemCameraTransforms.TransformType.GROUND);
+                RenderHelper.disableStandardItemLighting();
+                GL11.glPopMatrix();
+                GL11.glPopAttrib();
             }
         }
     }

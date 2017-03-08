@@ -44,9 +44,6 @@ public class CategoryTransmutation extends JEIBaseCategory<TransmutationRecipeWr
     public void drawExtras(Minecraft minecraft) {}
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, TransmutationRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.init(0, true, 22, 17);

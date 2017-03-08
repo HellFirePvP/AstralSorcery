@@ -41,7 +41,7 @@ public class ShapedLightProximityRecipe implements IRecipe {
 
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
-    protected ItemStack output = null;
+    protected ItemStack output = ItemStack.EMPTY;
     protected Object[] input = null;
     protected int width = 0;
     protected int height = 0;
@@ -220,7 +220,7 @@ public class ShapedLightProximityRecipe implements IRecipe {
                     if (!matched) {
                         return false;
                     }
-                } else if (target == null && slot != null) {
+                } else if (target == null && !slot.isEmpty()) {
                     return false;
                 }
             }

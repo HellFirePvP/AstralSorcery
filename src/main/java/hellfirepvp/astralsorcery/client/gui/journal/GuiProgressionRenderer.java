@@ -255,7 +255,7 @@ public class GuiProgressionRenderer {
             GL11.glPushMatrix();
             GL11.glTranslated(mouse.x, mouse.y - 15, 0);
             GL11.glScaled(1.4, 1.4, 1.4);
-            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
             fr.drawStringWithShadow(name, 0, 0, 0xBB5A28FF);
             GL11.glPopMatrix();
             GlStateManager.color(1F, 1F, 1F, 1F); //Resetting.

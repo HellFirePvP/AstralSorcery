@@ -61,25 +61,25 @@ public interface IGrindable {
             return type;
         }
 
-        @Nullable
+        @Nonnull
         public ItemStack getStack() {
             return stack;
         }
 
         public static GrindResult success() {
-            return new GrindResult(ResultType.SUCCESS, null);
+            return new GrindResult(ResultType.SUCCESS, ItemStack.EMPTY);
         }
 
-        public static GrindResult itemChange(ItemStack newStack) {
+        public static GrindResult itemChange(@Nonnull ItemStack newStack) {
             return new GrindResult(ResultType.ITEMCHANGE, newStack);
         }
 
         public static GrindResult failNoOp() {
-            return new GrindResult(ResultType.FAIL_SILENT, null);
+            return new GrindResult(ResultType.FAIL_SILENT, ItemStack.EMPTY);
         }
 
         public static GrindResult failBreakItem() {
-            return new GrindResult(ResultType.FAIL_BREAK_ITEM, null);
+            return new GrindResult(ResultType.FAIL_BREAK_ITEM, ItemStack.EMPTY);
         }
 
     }

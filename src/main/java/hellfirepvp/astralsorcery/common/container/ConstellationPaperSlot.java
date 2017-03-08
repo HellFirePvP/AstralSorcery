@@ -33,7 +33,7 @@ public class ConstellationPaperSlot extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(@Nullable ItemStack stack) {
-        return stack != null && stack.getItem() != null && stack.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(stack) != null;
+        return !stack.isEmpty() && stack.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(stack) != null;
     }
 
     @Override

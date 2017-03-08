@@ -40,7 +40,7 @@ public class RetroGenController {
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
-        ChunkPos pos = event.getChunk().getChunkCoordIntPair();
+        ChunkPos pos = event.getChunk().getPos();
         if(event.getWorld().isRemote || !event.getChunk().isTerrainPopulated() || retroGenActive.contains(pos)) return;
 
         Integer chunkVersion = -1;

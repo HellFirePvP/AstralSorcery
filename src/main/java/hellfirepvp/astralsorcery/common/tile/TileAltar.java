@@ -80,7 +80,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private ActiveCraftingTask craftingTask = null;
     private Object clientCraftSound = null;
 
-    private ItemStack focusItem = null;
+    private ItemStack focusItem = ItemStack.EMPTY;
     private AltarLevel level = AltarLevel.DISCOVERY;
     private boolean doesSeeSky = false;
     private boolean mbState = false;
@@ -149,17 +149,18 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Nullable
     public IConstellation getFocusedConstellation() {
         WorldSkyHandler wh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-        if (focusItem != null && focusItem.getItem() instanceof ItemConstellationFocus && wh != null) {
+        if (!focusItem.isEmpty() && focusItem.getItem() instanceof ItemConstellationFocus && wh != null) {
             return ((ItemConstellationFocus) focusItem.getItem()).getFocusConstellation(focusItem);
         }
         return null;
     }
 
+    @Nonnull
     public ItemStack getFocusItem() {
         return focusItem;
     }
 
-    public void setFocusStack(@Nullable ItemStack stack) {
+    public void setFocusStack(@Nonnull ItemStack stack) {
         this.focusItem = stack;
         markForUpdate();
     }
@@ -168,9 +169,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public void onBreak() {
         super.onBreak();
 
-        if (!world.isRemote && focusItem != null) {
+        if (!world.isRemote && !focusItem.isEmpty()) {
             ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, focusItem);
-            this.focusItem = null;
+            this.focusItem = ItemStack.EMPTY;
         }
     }
 
@@ -255,7 +256,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
         }
 
-        if(out != null) {
+        if(!out.isEmpty()) {
             /*for (EnumFacing dir : EnumFacing.VALUES) { FIXME Item capability system break here :|
                 if(dir == EnumFacing.UP) continue;
 
@@ -264,7 +265,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                     IItemHandler handle = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
                     if(handle != null) {
                         ItemUtils.tryPlaceItemInInventory(out, handle);
-                        if(out.stackSize <= 0) {
+                        if(out.getCount() <= 0) {
                             break;
                         }
                     }
@@ -488,7 +489,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
         }
 
-        this.focusItem = null;
+        this.focusItem = ItemStack.EMPTY;
         if(compound.hasKey("focusItem")) {
             this.focusItem = new ItemStack(compound.getCompoundTag("focusItem"));
         }
@@ -503,7 +504,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         compound.setInteger("starlight", starlightStored);
         compound.setBoolean("mbState", mbState);
 
-        if(focusItem != null) {
+        if(!focusItem.isEmpty()) {
             NBTTagCompound focusTag = new NBTTagCompound();
             focusItem.writeToNBT(focusTag);
             compound.setTag("focusItem", focusTag);

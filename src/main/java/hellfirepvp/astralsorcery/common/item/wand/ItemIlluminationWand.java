@@ -46,8 +46,12 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if (stack.isEmpty()) {
+            return EnumActionResult.SUCCESS;
+        }
+        if (!worldIn.isRemote) {
             IBlockState at = worldIn.getBlockState(pos);
             if(playerIn.isSneaking()) {
                 IBlockState iblockstate = worldIn.getBlockState(pos);
@@ -55,7 +59,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if (!block.isReplaceable(worldIn, pos)) {
                     pos = pos.offset(facing);
                 }
-                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, null, stack) &&
+                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, false, facing, null) &&
                         hasAtLeastCharge(playerIn, Side.SERVER, Config.illuminationWandUseCost)) {
                     if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);

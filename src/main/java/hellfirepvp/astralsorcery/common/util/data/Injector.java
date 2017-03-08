@@ -20,10 +20,11 @@ import java.util.Arrays;
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: Injector
- * Created by makeo
+ * Originally created by makeo for Gadomancy
  * Date: 02.12.13 / 18:45
  */
 public class Injector {
+
     Class clazz;
     Object object;
 

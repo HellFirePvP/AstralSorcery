@@ -151,7 +151,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         MachineType type = state.getValue(MACHINE_TYPE);
         if (type != MachineType.GRINDSTONE) return;
         TileGrindstone tgr = MiscUtils.getTileAt(worldIn, pos, TileGrindstone.class, true);
-        if(tgr == null || tgr.getGrindingItem() == null) return;
+        if(tgr == null || tgr.getGrindingItem().isEmpty()) return;
         ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
     }
 
@@ -172,11 +172,11 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                 if(tgr != null) {
                     if(!world.isRemote) {
                         ItemStack grind = tgr.getGrindingItem();
-                        if(grind != null) {
+                        if(!grind.isEmpty()) {
                             if(player.isSneaking()) {
                                 ItemUtils.dropItem(world, posX + 0.5F, posY + 1F, posZ + 0.5F, grind);
 
-                                tgr.setGrindingItem(null);
+                                tgr.setGrindingItem(ItemStack.EMPTY);
                             } else {
                                 Item i = grind.getItem();
                                 if(i instanceof IGrindable) {
@@ -189,7 +189,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             tgr.setGrindingItem(result.getStack());
                                             break;
                                         case FAIL_BREAK_ITEM:
-                                            tgr.setGrindingItem(null);
+                                            tgr.setGrindingItem(ItemStack.EMPTY);
                                             world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                                             break;
                                     }
@@ -229,7 +229,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                         }
                     } else {
                         ItemStack grind = tgr.getGrindingItem();
-                        if(grind != null && !player.isSneaking()) {
+                        if(!grind.isEmpty() && !player.isSneaking()) {
                             Item i = grind.getItem();
                             if(i instanceof IGrindable) {
                                 if(((IGrindable) i).canGrind(tgr, grind)) {

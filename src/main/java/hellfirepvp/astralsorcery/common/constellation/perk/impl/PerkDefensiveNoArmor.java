@@ -35,7 +35,7 @@ public class PerkDefensiveNoArmor extends ConstellationPerk {
     public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
         int eq = 0;
         for (ItemStack stack : hurt.getArmorInventoryList()) {
-            if(stack != null) {
+            if(!stack.isEmpty()) {
                 eq++;
             }
         }
@@ -52,7 +52,7 @@ public class PerkDefensiveNoArmor extends ConstellationPerk {
             if(player.ticksExisted % 20 != 0) return;
             int eq = 0;
             for (ItemStack stack : player.getArmorInventoryList()) {
-                if(stack != null) {
+                if(!stack.isEmpty()) {
                     eq++;
                 }
             }

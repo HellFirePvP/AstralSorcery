@@ -19,10 +19,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +44,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (MetaType type : MetaType.values()) {
             subItems.add(new ItemStack(itemIn, 1, type.getMeta()));
         }
@@ -59,6 +61,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         return super.hasCustomEntity(stack);
     }
 
+    @Nullable
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
         MetaType type = MetaType.fromMeta(itemstack.getItemDamage());

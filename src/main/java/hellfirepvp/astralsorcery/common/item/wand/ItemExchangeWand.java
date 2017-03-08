@@ -94,12 +94,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     @SideOnly(Side.CLIENT)
     public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks) {
         ItemStack blockStackStored = getStoredStateAsStack(lastCacheInstance);
-        if(blockStackStored == null) return;
+        if(blockStackStored.isEmpty()) return;
 
         int amtFound = 0;
         Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
-            amtFound += stack.stackSize;
+            amtFound += stack.getCount();
         }
 
         int height  =  26;
@@ -138,13 +138,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
         String amtString = String.valueOf(amtFound);
-        GL11.glTranslated(-Minecraft.getMinecraft().fontRendererObj.getStringWidth(amtString) / 3, 0, 0);
+        GL11.glTranslated(-Minecraft.getMinecraft().fontRenderer.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
         if(amtString.length() > 3) {
             GL11.glScaled(0.9, 0.9, 0.9);
         }
         int c = 0x00DDDDDD;
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(amtString, 0, 0, c);
+        Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(amtString, 0, 0, c);
         GlStateManager.color(1F, 1F, 1F, 1F);
         TextureHelper.refreshTextureBindState();
 
@@ -160,7 +160,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
         IBlockState stored = getStoredState(stack);
         ItemStack matchStack = getStoredStateAsStack(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR) || matchStack == null) return;
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || matchStack.isEmpty()) return;
 
         EntityPlayer pl = Minecraft.getMinecraft().player;
         PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
@@ -179,7 +179,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             amt = -1;
         } else {
             for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false).values()) {
-                amt += st.stackSize;
+                amt += st.getCount();
             }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, amt);
@@ -214,8 +214,10 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos origin, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World world, BlockPos origin, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(world.isRemote) return EnumActionResult.SUCCESS;
+        ItemStack stack = playerIn.getHeldItem(hand);
+        if(stack.isEmpty()) return EnumActionResult.SUCCESS;
 
         if(playerIn.isSneaking()) {
             tryStoreBlock(stack, world, origin);
@@ -224,7 +226,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
 
         IBlockState stored = getStoredState(stack);
         ItemStack consumeStack = getStoredStateAsStack(stack);
-        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack == null) return EnumActionResult.SUCCESS;
+        if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack.isEmpty()) return EnumActionResult.SUCCESS;
         IBlockState atOrigin = world.getBlockState(origin);
         if(stored.getBlock().equals(atOrigin.getBlock()) && stored.getBlock().getMetaFromState(stored) == atOrigin.getBlock().getMetaFromState(atOrigin)) {
             return EnumActionResult.SUCCESS;
@@ -235,7 +237,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             amt = -1;
         } else {
             for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false).values()) {
-                amt += st.stackSize;
+                amt += st.getCount();
             }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, amt);

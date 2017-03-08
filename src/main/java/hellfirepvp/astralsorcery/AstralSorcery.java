@@ -15,8 +15,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.server.ServerData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
-import hellfirepvp.astralsorcery.common.registry.RegisteredMods;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -37,7 +35,7 @@ import org.apache.logging.log4j.Logger;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 00:20
  */
-@Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION, acceptedMinecraftVersions="[1.10.2]")
+@Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION, acceptedMinecraftVersions="[1.11.2]")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";

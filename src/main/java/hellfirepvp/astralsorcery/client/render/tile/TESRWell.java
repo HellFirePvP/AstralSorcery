@@ -34,7 +34,7 @@ public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
     @Override
     public void renderTileEntityAt(TileWell te, double x, double y, double z, float partialTicks, int destroyStage) {
         ItemStack catalyst = te.getInventoryHandler().getStackInSlot(0);
-        if(catalyst != null) {
+        if(!catalyst.isEmpty()) {
             EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, catalyst);
             ei.age = te.getTicksExisted();
             ei.hoverStart = 0;

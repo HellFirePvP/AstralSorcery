@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 /**
@@ -41,7 +42,7 @@ public class RegistryEntities {
     }
 
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFreq, boolean sendVelUpdates) {
-        EntityRegistry.registerModEntity(entityClass, name, id, AstralSorcery.instance, trackingRange, updateFreq, sendVelUpdates);
+        EntityRegistry.registerModEntity(new ResourceLocation(AstralSorcery.MODID, name.toLowerCase()), entityClass, name, id, AstralSorcery.instance, trackingRange, updateFreq, sendVelUpdates);
     }
 
 }

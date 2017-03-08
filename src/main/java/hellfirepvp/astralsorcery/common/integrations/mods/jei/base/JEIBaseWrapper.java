@@ -23,27 +23,4 @@ import java.util.List;
  */
 public abstract class JEIBaseWrapper implements IRecipeWrapper {
 
-    @Override
-    @Deprecated
-    public List getInputs() {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    @Deprecated
-    public List getOutputs() {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    @Deprecated
-    public List<FluidStack> getFluidInputs() {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    @Deprecated
-    public List<FluidStack> getFluidOutputs() {
-        return Lists.newArrayList();
-    }
 }

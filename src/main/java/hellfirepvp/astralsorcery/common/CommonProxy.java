@@ -26,7 +26,6 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -58,7 +57,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -130,10 +128,10 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
-        if (RegisteredMods.MINETWEAKER.isLoaded()) {
-            AstralSorcery.log.info("Minetweaker found! Adding recipe handlers...");
-            ModIntegrationCrafttweaker.instance.load();
-        }
+        //if (Mods.MINETWEAKER.isLoaded()) { //TODO MINETWEAKER INTEGRATION
+        //    AstralSorcery.log.info("Minetweaker found! Adding recipe handlers...");
+        //    ModIntegrationCrafttweaker.instance.load();
+        //}
 
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
@@ -238,8 +236,8 @@ public class CommonProxy implements IGuiHandler {
                 return new ContainerAltarTrait(player.inventory, (TileAltar) t);
             case JOURNAL_STORAGE: {
                 ItemStack held = player.getHeldItem(EnumHand.MAIN_HAND);
-                if(held != null) {
-                    if(held.getItem() != null && held.getItem() instanceof ItemJournal) {
+                if(!held.isEmpty()) {
+                    if(held.getItem() instanceof ItemJournal) {
                         return new ContainerJournal(player.inventory, held, player.inventory.currentItem);
                     }
                 }

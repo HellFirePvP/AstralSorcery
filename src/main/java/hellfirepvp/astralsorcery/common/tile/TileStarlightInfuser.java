@@ -76,7 +76,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     private Object clientOrbitalCrafting = null;
     private Object clientOrbitalCraftingMirror = null;
 
-    private ItemStack stack = null;
+    private ItemStack stack = ItemStack.EMPTY;
     private boolean hasMultiblock = false, doesSeeSky = false;
 
     @Override
@@ -149,18 +149,18 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
 
         AbstractInfusionRecipe altarRecipe = craftingTask.getRecipeToCraft();
         ItemStack out = altarRecipe.getOutput(this);
-        if(out != null) {
-            out = ItemUtils.copyStackWithSize(out, out.stackSize);
+        if(!out.isEmpty()) {
+            out = ItemUtils.copyStackWithSize(out, out.getCount());
         }
 
         if(altarRecipe.mayDeleteInput(this)) {
-            this.stack = null;
+            this.stack = ItemStack.EMPTY;
         } else {
             altarRecipe.handleInputDecrement(this);
         }
 
-        if(out != null) {
-            if(out.stackSize > 0) {
+        if(!out.isEmpty()) {
+            if(out.getCount() > 0) {
                 ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
@@ -199,6 +199,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
     }
 
+    @Nonnull
     public ItemStack getInputStack() {
         return stack;
     }
@@ -280,9 +281,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        if(this.stack != null) {
-            NBTHelper.setStack(compound, "stack", stack);
-        }
+        NBTHelper.setStack(compound, "stack", stack);
         compound.setBoolean("mbState", hasMultiblock);
         compound.setBoolean("seesSky", doesSeeSky);
 
@@ -310,13 +309,13 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     public void onInteract(EntityPlayer playerIn, EnumHand heldHand, ItemStack heldItem) {
         if(!playerIn.getEntityWorld().isRemote) {
             if(playerIn.isSneaking()) {
-                if(stack != null) {
+                if(!stack.isEmpty()) {
                     ItemUtils.dropItemNaturally(playerIn.getEntityWorld(),
                             getPos().getX() + 0.5,
                             getPos().getY() + 1,
                             getPos().getZ() + 0.5,
                             stack);
-                    stack = null;
+                    stack = ItemStack.EMPTY;
                     world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                     markForUpdate();
                 }

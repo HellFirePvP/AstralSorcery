@@ -44,9 +44,6 @@ public class WellRecipeWrapper extends JEIBaseWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
 
-    @Override
-    public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {}
-
     @Nullable
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {

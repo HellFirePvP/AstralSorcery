@@ -30,10 +30,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +57,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         subItems.add(new ItemStack(this, 1));
 
         for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
@@ -99,7 +96,9 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        if(itemStackIn.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         if(worldIn.isRemote && getConstellation(itemStackIn) != null) {
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.CONSTELLATION_PAPER, playerIn, worldIn, ConstellationRegistry.getConstellationId(getConstellation(itemStackIn)), 0, 0);
@@ -143,7 +142,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     private void removeInventoryConstellations(InventoryPlayer inventory, List<IConstellation> constellations) {
         if (inventory == null) return;
         for (ItemStack stack : inventory.mainInventory) {
-            if (stack == null || stack.getItem() == null) continue;
+            if (stack.isEmpty()) continue;
             if (stack.getItem() instanceof ItemConstellationPaper) {
                 IConstellation c = getConstellation(stack);
                 if (c != null) {

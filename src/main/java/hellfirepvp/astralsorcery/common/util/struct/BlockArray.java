@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.block.BlockStructural;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -154,7 +155,7 @@ public class BlockArray {
             result.put(at, state);
 
             if(state.getBlock() instanceof BlockLiquid) {
-                world.notifyBlockOfStateChange(at, state.getBlock());
+                world.observedNeighborChanged(at, state.getBlock(), at);
             }
 
             TileEntity placed = world.getTileEntity(at);
@@ -183,14 +184,14 @@ public class BlockArray {
                 //s = new ItemStack(i, 1, otherState.getBlock().getMetaFromState(otherState));
             } else {
                 Item i = Item.getItemFromBlock(info.type);
-                if(i == null) continue;
+                if(i == Items.AIR) continue;
                 s = new ItemStack(i, 1, meta);
             }
-            if(s != null) {
+            if(!s.isEmpty()) {
                 boolean found = false;
                 for (ItemStack stack : out) {
                     if(stack.getItem().getRegistryName().equals(s.getItem().getRegistryName()) && stack.getItemDamage() == s.getItemDamage()) {
-                        stack.stackSize++;
+                        stack.setCount(stack.getCount() + 1);
                         found = true;
                         break;
                     }

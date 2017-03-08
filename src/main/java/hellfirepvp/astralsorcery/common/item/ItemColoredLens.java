@@ -36,6 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -64,7 +65,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (ColorType ct : ColorType.values()) {
             subItems.add(new ItemStack(itemIn, 1, ct.getMeta()));
         }
@@ -73,7 +74,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemColoredLens) {
+        if(!stack.isEmpty() && stack.getItem() instanceof ItemColoredLens) {
             int dmg = stack.getItemDamage();
             if(dmg >= 0 && dmg < ColorType.values().length) {
                 tooltip.add(I18n.format("item.ItemColoredLens.effect." + ColorType.values()[dmg].name().toLowerCase() + ".name"));
@@ -82,11 +83,11 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             ItemStack inHand = playerIn.getHeldItem(EnumHand.MAIN_HAND);
             ColorType type = null;
-            if(inHand != null && inHand.getItem() != null && inHand.getItem() instanceof ItemColoredLens) {
+            if(!inHand.isEmpty() && inHand.getItem() instanceof ItemColoredLens) {
                 int dmg = inHand.getItemDamage();
                 if(dmg >= 0 && dmg < ColorType.values().length) {
                     type = ColorType.values()[dmg];
@@ -97,9 +98,9 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 if(lens != null) {
                     ColorType oldType = lens.setLensColor(type);
                     if(!playerIn.isCreative()) {
-                        inHand.stackSize--;
-                        if(inHand.stackSize <= 0) {
-                            playerIn.setHeldItem(EnumHand.MAIN_HAND, null);
+                        inHand.setCount(inHand.getCount() - 1);
+                        if(inHand.getCount() <= 0) {
+                            playerIn.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                         }
                     }
                     SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);

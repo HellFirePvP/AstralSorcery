@@ -122,7 +122,7 @@ public class TileTreeBeacon extends TileReceiverBase {
             Block b = fakedState.getBlock();
             List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
             for (ItemStack i : drops) {
-                if(i == null || i.getItem() == null) continue;
+                if(i.isEmpty()) continue;
                 ItemUtils.dropItemNaturally(world,
                         out.getX() + rand.nextFloat() * 3 * (rand.nextBoolean() ? 1 : -1),
                         out.getY() + rand.nextFloat() * 3,

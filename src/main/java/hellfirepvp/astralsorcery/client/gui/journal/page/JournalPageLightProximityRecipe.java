@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 
@@ -107,7 +108,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             double offY = offsetY + 103;
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
 
-                List<ItemStack> expected = recipe.getExpectedStackForRender(srs);
+                NonNullList<ItemStack> expected = recipe.getExpectedStackForRender(srs);
                 if(expected == null || expected.isEmpty()) expected = recipe.getExpectedStackForRender(srs.rowMultipler, srs.columnMultiplier);
                 if(expected == null || expected.isEmpty()) continue;
                 long select = ((ClientScheduler.getClientTick() + srs.rowMultipler * 40 + srs.columnMultiplier * 40) / 20);
@@ -170,7 +171,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             if(r.contains(mouseX, mouseY)) {
                 RenderingUtils.renderBlueTooltip((int) (offsetX), (int) (offsetY),
                         Lists.newArrayList(I18n.format("astralsorcery.journal.recipe.starlight")),
-                        Minecraft.getMinecraft().fontRendererObj);
+                        Minecraft.getMinecraft().fontRenderer);
             }
 
             java.util.List<String> out = Lists.newLinkedList();

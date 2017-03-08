@@ -76,9 +76,11 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -144,7 +146,7 @@ public class ClientProxy extends CommonProxy {
         Block block = f.getBlock();
         if(block != null) {
             Item item = Item.getItemFromBlock(block);
-            if (item != null) {
+            if (item != Items.AIR) {
                 ModelLoader.registerItemVariants(item);
                 ModelLoader.setCustomMeshDefinition(item, mapper);
             } else {
@@ -299,7 +301,7 @@ public class ClientProxy extends CommonProxy {
             }
             return;
         }
-        List<ItemStack> list = new ArrayList<>();
+        NonNullList<ItemStack> list = NonNullList.create();
         item.getSubItems(item, item.getCreativeTab(), list);
         if (list.size() > 0) {
             for (ItemStack i : list) {

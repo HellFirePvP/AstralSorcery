@@ -43,6 +43,7 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
         return (int) (super.craftingTickTime() * 1.5);
     }
 
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack toolOut = super.getOutput(centralGridMap, altar);
@@ -65,7 +66,7 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
     public ItemStack getOutputForRender() {
         ItemStack stack = super.getOutputForRender();
         List<CrystalProperties> props = new LinkedList<>();
-        for (int i = 0; i < positions.length; i++) {
+        for (ShapedRecipeSlot position : positions) {
             props.add(CrystalProperties.getMaxRockProperties());
         }
         ItemCrystalToolBase.setToolProperties(stack, ToolCrystalProperties.merge(props));

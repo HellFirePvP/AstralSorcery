@@ -45,7 +45,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock().equals(Blocks.STONE)) {
                 BlockStone.EnumType stoneType = state.getValue(BlockStone.VARIANT);
-                if (stoneType != null && stoneType.equals(BlockStone.EnumType.STONE)) {
+                if (stoneType.equals(BlockStone.EnumType.STONE)) {
                     IBlockState newState = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                     world.setBlockState(pos, newState);
                     RockCrystalBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.ROCK_CRYSTAL);

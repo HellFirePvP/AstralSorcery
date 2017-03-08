@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
+import java.util.Collection;
 import java.util.Random;
 
 /**
@@ -61,8 +62,8 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
 
         Biome b = world.getBiome(pos);
-        BiomeDictionary.Type[] types = BiomeDictionary.getTypesForBiome(b);
-        if(types == null || types.length == 0) return false;
+        Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
+        if(types.isEmpty()) return false;
         boolean applicable = false;
         for (BiomeDictionary.Type t : types) {
             if (cfgEntry.getTypes().contains(t)) applicable = true;

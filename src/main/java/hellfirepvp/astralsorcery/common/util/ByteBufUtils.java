@@ -81,8 +81,8 @@ public class ByteBufUtils {
         return new BlockPos(x, y, z);
     }
 
-    public static void writeItemStack(ByteBuf byteBuf, @Nullable ItemStack stack) {
-        boolean defined = stack != null;
+    public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {
+        boolean defined = !stack.isEmpty();
         byteBuf.writeBoolean(defined);
         if(defined) {
             NBTTagCompound tag = new NBTTagCompound();
@@ -91,13 +91,13 @@ public class ByteBufUtils {
         }
     }
 
-    @Nullable
+    @Nonnull
     public static ItemStack readItemStack(ByteBuf byteBuf) {
         boolean defined = byteBuf.readBoolean();
         if(defined) {
-            return ItemStack.loadItemStackFromNBT(readNBTTag(byteBuf));
+            return new ItemStack(readNBTTag(byteBuf));
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 

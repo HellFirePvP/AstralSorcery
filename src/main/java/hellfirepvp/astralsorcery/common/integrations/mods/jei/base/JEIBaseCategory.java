@@ -55,7 +55,4 @@ public abstract class JEIBaseCategory<T extends IRecipeWrapper> implements IReci
         return Lists.newArrayList();
     }
 
-    @Override
-    @Deprecated
-    public void setRecipe(IRecipeLayout recipeLayout, T recipeWrapper) {}
 }

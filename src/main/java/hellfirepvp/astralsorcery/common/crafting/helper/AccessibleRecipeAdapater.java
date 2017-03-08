@@ -14,6 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +44,9 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
-    public List<ItemStack> getExpectedStackForRender(int row, int column) {
+    public NonNullList<ItemStack> getExpectedStackForRender(int row, int column) {
         ItemHandle handle = abstractRecipe.getExpectedStack(row, column);
-        if(handle == null) return null;
+        if(handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -57,9 +58,9 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
-    public List<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot) {
+    public NonNullList<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot) {
         ItemHandle handle = abstractRecipe.getExpectedStack(slot);
-        if(handle == null) return null;
+        if(handle == null) return NonNullList.create();
         return refactorSubItems(handle.getApplicableItemsForRender());
     }
 
@@ -69,8 +70,8 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     }
 
     @SideOnly(Side.CLIENT)
-    private List<ItemStack> refactorSubItems(List<ItemStack> applicableItems) {
-        List<ItemStack> out = new LinkedList<>();
+    private NonNullList<ItemStack> refactorSubItems(NonNullList<ItemStack> applicableItems) {
+        NonNullList<ItemStack> out = NonNullList.create();
         for (ItemStack oreDictIn : applicableItems) {
             if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
                 oreDictIn.getItem().getSubItems(oreDictIn.getItem(), CreativeTabs.BUILDING_BLOCKS, out);
@@ -104,7 +105,8 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
         return parent.getRemainingItems(inv);
     }
+
 }

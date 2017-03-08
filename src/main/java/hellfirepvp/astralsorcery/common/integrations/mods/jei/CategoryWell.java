@@ -52,9 +52,6 @@ public class CategoryWell extends JEIBaseCategory<WellRecipeWrapper> {
     }
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {}
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, WellRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         IGuiFluidStackGroup fGroup = recipeLayout.getFluidStacks();

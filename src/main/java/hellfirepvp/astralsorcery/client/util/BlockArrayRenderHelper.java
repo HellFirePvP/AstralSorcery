@@ -129,7 +129,7 @@ public class BlockArrayRenderHelper {
             BlockPos offset = data.getKey();
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null && renderData.tesr != null) {
-                renderData.tileEntity.setWorldObj(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
                 renderData.tesr.renderTileEntityAt(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0);
             }
         }

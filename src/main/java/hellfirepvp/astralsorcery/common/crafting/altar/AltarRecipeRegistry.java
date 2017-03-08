@@ -99,7 +99,7 @@ public class AltarRecipeRegistry {
         while (iterator.hasNext()) {
             AbstractAltarRecipe rec = iterator.next();
             ItemStack out = rec.getOutputForMatching();
-            if (out != null && ItemUtils.matchStackLoosely(rec.getOutputForMatching(), output)) {
+            if (!out.isEmpty() && ItemUtils.matchStackLoosely(rec.getOutputForMatching(), output)) {
                 iterator.remove();
                 return rec;
             }

@@ -118,7 +118,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return state.getValue(ALTAR_TYPE) != null;
+        return true;
     }
 
     @Override
@@ -152,11 +152,9 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
             }
         }*/
         AltarType type = state.getValue(ALTAR_TYPE);
-        if(type != null) {
-            AxisAlignedBB box = type.getBox();
-            if(box != null) {
-                return box;
-            }
+        AxisAlignedBB box = type.getBox();
+        if(box != null) {
+            return box;
         }
         return FULL_BLOCK_AABB;
     }
@@ -164,7 +162,6 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         AltarType type = state.getValue(ALTAR_TYPE);
-        if (type == null) return null;
         return type.provideTileEntity(world, state);
     }
 
@@ -176,7 +173,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public int getMetaFromState(IBlockState state) {
         AltarType type = state.getValue(ALTAR_TYPE);
-        return type == null ? 0 : type.ordinal();
+        return type.ordinal();
     }
 
     @Override
@@ -265,7 +262,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public String getIdentifierForMeta(int meta) {
         AltarType mt = getStateFromMeta(meta).getValue(ALTAR_TYPE);
-        return mt == null ? "null" : mt.getName();
+        return mt.getName();
     }
 
     @Override
