@@ -232,7 +232,7 @@ public class GuiHandTelescope extends GuiWHScreen {
                 movementY = f3 * i;
             }
             boolean nullify = this.mc.player.rotationPitch <= -89.99F && Math.abs(movementY) == movementY;
-            this.mc.player.setAngles(movementX, movementY);
+            this.mc.player.turn(movementX, movementY);
             if(nullify) movementY = 0;
             handleHandMovement(MathHelper.floor(movementX), MathHelper.floor(movementY));
         }

@@ -21,6 +21,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlackMarbleBlockType t : BlackMarbleBlockType.values()) {
             list.add(new ItemStack(item, 1, t.ordinal()));
         }
@@ -81,13 +82,13 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     @Override
     public String getIdentifierForMeta(int meta) {
         BlackMarbleBlockType mt = getStateFromMeta(meta).getValue(BLACK_MARBLE_TYPE);
-        return mt == null ? "null" : mt.getName();
+        return mt.getName();
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
         BlackMarbleBlockType type = state.getValue(BLACK_MARBLE_TYPE);
-        return type == null ? 0 : type.getMeta();
+        return type.getMeta();
     }
 
     @Override

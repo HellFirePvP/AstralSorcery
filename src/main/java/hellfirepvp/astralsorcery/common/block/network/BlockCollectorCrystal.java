@@ -17,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (IWeakConstellation major : ConstellationRegistry.getWeakConstellations()) {
             ItemStack stack = new ItemStack(itemIn);
             ItemCollectorCrystal.setConstellation(stack, major);

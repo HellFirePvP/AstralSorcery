@@ -55,9 +55,9 @@ public class ConstellationFocusSlot extends SlotItemHandler {
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
-        super.onPickupFromSlot(playerIn, stack);
+    public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
         ta.markForUpdate();
+        return super.onTake(thePlayer, stack);
     }
 
     @Override

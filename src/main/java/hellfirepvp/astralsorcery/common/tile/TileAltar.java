@@ -224,8 +224,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         AbstractAltarRecipe recipe = craftingTask.getRecipeToCraft();
         ShapeMap current = copyGetCurrentCraftingGrid();
         ItemStack out = recipe.getOutput(current, this); //Central item helps defining output - probably, eventually.
-        if(out != null) {
-            out = ItemUtils.copyStackWithSize(out, out.stackSize);
+        if(!out.isEmpty()) {
+            out = ItemUtils.copyStackWithSize(out, out.getCount());
         }
 
         for (int i = 0; i < 9; i++) {
@@ -270,7 +270,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                     }
                 }
             }*/
-            if(out.stackSize > 0) {
+            if(out.getCount() > 0) {
                 ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, out).setNoDespawn();
             }
         }
@@ -298,7 +298,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         for (int i = 0; i < 9; i++) {
             ShapedRecipeSlot slot = ShapedRecipeSlot.values()[i];
             ItemStack stack = getInventoryHandler().getStackInSlot(i);
-            if(stack != null) {
+            if(!stack.isEmpty()) {
                 current.put(slot, new ItemHandle(ItemUtils.copyStackWithSize(stack, 1)));
             }
         }
@@ -490,7 +490,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         this.focusItem = null;
         if(compound.hasKey("focusItem")) {
-            this.focusItem = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("focusItem"));
+            this.focusItem = new ItemStack(compound.getCompoundTag("focusItem"));
         }
     }
 

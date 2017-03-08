@@ -95,17 +95,18 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
 
-            if(heldItem != null && heldItem.getItem() != null) {
+            ItemStack heldItem = playerIn.getHeldItem(hand);
+            if(!heldItem.isEmpty()) {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
                 if(tw == null) return false;
 
                 WellLiquefaction.LiquefactionEntry entry = WellLiquefaction.getLiquefactionEntry(heldItem);
                 if(entry != null) {
                     ItemStackHandler handle = tw.getInventoryHandler();
-                    if(handle.getStackInSlot(0) != null) return false;
+                    if(!handle.getStackInSlot(0).isEmpty()) return false;
 
                     if(!worldIn.isAirBlock(pos.up())) {
                         return false;
@@ -120,14 +121,14 @@ public class BlockWell extends BlockStarlightNetwork {
                     }
 
                     if(!playerIn.isCreative()) {
-                        heldItem.stackSize--;
+                        heldItem.setCount(heldItem.getCount() - 1);
                     }
-                    if(heldItem.stackSize <= 0) {
-                        playerIn.setHeldItem(hand, null);
+                    if(heldItem.getCount() <= 0) {
+                        playerIn.setHeldItem(hand, ItemStack.EMPTY);
                     }
                 }
 
-                if(FluidUtil.tryFillContainerAndStow(heldItem, tw, new InvWrapper(playerIn.inventory), 1000, playerIn)) {
+                if(FluidUtil.tryFillContainerAndStow(heldItem, tw, new InvWrapper(playerIn.inventory), 1000, playerIn).isSuccess()) {
                     SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
                     tw.markForUpdate();
                 }
@@ -141,7 +142,7 @@ public class BlockWell extends BlockStarlightNetwork {
         TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, true);
         if(tw != null && !worldIn.isRemote) {
             ItemStack stack = tw.getInventoryHandler().getStackInSlot(0);
-            if(stack != null) {
+            if(!stack.isEmpty()) {
                 tw.breakCatalyst();
             }
         }
@@ -160,7 +161,7 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
         for (AxisAlignedBB box : collisionBoxes) {
             addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
         }

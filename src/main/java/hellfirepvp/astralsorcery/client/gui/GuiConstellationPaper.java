@@ -96,7 +96,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
     private void drawHeader() {
         String locName = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         TextureHelper.refreshTextureBindState();
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double length = fr.getStringWidth(locName) * 1.8;
         double offsetLeft = width / 2 - length / 2;
         int offsetTop = guiTop + 31;
@@ -135,7 +135,7 @@ public class GuiConstellationPaper extends GuiWHScreen {
         if(constellation instanceof IConstellationSpecialShowup) {
             double scale = 1.8;
             TextureHelper.refreshTextureBindState();
-            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
             double length = fr.getStringWidth("? ? ?") * scale;
             double offsetLeft = width / 2 - length / 2;
             int offsetTop = guiTop + 207;

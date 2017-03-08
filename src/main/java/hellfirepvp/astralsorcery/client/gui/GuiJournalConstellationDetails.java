@@ -69,7 +69,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         String unloc = constellation.getUnlocalizedName() + ".effect";
         String text = I18n.format(unloc);
         if(unloc.equals(text)) return;
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 
         List<String> lines = new LinkedList<>();
         for (String segment : text.split("<NL>")) {
@@ -134,7 +134,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GL11.glColor4f(br, br, br, 0.8F);
         String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
         TextureHelper.refreshTextureBindState();
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 
         double width = fr.getStringWidth(info);
         double chX = 305 - (width * 1.8 / 2);
@@ -191,7 +191,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             GL11.glDisable(GL11.GL_DEPTH_TEST);
             double scale = 1.8;
             TextureHelper.refreshTextureBindState();
-            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
             double length = fr.getStringWidth("? ? ?") * scale;
             double offsetLeft = guiLeft + 296 - length / 2;
             int offsetTop = guiTop + 199;
@@ -224,7 +224,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GL11.glColor4f(br, br, br, 0.8F);
         String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         TextureHelper.refreshTextureBindState();
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double width = fr.getStringWidth(name);
         double offsetX = 110 - (width * 1.8 / 2);
         GL11.glPushMatrix();

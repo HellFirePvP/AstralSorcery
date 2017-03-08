@@ -17,6 +17,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,7 +75,7 @@ public final class ItemHandle {
     }
 
     public ItemHandle(@Nonnull ItemStack matchStack) {
-        this.applicableItems.add(ItemUtils.copyStackWithSize(matchStack, matchStack.stackSize));
+        this.applicableItems.add(ItemUtils.copyStackWithSize(matchStack, matchStack.getCount()));
         this.handleType = Type.STACK;
     }
 
@@ -102,11 +103,11 @@ public final class ItemHandle {
         }
     }
 
-    public List<ItemStack> getApplicableItems() {
+    public NonNullList<ItemStack> getApplicableItems() {
         if(oreDictName != null) {
-            List<ItemStack> stacks = OreDictionary.getOres(oreDictName);
+            NonNullList<ItemStack> stacks = OreDictionary.getOres(oreDictName);
 
-            List<ItemStack> out = new LinkedList<>();
+            NonNullList<ItemStack> out = NonNullList.create();
             for (ItemStack oreDictIn : stacks) {
                 if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
                     oreDictIn.getItem().getSubItems(oreDictIn.getItem(), CreativeTabs.BUILDING_BLOCKS, out);
@@ -116,9 +117,11 @@ public final class ItemHandle {
             }
             return out;
         } else if(fluidTypeAndAmount != null) {
-            return Lists.newArrayList(UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid()));
+            return NonNullList.withSize(1, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid()));
         } else {
-            return Lists.newArrayList(applicableItems);
+            NonNullList<ItemStack> l = NonNullList.create();
+            l.addAll(applicableItems);
+            return l;
         }
     }
 
@@ -133,12 +136,12 @@ public final class ItemHandle {
     }
 
     @SideOnly(Side.CLIENT)
-    public List<ItemStack> getApplicableItemsForRender() {
-        List<ItemStack> applicable = getApplicableItems();
+    public NonNullList<ItemStack> getApplicableItemsForRender() {
+        NonNullList<ItemStack> applicable = getApplicableItems();
         Iterator<ItemStack> iterator = applicable.iterator();
         while (iterator.hasNext()) {
             ItemStack stack = iterator.next();
-            if(stack == null || stack.getItem() == null) continue;
+            if(stack.isEmpty()) continue;
             Item i = stack.getItem();
             if(i instanceof ItemGatedVisibility) {
                 if(!((ItemGatedVisibility) i).isSupposedToSeeInRender(stack)) {
@@ -159,8 +162,8 @@ public final class ItemHandle {
         return fluidTypeAndAmount;
     }
 
-    public boolean matchCrafting(@Nullable ItemStack stack) {
-        if(stack == null) return false;
+    public boolean matchCrafting(ItemStack stack) {
+        if(stack.isEmpty()) return false;
 
         switch (handleType) {
             case OREDICT:

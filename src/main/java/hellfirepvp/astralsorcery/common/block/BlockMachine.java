@@ -40,12 +40,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -134,7 +129,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (MachineType type : MachineType.values()) {
             list.add(type.asStack());
         }
@@ -143,7 +138,6 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if (type == null) return null;
         return type.provideTileEntity(world, state);
     }
 
@@ -155,16 +149,15 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if (type == null || type != MachineType.GRINDSTONE) return;
+        if (type != MachineType.GRINDSTONE) return;
         TileGrindstone tgr = MiscUtils.getTileAt(worldIn, pos, TileGrindstone.class, true);
         if(tgr == null || tgr.getGrindingItem() == null) return;
         ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         MachineType type = state.getValue(MACHINE_TYPE);
-        if (type == null) return true;
         int posX = pos.getX();
         int posY = pos.getY();
         int posZ = pos.getZ();
@@ -209,25 +202,27 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                 }
                             }
                         } else {
-                            if(stack != null) {
+                            ItemStack stack = player.getHeldItem(hand);
+
+                            if(!stack.isEmpty()) {
                                 Item trySet = stack.getItem();
                                 if(trySet instanceof IGrindable && ((IGrindable) trySet).canGrind(tgr, stack)) {
                                     ItemStack toSet = stack.copy();
-                                    toSet.stackSize = 1;
+                                    toSet.setCount(1);
                                     tgr.setGrindingItem(toSet);
                                     world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
-                                        stack.stackSize--;
+                                        stack.setCount(stack.getCount() - 1);
                                     }
                                 } else if(trySet instanceof ItemSword && !SwordSharpenHelper.isSwordSharpened(stack)) {
                                     ItemStack toSet = stack.copy();
-                                    toSet.stackSize = 1;
+                                    toSet.setCount(1);
                                     tgr.setGrindingItem(toSet);
                                     world.playSound(null, posX, posY, posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
 
                                     if(!player.isCreative()) {
-                                        stack.stackSize--;
+                                        stack.setCount(stack.getCount() - 1);
                                     }
                                 }
                             }
@@ -272,7 +267,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbor) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         switch (state.getValue(MACHINE_TYPE)) {
             case TELESCOPE:
                 if(world.isAirBlock(pos.up())) {
@@ -280,7 +275,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                 }
                 break;
         }
-        super.neighborChanged(state, world, pos, neighbor);
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
     }
 
     @Override
@@ -363,7 +358,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     @Override
     public String getIdentifierForMeta(int meta) {
         MachineType mt = getStateFromMeta(meta).getValue(MACHINE_TYPE);
-        return mt == null ? "null" : mt.getName();
+        return mt.getName();
     }
 
     @Override

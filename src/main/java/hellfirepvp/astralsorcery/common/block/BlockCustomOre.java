@@ -28,6 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -62,7 +63,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (OreType t : OreType.values()) {
             list.add(new ItemStack(item, 1, t.ordinal()));
         }
@@ -71,7 +72,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public int getMetaFromState(IBlockState state) {
         OreType type = state.getValue(ORE_TYPE);
-        return type == null ? 0 : type.getMeta();
+        return type.getMeta();
     }
 
     @Override
@@ -152,7 +153,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public String getIdentifierForMeta(int meta) {
         OreType ot = getStateFromMeta(meta).getValue(ORE_TYPE);
-        return ot == null ? "null" : ot.getName();
+        return ot.getName();
     }
 
     @Override

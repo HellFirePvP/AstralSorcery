@@ -25,10 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -59,7 +56,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
         ItemStack pedestal = new ItemStack(itemIn);
         list.add(pedestal);
     }
@@ -95,31 +92,33 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }*/
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
         if(pedestal == null) {
             return false;
         }
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+
         ItemStackHandler handle = pedestal.getInventoryHandler();
         ItemStack in = handle.getStackInSlot(0);
-        if(heldItem != null) {
+        if(!heldItem.isEmpty()) {
             Item i = heldItem.getItem();
-            if(i != null && i instanceof ItemTunedCrystalBase) {
-                if(in == null) {
+            if(i instanceof ItemTunedCrystalBase) {
+                if(in.isEmpty()) {
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
-                    playerIn.setHeldItem(hand, null);
+                    playerIn.setHeldItem(hand, ItemStack.EMPTY);
                 }
             }
         }
-        if(in != null && playerIn.isSneaking()) {
+        if(!in.isEmpty() && playerIn.isSneaking()) {
             ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, in);
-            handle.setStackInSlot(0, null);
+            handle.setStackInSlot(0, ItemStack.EMPTY);
         }
         return true;
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         TileRitualPedestal te = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
         if(te != null && !worldIn.isRemote) {
             BlockPos toCheck = pos.up();
@@ -164,7 +163,8 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public boolean canRenderInLayer(BlockRenderLayer layer) {
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
         return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
+
 }

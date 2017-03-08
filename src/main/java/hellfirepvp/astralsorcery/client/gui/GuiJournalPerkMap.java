@@ -211,7 +211,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
                     unlockStr = "perk.info.locked";
                 }
                 toolTip.add(I18n.format(unlockStr));
-                RenderingUtils.renderBlueTooltip(mouse.x, mouse.y, toolTip, Minecraft.getMinecraft().fontRendererObj);
+                RenderingUtils.renderBlueTooltip(mouse.x, mouse.y, toolTip, Minecraft.getMinecraft().fontRenderer);
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
@@ -242,7 +242,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         ConstellationPerkMap.Position pos = mapToDisplay.getPosition(perk);
         if(pos != null) {
             unlockPlayMap.put(perk, ClientScheduler.getClientTick());
-            Minecraft.getMinecraft().player.addChatMessage(new TextComponentString(I18n.format("perk.info.unlock", I18n.format(perk.getSingleInstance().getUnlocalizedName()))));
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(I18n.format("perk.info.unlock", I18n.format(perk.getSingleInstance().getUnlocalizedName()))));
         }
     }
 

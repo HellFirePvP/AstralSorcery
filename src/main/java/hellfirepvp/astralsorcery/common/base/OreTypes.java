@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.base;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -101,7 +102,7 @@ public class OreTypes {
             }
         }
         if(key == null) return null;
-        List<ItemStack> ores = OreDictionary.getOres(key);
+        NonNullList<ItemStack> ores = OreDictionary.getOres(key);
         for (ItemStack stack : ores) {
             if(Block.getBlockFromItem(stack.getItem()) == null) continue;
             String className = stack.getItem().getClass().getName();

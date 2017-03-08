@@ -19,16 +19,18 @@ import net.minecraftforge.fml.common.Loader;
  */
 public enum Mods {
 
-    TICONSTRUCT("tconstruct");
+    TICONSTRUCT("tconstruct"),
+    //MINETWEAKER("MineTweaker3"),
+    JEI("jei");
 
-    public final String modName;
+    public final String modid;
 
     private Mods(String modName) {
-        this.modName = modName;
+        this.modid = modName;
     }
 
     public boolean isPresent() {
-        return Loader.isModLoaded(modName);
+        return Loader.isModLoaded(modid);
     }
 
 }

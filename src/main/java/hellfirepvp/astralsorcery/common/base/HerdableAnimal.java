@@ -47,6 +47,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         return registryHerdable.get(entity.getClass());
     }
 
+    //TODO add llama
     public static void init() {
         register(new Cow());
         register(new Chicken());

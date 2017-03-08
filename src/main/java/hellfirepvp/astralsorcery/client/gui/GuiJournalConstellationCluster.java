@@ -127,7 +127,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             TextureHelper.refreshTextureBindState();
             GL11.glColor4f(r, g, b, 1F);
             String translated = I18n.format(unlocTitle).toUpperCase();
-            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
             fr.drawString(translated, guiLeft + 225, guiTop + 14, Color.DARK_GRAY.getRGB(), true);
             //fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
             GlStateManager.color(1F, 1F, 1F, 1F);
@@ -241,7 +241,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
         TextureHelper.refreshTextureBindState();
         String trName = specTitle == null ? I18n.format(display.getUnlocalizedName()).toUpperCase() : I18n.format(specTitle).toUpperCase();
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         //OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
         //fontRenderer.font_size_multiplicator = 0.04F;
         float fullLength = (width / 2) - (((float) fr.getStringWidth(trName)) / 2F);

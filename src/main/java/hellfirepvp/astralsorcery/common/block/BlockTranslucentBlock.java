@@ -94,15 +94,15 @@ public class BlockTranslucentBlock extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState fst = getFakedStateTile(worldIn, pos);
         if(fst != null) {
             Block actual = fst.getBlock();
             try {
-                return actual.onBlockActivated(worldIn, pos, fst, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+                return actual.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
             } catch (Exception exc) {}
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override

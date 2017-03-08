@@ -36,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -78,7 +79,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public boolean causesSuffocation() {
+    public boolean causesSuffocation(IBlockState state) {
         return false;
     }
 
@@ -112,7 +113,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int i = 0; i < 5; i++) {
             list.add(new ItemStack(itemIn, 1, i));
         }
@@ -197,7 +198,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         BlockPos down = pos.down();
         IBlockState downState = worldIn.getBlockState(down);
         if(!downState.isSideSolid(worldIn, down, EnumFacing.UP)) {

@@ -12,22 +12,26 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
@@ -43,20 +47,21 @@ public class ItemUtils {
     private static final Random rand = new Random();
 
     public static EntityItem dropItem(World world, double x, double y, double z, ItemStack stack) {
-        if(world.isRemote) return null;
+        if (world.isRemote) return null;
         EntityItem ei = new EntityItem(world, x, y, z, stack);
         ei.motionX = 0;
         ei.motionY = 0;
         ei.motionZ = 0;
-        world.spawnEntityInWorld(ei);
+        world.spawnEntity(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }
+
     public static EntityItem dropItemNaturally(World world, double x, double y, double z, ItemStack stack) {
-        if(world.isRemote) return null;
+        if (world.isRemote) return null;
         EntityItem ei = new EntityItem(world, x, y, z, stack);
         applyRandomDropOffset(ei);
-        world.spawnEntityInWorld(ei);
+        world.spawnEntity(ei);
         ei.setDefaultPickupDelay();
         return ei;
     }
@@ -67,10 +72,10 @@ public class ItemUtils {
         item.motionZ = rand.nextFloat() * 0.3F - 0.15D;
     }
 
-    @Nullable
+    @Nonnull
     public static ItemStack createBlockStack(IBlockState state) {
         Item i = Item.getItemFromBlock(state.getBlock());
-        if(i == null) return null;
+        if (i == Items.AIR) return ItemStack.EMPTY;
         int meta = state.getBlock().getMetaFromState(state);
         return new ItemStack(i, 1, meta);
     }
@@ -78,7 +83,7 @@ public class ItemUtils {
     @Nullable
     public static IBlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
-        if(b == null) return null;
+        if (b == Blocks.AIR) return null;
         return b.getStateFromMeta(stack.getMetadata());
     }
 
@@ -86,8 +91,8 @@ public class ItemUtils {
         List<ItemStack> out = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if(s != null && s.getItem() != null && s.getItem() == i)
-                out.add(copyStackWithSize(s, s.stackSize));
+            if (!s.isEmpty() && s.getItem() == i)
+                out.add(copyStackWithSize(s, s.getCount()));
         }
         return out;
     }
@@ -108,8 +113,8 @@ public class ItemUtils {
         Map<Integer, ItemStack> slotsOut = new HashMap<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if(strict ? matchStacks(s, match) : matchStackLoosely(s, match))
-                slotsOut.put(j, copyStackWithSize(s, s.stackSize));
+            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match))
+                slotsOut.put(j, copyStackWithSize(s, s.getCount()));
         }
         return slotsOut;
     }
@@ -120,17 +125,17 @@ public class ItemUtils {
 
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
         Map<Integer, ItemStack> contents = findItemsInInventory(handler, toConsume, false);
-        if(contents.isEmpty()) return false;
+        if (contents.isEmpty()) return false;
 
-        int cAmt = toConsume.stackSize;
+        int cAmt = toConsume.getCount();
         for (int slot : contents.keySet()) {
             ItemStack inSlot = contents.get(slot);
-            int toRemove = cAmt > inSlot.stackSize ? inSlot.stackSize : cAmt;
+            int toRemove = cAmt > inSlot.getCount() ? inSlot.getCount() : cAmt;
             cAmt -= toRemove;
-            if(!simulate) {
-                handler.setStackInSlot(slot, copyStackWithSize(inSlot, inSlot.stackSize - toRemove));
+            if (!simulate) {
+                handler.setStackInSlot(slot, copyStackWithSize(inSlot, inSlot.getCount() - toRemove));
             }
-            if(cAmt <= 0) {
+            if (cAmt <= 0) {
                 break;
             }
         }
@@ -138,10 +143,10 @@ public class ItemUtils {
     }
 
     public static void dropInventory(IItemHandler handle, World worldIn, BlockPos pos) {
-        if(worldIn.isRemote) return;
+        if (worldIn.isRemote) return;
         for (int i = 0; i < handle.getSlots(); i++) {
             ItemStack stack = handle.getStackInSlot(i);
-            if(stack == null) continue;
+            if (stack.isEmpty()) continue;
             dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
         }
     }
@@ -152,22 +157,19 @@ public class ItemUtils {
 
     //Returns true if the fluid with the specified amount could be drained, false if not.
     public static boolean drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
-        if(stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem ifci = (IFluidContainerItem) stack.getItem();
-            FluidStack containing = ifci.getFluid(stack);
-            if(containing != null && containing.getFluid() != null) {
-                if(containing.getFluid().equals(fluidStack.getFluid())) {
-                    FluidStack drained = ifci.drain(stack, fluidStack.amount, doDrain);
-                    if(drained != null && drained.amount >= fluidStack.amount) {
-                        return true;
-                    }
-                }
-            }
+        if (tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.UP), fluidStack, doDrain) ||
+                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP), fluidStack, doDrain) ||
+                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null), fluidStack, doDrain) ||
+                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null), fluidStack, doDrain)) {
+            return true;
         }
-        IFluidHandler handle = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-        if(handle != null) {
-            FluidStack tryDrain = handle.drain(fluidStack.copy(), doDrain);
-            if(tryDrain != null && tryDrain.amount >= fluidStack.amount) {
+        return false;
+    }
+
+    private static boolean tryDrain(@Nullable IFluidHandler cap, FluidStack stack, boolean doDrain) {
+        if (cap != null) {
+            FluidStack tryDrain = cap.drain(stack.copy(), doDrain);
+            if (tryDrain != null && tryDrain.amount >= stack.amount) {
                 return true;
             }
         }
@@ -185,12 +187,12 @@ public class ItemUtils {
     }*/
 
     public static void decrStackInInventory(ItemStackHandler handler, int slot) {
-        if(slot < 0 || slot >= handler.getSlots()) return;
+        if (slot < 0 || slot >= handler.getSlots()) return;
         ItemStack st = handler.getStackInSlot(slot);
-        if(st == null) return;
-        st.stackSize--;
-        if(st.stackSize <= 0) {
-            handler.setStackInSlot(slot, null);
+        if (st.isEmpty()) return;
+        st.setCount(st.getCount() - 1);
+        if (st.getCount() <= 0) {
+            handler.setStackInSlot(slot, ItemStack.EMPTY);
         }
     }
 
@@ -200,40 +202,40 @@ public class ItemUtils {
 
     public static boolean tryPlaceItemInInventory(ItemStack stack, IItemHandler handler, int start, int end) {
         ItemStack toAdd = stack.copy();
-        if(!hasInventorySpace(toAdd, handler, start, end)) return false;
+        if (!hasInventorySpace(toAdd, handler, start, end)) return false;
         int max = stack.getMaxStackSize();
 
         for (int i = start; i < end; i++) {
             ItemStack in = handler.getStackInSlot(i);
-            if (in == null) {
-                int added = Math.min(stack.stackSize, max);
-                stack.stackSize -= added;
+            if (in.isEmpty()) {
+                int added = Math.min(stack.getCount(), max);
+                stack.setCount(stack.getCount() - added);
                 handler.insertItem(i, copyStackWithSize(stack, added), false);
                 return true;
             } else {
                 if (stackEqualsNonNBT(stack, in) && matchTags(stack, in)) {
-                    int space = max-in.stackSize;
-                    int added = Math.min(stack.stackSize, space);
-                    stack.stackSize -= added;
-                    handler.getStackInSlot(i).stackSize += added;
-                    if (stack.stackSize <= 0)
+                    int space = max - in.getCount();
+                    int added = Math.min(stack.getCount(), space);
+                    stack.setCount(stack.getCount() - added);
+                    handler.getStackInSlot(i).setCount(handler.getStackInSlot(i).getCount() + added);
+                    if (stack.getCount() <= 0)
                         return true;
                 }
             }
         }
-        return stack.stackSize == 0;
+        return stack.getCount() == 0;
     }
 
     public static boolean hasInventorySpace(ItemStack stack, IItemHandler handler, int rangeMin, int rangeMax) {
-        int size = stack.stackSize;
+        int size = stack.getCount();
         int max = stack.getMaxStackSize();
         for (int i = rangeMin; i < rangeMax && size > 0; i++) {
             ItemStack in = handler.getStackInSlot(i);
-            if (in == null) {
+            if (in.isEmpty()) {
                 size -= max;
             } else {
                 if (stackEqualsNonNBT(stack, in) && matchTags(stack, in)) {
-                    int space = max-in.stackSize;
+                    int space = max - in.getCount();
                     size -= space;
                 }
             }
@@ -242,26 +244,26 @@ public class ItemUtils {
     }
 
     public static boolean stackEqualsNonNBT(ItemStack stack, ItemStack other) {
-        if (stack == null && other == null)
+        if (stack.isEmpty() && other.isEmpty())
             return true;
-        if (stack == null || other == null || stack.getItem() == null || other.getItem() == null)
+        if (stack.isEmpty() || other.isEmpty())
             return false;
         Item sItem = stack.getItem();
         Item oItem = other.getItem();
-        if(sItem.getHasSubtypes() || oItem.getHasSubtypes()) {
+        if (sItem.getHasSubtypes() || oItem.getHasSubtypes()) {
             return sItem.equals(other.getItem()) &&
                     (stack.getItemDamage() == other.getItemDamage() ||
-                    stack.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
-                    other.getItemDamage() == OreDictionary.WILDCARD_VALUE);
+                            stack.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
+                            other.getItemDamage() == OreDictionary.WILDCARD_VALUE);
         } else {
             return sItem.equals(other.getItem());
         }
     }
 
     public static ItemStack copyStackWithSize(ItemStack stack, int amount) {
-        if(stack == null || stack.getItem() == null || amount <= 0) return null;
+        if (stack.isEmpty() || amount <= 0) return ItemStack.EMPTY;
         ItemStack s = stack.copy();
-        s.stackSize = amount;
+        s.setCount(amount);
         return s;
     }
 
@@ -274,20 +276,20 @@ public class ItemUtils {
     }
 
     public static boolean matchStacks(ItemStack stack, ItemStack other) {
-        if(!ItemStack.areItemsEqual(stack, other)) return false;
+        if (!ItemStack.areItemsEqual(stack, other)) return false;
         return ItemStack.areItemStackTagsEqual(stack, other);
     }
 
     public static boolean matchStackLoosely(ItemStack stack, ItemStack other) {
-        if(stack == null) return other == null;
+        if (stack == null) return other == null;
         return stack.isItemEqual(other);
     }
 
     public static boolean matchesOreDict(String oreDictKey, ItemStack other) {
-        List<ItemStack> stacks = OreDictionary.getOres(oreDictKey);
+        NonNullList<ItemStack> stacks = OreDictionary.getOres(oreDictKey);
         for (ItemStack stack : stacks) {
-            if(stack == null) continue;
-            if(matchStackLoosely(stack, other))
+            if (stack.isEmpty()) continue;
+            if (matchStackLoosely(stack, other))
                 return true;
         }
         return false;

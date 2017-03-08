@@ -21,6 +21,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -52,7 +53,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
             if(!t.obtainableInCreative()) continue;
             list.add(new ItemStack(item, 1, t.getMeta()));

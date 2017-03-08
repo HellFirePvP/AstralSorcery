@@ -65,21 +65,21 @@ public abstract class AbstractAltarRecipe {
 
     @Nonnull
     public ItemStack getOutputForRender() {
-        return ItemUtils.copyStackWithSize(out, out.stackSize);
+        return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
     public IAccessibleRecipe getNativeRecipe() {
         return recipe;
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
-        return ItemUtils.copyStackWithSize(out, out.stackSize);
+        return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getOutputForMatching() {
-        return ItemUtils.copyStackWithSize(out, out.stackSize);
+        return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
@@ -165,7 +165,7 @@ public abstract class AbstractAltarRecipe {
 
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotID());
-        if(stack != null) {
+        if(!stack.isEmpty()) {
             ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
         }
     }
@@ -178,7 +178,7 @@ public abstract class AbstractAltarRecipe {
 
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
-        if(stack != null) {
+        if(!stack.isEmpty()) {
             ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
         }
     }
@@ -191,7 +191,7 @@ public abstract class AbstractAltarRecipe {
 
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
-        if(stack != null) {
+        if(!stack.isEmpty()) {
             ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
         }
     }

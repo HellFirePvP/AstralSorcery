@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
@@ -163,19 +164,12 @@ public class RecipeHelper {
             return required.isEmpty();
         }
 
-        /**
-         * Returns the input for this recipe, any mod accessing this value should never
-         * manipulate the values in this array as it will effect the recipe itself.
-         *
-         * @return The recipes input vales.
-         */
         public ArrayList<Object> getInput() {
             return this.input;
         }
 
         @Override
-        public ItemStack[] getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
-        {
+        public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
             return ForgeHooks.defaultRecipeGetRemainingItems(inv);
         }
     }
@@ -388,19 +382,12 @@ public class RecipeHelper {
             return this;
         }
 
-        /**
-         * Returns the input for this recipe, any mod accessing this value should never
-         * manipulate the values in this array as it will effect the recipe itself.
-         *
-         * @return The recipes input vales.
-         */
         public Object[] getInput() {
             return this.input;
         }
 
         @Override
-        public ItemStack[] getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
-        {
+        public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
             return ForgeHooks.defaultRecipeGetRemainingItems(inv);
         }
 

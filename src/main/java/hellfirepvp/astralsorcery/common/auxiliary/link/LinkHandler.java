@@ -64,7 +64,7 @@ public class LinkHandler implements ITickHandler {
             case SELECT:
                 String name = tile.getUnLocalizedDisplayName();
                 if(name != null) {
-                    playerIn.addChatMessage(new TextComponentTranslation("misc.link.start", new TextComponentTranslation(name)).setStyle(green));
+                    playerIn.sendMessage(new TextComponentTranslation("misc.link.start", new TextComponentTranslation(name)).setStyle(green));
                 }
                 tile.onSelect(playerIn);
                 break;
@@ -84,7 +84,7 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
-                        playerIn.addChatMessage(new TextComponentTranslation("misc.link.link", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TextComponentTranslation("misc.link.link", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
                     }
                 }
                 break;
@@ -100,7 +100,7 @@ public class LinkHandler implements ITickHandler {
                     }
                     String linkedFrom = tile.getUnLocalizedDisplayName();
                     if(linkedFrom != null) {
-                        playerIn.addChatMessage(new TextComponentTranslation("misc.link.unlink", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
+                        playerIn.sendMessage(new TextComponentTranslation("misc.link.unlink", new TextComponentTranslation(linkedFrom), new TextComponentTranslation(linkedTo)).setStyle(green));
                     }
                 }
                 break;
@@ -119,16 +119,16 @@ public class LinkHandler implements ITickHandler {
 
             boolean needsRemoval = true;
             ItemStack inhand = pl.getHeldItemMainhand();
-            if (inhand != null && inhand.getItem() != null && inhand.getItem() instanceof IItemLinkingTool)
+            if (!inhand.isEmpty() && inhand.getItem() instanceof IItemLinkingTool)
                 needsRemoval = false;
             inhand = pl.getHeldItemOffhand();
-            if (inhand != null && inhand.getItem() != null && inhand.getItem() instanceof IItemLinkingTool)
+            if (!inhand.isEmpty() && inhand.getItem() instanceof IItemLinkingTool)
                 needsRemoval = false;
             int dimId = session.selected.getLinkWorld().provider.getDimension();
             if(dimId != pl.dimension) needsRemoval = true;
             if (needsRemoval) {
                 iterator.remove();
-                pl.addChatMessage(new TextComponentTranslation("misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
+                pl.sendMessage(new TextComponentTranslation("misc.link.stop").setStyle(new Style().setColor(TextFormatting.RED)));
             }
         }
     }

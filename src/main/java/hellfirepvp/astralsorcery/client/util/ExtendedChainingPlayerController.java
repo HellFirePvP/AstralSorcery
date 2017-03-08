@@ -110,13 +110,13 @@ public class ExtendedChainingPlayerController extends PlayerControllerMP {
     }
 
     @Override
-    public EnumActionResult processRightClick(EntityPlayer player, World worldIn, ItemStack stack, EnumHand hand) {
-        return delegate.processRightClick(player, worldIn, stack, hand);
+    public EnumActionResult processRightClick(EntityPlayer player, World worldIn, EnumHand hand) {
+        return delegate.processRightClick(player, worldIn, hand);
     }
 
     @Override
-    public EnumActionResult processRightClickBlock(EntityPlayerSP player, WorldClient worldIn, @Nullable ItemStack stack, BlockPos pos, EnumFacing facing, Vec3d vec, EnumHand hand) {
-        return delegate.processRightClickBlock(player, worldIn, stack, pos, facing, vec, hand);
+    public EnumActionResult processRightClickBlock(EntityPlayerSP player, WorldClient worldIn, BlockPos pos, EnumFacing direction, Vec3d vec, EnumHand hand) {
+        return delegate.processRightClickBlock(player, worldIn, pos, direction, vec, hand);
     }
 
     @Override
@@ -130,13 +130,13 @@ public class ExtendedChainingPlayerController extends PlayerControllerMP {
     }
 
     @Override
-    public EnumActionResult interactWithEntity(EntityPlayer player, Entity target, @Nullable ItemStack heldItem, EnumHand hand) {
-        return delegate.interactWithEntity(player, target, heldItem, hand);
+    public EnumActionResult interactWithEntity(EntityPlayer player, Entity target, EnumHand hand) {
+        return delegate.interactWithEntity(player, target, hand);
     }
 
     @Override
-    public EnumActionResult interactWithEntity(EntityPlayer player, Entity target, RayTraceResult raytrace, @Nullable ItemStack heldItem, EnumHand hand) {
-        return delegate.interactWithEntity(player, target, raytrace, heldItem, hand);
+    public EnumActionResult interactWithEntity(EntityPlayer player, Entity target, RayTraceResult ray, EnumHand hand) {
+        return delegate.interactWithEntity(player, target, ray, hand);
     }
 
     @Override

@@ -72,7 +72,6 @@ public class ContainerJournal extends Container {
         }
     }
 
-    @Nullable
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = null;
@@ -84,27 +83,27 @@ public class ContainerJournal extends Container {
 
             if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (index >= 27 && index < 36) {
                 if (!this.mergeItemStack(itemstack1, 0, 27, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;
@@ -120,7 +119,7 @@ public class ContainerJournal extends Container {
             LinkedList<IConstellation> saveConstellations = new LinkedList<>();
             for (int i = 36; i < 63; i++) {
                 ItemStack in = inventorySlots.get(i).getStack();
-                if(in == null || in.getItem() == null) continue;
+                if(in.isEmpty()) continue;
                 IConstellation c = ItemConstellationPaper.getConstellation(in);
                 if(c != null) {
                     saveConstellations.add(c);

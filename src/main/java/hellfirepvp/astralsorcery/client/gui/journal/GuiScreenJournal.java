@@ -98,12 +98,13 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         TextureHelper.setActiveTextureToAtlasSprite();
         //Reset styles, because MC fontrenderer is STUPID A F
         if(titleRGBColor == Color.WHITE.getRGB()) {
-            fontRendererObj.drawString("", 0, 0, Color.BLACK.getRGB());
+            fontRenderer.drawString("", 0, 0, Color.BLACK.getRGB());
         } else {
-            fontRendererObj.drawString("", 0, 0, Color.WHITE.getRGB());
+            fontRenderer.drawString("", 0, 0, Color.WHITE.getRGB());
         }
         GL11.glPushMatrix();
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         textureBookmark.bind();
 
         Rectangle r = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), MathHelper.floor(width), MathHelper.floor(height));
@@ -127,7 +128,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 2, offsetY + 4, zLevel + 50);
         GL11.glScaled(0.7, 0.7, 0.7);
-        fontRendererObj.drawString(I18n.format(title), 0, 0, titleRGBColor);
+        fontRenderer.drawString(I18n.format(title), 0, 0, titleRGBColor);
         GL11.glPopMatrix();
 
         GlStateManager.color(1F, 1F, 1F, 1F);

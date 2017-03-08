@@ -56,11 +56,11 @@ public class BlockStarlightInfuser extends BlockStarlightNetwork{
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote && hand.equals(EnumHand.MAIN_HAND)) {
             TileStarlightInfuser infuser = MiscUtils.getTileAt(worldIn, pos, TileStarlightInfuser.class, true);
             if(infuser != null) {
-                infuser.onInteract(playerIn, hand, heldItem);
+                infuser.onInteract(playerIn, hand, playerIn.getHeldItem(hand));
             }
         }
         return true;

@@ -307,7 +307,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         return new TransmissionReceiverStarlightInfuser(at);
     }
 
-    public void onInteract(EntityPlayer playerIn, EnumHand heldHand, @Nullable ItemStack heldItem) {
+    public void onInteract(EntityPlayer playerIn, EnumHand heldHand, ItemStack heldItem) {
         if(!playerIn.getEntityWorld().isRemote) {
             if(playerIn.isSneaking()) {
                 if(stack != null) {
@@ -321,18 +321,16 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                     markForUpdate();
                 }
             } else {
-                if(heldItem != null) {
-                    if(stack == null) {
-                        heldItem.stackSize--;
+                if(!heldItem.isEmpty()) {
+                    if(stack.isEmpty()) {
+                        heldItem.setCount(heldItem.getCount() - 1);
                         this.stack = ItemUtils.copyStackWithSize(heldItem, 1);
-                        if(heldItem.stackSize <= 0) {
-                            playerIn.setHeldItem(heldHand, null);
+                        if(heldItem.getCount() <= 0) {
+                            playerIn.setHeldItem(heldHand, ItemStack.EMPTY);
                         }
                         world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                         markForUpdate();
-                    }/* else if(heldItem.getItem() instanceof ItemWand) {
-                        findRecipe(playerIn);
-                    }*/
+                    }
                 }
             }
         }

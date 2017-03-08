@@ -41,17 +41,16 @@ public abstract class ContainerAltarBase extends Container {
         bindPlayerInventory();
         bindAltarInventory();
 
-        this.plSize = playerInv.mainInventory.length;
+        this.plSize = playerInv.mainInventory.size();
     }
 
     abstract void bindPlayerInventory();
 
     abstract void bindAltarInventory();
 
-    @Nullable
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack()) {
@@ -67,27 +66,27 @@ public abstract class ContainerAltarBase extends Container {
             }
             if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (index >= 27 && index < 36) {
                 if (!this.mergeItemStack(itemstack1, 0, 27, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (!this.mergeItemStack(itemstack1, 0, 36, false)) {
-                return null;
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.stackSize == 0) {
-                slot.putStack(null);
+            if (itemstack1.getCount() == 0) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.EMPTY;
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;

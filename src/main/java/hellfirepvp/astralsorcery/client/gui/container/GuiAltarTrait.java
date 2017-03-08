@@ -71,7 +71,7 @@ public class GuiAltarTrait extends GuiAltarBase {
             GL11.glScaled(2.5, 2.5, 2.5);
 
             itemRender.renderItemAndEffectIntoGUI(mc.player, out, 0, 0);
-            itemRender.renderItemOverlayIntoGUI(fontRendererObj, out, 0, 0, null);
+            itemRender.renderItemOverlayIntoGUI(fontRenderer, out, 0, 0, null);
 
             GL11.glPopMatrix();
             GL11.glPopAttrib();

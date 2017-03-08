@@ -14,16 +14,16 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.1.5-beta"
+version = "1.2.0-beta"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.10.2-12.18.3.2185"
+    version = "1.11.2-13.20.0.2255"
     runDir = "run"
     useDepAts = true
 
-    mappings = "snapshot_20161116"
+    mappings = "snapshot_20170308"
 }
 
 compileJava {
@@ -42,8 +42,8 @@ repositories {
 
 dependencies {
 
-    def mc_version = "1.10.2"
-    def jei_version = "3.14.7.414"
+    def mc_version = "1.11.2"
+    def jei_version = "4.2.8.242"
 
     //JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"

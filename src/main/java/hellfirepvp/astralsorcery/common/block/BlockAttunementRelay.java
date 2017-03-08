@@ -55,7 +55,8 @@ public class BlockAttunementRelay extends Block {
     }
 
     @Override
-    public boolean canRenderInLayer(BlockRenderLayer layer) {
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
         return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
+
 }

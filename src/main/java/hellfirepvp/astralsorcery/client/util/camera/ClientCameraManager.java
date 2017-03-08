@@ -197,7 +197,7 @@ public class ClientCameraManager implements ITickHandler {
 
             EntityClientReplacement repl = new EntityClientReplacement();
             repl.readFromNBT(Minecraft.getMinecraft().player.writeToNBT(new NBTTagCompound()));
-            Minecraft.getMinecraft().world.spawnEntityInWorld(repl);
+            Minecraft.getMinecraft().world.spawnEntity(repl);
             this.clientEntity = repl;
 
             entity.setAsRenderViewEntity();
@@ -305,7 +305,7 @@ public class ClientCameraManager implements ITickHandler {
 
         @Override
         @SideOnly(Side.CLIENT)
-        public void setAngles(float yaw, float pitch) {}
+        public void turn(float yaw, float pitch) {}
 
         public abstract void moveEntityTick(EntityRenderViewReplacement entity, EntityClientReplacement replacementEntity, int ticksExisted);
 

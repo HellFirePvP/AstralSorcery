@@ -25,10 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -111,21 +108,21 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlockType bt : BlockType.values()) {
             list.add(new ItemStack(item, 1, bt.ordinal()));
         }
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState(), playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.TELESCOPE_STRUCT.getSupportedState(), playerIn, hand, facing, hitX, hitY, hitZ);
             //case ATTUNEMENT_ALTAR_STRUCT:
             //    return BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState().getBlock().onBlockActivated(worldIn, pos.down(), BlockType.ATTUNEMENT_ALTAR_STRUCT.getSupportedState(), playerIn, hand, heldItem, side, hitX, hitY, hitZ);
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override
@@ -178,7 +175,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighbor) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
                 if(world.isAirBlock(pos.down())) {

@@ -102,7 +102,7 @@ public class JournalPageText implements IJournalPage {
 
         @Override
         public FontRenderer getFontRenderer() {
-            return Minecraft.getMinecraft().fontRendererObj;
+            return Minecraft.getMinecraft().fontRenderer;
         }
     }
 

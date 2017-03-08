@@ -142,7 +142,7 @@ public interface IGuiRenderablePage {
     }
 
     default public FontRenderer getStandardFontRenderer() {
-        return Minecraft.getMinecraft().fontRendererObj;
+        return Minecraft.getMinecraft().fontRenderer;
     }
 
     default public FontRenderer getStandardGalFontRenderer() {
