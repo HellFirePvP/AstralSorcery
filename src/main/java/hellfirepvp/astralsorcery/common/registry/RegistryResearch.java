@@ -228,8 +228,17 @@ public class RegistryResearch {
         resMountedTelescope.addPage(getTextPage("TELESCOPE.3"));
         resMountedTelescope.addPage(getTextPage("TELESCOPE.4"));
 
+        ResearchNode resToolWands = new ResearchNode(new ItemStack[] {
+                new ItemStack(ItemsAS.architectWand), new ItemStack(ItemsAS.exchangeWand)
+        }, "TOOL_WANDS", 0, 6);
+        resToolWands.addPage(getTextPage("TOOL_WANDS.1"));
+        resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rArchitectWand));
+        resToolWands.addPage(getTextPage("TOOL_WANDS.3"));
+        resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rExchangeWand));
+
         ResearchNode resResoGem = new ResearchNode(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), "RESO_GEM_POOL", 3, 1);
         resResoGem.addPage(getTextPage("RESO_GEM_POOL.1"));
+        resResoGem.addPage(getTextPage("RESO_GEM_POOL.2"));
 
         ResearchNode resInfuser = new ResearchNode(new ItemStack(BlocksAS.starlightInfuser), "INFUSER", 4, 2);
         resInfuser.addPage(getTextPage("INFUSER.1"));
@@ -249,6 +258,8 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),     resIlluminator,          1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.tunedRockCrystal, 1, OreDictionary.WILDCARD_VALUE),      resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.tunedCelestialCrystal, 1, OreDictionary.WILDCARD_VALUE), resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.architectWand, 1, OreDictionary.WILDCARD_VALUE),         resToolWands,            1, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.exchangeWand, 1, OreDictionary.WILDCARD_VALUE),          resToolWands,            2, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),     resInfuser,              1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),           resTreeBeacon,           1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                             resInfuser,              1, ResearchProgression.ATTUNEMENT);
@@ -264,12 +275,14 @@ public class RegistryResearch {
         regAttunement.register(resInfuser);
         regAttunement.register(resTreeBeacon);
         regAttunement.register(resResoGem);
+        regAttunement.register(resToolWands);
 
         resRitPedestal.addSourceConnectionFrom(resCrystalAtt);
         resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
         resAttPerks.addSourceConnectionFrom(resPlayerAtt);
         resConstellationUpgrade.addSourceConnectionFrom(resCrystalAtt);
         resMountedTelescope.addSourceConnectionFrom(resPlayerAtt);
+        resToolWands.addSourceConnectionFrom(resAttPerks);
         resTreeBeacon.addSourceConnectionFrom(resInfuser);
         resInfuser.addSourceConnectionFrom(resResoGem);
     }

@@ -80,8 +80,8 @@ public class RegistryRecipes {
     public static AttunementRecipe rStarlightInfuser;
     public static AttunementRecipe rTreeBeacon;
     public static ConstellationRecipe rIlluminationWand;
-    public static ConstellationRecipe rArchitectWand;
-    public static ConstellationRecipe rExchangeWand;
+    public static AttunementRecipe rArchitectWand;
+    public static AttunementRecipe rExchangeWand;
     public static ConstellationRecipe rShiftStar;
 
     public static LensRecipe rLens;
@@ -270,6 +270,31 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rArchitectWand = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.architectWand)
+                .addPart(OreDictAlias.ITEM_DYE_PURPLE,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT));
+        rArchitectWand.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(), AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
+        rArchitectWand.setPassiveStarlightRequirement(1600);
+
+        rExchangeWand = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.exchangeWand)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.ITEM_DIAMOND,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LEFT));
+        rExchangeWand.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(), AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
+        rExchangeWand.setPassiveStarlightRequirement(1600);
 
         rShiftStar = registerConstellationRecipe(new ShapedRecipe(ItemsAS.shiftingStar)
                 .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,

@@ -60,10 +60,10 @@ public class Config {
 
     @Sync public static double swordSharpMultiplier = 0.1;
 
-    @Sync public static double illuminationWandUseCost = 1;
-    @Sync public static double architectWandUseCost = 0.4;
-    @Sync public static double builderWandUseCost = 0.2;
-    @Sync public static double exchangeWandUseCost = 0.3;
+    @Sync public static double illuminationWandUseCost = 0.2;
+    @Sync public static double architectWandUseCost = 0.03;
+    @Sync public static double builderWandUseCost = 0.014;
+    @Sync public static double exchangeWandUseCost = 0.04;
 
     @Sync public static int dimensionIdSkyRift = -81;
 
@@ -115,10 +115,10 @@ public class Config {
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
-        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "wands", 1F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
-        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "wands", 0.4F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
-        builderWandUseCost = latestConfig.getFloat("wandCost_builder", "wands", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
-        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "wands", 0.3F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
+        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "wands", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
+        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "wands", 0.03F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
+        builderWandUseCost = latestConfig.getFloat("wandCost_builder", "wands", 0.014F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
+        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "wands", 0.04F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
 
         craftingLiqResoGem = latestConfig.getBoolean("liquidStarlightResoGem", "crafting", true, "Set this to false to disable Aquamarine -> Resonant Gem in liquid starlight.");
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");

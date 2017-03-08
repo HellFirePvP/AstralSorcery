@@ -68,7 +68,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(ALTAR_TYPE, AltarType.ALTAR_1));
     }
@@ -127,7 +127,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
-            if(type == AltarType.ALTAR_5) continue;
+            if(type == AltarType.ALTAR_4 || type == AltarType.ALTAR_5) continue;
             ItemStack stack = new ItemStack(item, 1, type.ordinal());
             NBTTagCompound pers = NBTHelper.getPersistentData(stack);
             pers.setInteger("exp", 0);

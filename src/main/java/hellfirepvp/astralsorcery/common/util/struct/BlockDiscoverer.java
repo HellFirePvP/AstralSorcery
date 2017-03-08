@@ -50,7 +50,7 @@ public class BlockDiscoverer {
                     BlockPos search = offsetPos.offset(face);
                     if (visited.contains(search)) continue;
                     if (getCubeDistance(search, origin) > cubeSize) continue;
-                    if (foundArray.pattern.size() > limit) continue;
+                    if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
 
                     visited.add(search);
 
@@ -75,7 +75,8 @@ public class BlockDiscoverer {
 
     public static boolean isExposedToAir(World world, BlockPos pos) {
         for (EnumFacing face : EnumFacing.VALUES) {
-            if (world.isAirBlock(pos.offset(face))) return true;
+            BlockPos offset = pos.offset(face);
+            if (world.isAirBlock(offset) || world.getBlockState(offset).getBlock().isReplaceable(world, offset)) return true;
         }
         return false;
     }

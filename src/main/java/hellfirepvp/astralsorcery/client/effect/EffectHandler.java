@@ -122,6 +122,13 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRTranslucentBlock.renderTranslucentBlocks();
+        for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
+            og.prepareGLContext();
+            for (CompoundObjectEffect effect : objects.get(og)) {
+                effect.render(event.getPartialTicks());
+            }
+            og.revertGLContext();
+        }
     }
 
     @SubscribeEvent

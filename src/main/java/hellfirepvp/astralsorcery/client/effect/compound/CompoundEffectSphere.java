@@ -37,7 +37,7 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
     }
 
     private void buildFaces(int fractionsSplit, int fractionsCircle) {
-        Vector3 centerPerp = offset.clone().perpendicular();
+        Vector3 centerPerp = axis.clone().perpendicular();
         double degSplit =       180D / ((double) fractionsSplit);
         double degCircleSplit = 360D / ((double) fractionsCircle);
         Vector3 prev = offset.clone().add(axis);

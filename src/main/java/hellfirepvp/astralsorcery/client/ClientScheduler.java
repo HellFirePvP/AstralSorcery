@@ -52,6 +52,7 @@ public class ClientScheduler implements ITickHandler {
         for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
             queuedRunnables.put(waiting.getKey(), waiting.getValue());
         }
+        waitingRunnables.clear();
     }
 
     public static long getClientTick() {

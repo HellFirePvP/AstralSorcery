@@ -54,7 +54,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

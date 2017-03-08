@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.wand;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
@@ -179,6 +180,8 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer playerIn, EnumHand hand) {
+        if (world.isRemote) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+
         IBlockState stored = getStoredState(stack);
         ItemStack consumeStack = getStoredStateAsStack(stack);
         if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack == null) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -208,23 +211,25 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             return EnumActionResult.SUCCESS;
         }
 
-        return super.onItemUse(stack, playerIn, world, pos, hand, facing, hitX, hitY, hitZ);
+        return EnumActionResult.SUCCESS;
     }
 
     @SideOnly(Side.CLIENT)
     public static void playArchitectPlaceEvent(PktParticleEvent event) {
-        Vector3 at = event.getVec();
-        RenderingUtils.playBlockBreakParticles(at.toBlockPos(), Minecraft.getMinecraft().world.getBlockState(at.toBlockPos()));
-        for (int i = 0; i < 9; i++) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
-                    at.getX() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)),
-                    at.getY() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)),
-                    at.getZ() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)));
-            p.motion((itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1),
-                    (itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1),
-                    (itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1));
-            p.scale(0.35F).setColor(Color.WHITE.brighter());
-        }
+        AstralSorcery.proxy.scheduleClientside(() -> {
+            Vector3 at = event.getVec();
+            RenderingUtils.playBlockBreakParticles(at.toBlockPos(), Minecraft.getMinecraft().world.getBlockState(at.toBlockPos()));
+            for (int i = 0; i < 9; i++) {
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                        at.getX() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)),
+                        at.getY() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)),
+                        at.getZ() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)));
+                p.motion((itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1),
+                        (itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1),
+                        (itemRand.nextFloat() * 0.03F) * (itemRand.nextBoolean() ? 1 : -1));
+                p.scale(0.35F).setColor(Color.WHITE.brighter());
+            }
+        }, 1);
     }
 
     private Deque<BlockPos> filterBlocksToPlace(Entity entity, World world, double range) {

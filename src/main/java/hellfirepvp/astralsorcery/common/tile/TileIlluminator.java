@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.util.data.DirectionalLayerBlockDiscovere
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -49,6 +50,7 @@ public class TileIlluminator extends TileSkybound {
     private LinkedList<BlockPos>[] validPositions = null;
     private boolean recalcRequested = false;
     private int ticksUntilNext = 180;
+    private boolean playerPlaced = false;
 
     private Object[] orbitals = new Object[5];
 
@@ -56,7 +58,9 @@ public class TileIlluminator extends TileSkybound {
     public void update() {
         super.update();
 
-        if(!world.isRemote && doesSeeSky()) {
+        if (!playerPlaced) return;
+
+        if (!world.isRemote && doesSeeSky()) {
             if(validPositions == null) recalculate();
             if(rand.nextInt(3) == 0 && placeFlares()) {
                 recalcRequested = true;
@@ -70,9 +74,14 @@ public class TileIlluminator extends TileSkybound {
                 }
             }
         }
-        if(world.isRemote) {
+        if (world.isRemote) {
             playEffects();
         }
+    }
+
+    public void setPlayerPlaced() {
+        playerPlaced = true;
+        markForUpdate();
     }
 
     @SideOnly(Side.CLIENT)
@@ -147,6 +156,20 @@ public class TileIlluminator extends TileSkybound {
             rep.addAll(list);
         }
         return rep;
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+
+        compound.setBoolean("playerPlaced", this.playerPlaced);
+    }
+
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+
+        this.playerPlaced = compound.getBoolean("playerPlaced");
     }
 
     @Override

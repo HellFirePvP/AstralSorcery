@@ -46,7 +46,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
             this.vecV = vecV.clone();
         }
 
-        public VertexBuffer addVertexForUV(VertexBuffer vb, double u, double v) {
+        public VertexBuffer addPositionVertexForUV(VertexBuffer vb, double u, double v) {
             vb.pos(offset.getX() + vecU.getX() * u + vecV.getX() * v,
                     offset.getY() + vecU.getY() * u + vecV.getY() * v,
                     offset.getZ() + vecU.getZ() * u + vecV.getZ() * v);
@@ -62,7 +62,13 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         public void prepareGLContext() {
             switch (this) {
                 case GASEOUS_SPHERE:
+                    break;
+            }
+        }
 
+        public void revertGLContext() {
+            switch (this) {
+                case GASEOUS_SPHERE:
                     break;
             }
         }

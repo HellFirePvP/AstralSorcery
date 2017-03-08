@@ -175,8 +175,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             return;
         }
         int amt = 0;
-        for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false).values()) {
-            amt += st.stackSize;
+        if (pl.isCreative()) {
+            amt = -1;
+        } else {
+            for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false).values()) {
+                amt += st.stackSize;
+            }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, amt);
         if(found.isEmpty()) return;
@@ -227,8 +231,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
 
         int amt = 0;
-        for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false).values()) {
-            amt += st.stackSize;
+        if (playerIn.isCreative()) {
+            amt = -1;
+        } else {
+            for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false).values()) {
+                amt += st.stackSize;
+            }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, amt);
         if (found.isEmpty()) return EnumActionResult.SUCCESS;
