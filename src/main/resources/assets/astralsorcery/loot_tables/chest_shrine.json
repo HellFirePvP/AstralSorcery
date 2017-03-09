@@ -13,7 +13,7 @@
          "entries":[
             {
                "type":"item",
-               "name":"astralsorcery:ItemConstellationPaper",
+               "name":"astralsorcery:itemconstellationpaper",
                "weight":18,
                "functions":[
                   {
@@ -24,7 +24,7 @@
             },
             {
                "type":"item",
-               "name":"astralsorcery:ItemCraftingComponent",
+               "name":"astralsorcery:itemcraftingcomponent",
                "weight":12,
                "functions":[
                   {

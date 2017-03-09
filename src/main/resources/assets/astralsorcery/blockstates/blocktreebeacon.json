@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:BlockTreeBeacon" }
+        "normal": { "model":"astralsorcery:blocktreebeacon" }
     }
 }

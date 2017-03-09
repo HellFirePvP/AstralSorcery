@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:BlockWell" }
+        "normal": { "model":"astralsorcery:blockwell" }
     }
 }

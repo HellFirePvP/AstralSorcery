@@ -3,9 +3,9 @@
     "defaults": {
         "model": "forge:multi-layer",
         "custom": {
-            "base": "astralsorcery:BlockAttunementRelay#base",
-            "Solid": "astralsorcery:BlockAttunementRelay#base",
-            "Translucent": "astralsorcery:BlockAttunementRelay#trans"
+            "base": "astralsorcery:blockattunementrelay#base",
+            "Solid": "astralsorcery:blockattunementrelay#base",
+            "Translucent": "astralsorcery:blockattunementrelay#trans"
         },
         "transform": "forge:default-block"
     },
@@ -13,10 +13,10 @@
         "normal": [{}],
         "inventory": [{}],
         "base": [{
-            "model": "astralsorcery:BlockAttunementRelay"
+            "model": "astralsorcery:blockattunementrelay"
         }],
         "trans": [{
-            "model": "astralsorcery:BlockAttunementRelayGlass"
+            "model": "astralsorcery:blockattunementrelayglass"
         }]
     }
 }

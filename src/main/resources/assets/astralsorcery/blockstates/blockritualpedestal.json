@@ -3,9 +3,9 @@
     "defaults": {
         "model": "forge:multi-layer",
         "custom": {
-            "base": "astralsorcery:BlockRitualPedestal#base",
-            "Solid": "astralsorcery:BlockRitualPedestal#base",
-            "Translucent": "astralsorcery:BlockRitualPedestal#trans"
+            "base": "astralsorcery:blockritualpedestal#base",
+            "Solid": "astralsorcery:blockritualpedestal#base",
+            "Translucent": "astralsorcery:blockritualpedestal#trans"
         },
         "transform": "forge:default-block"
     },
@@ -13,10 +13,10 @@
         "normal": [{}],
         "inventory": [{}],
         "base": [{
-            "model": "astralsorcery:BlockRitualPedestal"
+            "model": "astralsorcery:blockritualpedestal"
         }],
         "trans": [{
-            "model": "astralsorcery:BlockRitualPedestalGlass"
+            "model": "astralsorcery:blockritualpedestalglass"
         }]
     }
 }

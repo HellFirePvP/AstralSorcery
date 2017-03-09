@@ -1,5 +1,5 @@
 {
     "variants": {
-        "oretype=aquamarine": { "model":"astralsorcery:BlockCustomSandOre_aquamarine" }
+        "oretype=aquamarine": { "model":"astralsorcery:blockcustomsandore_aquamarine" }
     }
 }

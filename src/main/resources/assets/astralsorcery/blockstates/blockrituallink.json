@@ -3,9 +3,9 @@
     "defaults": {
         "model": "forge:multi-layer",
         "custom": {
-            "base": "astralsorcery:BlockRitualLink#base",
-            "Solid": "astralsorcery:BlockRitualLink#base",
-            "Translucent": "astralsorcery:BlockRitualLink#trans"
+            "base": "astralsorcery:blockrituallink#base",
+            "Solid": "astralsorcery:blockrituallink#base",
+            "Translucent": "astralsorcery:blockrituallink#trans"
         },
         "transform": "forge:default-block"
     },
@@ -13,10 +13,10 @@
         "normal": [{}],
         "inventory": [{}],
         "base": [{
-            "model": "astralsorcery:BlockRitualLink"
+            "model": "astralsorcery:blockrituallink"
         }],
         "trans": [{
-            "model": "astralsorcery:BlockRitualLinkGlass"
+            "model": "astralsorcery:blockrituallinkglass"
         }]
     }
 }
