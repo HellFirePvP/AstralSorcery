@@ -381,10 +381,10 @@ public class ClientRenderEventHandler {
     }
 
     static {
-        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelAssec.obj");
+        ResourceLocation mod = new ResourceLocation(AstralSorcery.MODID + ":models/obj/modelassec.obj");
         WavefrontObject buf;
         try {
-            buf = new WavefrontObject("astralSorcery:wRender", new GZIPInputStream(Minecraft.getMinecraft().getResourceManager().getResource(mod).getInputStream()));
+            buf = new WavefrontObject("astralSorcery:wrender", new GZIPInputStream(Minecraft.getMinecraft().getResourceManager().getResource(mod).getInputStream()));
         } catch (Exception exc) {
             buf = null;
         }
@@ -392,7 +392,7 @@ public class ClientRenderEventHandler {
     }
 
     private static final WavefrontObject obj;
-    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texW.png");
+    private static final ResourceLocation tex = new ResourceLocation(AstralSorcery.MODID + ":textures/models/texw.png");
     private static int dList = -1;
 
     @SubscribeEvent

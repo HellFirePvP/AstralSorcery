@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "render=true":  { "model":"astralsorcery:BlockLens_full" },
+        "render=false": { "model":"astralsorcery:BlockLens_tesr" }
+    }
+}

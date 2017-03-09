@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "marbletype=raw": { "model":"astralsorcery:BlockMarble_raw" },
+        "marbletype=bricks": { "model":"astralsorcery:BlockMarble_bricks" },
+        "marbletype=pillar": { "model":"astralsorcery:BlockMarble_pillar" },
+        "marbletype=pillar_top": { "model":"astralsorcery:BlockMarble_pillar_top" },
+        "marbletype=pillar_bottom": { "model":"astralsorcery:BlockMarble_pillar_bottom" },
+        "marbletype=arch": { "model":"astralsorcery:BlockMarble_arch" },
+        "marbletype=chiseled": { "model":"astralsorcery:BlockMarble_chiseled" },
+        "marbletype=engraved": { "model":"astralsorcery:BlockMarble_engraved" },
+        "marbletype=runed": { "model":"astralsorcery:BlockMarble_runed" }
+    }
+}
