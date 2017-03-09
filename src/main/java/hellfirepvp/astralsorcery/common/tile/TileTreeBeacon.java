@@ -286,7 +286,7 @@ public class TileTreeBeacon extends TileReceiverBase {
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockTreeBeacon.name";
+        return "tile.blocktreebeacon.name";
     }
 
     @Override

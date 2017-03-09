@@ -60,7 +60,7 @@ public class TileCrystalPrismLens extends TileCrystalLens {
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockPrism.name";
+        return "tile.blockprism.name";
     }
 
     @Override

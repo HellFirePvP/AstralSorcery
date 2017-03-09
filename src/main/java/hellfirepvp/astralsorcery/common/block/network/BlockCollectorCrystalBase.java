@@ -195,7 +195,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         if(EnumGatedKnowledge.COLLECTOR_CRYSTAL.canSee(client.getTierReached())) {
             return super.getUnlocalizedName();
         }
-        return "tile.BlockCollectorCrystal.obf";
+        return "tile.blockcollectorcrystal.obf";
     }
 
     @Override

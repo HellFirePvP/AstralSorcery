@@ -390,7 +390,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockRitualPedestal.name";
+        return "tile.blockritualpedestal.name";
     }
 
     @Override

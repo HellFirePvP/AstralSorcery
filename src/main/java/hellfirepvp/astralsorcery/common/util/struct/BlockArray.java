@@ -154,8 +154,8 @@ public class BlockArray {
             world.setBlockState(at, state, 3);
             result.put(at, state);
 
-            if(state.getBlock() instanceof BlockLiquid) {
-                world.observedNeighborChanged(at, state.getBlock(), at);
+            if(state.getBlock() instanceof BlockLiquid || state.getBlock() instanceof BlockFluidBase) {
+                world.neighborChanged(at, state.getBlock(), at);
             }
 
             TileEntity placed = world.getTileEntity(at);

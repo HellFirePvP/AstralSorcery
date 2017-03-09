@@ -413,4 +413,10 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     public boolean shouldMapSpin(String entity, double x, double y, double z) {
         return parentOvrProvider.shouldMapSpin(entity, x, y, z);
     }
+
+    @Override
+    public boolean hasSkyLight() {
+        return parentOvrProvider.hasSkyLight();
+    }
+
 }

@@ -520,7 +520,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockAltar.general.name";
+        return "tile.blockaltar.general.name";
     }
 
     @Override

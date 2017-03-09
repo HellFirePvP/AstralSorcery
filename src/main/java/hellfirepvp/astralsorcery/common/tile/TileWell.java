@@ -198,7 +198,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockWell.name";
+        return "tile.blockwell.name";
     }
 
     @Override

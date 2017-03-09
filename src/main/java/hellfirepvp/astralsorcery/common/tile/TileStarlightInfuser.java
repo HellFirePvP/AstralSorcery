@@ -295,7 +295,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockStarlightInfuser.name";
+        return "tile.blockstarlightinfuser.name";
     }
 
     private void receiveStarlight(IWeakConstellation type, double amount) {}
@@ -322,8 +322,10 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             } else {
                 if(!heldItem.isEmpty()) {
                     if(stack.isEmpty()) {
-                        heldItem.setCount(heldItem.getCount() - 1);
                         this.stack = ItemUtils.copyStackWithSize(heldItem, 1);
+                        if(!playerIn.isCreative()) {
+                            heldItem.setCount(heldItem.getCount() - 1);
+                        }
                         if(heldItem.getCount() <= 0) {
                             playerIn.setHeldItem(heldHand, ItemStack.EMPTY);
                         }

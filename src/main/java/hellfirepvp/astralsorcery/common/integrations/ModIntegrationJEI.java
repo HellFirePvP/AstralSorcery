@@ -106,7 +106,6 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
 
         registry.addRecipes(InfusionRecipeRegistry.recipes);
-        registry.addRecipes(InfusionRecipeRegistry.mtRecipes);
         registry.addRecipes(LightOreTransmutations.getRegisteredTransmutations());
         registry.addRecipes(WellLiquefaction.getRegisteredLiquefactions());
 

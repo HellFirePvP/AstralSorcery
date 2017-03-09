@@ -120,7 +120,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile {
     @Nullable
     @Override
     public String getUnLocalizedDisplayName() {
-        return "tile.BlockRitualLink.name";
+        return "tile.blockrituallink.name";
     }
 
     @Override
