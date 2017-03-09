@@ -63,4 +63,27 @@ public abstract class EntityComplexFX implements IComplexEffect {
         flagRemoved = false;
     }
 
+    public static enum AlphaFunction {
+
+        CONSTANT,
+        FADE_OUT,
+        PYRAMID;
+
+        AlphaFunction() {}
+
+        public float getAlpha(int age, int maxAge) {
+            switch (this) {
+                case CONSTANT:
+                    return 1F;
+                case FADE_OUT:
+                    return 1F - (((float) age) / ((float) maxAge));
+                case PYRAMID:
+                    float halfAge = maxAge / 2F;
+                    return 1F - (Math.abs(halfAge - age) / halfAge);
+            }
+            return 1F;
+        }
+
+    }
+
 }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect.light;
 
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -20,6 +21,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -35,6 +37,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     private final double fromSize, toSize;
     private int maxAge = 64;
     private int age = 0;
+    private EntityComplexFX.AlphaFunction alphaFunction = EntityComplexFX.AlphaFunction.PYRAMID;
     private float alphaMultiplier = 1F;
     private float cR = 1F, cG = 1F, cB = 1F, cA = 1F;
 
@@ -71,6 +74,11 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
 
     public EffectLightbeam setAlphaMultiplier(float alphaMultiplier) {
         this.alphaMultiplier = alphaMultiplier;
+        return this;
+    }
+
+    public EffectLightbeam setAlphaFunction(@Nonnull EntityComplexFX.AlphaFunction function) {
+        this.alphaFunction = function;
         return this;
     }
 
@@ -132,8 +140,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     }
 
     private void renderFast(VertexBuffer vb) {
-        float halfAge = maxAge / 2F;
-        float tr = 1F - (Math.abs(halfAge - age) / halfAge);
+        float tr = alphaFunction.getAlpha(age, maxAge);
         tr *= 0.6;
         tr *= alphaMultiplier;
         renderBeamOnAngles(vb, SpriteLibrary.spriteLightbeam.getUVOffset(age), tr);
@@ -145,8 +152,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         if(rView == null) rView = Minecraft.getMinecraft().player;
         if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > Config.maxEffectRenderDistanceSq) return;
 
-        float halfAge = maxAge / 2F;
-        float tr = 1F - (Math.abs(halfAge - age) / halfAge);
+        float tr = alphaFunction.getAlpha(age, maxAge);
         tr *= 0.6;
         tr *= alphaMultiplier;
 

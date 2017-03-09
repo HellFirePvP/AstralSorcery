@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
     private double yGravity = 0.004;
     private float scale = 1F;
 
-    private boolean alphaFade = false;
+    private AlphaFunction fadeFunction = AlphaFunction.CONSTANT;
     private float alphaMultiplier = 1F;
     private float colorRed = 1F, colorGreen = 1F, colorBlue = 1F;
     private double motionX = 0, motionY = 0, motionZ = 0;
@@ -67,8 +68,8 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         return this;
     }
 
-    public EntityFXFacingParticle enableAlphaFade() {
-        alphaFade = true;
+    public EntityFXFacingParticle enableAlphaFade(@Nonnull AlphaFunction function) {
+        this.fadeFunction = function;
         return this;
     }
 
@@ -143,11 +144,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
     //Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
     //GL states have to be preinitialized.
     public void renderFast(float pTicks, VertexBuffer vbDrawing) {
-        float alpha = 1F;
-        if(alphaFade) {
-            float halfAge = maxAge / 2F;
-            alpha = 1F - (Math.abs(halfAge - age) / halfAge);
-        }
+        float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
         RenderingUtils.renderFacingFullQuadVB(vbDrawing, interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, colorRed, colorGreen, colorBlue, alpha);
     }
@@ -158,11 +155,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
-        float alpha = 1F;
-        if(alphaFade) {
-            float halfAge = maxAge / 2F;
-            alpha = 1F - (Math.abs(halfAge - age) / halfAge);
-        }
+        float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
         GL11.glColor4f(colorRed, colorGreen, colorBlue, alpha);
         staticFlareTex.bind();
