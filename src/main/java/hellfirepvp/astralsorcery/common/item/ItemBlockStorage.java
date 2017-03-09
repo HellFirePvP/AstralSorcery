@@ -44,7 +44,7 @@ public abstract class ItemBlockStorage extends Item {
     @Nonnull
     public static ItemStack getStoredStateAsStack(ItemStack stack) {
         IBlockState stored = getStoredState(stack);
-        if(stored == null) return null; //Guarantees also that the block has an itemblock.
+        if(stored == null) return ItemStack.EMPTY; //Guarantees also that the block has an itemblock.
         return new ItemStack(stored.getBlock(), 1, stored.getBlock().getMetaFromState(stored));
     }
 

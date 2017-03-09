@@ -80,7 +80,8 @@ public class BindableResource {
         if (resource == null) {
             allocateGlId();
         }
-        GlStateManager.bindTexture(resource.getGlTextureId());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, resource.getGlTextureId());
+        //GlStateManager.bindTexture(resource.getGlTextureId());
     }
 
 }
