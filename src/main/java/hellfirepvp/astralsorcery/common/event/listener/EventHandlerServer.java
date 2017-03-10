@@ -64,6 +64,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -96,13 +97,13 @@ public class EventHandlerServer {
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
         int id = w.provider.getDimension();
-        if(!w.isRemote && !isDataInitialized) {
+        if (!w.isRemote && !isDataInitialized) {
             //This is kinda an early point in server startup, when it loads the overworld.
             //Since the FML Server start events are either too early or too late, we do it here.
             ServerData.reloadDataFromSaveHandler(w.getSaveHandler());
             isDataInitialized = true;
         }
-        if(DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
+        if (DataWorldSkyHandlers.hasWorldHandler(id, w.isRemote ? Side.CLIENT : Side.SERVER) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
             AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");
@@ -113,7 +114,7 @@ public class EventHandlerServer {
     public void onUnload(WorldEvent.Unload event) {
         World w = event.getWorld();
         ConstellationSkyHandler.getInstance().informWorldUnload(w);
-        if(w.isRemote) {
+        if (w.isRemote) {
             clientUnload();
         }
     }
@@ -126,9 +127,9 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
-        if(living == null || living.getEntityWorld().isRemote) return;
+        if (living == null || living.getEntityWorld().isRemote) return;
 
-        if(!living.isDead && living instanceof EntityPlayer) {
+        if (!living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
                 event.setCanceled(true);
                 return;
@@ -136,13 +137,14 @@ public class EventHandlerServer {
         }
 
         DamageSource source = event.getSource();
-        lblIn: if(source.getSourceOfDamage() != null) {
+        lblIn:
+        if (source.getSourceOfDamage() != null) {
             EntityPlayer p;
-            if(source.getSourceOfDamage() instanceof EntityPlayer) {
+            if (source.getSourceOfDamage() instanceof EntityPlayer) {
                 p = (EntityPlayer) source.getSourceOfDamage();
-            } else if(source.getSourceOfDamage() instanceof EntityArrow) {
+            } else if (source.getSourceOfDamage() instanceof EntityArrow) {
                 Entity shooter = ((EntityArrow) source.getSourceOfDamage()).shootingEntity;
-                if(shooter != null && shooter instanceof EntityPlayer) {
+                if (shooter != null && shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
                     break lblIn;
@@ -151,27 +153,27 @@ public class EventHandlerServer {
                 break lblIn;
             }
             PlayerProgress prog = ResearchManager.getProgress(p);
-            if(prog != null) {
+            if (prog != null) {
                 float dmg = event.getAmount();
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks.keySet()) {
-                    if(!prog.isPerkActive(perk)) continue;
-                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
+                    if (!prog.isPerkActive(perk)) continue;
+                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
                         dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
                     }
                 }
                 event.setAmount(dmg);
             }
         }
-        if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
+        if (event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer hurt = (EntityPlayer) event.getEntityLiving();
             PlayerProgress prog = ResearchManager.getProgress(hurt);
-            if(prog != null) {
+            if (prog != null) {
                 float dmg = event.getAmount();
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks.keySet()) {
-                    if(!prog.isPerkActive(perk)) continue;
-                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
+                    if (!prog.isPerkActive(perk)) continue;
+                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
                         dmg = perk.onEntityHurt(hurt, source, dmg);
                     }
                 }
@@ -183,10 +185,10 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onTarget(LivingSetAttackTargetEvent event) {
         EntityLivingBase living = event.getTarget();
-        if(living != null && !living.isDead && living instanceof EntityPlayer) {
+        if (living != null && !living.isDead && living instanceof EntityPlayer) {
             if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
                 event.getEntityLiving().setRevengeTarget(null);
-                if(event.getEntityLiving() instanceof EntityLiving) {
+                if (event.getEntityLiving() instanceof EntityLiving) {
                     ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
                 }
             }
@@ -196,16 +198,16 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onKnockback(EntityKnockbackEvent event) {
         Entity attacker = event.getAttacker();
-        if(attacker == null || attacker.getEntityWorld().isRemote) return;
+        if (attacker == null || attacker.getEntityWorld().isRemote) return;
 
-        if(attacker instanceof EntityPlayer) {
+        if (attacker instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) attacker;
             PlayerProgress prog = ResearchManager.getProgress(p);
-            if(prog != null) {
+            if (prog != null) {
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks.keySet()) {
-                    if(!prog.isPerkActive(perk)) continue;
-                    if(perk.mayExecute(ConstellationPerk.Target.ENTITY_KNOCKBACK)) {
+                    if (!prog.isPerkActive(perk)) continue;
+                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KNOCKBACK)) {
                         perk.onEntityKnockback(p, event.getEntityLiving());
                     }
                 }
@@ -215,26 +217,26 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onAttack(LivingAttackEvent event) {
-        if(phoenixProtect((event.getEntityLiving()), event.getAmount())) {
+        if (phoenixProtect((event.getEntityLiving()), event.getAmount())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
-        if(phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
+        if (phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
             event.setCanceled(true);
         } else {
-            if(event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
+            if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
 
             DamageSource source = event.getSource();
-            if(source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
+            if (source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
                 EntityPlayer p = (EntityPlayer) source.getEntity();
                 PlayerProgress prog = ResearchManager.getProgress(p);
-                if(prog != null) {
+                if (prog != null) {
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                     for (ConstellationPerk perk : perks.keySet()) {
-                        if(!prog.isPerkActive(perk)) continue;
+                        if (!prog.isPerkActive(perk)) continue;
                         if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KILL)) {
                             perk.onEntityKilled(p, event.getEntityLiving());
                         }
@@ -251,7 +253,7 @@ public class EventHandlerServer {
         }
 
         PotionEffect pe = entity.getActivePotionEffect(RegistryPotions.potionCheatDeath);
-        if(pe != null) {
+        if (pe != null) {
             int level = pe.getAmplifier();
             phoenixEffects(entity, level);
             return true;
@@ -261,7 +263,7 @@ public class EventHandlerServer {
 
     private void phoenixEffects(EntityLivingBase entity, int level) {
         entity.heal(2 + level * 2);
-        entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION,    300, 1, false, false));
+        entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 300, 1, false, false));
         entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 300, 1, false, false));
         List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
         for (EntityLivingBase lb : others) {
@@ -272,22 +274,22 @@ public class EventHandlerServer {
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.world, entity.getPosition(), 32));
 
         MinecraftServer server = entity.getServer();
-        if(server != null) {
+        if (server != null) {
             server.addScheduledTask(() -> entity.removePotionEffect(RegistryPotions.potionCheatDeath));
         }
     }
 
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
-        if(event.getResult() == Event.Result.DENY) return; //Already denied anyway.
+        if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
 
         EntityLivingBase toTest = event.getEntityLiving();
         Vector3 at = new Vector3(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
-        if(mayDeny) {
+        if (mayDeny) {
             for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
-                if(!entry.getKey().getWorld().equals(toTest.getEntityWorld())) continue;
-                if(at.distance(entry.getKey()) <= entry.getValue().getValue()) {
+                if (!entry.getKey().getWorld().equals(toTest.getEntityWorld())) continue;
+                if (at.distance(entry.getKey()) <= entry.getValue().getValue()) {
                     event.setResult(Event.Result.DENY);
                     return;
                 }
@@ -298,13 +300,13 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
         ItemStack hand = event.getItemStack();
-        if(event.getHand() == EnumHand.OFF_HAND) {
+        if (event.getHand() == EnumHand.OFF_HAND) {
             hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
         }
-        if(hand.isEmpty()) return;
-        if(hand.getItem() instanceof ISpecialInteractItem) {
+        if (hand.isEmpty()) return;
+        if (hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
-            if(i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
+            if (i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
                 i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand);
                 event.setCanceled(true);
             }
@@ -313,13 +315,13 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onCraft(PlayerEvent.ItemCraftedEvent event) {
-        if(event.player.getServer() != null) {
+        if (event.player.getServer() != null) {
             ResearchManager.informCraftingGridCompletion(event.player, event.crafting);
 
             Item crafted = event.crafting.getItem();
             Block blockCrafted = Block.getBlockFromItem(crafted);
-            if(blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
-                if(event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
+            if (blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
+                if (event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
                     event.player.addStat(RegistryAchievements.achvBuildActTelescope);
                 }
             }
@@ -328,9 +330,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if(Config.giveJournalFirst) {
+        if (Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
-            if(!ResearchManager.getPlayerFile(pl).exists()) {
+            if (!ResearchManager.getPlayerFile(pl).exists()) {
                 pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
             }
         }
@@ -345,24 +347,44 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
-        if(event.getWorld().isRemote) return;
+        if (event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
         WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
-        if(event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
-            if(!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
+        if (event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
+            if (!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
             }
         }
-        if(event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
-            if(!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
+        if (event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
+            if (!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
             }
         }
-        if(event.getOldBlock().equals(BlocksAS.customOre)) {
+        if (event.getOldBlock().equals(BlocksAS.customOre)) {
             IBlockState oldState = event.getOldState();
-            if(oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
+            if (oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
                 ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(event.getWorld(), WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(event.getPos());
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onPlace(BlockEvent.PlaceEvent event) {
+        if (event.getWorld().isRemote) return;
+        BlockPos at = event.getPos();
+
+        if (event.getPlacedBlock().getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onBreak(BlockEvent.BreakEvent event) {
+        if (event.getWorld().isRemote) return;
+        BlockPos at = event.getPos();
+
+        if (event.getState().getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
         }
     }
 

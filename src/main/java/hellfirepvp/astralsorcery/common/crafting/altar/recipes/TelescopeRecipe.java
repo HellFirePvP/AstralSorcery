@@ -57,17 +57,6 @@ public class TelescopeRecipe extends AttunementRecipe {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean hasProgressionClient() {
-        return super.hasProgressionClient() && ResearchManager.clientProgress.wasOnceAttuned();
-    }
-
-    @Override
-    public boolean hasProgressionServer(EntityPlayer player) {
-        return super.hasProgressionServer(player) && ResearchManager.getProgress(player).wasOnceAttuned();
-    }
-
-    @Override
     public boolean allowsForChaining() {
         return false;
     }
