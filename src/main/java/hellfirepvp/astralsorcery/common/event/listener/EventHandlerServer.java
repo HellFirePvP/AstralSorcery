@@ -64,6 +64,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -301,7 +302,7 @@ public class EventHandlerServer {
         if(event.getHand() == EnumHand.OFF_HAND) {
             hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
         }
-        if(hand == null || hand.getItem() == null) return;
+        if(hand == null) return;
         if(hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
             if(i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
@@ -318,7 +319,7 @@ public class EventHandlerServer {
 
             Item crafted = event.crafting.getItem();
             Block blockCrafted = Block.getBlockFromItem(crafted);
-            if(blockCrafted != null && blockCrafted instanceof BlockMachine) {
+            if(blockCrafted instanceof BlockMachine) {
                 if(event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
                     event.player.addStat(RegistryAchievements.achvBuildActTelescope);
                 }
@@ -348,6 +349,7 @@ public class EventHandlerServer {
         if(event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
         WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
+
         if(event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
             if(!event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
@@ -363,6 +365,26 @@ public class EventHandlerServer {
             if(oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {
                 ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(event.getWorld(), WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(event.getPos());
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onPlace(BlockEvent.PlaceEvent event) {
+        if(event.getWorld().isRemote) return;
+        BlockPos at = event.getPos();
+
+        if(event.getPlacedBlock().getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onBreak(BlockEvent.BreakEvent event) {
+        if(event.getWorld().isRemote) return;
+        BlockPos at = event.getPos();
+
+        if(event.getState().getBlock().equals(Blocks.CRAFTING_TABLE)) {
+            WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
         }
     }
 
