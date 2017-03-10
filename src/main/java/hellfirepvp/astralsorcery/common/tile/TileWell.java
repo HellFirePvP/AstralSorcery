@@ -20,7 +20,6 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
@@ -28,6 +27,8 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
+import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -37,15 +38,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -61,19 +57,19 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 18.10.2016 / 12:28
  */
-public class TileWell extends TileReceiverBaseInventory implements IFluidHandler, IFluidTankProperties {
+public class TileWell extends TileReceiverBaseInventory {
 
     private static final Random rand = new Random();
     private static final int MAX_CAPACITY = 2000;
 
     private WellLiquefaction.LiquefactionEntry running = null;
 
-    private Fluid heldFluid = null;
-    private double mbFluidAmount = 0;
+    private PrecisionSingleFluidCapabilityTank tank;
     private double starlightBuffer = 0;
 
     public TileWell() {
         super(1, EnumFacing.UP);
+        this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
     }
 
     @Override
@@ -108,8 +104,8 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
 
                     if(running != null && stack.getItem() != null) {
                         double gain = Math.sqrt(starlightBuffer) * running.productionMultiplier;
-                        if(gain > 0 && mbFluidAmount <= MAX_CAPACITY) {
-                            if (mbFluidAmount <= MAX_CAPACITY) {
+                        if(gain > 0 && tank.getFluidAmount() <= MAX_CAPACITY) {
+                            if (tank.getFluidAmount() <= MAX_CAPACITY) {
                                 markForUpdate();
                             }
                             fillAndDiscardRest(running, gain);
@@ -141,7 +137,7 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
                     doCatalystEffect(color);
                 }
             }
-            if(mbFluidAmount > 0 && heldFluid != null && heldFluid instanceof FluidLiquidStarlight) {
+            if(tank.getFluidAmount() > 0 && tank.getTankFluid() != null && tank.getTankFluid() instanceof FluidLiquidStarlight) {
                 doStarlightEffect();
             }
         }
@@ -181,12 +177,12 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
     }
 
     private void fillAndDiscardRest(WellLiquefaction.LiquefactionEntry entry, double gain) {
-        if(heldFluid == null) {
-            heldFluid = entry.producing;
-        } else if(!entry.producing.equals(heldFluid)) {
+        if(tank.getTankFluid() == null) {
+            tank.setFluid(entry.producing);
+        } else if(!entry.producing.equals(tank.getTankFluid())) {
             return;
         }
-        mbFluidAmount = Math.min(MAX_CAPACITY, mbFluidAmount + gain);
+        tank.addAmount(gain);
     }
 
     @SideOnly(Side.CLIENT)
@@ -207,104 +203,40 @@ public class TileWell extends TileReceiverBaseInventory implements IFluidHandler
         return new TransmissionReceiverWell(at);
     }
 
-    public double getFluidAmount() {
-        return mbFluidAmount;
+    public int getFluidAmount() {
+        return tank.getFluidAmount();
     }
 
     @Nullable
     public Fluid getHeldFluid() {
-        return heldFluid;
+        return tank.getTankFluid();
     }
 
     public float getPercFilled() {
-        return (float) (mbFluidAmount / MAX_CAPACITY);
+        return tank.getPercentageFilled();
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
-
-        compound.setDouble("mbAmount", mbFluidAmount);
-        if (heldFluid != null) {
-            compound.setString("rFluid", FluidRegistry.getFluidName(heldFluid));
-        }
+        compound.setTag("tank", tank.writeNBT());
     }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
-
-        this.mbFluidAmount = compound.getDouble("mbAmount");
-        if(compound.hasKey("rFluid")) {
-            this.heldFluid = FluidRegistry.getFluid(compound.getString("rFluid"));
-        } else {
-            this.heldFluid = null;
-        }
+        this.tank = PrecisionSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
     }
 
     @Override
-    public IFluidTankProperties[] getTankProperties() {
-        return new IFluidTankProperties[] { this };
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && tank.hasCapability(facing);
     }
 
     @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        return 0;
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
-        if (heldFluid == null) return null;
-        int drainPotential = MathHelper.floor(Math.min(1000D, mbFluidAmount));
-        if(doDrain) {
-            mbFluidAmount -= drainPotential;
-        }
-        return new FluidStack(heldFluid, drainPotential);
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        if (heldFluid == null) return null;
-
-        int drainPotential = MathHelper.floor(MathHelper.clamp(mbFluidAmount, 0, Math.min(1000D, maxDrain)));
-        if(doDrain) {
-            mbFluidAmount -= drainPotential;
-        }
-        return new FluidStack(heldFluid, drainPotential);
-    }
-
-    @Nullable
-    @Override
-    public FluidStack getContents() {
-        if(heldFluid == null) return null;
-        return new FluidStack(heldFluid, MathHelper.floor(mbFluidAmount));
-    }
-
-    @Override
-    public int getCapacity() {
-        return MAX_CAPACITY;
-    }
-
-    @Override
-    public boolean canFill() {
-        return false;
-    }
-
-    @Override
-    public boolean canDrain() {
-        return true;
-    }
-
-    @Override
-    public boolean canFillFluidType(FluidStack fluidStack) {
-        return false;
-    }
-
-    @Override
-    public boolean canDrainFluidType(FluidStack fluidStack) {
-        return heldFluid != null && fluidStack.getFluid() != null && fluidStack.getFluid().equals(heldFluid);
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability != CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || !hasCapability(capability, facing)) return null;
+        return (T) tank.getCapability(facing);
     }
 
     public static class CatalystItemHandler extends ItemHandlerTileFiltered {

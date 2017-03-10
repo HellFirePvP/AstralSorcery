@@ -161,6 +161,11 @@ public class TileCollectorCrystal extends TileSourceBase {
         return enhanced;
     }
 
+    @Override
+    public boolean hasBeenLinked() {
+        return !playerMade;
+    }
+
     @SideOnly(Side.CLIENT)
     public static void breakParticles(PktParticleEvent event) {
         BlockPos at = event.getVec().toBlockPos();
@@ -210,7 +215,7 @@ public class TileCollectorCrystal extends TileSourceBase {
     @Override
     @Nonnull
     public IIndependentStarlightSource provideNewSourceNode() {
-        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade, type);
+        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, hasBeenLinked(), type);
     }
 
     @Override

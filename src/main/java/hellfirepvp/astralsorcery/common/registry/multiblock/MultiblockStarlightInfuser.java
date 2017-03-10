@@ -32,6 +32,7 @@ public class MultiblockStarlightInfuser extends PatternBlockArray {
         IBlockState mrw = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW);
         IBlockState mpl = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
         IBlockState mch = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.CHISELED);
+        IBlockState mru = BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RUNED);
 
         IBlockState liquidStarlight = BlocksAS.blockLiquidStarlight.getDefaultState();
 
@@ -39,6 +40,8 @@ public class MultiblockStarlightInfuser extends PatternBlockArray {
 
         addBlockCube(mar, -2, -1, -3, 2, -1, 3);
         addBlockCube(mar, -3, -1, -2, 3, -1, 2);
+
+        addBlockCube(mru, -2, -1, -2, 2, -1, 2);
 
         addBlock(0, -1, 0, Blocks.LAPIS_BLOCK.getDefaultState());
         addBlock(-2, -1, -1, liquidStarlight);

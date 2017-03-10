@@ -27,7 +27,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -46,7 +45,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private CrystalProperties crystalProperties;
     private BlockCollectorCrystalBase.CollectorCrystalType type;
-    private boolean doesSeeSky, hasBeenLinkedBefore;
+    private boolean doesSeeSky, structural;
     private double collectionDstMultiplier = 1;
 
     private boolean enhanced = false;
@@ -56,7 +55,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         this.crystalProperties = properties;
         this.doesSeeSky = seesSky;
         this.type = type;
-        this.hasBeenLinkedBefore = hasBeenLinkedBefore;
+        this.structural = hasBeenLinkedBefore;
     }
 
     @Override
@@ -89,7 +88,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public boolean providesAutoLink() {
-        return !hasBeenLinkedBefore;
+        return structural;
     }
 
     @Override
@@ -99,7 +98,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
             this.doesSeeSky = tns.doesSeeSky();
         }
         if(tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
-            this.hasBeenLinkedBefore = true;
+            this.structural = true;
         }
     }
 
@@ -132,7 +131,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         this.crystalProperties = CrystalProperties.readFromNBT(compound);
         this.doesSeeSky = compound.getBoolean("seesSky");
-        this.hasBeenLinkedBefore = compound.getBoolean("linkedBefore");
+        this.structural = compound.getBoolean("linkedBefore");
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
         this.collectionDstMultiplier = compound.getDouble("dstMul");
         this.enhanced = compound.getBoolean("enhanced");
@@ -144,7 +143,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
         crystalProperties.writeToNBT(compound);
         compound.setBoolean("seesSky", doesSeeSky);
-        compound.setBoolean("linkedBefore", hasBeenLinkedBefore);
+        compound.setBoolean("linkedBefore", structural);
         compound.setInteger("collectorType", type.ordinal());
         compound.setDouble("dstMul", collectionDstMultiplier);
         compound.setBoolean("enhanced", enhanced);

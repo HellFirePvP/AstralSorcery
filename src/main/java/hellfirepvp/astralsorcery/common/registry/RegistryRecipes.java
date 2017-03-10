@@ -93,6 +93,7 @@ public class RegistryRecipes {
 
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
+    public static DiscoveryRecipe rCCParchment;
     public static AttunementRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensNightvision;
 
     //Smelting
@@ -270,6 +271,16 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rCCParchment = registerDiscoveryRecipe(new ShapedRecipe(ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), 2))
+                .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.PAPER,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT));
+        rCCParchment.setPassiveStarlightRequirement(50);
 
         rArchitectWand = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.architectWand)
                 .addPart(OreDictAlias.ITEM_DYE_PURPLE,
