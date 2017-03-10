@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.effect.light;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -163,13 +164,21 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        Blending.PREALPHA.apply();
+        boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
+        if(lighting) {
+            GL11.glDisable(GL11.GL_LIGHTING);
+        }
         SpriteLibrary.spriteLightbeam.getResource().bind();
 
         renderCurrentTextureAroundAxis(Math.toRadians(0F));
         renderCurrentTextureAroundAxis(Math.toRadians(120F));
         renderCurrentTextureAroundAxis(Math.toRadians(240F));
 
+        if(lighting) {
+            GL11.glEnable(GL11.GL_LIGHTING);
+        }
+        Blending.DEFAULT.apply();
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);

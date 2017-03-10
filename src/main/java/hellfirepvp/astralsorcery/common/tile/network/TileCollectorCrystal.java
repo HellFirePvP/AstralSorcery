@@ -174,6 +174,11 @@ public class TileCollectorCrystal extends TileSourceBase {
     }
 
     @Override
+    public boolean hasBeenLinked() {
+        return !playerMade;
+    }
+
+    @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
@@ -210,7 +215,7 @@ public class TileCollectorCrystal extends TileSourceBase {
     @Override
     @Nonnull
     public IIndependentStarlightSource provideNewSourceNode() {
-        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, playerMade, type);
+        return new IndependentCrystalSource(usedCrystalProperties, associatedType, doesSeeSky, hasBeenLinked(), type);
     }
 
     @Override

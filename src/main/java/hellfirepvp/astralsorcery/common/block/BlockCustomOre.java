@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -60,6 +62,15 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
         setHarvestLevel("pickaxe", 3);
         setResistance(25.0F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+
+        if(state.getValue(ORE_TYPE).equals(OreType.STARMETAL)) {
+            ((RockCrystalBuffer) WorldCacheManager.getOrLoadData(worldIn, WorldCacheManager.SaveKey.ROCK_CRYSTAL)).removeOre(pos);
+        }
     }
 
     @Override

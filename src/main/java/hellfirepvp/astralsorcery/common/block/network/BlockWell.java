@@ -34,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -90,6 +91,11 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean causesSuffocation(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
         return 0;
     }
@@ -128,7 +134,7 @@ public class BlockWell extends BlockStarlightNetwork {
                     }
                 }
 
-                if(FluidUtil.tryFillContainerAndStow(heldItem, tw, new InvWrapper(playerIn.inventory), 1000, playerIn).isSuccess()) {
+                if(FluidUtil.tryFillContainerAndStow(heldItem, tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN), new InvWrapper(playerIn.inventory), 1000, playerIn).isSuccess()) {
                     SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
                     tw.markForUpdate();
                 }
