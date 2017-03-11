@@ -65,6 +65,10 @@ public class BlockArray {
         tileCallbacks.put(pos, callback);
     }
 
+    public boolean hasBlockAt(BlockPos pos) {
+        return pattern.containsKey(pos);
+    }
+
     public boolean isEmpty() {
         return pattern.isEmpty();
     }

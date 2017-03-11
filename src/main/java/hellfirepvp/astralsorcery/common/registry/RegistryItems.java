@@ -26,17 +26,10 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalAxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalPickaxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalShovel;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
-import hellfirepvp.astralsorcery.common.item.tool.ItemLinkingTool;
-import hellfirepvp.astralsorcery.common.item.tool.ItemRoseBranchBow;
-import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
-import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
@@ -136,6 +129,7 @@ public class RegistryItems {
         crystalShovel = registerItem(new ItemCrystalShovel());
         crystalAxe = registerItem(new ItemCrystalAxe());
         crystalSword = registerItem(new ItemCrystalSword());
+        chargedCrystalAxe = registerItem(new ItemChargedCrystalAxe());
     }
 
     //Items associated to blocks/itemblocks
