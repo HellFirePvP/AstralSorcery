@@ -257,6 +257,7 @@ item.ItemCrystalPickaxe.name=Crystal Pickaxe
 item.ItemCrystalShovel.name=Crystal Shovel
 item.ItemCrystalAxe.name=Crystal Axe
 item.ItemCrystalSword.name=Crystal Sword
+item.ItemChargedCrystalAxe.name=-
 item.ItemColoredLens.name=Colored Lens
 item.ItemHandTelescope.name=Hand Telescope
 item.ItemSkyResonator.name=Sky Wave Resonator

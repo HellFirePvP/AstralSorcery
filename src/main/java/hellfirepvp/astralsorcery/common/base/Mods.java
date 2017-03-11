@@ -21,14 +21,14 @@ public enum Mods {
 
     TICONSTRUCT("tconstruct");
 
-    public final String modName;
+    public final String modId;
 
     private Mods(String modName) {
-        this.modName = modName;
+        this.modId = modName;
     }
 
     public boolean isPresent() {
-        return Loader.isModLoaded(modName);
+        return Loader.isModLoaded(modId);
     }
 
 }

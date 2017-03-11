@@ -41,10 +41,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
-import hellfirepvp.astralsorcery.common.util.LootTableUtil;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.OreDictAlias;
-import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
@@ -147,6 +144,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
+        MinecraftForge.EVENT_BUS.register(BlockDropCaptureAssist.instance);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -163,6 +161,7 @@ public class CommonProxy implements IGuiHandler {
         LightOreTransmutations.init();
         HerdableAnimal.init();
         WellLiquefaction.init();
+        TreeTypes.init();
     }
 
     protected void registerTickHandlers(TickManager manager) {
