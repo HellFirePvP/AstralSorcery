@@ -38,11 +38,12 @@ public class TreeDiscoverer {
         int xzLimitSq = xzLimit == -1 ? -1 : xzLimit * xzLimit;
 
         BlockArray out = new BlockArray();
-        itDiscoverAndAdd(world, origin, logCheck, leafCheck, xzLimitSq, cornerSpread, out);
+        Tuple<BlockStateCheck, BlockStateCheck> checks = itDiscoverAndAdd(world, origin, logCheck, leafCheck, xzLimitSq, cornerSpread, out);
+        if(checks.key == null || checks.value == null) return null; //If we only have leaves or only logs, we didn't really find a tree...
         return out;
     }
 
-    private static void itDiscoverAndAdd(World world, BlockPos origin, BlockStateCheck logCheck, BlockStateCheck leafCheck, int xzLimitSq, boolean cornerSpread, BlockArray out) {
+    private static Tuple<BlockStateCheck, BlockStateCheck> itDiscoverAndAdd(World world, BlockPos origin, BlockStateCheck logCheck, BlockStateCheck leafCheck, int xzLimitSq, boolean cornerSpread, BlockArray out) {
         Stack<BlockPos> offsetPositions = new Stack<>();
         offsetPositions.add(origin);
         while (!offsetPositions.isEmpty()) {
@@ -95,6 +96,7 @@ public class TreeDiscoverer {
                 }
             }
         }
+        return new Tuple<>(logCheck, leafCheck);
     }
 
     private static double flatDistanceSq(Vec3i from, Vec3i to) {

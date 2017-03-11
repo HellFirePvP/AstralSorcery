@@ -160,7 +160,7 @@ public enum TreeTypes {
     @Nullable
     public static TreeTypes getTree(World world, BlockPos pos, IBlockState blockToTest) {
         for (TreeTypes type : values()) {
-            if (type.exists() && type.logCheck.isStateValid(world, pos, blockToTest) || type.leavesCheck.isStateValid(world, pos, blockToTest)) {
+            if (type.exists() && (type.logCheck.isStateValid(world, pos, blockToTest) || type.leavesCheck.isStateValid(world, pos, blockToTest))) {
                 return type;
             }
         }
