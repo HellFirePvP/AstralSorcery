@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -22,6 +23,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -151,6 +153,13 @@ public final class EffectHandler {
     public EntityComplexFX registerFX(EntityComplexFX entityComplexFX) {
         register(entityComplexFX);
         return entityComplexFX;
+    }
+
+    public EffectTranslucentFallingBlock translucentFallingBlock(Vector3 position, IBlockState state) {
+        EffectTranslucentFallingBlock block = new EffectTranslucentFallingBlock(state);
+        block.setPosition(position.clone().add(-0.5, -0.5, -0.5));
+        register(block);
+        return block;
     }
 
     public EffectLightning lightning(Vector3 from, Vector3 to) {

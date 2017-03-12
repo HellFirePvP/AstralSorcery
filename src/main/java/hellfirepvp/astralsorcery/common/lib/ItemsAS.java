@@ -55,6 +55,7 @@ public class ItemsAS {
 
     public static ItemChargedCrystalAxe chargedCrystalAxe;
     public static ItemChargedCrystalSword chargedCrystalSword;
+    public static ItemChargedCrystalPickaxe chargedCrystalPickaxe;
 
     public static ItemWand wand;
     public static ItemColoredLens coloredLens;

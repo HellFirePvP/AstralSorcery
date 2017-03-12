@@ -68,8 +68,9 @@ public class Vector3 {
     }
 
     public Vector3(Entity entity) {
-        this(entity.posX, entity.posY + entity.getEyeHeight() / 2D, entity.posZ);
+        this(entity.posX - entity.width / 2, entity.posY + entity.height / 2D, entity.posZ - entity.width / 2);
     }
+
 
     public Vector3(Entity entity, boolean unused_NoAdjustment) {
         this(entity.posX, entity.posY, entity.posZ);

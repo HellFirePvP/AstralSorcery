@@ -32,7 +32,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
-        getStructureTemplate().placeInWorld(world, pos);
+        getStructureTemplate().placeInWorld(world, pos.down());
     }
 
     @Override

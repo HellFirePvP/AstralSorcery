@@ -38,14 +38,14 @@ public abstract class ItemBlockStorage extends Item {
         if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
         cmp.setString("storedBlock", stateToStore.getBlock().getRegistryName().toString());
-        cmp.setInteger("storedMeta", stateToStore.getBlock().getMetaFromState(stateToStore));
+        cmp.setInteger("storedMeta", stateToStore.getBlock().damageDropped(stateToStore));
     }
 
     @Nonnull
     public static ItemStack getStoredStateAsStack(ItemStack stack) {
         IBlockState stored = getStoredState(stack);
         if(stored == null) return ItemStack.EMPTY; //Guarantees also that the block has an itemblock.
-        return new ItemStack(stored.getBlock(), 1, stored.getBlock().getMetaFromState(stored));
+        return new ItemStack(stored.getBlock(), 1, stored.getBlock().damageDropped(stored));
     }
 
     @Nullable

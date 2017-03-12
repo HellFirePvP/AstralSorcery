@@ -131,6 +131,7 @@ public class RegistryItems {
         crystalSword = registerItem(new ItemCrystalSword());
         chargedCrystalAxe = registerItem(new ItemChargedCrystalAxe());
         chargedCrystalSword = registerItem(new ItemChargedCrystalSword());
+        chargedCrystalPickaxe = registerItem(new ItemChargedCrystalPickaxe());
     }
 
     //Items associated to blocks/itemblocks

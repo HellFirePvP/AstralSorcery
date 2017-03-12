@@ -45,7 +45,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
 
     private int counter = 0;
     private boolean remove = false;
-    private RefreshFunction refreshFunc = null;
+    private EntityComplexFX.RefreshFunction refreshFunc = null;
 
     private Color colorOverlay = Color.WHITE;
     private int ticksPerFullRot = 100;
@@ -55,7 +55,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private float scale = 1F;
     private EntityComplexFX.AlphaFunction alphaFunction = EntityComplexFX.AlphaFunction.CONSTANT;
     private float alphaMultiplier = 1F;
-    private ScaleFunction scaleFunc;
+    private EntityComplexFX.ScaleFunction<TexturePlane> scaleFunc;
     private boolean flagRemoved = true;
 
     private final BindableResource texture;
@@ -109,12 +109,12 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         return this;
     }
 
-    public TexturePlane setScaleFunction(ScaleFunction function) {
+    public TexturePlane setScaleFunction(EntityComplexFX.ScaleFunction<TexturePlane> function) {
         this.scaleFunc = function;
         return this;
     }
 
-    public TexturePlane setRefreshFunc(RefreshFunction refreshFunc) {
+    public TexturePlane setRefreshFunc(EntityComplexFX.RefreshFunction refreshFunc) {
         this.refreshFunc = refreshFunc;
         return this;
     }
@@ -200,7 +200,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     @Override
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) return;
+        if(rView == null) rView = Minecraft.getMinecraft().player;
         double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
         if(dst > Config.maxEffectRenderDistanceSq) return;
 
@@ -243,7 +243,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
         float scale = this.scale;
         if(scaleFunc != null) {
-            scale = scaleFunc.getScale(scale);
+            scale = scaleFunc.getScale(this, parTicks, scale);
         }
         texture.bind();
         RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
@@ -254,18 +254,6 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         double y = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double z = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
         GL11.glTranslated(-x, -y, -z);
-    }
-
-    public static interface ScaleFunction {
-
-        public float getScale(float scaleIn);
-
-    }
-
-    public static interface RefreshFunction {
-
-        public boolean shouldRefresh();
-
     }
 
 }

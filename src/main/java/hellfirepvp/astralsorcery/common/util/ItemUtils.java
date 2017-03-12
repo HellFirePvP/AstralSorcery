@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -76,7 +77,7 @@ public class ItemUtils {
     public static ItemStack createBlockStack(IBlockState state) {
         Item i = Item.getItemFromBlock(state.getBlock());
         if (i == Items.AIR) return ItemStack.EMPTY;
-        int meta = state.getBlock().getMetaFromState(state);
+        int meta = state.getBlock().damageDropped(state);
         return new ItemStack(i, 1, meta);
     }
 
@@ -265,6 +266,28 @@ public class ItemUtils {
         ItemStack s = stack.copy();
         s.setCount(amount);
         return s;
+    }
+
+    public static boolean hasOreNamePart(ItemStack stack, String namePart) {
+        namePart = namePart.toLowerCase();
+        List<String> oreNames = getOreDictNames(stack);
+        for (String s : oreNames) {
+            if(s.contains(namePart)) return true;
+        }
+        return false;
+    }
+
+    public static boolean hasOreName(ItemStack stack, String name) {
+        name = name.toLowerCase();
+        return getOreDictNames(stack).contains(name);
+    }
+
+    public static List<String> getOreDictNames(ItemStack stack) {
+        List<String> out = Lists.newArrayList();
+        for (int id : OreDictionary.getOreIDs(stack)) {
+            out.add(OreDictionary.getOreName(id).toLowerCase());
+        }
+        return out;
     }
 
     public static boolean matchTags(@Nonnull ItemStack stack, @Nonnull  ItemStack other) {
