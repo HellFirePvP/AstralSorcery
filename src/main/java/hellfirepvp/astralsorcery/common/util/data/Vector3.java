@@ -68,6 +68,10 @@ public class Vector3 {
     }
 
     public Vector3(Entity entity) {
+        this(entity.posX, entity.posY + entity.getEyeHeight() / 2D, entity.posZ);
+    }
+
+    public Vector3(Entity entity, boolean unused_NoAdjustment) {
         this(entity.posX, entity.posY, entity.posZ);
     }
 

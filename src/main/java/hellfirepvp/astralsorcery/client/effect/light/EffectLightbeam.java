@@ -23,6 +23,7 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -70,6 +71,14 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         this.cG = green;
         this.cB = blue;
         this.cA = alpha;
+        return this;
+    }
+
+    public EffectLightbeam setColorOverlay(Color color) {
+        this.cR = color.getRed() / 255F;
+        this.cG = color.getGreen() / 255F;
+        this.cB = color.getBlue() / 255F;
+        this.cA = color.getAlpha() / 255F;
         return this;
     }
 

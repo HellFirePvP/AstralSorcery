@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect.texture;
 
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemoval {
 
-    protected double u, v, uLength, vLength;
+    protected double u = 0, v = 0, uLength = 1, vLength = 1;
 
     private float lastRenderDegree = 0F;
 
@@ -52,7 +53,8 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private int maxAge = -1;
     private Vector3 pos = new Vector3(0, 0, 0);
     private float scale = 1F;
-    private float alphaMul = 1F;
+    private EntityComplexFX.AlphaFunction alphaFunction = EntityComplexFX.AlphaFunction.CONSTANT;
+    private float alphaMultiplier = 1F;
     private ScaleFunction scaleFunc;
     private boolean flagRemoved = true;
 
@@ -117,8 +119,13 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         return this;
     }
 
-    public TexturePlane setAlphaMultiplier(float alphaMul) {
-        this.alphaMul = alphaMul;
+    public TexturePlane setAlphaFunction(EntityComplexFX.AlphaFunction alphaFunction) {
+        this.alphaFunction = alphaFunction;
+        return this;
+    }
+
+    public TexturePlane setAlphaMultiplier(float alphaMultiplier) {
+        this.alphaMultiplier = alphaMultiplier;
         return this;
     }
 
@@ -193,19 +200,20 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     @Override
     public void render(float partialTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().player;
+        if(rView == null) return;
         double dst = rView.getDistanceSq(pos.getX(), pos.getY(), pos.getZ());
         if(dst > Config.maxEffectRenderDistanceSq) return;
 
-        float alphaGrad = colorOverlay.getAlpha() * alphaMul;
+        float alphaMul = alphaFunction.getAlpha(counter, maxAge);
+        float alphaGrad = colorOverlay.getAlpha() * alphaMul * this.alphaMultiplier;
         if(alphaGradient) {
-            alphaGrad = getAlphaDistanceMultiplier(dst) * alphaMul;
+            alphaGrad = getAlphaDistanceMultiplier(dst) * alphaMul * this.alphaMultiplier;
         }
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         //removeOldTranslate(rView, partialTicks);
-        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
+        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad / 255F);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
         Vector3 axis = this.axis.clone();
