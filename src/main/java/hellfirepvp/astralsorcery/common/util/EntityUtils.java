@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.base.Predicate;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -26,6 +27,22 @@ import java.util.function.Function;
  * Date: 14.09.2016 / 20:10
  */
 public class EntityUtils {
+
+    public static void applyVortexMotion(Function<Void, Vector3> positionFunc, Function<Vector3, Object> addMotion, Vector3 to, double vortexRange, double multiplier) {
+        Vector3 pos = positionFunc.apply(null);
+        double diffX = (to.getX() - pos.getX()) / vortexRange;
+        double diffY = (to.getY() - pos.getY()) / vortexRange;
+        double diffZ = (to.getZ() - pos.getZ()) / vortexRange;
+        double dist = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+        if (1.0D - dist > 0.0D) {
+            double dstFactorSq = (1.0D - dist) * (1.0D - dist);
+            Vector3 toAdd = new Vector3();
+            toAdd.setX(diffX / dist * dstFactorSq * 0.15D * multiplier);
+            toAdd.setY(diffY / dist * dstFactorSq * 0.25D * multiplier);
+            toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
+            addMotion.apply(toAdd);
+        }
+    }
 
     public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {
         return new Predicate<Entity>() {

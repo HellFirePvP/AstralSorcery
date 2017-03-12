@@ -8,6 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.util.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.entity.Entity;
+
+import java.util.function.Function;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -29,6 +37,10 @@ public abstract class EntityComplexFX implements IComplexEffect {
 
     public int getMaxAge() {
         return maxAge;
+    }
+
+    public int getAge() {
+        return age;
     }
 
     @Override
@@ -83,6 +95,60 @@ public abstract class EntityComplexFX implements IComplexEffect {
             }
             return 1F;
         }
+
+    }
+
+    public static interface PositionController<T extends IComplexEffect> {
+
+        public Vector3 updatePosition(T fx, Vector3 position, Vector3 motionToBeMoved);
+
+    }
+
+    public static interface MotionController<T extends IComplexEffect> {
+
+        public Vector3 updateMotion(T fx, Vector3 motion);
+
+        public static class EntityTarget<T extends IComplexEffect> implements MotionController<T> {
+
+            private final Entity target;
+            private final Function<T, Vector3> positionFunction;
+
+            public EntityTarget(Entity target, Function<T, Vector3> positionFunction) {
+                this.target = target;
+                this.positionFunction = positionFunction;
+            }
+
+            @Override
+            public Vector3 updateMotion(T fx, Vector3 motion) {
+                if (target.isDead) return motion;
+                EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, new Vector3(target), 256, 1);
+                return motion.multiply(0.9);
+            }
+
+        }
+
+    }
+
+    public static interface ScaleFunction<T extends IComplexEffect> {
+
+        public float getScale(T fx, float pTicks, float scaleIn);
+
+        public static class Shrink<T extends EntityComplexFX> implements ScaleFunction<T> {
+
+            @Override
+            public float getScale(T fx, float pTicks, float scaleIn) {
+                float prevAge = Math.max(0F, ((float) fx.getAge() - 1)) / ((float) fx.getMaxAge());
+                float currAge = Math.max(0F, ((float) fx.getAge()))     / ((float) fx.getMaxAge());
+                return (float) (scaleIn * (1 - (RenderingUtils.interpolate(prevAge, currAge, pTicks))));
+            }
+
+        }
+
+    }
+
+    public static interface RefreshFunction {
+
+        public boolean shouldRefresh();
 
     }
 

@@ -35,7 +35,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
     private final float scale;
 
     private RefreshFunction refreshFunction;
-    private PositionUpdateFunction positionUpdateFunction;
+    private PositionController positionUpdateFunction;
 
     public EntityFXFacingSprite(SpriteSheetResource spriteSheet, double x, double y, double z) {
         this(spriteSheet, x, y, z, 1F);
@@ -71,7 +71,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         };
     }
 
-    public EntityFXFacingSprite setPositionUpdateFunction(PositionUpdateFunction positionUpdateFunction) {
+    public EntityFXFacingSprite setPositionUpdateFunction(PositionController positionUpdateFunction) {
         this.positionUpdateFunction = positionUpdateFunction;
         return this;
     }
@@ -113,7 +113,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
             this.prevX = this.x;
             this.prevY = this.y;
             this.prevZ = this.z;
-            Vector3 newPos = positionUpdateFunction.updatePosition(new Vector3(x, y, z));
+            Vector3 newPos = positionUpdateFunction.updatePosition(this, new Vector3(x, y, z), new Vector3());
             this.x = newPos.getX();
             this.y = newPos.getY();
             this.z = newPos.getZ();
@@ -139,18 +139,6 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);
-    }
-
-    public static interface PositionUpdateFunction {
-
-        public Vector3 updatePosition(Vector3 current);
-
-    }
-
-    public static interface RefreshFunction {
-
-        public boolean shouldRefresh();
-
     }
 
 }

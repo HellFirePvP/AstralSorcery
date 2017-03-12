@@ -16,7 +16,9 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncMinetweaker
 import minetweaker.MineTweakerAPI;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -75,7 +77,9 @@ public class ModIntegrationCrafttweaker {
 
             CraftingAccessManager.compile();
 
-            PacketChannel.CHANNEL.sendToAll(compileRecipeChangePacket());
+            if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+                PacketChannel.CHANNEL.sendToAll(compileRecipeChangePacket());
+            }
         }
     }
 

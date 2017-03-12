@@ -195,9 +195,9 @@ public class TileFakeTree extends TileEntityTick {
                     Vector3 plPos = new Vector3(player);
                     for (ItemStack stack : out) {
                         ItemUtils.dropItemNaturally(player.getEntityWorld(),
-                                plPos.getX() + rand.nextFloat() * 2 - rand.nextFloat() * 4,
+                                plPos.getX() + rand.nextFloat() - rand.nextFloat(),
                                 plPos.getY() + rand.nextFloat(),
-                                plPos.getZ() + rand.nextFloat() * 2 - rand.nextFloat() * 4,
+                                plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
                                 stack);
                     }
                     PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.AXE_HARVEST, new Vector3(tft), new Vector3(player));

@@ -10,6 +10,8 @@ import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -44,7 +46,7 @@ public class CelestialStrike {
             livingEntities.remove(except);
         }
 
-        float dmg = 45.0F;
+        float dmg = 35 + ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 30F;
         for (EntityLivingBase living : livingEntities) {
             if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
                 float dstPerc = (float) (new Vector3(living).distance(position) / radius);
@@ -100,7 +102,7 @@ public class CelestialStrike {
         tex.setMaxAge(35);
         tex.setStaticUVOffset(r.nextBoolean() ? 0 : 0.5, r.nextBoolean() ? 0 : 0.5);
         tex.setUVLength(0.5D, 0.5D);
-        tex.setColorOverlay(new Color(0x6EC8FF));
+        tex.setColorOverlay(Color.WHITE);
         tex.setPosition(origin.add(0, 0.1, 0));
         tex.setScale(17);
         tex.setNoRotation(r.nextFloat());

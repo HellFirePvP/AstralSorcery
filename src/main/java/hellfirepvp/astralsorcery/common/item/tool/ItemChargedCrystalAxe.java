@@ -3,6 +3,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktDualParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
@@ -32,7 +33,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe {
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
         World world = player.getEntityWorld();
-        if (!world.isRemote) {
+        if (!world.isRemote && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalAxe)) {
             BlockArray tree = TreeDiscoverer.tryCaptureTreeAt(world, pos, 9, true);
             if (tree != null) {
                 Map<BlockPos, BlockArray.BlockInformation> pattern = tree.getPattern();
@@ -45,6 +46,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe {
                         world.setBlockState(blocks.getKey(), blocks.getValue().state);
                     }
                 }
+                player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalAxe, 70);
                 return true;
             }
         }
