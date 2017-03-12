@@ -176,9 +176,9 @@ public class TileFakeTree extends TileEntityTick {
             this.usedAxe = usedAxe.copy();
             Map<Enchantment, Integer> levels = EnchantmentHelper.getEnchantments(this.usedAxe);
             if(levels.containsKey(Enchantments.FORTUNE)) {
-                levels.put(Enchantments.FORTUNE, levels.get(Enchantments.FORTUNE) + 3);
+                levels.put(Enchantments.FORTUNE, levels.get(Enchantments.FORTUNE) + 2);
             } else {
-                levels.put(Enchantments.FORTUNE, 3);
+                levels.put(Enchantments.FORTUNE, 2);
             }
             EnchantmentHelper.setEnchantments(levels, this.usedAxe);
         }

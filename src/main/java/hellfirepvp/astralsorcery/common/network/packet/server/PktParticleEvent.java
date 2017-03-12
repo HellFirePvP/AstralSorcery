@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -45,6 +46,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
 
     private int typeOrdinal;
     private double xCoord, yCoord, zCoord;
+    private double additionalData = 0.0D;
 
     public PktParticleEvent() {}
 
@@ -63,12 +65,21 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         this.zCoord = z;
     }
 
+    public void setAdditionalData(double additionalData) {
+        this.additionalData = additionalData;
+    }
+
+    public double getAdditionalData() {
+        return additionalData;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         this.typeOrdinal = buf.readInt();
         this.xCoord = buf.readDouble();
         this.yCoord = buf.readDouble();
         this.zCoord = buf.readDouble();
+        this.additionalData = buf.readDouble();
     }
 
     @Override
@@ -77,6 +88,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         buf.writeDouble(this.xCoord);
         buf.writeDouble(this.yCoord);
         buf.writeDouble(this.zCoord);
+        buf.writeDouble(this.additionalData);
     }
 
     @Override
@@ -111,6 +123,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         PHOENIX_PROC,
         TREE_VORTEX,
         ARCHITECT_PLACE,
+        CEL_STRIKE,
 
         CE_CROP_INTERACT,
         //CE_MELT_BLOCK,
@@ -160,6 +173,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileTreeBeacon::playParticles;
                 case RT_DEBUG:
                     return RaytraceAssist::playDebug;
+                case CEL_STRIKE:
+                    return CelestialStrike::playEffects;
             }
             return null;
         }
