@@ -95,6 +95,7 @@ public class RegistryRecipes {
 
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
+    public static DiscoveryRecipe rCCParchment;
     public static AttunementRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensNightvision;
 
     //Smelting
@@ -139,10 +140,10 @@ public class RegistryRecipes {
         registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 4, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.ICE, 1, 0), new ItemStack(Blocks.GLASS, 1, 0));
 
-        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalAxe));
-        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalPickaxe));
-        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalShovel));
-        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalSword));
+        //registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalAxe));
+        //registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalPickaxe));
+        //registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalShovel));
+        //registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalSword));
     }
 
     public static void initVanillaRecipes() {
@@ -277,6 +278,16 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+
+        rCCParchment = registerDiscoveryRecipe(new ShapedRecipe(ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), 2))
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.PAPER,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT));
+        rCCParchment.setPassiveStarlightRequirement(50);
 
         rArchitectWand = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.architectWand)
                 .addPart(OreDictAlias.ITEM_DYE_PURPLE,

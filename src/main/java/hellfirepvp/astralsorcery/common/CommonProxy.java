@@ -121,7 +121,9 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerOreDictEntries() {
+        //*sigh*
         OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, new ItemStack(BlocksAS.blockMarble, 1, 0));
+        OreDictionary.registerOre("blockMarble", new ItemStack(BlocksAS.blockMarble, 1, 0));
     }
 
     public void init() {

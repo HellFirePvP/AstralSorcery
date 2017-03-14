@@ -198,7 +198,9 @@ public class TileCollectorCrystal extends TileSourceBase {
         if (associatedType != null) {
             associatedType.writeToNBT(compound);
         }
-        usedCrystalProperties.writeToNBT(compound);
+        if (usedCrystalProperties != null) {
+            usedCrystalProperties.writeToNBT(compound);
+        }
         if(type != null) {
             compound.setInteger("collectorType", type.ordinal());
         }

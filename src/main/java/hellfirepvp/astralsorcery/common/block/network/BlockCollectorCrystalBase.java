@@ -178,7 +178,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
         TileCollectorCrystal te = MiscUtils.getTileAt(world, pos, TileCollectorCrystal.class, true);
         if(te != null) {
             if(te.getCrystalProperties() == null || te.getConstellation() == null || te.getType() == null) {
-                return null;
+                return ItemStack.EMPTY;
             }
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
@@ -186,7 +186,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
             ItemCollectorCrystal.setType(stack, te.getType());
             return stack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
