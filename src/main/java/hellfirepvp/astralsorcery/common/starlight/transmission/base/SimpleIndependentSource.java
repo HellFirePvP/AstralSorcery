@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,13 +25,14 @@ import javax.annotation.Nonnull;
  */
 public abstract class SimpleIndependentSource implements IIndependentStarlightSource {
 
-    private IWeakConstellation starlightType;
+    protected IWeakConstellation starlightType;
 
     public SimpleIndependentSource(IWeakConstellation constellation) {
         this.starlightType = constellation;
     }
 
     @Override
+    @Nullable
     public IWeakConstellation getStarlightType() {
         return starlightType;
     }
@@ -42,7 +44,9 @@ public abstract class SimpleIndependentSource implements IIndependentStarlightSo
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        starlightType.writeToNBT(compound);
+        if(starlightType != null) {
+            starlightType.writeToNBT(compound);
+        }
     }
 
 }

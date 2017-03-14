@@ -24,18 +24,18 @@ public class TexturePreloader {
 
     public static void doPreloadRoutine() {
         //Needs to happen...
-        AstralSorcery.log.info("[AstralSorcery] Preload mandatory textures");
+        AstralSorcery.log.info("[AssetLibrary] Preload mandatory textures");
         TexturePreloader.preloadMandatoryTextures();
 
         if(Config.clientPreloadTextures) {
             long startMs = System.currentTimeMillis();
-            AstralSorcery.log.info("[AstralSorcery] Preload textures");
+            AstralSorcery.log.info("[AssetLibrary] Preload textures");
             TexturePreloader.preloadTextures();
-            AstralSorcery.log.info("[AstralSorcery] Initializing sprite library");
+            AstralSorcery.log.info("[AssetLibrary] Initializing sprite library");
             SpriteLibrary.init();
-            AstralSorcery.log.info("[AstralSorcery] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
+            AstralSorcery.log.info("[AssetLibrary] Texture Preloading took " + (System.currentTimeMillis() - startMs) + "ms!");
         } else {
-            AstralSorcery.log.info("[AstralSorcery] Skipping preloading textures (configured).");
+            AstralSorcery.log.info("[AssetLibrary] Skipping preloading textures (configured).");
         }
     }
 

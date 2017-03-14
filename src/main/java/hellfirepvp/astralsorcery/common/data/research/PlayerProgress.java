@@ -39,6 +39,7 @@ import java.util.Map;
 public class PlayerProgress {
 
     private List<String> knownConstellations = new ArrayList<>();
+    private List<String> seenConstellations = new ArrayList<>();
     private IMajorConstellation attunedConstellation = null;
     private boolean wasOnceAttuned = false;
     private Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>(); //Perk -> Level Of Unlock
@@ -48,6 +49,7 @@ public class PlayerProgress {
 
     public void load(NBTTagCompound compound) {
         knownConstellations.clear();
+        seenConstellations.clear();
         researchProgression.clear();
         appliedPerks.clear();
         attunedConstellation = null;
@@ -55,10 +57,20 @@ public class PlayerProgress {
         alignmentCharge = 0.0;
         wasOnceAttuned = false;
 
+        if (compound.hasKey("seenConstellations")) {
+            NBTTagList list = compound.getTagList("seenConstellations", 8);
+            for (int i = 0; i < list.tagCount(); i++) {
+                seenConstellations.add(list.getStringTagAt(i));
+            }
+        }
         if (compound.hasKey("constellations")) {
             NBTTagList list = compound.getTagList("constellations", 8);
             for (int i = 0; i < list.tagCount(); i++) {
-                knownConstellations.add(list.getStringTagAt(i));
+                String s = list.getStringTagAt(i);
+                knownConstellations.add(s);
+                if (!seenConstellations.contains(s)) {
+                    seenConstellations.add(s);
+                }
             }
         }
         if(compound.hasKey("listPerks")) {
@@ -107,7 +119,12 @@ public class PlayerProgress {
         for (String s : knownConstellations) {
             list.appendTag(new NBTTagString(s));
         }
+        NBTTagList l = new NBTTagList();
+        for (String s : seenConstellations) {
+            l.appendTag(new NBTTagString(s));
+        }
         cmp.setTag("constellations", list);
+        cmp.setTag("seenConstellations", l);
         cmp.setInteger("tierReached", tierReached.ordinal());
         cmp.setBoolean("wasAttuned", wasOnceAttuned);
         int[] researchArray = new int[researchProgression.size()];
@@ -250,16 +267,26 @@ public class PlayerProgress {
         return knownConstellations;
     }
 
+    public List<String> getSeenConstellations() {
+        return seenConstellations;
+    }
+
     public boolean hasConstellationDiscovered(String constellation) {
         return knownConstellations.contains(constellation);
     }
 
     protected void discoverConstellation(String name) {
+        memorizeConstellation(name);
         if (!knownConstellations.contains(name)) knownConstellations.add(name);
+    }
+
+    protected void memorizeConstellation(String name) {
+        if (!seenConstellations.contains(name)) seenConstellations.add(name);
     }
 
     protected void receive(PktSyncKnowledge message) {
         this.knownConstellations = message.knownConstellations;
+        this.seenConstellations = message.seenConstellations;
         this.researchProgression = message.researchProgression;
         this.tierReached = ProgressionTier.values()[MathHelper.clamp(message.progressTier, 0, ProgressionTier.values().length - 1)];
         this.attunedConstellation = message.attunedConstellation;

@@ -25,6 +25,8 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     private int maxCapacity;
     private Fluid fluid = null;
 
+    private boolean allowInput = true, allowOutput = true;
+
     private List<EnumFacing> accessibleSides = new ArrayList<>();
     private boolean acceptNullCapabilityAccess;
 
@@ -46,6 +48,14 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         this.maxCapacity = Math.max(0, capacity);
         this.accessibleSides = Arrays.asList(accessibleFrom);
         this.acceptNullCapabilityAccess = acceptNull;
+    }
+
+    public void setAllowInput(boolean allowInput) {
+        this.allowInput = allowInput;
+    }
+
+    public void setAllowOutput(boolean allowOutput) {
+        this.allowOutput = allowOutput;
     }
 
     //returns min(toAdd, what can be added at most)
@@ -113,22 +123,22 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
 
     @Override
     public boolean canFill() {
-        return this.amount < this.maxCapacity;
+        return this.allowInput && this.amount < this.maxCapacity;
     }
 
     @Override
     public boolean canDrain() {
-        return this.amount > 0 && this.fluid != null;
+        return this.allowOutput && this.amount > 0 && this.fluid != null;
     }
 
     @Override
     public boolean canFillFluidType(FluidStack fluidStack) {
-        return this.fluid == null || fluidStack.getFluid().equals(this.fluid);
+        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
     }
 
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return this.fluid != null && fluidStack.getFluid().equals(this.fluid);
+        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
     }
 
     public float getPercentageFilled() {
@@ -178,6 +188,8 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         NBTTagCompound tag = new NBTTagCompound();
         tag.setDouble("amt", this.amount);
         tag.setInteger("capacity", this.maxCapacity);
+        tag.setBoolean("aIn", this.allowInput);
+        tag.setBoolean("aOut", this.allowOutput);
         if(this.fluid != null) {
             tag.setString("fluid", this.fluid.getName());
         }
@@ -194,6 +206,8 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     public void readNBT(NBTTagCompound tag) {
         this.amount = tag.getDouble("amt");
         this.maxCapacity = tag.getInteger("capacity");
+        this.allowInput = tag.getBoolean("aIn");
+        this.allowOutput = tag.getBoolean("aOut");
         if(tag.hasKey("fluid")) {
             this.fluid = FluidRegistry.getFluid(tag.getString("fluid"));
         } else {

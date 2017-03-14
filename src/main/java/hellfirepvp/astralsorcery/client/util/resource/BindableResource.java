@@ -65,13 +65,13 @@ public class BindableResource {
         try {
             resource.loadTexture(Minecraft.getMinecraft().getResourceManager());
         } catch (Exception exc) {
-            AstralSorcery.log.warn("[AstralSorcery] Failed to load texture " + path);
-            AstralSorcery.log.warn("[AstralSorcery] Please report this issue; include the message above, the following stacktrace as well as instructions on how to reproduce this!");
+            AstralSorcery.log.warn("[AssetLibrary] Failed to load texture " + path);
+            AstralSorcery.log.warn("[AssetLibrary] Please report this issue; include the message above, the following stacktrace as well as instructions on how to reproduce this!");
             exc.printStackTrace();
             resource = TextureUtil.MISSING_TEXTURE;
             return;
         }
-        AstralSorcery.log.info("[AstralSorcery] Allocated " + path + " to " + resource.getGlTextureId());
+        AstralSorcery.log.info("[AssetLibrary] Allocated " + path + " to " + resource.getGlTextureId());
     }
 
     public void bind() {

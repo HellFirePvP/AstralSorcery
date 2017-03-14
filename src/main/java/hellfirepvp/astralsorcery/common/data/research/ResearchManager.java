@@ -201,6 +201,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean memorizeConstellation(IConstellation c, EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.memorizeConstellation(c.getUnlocalizedName());
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
+    }
+
     public static boolean maximizeTier(EntityPlayer player) {
         PlayerProgress progress = getProgress(player);
         if(progress == null) return false;

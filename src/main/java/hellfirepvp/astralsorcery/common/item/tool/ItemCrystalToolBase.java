@@ -38,6 +38,8 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
 
     public ItemCrystalToolBase() {
         super(0, 0, RegistryItems.crystalToolMaterial, Collections.emptySet());
+        setMaxDamage(0);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     public void setDamageVsEntity(float damageVsEntity) {
@@ -82,6 +84,10 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
         ToolCrystalProperties prop = getToolProperties(stack);
         if(prop == null) {
             stack.setItemDamage(stack.getMaxDamage());
+            return;
+        }
+        if(prop.getSize() <= 0) {
+            super.setDamage(stack, 11);
             return;
         }
         if(damage < 0) {

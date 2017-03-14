@@ -52,7 +52,6 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     private static final int width = 80, height = 110;
     private static final Map<Integer, Point> offsetMap = new HashMap<>(); //we put 6 on "1" page/screen
 
-    private final boolean isDiscovered;
     private List<IConstellation> constellations;
     private String unlocTitle;
     private int pageId = 0;
@@ -61,22 +60,21 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     private Rectangle rectBack, rectPrev, rectNext;
 
-    public GuiJournalConstellationCluster(int bookmark, int pageId, boolean discoveredTier, String unlocTitle, List<IConstellation> constellations) {
-        this(bookmark, discoveredTier, unlocTitle, constellations);
+    public GuiJournalConstellationCluster(int bookmark, int pageId, String unlocTitle, List<IConstellation> constellations) {
+        this(bookmark, unlocTitle, constellations);
         this.pageId = pageId;
     }
 
-    public GuiJournalConstellationCluster(int bookmark, boolean discoveredTier, String unlocTitle, List<IConstellation> constellations) {
+    public GuiJournalConstellationCluster(int bookmark, String unlocTitle, List<IConstellation> constellations) {
         super(bookmark);
         this.unlocTitle = unlocTitle;
-        this.isDiscovered = discoveredTier;
         this.constellations = constellations;
     }
 
     public static GuiScreenJournal getConstellationScreen() {
         PlayerProgress client = ResearchManager.clientProgress;
-        List<IConstellation> constellations = ConstellationRegistry.resolve(client.getKnownConstellations());
-        return new GuiJournalConstellationCluster(1, true, "no.title", constellations);
+        List<IConstellation> constellations = ConstellationRegistry.resolve(client.getSeenConstellations());
+        return new GuiJournalConstellationCluster(1, "no.title", constellations);
 
         /*if(tiersFound.isEmpty()) {
             return new GuiJournalConstellationCluster(1, false, "gui.journal.c.unmapped", unmapped);
@@ -242,12 +240,8 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         TextureHelper.refreshTextureBindState();
         String trName = specTitle == null ? I18n.format(display.getUnlocalizedName()).toUpperCase() : I18n.format(specTitle).toUpperCase();
         FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-        //OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
-        //fontRenderer.font_size_multiplicator = 0.04F;
         float fullLength = (width / 2) - (((float) fr.getStringWidth(trName)) / 2F);
-
         fr.drawString(trName, fullLength, 75F, 0xBBDDDDDD, true);
-        //fontRenderer.drawString(trName, fullLength, 75F, zLevel, null, 1F, 0);
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GlStateManager.color(1F, 1F, 1F, 1F);
@@ -277,7 +271,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
         for (Rectangle r : rectCRenderMap.keySet()) {
             if(r.contains(p)) {
                 IConstellation c = rectCRenderMap.get(r);
-                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationDetails(this, c, isDiscovered));
+                Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationDetails(this, c));
             }
         }
         if(rectBack != null && rectBack.contains(p)) {
@@ -285,11 +279,11 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             return;
         }
         if(rectPrev != null && rectPrev.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId - 1, isDiscovered, unlocTitle, constellations));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId - 1, unlocTitle, constellations));
             return;
         }
         if(rectNext != null && rectNext.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId + 1, isDiscovered, unlocTitle, constellations));
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalConstellationCluster(bookmarkIndex, pageId + 1, unlocTitle, constellations));
         }
     }
 

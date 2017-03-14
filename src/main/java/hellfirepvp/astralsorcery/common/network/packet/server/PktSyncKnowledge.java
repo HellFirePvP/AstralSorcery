@@ -42,6 +42,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     private byte state;
     public List<String> knownConstellations = new ArrayList<>();
+    public List<String> seenConstellations = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
@@ -57,6 +58,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     public void load(PlayerProgress progress) {
         this.knownConstellations = progress.getKnownConstellations();
+        this.seenConstellations = progress.getSeenConstellations();
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
@@ -78,6 +80,17 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             }
         } else {
             knownConstellations = new ArrayList<>();
+        }
+
+        cLength = buf.readInt();
+        if (cLength != -1) {
+            seenConstellations = new ArrayList<>(cLength);
+            for (int i = 0; i < cLength; i++) {
+                String val = ByteBufUtils.readString(buf);
+                seenConstellations.add(val);
+            }
+        } else {
+            seenConstellations = new ArrayList<>();
         }
 
         int rLength = buf.readInt();
@@ -125,6 +138,15 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         if (knownConstellations != null) {
             buf.writeInt(knownConstellations.size());
             for (String dat : knownConstellations) {
+                ByteBufUtils.writeString(buf, dat);
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
+        if (seenConstellations != null) {
+            buf.writeInt(seenConstellations.size());
+            for (String dat : seenConstellations) {
                 ByteBufUtils.writeString(buf, dat);
             }
         } else {

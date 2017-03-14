@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -27,7 +28,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 11.03.2017 / 22:43
  */
-public class ItemChargedCrystalSword extends ItemCrystalSword {
+public class ItemChargedCrystalSword extends ItemCrystalSword implements ChargedCrystalToolBase {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -38,10 +39,17 @@ public class ItemChargedCrystalSword extends ItemCrystalSword {
                 swingEndTick -= 1;
                 if(player.swingProgressInt == swingEndTick) {
                     worldIn.spawnEntityInWorld(new EntityStarburst(worldIn, player));
-                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 70);
+                    if(!ChargedCrystalToolBase.tryRevertMainHand(player, stack)) {
+                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 70);
+                    }
                 }
             }
         }
+    }
+
+    @Override
+    public Item getInertVariant() {
+        return ItemsAS.crystalSword;
     }
 
 }

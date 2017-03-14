@@ -12,8 +12,10 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.TreeDiscoverer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,7 +30,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 11.03.2017 / 11:59
  */
-public class ItemChargedCrystalAxe extends ItemCrystalAxe {
+public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrystalToolBase {
 
     @Override
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
@@ -46,7 +48,9 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe {
                         world.setBlockState(blocks.getKey(), blocks.getValue().state);
                     }
                 }
-                player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalAxe, 70);
+                if(!ChargedCrystalToolBase.tryRevertMainHand(player, itemstack)) {
+                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalAxe, 70);
+                }
                 return true;
             }
         }
@@ -56,13 +60,20 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe {
     @SideOnly(Side.CLIENT)
     public static void playDrainParticles(PktDualParticleEvent pktDualParticleEvent) {
         Vector3 to = pktDualParticleEvent.getTargetVec();
+        int colorHex = MathHelper.floor(pktDualParticleEvent.getAdditionalData());
+        Color c = new Color(colorHex);
         for (int i = 0; i < 10; i++) {
             Vector3 from = pktDualParticleEvent.getOriginVec().add(itemRand.nextFloat(), itemRand.nextFloat(), itemRand.nextFloat());
             Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1 + 0.1 * itemRand.nextFloat());
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
             p.motion(mov.getX(), mov.getY(), mov.getZ()).setMaxAge(30 + itemRand.nextInt(25));
-            p.gravity(0.004).scale(0.25F).setColor(Color.GREEN);
+            p.gravity(0.004).scale(0.25F).setColor(c);
         }
+    }
+
+    @Override
+    public Item getInertVariant() {
+        return ItemsAS.crystalAxe;
     }
 
 }

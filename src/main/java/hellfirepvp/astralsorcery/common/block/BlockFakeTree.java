@@ -65,6 +65,8 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        TileFakeTree tft = MiscUtils.getTileAt(worldIn, pos, TileFakeTree.class, false);
+        if(tft != null && tft.getReference() == null) return;
         if(rand.nextInt(20) == 0) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat(),
@@ -148,9 +150,12 @@ public class BlockFakeTree extends BlockContainer {
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileFakeTree tft = MiscUtils.getTileAt(world, pos, TileFakeTree.class, true);
-        if(tft != null && tft.getFakedState() != null) {
-            return tft.getFakedState().getBlock().getPickBlock(tft.getFakedState(), target, world, pos, player);
-        }
+        try {
+            if(tft != null && tft.getFakedState() != null) {
+                return tft.getFakedState().getBlock().getPickBlock(tft.getFakedState(), target, world, pos, player);
+            }
+        } catch (Exception ignored) {}
         return null;
     }
+
 }

@@ -22,6 +22,7 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
     private int typeOrdinal;
     private double originX, originY, originZ;
     private double targetX, targetY, targetZ;
+    private double additionalData = 0;
 
     public PktDualParticleEvent() {}
 
@@ -35,6 +36,14 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
         this.targetZ = target.getZ();
     }
 
+    public void setAdditionalData(double additionalData) {
+        this.additionalData = additionalData;
+    }
+
+    public double getAdditionalData() {
+        return additionalData;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         this.typeOrdinal = buf.readInt();
@@ -44,6 +53,7 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
         this.targetX = buf.readDouble();
         this.targetY = buf.readDouble();
         this.targetZ = buf.readDouble();
+        this.additionalData = buf.readDouble();
     }
 
     @Override
@@ -55,6 +65,7 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
         buf.writeDouble(targetX);
         buf.writeDouble(targetY);
         buf.writeDouble(targetZ);
+        buf.writeDouble(additionalData);
     }
 
     @Override
@@ -81,12 +92,12 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
 
     public static enum DualParticleEventType {
 
-        AXE_HARVEST;
+        CHARGE_HARVEST;
 
         @SideOnly(Side.CLIENT)
         private static EventAction getClientTrigger(DualParticleEventType type) {
             switch (type) {
-                case AXE_HARVEST:
+                case CHARGE_HARVEST:
                     return ItemChargedCrystalAxe::playDrainParticles;
             }
             return null;

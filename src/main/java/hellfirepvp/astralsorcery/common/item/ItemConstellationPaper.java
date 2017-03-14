@@ -34,6 +34,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -109,9 +111,40 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (worldIn.isRemote || getConstellation(stack) != null) return;
+        if (worldIn.isRemote || entityIn == null || !(entityIn instanceof EntityPlayer)) return;
 
-        if (entityIn != null && entityIn instanceof EntityPlayer && (worldIn.getTotalWorldTime() & 7)  == 0) {
+        IConstellation cst = getConstellation(stack);
+
+        if(cst != null) {
+            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            if(progress != null) {
+                boolean has = false;
+                for (String strConstellation : progress.getSeenConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null && c.equals(cst)) {
+                        has = true;
+                        break;
+                    }
+                }
+                if(!has) {
+                    if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+                        entityIn.addChatMessage(
+                                new TextComponentTranslation("progress.seen.constellation.chat",
+                                        new TextComponentTranslation(cst.getUnlocalizedName())
+                                                .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                        if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
+                            entityIn.addChatMessage(
+                                    new TextComponentTranslation("progress.seen.constellation.first.chat")
+                                            .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        if ((worldIn.getTotalWorldTime() & 7)  == 0) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
             if (progress != null) {
                 List<IConstellation> constellations = new ArrayList<>();
@@ -127,7 +160,12 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                         constellations.remove(c);
                     }
                 }
-                removeInventoryConstellations(((EntityPlayer) entityIn).inventory, constellations);
+                for (String strConstellation : progress.getSeenConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
 
                 if (constellations.isEmpty()) {
                     return;
@@ -136,26 +174,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                 List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
                 WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
                 setConstellation(stack, result.getValue());
-            }
-        }
-    }
-
-    private void removeInventoryConstellations(InventoryPlayer inventory, List<IConstellation> constellations) {
-        if (inventory == null) return;
-        for (ItemStack stack : inventory.mainInventory) {
-            if (stack == null || stack.getItem() == null) continue;
-            if (stack.getItem() instanceof ItemConstellationPaper) {
-                IConstellation c = getConstellation(stack);
-                if (c != null) {
-                    constellations.remove(c);
-                }
-            }
-            if (stack.getItem() instanceof ItemJournal) {
-                for(IConstellation c : ItemJournal.getStoredConstellations(stack)) {
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
             }
         }
     }

@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class BlockDiscoverer {
 
-    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit) {
+    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
         IBlockState toMatch = world.getBlockState(origin);
 
         Block matchBlock = toMatch.getBlock();
@@ -46,22 +46,44 @@ public class BlockDiscoverer {
             searchNext = new LinkedList<>();
 
             for (BlockPos offsetPos : currentSearch) {
-                for (EnumFacing face : EnumFacing.VALUES) {
-                    BlockPos search = offsetPos.offset(face);
-                    if (visited.contains(search)) continue;
-                    if (getCubeDistance(search, origin) > cubeSize) continue;
-                    if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
+                if (searchCorners) {
+                    for (int xx = -1; xx <= 1; xx++) {
+                        for (int yy = -1; yy <= 1; yy++) {
+                            for (int zz = -1; zz <= 1; zz++) {
+                                BlockPos search = offsetPos.add(xx, yy, zz);
+                                if (visited.contains(search)) continue;
+                                if (getCubeDistance(search, origin) > cubeSize) continue;
+                                if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
 
-                    visited.add(search);
+                                visited.add(search);
 
-                    if (!onlyExposed || isExposedToAir(world, search)) {
-                        IBlockState current = world.getBlockState(search);
-                        if (current.getBlock() == matchBlock && current.getBlock().getMetaFromState(current) == matchMeta) {
-                            foundArray.addBlock(search, current);
-                            searchNext.add(search);
+                                if (!onlyExposed || isExposedToAir(world, search)) {
+                                    IBlockState current = world.getBlockState(search);
+                                    if (current.getBlock() == matchBlock && current.getBlock().getMetaFromState(current) == matchMeta) {
+                                        foundArray.addBlock(search, current);
+                                        searchNext.add(search);
+                                    }
+                                }
+                            }
                         }
                     }
+                } else {
+                    for (EnumFacing face : EnumFacing.VALUES) {
+                        BlockPos search = offsetPos.offset(face);
+                        if (visited.contains(search)) continue;
+                        if (getCubeDistance(search, origin) > cubeSize) continue;
+                        if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
 
+                        visited.add(search);
+
+                        if (!onlyExposed || isExposedToAir(world, search)) {
+                            IBlockState current = world.getBlockState(search);
+                            if (current.getBlock() == matchBlock && current.getBlock().getMetaFromState(current) == matchMeta) {
+                                foundArray.addBlock(search, current);
+                                searchNext.add(search);
+                            }
+                        }
+                    }
                 }
             }
         }

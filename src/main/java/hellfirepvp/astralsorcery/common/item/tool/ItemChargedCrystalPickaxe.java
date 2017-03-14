@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -39,13 +40,13 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 12.03.2017 / 14:02
  */
-public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
+public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements ChargedCrystalToolBase {
 
     private static int idx = 0;
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        if (scanForOres(worldIn, playerIn)) {
+        if (hand == EnumHand.MAIN_HAND && scanForOres(worldIn, playerIn)) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         }
         return ActionResult.newResult(EnumActionResult.PASS, itemStackIn);
@@ -53,7 +54,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (scanForOres(worldIn, playerIn)) {
+        if (hand == EnumHand.MAIN_HAND && scanForOres(worldIn, playerIn)) {
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
@@ -63,12 +64,12 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
         if (!world.isRemote && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             if (!player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalPickaxe)) {
                 Thread tr = new Thread(() -> {
-                    BlockArray foundOres = OreDiscoverer.startSearch(world, new Vector3(player), 16);
+                    BlockArray foundOres = OreDiscoverer.startSearch(world, new Vector3(player), 14);
                     if (!foundOres.isEmpty()) {
                         List<BlockPos> positions = new LinkedList<>();
                         BlockPos plPos = player.getPosition();
                         for (BlockPos pos : foundOres.getPattern().keySet()) {
-                            if(pos.distanceSq(plPos) < 650) {
+                            if(pos.distanceSq(plPos) < 350) {
                                 positions.add(pos);
                             }
                         }
@@ -79,7 +80,9 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
                 tr.setName("Ore Scan " + idx);
                 idx++;
                 tr.start();
-                player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 70);
+                if(!ChargedCrystalToolBase.tryRevertMainHand(player, player.getHeldItemMainhand())) {
+                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 70);
+                }
                 return true;
             }
         }
@@ -98,8 +101,13 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
             if (tumble) {
                 bl.tumble();
             }
-            bl.setMaxAge(55);
+            bl.setMaxAge(35);
         }
+    }
+
+    @Override
+    public Item getInertVariant() {
+        return ItemsAS.crystalPickaxe;
     }
 
 }

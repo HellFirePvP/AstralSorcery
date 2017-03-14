@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleIndepe
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileNetworkSkybound;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
+import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
@@ -60,6 +61,10 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     @Override
     public float produceStarlightTick(World world, BlockPos pos) {
+        IWeakConstellation cst = getStarlightType();
+        if(cst == null) return 0F;
+        if(crystalProperties == null || type == null) return 0F;
+
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if(!doesSeeSky || handle == null) {
             return 0F;
@@ -71,7 +76,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         double perc = distrFunction.apply(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
         perc *= (0.2 + (0.8 * posDistribution));
-        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(getStarlightType(), distrFunction)));
+        return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(cst, distrFunction)));
     }
 
     public void setEnhanced(boolean enhanced) {
@@ -99,6 +104,11 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         }
         if(tns instanceof TileSourceBase && ((TileSourceBase) tns).hasBeenLinked()) {
             this.structural = true;
+        }
+        if(tns instanceof TileCollectorCrystal) {
+            this.crystalProperties = ((TileCollectorCrystal) tns).getCrystalProperties();
+            this.type = ((TileCollectorCrystal) tns).getType();
+            this.starlightType = ((TileCollectorCrystal) tns).getConstellation();
         }
     }
 
@@ -141,10 +151,12 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
     public void writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
-        crystalProperties.writeToNBT(compound);
+        if(crystalProperties != null) {
+            crystalProperties.writeToNBT(compound);
+        }
         compound.setBoolean("seesSky", doesSeeSky);
         compound.setBoolean("linkedBefore", structural);
-        compound.setInteger("collectorType", type.ordinal());
+        compound.setInteger("collectorType", type == null ? 0 : type.ordinal());
         compound.setDouble("dstMul", collectionDstMultiplier);
         compound.setBoolean("enhanced", enhanced);
     }
