@@ -19,7 +19,9 @@ import net.minecraftforge.fml.common.Loader;
  */
 public enum Mods {
 
-    TICONSTRUCT("tconstruct");
+    TICONSTRUCT("tconstruct"),
+    MINETWEAKER("MineTweaker3"),
+    JEI("JEI");
 
     public final String modId;
 

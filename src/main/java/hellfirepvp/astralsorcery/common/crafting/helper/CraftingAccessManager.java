@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
@@ -16,10 +17,8 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
-import hellfirepvp.astralsorcery.common.registry.RegisteredMods;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -150,13 +149,13 @@ public class CraftingAccessManager {
      ******************************************
      */
     private static void addRecipe(Object o) {
-        if(RegisteredMods.JEI.isLoaded()) {
+        if(Mods.JEI.isPresent()) {
             ModIntegrationJEI.recipeRegistry.addRecipe(o);
         }
     }
 
     private static void removeAll(Collection objects) {
-        if(RegisteredMods.JEI.isLoaded()) {
+        if(Mods.JEI.isPresent()) {
             for (Object o : objects) {
                 ModIntegrationJEI.recipeRegistry.removeRecipe(o);
             }
@@ -166,7 +165,7 @@ public class CraftingAccessManager {
     private static void markForRemoval(Object o) {
         if(o != null) {
             lastReloadRemovedRecipes.add(o);
-            if(RegisteredMods.JEI.isLoaded()) {
+            if(Mods.JEI.isPresent()) {
                 ModIntegrationJEI.recipeRegistry.removeRecipe(o);
             }
         }

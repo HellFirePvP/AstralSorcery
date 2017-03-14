@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.common.crafting;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -39,6 +42,8 @@ import java.util.List;
  * Date: 26.12.2016 / 15:13
  */
 public final class ItemHandle {
+
+    public static boolean ignoreGatingRequirement = true;
 
     public final Type handleType;
 
@@ -140,7 +145,7 @@ public final class ItemHandle {
             ItemStack stack = iterator.next();
             if(stack == null || stack.getItem() == null) continue;
             Item i = stack.getItem();
-            if(i instanceof ItemGatedVisibility) {
+            if(!ignoreGatingRequirement && i instanceof ItemGatedVisibility) {
                 if(!((ItemGatedVisibility) i).isSupposedToSeeInRender(stack)) {
                     iterator.remove();
                 }

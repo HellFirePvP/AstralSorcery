@@ -29,7 +29,7 @@ public class OreDictAlias {
     public static String ITEM_DYE_PURPLE = "dyePurple";
 
     public static String BLOCK_CRAFTING_TABLE = "workbench";
-    public static String BLOCK_MARBLE = "blockMarble";
+    public static String BLOCK_MARBLE = "stoneMarble";
     public static String BLOCK_WOOD_PLANKS = "plankWood";
     public static String BLOCK_WOOD_LOGS = "logWood";
     public static String BLOCK_SAPLING = "treeSapling";

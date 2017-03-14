@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -17,7 +18,6 @@ import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
-import hellfirepvp.astralsorcery.common.registry.RegisteredMods;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -47,7 +47,7 @@ public class EventHandlerNetwork {
         AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
-        if(RegisteredMods.MINETWEAKER.isLoaded()) {
+        if(Mods.MINETWEAKER.isPresent()) {
             PacketChannel.CHANNEL.sendTo(ModIntegrationCrafttweaker.compileRecipeChangePacket(), p);
         }
 
