@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalShovel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktDualParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
@@ -32,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -167,18 +167,22 @@ public class TileFakeTree extends TileEntityTick {
     private static class PlayerHarvestRef implements TickAction {
 
         private EntityPlayer player;
-        private ItemStack usedAxe;
+        private ItemStack usedTool;
 
         private PlayerHarvestRef(EntityPlayer player, ItemStack usedAxe) {
             this.player = player;
-            this.usedAxe = usedAxe.copy();
-            Map<Enchantment, Integer> levels = EnchantmentHelper.getEnchantments(this.usedAxe);
-            if(levels.containsKey(Enchantments.FORTUNE)) {
-                levels.put(Enchantments.FORTUNE, levels.get(Enchantments.FORTUNE) + 2);
+            if (usedAxe != null) {
+                this.usedTool = usedAxe.copy();
+                Map<Enchantment, Integer> levels = EnchantmentHelper.getEnchantments(this.usedTool);
+                if(levels.containsKey(Enchantments.FORTUNE)) {
+                    levels.put(Enchantments.FORTUNE, levels.get(Enchantments.FORTUNE) + 2);
+                } else {
+                    levels.put(Enchantments.FORTUNE, 2);
+                }
+                EnchantmentHelper.setEnchantments(levels, this.usedTool);
             } else {
-                levels.put(Enchantments.FORTUNE, 2);
+                this.usedTool = null;
             }
-            EnchantmentHelper.setEnchantments(levels, this.usedAxe);
         }
 
         @Override
@@ -197,7 +201,12 @@ public class TileFakeTree extends TileEntityTick {
                             plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
                             stack);
                 }
-                PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.AXE_HARVEST, new Vector3(tft), new Vector3(player));
+                PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), new Vector3(player));
+                if(usedTool != null && usedTool.getItem() instanceof ItemChargedCrystalShovel) {
+                    ev.setAdditionalData(Color.GRAY.brighter().getRGB());
+                } else {
+                    ev.setAdditionalData(Color.GREEN.getRGB());
+                }
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(tft.world, tft.getPos(), 24));
             }
             tft.getWorld().setBlockToAir(tft.getPos());
@@ -205,7 +214,7 @@ public class TileFakeTree extends TileEntityTick {
 
         private void harvestAndAppend(TileFakeTree tft, NonNullList<ItemStack> out) {
             BlockDropCaptureAssist.startCapturing(false);
-            tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedAxe);
+            tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
             out.addAll(BlockDropCaptureAssist.getCapturedStacksAndStop());
         }
 

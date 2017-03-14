@@ -44,6 +44,7 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
 
     public ItemCrystalSword() {
         super(RegistryItems.crystalToolMaterial);
+        setMaxDamage(0);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -87,6 +88,10 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
         ToolCrystalProperties prop = getToolProperties(stack);
         if(prop == null) {
             stack.setItemDamage(stack.getMaxDamage());
+            return;
+        }
+        if(prop.getSize() <= 0) {
+            super.setDamage(stack, 11);
             return;
         }
         if(damage < 0) {

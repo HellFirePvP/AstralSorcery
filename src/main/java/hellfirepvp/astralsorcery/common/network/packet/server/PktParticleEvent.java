@@ -78,6 +78,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         this.typeOrdinal = buf.readInt();
         this.xCoord = buf.readDouble();
         this.yCoord = buf.readDouble();
+        this.zCoord = buf.readDouble();
         this.additionalData = buf.readDouble();
     }
 

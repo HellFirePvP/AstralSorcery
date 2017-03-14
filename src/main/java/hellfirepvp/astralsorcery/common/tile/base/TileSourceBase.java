@@ -31,7 +31,7 @@ import java.util.List;
  */
 public abstract class TileSourceBase extends TileNetworkSkybound implements IStarlightSource, ILinkableTile {
 
-    private boolean needsUpdate = false;
+    protected boolean needsUpdate = false;
     private boolean linked = false;
     private List<BlockPos> positions = new LinkedList<>();
 

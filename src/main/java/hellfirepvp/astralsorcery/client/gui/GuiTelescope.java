@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
@@ -26,6 +27,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
@@ -628,27 +630,15 @@ public class GuiTelescope extends GuiTileBase {
         lblInfos: for (ConstellationInformation info : renderInfos) {
             IConstellation c = info.constellation;
             if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
+            PlayerProgress client = ResearchManager.clientProgress;
+            if (client == null) return;
 
             boolean has = false;
-            IItemHandler handle = Minecraft.getMinecraft().player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-            Collection<ItemStack> papers = ItemUtils.scanInventoryFor(handle, ItemsAS.constellationPaper);
-            for (ItemStack stack : papers) {
-                IConstellation con = ItemConstellationPaper.getConstellation(stack);
-                if(c.equals(con)) {
+            for (String strConstellation : client.getSeenConstellations()) {
+                IConstellation ce = ConstellationRegistry.getConstellationByName(strConstellation);
+                if(ce != null && ce.equals(c)) {
                     has = true;
                     break;
-                }
-            }
-            if(!has) {
-                Collection<ItemStack> journals = ItemUtils.scanInventoryFor(handle, ItemsAS.journal);
-                lblJournals:
-                for (ItemStack stack : journals) {
-                    for (IConstellation con : ItemJournal.getStoredConstellations(stack)) {
-                        if(con.equals(c)) {
-                            has = true;
-                            break lblJournals;
-                        }
-                    }
                 }
             }
 

@@ -18,12 +18,8 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.constellation.*;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -56,11 +52,19 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private List<MoonPhase> phases = new LinkedList<>();
     private List<String> locText = new LinkedList<>();
 
-    public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c, boolean detailed) {
+    public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
         super(-1);
         this.origin = origin;
         this.constellation = c;
-        this.detailed = detailed;
+        boolean has = false;
+        for (String strConstellation : ResearchManager.clientProgress.getKnownConstellations()) {
+            IConstellation ce = ConstellationRegistry.getConstellationByName(strConstellation);
+            if(ce != null && ce.equals(c)) {
+                has = true;
+                break;
+            }
+        }
+        this.detailed = has;
         testPhases();
         buildLines();
     }
@@ -119,9 +123,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         drawBackArrow(partialTicks);
         drawConstellation();
         drawPhaseInformation();
-        if(detailed) {
-            drawExtendedInformation();
-        }
+        drawExtendedInformation();
         zLevel -= 150;
 
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -133,6 +135,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         float br = 0.8666F;
         GL11.glColor4f(br, br, br, 0.8F);
         String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
+        info = detailed ? info : "???";
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 
@@ -149,7 +152,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GL11.glColor4f(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
 
-        if(!locText.isEmpty()) {
+        if(detailed && !locText.isEmpty()) {
             int offsetX = 220, offsetY = 70;
             for (String s : locText) {
                 GL11.glPushMatrix();
@@ -244,6 +247,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             dstInfo += "weak";
         } else {
             dstInfo += "minor";
+        }
+        if (!detailed) {
+            dstInfo = "???";
         }
         dstInfo = I18n.format(dstInfo);
         width = fr.getStringWidth(dstInfo);

@@ -89,6 +89,7 @@ public class TransmissionWorldHandler {
                 TransmissionChain chain = cachedSourceChain.get(source);
                 double starlight = source.produceStarlightTick(world, at);
                 IWeakConstellation type = source.getStarlightType();
+                if (type == null) continue;
 
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {

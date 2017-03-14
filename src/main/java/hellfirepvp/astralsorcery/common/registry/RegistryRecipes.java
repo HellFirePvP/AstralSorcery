@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -47,6 +48,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerBasicInfusion;
+import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
 
 /**
@@ -136,6 +138,11 @@ public class RegistryRecipes {
         registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 4, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 4, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.ICE, 1, 0), new ItemStack(Blocks.GLASS, 1, 0));
+
+        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalAxe));
+        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalPickaxe));
+        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalShovel));
+        registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalSword));
     }
 
     public static void initVanillaRecipes() {

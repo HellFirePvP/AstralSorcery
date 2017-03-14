@@ -22,6 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -32,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,22 +45,22 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 12.03.2017 / 23:25
  */
-public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
+public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements ChargedCrystalToolBase {
 
     private static int idx = 0;
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack itemStackIn = playerIn.getHeldItem(handIn);
-        if (!itemStackIn.isEmpty() && scanForOres(worldIn, playerIn)) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack itemStackIn = playerIn.getHeldItem(hand);
+        if (hand == EnumHand.MAIN_HAND && !itemStackIn.isEmpty() && scanForOres(worldIn, playerIn)) {
             return ActionResult.newResult(EnumActionResult.SUCCESS, itemStackIn);
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (scanForOres(worldIn, playerIn)) {
+        if (hand == EnumHand.MAIN_HAND && scanForOres(worldIn, playerIn)) {
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;
@@ -68,12 +70,12 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
         if (!world.isRemote && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             if (!player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalPickaxe)) {
                 Thread tr = new Thread(() -> {
-                    BlockArray foundOres = OreDiscoverer.startSearch(world, new Vector3(player), 16);
+                    BlockArray foundOres = OreDiscoverer.startSearch(world, new Vector3(player), 14);
                     if (!foundOres.isEmpty()) {
                         List<BlockPos> positions = new LinkedList<>();
                         BlockPos plPos = player.getPosition();
                         for (BlockPos pos : foundOres.getPattern().keySet()) {
-                            if(pos.distanceSq(plPos) < 650) {
+                            if(pos.distanceSq(plPos) < 350) {
                                 positions.add(pos);
                             }
                         }
@@ -84,7 +86,9 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
                 tr.setName("Ore Scan " + idx);
                 idx++;
                 tr.start();
-                player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 70);
+                if(!ChargedCrystalToolBase.tryRevertMainHand(player, player.getHeldItemMainhand())) {
+                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 70);
+                }
                 return true;
             }
         }
@@ -103,8 +107,14 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe {
             if (tumble) {
                 bl.tumble();
             }
-            bl.setMaxAge(55);
+            bl.setMaxAge(35);
         }
+    }
+
+    @Nonnull
+    @Override
+    public Item getInertVariant() {
+        return ItemsAS.crystalPickaxe;
     }
 
 }

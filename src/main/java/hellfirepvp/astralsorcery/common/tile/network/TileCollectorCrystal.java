@@ -140,7 +140,8 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.playerMade = player;
         this.usedCrystalProperties = properties;
         this.type = type;
-        //setEnhanced(true);
+
+        this.needsUpdate = true;
         markDirty();
     }
 
@@ -194,15 +195,13 @@ public class TileCollectorCrystal extends TileSourceBase {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("player", playerMade);
-        if (associatedType == null) {
-            associatedType = ConstellationRegistry.getMajorConstellations().get(rand.nextInt(ConstellationRegistry.getMajorConstellations().size()));
-        }
-        associatedType.writeToNBT(compound);
-        if (usedCrystalProperties == null) {
-            usedCrystalProperties = CrystalProperties.createStructural();
+        if (associatedType != null) {
+            associatedType.writeToNBT(compound);
         }
         usedCrystalProperties.writeToNBT(compound);
-        compound.setInteger("collectorType", type.ordinal());
+        if(type != null) {
+            compound.setInteger("collectorType", type.ordinal());
+        }
         compound.setBoolean("enhanced", enhanced);
     }
 

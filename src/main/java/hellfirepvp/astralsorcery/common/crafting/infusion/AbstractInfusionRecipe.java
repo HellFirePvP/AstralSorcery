@@ -34,9 +34,9 @@ public abstract class AbstractInfusionRecipe {
     private boolean consumeMultiple = false;
 
     @Nonnull
-    private ItemStack output = ItemStack.EMPTY;
+    protected ItemStack output = ItemStack.EMPTY;
     @Nonnull
-    private ItemHandle input;
+    protected ItemHandle input;
 
     public AbstractInfusionRecipe(@Nonnull ItemStack output, @Nonnull ItemHandle input) {
         this.output = output;

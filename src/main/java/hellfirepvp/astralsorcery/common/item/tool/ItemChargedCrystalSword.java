@@ -15,8 +15,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -25,7 +28,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 12.03.2017 / 10:45
  */
-public class ItemChargedCrystalSword extends ItemCrystalSword {
+public class ItemChargedCrystalSword extends ItemCrystalSword implements ChargedCrystalToolBase {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -36,10 +39,19 @@ public class ItemChargedCrystalSword extends ItemCrystalSword {
                 swingEndTick -= 1;
                 if(player.swingProgressInt == swingEndTick) {
                     worldIn.spawnEntity(new EntityStarburst(worldIn, player));
-                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 70);
+                    if(!ChargedCrystalToolBase.tryRevertMainHand(player, stack)) {
+                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 70);
+                    }
                 }
             }
         }
     }
+
+    @Nonnull
+    @Override
+    public Item getInertVariant() {
+        return ItemsAS.crystalSword;
+    }
+
 
 }

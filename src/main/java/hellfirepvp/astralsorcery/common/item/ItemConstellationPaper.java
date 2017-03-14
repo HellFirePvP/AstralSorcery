@@ -31,6 +31,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -108,9 +110,40 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (worldIn.isRemote || getConstellation(stack) != null) return;
+        if (worldIn.isRemote || entityIn == null || !(entityIn instanceof EntityPlayer)) return;
 
-        if (entityIn != null && entityIn instanceof EntityPlayer && (worldIn.getTotalWorldTime() & 7)  == 0) {
+        IConstellation cst = getConstellation(stack);
+
+        if(cst != null) {
+            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            if(progress != null) {
+                boolean has = false;
+                for (String strConstellation : progress.getSeenConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null && c.equals(cst)) {
+                        has = true;
+                        break;
+                    }
+                }
+                if(!has) {
+                    if(ResearchManager.memorizeConstellation(cst, (EntityPlayer) entityIn)) {
+                        entityIn.sendMessage(
+                                new TextComponentTranslation("progress.seen.constellation.chat",
+                                        new TextComponentTranslation(cst.getUnlocalizedName())
+                                                .setStyle(new Style().setColor(TextFormatting.GRAY)))
+                                        .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                        if(ResearchManager.clientProgress.getSeenConstellations().size() == 1) {
+                            entityIn.sendMessage(
+                                    new TextComponentTranslation("progress.seen.constellation.first.chat")
+                                            .setStyle(new Style().setColor(TextFormatting.BLUE)));
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        if ((worldIn.getTotalWorldTime() & 7)  == 0) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
             if (progress != null) {
                 List<IConstellation> constellations = new ArrayList<>();
@@ -126,7 +159,12 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                         constellations.remove(c);
                     }
                 }
-                removeInventoryConstellations(((EntityPlayer) entityIn).inventory, constellations);
+                for (String strConstellation : progress.getSeenConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
 
                 if (constellations.isEmpty()) {
                     return;

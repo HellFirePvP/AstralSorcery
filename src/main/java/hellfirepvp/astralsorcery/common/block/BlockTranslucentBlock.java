@@ -159,9 +159,11 @@ public class BlockTranslucentBlock extends BlockContainer {
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IBlockState fst = getFakedStateTile(world, pos);
-        if(fst != null) {
-            return fst.getBlock().getPickBlock(fst, target, world, pos, player);
-        }
+        try {
+            if(fst != null) {
+                return fst.getBlock().getPickBlock(fst, target, world, pos, player);
+            }
+        } catch (Exception ignored) {}
         return null;
     }
 

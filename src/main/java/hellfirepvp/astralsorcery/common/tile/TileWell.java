@@ -77,6 +77,7 @@ public class TileWell extends TileReceiverBaseInventory {
     public TileWell() {
         super(1, EnumFacing.UP);
         this.tank = new PrecisionSingleFluidCapabilityTank(MAX_CAPACITY, EnumFacing.DOWN);
+        this.tank.setAllowInput(false);
     }
 
     @Override

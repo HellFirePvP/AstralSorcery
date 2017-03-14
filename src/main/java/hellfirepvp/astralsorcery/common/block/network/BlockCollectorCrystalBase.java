@@ -218,11 +218,13 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
             TileCollectorCrystal.breakDamage(worldIn, pos);
 
             if(te.isPlayerMade() && !player.isCreative()) {
-                ItemStack drop = new ItemStack(te.getType() == CollectorCrystalType.ROCK_CRYSTAL ? BlocksAS.collectorCrystal : BlocksAS.celestialCollectorCrystal);
-                CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
-                ItemCollectorCrystal.setType(drop, te.getType());
-                ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
-                ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+                ItemStack drop = new ItemStack(te.getType() == CollectorCrystalType.CELESTIAL_CRYSTAL ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);
+                if(te.getCrystalProperties() != null && te.getConstellation() != null) {
+                    CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
+                    ItemCollectorCrystal.setType(drop, te.getType() != null ? te.getType() : CollectorCrystalType.ROCK_CRYSTAL);
+                    ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
+                    ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
+                }
             }
         }
         super.onBlockHarvested(worldIn, pos, state, player);

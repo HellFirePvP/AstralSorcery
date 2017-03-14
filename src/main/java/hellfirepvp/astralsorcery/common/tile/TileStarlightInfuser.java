@@ -46,6 +46,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -165,9 +168,14 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             }
         }
         int size = offsetsLiquidStarlight.length;
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            indexes.add(i);
+        }
+        Collections.shuffle(indexes);
         while (size > 0) {
+            BlockPos offset = offsetsLiquidStarlight[indexes.get(size - 1)];
             size--;
-            BlockPos offset = offsetsLiquidStarlight[rand.nextInt(offsetsLiquidStarlight.length)];
             if(world.rand.nextFloat() < craftingTask.getRecipeToCraft().getLiquidStarlightConsumptionChance()) {
                 world.setBlockToAir(getPos().add(offset));
                 EntityFlare.spawnAmbient(world, new Vector3(this).add(-3 + rand.nextFloat() * 7, 0.6, -3 + rand.nextFloat() * 7));
