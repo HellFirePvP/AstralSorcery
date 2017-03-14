@@ -2,7 +2,7 @@
 // Parameters:
 // InputStack, OutputStack, consumeMultiple (true/false), consumptionChance, craftTickTime
 // Example:
-// mods.astralsorcery.StarlightInfusion.addInfusion(<astralsorcery:ItemJournal>, <minecraft:bow>, false, 0.7, 200);
+// mods.astralsorcery.StarlightInfusion.addInfusion(<astralsorcery:itemjournal>, <minecraft:bow>, false, 0.7, 200);
 
 // Removes the first Infusion that matches the described ItemStack.
 // Removes only the first it finds. Add multiple removeInfusion-calls to remove multiples, if present.
@@ -50,7 +50,7 @@
 // Parameters:
 // matchStack (itemstack that is matched against the input of the liquefaction), liquidStack (as additional search parameter *or null* to only search via itemstack-input)
 // Example:
-// mods.astralsorcery.Lightwell.removeLiquefaction(<minecraft:dirt>, null);
+// mods.astralsorcery.Lightwell.removeLiquefaction(<astralsorcery:itemcraftingcomponent:0>, null);
 
 // Adds a lightwell recipe
 // Only the fluid from the output-liquidstack counts, the amount will (like the default lightwell depend on day/night and stuff too..)
@@ -67,7 +67,7 @@
 // Parameters:
 // OutputStack, AltarLevel to remove the recipe from (0=Luminous CrafingTable, 1=Starlight Crafting Altar, 2=Celestial Altar)
 // Example:
-// mods.astralsorcery.Altar.removeAltarRecipe(<astralsorcery:BlockBlackMarble>, 0);
+// mods.astralsorcery.Altar.removeAltarRecipe(<astralsorcery:blockblackmarble>, 0);
 
 
 // Adds a recipe to the discovery/tier1 altar recipes
@@ -111,7 +111,7 @@
 // Example:
 // mods.astralsorcery.Altar.addAttunmentAltarRecipe(<minecraft:dirt>, 500, 300, [
 // null, null, null,
-// <ore:treeLeaves>, <astralsorcery:BlockMarble:2>, <ore:treeLeaves>,
+// <ore:treeLeaves>, <astralsorcery:blockmarble:2>, <ore:treeLeaves>,
 // null, <liquid:astralsorcery.liquidstarlight>, null,
 // <ore:blockMarble>, <ore:blockMarble>, <ore:blockMarble>, <ore:blockMarble>
 // ]);
@@ -134,9 +134,9 @@
 // Parameters:
 // OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 21 elements)
 // Example:
-// mods.astralsorcery.Altar.addConstellationAltarRecipe(<astralsorcery:ItemCraftingComponent:2>, 2000, 10, [
-// <ore:blockMarble>, <astralsorcery:BlockLens>, <ore:blockMarble>,
-// <ore:blockMarble>, <astralsorcery:ItemCraftingComponent:2>, <ore:blockMarble>,
+// mods.astralsorcery.Altar.addConstellationAltarRecipe(<astralsorcery:itemcraftingcomponent:2>, 2000, 10, [
+// <ore:blockMarble>, <astralsorcery:blocklens>, <ore:blockMarble>,
+// <ore:blockMarble>, <astralsorcery:itemcraftingcomponent:2>, <ore:blockMarble>,
 // <ore:blockMarble>, <minecraft:nether_star>, <ore:blockMarble>,
 // null, null, <liquid:astralsorcery.liquidstarlight>, <liquid:astralsorcery.liquidstarlight>,
 // <ore:blockMarble>, <ore:blockMarble>,
