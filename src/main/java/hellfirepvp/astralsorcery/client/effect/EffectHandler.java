@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
@@ -27,9 +28,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -198,6 +201,12 @@ public final class EffectHandler {
 
     private void register(final IComplexEffect effect) {
         if(AssetLibrary.reloading || effect == null || Minecraft.getMinecraft().isGamePaused()) return;
+
+        //instead of getEffeciveSide - neither is pretty, but this at least prevents async editing.
+        if (!Thread.currentThread().getName().contains("Client thread")) {
+            AstralSorcery.proxy.scheduleClientside(() -> register(effect));
+            return;
+        }
 
         if(acceptsNewParticles) {
             registerUnsafe(effect);

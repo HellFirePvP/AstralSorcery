@@ -56,9 +56,9 @@ public class TileCelestialCrystals extends TileSkybound {
             IBlockState downState = world.getBlockState(getPos().down());
             if(downState.getBlock() == BlocksAS.customOre &&
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
-                mul *= 0.8;
+                mul *= 0.3;
 
-                if(rand.nextInt(5000) == 0) {
+                if(rand.nextInt(3500) == 0) {
                     world.setBlockState(getPos().down(), Blocks.IRON_ORE.getDefaultState());
                 }
             }
@@ -121,6 +121,7 @@ public class TileCelestialCrystals extends TileSkybound {
             }
         }
         r *= Math.abs(mul);
+        r = Math.max(1, r);
 
         if(world.rand.nextInt(r) == 0) {
             grow();

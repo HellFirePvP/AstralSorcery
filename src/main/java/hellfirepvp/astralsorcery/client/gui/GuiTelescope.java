@@ -64,7 +64,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 23:51
  */
-public class GuiTelescope extends GuiTileBase {
+public class GuiTelescope extends GuiTileBase<TileTelescope> {
 
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiJArrow");
     private static final BindableResource textureGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridTelescope");

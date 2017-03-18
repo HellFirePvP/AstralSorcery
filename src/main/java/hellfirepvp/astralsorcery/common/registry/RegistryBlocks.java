@@ -9,24 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
-import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
-import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
-import hellfirepvp.astralsorcery.common.block.BlockCelestialOrrery;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
-import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
-import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
-import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
-import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
-import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
-import hellfirepvp.astralsorcery.common.block.BlockStructural;
-import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
-import hellfirepvp.astralsorcery.common.block.BlockTreeBeacon;
-import hellfirepvp.astralsorcery.common.block.BlockVariants;
-import hellfirepvp.astralsorcery.common.block.BlockWorldIlluminator;
+import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -39,21 +22,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.network.BlockWell;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialOrrery;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
-import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
-import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
-import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
-import hellfirepvp.astralsorcery.common.tile.TileTelescope;
-import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
-import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -147,6 +116,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(treeBeacon);
         translucentBlock = registerBlock(new BlockTranslucentBlock());
         queueDefaultItemBlock(translucentBlock);
+        //drawingTable = registerBlock(new BlockMapDrawingTable());
+        //queueCustomNameItemBlock(drawingTable);
         //celestialOrrery = registerBlock(new BlockCelestialOrrery());
         //queueDefaultItemBlock(celestialOrrery);
 
@@ -196,6 +167,7 @@ public class RegistryBlocks {
         registerTile(TileTreeBeacon.class);
         registerTile(TileRitualLink.class);
         registerTile(TileTranslucent.class);
+        registerTile(TileMapDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
 
         registerTile(TileCrystalLens.class);

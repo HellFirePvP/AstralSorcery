@@ -27,7 +27,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
 
     private boolean allowInput = true, allowOutput = true;
 
-    private List<EnumFacing> accessibleSides = new ArrayList<>();
+    public List<EnumFacing> accessibleSides = new ArrayList<>();
     private boolean acceptNullCapabilityAccess;
 
     private PrecisionSingleFluidCapabilityTank() {}

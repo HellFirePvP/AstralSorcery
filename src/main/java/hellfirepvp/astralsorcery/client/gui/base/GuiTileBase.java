@@ -19,16 +19,16 @@ import net.minecraft.tileentity.TileEntity;
  * Created by HellFirePvP
  * Date: 02.03.2017 / 16:34
  */
-public class GuiTileBase extends GuiWHScreen {
+public class GuiTileBase<T extends TileEntity> extends GuiWHScreen {
 
-    private final TileEntity te;
+    private final T te;
 
-    protected GuiTileBase(TileEntity te, int guiHeight, int guiWidth) {
+    protected GuiTileBase(T te, int guiHeight, int guiWidth) {
         super(guiHeight, guiWidth);
         this.te = te;
     }
 
-    public TileEntity getOwningTileEntity() {
+    public T getOwningTileEntity() {
         return te;
     }
 
@@ -36,7 +36,7 @@ public class GuiTileBase extends GuiWHScreen {
     public void updateScreen() {
         super.updateScreen();
 
-        if(te.isInvalid()) {
+        if(te.isInvalid() || te.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
             Minecraft.getMinecraft().displayGuiScreen(null);
         }
     }

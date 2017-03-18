@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -149,7 +151,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                     IBlockState down = world.getBlockState(pos.down());
                     if(down.getBlock() instanceof BlockCustomOre &&
                             down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL) &&
-                            rand.nextBoolean()) {
+                            rand.nextInt(3) == 0) {
                         drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }
@@ -166,8 +168,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
         TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
-        if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (500 / amount)))) == 0) {
-            tile.tryGrowth(1);
+        if(tile != null && rand.nextInt(Math.max(1, Math.abs((int) (80 / amount)))) == 0) {
+            tile.tryGrowth(0.7);
         }
     }
 

@@ -213,7 +213,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         //removeOldTranslate(rView, partialTicks);
-        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad / 255F);
+        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
         Vector3 axis = this.axis.clone();

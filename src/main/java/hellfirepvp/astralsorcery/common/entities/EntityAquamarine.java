@@ -93,7 +93,8 @@ public class EntityAquamarine extends EntityItem implements EntityStarlightReact
             } else {
                 setDead();
             }
-            ItemUtils.dropItemNaturally(world, posX, posY, posZ, ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+            EntityItem ei = ItemUtils.dropItemNaturally(world, posX, posY, posZ, ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+            ei.age = -32768;
         }
     }
 

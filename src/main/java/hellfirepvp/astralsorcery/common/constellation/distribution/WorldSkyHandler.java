@@ -248,7 +248,7 @@ public class WorldSkyHandler {
         LinkedList<IConstellation> out = new LinkedList<>();
         LinkedList<Map.Entry<IConstellation, Float>> entries = new LinkedList<>();
         activeDistributions.entrySet().forEach(entries::add);
-        Collections.sort(entries, (e1, e2) -> e2.getValue().intValue() - e1.getValue().intValue());
+        Collections.sort(entries, (e1, e2) -> MathHelper.floor(e2.getValue() * 1000) - MathHelper.floor(e1.getValue() * 1000));
         entries.forEach((e) -> out.addLast(e.getKey()));
         return out;
     }

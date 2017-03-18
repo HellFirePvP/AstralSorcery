@@ -41,6 +41,7 @@ public class CraftingAccessManager {
     private static List<Object> lastReloadRemovedRecipes = new LinkedList<>();
 
     private static boolean completed = false;
+    public static boolean ignoreJEI = true;
 
     public static boolean hasCompletedSetup() {
         return completed;
@@ -149,13 +150,13 @@ public class CraftingAccessManager {
      ******************************************
      */
     private static void addRecipe(Object o) {
-        if(Mods.JEI.isPresent()) {
+        if(!ignoreJEI && Mods.JEI.isPresent()) {
             ModIntegrationJEI.recipeRegistry.addRecipe(o);
         }
     }
 
     private static void removeAll(Collection objects) {
-        if(Mods.JEI.isPresent()) {
+        if(!ignoreJEI && Mods.JEI.isPresent()) {
             for (Object o : objects) {
                 ModIntegrationJEI.recipeRegistry.removeRecipe(o);
             }
@@ -163,7 +164,7 @@ public class CraftingAccessManager {
     }
 
     private static void markForRemoval(Object o) {
-        if(o != null) {
+        if(!ignoreJEI && o != null) {
             lastReloadRemovedRecipes.add(o);
             if(Mods.JEI.isPresent()) {
                 ModIntegrationJEI.recipeRegistry.removeRecipe(o);

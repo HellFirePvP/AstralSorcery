@@ -11,6 +11,9 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
+import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,6 +42,13 @@ public class PlayerPerkHandler implements ITickHandler {
                 if(perk.mayExecute(ConstellationPerk.Target.PLAYER_TICK)) {
                     perk.onPlayerTick(ticked, (Side) context[1]);
                 }
+            }
+        }
+        boolean client = ticked.getEntityWorld().isRemote;
+        for (EnchantmentPlayerWornTick e : RegistryEnchantments.wearableTickEnchantments) {
+            int max = EnchantmentHelper.getMaxEnchantmentLevel(e, ticked);
+            if(max > 0) {
+                e.onWornTick(client, ticked, max);
             }
         }
     }

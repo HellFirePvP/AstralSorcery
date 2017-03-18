@@ -9,16 +9,14 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.gui.GuiConstellationPaper;
-import hellfirepvp.astralsorcery.client.gui.GuiHandTelescope;
-import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
-import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
+import hellfirepvp.astralsorcery.client.gui.*;
 import hellfirepvp.astralsorcery.client.gui.container.*;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,6 +67,8 @@ public class ClientGuiHandler {
                 return new GuiAltarConstellation(player.inventory, (TileAltar) t);
             case ALTAR_TRAIT:
                 return new GuiAltarTrait(player.inventory, (TileAltar) t);
+            case MAP_DRAWING:
+                return new GuiMapDrawing((TileMapDrawingTable) t);
             case JOURNAL:
                 return GuiJournalProgression.getOpenJournalInstance();
             case JOURNAL_STORAGE:

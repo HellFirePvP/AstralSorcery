@@ -87,7 +87,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-            int runs = MathHelper.ceil(starlightCharge / 6D);
+            int runs = MathHelper.ceil(starlightCharge * 1.7D);
             starlightCharge = 0D;
             for (int i = 0; i < Math.max(1, runs); i++) {
                 BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
@@ -120,7 +120,13 @@ public class TileTreeBeacon extends TileReceiverBase {
     private boolean tryHarvestBlock(World world, BlockPos out, BlockPos treeBlockPos, IBlockState fakedState) {
         if(rand.nextInt(ConfigEntryTreeBeacon.dropsChance) == 0) {
             Block b = fakedState.getBlock();
-            List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 2);
+            List<ItemStack> drops = b.getDrops(world, treeBlockPos, fakedState, 0);
+            if(rand.nextBoolean()) {
+                drops.addAll(b.getDrops(world, treeBlockPos, fakedState, 0));
+            }
+            if(rand.nextBoolean()) {
+                drops.addAll(b.getDrops(world, treeBlockPos, fakedState, 0));
+            }
             for (ItemStack i : drops) {
                 if(i == null || i.getItem() == null) continue;
                 ItemUtils.dropItemNaturally(world,

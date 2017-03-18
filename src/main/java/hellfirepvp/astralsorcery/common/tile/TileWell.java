@@ -227,6 +227,9 @@ public class TileWell extends TileReceiverBaseInventory {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = PrecisionSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
+        if(!tank.hasCapability(EnumFacing.DOWN)) {
+            tank.accessibleSides.add(EnumFacing.DOWN);
+        }
     }
 
     @Override
