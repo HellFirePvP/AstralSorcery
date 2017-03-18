@@ -73,6 +73,8 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridatt")                 .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridcst")                 .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijstoragebook")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guidrawing")              .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guidrawing_empty")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightbeam")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst1")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "burst2")               .allocateGlId();

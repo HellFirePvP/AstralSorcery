@@ -943,11 +943,15 @@ public class TileAttunementAltar extends TileEntityTick {
         this.hasMultiblock = compound.getBoolean("mbState");
         this.doesSeeSky = compound.getBoolean("skState");
 
+        IConstellation prev = activeFound;
         IConstellation found = IConstellation.readFromNBT(compound);
         if(found == null || !(found instanceof IWeakConstellation)) {
             activeFound = null;
         } else {
             activeFound = (IWeakConstellation) found;
+        }
+        if(prev != activeFound && world.isRemote) {
+            starSprites.clear();
         }
     }
 

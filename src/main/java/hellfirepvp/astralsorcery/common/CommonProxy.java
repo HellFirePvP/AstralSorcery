@@ -39,6 +39,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTrack
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.*;
@@ -87,6 +88,7 @@ public class CommonProxy implements IGuiHandler {
     public void preInit() {
         RegistryItems.setupDefaults();
 
+        RegistryEnchantments.init();
         RegistryConstellations.init();
 
         PacketChannel.init();
@@ -268,6 +270,7 @@ public class CommonProxy implements IGuiHandler {
         ALTAR_ATTUNEMENT(TileAltar.class),
         ALTAR_CONSTELLATION(TileAltar.class),
         ALTAR_TRAIT(TileAltar.class),
+        MAP_DRAWING(TileMapDrawingTable.class),
         JOURNAL,
         JOURNAL_STORAGE;
 

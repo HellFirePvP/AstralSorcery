@@ -8,22 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
-import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
-import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
-import hellfirepvp.astralsorcery.common.block.BlockCelestialCrystals;
-import hellfirepvp.astralsorcery.common.block.BlockCelestialOrrery;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
-import hellfirepvp.astralsorcery.common.block.BlockFakeTree;
-import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
-import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
-import hellfirepvp.astralsorcery.common.block.BlockRitualLink;
-import hellfirepvp.astralsorcery.common.block.BlockStarlightInfuser;
-import hellfirepvp.astralsorcery.common.block.BlockStructural;
-import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
-import hellfirepvp.astralsorcery.common.block.BlockTreeBeacon;
-import hellfirepvp.astralsorcery.common.block.BlockWorldIlluminator;
+import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
@@ -67,6 +52,7 @@ public class BlocksAS {
     public static BlockTreeBeacon treeBeacon;
     public static BlockRitualLink ritualLink;
     public static BlockTranslucentBlock translucentBlock;
+    public static BlockMapDrawingTable drawingTable;
     //public static BlockCelestialOrrery celestialOrrery;
 
     public static Fluid fluidLiquidStarlight;

@@ -150,7 +150,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                     IBlockState down = world.getBlockState(pos.down());
                     if(down.getBlock() instanceof BlockCustomOre &&
                             down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL) &&
-                            rand.nextBoolean()) {
+                            rand.nextInt(3) == 0) {
                         drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }
@@ -167,8 +167,8 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     @Override
     public void receiveStarlight(World world, Random rand, BlockPos pos, IWeakConstellation starlightType, double amount) {
         TileCelestialCrystals tile = MiscUtils.getTileAt(world, pos, TileCelestialCrystals.class, false);
-        if(tile != null && rand.nextInt(Math.max(20, Math.abs((int) (500 / amount)))) == 0) {
-            tile.tryGrowth(1);
+        if(tile != null && rand.nextInt(Math.max(1, Math.abs((int) (30 / amount)))) == 0) {
+            tile.tryGrowth(0.5);
         }
     }
 

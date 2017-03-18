@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.effect;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
@@ -198,6 +199,12 @@ public final class EffectHandler {
 
     private void register(final IComplexEffect effect) {
         if(AssetLibrary.reloading || effect == null || Minecraft.getMinecraft().isGamePaused()) return;
+
+        //instead of getEffeciveSide - neither is pretty, but this at least prevents async editing.
+        if (!Thread.currentThread().getName().contains("Client thread")) {
+            AstralSorcery.proxy.scheduleClientside(() -> register(effect));
+            return;
+        }
 
         if(acceptsNewParticles) {
             registerUnsafe(effect);

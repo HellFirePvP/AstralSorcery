@@ -125,7 +125,9 @@ public class TileFakeTree extends TileEntityTick {
         } else if (ta instanceof PlayerHarvestRef) {
             compound.setInteger("type", 1);
         }
-        ta.write(compound);
+        if(ta != null) {
+            ta.write(compound);
+        }
         if(fakedState != null) {
             compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
             compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));

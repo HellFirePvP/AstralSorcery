@@ -141,7 +141,9 @@ public class DataLightConnections extends AbstractData {
             Map<BlockPos, List<BlockPos>> dat = serverPosBuffer.get(dimId);
             NBTTagList dataList = new NBTTagList();
             for (BlockPos pos : dat.keySet()) {
-                for (BlockPos end : dat.get(pos)) {
+                List<BlockPos> connections = dat.get(pos);
+                if(connections == null) continue;
+                for (BlockPos end : connections) {
                     NBTTagCompound cmp = new NBTTagCompound();
                     cmp.setLong("sta", pos.toLong());
                     cmp.setLong("end", end.toLong());

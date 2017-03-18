@@ -44,6 +44,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityStarburst;
@@ -123,6 +124,8 @@ public class ClientProxy extends CommonProxy {
 
         registerFluidRenderers();
         registerEntityRenderers();
+
+        CraftingAccessManager.ignoreJEI = false;
     }
 
     private void registerPendingIBlockColorBlocks() {
