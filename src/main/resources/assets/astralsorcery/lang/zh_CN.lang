@@ -61,7 +61,7 @@ progress.remove.attunement=你的力量衰弱了...
 astralsorcery.journal.cluster.discovery.name=发现
 astralsorcery.journal.cluster.basic_craft.name=探索
 astralsorcery.journal.cluster.attunement.name=共振
-astralsorcery.journal.cluster.constellation.name=星座
+astralsorcery.journal.cluster.constellation.name=星宿
 astralsorcery.journal.cluster.radiance.name=光辉
 
 astralsorcery.journal.constellation.dst.major=明亮的
@@ -70,20 +70,20 @@ astralsorcery.journal.constellation.dst.minor=微弱的
 
 research.SHRINES.name=古代神殿
 astralsorcery.journal.SHRINES.1.text=分散在世界各地由大理石建成的古代神殿。 <NL>你可以在高山顶找到一些大型的神殿，沙漠 也有一些被掩埋的小型神殿。 <NL>起初，它们看起来不是很特别，据说大部分 神殿里面都藏有许多古老而神圣的宝藏。 然而与那些传说不同，神殿里面只含有 1或2个藏宝箱以及一个奇怪的漂浮的水晶。
-astralsorcery.journal.SHRINES.2.text=浮动晶体的属性是相当奇怪。它不断发出一种 怪异而又迷人的闪光。<NL>毫无疑问，这些水晶 是人造的。它们真正的年代和起源早已不可 考证了，但在经过一些小实验和修正后发现浮 动水晶对环境伤害的抵抗性较强。
-astralsorcery.journal.SHRINES.3.text=即使用最具破坏的攻击方式也不能损坏它一丁点。<NL>这些水晶似乎很奇怪。它发出的光会让某些物体像水一样流动和衰退。 §3也许在附近使用§3合成台会产生一些§3有趣的结果？§r
+astralsorcery.journal.SHRINES.2.text=浮动晶体的属性是相当奇怪。它不断发出一种 怪异而又迷人的闪光。<NL>毫无疑问，这些水晶是人造的。它们真正的 年代和起源早已不可考证了，但在经过一些小 实验和修正后发现浮动水晶对环境 伤害的抵抗性较强。
+astralsorcery.journal.SHRINES.3.text=即使用最具破坏的攻击方式也不能损坏它一丁点。<NL>这些水晶似乎很奇怪。它发出的光会让某些 物体像水一样流动和衰退。§3也许在附近 使用§3合成台会产生一些§3有趣的结果？§r
 
 research.CPAPER.name=星座卷轴
-astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝箱，箱子里偶 尔有些空白卷轴。打开这些卷轴后就能知道卷 轴的名称，还会发现与夜空中的星星类似的奇 怪图案。 <NL>在收集一定数量的卷轴后,每个卷 轴都会显示一些不同的图案，但之后发现的 卷轴就都是空白的了。
-astralsorcery.journal.CPAPER.3.text=在进一步观察后你发现， 这些卷轴是以书写 或附魔的形式出现的以防止和你已有的卷轴 重复。<NL>为了更方便的查看和管理这些卷轴你 可以按住shift打开星空日记的夹层， 将星空卷轴放入。
+astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝箱，箱子里偶 尔有些空白卷轴。打开这些卷轴后就能知道卷 轴的名称，还会发现与夜空中的星星类似的奇 怪图案。 <NL>在收集一定数量的卷轴后,每个卷轴都会显示 一些不同的图案，但之后发现的卷轴 就都是空白的了。
+astralsorcery.journal.CPAPER.3.text=在进一步观察后你发现， 这些卷轴是以书写 或附魔的形式出现以防止和你已有的卷轴 重复。<NL>为了更方便的查看和管理这些卷轴你可以 按住shift打开星空日记的夹层， 将星空卷轴放入。
 
 research.WAND.name=共鸣之杖
-astralsorcery.journal.WAND.1.text=当你在分散的古代神殿内那奇怪的水晶旁 使用合成台时，水晶将聚焦一束光到合成台上。 这束光很暗淡，但经研究发现它能影响 某些材料的密度和延展性。<NL>有鉴于此，一些 不可能制作的设想可以轻松的实现。但一开始 只能做一个能控制各种星光牵引装置的 基础法杖。
-astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特点。在晚上拿着它时， 它会颤动着并看似随意的在周围的地表发出 一束火花。 that gather in seemingly random locations around the surface of the land. Nothing seems out of place or special on the surface though... §3也许 §3地下深处有什么东西？§r
+astralsorcery.journal.WAND.1.text=当你在分散的古代神殿内那奇怪的水晶旁 使用合成台时，水晶将聚焦一束光到合成台上。 这束光很暗淡，但经研究发现它能影响 某些材料的密度和延展性。<NL>有鉴于此，一些不可能的设想可以轻松的实现。 但一开始只能做基础法杖，以便控制 各种星光牵引装置。
+astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特点。在晚上拿着它时， 它会颤动着并看似随意的在周围的地表发出 一束火花。地表看上去并没有什么特殊的地方。 §3也许，§3地底深处有什么东西？§r
 
 research.ORES.name=矿物
-astralsorcery.journal.ORES.1.text=§7§nRock Crystal Ore:§r In the deepest reaches of the world, intense heat and pressure form incredibly rare and fragile crystals. These crystals each have their own unique properties, and they seem to take in starlight with unusual ease. Due to the fragility of rock crystals mechanical hands are not careful enough when handling these ores.
-astralsorcery.journal.ORES.2.text=§1§nAquamarine Shale:§r Shaped by the continuous flow of water and starlight over fragmented rock crystal, these small and fragile gems form in the sands of riverbeds. Usually they can be found close to the surface buried in patches of sand.
+astralsorcery.journal.ORES.1.text=§7§n水晶石矿石：§r在世界的最深处，因高温和高压而形成的 稀有而脆弱的晶体，真是令人难以置信！ 这些水晶有着独一无二的属性，它们在星光 下似乎变的非比寻常。由于水晶石太过脆弱， mechanical hands易破坏矿石。
+astralsorcery.journal.ORES.2.text=§1§n海蓝宝石页岩：§r在星光长久的照射与水流连续不断的冲刷下， 在河床下的沙内形成的小而脆弱的宝石。 通常，可以在被泥沙掩埋的顶部找到它们。
 
 research.ALTAR1.name=星光合成台
 astralsorcery.journal.ALTAR1.1.text=Using a regular crafting table to interact with the starlight emitted by the crystal seems to be rather inefficient. The table was able to receive only a small amount of starlight from the crystal. Not only that, but the table must be in very close proximity to the crystal in order to receive any light at all.<NL>The Luminous Crafting table solves both issues perfectly. It is able to absorb and utilize a much larger amount of starlight than the crafting table in the ruins. Also, it does not require a connection to the crystal to collect starlight at all.
@@ -94,22 +94,22 @@ research.HAND_TELESCOPE.name=单筒望远镜
 astralsorcery.journal.HAND_TELESCOPE.1.text=Despite the night sky constantly shifting all the time, certain recurring patterns and shapes show up on a regular basis. Many of these shapes bear a close resemblance to the patterns on the strange star charts found in ruins.<NL> Since the shapes of the constellations apparently bear enough significance to have recorded on charts, being able to find such patterns easily could become very useful in the future.
 astralsorcery.journal.HAND_TELESCOPE.4.text=The hand telescope, despite being a rather rudimentary device, goes a long way toward easing the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary. Also, constellation papers of the desired constellations need to be on hand.<NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
 
-research.GRINDSTONE.name=磨刀石
+research.GRINDSTONE.name=砂轮
 astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly manipulate certain materials, a more specialized tool is required. A grindstone with a marble grinding wheel does exactly that. It allows for fine adjustments to be made to different types of crystals, as well as giving the ability to grind certain types of materials into dust.<NL>A material or object can be placed onto it and then ground by right-clicking. Right-clicking while sneaking will remove the item.
 astralsorcery.journal.GRINDSTONE.3.text=Handling rock crystals properly when trying to shape them into a more fitting form is a bit of a tedious process. Frequent inspection when doing so is highly advisable, as unattentive grinding can end up reducing one to nothing.
 
 research.TOOLS.name=水晶工具
-astralsorcery.journal.TOOLS.1.text=After some careful testing, it becomes readily apparent that pure rock crystals are nowhere near as fragile as they appear. Tools crafted with them have much more durability than normal tools made from other materials. Specifically, they don't seem to break from normal activities. Crystal tools have the collective attributes of the crystals used to craft them, and their properties such as damage and mining speed are determined by them.
-astralsorcery.journal.TOOLS.2.text=Unfortunately, crystal tools are not perfect. Despite their apparent unbreakability they become dull after constant use, causing them to deal less damage, mine blocks slower, etc. It is possible to sharpen them on a grindstone to regain their lost attributes, but when ground they lose size similarly to individual rock crystals. It is not possible to increase the stats of a crystal tool above the ammounts present when it is newly crafted by grinding it more than normal.
+astralsorcery.journal.TOOLS.1.text=经过一番仔细的测试后，你发觉纯净的  水晶石不像刚挖出来的那样脆弱。用它们 制作的工具比其他的材料所制成的普通工具 具有更高的耐久。具体来说，它们并不影响 日常的活动。水晶工具的属性由合成时的材料 决定，例如攻击伤害和挖掘速度。
+astralsorcery.journal.TOOLS.2.text=不幸的是，水晶工具并不完美。尽管它们更 不易损坏，但在使用后就不在那么锋利了， 这导致攻击伤害变低，挖掘速度变慢等等。 可以用砂轮让其焕然一新，但将减少它们的 耐久就如同普通的水晶一样。不可能将被砂轮 磨损的耐久恢复到刚制作出工具时的大小。
 
-research.ROCK_CRYSTALS.name=石质水晶属性
-astralsorcery.journal.ROCK_CRYSTALS.1.text=Almost every newly mined rock crystal is unique. They vary in size, purity and shape, and there seems to be no way to absulutely determine what said will be during the mining process.<NL>While changeing the size and purity of rock crystals does not seem to be possible at the moment, grinding off small bits of them with a grindstone to form them into a more suitable shape seems easy enough.
+research.ROCK_CRYSTALS.name= 水晶石属性
+astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的 水晶石都是独一无二的。 它们的大小，纯度和形状都不同，当然， 也没办法在挖掘出来前知晓它的信息。<NL> 虽然目前无法改变 水晶石的大小和纯度， 但你可以用砂轮把它磨细以改变成更合适的形状。
 
 research.MARBLETYPES.name=大理石
-astralsorcery.journal.MARBLETYPES.1.text=A clean and light-reflecting variety of marble can be found from time to time while mining through the ground. The ancient shrines are all built entirely out of it, and its reflective capabilities do seem to interact with starlight in an interesting manner. Certain kinds of shaping and refinement could render it useful in various endeavors related to starlight manipulation.
+astralsorcery.journal.MARBLETYPES.1.text=当你在地表开掘时可以不时的发现 一些洁净透亮的大理石。那些古代神殿都是 用大理石建成的，它似乎能以一种独特的方式 反射并使用星光中蕴含的能量。某些精雕 细砌的大理石可以让利用的星光更多。
 
 research.SOOTYMARBLE.name=熏黑大理石
-astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of marble with a very dark material such as coal will change its innate reflective properties into strong absorbative properties. Sooty marble collects sunlight and heats up during the day and radiates its heat away during the night. This new type of marble may prove to be just as useful as regular marble in the future.
+astralsorcery.journal.SOOTYMARBLE.1.text=用颜色较深的材料（比如煤）涂覆在大理石 的表面能将其先天的反射性质改变成吸收性质。 熏黑大理石在白天收集日光和热量，在晚上 释放热量。这种新型的大理石的作用将被 证明与普通大理石一样重要。
 
 research.ALTAR2.name=星光祭坛
 astralsorcery.journal.ALTAR2.1.text=The starlight capacity and focusing abilities of the luminous crafting table are admirable compared to a regular crafting table, but they can be greatly inproved apon. Engineering additional reinforcements and extensions to make the table larger are not quite enough on their own though.<NL>In order to focus enough starlight to actually make use of the extensions, a large starlight collection structure made of various types of marble is required.
@@ -230,7 +230,7 @@ astralsorcery.journal.recipe.amt.high=很多
 astralsorcery.journal.recipe.amt.highest=大量
 astralsorcery.journal.recipe.amt.toomuch=§c太多了
 
-crystal.size=尺寸
+crystal.size=大小
 crystal.purity=纯度
 crystal.collectivity=切割
 crystal.attuned=调整到
@@ -250,8 +250,8 @@ item.ItemCraftingComponent.reso_gem.name=共振宝石
 item.ItemCraftingComponent.parchment.name=羊皮纸
 
 item.ItemConstellationPaper.name=星座卷轴
-item.ItemRockCrystalSimple.name=石质水晶
-item.ItemTunedRockCrystal.name=共鸣石质水晶
+item.ItemRockCrystalSimple.name= 水晶石
+item.ItemTunedRockCrystal.name=共鸣 水晶石
 item.ItemTunedCelestialCrystal.name=共鸣天体水晶
 item.ItemCelestialCrystal.name=天体水晶
 item.ItemLinkingTool.name=链接器
@@ -288,7 +288,7 @@ inventory.altar.4=[NoName-Endgame] Altar
 
 fluid.astralsorcery.liquidStarlight=星能液
 
-tile.BlockCustomOre.rock_crystal.name=岩石水晶矿石
+tile.BlockCustomOre.rock_crystal.name=水晶石矿石
 tile.BlockCustomOre.starmetal.name=星光矿石
 tile.BlockCustomSandOre.aquamarine.name=海蓝宝石页岩
 tile.BlockCollectorCrystal.name=水晶收集器
@@ -319,7 +319,7 @@ tile.BlockLens.name=透镜
 tile.BlockCelestialCrystals.name=天体水晶簇
 tile.BlockWell.name=聚星缸
 tile.BlockMachine.telescope.name=天文望远镜
-tile.BlockMachine.grindstone.name=磨刀石
+tile.BlockMachine.grindstone.name=砂轮
 tile.BlockStructural.telescope_struct.name=天文望远镜
 tile.BlockFakeTree.name=
 tile.BlockStarlightInfuser.name=星光聚合器
@@ -329,7 +329,7 @@ tile.BlockTranslucentBlock.name=半透明块
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive
-astralsorcery.constellation.discidia.effect=这个星座的光似乎是不可阻挡的； Forcing its way through different materials as well as living things.
+astralsorcery.constellation.discidia.effect=这个星座的光似乎是不可阻挡的； 任何挡在它面前的生物或材料都会被穿透。
 astralsorcery.constellation.armara=Armara
 astralsorcery.constellation.armara.info=Defence
 astralsorcery.constellation.armara.effect=你感到一种推力使你远离星座的光芒， 就像个屏障，保护着星光。
