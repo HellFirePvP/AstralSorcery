@@ -91,8 +91,8 @@ astralsorcery.journal.ALTAR1.3.text=星光合成台并非完美无缺的。首�
 astralsorcery.journal.ALTAR1.4.text=要使用星光合成台，在你按合成表摆放好物品后 需要用共鸣之杖右键合成台。物品在制作 完成后将被放置在合成台上方<NL>它收集星光的容量依位置而变，星光的吸收 范围从几乎没有到近乎满值。
 
 research.HAND_TELESCOPE.name=单筒望远镜
-astralsorcery.journal.HAND_TELESCOPE.1.text=Despite the night sky constantly shifting all the time, certain recurring patterns and shapes show up on a regular basis. Many of these shapes bear a close resemblance to the patterns on the strange star charts found in ruins.<NL> Since the shapes of the constellations apparently bear enough significance to have recorded on charts, being able to find such patterns easily could become very useful in the future.
-astralsorcery.journal.HAND_TELESCOPE.4.text=The hand telescope, despite being a rather rudimentary device, goes a long way toward easing the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary. Also, constellation papers of the desired constellations need to be on hand.<NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
+astralsorcery.journal.HAND_TELESCOPE.1.text=尽管夜空在持续不断的移动，但总会显现 一些固定的图案。这些图案与你在各地找到 的卷轴上的图案非常相似。<NL>很显然，这些记录下来的图案有重要的意义。 这些能轻松的在夜空上找到的图案在将来 必然十分重要。
+astralsorcery.journal.HAND_TELESCOPE.4.text=虽然单筒望远镜是最基础的观测设备， 但它能提高你对夜空的观测效率。<NL>只有在清晰的夜空下，才有可能定位星座。 此外星座卷轴需要放在左手以便查看。<NL>一旦找到类似的图案，可以通过潜行来 固定单筒望远镜的视角。之后用左键描出星座。
 
 research.GRINDSTONE.name=砂轮
 astralsorcery.journal.GRINDSTONE.1.text=尽管工作台可以使用所有材料，但为了更完全 的发挥某些材料的价值，需要用专业工具。 它就是由大理石做成的砂轮。它能让你对不同 种类的水晶石进行打磨，还能将一些材料磨成粉。 <NL>将物品放置在砂轮上右键以进行工作。 潜行时右键可以取下物品。
@@ -102,7 +102,7 @@ research.TOOLS.name=水晶工具
 astralsorcery.journal.TOOLS.1.text=经过一番仔细的测试后，你发觉纯净的  水晶石不像刚挖出来的那样脆弱。用它们 制作的工具比其他的材料所制成的普通工具 具有更高的耐久。具体来说，它们并不影响 日常的活动。水晶工具的属性由合成时的材料 决定，例如攻击伤害和挖掘速度。
 astralsorcery.journal.TOOLS.2.text=不幸的是，水晶工具并不完美。尽管它们更 不易损坏，但在使用后就不在那么锋利了， 这导致攻击伤害变低，挖掘速度变慢等等。 可以用砂轮让其焕然一新，但将减少它们的 耐久就如同普通的水晶一样。不可能将被砂轮 磨损的耐久恢复到刚制作出工具时的大小。
 
-research.ROCK_CRYSTALS.name= 水晶石属性
+research.ROCK_CRYSTALS.name= 水晶石的属性
 astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的 水晶石都是独一无二的。 它们的大小，纯度和形状都不同，当然， 也没办法在挖掘出来前知晓它的信息。<NL> 虽然目前无法改变 水晶石的大小和纯度， 但你可以用砂轮把它磨细以改变成更合适的形状。
 
 research.MARBLETYPES.name=大理石
@@ -128,7 +128,7 @@ astralsorcery.journal.ILLUMINATOR.1.text=Glowstone and aquamarine exhibit a stra
 astralsorcery.journal.ILLUMINATOR.3.text=The Cave Illuminator takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
 astralsorcery.journal.ILLUMINATOR.4.text=The cave illuminator forms these flares in any lightless open space located beneath the device itself. The process of formation is slow, but its radius extends an impressive distance from the main device. The cave illuminator also adapts to newly formed empty spaces made by mining and building, making it indispensable to avid spelunkers and miners.
 
-research.ATT_PLAYER.name=共鸣
+research.ATT_PLAYER.name=共鸣之力
 astralsorcery.journal.ATT_PLAYER.1.text=Crafting things with starlight and liquid starlight might be fine and all, but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific constellations have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.<NL>Maybe it might be possible to filter the starlight of a specific constellation and amplify it? Or maybe just collect enough to amplify its strength?
 astralsorcery.journal.ATT_PLAYER.3.text=While you are unable to properly focus the light in a reasonable size, you could just build something bigger to absorb more light and try channel the light to a central point.<NL>Something of the size of your altar structure doesn't seem to be enough to collect sufficient amounts. To cope with the bigger size, you came up with some small relays to channel the light to the appropriate places.
 astralsorcery.journal.ATT_PLAYER.5.text=Channeling the light around is pretty useless without a central point of focusing it. An altar that can act as a relay itself at the center of the structure will act as focal point.<NL>Now, where to place the relays? Maybe the constellation papers could be of use to find the positions best suitable for channeling the part of the starlight spectrum that you're interested in.<NL>There doesn't seem to be enough starlight during the day. Maybe at night?
@@ -142,11 +142,11 @@ research.ATT_CRYSTAL.name=水晶共振
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as you attune yourself to a constellation, you can also attune rock crystals to a constellation. It will react stronger to that constellation and channel its effects.<NL>You are not sure what to use it for, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it comes to mind. Maybe you could use its focusing properties for some other things aswell?
 astralsorcery.journal.ATT_CRYSTAL.2.text=You're sure you've seen those kinds of properties somewhere already...<NL>Those floating crystals inside some of the shrines around the world, right. They seem to be very capable of collecting and focusing starlight. Using them in the future might help a lot. However, your current altar can provide nowhere enough starlight to form an item capable of bending its chaotic rays of light.
 
-research.RESO_GEM_POOL.name=星光聚合器
+research.RESO_GEM_POOL.name=星光聚合
 astralsorcery.journal.RESO_GEM_POOL.1.text=Liquid starlight's unique properties cause it to interact with certain solid materials in several very useful ways.<NL>The liquid adheres to the surface of rock crystals, gradually hardening into extra layers that increasing their size. Aquamarine gems seem to react almost violently to liquid starlight. When immersed, they almost immediately begin to absorb the liquid, vibrating and shimmering quite energetically as they do so. The result of this reaction is a resonating gem that constantly pulses with energy.
 astralsorcery.journal.RESO_GEM_POOL.2.text=Unfortunately, both reactions take an extremely long time to complete, and any starlight traces left over evaporate immediately on completion. Creating a means to make this process more efficient is a reasonable idea.
 
-research.INFUSER.name=星光注入器
+research.INFUSER.name=星能注入器
 astralsorcery.journal.INFUSER.1.text=It seems you found at least a faster way and one that allows for more generic applications: The starlight infuser.<NL>And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.
 astralsorcery.journal.INFUSER.4.text=The process in the infuser is way faster than the manual process, but it might instead of consuming just 1 bucket consume more. Sometimes it also doesn't consume any.<NL>Due to the nature of liquid starlight, you might now in this more organized process infuse many more things.<NL>However, it seems incapable of reproducing the effect that liquid starlight itself had on rock crystals by throwing them inside a pool of it.
 
@@ -158,7 +158,7 @@ research.TOOL_WANDS.name=接引之力
 astralsorcery.journal.TOOL_WANDS.1.text=Having gained some of these strange powers, you feel like you could try to actively channel that energy through you to bring forth stronger effects instead of just passively harnessing those.<NL>You can't think of a way to just have it shoot out of your bare hands, so creating small tool rod enhanced with the newly discovered properties of the resonating gems should help with that.
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block you want to place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from your inventory.<NL>Upon channeling some of this spectral energy through you, you feel a bit drained afterwards. Oddly enough, it seems like you've lost some of those celestial energies.. Maybe you should keep an eye out on your alignment when using those kinds of gadgets.
 
-research.RIT_PEDESTAL.name=放置仪式
+research.RIT_PEDESTAL.name=Ritual Pedestal
 astralsorcery.journal.RIT_PEDESTAL.1.text=Just as you suspected, the attuned crystal seems already almost strong enough to make its effects manifest in the world. To be actually useful you should put a pedestal for it with another rock crystal to help focus enough starlight.<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, you should add some liquid starlight aswell, to fill them like they appear.
 
 research.TELESCOPE.name=天文望远镜
@@ -201,18 +201,18 @@ astralsorcery.journal.STARMETAL_RES.2.text=On most occasions, it seems to still 
 research.PRISM.name=水晶棱镜
 astralsorcery.journal.PRISM.1.text=While crystal lenses are useful and all, sometimes you just want to direct the light onto multiple locations other than just one.<NL>You conclude on having a crystal acting as prism and splitting the outgoing starlight evenly across them would be the central part. Other than that it would most likely work the same way like the crystal lens.
 
-research.COLL_CRYSTAL.name=水晶收集器
+research.COLL_CRYSTAL.name=增幅水晶
 astralsorcery.journal.COLL_CRYSTAL.1.text=Growing more and more familiar with handling attuned crystals and learning about their properties, you think you might be able to recreate what you found in those shrines. A simple crystal alone has proven to be too weak to properly channel the same amount that you experience from those big floating crystals.<NL>Enhancing the attuned crystals you've obtained might lead to something similar like the collector crystals, however you feel like there might be more ways to enhance them in the future.
 astralsorcery.journal.COLL_CRYSTAL.0.text=[WIP]<NL>You discovered how to create your own collector crystals. They will copy over the crystal properties and the constellation from the attuned crystal that was used to craft them had. Needs to see the sky to collect starlight. Starlight collected depends on time of the day, as well as the current constellations in the sky. Starlight type is the type of the constellation the crystal was attuned to.
 
-research.CEL_CRYSTAL_GROW.name=水晶簇
+research.CEL_CRYSTAL_GROW.name=天体水晶簇
 astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way better material to mess with. Its little grains occasionally flash with light and sparkle while running like sand through your hands.<NL>Accidentally, some of it dropped onto your crystals. You could hard get it off of them... They stick to the surface of them like a thin coating.
 astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Maybe you don't want to remove the coating but rather have it somehow fuse into the crystal? Throwing them both into liquid starlight and wait for them to fuse together might be one approach to that.<NL>After waiting a while you notice that they did indeed fuse together into a cluster of small blue crystals, consuming the liquid in the process.<NL>They still seem to grow a bit. Maybe you should just leave them like that for a while until they stop growing. Focusing some additional starlight onto them might also help.
 
 research.CEL_CRYSTALS.name=天体水晶
-astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘凝结成蓝色晶体后，你发现它们与 水晶石有相同的属性。但比水晶石更大更坚硬。 <NL>进一步研究后，它们不仅在各个方面与水晶石 相似，且效用要远高于水晶石。用这种 水晶来代替水晶石是非常有利的。
+astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色晶体后，你发现它们与 水晶石有相同的属性。但比水晶石更大更坚硬。 <NL>进一步研究后，它们不仅在各个方面与水晶石 相似，且效用要远高于水晶石。用这种 水晶来代替水晶石是非常有利的。
 
-research.PED_ACCEL.name=仪式加速
+research.PED_ACCEL.name=Ritual Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up some time ago is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
 astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the ritual pedestal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
 
@@ -291,8 +291,8 @@ fluid.astralsorcery.liquidStarlight=星能液
 tile.BlockCustomOre.rock_crystal.name=水晶石矿石
 tile.BlockCustomOre.starmetal.name=星光矿石
 tile.BlockCustomSandOre.aquamarine.name=海蓝宝石页岩
-tile.BlockCollectorCrystal.name=水晶收集器
-tile.BlockCelestialCollectorCrystal.name=天体水晶收集器
+tile.BlockCollectorCrystal.name=增幅水晶
+tile.BlockCelestialCollectorCrystal.name=天体增幅水晶
 tile.BlockCollectorCrystal.obf.name=浮动水晶
 tile.BlockAltar.altar_1.name=星光合成台
 tile.BlockAltar.altar_2.name=星光祭坛
@@ -303,7 +303,7 @@ tile.BlockAltar.general.name=祭坛
 tile.BlockAttunementAltar.name=共鸣祭坛
 tile.BlockStructural.attunement_altar_struct.name=共鸣祭坛
 tile.BlockAttunementRelay.name=共鸣中继器
-tile.BlockRitualPedestal.name=放置仪式
+tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=挥发性火炬
 tile.BlockWorldIlluminator.name=洞穴照明器
 tile.BlockBlackMarble.raw.name=熏黑大理石
@@ -311,8 +311,8 @@ tile.BlockMarble.raw.name=大理石
 tile.BlockMarble.bricks.name=大理石砖
 tile.BlockMarble.pillar.name=大理石柱
 tile.BlockMarble.chiseled.name=雕纹大理石
-tile.BlockMarble.arch.name=拱形大理石
-tile.BlockMarble.runed.name=符文大理石
+tile.BlockMarble.arch.name=大理石横梁
+tile.BlockMarble.runed.name=精致大理石柱
 tile.BlockMarble.engraved.name=凹面大理石
 tile.BlockPrism.name=棱镜
 tile.BlockLens.name=透镜
@@ -416,4 +416,4 @@ perk.TRV_LIGHT.info=当你在洞穴时在你附近放置光源
 perk.TRV_LPROT=直接向下挖！
 perk.TRV_LPROT.info=短时间的火焰保护
 
-constellation.noInformation=There is nothing here.
+constellation.noInformation=暂无信息！
