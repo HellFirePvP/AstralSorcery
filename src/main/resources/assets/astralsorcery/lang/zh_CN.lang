@@ -134,7 +134,7 @@ astralsorcery.journal.ATT_PLAYER.3.text=While you are unable to properly focus t
 astralsorcery.journal.ATT_PLAYER.5.text=Channeling the light around is pretty useless without a central point of focusing it. An altar that can act as a relay itself at the center of the structure will act as focal point.<NL>Now, where to place the relays? Maybe the constellation papers could be of use to find the positions best suitable for channeling the part of the starlight spectrum that you're interested in.<NL>There doesn't seem to be enough starlight during the day. Maybe at night?
 astralsorcery.journal.ATT_PLAYER.7.text=Just placing the relays at the designated positions didn't seem to be enough sometimes. The constellation you want to focus starlight from should be at least visible during the night.<NL>Once everything is arranged, the central altar and the relays start glowing in a bright blue light as starlight streams through them. As you planned, the starlight gets focused in the center. It's even so strong to lift the golden ornaments from the ground. What would happen if you step into the blue light? Or throw a crystal into it first?
 
-research.ATT_PERKS.name=Alignment Perks
+research.ATT_PERKS.name=等级强化
 astralsorcery.journal.ATT_PERKS.1.text=After bathing in the beam of focused light, you see a strange pattern appear in the sky, which doesn't really resemble the constellation as you know it. The constellation seems deformed into some.. other pattern. The stars of it seem way closer. Almost close enough to reach out and grab them.<NL>Upon instinctively trying to do so, you notice a flash of light appear and you feel... §odifferent.
 astralsorcery.journal.ATT_PERKS.2.text=It seems you can't reach to the other stars, but you nevertheless feel stronger than you were before. The light of that other star seems to be focused onto you and it radiates off of you.<NL>You feel like using this new strength will help you to get closer to the other stars.<NL>To keep track of that, you reserve a new section in your book dedicated to this strange pattern. You should look back at it from time to time after you used some of your newly gained powers.
 
@@ -154,11 +154,11 @@ research.TREEBEACON.name=树之信标
 astralsorcery.journal.TREEBEACON.1.text=Remembering the properties of the resonant gem, specifically its draining effects on liquid starlight, you wonder how you could apply that for your benefit.<NL>You came up with the idea of infusing trees just before they grow with liquid starlight so the resonant gem drains bits and bits from the tree when its grown. You came up with a tree, designed to distribute that liquid into nearby saplings.
 astralsorcery.journal.TREEBEACON.3.text=It also has its limits: Due to the nature of this harvesting process, the trees infused with starlight will be slowly consumed overtime.<NL>Additionally, there's only so many trees your tree-construct can support before it simply won't infuse them with liquid starlight because it doesn't have enough left.<NL>After breaking your artificial tree, all the previously infused ones turn back into normal trees.
 
-research.TOOL_WANDS.name=Active Channeling
+research.TOOL_WANDS.name=接引之力
 astralsorcery.journal.TOOL_WANDS.1.text=Having gained some of these strange powers, you feel like you could try to actively channel that energy through you to bring forth stronger effects instead of just passively harnessing those.<NL>You can't think of a way to just have it shoot out of your bare hands, so creating small tool rod enhanced with the newly discovered properties of the resonating gems should help with that.
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block you want to place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from your inventory.<NL>Upon channeling some of this spectral energy through you, you feel a bit drained afterwards. Oddly enough, it seems like you've lost some of those celestial energies.. Maybe you should keep an eye out on your alignment when using those kinds of gadgets.
 
-research.RIT_PEDESTAL.name=Ritual Pedestal
+research.RIT_PEDESTAL.name=放置仪式
 astralsorcery.journal.RIT_PEDESTAL.1.text=Just as you suspected, the attuned crystal seems already almost strong enough to make its effects manifest in the world. To be actually useful you should put a pedestal for it with another rock crystal to help focus enough starlight.<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, you should add some liquid starlight aswell, to fill them like they appear.
 
 research.TELESCOPE.name=天文望远镜
@@ -183,18 +183,18 @@ astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects a r
 astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of resonant gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
 
 research.ILLUMINATION_WAND.name=照明之杖
-astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage. Given sufficient charge, right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form. Shift-right-clicking will create a small flare.
+astralsorcery.journal.ILLUMINATION_WAND.1.text=你在不断深入研究星力，试图来强化自己时， 你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块 或空气中，可以强化方块以抵御几乎 任何类型的伤害。用体内的星力充能后， 右键可将强化方块还原，Shift右键 将形成星核。
 
 research.SHIFT_STAR.name=更替之星
-astralsorcery.journal.SHIFT_STAR.1.text=Blinded by your discovery and the appeal of the powers an attunement to a constellation grants, you missed out on all the possibilities the other constellations offer that you've discovered now.<NL>You quickly come up with an idea to dissipate your current powers into your surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy left your body.
+astralsorcery.journal.SHIFT_STAR.1.text=经研究发现，当你与一个星座共鸣时它将赋予 你强大的力量。与此同时你发觉你将无法再 获得其他星座的力量。<NL>很快，你找到了解决方法，释放你所有的星力 到周围，以便重新与另一个星座共鸣。<NL>不幸的是，使用后因冲击而导致的裂缝 将吸光你身上的星力。
 
-research.STARMETAL_ORE.name=铁转化
-astralsorcery.journal.STARMETAL_ORE.1.text=You feel like these beams of light could have other uses than look pretty and have their effects on the world generally. How about focusing the light directly onto one mundane iron ore? As source of that focused light you might aswell use one of those floating crystals in the shrines you found. Giving that one a clear view to the sky might help too.<NL>Seems like the iron reflects it back and shimmers slightly blue... Maybe something might change over time?
+research.STARMETAL_ORE.name=铁矿转化
+astralsorcery.journal.STARMETAL_ORE.1.text=你觉得这些光束除了好看之外还有其他的用途， 或许能在一定程度上改变世界。何不把光 聚集在一个普通的铁矿石上呢？你可以用 神殿里的浮动水晶作为光源。在星空下 或许能提高效率。<NL>在星光照耀下铁矿石闪烁着微蓝色的光。 也许某些事物随时间而改变？
 
 research.TRANSMUTATION_ORES.name=方块转化
-astralsorcery.journal.TRANSMUTATION_ORES.1.text=Maybe iron ore is not the only block that reacts to those focused rays of starlight? You should try some other things as well...
+astralsorcery.journal.TRANSMUTATION_ORES.1.text=也许铁矿石不是唯一可以被星光改变的方块？ 你应该也试试其他的方块....
 
-research.STARMETAL_RES.name=Starmetal
+research.STARMETAL_RES.name=星光矿石
 astralsorcery.journal.STARMETAL_RES.1.text=Shimmering blue, ice cold and sparkling as the night sky above you; The iron ore fused with the blue effect it gave off from the very beginning and formed a shimmering metal from the plain, grey iron.
 astralsorcery.journal.STARMETAL_RES.2.text=On most occasions, it seems to still behave almost like iron. Exposing an ingot of it to the night sky makes it sparkle and look almost like a mirror of it.<NL>The ingot itself however seems to be rather mundane and not reactive to anything besides looking pretty. Maybe you should grind the ingot down into its dust and see what happens?
 
@@ -210,7 +210,7 @@ astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way bett
 astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Maybe you don't want to remove the coating but rather have it somehow fuse into the crystal? Throwing them both into liquid starlight and wait for them to fuse together might be one approach to that.<NL>After waiting a while you notice that they did indeed fuse together into a cluster of small blue crystals, consuming the liquid in the process.<NL>They still seem to grow a bit. Maybe you should just leave them like that for a while until they stop growing. Focusing some additional starlight onto them might also help.
 
 research.CEL_CRYSTALS.name=天体水晶
-astralsorcery.journal.CEL_CRYSTALS.1.text=After having the stardust completely fuse and tint these blue-ish crystals, they still seem to share the same properties as rock crystals, but are way bigger and more robust than their white counterparts.<NL>Studying them further, they seem to resemble the rock crystals in many parts, but excel them in almost every aspect. Using them instead of the smaller ones might be very advantageous.
+astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘凝结成蓝色晶体后，你发现它们与 水晶石有相同的属性。但比水晶石更大更坚硬。 <NL>进一步研究后，它们不仅在各个方面与水晶石 相似，且效用要远高于水晶石。用这种 水晶来代替水晶石是非常有利的。
 
 research.PED_ACCEL.name=仪式加速
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up some time ago is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
@@ -251,7 +251,7 @@ item.ItemCraftingComponent.parchment.name=羊皮纸
 
 item.ItemConstellationPaper.name=星座卷轴
 item.ItemRockCrystalSimple.name= 水晶石
-item.ItemTunedRockCrystal.name=共鸣 水晶石
+item.ItemTunedRockCrystal.name=共鸣水晶石
 item.ItemTunedCelestialCrystal.name=共鸣天体水晶
 item.ItemCelestialCrystal.name=天体水晶
 item.ItemLinkingTool.name=链接器
@@ -303,8 +303,8 @@ tile.BlockAltar.general.name=祭坛
 tile.BlockAttunementAltar.name=共鸣祭坛
 tile.BlockStructural.attunement_altar_struct.name=共鸣祭坛
 tile.BlockAttunementRelay.name=共鸣中继器
-tile.BlockRitualPedestal.name=Ritual Pedestal
-tile.BlockFlareLight.name=Volatile Flare
+tile.BlockRitualPedestal.name=放置仪式
+tile.BlockFlareLight.name=挥发性火炬
 tile.BlockWorldIlluminator.name=洞穴照明器
 tile.BlockBlackMarble.raw.name=熏黑大理石
 tile.BlockMarble.raw.name=大理石
