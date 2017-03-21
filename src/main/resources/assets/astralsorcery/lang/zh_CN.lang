@@ -3,7 +3,7 @@ itemGroup.astralsorcery.papers=[AS] 星座卷轴
 itemGroup.astralsorcery.crystals=[AS] 共振水晶
 
 jei.category.well=聚星缸
-jei.category.infuser=星光聚合器
+jei.category.infuser=星能聚合器
 jei.category.transmutation=星光转化
 jei.category.altar.discovery=星光合成台
 jei.category.altar.attunement=星光祭坛
@@ -78,7 +78,7 @@ astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝�
 astralsorcery.journal.CPAPER.3.text=在进一步观察后你发现， 这些卷轴是以书写 或附魔的形式出现以防止和你已有的卷轴 重复。<NL>为了更方便的查看和管理这些卷轴你可以 按住shift打开星空日记的夹层， 将星空卷轴放入。
 
 research.WAND.name=共鸣之杖
-astralsorcery.journal.WAND.1.text=当你在分散的古代神殿内那奇怪的水晶旁 使用合成台时，水晶将聚焦一束光到合成台上。 这束光很暗淡，但经研究发现它能影响 某些材料的密度和延展性。<NL>有鉴于此，一些不可能的设想可以轻松的实现。 但一开始只能做基础法杖，以便控制 各种星光牵引装置。
+astralsorcery.journal.WAND.1.text=当你在分散的古代神殿内那奇怪的水晶旁 使用合成台时，水晶将聚焦一束光到合成台上。 这束光很暗淡，但经研究发现它能影响 某些材料的密度和延展性。<NL>有鉴于此，一些不可能的设想可以轻松的实现。 但一开始只能做基础法杖，以便控制 各种星能牵引装置。
 astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特点。在晚上拿着它时， 它会颤动着并看似随意的在周围的地表发出 一束火花。地表看上去并没有什么特殊的地方。 §3也许，§3地底深处有什么东西？§r
 
 research.ORES.name=矿物
@@ -88,7 +88,7 @@ astralsorcery.journal.ORES.2.text=§1§n海蓝宝石页岩：§r在星光长久�
 research.ALTAR1.name=星光合成台
 astralsorcery.journal.ALTAR1.1.text=看起来普通的合成台利用水晶能量的效率很低。 只能接收到非常少的星能。而且为了更充分的 吸收星能必须将合成台尽可能靠近浮动水晶。 <NL>星光合成台完美的解决了这个问题。它所能 吸收的星能比普通的合成台多的多。而且还 不需要靠近浮动水晶。
 astralsorcery.journal.ALTAR1.3.text=星光合成台并非完美无缺的。首先，它要放在 地平线以上且可直视天空的地方，以便收集星能。 即使在最清晰的时候它的收集效率也很低。 <NL>离天空越近的地方，所能收集的星能也越多。 此外，在晚上能收集到更多的星能。合成格 下方会显示收集到的星能。
-astralsorcery.journal.ALTAR1.4.text=要使用星光合成台，在你按合成表摆放好物品后 需要用共鸣之杖右键合成台。物品在制作 完成后将被放置在合成台上方<NL>它收集星光的容量依位置而变，星光的吸收 范围从几乎没有到近乎满值。
+astralsorcery.journal.ALTAR1.4.text=要使用星光合成台，在你按合成表摆放好物品后 需要用共鸣之杖右键合成台。物品在制作 完成后将被放置在合成台上方<NL>它收集星能的容量依位置而变，星能的吸收 范围从几乎没有到近乎满值。
 
 research.HAND_TELESCOPE.name=单筒望远镜
 astralsorcery.journal.HAND_TELESCOPE.1.text=尽管夜空在持续不断的移动，但总会显现 一些固定的图案。这些图案与你在各地找到 的卷轴上的图案非常相似。<NL>很显然，这些记录下来的图案有重要的意义。 这些能轻松的在夜空上找到的图案在将来 必然十分重要。
@@ -106,18 +106,18 @@ research.ROCK_CRYSTALS.name= 水晶石的属性
 astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的 水晶石都是独一无二的。 它们的大小，纯度和形状都不同，当然， 也没办法在挖掘出来前知晓它的信息。<NL> 虽然目前无法改变 水晶石的大小和纯度， 但你可以用砂轮把它磨细以改变成更合适的形状。
 
 research.MARBLETYPES.name=大理石
-astralsorcery.journal.MARBLETYPES.1.text=当你在地表开掘时可以不时的发现 一些洁净透亮的大理石。那些古代神殿都是 用大理石建成的，它似乎能以一种独特的方式 反射并使用星光中蕴含的能量。某些精雕 细砌的大理石可以让利用的星光更多。
+astralsorcery.journal.MARBLETYPES.1.text=当你在地表开掘时可以不时的发现 一些洁净透亮的大理石。那些古代神殿都是 用大理石建成的，它似乎能以一种独特的方式 反射并使用星光中蕴含的能量。某些精雕 细砌的大理石能获得更多可利用的星能。
 
 research.SOOTYMARBLE.name=熏黑大理石
 astralsorcery.journal.SOOTYMARBLE.1.text=用颜色较深的材料（比如煤）涂覆在大理石 的表面能将其先天的反射性质改变成吸收性质。 熏黑大理石在白天收集日光和热量，在晚上 释放热量。这种新型的大理石的作用将被 证明与普通大理石一样重要。
 
 research.ALTAR2.name=星光祭坛
-astralsorcery.journal.ALTAR2.1.text=The starlight capacity and focusing abilities of the luminous crafting table are admirable compared to a regular crafting table, but they can be greatly inproved apon. Engineering additional reinforcements and extensions to make the table larger are not quite enough on their own though.<NL>In order to focus enough starlight to actually make use of the extensions, a large starlight collection structure made of various types of marble is required.
-astralsorcery.journal.ALTAR2.4.text=The starlight reservoir in the crafting altar is not only greater in size compared to the luminous crafting table. It has special properties that cause it to turn red if the collection structure around the table is damaged, incorrect, or incomplete.
+astralsorcery.journal.ALTAR2.1.text=星光祭坛有比星光合成台更强大的吸收能力， 这种能力还能被改进。升级后所附带的组件 扩大了合成格的大小。<NL>为了能够使用这些组件，你需要一个由 各种大理石组装的大型星能收集结构。
+astralsorcery.journal.ALTAR2.4.text=星光祭坛所存储的星能不仅比星光合成台更多。 还有着特殊的属性，如果星光祭坛周围的星能 收集装置被破坏，放置错误或不完整，星能条将会变红。
 
 research.WELL.name=聚星缸
-astralsorcery.journal.WELL.1.text=At night, a strange water-like substance seems to collect on aquamarine gems and rock crystals. On closer examination, the liquid seems to be a condensate of pure energy derived from starlight.<NL> A carefully carved basin of marble makes the collection of this liquid quite easy. The liquid emits a bright and pure light, feels very cold and a bucket full of it weighs almost nothing.
-astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an aquamarine gem or rock crystal needs to be placed on top of it. Gems and crystals used to gather starlight will constantly degrade until the point of completely shattering. Once placed on the lightwell, they cannot be used for any other purpose than collecting starlight.
+astralsorcery.journal.WELL.1.text=在晚上，海蓝宝石和水晶石表面凝结了 一层奇怪的液体。在仔细观察后，你发现 这种液体似乎是由星光中的能量冷凝成的。<NL>一个精心雕琢的大理石盆将更容易收集这种 液体。这种液体散发着明亮而纯净的光， 看上去感觉非常冷，即使一整桶也几乎感觉不到重量。
+astralsorcery.journal.WELL.3.text=只有在聚星缸上放置海蓝宝石或水晶石 它才能工作。用于收集星能的海蓝宝石和 水晶将不断降解，直至最后崩解。一旦放置在 聚星缸上将无法取下用于别的用途！
 
 research.SKY_RESO.name=天波共振器
 astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky it seems like any star is like the other. However the light they send varies from position to position; the light of one star overlays with others causing it to either amplify in strength or just vanish entirely.<NL>Placing your altar and whatever construct you come up with in the future to potentially collect this volatile light at positions where the light is amplified, might be very important.
@@ -216,11 +216,11 @@ research.PED_ACCEL.name=Ritual Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up some time ago is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
 astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the ritual pedestal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
 
-astralsorcery.journal.recipe.starlight=合成时需要星光
+astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
 astralsorcery.journal.recipe.upgrade=升级祭坛到下一级
 astralsorcery.journal.recipe.attunement=调用水晶：%s
-astralsorcery.journal.recipe.amt.desc=需要星光：
+astralsorcery.journal.recipe.amt.desc=需要星能：
 
 astralsorcery.journal.recipe.amt.lowest=几乎没有
 astralsorcery.journal.recipe.amt.low=不多
@@ -235,7 +235,7 @@ crystal.purity=纯度
 crystal.collectivity=切割
 crystal.attuned=调整到
 crystal.trait=特性
-crystal.collect.type=从。。中收集星光
+crystal.collect.type=从。。中收集星能
 
 entity.astralsorcery.EntityStardust.name=星尘
 entity.astralsorcery.EntityAquamarine.name=海蓝宝石
@@ -322,7 +322,7 @@ tile.BlockMachine.telescope.name=天文望远镜
 tile.BlockMachine.grindstone.name=砂轮
 tile.BlockStructural.telescope_struct.name=天文望远镜
 tile.BlockFakeTree.name=
-tile.BlockStarlightInfuser.name=星光聚合器
+tile.BlockStarlightInfuser.name=星能聚合器
 tile.BlockTreeBeacon.name=树之信标
 tile.BlockRitualLink.name=Ritual Anchor
 tile.BlockTranslucentBlock.name=半透明块
