@@ -56,23 +56,7 @@ public class JournalPageText implements IJournalPage {
             String text = I18n.format(unlocText);
             List<String> lines = new LinkedList<>();
             for (String segment : text.split("<NL>")) {
-                StringBuilder cache = new StringBuilder();
-                for(String element : segment.split(" ")) {
-                    String cacheStr = cache.toString();
-                    String built = cacheStr.isEmpty() ? element : cacheStr + " " + element;
-                    if(fontRenderer.getStringWidth(built) > DEFAULT_WIDTH) {
-                        lines.add(cacheStr);
-                        cache = new StringBuilder();
-                        cache.append(element);
-                    } else {
-                        if(cacheStr.isEmpty()) {
-                            cache.append(element);
-                        } else {
-                            cache.append(' ').append(element);
-                        }
-                    }
-                }
-                lines.add(cache.toString());
+                lines.addAll(fontRenderer.listFormattedStringToWidth(segment, DEFAULT_WIDTH));
                 lines.add("");
             }
             return lines;
