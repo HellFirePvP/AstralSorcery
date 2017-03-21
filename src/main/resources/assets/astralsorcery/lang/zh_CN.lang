@@ -86,17 +86,17 @@ astralsorcery.journal.ORES.1.text=§7§n水晶石矿石：§r在世界的最深�
 astralsorcery.journal.ORES.2.text=§1§n海蓝宝石页岩：§r在星光长久的照射与水流连续不断的冲刷下， 在河床下的沙内形成的小而脆弱的宝石。 通常，可以在被泥沙掩埋的顶部找到它们。
 
 research.ALTAR1.name=星光合成台
-astralsorcery.journal.ALTAR1.1.text=Using a regular crafting table to interact with the starlight emitted by the crystal seems to be rather inefficient. The table was able to receive only a small amount of starlight from the crystal. Not only that, but the table must be in very close proximity to the crystal in order to receive any light at all.<NL>The Luminous Crafting table solves both issues perfectly. It is able to absorb and utilize a much larger amount of starlight than the crafting table in the ruins. Also, it does not require a connection to the crystal to collect starlight at all.
-astralsorcery.journal.ALTAR1.3.text=The Luminous crafting table is not without its drawbacks though. Firstly, it needs to be placed somewhere above the ground with an unobstructed view of the sky in order to collect starlight. Its collection process also seems to be inefficient, even on the clearest of days.<NL>Placing the table closer to the sky allows it to collect more starlight. Additionally, it collects considerably more starlight during the nighttime. The table's starlight reservoir is visible beneath its crafting grid.
-astralsorcery.journal.ALTAR1.4.text=In order to craft with the Luminous crafting table, the table must be right clicked with a resonating wand after the items used in the recipe are placed on it. When the item is done crafting, the item will be dropped onto the altar.<NL>The rate at which it collects starlight varies heavily from position to position, ranging from almost no starlight at all to vast amounts.
+astralsorcery.journal.ALTAR1.1.text=看起来普通的合成台利用水晶能量的效率很低。 只能接收到非常少的星能。而且为了更充分的 吸收星能必须将合成台尽可能靠近浮动水晶。 <NL>星光合成台完美的解决了这个问题。它所能 吸收的星能比普通的合成台多的多。而且还 不需要靠近浮动水晶。
+astralsorcery.journal.ALTAR1.3.text=星光合成台并非完美无缺的。首先，它要放在 地平线以上且可直视天空的地方，以便收集星能。 即使在最清晰的时候它的收集效率也很低。 <NL>离天空越近的地方，所能收集的星能也越多。 此外，在晚上能收集到更多的星能。合成格 下方会显示收集到的星能。
+astralsorcery.journal.ALTAR1.4.text=要使用星光合成台，在你按合成表摆放好物品后 需要用共鸣之杖右键合成台。物品在制作 完成后将被放置在合成台上方<NL>它收集星光的容量依位置而变，星光的吸收 范围从几乎没有到近乎满值。
 
 research.HAND_TELESCOPE.name=单筒望远镜
 astralsorcery.journal.HAND_TELESCOPE.1.text=Despite the night sky constantly shifting all the time, certain recurring patterns and shapes show up on a regular basis. Many of these shapes bear a close resemblance to the patterns on the strange star charts found in ruins.<NL> Since the shapes of the constellations apparently bear enough significance to have recorded on charts, being able to find such patterns easily could become very useful in the future.
 astralsorcery.journal.HAND_TELESCOPE.4.text=The hand telescope, despite being a rather rudimentary device, goes a long way toward easing the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary. Also, constellation papers of the desired constellations need to be on hand.<NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
 
 research.GRINDSTONE.name=砂轮
-astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly manipulate certain materials, a more specialized tool is required. A grindstone with a marble grinding wheel does exactly that. It allows for fine adjustments to be made to different types of crystals, as well as giving the ability to grind certain types of materials into dust.<NL>A material or object can be placed onto it and then ground by right-clicking. Right-clicking while sneaking will remove the item.
-astralsorcery.journal.GRINDSTONE.3.text=Handling rock crystals properly when trying to shape them into a more fitting form is a bit of a tedious process. Frequent inspection when doing so is highly advisable, as unattentive grinding can end up reducing one to nothing.
+astralsorcery.journal.GRINDSTONE.1.text=尽管工作台可以使用所有材料，但为了更完全 的发挥某些材料的价值，需要用专业工具。 它就是由大理石做成的砂轮。它能让你对不同 种类的水晶石进行打磨，还能将一些材料磨成粉。 <NL>将物品放置在砂轮上右键以进行工作。 潜行时右键可以取下物品。
+astralsorcery.journal.GRINDSTONE.3.text=把水晶石磨成更合适的形状将是一个极为 繁琐的过程。时常检查是一个明智的行为， 这样可以减少多余的磨损。
 
 research.TOOLS.name=水晶工具
 astralsorcery.journal.TOOLS.1.text=经过一番仔细的测试后，你发觉纯净的  水晶石不像刚挖出来的那样脆弱。用它们 制作的工具比其他的材料所制成的普通工具 具有更高的耐久。具体来说，它们并不影响 日常的活动。水晶工具的属性由合成时的材料 决定，例如攻击伤害和挖掘速度。
@@ -310,10 +310,10 @@ tile.BlockBlackMarble.raw.name=熏黑大理石
 tile.BlockMarble.raw.name=大理石
 tile.BlockMarble.bricks.name=大理石砖
 tile.BlockMarble.pillar.name=大理石柱
-tile.BlockMarble.chiseled.name=Chiseled 大理石
+tile.BlockMarble.chiseled.name=雕纹大理石
 tile.BlockMarble.arch.name=拱形大理石
 tile.BlockMarble.runed.name=符文大理石
-tile.BlockMarble.engraved.name=Engraved 大理石
+tile.BlockMarble.engraved.name=凹面大理石
 tile.BlockPrism.name=棱镜
 tile.BlockLens.name=透镜
 tile.BlockCelestialCrystals.name=天体水晶簇
@@ -366,10 +366,10 @@ astralsorcery.constellation.alcara.info=-
 perk.info.locked=§7锁定
 perk.info.available=§9可用
 perk.info.active=§a激活
-perk.info.inactive=§c未激活 （未对齐）
+perk.info.inactive=§c未激活 （未达到要求等级）
 perk.info.unlock=§a强化解锁 '%s'
-perk.info.unlock.level=§7对齐来解锁此等级 %s
-perk.info.unlocked.level=§7对齐来解锁此等级 %s
+perk.info.unlock.level=§7升级来解锁此等级 %s
+perk.info.unlocked.level=§7升级来解锁此等级 %s
 perk.info.unlocked.free=§7基础强化
 
 perk.DMG_KILL=嗜血
