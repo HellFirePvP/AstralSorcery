@@ -83,7 +83,7 @@ astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特点。�
 
 research.ORES.name=矿物
 astralsorcery.journal.ORES.1.text=§7§n水晶石矿石：§r在世界的最深处，因高温和高压而形成的 稀有而脆弱的晶体，真是令人难以置信！ 这些水晶有着独一无二的属性，它们在星光 下似乎变的非比寻常。由于水晶石太过脆弱， mechanical hands易破坏矿石。
-astralsorcery.journal.ORES.2.text=§1§n海蓝宝石页岩：§r在星光长久的照射与水流连续不断的冲刷下， 在河床下的沙内形成的小而脆弱的宝石。 通常，可以在被泥沙掩埋的顶部找到它们。
+astralsorcery.journal.ORES.2.text=§1§n海蓝宝石砂岩：§r在星光长久的照射与水流连续不断的冲刷下， 在河床下的沙内形成的小而脆弱的宝石。 通常，可以在被泥沙掩埋的顶部找到它们。
 
 research.ALTAR1.name=星光合成台
 astralsorcery.journal.ALTAR1.1.text=看起来普通的合成台利用水晶能量的效率很低。 只能接收到非常少的星能。而且为了更充分的 吸收星能必须将合成台尽可能靠近浮动水晶。 <NL>星光合成台完美的解决了这个问题。它所能 吸收的星能比普通的合成台多的多。而且还 不需要靠近浮动水晶。
@@ -124,9 +124,9 @@ astralsorcery.journal.SKY_RESO.1.text=你凝视着星空，星空也在凝视着
 astralsorcery.journal.SKY_RESO.3.text=在不同区域对星空进行观测来发现这种区域 既废时又乏味。<NL>一个增强现实设备可以帮你更方便的找到那些 区域。你仍然需要去各地探索，不过在夜间时 更容易发现星能聚集地。
 
 research.ILLUMINATOR.name=洞穴照明器
-astralsorcery.journal.ILLUMINATOR.1.text=Glowstone and aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out, sometimes even passing through solid substances before doing so.
-astralsorcery.journal.ILLUMINATOR.3.text=The Cave Illuminator takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
-astralsorcery.journal.ILLUMINATOR.4.text=The cave illuminator forms these flares in any lightless open space located beneath the device itself. The process of formation is slow, but its radius extends an impressive distance from the main device. The cave illuminator also adapts to newly formed empty spaces made by mining and building, making it indispensable to avid spelunkers and miners.
+astralsorcery.journal.ILLUMINATOR.1.text=萤石和海蓝宝石在靠近时会产生奇特的反应。 在它们之间产生了不断闪烁的微小火花。 这些火花即使远离源头也仍然能存在， 没有任何物质能阻挡它。
+astralsorcery.journal.ILLUMINATOR.3.text=洞穴照明器正是用这些特性所制成的。 它用水晶石代替海蓝宝石以放大与萤石产生 的火花，并将火花汇聚成可以常亮的蓝色 小耀斑。耀斑不仅能穿透物质，还同类相斥， 这个特性使耀斑形成一个均匀的空间。
+astralsorcery.journal.ILLUMINATOR.4.text=洞穴照明器会在它下方的所以黑暗空间内 形成耀斑。形成的速度较慢，但有着非常大的 工作范围。洞穴照明器也兼容新的建筑和矿道， 因此也成为建筑党和矿工的必须品。
 
 research.ATT_PLAYER.name=共鸣之力
 astralsorcery.journal.ATT_PLAYER.1.text=Crafting things with starlight and liquid starlight might be fine and all, but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific constellations have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.<NL>Maybe it might be possible to filter the starlight of a specific constellation and amplify it? Or maybe just collect enough to amplify its strength?
@@ -159,7 +159,7 @@ astralsorcery.journal.TOOL_WANDS.1.text=Having gained some of these strange powe
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block you want to place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from your inventory.<NL>Upon channeling some of this spectral energy through you, you feel a bit drained afterwards. Oddly enough, it seems like you've lost some of those celestial energies.. Maybe you should keep an eye out on your alignment when using those kinds of gadgets.
 
 research.RIT_PEDESTAL.name=Ritual Pedestal
-astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到 能改变世界的力量。但要真正让其生效 需要在底座上放置水晶石，以便能收集够星能。<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, you should add some liquid starlight aswell, to fill them like they appear.
+astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到 能改变世界的力量。但要真正让其生效 需要在底座上放置水晶石，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸 那样解体。你可以加些星能液来预防水晶石解体。
 
 research.TELESCOPE.name=天文望远镜
 astralsorcery.journal.TELESCOPE.1.text=The hand telescope was all good and fine, but holding still all the time is exhausting and doesn't give you a good view. Additionally, you can only make out one constellation at a time at one night, so discovering everything those constellation papers show you would take forever.<NL>You're going to need a fixture for this. That way, you might be able to look deeper into the sky, finding stars and constellations that are even further away.
@@ -290,7 +290,7 @@ fluid.astralsorcery.liquidStarlight=星能液
 
 tile.BlockCustomOre.rock_crystal.name=水晶石矿石
 tile.BlockCustomOre.starmetal.name=星光矿石
-tile.BlockCustomSandOre.aquamarine.name=海蓝宝石页岩
+tile.BlockCustomSandOre.aquamarine.name=海蓝宝石砂岩
 tile.BlockCollectorCrystal.name=增幅水晶
 tile.BlockCelestialCollectorCrystal.name=天体增幅水晶
 tile.BlockCollectorCrystal.obf.name=浮动水晶
