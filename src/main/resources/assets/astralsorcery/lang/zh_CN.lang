@@ -130,8 +130,8 @@ astralsorcery.journal.ILLUMINATOR.4.text=洞穴照明器会在它下方的所以
 
 research.ATT_PLAYER.name=共鸣之力
 astralsorcery.journal.ATT_PLAYER.1.text=Crafting things with starlight and liquid starlight might be fine and all, but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific constellations have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.<NL>Maybe it might be possible to filter the starlight of a specific constellation and amplify it? Or maybe just collect enough to amplify its strength?
-astralsorcery.journal.ATT_PLAYER.3.text=While you are unable to properly focus the light in a reasonable size, you could just build something bigger to absorb more light and try channel the light to a central point.<NL>Something of the size of your altar structure doesn't seem to be enough to collect sufficient amounts. To cope with the bigger size, you came up with some small relays to channel the light to the appropriate places.
-astralsorcery.journal.ATT_PLAYER.5.text=Channeling the light around is pretty useless without a central point of focusing it. An altar that can act as a relay itself at the center of the structure will act as focal point.<NL>Now, where to place the relays? Maybe the constellation papers could be of use to find the positions best suitable for channeling the part of the starlight spectrum that you're interested in.<NL>There doesn't seem to be enough starlight during the day. Maybe at night?
+astralsorcery.journal.ATT_PLAYER.3.text=虽然你无法将光线聚集在一个合理的范围， 但你可以建立一个大型装置来扩大吸收范围， 同时尽可能将星光引导到中心。<NL>然而你的共鸣祭坛不足以聚集够所需的星能， 所以你使用一些共鸣增幅器来扩大吸收范围。
+astralsorcery.journal.ATT_PLAYER.5.text=只有将星光聚集到中心才能生效。放置在建筑结构中心的共鸣祭坛将成为星能的焦点。<NL>Now, where to place the relays? Maybe the constellation papers could be of use to find the positions best suitable for channeling the part of the starlight spectrum that you're interested in.<NL>There doesn't seem to be enough starlight during the day. Maybe at night?
 astralsorcery.journal.ATT_PLAYER.7.text=Just placing the relays at the designated positions didn't seem to be enough sometimes. The constellation you want to focus starlight from should be at least visible during the night.<NL>Once everything is arranged, the central altar and the relays start glowing in a bright blue light as starlight streams through them. As you planned, the starlight gets focused in the center. It's even so strong to lift the golden ornaments from the ground. What would happen if you step into the blue light? Or throw a crystal into it first?
 
 research.ATT_PERKS.name=等级强化
@@ -144,7 +144,7 @@ astralsorcery.journal.ATT_CRYSTAL.2.text=你确信你在某些地方看到过这
 
 research.RESO_GEM_POOL.name=星光聚合
 astralsorcery.journal.RESO_GEM_POOL.1.text=星能液所具有的独特属性可以让其他 固体材料变得更加有用。<NL>液体会吸附在水晶石的表面，固化成结晶 并逐渐增厚。海蓝宝石与星能液的反应最为 剧烈，当它一浸入液体时就立即开始吸收， 并伴有剧烈的闪光和振动。最终，海蓝宝石 变成不间断发射星能的共振宝石
-astralsorcery.journal.RESO_GEM_POOL.2.text=不幸的是，这两种反应都需要很长的时间 才能完成，还会暂时吸光那附近的星能。 Creating a means to make this process more efficient is a reasonable idea.
+astralsorcery.journal.RESO_GEM_POOL.2.text=不幸的是，这两种反应都需要很长的时间 才能完成，还会暂时吸光那附近的星能。 或许可以想办法加快制作过程？
 
 research.INFUSER.name=星能注入器
 astralsorcery.journal.INFUSER.1.text=It seems you found at least a faster way and one that allows for more generic applications: The starlight infuser.<NL>And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.
@@ -302,7 +302,7 @@ tile.BlockAltar.altar_5.name=[NoName-Endgame] Altar
 tile.BlockAltar.general.name=祭坛
 tile.BlockAttunementAltar.name=共鸣祭坛
 tile.BlockStructural.attunement_altar_struct.name=共鸣祭坛
-tile.BlockAttunementRelay.name=共鸣中继器
+tile.BlockAttunementRelay.name=共鸣增幅器
 tile.BlockRitualPedestal.name=Ritual Pedestal
 tile.BlockFlareLight.name=挥发性火炬
 tile.BlockWorldIlluminator.name=洞穴照明器
