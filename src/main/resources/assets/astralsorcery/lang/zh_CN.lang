@@ -129,7 +129,7 @@ astralsorcery.journal.ILLUMINATOR.3.text=洞穴照明器正是用这些特性所
 astralsorcery.journal.ILLUMINATOR.4.text=洞穴照明器会在它下方的所以黑暗空间内 形成耀斑。形成的速度较慢，但有着非常大的 工作范围。洞穴照明器也兼容新的建筑和矿道， 因此也成为建筑党和矿工的必须品。
 
 research.ATT_PLAYER.name=共鸣之力
-astralsorcery.journal.ATT_PLAYER.1.text=用星光或者星能液制作的东西的确不错，但你似乎忽略了but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific constellations have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.<NL>Maybe it might be possible to filter the starlight of a specific constellation and amplify it? Or maybe just collect enough to amplify its strength?
+astralsorcery.journal.ATT_PLAYER.1.text=用星光或者星能液制作的东西的确不错， 但你似乎忽略了一些重要的东西。宇宙中 有数之不尽的星星，但只有特定星座的星光 才对你有较大的影响。星光下，你感到身边 有许多推力在不断的挤压，还感觉自己变得 更强大了。<NL>也许可以放大某个特定星座的星能？亦或者 只要收集够强化自身的星能？
 astralsorcery.journal.ATT_PLAYER.3.text=虽然你无法将光线聚集在一个合理的范围， 但你可以建立一个大型装置来扩大吸收范围， 同时尽可能将星光引导到中心。<NL>然而你的共鸣祭坛不足以聚集够所需的星能， 所以你使用一些共鸣增幅器来扩大吸收范围。
 astralsorcery.journal.ATT_PLAYER.5.text=只有将星光聚集到中心才能生效。放置在 建筑结构中心的共鸣祭坛将成为星能的焦点。<NL>那么，共鸣增幅器该怎么放呢?也许 星座卷轴可以帮你找到最适合的位置。<NL>白天的星能似乎不够，也许晚上够？
 astralsorcery.journal.ATT_PLAYER.7.text=即使共鸣增幅器放置在正确的位置，共鸣祭坛 仍然无法工作。这是因为你的目标星座必须在 晚上可见！<NL>当一切就绪后，共鸣祭坛与共鸣增幅器将发出 亮蓝色的光并连成星座的样子。正如你所 计划的那样，所有星能都汇聚在中心。巨量的 星能甚至把祭坛外边的金色点缀物托起到半空。 如果你进入中心会发生什么呢？还是说先 扔个水晶石进去看看呢？
@@ -147,8 +147,8 @@ astralsorcery.journal.RESO_GEM_POOL.1.text=星能液所具有的独特属性可�
 astralsorcery.journal.RESO_GEM_POOL.2.text=不幸的是，这两种反应都需要很长的时间 才能完成，还会暂时吸光那附近的星能。 或许可以想办法加快制作过程？
 
 research.INFUSER.name=星能注入器
-astralsorcery.journal.INFUSER.1.text=It seems you found at least a faster way and one that allows for more generic applications: The starlight infuser.<NL>And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.
-astralsorcery.journal.INFUSER.4.text=The process in the infuser is way faster than the manual process, but it might instead of consuming just 1 bucket consume more. Sometimes it also doesn't consume any.<NL>Due to the nature of liquid starlight, you might now in this more organized process infuse many more things.<NL>However, it seems incapable of reproducing the effect that liquid starlight itself had on rock crystals by throwing them inside a pool of it.
+astralsorcery.journal.INFUSER.1.text=你终于发现一种快速的通用装置：星光注入器。<NL>身为建筑的你为它设计了一个带星能液的 注能结构。星能注入器的使用方式与祭坛相同。
+astralsorcery.journal.INFUSER.4.text=在星能注入器的速度比手动快多了，但它有 可能消耗一桶甚至更多的星能液。有时也 不消耗。<NL>得益于星能液的特性，你可以将其注入更多 物品中。<NL>然而，这样无法产生星能液对水晶石那样的影响。
 
 research.TREEBEACON.name=树之信标
 astralsorcery.journal.TREEBEACON.1.text=Remembering the properties of the resonant gem, specifically its draining effects on liquid starlight, you wonder how you could apply that for your benefit.<NL>You came up with the idea of infusing trees just before they grow with liquid starlight so the resonant gem drains bits and bits from the tree when its grown. You came up with a tree, designed to distribute that liquid into nearby saplings.
@@ -167,7 +167,7 @@ astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the 
 astralsorcery.journal.TELESCOPE.4.text=These new kinds of constellations you see now seem to be significantly further away from you. Attuning yourself to them might be not possible, but it should still be enough to create crystals that focus their light.
 
 research.ALTAR3.name=天光祭坛
-astralsorcery.journal.ALTAR3.1.text=Other than adding some more space, the starlight crafting altar wasn't really what you were looking for. You might just need a stronger starlight focus and a bigger table.<NL>The attuned rock crystal you made seems to fit that perfectly. Just to make sure you add another glass lens and you decide to further expand the complex.
+astralsorcery.journal.ALTAR3.1.text=除了有更大的空间外，你发觉星光祭坛已经不 适合你了。你需要更大的合成台以及更强的 聚星结构<NL>之前做的共鸣水晶石似乎非常适合,只要 加个玻璃透镜就能达到期望值了。
 
 research.LENS.name=水晶透镜
 astralsorcery.journal.LENS.1.text=Bending starlight simply from a source to a location might not be enough... The source might be at an unfitting place or the destination you want to direct starlight to is just too far away.<NL>A brilliant, yet seemingly obvious idea strikes your mind: Redirecting and refocusing the starlight via a network of lenses might provide enough reach to direct it wherever you need.
@@ -195,11 +195,11 @@ research.TRANSMUTATION_ORES.name=方块转化
 astralsorcery.journal.TRANSMUTATION_ORES.1.text=也许铁矿石不是唯一可以被星光改变的方块？ 你应该也试试其他的方块....
 
 research.STARMETAL_RES.name=星光矿石
-astralsorcery.journal.STARMETAL_RES.1.text=Shimmering blue, ice cold and sparkling as the night sky above you; The iron ore fused with the blue effect it gave off from the very beginning and formed a shimmering metal from the plain, grey iron.
-astralsorcery.journal.STARMETAL_RES.2.text=On most occasions, it seems to still behave almost like iron. Exposing an ingot of it to the night sky makes it sparkle and look almost like a mirror of it.<NL>The ingot itself however seems to be rather mundane and not reactive to anything besides looking pretty. Maybe you should grind the ingot down into its dust and see what happens?
+astralsorcery.journal.STARMETAL_RES.1.text=星光矿石与你头顶的夜空一般，闪烁着孤寂、 冰冷的蓝色光芒，当铁矿石产生蓝色的粒子时， 它就不在是平原下那灰暗的铁了， 取而代之 的是一种不断闪烁着奇异光芒的神秘金属。
+astralsorcery.journal.STARMETAL_RES.2.text=它和铁矿石基本没差别。除了放置在夜空下， 会发出闪光，如同镜子一样。<NL>这个锭真是中看不中用。把它磨成粉会如何呢？
 
 research.PRISM.name=水晶棱镜
-astralsorcery.journal.PRISM.1.text=While crystal lenses are useful and all, sometimes you just want to direct the light onto multiple locations other than just one.<NL>You conclude on having a crystal acting as prism and splitting the outgoing starlight evenly across them would be the central part. Other than that it would most likely work the same way like the crystal lens.
+astralsorcery.journal.PRISM.1.text=虽然水晶镜片也不错，但无法将多个星光 分散到多个方位。<NL>最终，你将水晶石打磨成棱镜，作为一个 星光散射中心。当然它也拥有水晶透镜的功能。
 
 research.COLL_CRYSTAL.name=增幅水晶
 astralsorcery.journal.COLL_CRYSTAL.1.text=Growing more and more familiar with handling attuned crystals and learning about their properties, you think you might be able to recreate what you found in those shrines. A simple crystal alone has proven to be too weak to properly channel the same amount that you experience from those big floating crystals.<NL>Enhancing the attuned crystals you've obtained might lead to something similar like the collector crystals, however you feel like there might be more ways to enhance them in the future.
