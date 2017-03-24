@@ -74,7 +74,7 @@ astralsorcery.journal.SHRINES.2.text=浮动晶体的属性是相当奇怪。它�
 astralsorcery.journal.SHRINES.3.text=即使用最具破坏的攻击方式也不能损坏它一丁点。<NL>这些水晶似乎很奇怪。它发出的光会让某些 物体像水一样流动和衰退。§3也许在附近 使用§3合成台会产生一些§3有趣的结果？§r
 
 research.CPAPER.name=星图
-astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝箱，箱子里偶 尔有些空白卷轴。打开这些卷轴后就能知道卷 轴的名称，还会发现与夜空中的星星类似的奇 怪图案。 <NL>在收集一定数量的卷轴后,每个卷轴都会显示 一些不同的图案，但之后发现的卷轴 就都是空白的了。
+astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝箱，箱子里偶 尔有些空白卷轴。打开这些卷轴后就能知道卷 轴的名称，还会发现与星空中的星星类似的奇 怪图案。 <NL>在收集一定数量的卷轴后,每个卷轴都会显示 一些不同的图案，但之后发现的卷轴 就都是空白的了。
 astralsorcery.journal.CPAPER.3.text=在进一步观察后你发现， 这些卷轴是以书写 或附魔的形式出现以防止和你已有的卷轴 重复。<NL>为了更方便的查看和管理这些卷轴你可以 按住shift打开星空日记的夹层， 将星空卷轴放入。
 
 research.WAND.name=共鸣之杖
@@ -91,8 +91,8 @@ astralsorcery.journal.ALTAR1.3.text=星辉合成台并非完美无缺的。首�
 astralsorcery.journal.ALTAR1.4.text=要使用星辉合成台，在你按合成表摆放好物品后 需要用共鸣之杖右键合成台。物品在制作 完成后将被放置在合成台上方<NL>它收集星能的容量依位置而变，星能的吸收 范围从几乎没有到近乎满值。
 
 research.HAND_TELESCOPE.name=单筒望远镜
-astralsorcery.journal.HAND_TELESCOPE.1.text=尽管夜空在持续不断的移动，但总会显现 一些固定的图案。这些图案与你在各地找到 的卷轴上的图案非常相似。<NL>很显然，这些记录下来的图案有重要的意义。 这些能轻松的在夜空上找到的图案在将来 必然十分重要。
-astralsorcery.journal.HAND_TELESCOPE.4.text=虽然单筒望远镜是最基础的观测设备， 但它能提高你对夜空的观测效率。<NL>只有在清晰的夜空下，才有可能定位星座。 此外星图需要放在左手以便查看。<NL>一旦找到类似的图案，可以通过潜行来 固定单筒望远镜的视角。之后用左键描出星座。
+astralsorcery.journal.HAND_TELESCOPE.1.text=尽管星空在持续不断的移动，但总会显现 一些固定的图案。这些图案与你在各地找到 的卷轴上的图案非常相似。<NL>很显然，这些记录下来的图案有重要的意义。 这些能轻松的在星空上找到的图案在将来 必然十分重要。
+astralsorcery.journal.HAND_TELESCOPE.4.text=虽然单筒望远镜是最基础的观测设备， 但它能提高你对星空的观测效率。<NL>只有在清晰的星空下，才有可能定位星座。 此外星图需要放在左手以便查看。<NL>一旦找到类似的图案，可以通过潜行来 固定单筒望远镜的视角。之后用左键描出星座。
 
 research.GRINDSTONE.name=砂轮
 astralsorcery.journal.GRINDSTONE.1.text=尽管工作台可以使用所有材料，但为了更完全 的发挥某些材料的价值，需要用专业工具。 它就是由大理石做成的砂轮。它能让你对不同 种类的水晶石进行打磨，还能将一些材料磨成粉。 <NL>将物品放置在砂轮上右键以进行工作。 潜行时右键可以取下物品。
@@ -162,9 +162,9 @@ research.RIT_PEDESTAL.name=Ritual Pedestal
 astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到 能改变世界的力量。但要真正让其生效 需要用水晶石作为底座，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸 那样解体。你可以加些星能液来预防水晶石解体。
 
 research.TELESCOPE.name=天文望远镜
-astralsorcery.journal.TELESCOPE.1.text=The hand telescope was all good and fine, but holding still all the time is exhausting and doesn't give you a good view. Additionally, you can only make out one constellation at a time at one night, so discovering everything those constellation papers show you would take forever.<NL>You're going to need a fixture for this. That way, you might be able to look deeper into the sky, finding stars and constellations that are even further away.
-astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the same as with the hand telescope. You have to have a clear view to the sky when looking through it.<NL>You can only look at a section of the sky at one time with it. But you can rotate the telescope's direction with the arrows on the left and right. Drawing outside the telescope frame or rotating the telescope erases all drawn lines.
-astralsorcery.journal.TELESCOPE.4.text=These new kinds of constellations you see now seem to be significantly further away from you. Attuning yourself to them might be not possible, but it should still be enough to create crystals that focus their light.
+astralsorcery.journal.TELESCOPE.1.text=手持望远镜虽然使用方便，但一直拿着太累了， 使用体验也不好。而且一晚只能观测到一个星座， 想发现所有星座不知道要到猴年马月了。<NL>你需要一个支架来固定望远镜。只有这样， 你才能更深入的探索深邃的星空，发现更远 的星星已及更多的星座。
+astralsorcery.journal.TELESCOPE.3.text=发现星座的方法与手持望远镜一样。使用它 能够看到更清晰的星空。<NL>虽然每次只能看到一部分星空。但你可以 用左右箭头改变望远镜的方向。远离望远镜 或改变其方向将中断星座的绘制。
+astralsorcery.journal.TELESCOPE.4.text=虽然这些新发现的星座似乎离你很远。 无法进一步靠近它们，但你仍然可以用水晶 来吸收它们的星能。
 
 research.ALTAR3.name=天辉祭坛
 astralsorcery.journal.ALTAR3.1.text=除了有更大的空间外，你发觉星辉祭坛已经不 适合你了。你需要更大的合成台以及更强的 聚星结构<NL>之前做的共鸣水晶石似乎非常适合,只要 加个玻璃透镜就能达到期望值了。
@@ -179,8 +179,8 @@ astralsorcery.journal.LENSES_EFFECTS.1.text=Starlight itself seems to have a vas
 astralsorcery.journal.LENSES_EFFECTS.2.text=By fusing mundane aquamarine gems and other materials together into a glass lens, you might be able to create such colored beams when putting the result onto your newly crafted Crystal Lenses.<NL>This is not without a price though, as an additional lens that is also discarding parts of the light itself is placed onto a lens blocks more starlight than the crystal lens alone.
 
 research.LINKTOOL.name=链接器
-astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects a resonant gem had on liquid starlight, having multiple of those condensed into one crystal might provide enough to direct and focus the raw rays of starlight in a more organized manner.<NL>Fusing them together with a rock crystal might prove a bit tedious if you don't have sufficient starlight. Luckily your newly upgraded altar might help a bit on that end.<NL>Additionally, holding the created crystal with your bare hands seems unreasonable.
-astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of resonant gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
+astralsorcery.journal.LINKTOOL.1.text=回想起共振宝石对星能液的牵引效果， 将多个共振宝石和水晶石混合在一块能以 更直接的方式引导星能。<NL>如果星能不够可以借用其他水晶的星能。 你可以用你新做的祭坛来合成它。<NL>另外。你无法直接接触这种新水晶。
+astralsorcery.journal.LINKTOOL.3.text=通过融合共振宝石所制作的水晶杖可以 随意的改变周围的星辉的流动方向。<NL>要选择光源，只需右键单击源头后在右键 选择目标位置即可。潜行时右键目标将断开连接。 在连接时可以切换物品栏来停止连接过程。
 
 research.ILLUMINATION_WAND.name=照明之杖
 astralsorcery.journal.ILLUMINATION_WAND.1.text=你在不断深入研究星力，试图来强化自己时， 你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块 或空气中，可以强化方块以抵御几乎 任何类型的伤害。用体内的星力充能后， 右键可将强化方块还原，Shift右键 将形成星核。
@@ -195,26 +195,26 @@ research.TRANSMUTATION_ORES.name=方块转化
 astralsorcery.journal.TRANSMUTATION_ORES.1.text=也许铁矿石不是唯一可以被星辉改变的方块？ 你应该也试试其他的方块....
 
 research.STARMETAL_RES.name=星辉矿石
-astralsorcery.journal.STARMETAL_RES.1.text=星辉矿石与你头顶的夜空一般，闪烁着孤寂、 冰冷的蓝色光芒，当铁矿石产生蓝色的粒子时， 它就不在是平原下那灰暗的铁了， 取而代之 的是一种不断闪烁着奇异光芒的神秘金属。
-astralsorcery.journal.STARMETAL_RES.2.text=它和铁矿石基本没差别。除了放置在夜空下， 会发出闪光，如同镜子一样。<NL>这个锭真是中看不中用。把它磨成粉会如何呢？
+astralsorcery.journal.STARMETAL_RES.1.text=星辉矿石与你头顶的星空一般，闪烁着孤寂、 冰冷的蓝色光芒，当铁矿石产生蓝色的粒子时， 它就不在是平原下那灰暗的铁了， 取而代之 的是一种不断闪烁着奇异光芒的神秘金属。
+astralsorcery.journal.STARMETAL_RES.2.text=它和铁矿石基本没差别。除了放置在星空下， 会发出闪光，如同镜子一样。<NL>这个锭真是中看不中用。把它磨成粉会如何呢？
 
 research.PRISM.name=水晶棱镜
 astralsorcery.journal.PRISM.1.text=虽然水晶镜片也不错，但无法将多个星辉 分散到多个方位。<NL>最终，你将水晶石打磨成棱镜，作为一个 星辉散射中心。当然它也拥有水晶透镜的功能。
 
 research.COLL_CRYSTAL.name=增幅水晶
 astralsorcery.journal.COLL_CRYSTAL.1.text=你对共鸣水晶的属性及使用方式越来越熟练了， 你认为有可能仿制出你在神殿里发现的那些东西。 普通的水晶石还是无法当做浮动水晶用的。<NL>将水晶石进行强化就可以得到与浮动水晶十分 相似的增幅水晶，以后应该能进一步强化吧。
-astralsorcery.journal.COLL_CRYSTAL.0.text=[WIP]<NL>你终于明白如何制作适合自己的增幅水晶了。 它也会继承共鸣水晶的属性及相关星座的力量。 共鸣水晶需要在夜空下吸收星能。收集的量 取决于时间的长短以及当晚的星座是否与水晶相同。
+astralsorcery.journal.COLL_CRYSTAL.0.text=[WIP]<NL>你终于明白如何制作适合自己的增幅水晶了。 它也会继承共鸣水晶的属性及相关星座的力量。 共鸣水晶需要在星空下吸收星能。收集的量 取决于时间的长短以及当晚的星座是否与水晶相同。
 
 research.CEL_CRYSTAL_GROW.name=天体水晶簇
-astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way better material to mess with. Its little grains occasionally flash with light and sparkle while running like sand through your hands.<NL>Accidentally, some of it dropped onto your crystals. You could hard get it off of them... They stick to the surface of them like a thin coating.
-astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Maybe you don't want to remove the coating but rather have it somehow fuse into the crystal? Throwing them both into liquid starlight and wait for them to fuse together might be one approach to that.<NL>After waiting a while you notice that they did indeed fuse together into a cluster of small blue crystals, consuming the liquid in the process.<NL>They still seem to grow a bit. Maybe you should just leave them like that for a while until they stop growing. Focusing some additional starlight onto them might also help.
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=星尘看起来是一种非常好的混合材料。 如同闪烁着光的沙子。<NL>偶然间，一些星尘粘在了水晶石上。就像个 外部涂层般，可以很容易取下。
+astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=也许你想把星尘和水晶石融合而不是去掉涂层。 利用星能液的特性让它们融合也是一种可行 的方法。<NL>经过一段时间，它们耗光了星能液并形成了 蓝色的小晶体簇。<NL>它们似乎还在生长。也行应该将它们闲置 一段时间，直到它们长好。将星辉聚焦在 它身上应该对你有所帮助。
 
 research.CEL_CRYSTALS.name=天体水晶
 astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色晶体后，你发现它们与 水晶石有相同的属性。但比水晶石更大更坚硬。 <NL>进一步研究后，它们不仅在各个方面与水晶石 相似，且效用要远高于水晶石。用这种 水晶来代替水晶石是非常有利的。
 
 research.PED_ACCEL.name=Ritual Acceleration
-astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up some time ago is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
-astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the ritual pedestal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
+astralsorcery.journal.PED_ACCEL.1.text=你之前对ritual pedestal的 设定是完全正确的，但它仍然工作缓慢，或许 它需要在星空下来吸收星座的力量减轻负担。<NL>同样，你可以放个水晶石提升吸收星能的效率， 水晶透镜也对其有效果。
+astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的压力， 如同在聚星缸那样。幸运的是，得益于 ritual pedestal的优良设计，水晶石所承受的压力 会分散到四周。<NL>其中一些星辉将显现出奇怪的图案，你确信 水晶透镜能增强ritual pedestal的效果。你现在需要 做的是保护好你的水晶防止它崩碎。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
