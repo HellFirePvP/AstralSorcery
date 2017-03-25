@@ -170,13 +170,13 @@ research.ALTAR3.name=天辉祭坛
 astralsorcery.journal.ALTAR3.1.text=除了有更大的空间外，你发觉星辉祭坛已经不 适合你了。你需要更大的合成台以及更强的 聚星结构<NL>之前做的共鸣水晶石似乎非常适合,只要 加个玻璃透镜就能达到期望值了。
 
 research.LENS.name=水晶透镜
-astralsorcery.journal.LENS.1.text=Bending starlight simply from a source to a location might not be enough... The source might be at an unfitting place or the destination you want to direct starlight to is just too far away.<NL>A brilliant, yet seemingly obvious idea strikes your mind: Redirecting and refocusing the starlight via a network of lenses might provide enough reach to direct it wherever you need.
-astralsorcery.journal.LENS.3.text=Constantly shifting the light into different directions over long distances takes its toll. The further the light travels the weaker it will get.<NL>Additionally, since the crystal used to construct a lens that is capable of redirecting this volatile light makes up most of the lens, the properties it had will affect the transmission rate significantly. A very impure crystal will most likely block starlight passing through by the inclusions of dust and other material it has. But also, the bigger the used crystal is, the more lenses you are able to craft from it.
-astralsorcery.journal.LENS.4.text=Bound by its physicality, a lens might accept starlight from multiple directions, however it's only able to direct the light into one direction. So wherever you bend the outgoing starlight to, the lens will rotate to direct it there. To make the starlight pass through without a problem, the lens has to have clear line of sight to its destination.
+astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光源的位置 可能不太合适，又或者你要到达的目标太远了。 <NL>你突然灵光一现，用透镜改变光源的方向并 聚集足够的星能以便你随时使用。
+astralsorcery.journal.LENS.3.text=不断改变光线的方向会对其造成损害。而且 光线的传播距离有限。<NL>另外，这个能改变星辉方向的透镜的主要 部分是由水晶石制成的，它的属性影响着 透镜的优劣。纯度太低的水晶石会大大的 影响透镜的功效。水晶石越大，制作的透镜越多。
+astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜能接受多个光源 但只有一个输出点。无论什么方向的星辉， 透镜都能将其折射到正确的位置。星辉的 照射路径不得阻挡。
 
 research.LENSES_EFFECTS.name=彩色透镜
-astralsorcery.journal.LENSES_EFFECTS.1.text=Starlight itself seems to have a vast spectrum of underlying effects along with the energies of the constellation that created it. Under normal circumstances, those balance each other out and form almost neutral light.<NL>Filtering this light to discard other parts of the spectrum and let only the light pass that grants a possibly desired aspect might end up being really useful.
-astralsorcery.journal.LENSES_EFFECTS.2.text=By fusing mundane aquamarine gems and other materials together into a glass lens, you might be able to create such colored beams when putting the result onto your newly crafted Crystal Lenses.<NL>This is not without a price though, as an additional lens that is also discarding parts of the light itself is placed onto a lens blocks more starlight than the crystal lens alone.
+astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能对周围的一切 造成广泛的影响。正常情况下，星辉间保持着 平衡状态，其光线也是近乎中性的。<NL>你想将星辉中的其他光谱过滤掉，只留下 需要的那部分。
+astralsorcery.journal.LENSES_EFFECTS.2.text=将海蓝宝石和其他材料的混合物涂抹在 水晶透镜上，最终你做出了彩色水晶透镜。<NL>世界万物皆是平衡的，你获得了星辉的特殊 能力的同时，所能使用的星能就减少了。
 
 research.LINKTOOL.name=链接器
 astralsorcery.journal.LINKTOOL.1.text=回想起共振宝石对星能液的牵引效果， 将多个共振宝石和水晶石混合在一块能以 更直接的方式引导星能。<NL>如果星能不够可以借用其他水晶的星能。 你可以用你新做的祭坛来合成它。<NL>另外。你无法直接接触这种新水晶。
