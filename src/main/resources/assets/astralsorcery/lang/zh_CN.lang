@@ -147,7 +147,7 @@ astralsorcery.journal.RESO_GEM_POOL.1.text=星能液所具有的独特属性可�
 astralsorcery.journal.RESO_GEM_POOL.2.text=不幸的是，这两种反应都需要很长的时间 才能完成，还会暂时吸光那附近的星能。 或许可以想办法加快制作过程？
 
 research.INFUSER.name=星能注入器
-astralsorcery.journal.INFUSER.1.text=你终于发现一种快速的通用装置：星辉注入器。<NL>身为建筑的你为它设计了一个带星能液的 注能结构。星能注入器的使用方式与祭坛相同。
+astralsorcery.journal.INFUSER.1.text=你终于发现一种快速的通用装置：星能注入器。<NL>身为建筑的你为它设计了一个带星能液的 注能结构。星能注入器的使用方式与祭坛相同。
 astralsorcery.journal.INFUSER.4.text=在星能注入器的速度比手动快多了，但它有 可能消耗一桶甚至更多的星能液。有时也 不消耗。<NL>得益于星能液的特性，你可以将其注入更多 物品中。<NL>然而，这样无法产生星能液对水晶石那样的影响。
 
 research.TREEBEACON.name=树之信标
@@ -156,9 +156,9 @@ astralsorcery.journal.TREEBEACON.3.text=当然无形中也是有限制存在的�
 
 research.TOOL_WANDS.name=接引之力
 astralsorcery.journal.TOOL_WANDS.1.text=在获得这些奇怪的能力后，你觉得你应该 主动引导这种能量以产生比被动使用更强的效果。<NL>你无法只通过自身使用这种能量，或许可以 做个利用新发现的共振宝石的特殊属性的 法杖来协助你。
-astralsorcery.journal.TOOL_WANDS.3.text=通过潜行右键选择要放置或替换的方块。 将自动使用背包里的方块。<NL>在使用一些星能后，你感觉有点虚弱1。 古怪的是，你自身的星能似乎有所减少。 或许你在使用法杖时应留意下对应的星座。
+astralsorcery.journal.TOOL_WANDS.3.text=通过潜行右键选择要放置或替换的方块。 将自动使用背包里的方块。<NL>在使用一些星能后，你感觉有点虚弱。 古怪的是，你自身的星能似乎有所减少。 或许你在使用法杖时应留意下对应的星座。
 
-research.RIT_PEDESTAL.name=Ritual Pedestal
+research.RIT_PEDESTAL.name=信标基座
 astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到 能改变世界的力量。但要真正让其生效 需要用水晶石作为底座，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸 那样解体。你可以加些星能液来预防水晶石解体。
 
 research.TELESCOPE.name=天文望远镜
@@ -212,9 +212,9 @@ astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=也许你想把星尘和水晶石�
 research.CEL_CRYSTALS.name=天体水晶
 astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色晶体后，你发现它们与 水晶石有相同的属性。但比水晶石更大更坚硬。 <NL>进一步研究后，它们不仅在各个方面与水晶石 相似，且效用要远高于水晶石。用这种 水晶来代替水晶石是非常有利的。
 
-research.PED_ACCEL.name=Ritual Acceleration
-astralsorcery.journal.PED_ACCEL.1.text=你之前对ritual pedestal的 设定是完全正确的，但它仍然工作缓慢，或许 它需要在星空下来吸收星座的力量减轻负担。<NL>同样，你可以放个水晶石提升吸收星能的效率， 水晶透镜也对其有效果。
-astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的压力， 如同在聚星缸那样。幸运的是，得益于 ritual pedestal的优良设计，水晶石所承受的压力 会分散到四周。<NL>其中一些星辉将显现出奇怪的图案，你确信 水晶透镜能增强ritual pedestal的效果。你现在需要 做的是保护好你的水晶防止它崩碎。
+research.PED_ACCEL.name=信标强化
+astralsorcery.journal.PED_ACCEL.1.text=你之前对信标基座的设定是完全正确的， 但它的效率还是很低，或许它需要在星空下 来吸收星座的力量减轻负担。<NL>同样，你可以放个水晶石提升吸收星能的效率， 水晶透镜也对其有效果。
+astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的压力， 如同在聚星缸那样。幸运的是，得益于 信标基座的优良设计，水晶石所承受的压力 会分散到四周。<NL>其中一些星辉将显现出奇怪的图案，你确信 水晶透镜能增强信标基座的效果。你现在 需要做的是保护好你的水晶防止它崩碎。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -261,10 +261,10 @@ item.ItemCrystalPickaxe.name=水晶镐
 item.ItemCrystalShovel.name=水晶铲
 item.ItemCrystalAxe.name=水晶斧
 item.ItemCrystalSword.name=水晶剑
-item.ItemChargedCrystalPickaxe.name=Aligned水晶镐
-item.ItemChargedCrystalShovel.name=Aligned水晶铲
-item.ItemChargedCrystalAxe.name=Aligned水晶斧
-item.ItemChargedCrystalSword.name=Aligned水晶剑
+item.ItemChargedCrystalPickaxe.name=秩序水晶镐
+item.ItemChargedCrystalShovel.name=秩序水晶铲
+item.ItemChargedCrystalAxe.name=秩序水晶斧
+item.ItemChargedCrystalSword.name=秩序水晶剑
 item.ItemColoredLens.name=彩色透镜
 item.ItemHandTelescope.name=单筒望远镜
 item.ItemSkyResonator.name=天波共振器
@@ -303,7 +303,7 @@ tile.BlockAltar.general.name=祭坛
 tile.BlockAttunementAltar.name=共鸣祭坛
 tile.BlockStructural.attunement_altar_struct.name=共鸣祭坛
 tile.BlockAttunementRelay.name=共鸣增幅器
-tile.BlockRitualPedestal.name=Ritual Pedestal
+tile.BlockRitualPedestal.name=信标基座
 tile.BlockFlareLight.name=挥发性火炬
 tile.BlockWorldIlluminator.name=洞穴照明器
 tile.BlockBlackMarble.raw.name=熏黑大理石
@@ -324,7 +324,7 @@ tile.BlockStructural.telescope_struct.name=天文望远镜
 tile.BlockFakeTree.name=
 tile.BlockStarlightInfuser.name=星能聚合器
 tile.BlockTreeBeacon.name=树之信标
-tile.BlockRitualLink.name=Ritual Anchor
+tile.BlockRitualLink.name=水晶信标
 tile.BlockTranslucentBlock.name=半透明块
 
 astralsorcery.constellation.discidia=Discidia
