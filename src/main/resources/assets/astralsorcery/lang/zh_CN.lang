@@ -17,7 +17,7 @@ misc.link.stop=连接中断!
 misc.link.start=已选择 %s!
 misc.link.link=在 %s 和 %s 建立连接!
 misc.link.link.block=此方块
-misc.link.unlink=U将 %s 到 %s 的连接断开!
+misc.link.unlink=已将 %s 到 %s 的连接断开!
 
 misc.sword.sharpened=锋利
 
