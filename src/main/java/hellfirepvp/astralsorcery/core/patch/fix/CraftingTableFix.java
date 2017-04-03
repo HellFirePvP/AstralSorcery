@@ -31,7 +31,7 @@ public class CraftingTableFix extends ClassPatch {
 
     @Override
     public void patch(ClassNode cn) {
-        MethodNode mn = getMethod(cn, "onBlockActivated", "func_180639_a", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/EnumFacing;FFF)Z");
+        MethodNode mn = getMethod(cn, "onBlockActivated", "func_180639_a", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Z");
         AbstractInsnNode newNode = findFirstInstruction(mn, Opcodes.NEW).getPrevious();
         int index = mn.instructions.indexOf(newNode);
 

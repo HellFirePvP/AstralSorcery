@@ -97,7 +97,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                trigger.trigger(message);
+                AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
             AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);

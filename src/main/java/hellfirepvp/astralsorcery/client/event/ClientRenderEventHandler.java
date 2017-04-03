@@ -18,12 +18,14 @@ import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
@@ -38,8 +40,10 @@ import hellfirepvp.astralsorcery.common.item.ItemHandRender;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -266,6 +270,38 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+            if(true || Minecraft.getMinecraft().playerController.gameIsSurvivalOrAdventure()) {
+                SpriteSheetResource ssr = SpriteLibrary.spriteCharge;
+                ssr.getResource().bind();
+
+                ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+                int width = res.getScaledWidth();
+                int height = res.getScaledHeight();
+                int barWidth = 194;
+                int offsetLeft = width / 2 - barWidth / 2;
+                int offsetTop = height + 3 - 54; //*sigh* vanilla
+
+                GlStateManager.enableBlend();
+                GlStateManager.disableAlpha();
+                Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
+
+                float percFilled = 1F;
+                double uLength = ssr.getULength() * percFilled;
+
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                Tessellator tes = Tessellator.getInstance();
+                VertexBuffer vb = tes.getBuffer();
+                vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+                vb.pos(offsetLeft,            offsetTop + 27, 10).tex(uvPos.key, uvPos.value + ssr.getVLength()).endVertex();
+                vb.pos(offsetLeft + barWidth * percFilled, offsetTop + 27, 10).tex(uvPos.key + uLength, uvPos.value + ssr.getVLength()).endVertex();
+                vb.pos(offsetLeft + barWidth * percFilled, offsetTop,          10).tex(uvPos.key + uLength, uvPos.value).endVertex();
+                vb.pos(offsetLeft,            offsetTop,          10).tex(uvPos.key, uvPos.value).endVertex();
+                tes.draw();
+                GlStateManager.enableAlpha();
+
+                TextureHelper.refreshTextureBindState();
+            }
+
             if(visibility > 0) {
                 renderAlignmentChargeOverlay(event.getPartialTicks());
             }

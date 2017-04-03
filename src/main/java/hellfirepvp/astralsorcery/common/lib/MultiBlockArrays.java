@@ -44,6 +44,8 @@ public class MultiBlockArrays {
 
     public static PatternBlockArray patternStarlightInfuser;
 
+    public static PatternBlockArray patternCollectorRelay;
+
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public static @interface PasteBlacklist {}

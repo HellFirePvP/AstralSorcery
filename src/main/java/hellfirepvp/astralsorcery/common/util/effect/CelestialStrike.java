@@ -52,7 +52,7 @@ public class CelestialStrike {
             livingEntities.remove(except);
         }
 
-        float dmg = 35 + ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 30F;
+        float dmg = 15 + ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 20F;
         for (EntityLivingBase living : livingEntities) {
             if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
                 float dstPerc = (float) (new Vector3(living).distance(position) / radius);

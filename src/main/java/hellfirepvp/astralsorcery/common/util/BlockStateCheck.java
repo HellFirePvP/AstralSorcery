@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,6 +17,7 @@ import scala.actors.threadpool.Arrays;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,23 +32,15 @@ public interface BlockStateCheck {
 
     public static class Block implements BlockStateCheck {
 
-        private final net.minecraft.block.Block toCheck;
+        private final List<net.minecraft.block.Block> toCheck;
 
-        public Block(net.minecraft.block.Block toCheck) {
-            this.toCheck = toCheck;
-        }
-
-        public AnyMeta copyWithAdditionalMeta(int add) {
-            AnyMeta ret = new AnyMeta(this.toCheck, Lists.newArrayList());
-            if (!ret.passableMetadataValues.contains(add)) {
-                ret.passableMetadataValues.add(add);
-            }
-            return ret;
+        public Block(net.minecraft.block.Block... toCheck) {
+            this.toCheck = Lists.newArrayList(toCheck);
         }
 
         @Override
         public boolean isStateValid(World world, BlockPos pos, IBlockState state) {
-            return state.getBlock().equals(toCheck);
+            return toCheck.contains(world.getBlockState(pos).getBlock());
         }
     }
 

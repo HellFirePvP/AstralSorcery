@@ -61,17 +61,17 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
-                .addPart(ItemHandle.getCrystalVariant(true, false),
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER));
-        setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
+        setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);
-        setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+        setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                 AttunementAltarSlot.UPPER_RIGHT,
                 AttunementAltarSlot.UPPER_LEFT);
     }

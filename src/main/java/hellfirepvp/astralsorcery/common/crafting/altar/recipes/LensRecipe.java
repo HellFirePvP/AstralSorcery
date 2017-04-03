@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -30,39 +31,31 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 02.11.2016 / 20:27
  */
-public class LensRecipe extends ConstellationRecipe {
+public class LensRecipe extends AttunementRecipe {
 
     public LensRecipe() {
         super(new ShapedRecipe(new ItemStack(BlocksAS.lens))
-                .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.BLOCK_WOOD_LOGS,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT));
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);
-        setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                ConstellationAtlarSlot.DOWN_DOWN_LEFT,
-                ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
-        setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
-                ConstellationAtlarSlot.DOWN_LEFT_LEFT,
-                ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
-        setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
-                ConstellationAtlarSlot.UP_LEFT_LEFT,
-                ConstellationAtlarSlot.UP_RIGHT_RIGHT);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack lens = super.getOutput(centralGridMap, altar);

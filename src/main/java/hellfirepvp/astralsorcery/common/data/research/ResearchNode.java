@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
+import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -34,6 +36,8 @@ public class ResearchNode {
     //private boolean special = false;
 
     private ItemStack[] renderItemStacks;
+    private TextureQuery renderTextureQuery;
+    private SpriteQuery renderSpriteQuery;
     //private BindableResource texture;
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
@@ -56,6 +60,16 @@ public class ResearchNode {
     public ResearchNode(ItemStack[] stacks, String unlocName, int renderPosX, int renderPosZ) {
         this(RenderType.ITEMSTACK, unlocName, renderPosX, renderPosZ);
         this.renderItemStacks = stacks;
+    }
+
+    public ResearchNode(TextureQuery query, String unlocName, int renderPosX, int renderPosZ) {
+        this(RenderType.TEXTURE, unlocName, renderPosX, renderPosZ);
+        this.renderTextureQuery = query;
+    }
+
+    public ResearchNode(SpriteQuery query, String unlocName, int renderPosX, int renderPosZ) {
+        this(RenderType.TEXTURE_SPRITE, unlocName, renderPosX, renderPosZ);
+        this.renderSpriteQuery = query;
     }
 
     /*public ResearchNode(BindableResource textureResource, String unlocName, int renderPosX, int renderPosZ) {
@@ -106,9 +120,13 @@ public class ResearchNode {
         return renderItemStacks[((int) ((tick / 40) % renderItemStacks.length))];
     }
 
-    /*public BindableResource getTexture() {
-        return texture;
-    }*/
+    public TextureQuery getTexture() {
+        return renderTextureQuery;
+    }
+
+    public SpriteQuery getSpriteTexture() {
+        return renderSpriteQuery;
+    }
 
     public List<IJournalPage> getPages() {
         return pages;
@@ -134,7 +152,7 @@ public class ResearchNode {
 
     public static enum RenderType {
 
-        ITEMSTACK//, TEXTURE, TEXTURE_SPRITE
+        ITEMSTACK, TEXTURE, TEXTURE_SPRITE
 
     }
 

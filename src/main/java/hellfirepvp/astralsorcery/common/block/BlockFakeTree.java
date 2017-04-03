@@ -155,7 +155,7 @@ public class BlockFakeTree extends BlockContainer {
                 return tft.getFakedState().getBlock().getPickBlock(tft.getFakedState(), target, world, pos, player);
             }
         } catch (Exception ignored) {}
-        return null;
+        return ItemStack.EMPTY;
     }
 
 }

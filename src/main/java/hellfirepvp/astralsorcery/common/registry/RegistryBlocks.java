@@ -22,21 +22,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.network.BlockWell;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialOrrery;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
-import hellfirepvp.astralsorcery.common.tile.TileIlluminator;
-import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
-import hellfirepvp.astralsorcery.common.tile.TileStructuralConnector;
-import hellfirepvp.astralsorcery.common.tile.TileTelescope;
-import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
-import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -101,6 +87,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(customOre);
         customSandOre = registerBlock(new BlockCustomSandOre());
         queueCustomNameItemBlock(customSandOre);
+        customFlower = registerBlock(new BlockCustomFlower());
+        queueCustomNameItemBlock(customFlower);
         blockMarble = registerBlock(new BlockMarble());
         queueCustomNameItemBlock(blockMarble);
         blockBlackMarble = registerBlock(new BlockBlackMarble());
@@ -162,6 +150,7 @@ public class RegistryBlocks {
         registerBlockRender(blockAltar);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
+        registerBlockRender(customFlower);
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
     }
@@ -183,6 +172,7 @@ public class RegistryBlocks {
         registerTile(TileTreeBeacon.class);
         registerTile(TileRitualLink.class);
         registerTile(TileTranslucent.class);
+        registerTile(TileAttunementRelay.class);
         //registerTile(TileDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
 

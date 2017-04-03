@@ -37,7 +37,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(-0.6, -0.2, -0.6, 0.6, 0.2, 0.6);
 
-    public static final int TOTAL_MERGE_TIME = 60 * 20;
+    public static final int TOTAL_MERGE_TIME = 30 * 20;
     private int inertMergeTick = 0;
 
     public EntityItemStardust(World worldIn, double x, double y, double z) {
@@ -55,6 +55,10 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
     @Override
     public void onUpdate() {
         super.onUpdate();
+
+        if(age + 5 >= this.lifespan) {
+            age = 0;
+        }
 
         if (Config.craftingLiqCelestialCrystalForm) {
             checkMergeConditions();

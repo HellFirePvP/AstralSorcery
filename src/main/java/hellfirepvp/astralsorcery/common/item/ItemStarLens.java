@@ -20,13 +20,13 @@ import net.minecraft.util.NonNullList;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemStarmap
+ * Class: ItemStarLens
  * Created by HellFirePvP
  * Date: 18.03.2017 / 19:55
  */
-public class ItemStarmap extends Item {
+public class ItemStarLens extends Item {
 
-    public ItemStarmap() {
+    public ItemStarLens() {
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

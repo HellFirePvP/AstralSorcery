@@ -59,7 +59,6 @@ public class ItemShiftingStar extends Item {
         return super.onItemRightClick(worldIn, playerIn, hand);
     }
 
-    @Nullable
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
         if(!worldIn.isRemote && entityLiving instanceof EntityPlayer) {
@@ -69,7 +68,7 @@ public class ItemShiftingStar extends Item {
                 SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, worldIn, entityLiving.getPosition(), 1F, 1F);
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

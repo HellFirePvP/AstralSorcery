@@ -185,6 +185,10 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
             return new ItemStack(BlocksAS.blockMarble, 1, meta);
         }
 
+        public IBlockState asBlock() {
+            return BlocksAS.blockMarble.getStateFromMeta(meta);
+        }
+
         public boolean isPillar() {
             return this == PILLAR_BOTTOM || this == PILLAR || this == PILLAR_TOP;
         }

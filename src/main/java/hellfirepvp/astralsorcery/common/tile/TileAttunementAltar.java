@@ -364,7 +364,8 @@ public class TileAttunementAltar extends TileEntityTick {
             for (BlockPos pos : positions) {
                 if(pos.equals(getPos())) continue;
                 IBlockState state = world.getBlockState(pos);
-                if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
+                if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
+                        !state.getBlock().equals(BlocksAS.attunementAltar)) {
                     valid = false;
                 }
             }
@@ -950,7 +951,7 @@ public class TileAttunementAltar extends TileEntityTick {
         } else {
             activeFound = (IWeakConstellation) found;
         }
-        if(prev != activeFound && world.isRemote) {
+        if(prev != activeFound) {
             starSprites.clear();
         }
     }

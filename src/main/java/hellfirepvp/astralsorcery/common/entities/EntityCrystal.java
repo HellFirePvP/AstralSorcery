@@ -38,17 +38,15 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
-    public static final int TOTAL_MERGE_TIME = 300 * 20;
+    public static final int TOTAL_MERGE_TIME = 160 * 20;
     private int inertMergeTick = 0;
 
     public EntityCrystal(World worldIn) {
         super(worldIn);
-        this.age = -32768;
     }
 
     public EntityCrystal(World worldIn, double x, double y, double z) {
         super(worldIn, x, y, z);
-        this.age = -32768;
     }
 
     public EntityCrystal(World worldIn, double x, double y, double z, ItemStack stack) {
@@ -57,12 +55,15 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
         if(i instanceof ItemHighlighted) {
             applyColor(((ItemHighlighted) i).getHightlightColor(stack));
         }
-        this.age = -32768;
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
+
+        if(age + 5 >= this.lifespan) {
+            age = 0;
+        }
 
         if (Config.craftingLiqCrystalGrowth) {
             checkIncreaseConditions();
@@ -102,7 +103,6 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
             max = Math.min(prop.getSize() + grow, max);
             CrystalProperties.applyCrystalProperties(stack,
                     new CrystalProperties(max, prop.getPurity(), prop.getCollectiveCapability()));
-            this.age = -32768;
         }
     }
 

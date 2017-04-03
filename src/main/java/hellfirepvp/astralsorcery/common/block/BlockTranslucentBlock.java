@@ -164,7 +164,7 @@ public class BlockTranslucentBlock extends BlockContainer {
                 return fst.getBlock().getPickBlock(fst, target, world, pos, player);
             }
         } catch (Exception ignored) {}
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

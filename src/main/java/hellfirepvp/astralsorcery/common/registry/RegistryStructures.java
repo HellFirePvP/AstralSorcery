@@ -35,6 +35,7 @@ public class RegistryStructures {
         patternAltarTrait = new MultiblockAltarTrait();
         patternAttunementFrame = new MultiblockAttunementFrame();
         patternStarlightInfuser = new MultiblockStarlightInfuser();
+        patternCollectorRelay = new MultiblockStarlightRelay();
     }
 
 }

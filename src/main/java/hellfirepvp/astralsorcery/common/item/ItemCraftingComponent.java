@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
-import hellfirepvp.astralsorcery.common.entities.EntityAquamarine;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
@@ -25,7 +24,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -73,13 +71,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
                 stardust.motionY = location.motionY;
                 stardust.motionZ = location.motionZ;
                 return stardust;
-            case AQUAMARINE:
-                EntityAquamarine aquamarine = new EntityAquamarine(world, location.posX, location.posY, location.posZ, itemstack);
-                aquamarine.setDefaultPickupDelay();
-                aquamarine.motionX = location.motionX;
-                aquamarine.motionY = location.motionY;
-                aquamarine.motionZ = location.motionZ;
-                return aquamarine;
         }
         return null;
     }

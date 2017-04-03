@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -53,6 +54,16 @@ public class BlockArray {
     public void addBlock(BlockPos offset, @Nonnull IBlockState state) {
         Block b = state.getBlock();
         pattern.put(offset, new BlockInformation(b, state));
+        updateSize(offset);
+    }
+
+    public void addBlock(int x, int y, int z, @Nonnull IBlockState state, BlockStateCheck match) {
+        addBlock(new BlockPos(x, y, z), state, match);
+    }
+
+    public void addBlock(BlockPos offset, @Nonnull IBlockState state, BlockStateCheck match) {
+        Block b = state.getBlock();
+        pattern.put(offset, new BlockInformation(b, state, match));
         updateSize(offset);
     }
 
@@ -116,6 +127,10 @@ public class BlockArray {
     }
 
     public void addBlockCube(@Nonnull IBlockState state, int ox, int oy, int oz, int tx, int ty, int tz) {
+        addBlockCube(state, new BlockStateCheck.Meta(state.getBlock(), state.getBlock().getMetaFromState(state)), ox, oy, oz, tx, ty, tz);
+    }
+
+    public void addBlockCube(@Nonnull IBlockState state, BlockStateCheck match, int ox, int oy, int oz, int tx, int ty, int tz) {
         int lx, ly, lz;
         int hx, hy, hz;
         if(ox < tx) {
@@ -143,7 +158,7 @@ public class BlockArray {
         for (int xx = lx; xx <= hx; xx++) {
             for (int zz = lz; zz <= hz; zz++) {
                 for (int yy = ly; yy <= hy; yy++) {
-                    addBlock(new BlockPos(xx, yy, zz), state);
+                    addBlock(new BlockPos(xx, yy, zz), state, match);
                 }
             }
         }
@@ -221,11 +236,17 @@ public class BlockArray {
         public final Block type;
         public final IBlockState state;
         public final int metadata;
+        public final BlockStateCheck matcher;
 
         protected BlockInformation(Block type, IBlockState state) {
+            this(type, state, new BlockStateCheck.Meta(type, type.getMetaFromState(state)));
+        }
+
+        protected BlockInformation(Block type, IBlockState state, BlockStateCheck matcher) {
             this.type = type;
             this.state = state;
             this.metadata = type.getMetaFromState(state);
+            this.matcher = matcher;
         }
 
     }

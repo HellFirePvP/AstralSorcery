@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.client.util.resource;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.obj.WavefrontObject;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,14 +25,12 @@ public class AssetLoader {
 
     private AssetLoader() {}
 
-    /*public static ResourceLocation loadMinecraftTextureResource(AssetLocation location, SubLocation subLocation, String name) {
-        return new ResourceLocation(buildResourceString(location, subLocation, name, ".png"));
-    }*/
-
+    @SideOnly(Side.CLIENT)
     protected static BindableResource load(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         return new BindableResource(buildResourceString(location, subLocation, name, suffix));
     }
 
+    @SideOnly(Side.CLIENT)
     private static String buildResourceString(AssetLocation location, SubLocation subLocation, String name, String suffix) {
         if(name.endsWith(suffix)) { //In case of derp.
             name = name.substring(0, name.length() - suffix.length());
@@ -45,10 +45,12 @@ public class AssetLoader {
         return builder.toString();
     }
 
+    @SideOnly(Side.CLIENT)
     protected static BindableResource loadTexture(TextureLocation location, String name) {
         return load(AssetLocation.TEXTURES, location, name, ".png");
     }
 
+    @SideOnly(Side.CLIENT)
     public static WavefrontObject loadObjModel(ModelLocation location, String name) {
         return new WavefrontObject(new ResourceLocation(buildResourceString(AssetLocation.MODELS, location, name, ".obj")));
     }

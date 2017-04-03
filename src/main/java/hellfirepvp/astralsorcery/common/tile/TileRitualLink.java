@@ -63,7 +63,7 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile {
     private void playClientEffects() {
         if(this.linkedTo != null) {
             if(clientStarSprite == null || ((EntityFXFacingSprite) clientStarSprite).isRemoved()) {
-                EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0.6F, 2);
+                EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1.5F, 2);
                 EffectHandler.getInstance().registerFX(sprite);
                 this.clientStarSprite = sprite;
                 sprite.setRefreshFunc(() -> clientStarSprite == sprite && !isInvalid());

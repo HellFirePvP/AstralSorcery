@@ -43,7 +43,6 @@ public class Config {
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
-    @Sync public static boolean craftingLiqResoGem = true;
     @Sync public static boolean craftingLiqCrystalGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
 
@@ -123,7 +122,6 @@ public class Config {
         exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.04F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", true, "If this is set to true, charged crystals tools can revert back to their inert state.");
 
-        craftingLiqResoGem = latestConfig.getBoolean("liquidStarlightResoGem", "crafting", true, "Set this to false to disable Aquamarine -> Resonant Gem in liquid starlight.");
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
 

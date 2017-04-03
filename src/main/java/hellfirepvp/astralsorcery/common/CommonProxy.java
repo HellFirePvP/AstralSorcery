@@ -76,6 +76,7 @@ public class CommonProxy implements IGuiHandler {
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
+    private CommonScheduler commonScheduler = new CommonScheduler();
 
     public void preLoadConfigEntries() {
         worldGenerator.pushConfigEntries();
@@ -177,6 +178,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(new LinkHandler()); //Only used as instance for tick handling
         manager.register(SyncDataHolder.getTickInstance());
         manager.register(new PlayerPerkHandler());
+        manager.register(commonScheduler);
 
         //TickTokenizedMaps
         manager.register(EventHandlerServer.spawnDenyRegions);
@@ -203,6 +205,14 @@ public class CommonProxy implements IGuiHandler {
     public void scheduleClientside(Runnable r, int tickDelay) {}
 
     public void scheduleClientside(Runnable r) {
+        scheduleClientside(r, 0);
+    }
+
+    public void scheduleDelayed(Runnable r, int tickDelay) {
+        commonScheduler.addRunnable(r, tickDelay);
+    }
+
+    public void scheduleDelayed(Runnable r) {
         scheduleClientside(r, 0);
     }
 

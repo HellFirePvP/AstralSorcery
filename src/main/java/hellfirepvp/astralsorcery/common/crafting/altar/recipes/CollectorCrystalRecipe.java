@@ -41,14 +41,18 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
     public CollectorCrystalRecipe(boolean celestial) {
         super(new ShapedRecipe(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal)
                 .addPart((celestial ? ItemsAS.tunedCelestialCrystal : ItemsAS.tunedRockCrystal),
-                        ShapedRecipeSlot.CENTER)
-                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                        ShapedRecipeSlot.CENTER));
         setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AttunementAltarSlot.values());
+        setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationAtlarSlot.UP_UP_RIGHT,
+                ConstellationAtlarSlot.DOWN_DOWN_LEFT,
+                ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
+        setCstItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
         this.celestial = celestial;
         ItemStack stack = new ItemStack(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal);
         ItemCollectorCrystal.setType(stack, celestial ?

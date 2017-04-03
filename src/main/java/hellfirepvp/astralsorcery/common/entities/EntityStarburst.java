@@ -157,9 +157,7 @@ public class EntityStarburst extends EntityThrowable {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }
-                if (world.canSeeSky(new BlockPos(result.entityHit))) {
-                    CelestialStrike.play(getThrower(), world, new Vector3(result.entityHit), new Vector3(result.entityHit, true));
-                }
+                CelestialStrike.play(getThrower(), world, new Vector3(result.entityHit), new Vector3(result.entityHit, true));
             }
             setDead();
         }

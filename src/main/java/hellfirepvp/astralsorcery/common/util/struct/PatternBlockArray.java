@@ -36,8 +36,7 @@ public class PatternBlockArray extends BlockArray {
             BlockInformation info = entry.getValue();
             BlockPos at = center.add(entry.getKey());
             IBlockState state = world.getBlockState(at);
-            if(!state.getBlock().equals(info.type) ||
-                    state.getBlock().getMetaFromState(state) != info.metadata) {
+            if(!info.matcher.isStateValid(world, at, state)) {
                 return false;
             }
             if(matcherMap.containsKey(entry.getKey())) {
