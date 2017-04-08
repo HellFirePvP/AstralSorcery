@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityFlare;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityIlluminationSpark;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityStarburst;
 import hellfirepvp.astralsorcery.client.render.tile.*;
@@ -34,6 +35,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
+import hellfirepvp.astralsorcery.common.entities.EntityIlluminationSpark;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityStarburst;
 import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
@@ -231,6 +233,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityFlare.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityStarburst.class, new RenderEntityStarburst.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityIlluminationSpark.Factory());
     }
 
     public void registerDisplayInformationInit() {

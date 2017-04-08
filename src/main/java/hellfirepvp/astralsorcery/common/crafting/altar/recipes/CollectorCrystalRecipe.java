@@ -59,6 +59,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
                 BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL :
                 BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
         this.renderOutput = stack;
+        setPassiveStarlightRequirement(2600);
     }
 
     @Nonnull

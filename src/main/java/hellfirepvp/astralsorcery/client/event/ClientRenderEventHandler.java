@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
@@ -94,8 +95,11 @@ public class ClientRenderEventHandler {
     private static final int fadeTicks = 15;
     private static final float visibilityChange = 1F / ((float) fadeTicks);
 
-    private static int chargeRevealTicks = 0;
-    private static float visibility = 0F; //0F-1F
+    private static int chargePermRevealTicks = 0;
+    private static float visibilityPermCharge = 0F; //0F-1F
+
+    private static int chargeTempRevealTicks = 0;
+    private static float visibilityTempCharge = 0F;
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
@@ -130,13 +134,22 @@ public class ClientRenderEventHandler {
         }
     }
 
-    public static void requestChargeReveal(int forTicks) {
-        chargeRevealTicks = forTicks;
+    public static void requestPermChargeReveal(int forTicks) {
+        chargePermRevealTicks = forTicks;
     }
 
-    public static void resetChargeReveal() {
-        chargeRevealTicks = 0;
-        visibility = 0F;
+    public static void resetPermChargeReveal() {
+        chargePermRevealTicks = 0;
+        visibilityPermCharge = 0F;
+    }
+
+    public static void requestTempChargeReveal(int forTicks) {
+        chargeTempRevealTicks = forTicks;
+    }
+
+    public static void resetTempChargeReveal() {
+        chargeTempRevealTicks = 0;
+        visibilityTempCharge = 0F;
     }
 
     @SubscribeEvent
@@ -147,17 +160,28 @@ public class ClientRenderEventHandler {
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
 
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
-                requestChargeReveal(20);
+                requestPermChargeReveal(20);
             }
-            chargeRevealTicks--;
+            chargePermRevealTicks--;
+            chargeTempRevealTicks--;
 
-            if((chargeRevealTicks - fadeTicks) < 0) {
-                if(visibility > 0) {
-                    visibility = Math.max(0, visibility - visibilityChange);
+            if((chargePermRevealTicks - fadeTicks) < 0) {
+                if(visibilityPermCharge > 0) {
+                    visibilityPermCharge = Math.max(0, visibilityPermCharge - visibilityChange);
                 }
             } else {
-                if(visibility < 1) {
-                    visibility = Math.min(1, visibility + visibilityChange);
+                if(visibilityPermCharge < 1) {
+                    visibilityPermCharge = Math.min(1, visibilityPermCharge + visibilityChange);
+                }
+            }
+
+            if((chargeTempRevealTicks - fadeTicks) < 0) {
+                if(visibilityTempCharge > 0) {
+                    visibilityTempCharge = Math.max(0, visibilityTempCharge - visibilityChange);
+                }
+            } else {
+                if(visibilityTempCharge < 1) {
+                    visibilityTempCharge = Math.min(1, visibilityTempCharge + visibilityChange);
                 }
             }
 
@@ -203,8 +227,11 @@ public class ClientRenderEventHandler {
         if(!inHand.isEmpty()) {
             Item i = inHand.getItem();
             if(i instanceof ItemAlignmentChargeRevealer) {
-                if(((ItemAlignmentChargeRevealer) i).shouldReveal(inHand)) {
-                    requestChargeReveal(20);
+                if(((ItemAlignmentChargeRevealer) i).shouldReveal(ItemAlignmentChargeRevealer.ChargeType.PERM, inHand)) {
+                    requestPermChargeReveal(20);
+                }
+                if(((ItemAlignmentChargeRevealer) i).shouldReveal(ItemAlignmentChargeRevealer.ChargeType.TEMP, inHand)) {
+                    requestTempChargeReveal(20);
                 }
             }
             if(i instanceof ItemSkyResonator) {
@@ -270,7 +297,7 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            if(true || Minecraft.getMinecraft().playerController.gameIsSurvivalOrAdventure()) {
+            if(visibilityTempCharge > 0) {
                 SpriteSheetResource ssr = SpriteLibrary.spriteCharge;
                 ssr.getResource().bind();
 
@@ -285,10 +312,10 @@ public class ClientRenderEventHandler {
                 GlStateManager.disableAlpha();
                 Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
 
-                float percFilled = 1F;
+                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F : PlayerChargeHandler.instance.clientCharge;
                 double uLength = ssr.getULength() * percFilled;
 
-                GlStateManager.color(1F, 1F, 1F, 1F);
+                GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);
                 Tessellator tes = Tessellator.getInstance();
                 VertexBuffer vb = tes.getBuffer();
                 vb.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -302,7 +329,7 @@ public class ClientRenderEventHandler {
                 TextureHelper.refreshTextureBindState();
             }
 
-            if(visibility > 0) {
+            if(visibilityPermCharge > 0) {
                 renderAlignmentChargeOverlay(event.getPartialTicks());
             }
             if(!ongoingItemRenders.isEmpty()) {
@@ -349,7 +376,7 @@ public class ClientRenderEventHandler {
         float offsetY =  5F;
 
         texChargeFrame.bind();
-        GL11.glColor4f(1F, 1F, 1F, visibility * 0.9F);
+        GL11.glColor4f(1F, 1F, 1F, visibilityPermCharge * 0.9F);
 
         //Draw hud itself
         Tessellator tes = Tessellator.getInstance();
@@ -365,7 +392,7 @@ public class ClientRenderEventHandler {
         float filled = ConstellationPerkLevelManager.getPercToNextLevel(ResearchManager.clientProgress);
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
-        GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibility * 0.9F);
+        GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
         texChargeCharge.bind();
         height *= filled;
 
@@ -380,14 +407,14 @@ public class ClientRenderEventHandler {
         TextureHelper.refreshTextureBindState();
         //Draw level
         int level = ResearchManager.clientProgress.getAlignmentLevel();
-        GL11.glColor4f(0.86F, 0.86F, 0.86F, visibility);
+        GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 13, 94, 0);
         GL11.glScaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
-        c |= ((int) (255F * visibility)) << 24;
-        if(visibility > 0.1E-4) {
+        c |= ((int) (255F * visibilityPermCharge)) << 24;
+        if(visibilityPermCharge > 0.1E-4) {
             Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level + 1), 0, 0, c);
         }
         GL11.glPopMatrix();

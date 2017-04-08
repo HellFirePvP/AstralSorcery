@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -81,6 +82,11 @@ public class ResearchNode {
         this.connectionsTo.add(node);
         return this;
     }
+
+    public ResearchNode addSourceConnectionFrom(ResearchNode... node) {
+        return addSourceConnectionsFrom(Arrays.asList(node));
+    }
+
     public ResearchNode addSourceConnectionsFrom(Collection<ResearchNode> node) {
         this.connectionsTo.addAll(node);
         return this;

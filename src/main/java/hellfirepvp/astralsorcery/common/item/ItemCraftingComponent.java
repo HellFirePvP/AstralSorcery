@@ -52,7 +52,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     public boolean hasCustomEntity(ItemStack stack) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
         switch (type) {
-            case AQUAMARINE:
             case STARDUST:
                 return true;
         }

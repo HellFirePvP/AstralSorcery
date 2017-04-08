@@ -119,7 +119,7 @@ public class RenderingUtils {
         TileEntityRendererDispatcher.staticPlayerZ = z;
 
         Entity rv = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rv == null || !rv.equals(Minecraft.getMinecraft().player)) {
+        if(rv == null || !rv.equals(renderView)) {
             Minecraft.getMinecraft().setRenderViewEntity(renderView);
             rv = renderView;
         }

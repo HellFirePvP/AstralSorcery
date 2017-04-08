@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
+import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -179,6 +180,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(SyncDataHolder.getTickInstance());
         manager.register(new PlayerPerkHandler());
         manager.register(commonScheduler);
+        manager.register(PlayerChargeHandler.instance);
 
         //TickTokenizedMaps
         manager.register(EventHandlerServer.spawnDenyRegions);

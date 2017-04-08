@@ -6,14 +6,6 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-/*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
- *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
- ******************************************************************************/
-
 package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;

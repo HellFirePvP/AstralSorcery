@@ -37,6 +37,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.tileentity.TileEntity;
@@ -194,7 +195,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             break;
                                     }
                                     tgr.playWheelEffect();
-                                } else if(i instanceof ItemSword) {
+                                } else if(SwordSharpenHelper.isSharpenableItem(grind)) {
                                     if(rand.nextInt(40) == 0) {
                                         SwordSharpenHelper.setSwordSharpened(grind);
                                     }
@@ -215,7 +216,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     if(!player.isCreative()) {
                                         stack.setCount(stack.getCount() - 1);
                                     }
-                                } else if(trySet instanceof ItemSword && !SwordSharpenHelper.isSwordSharpened(stack)) {
+                                } else if(SwordSharpenHelper.isSharpenableItem(stack) && !SwordSharpenHelper.isSwordSharpened(stack)) {
                                     ItemStack toSet = stack.copy();
                                     toSet.setCount(1);
                                     tgr.setGrindingItem(toSet);
@@ -332,14 +333,10 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
-    }
-
-    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
+
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;

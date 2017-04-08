@@ -6,14 +6,6 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-/*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
- *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
- * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
- * For further details, see the License file there.
- ******************************************************************************/
-
 package hellfirepvp.astralsorcery.common.integrations;
 
 import com.google.common.collect.Lists;
@@ -114,6 +106,7 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT));
 
         registry.addRecipes(Lists.newArrayList(
+                RegistryRecipes.rCCParchment   .makeNative(),
                 RegistryRecipes.rRJournal      .makeNative(),
                 RegistryRecipes.rBlackMarbleRaw.makeNative(),
                 RegistryRecipes.rMarbleArch    .makeNative(),
@@ -132,7 +125,6 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.ritualLink));
     }
 
     @Override

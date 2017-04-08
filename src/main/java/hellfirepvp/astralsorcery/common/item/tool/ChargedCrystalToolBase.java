@@ -53,8 +53,8 @@ public interface ChargedCrystalToolBase {
         int c = tag.getInteger("chCount");
         c++;
         tag.setInteger("chCount", c);
-        if(c >= 20) {
-            return chRand.nextInt(200) == 0;
+        if(c >= Config.revertStart) {
+            return chRand.nextInt(Config.revertChance) == 0;
         } else {
             return false;
         }

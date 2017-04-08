@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.util.Counter;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;
@@ -29,7 +30,7 @@ public class ClientScheduler implements ITickHandler {
     private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private Map<Runnable, Integer> queuedRunnables = new HashMap<>();
+    private Map<Runnable, Counter> queuedRunnables = new HashMap<>();
     private Map<Runnable, Integer> waitingRunnables = new HashMap<>();
 
     @Override
@@ -42,18 +43,16 @@ public class ClientScheduler implements ITickHandler {
             Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
             while (iterator.hasNext()) {
                 Runnable r = iterator.next();
-                int delay = queuedRunnables.get(r);
-                delay--;
-                if(delay <= 0) {
+                Counter delay = queuedRunnables.get(r);
+                delay.decrement();
+                if(delay.value <= 0) {
                     r.run();
                     iterator.remove();
-                } else {
-                    queuedRunnables.put(r, delay);
                 }
             }
             inTick = false;
             for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
-                queuedRunnables.put(waiting.getKey(), waiting.getValue());
+                queuedRunnables.put(waiting.getKey(), new Counter(waiting.getValue()));
             }
         }
         waitingRunnables.clear();
@@ -83,7 +82,7 @@ public class ClientScheduler implements ITickHandler {
             if(inTick) {
                 waitingRunnables.put(r, tickDelay);
             } else {
-                queuedRunnables.put(r, tickDelay);
+                queuedRunnables.put(r, new Counter(tickDelay));
             }
         }
     }

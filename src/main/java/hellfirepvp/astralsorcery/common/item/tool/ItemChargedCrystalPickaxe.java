@@ -87,7 +87,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
                 idx++;
                 tr.start();
                 if(!ChargedCrystalToolBase.tryRevertMainHand(player, player.getHeldItemMainhand())) {
-                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 70);
+                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalPickaxe, 150);
                 }
                 return true;
             }

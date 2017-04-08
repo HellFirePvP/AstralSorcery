@@ -30,10 +30,6 @@ public interface IConstellationSpecialShowup extends IConstellation {
         return day > 0 && day % 36 == 0;
     }
 
-    default public boolean isDayOfLunarEclipse(long day) {
-        return day > 0 && day % 68 == 0;
-    }
-
     default public long dayToWorldTime(long day) {
         return day * 24000L;
     }

@@ -44,6 +44,7 @@ public class BlockAttunementAltar extends BlockContainer {
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
+        setLightLevel(0.8F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

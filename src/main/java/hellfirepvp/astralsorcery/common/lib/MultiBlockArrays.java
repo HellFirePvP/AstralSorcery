@@ -34,6 +34,9 @@ public class MultiBlockArrays {
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;
 
+    @PasteBlacklist
+    public static PatternBlockArray patternRitualPedestalWithLink;
+
     public static PatternBlockArray patternAltarAttunement;
 
     public static PatternBlockArray patternAltarConstellation;

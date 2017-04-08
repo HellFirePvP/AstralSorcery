@@ -68,6 +68,17 @@ public class MiscUtils {
         return max;
     }
 
+    public static Collection<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {
+        List<Vector3> out = new LinkedList<>();
+        Vector3 circleVec = axis.clone().perpendicular().normalize().multiply(radius);
+        double degPerPoint = 360D / ((double) amountOfPointsOnCircle);
+        for (int i = 0; i < amountOfPointsOnCircle; i++) {
+            double deg = i * degPerPoint;
+            out.add(circleVec.clone().rotate(Math.toRadians(deg), axis.clone()).add(centerOffset));
+        }
+        return out;
+    }
+
     @Nullable
     public static RayTraceResult rayTraceLook(EntityLivingBase entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);

@@ -31,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -426,7 +425,7 @@ public class ResearchManager {
 
     @SideOnly(Side.CLIENT)
     private static void showBar() {
-        ClientRenderEventHandler.requestChargeReveal(200);
+        ClientRenderEventHandler.requestPermChargeReveal(160);
     }
 
     public static void informCraftingGridCompletion(EntityPlayer player, ItemStack out) {

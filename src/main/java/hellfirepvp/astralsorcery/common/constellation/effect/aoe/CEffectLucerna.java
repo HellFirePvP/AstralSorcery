@@ -53,7 +53,7 @@ public class CEffectLucerna extends ConstellationEffect {
         if(pedestal.getTicksExisted() % 20 == 0) {
             OrbitalEffectLucerna luc = new OrbitalEffectLucerna();
             OrbitalEffectController ctrl = EffectHandler.getInstance().orbital(luc, luc, luc);
-            ctrl.setOffset(new Vector3(pedestal).add(0.5, 0.5, 0.5));
+            ctrl.setOffset(new Vector3(pos).add(0.5, 0.5, 0.5));
             ctrl.setOrbitRadius(0.8 + rand.nextFloat() * 0.7);
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));

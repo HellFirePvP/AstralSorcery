@@ -281,7 +281,7 @@ public class TileAttunementAltar extends TileEntityTick {
             for (int zz = -7; zz <= 7; zz++) {
                 BlockPos other = at.add(xx, 0, zz);
                 if(MiscUtils.isChunkLoaded(world, new ChunkPos(other))) {
-                    boolean see = itDown(other) <= other.getY() + 1;
+                    boolean see = world.canSeeSky(other);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -293,7 +293,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         break lbl;
                     }
                 } else {
-                    boolean see = itDown(other) <= other.getY() + 1;
+                    boolean see = world.canSeeSky(other);
                     unloadCache.put(other, see);
                     if(!see) {
                         seesSky = false;
@@ -307,19 +307,6 @@ public class TileAttunementAltar extends TileEntityTick {
         if(update) {
             markForUpdate();
         }
-    }
-
-    private int itDown(BlockPos xzPos) {
-        BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
-        mut.setPos(xzPos);
-        for (int i = 255; i >= 0; i--) {
-            mut.setY(i);
-            if(!world.isAirBlock(mut)) {
-                mut.release();
-                return i;
-            }
-        }
-        return -1;
     }
 
     private void updateMultiblockState() {
@@ -344,8 +331,19 @@ public class TileAttunementAltar extends TileEntityTick {
         for (BlockPos pos : positions) {
             if(pos.equals(getPos())) continue;
             IBlockState state = world.getBlockState(pos);
-            if(!state.getBlock().equals(BlocksAS.attunementRelay)) {
+            if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
+                    !state.getBlock().equals(BlocksAS.attunementAltar)) {
                 valid = false;
+            }
+            if(state.getBlock().equals(BlocksAS.attunementRelay)) {
+                TileAttunementRelay tar = MiscUtils.getTileAt(world, pos, TileAttunementRelay.class, true);
+                if(tar != null) {
+                    ItemStack in = tar.getInventoryHandler().getStackInSlot(0);
+                    if(!in.isEmpty()) {
+                        ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, in);
+                        tar.getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
+                    }
+                }
             }
         }
         if(!valid) {
@@ -789,7 +787,7 @@ public class TileAttunementAltar extends TileEntityTick {
             if(spriteCrystalAttunement == null) {
                 Entity ee = world.getEntityByID(entityIdActive);
                 if(ee != null) {
-                    Vector3 posV = new Vector3(ee).addY(0.5);
+                    Vector3 posV = new Vector3(ee);
                     EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, posV.getX(), posV.getY(), posV.getZ(), 2.5F, 2);
                     EffectHandler.getInstance().registerFX(sprite);
                     spriteCrystalAttunement = sprite;
@@ -802,7 +800,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
                         Entity ent = world.getEntityByID(entityIdActive);
                         if(ent == null || ent.isDead) return v;
-                        return new Vector3(ent).addY(0.5);
+                        return new Vector3(ent);
                     });
                 }
             }

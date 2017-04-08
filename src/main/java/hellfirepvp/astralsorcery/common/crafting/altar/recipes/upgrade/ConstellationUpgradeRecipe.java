@@ -61,7 +61,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
-                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,

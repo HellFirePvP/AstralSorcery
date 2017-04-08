@@ -79,12 +79,14 @@ public class RegistryRecipes {
     public static AttunementRecipe rIlluminator;
     public static DiscoveryRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltar;
-    public static AttunementRecipe rStarlightInfuser;
-    public static AttunementRecipe rTreeBeacon;
+    public static ConstellationRecipe rStarlightInfuser;
+    public static ConstellationRecipe rTreeBeacon;
     public static ConstellationRecipe rIlluminationWand;
     public static AttunementRecipe rArchitectWand;
     public static AttunementRecipe rExchangeWand;
     public static ConstellationRecipe rShiftStar;
+    public static ConstellationRecipe rRitualLink;
+    public static DiscoveryRecipe rIlluminationPowder;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -192,13 +194,8 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.RIGHT);
 
         rBlackMarbleRaw = new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 8, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(Items.COAL,
-                        ShapedRecipeSlot.CENTER);
+                .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.values())
+                .addPart(Items.COAL, ShapedRecipeSlot.CENTER);
 
         rMarbleEngraved = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
@@ -281,6 +278,40 @@ public class RegistryRecipes {
         DiscoveryRecipe dr = registerDiscoveryRecipe(rCCParchment);
         dr.setPassiveStarlightRequirement(50);
 
+        rIlluminationPowder = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.illuminationPowder, 16))
+                .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.CENTER));
+        rIlluminationPowder.setPassiveStarlightRequirement(200);
+
+        rRitualLink = registerConstellationRecipe(new ShapedRecipe(new ItemStack(BlocksAS.ritualLink, 2))
+                .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.UPPER_LEFT)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT));
+        rRitualLink.setCstItem(OreDictAlias.ITEM_GOLD_NUGGET,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT);
+        rRitualLink.setCstItem(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
+        rRitualLink.setPassiveStarlightRequirement(2600);
+
         rArchitectWand = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.architectWand)
                 .addPart(OreDictAlias.ITEM_DYE_PURPLE,
                         ShapedRecipeSlot.LEFT,
@@ -336,7 +367,7 @@ public class RegistryRecipes {
                 ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT);
         rIlluminationWand.setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                 ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
-        rIlluminationWand.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+        rIlluminationWand.setAttItem(ItemsAS.illuminationPowder,
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
 
         rSkyResonator = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.skyResonator)
@@ -351,15 +382,14 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_CENTER));
         rSkyResonator.setPassiveStarlightRequirement(100);
 
-        rTreeBeacon = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
-                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
+        rTreeBeacon = registerConstellationRecipe(new ShapedRecipe(BlocksAS.treeBeacon)
                 .addPart(OreDictAlias.BLOCK_LEAVES,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(OreDictAlias.BLOCK_SAPLING,
                         ShapedRecipeSlot.CENTER)
                 .addPart(BlocksAS.fluidLiquidStarlight,
@@ -369,16 +399,19 @@ public class RegistryRecipes {
         rTreeBeacon.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
+        rTreeBeacon.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
         rTreeBeacon.setPassiveStarlightRequirement(2000);
 
-        rStarlightInfuser = registerAttenuationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
-                .addPart(ItemHandle.getCrystalVariant(false, false),
+        rStarlightInfuser = registerConstellationRecipe(new ShapedRecipe(BlocksAS.starlightInfuser)
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_CENTER)
@@ -387,9 +420,14 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER));
-        rStarlightInfuser.setAttItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
-                AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
-                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
+        rStarlightInfuser.setCstItem(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT);
+        rStarlightInfuser.setCstItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT);
         rStarlightInfuser.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
@@ -414,18 +452,25 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER));
         rGlassLensFire.setAttItem(Items.BLAZE_POWDER, AttunementRecipe.AttunementAltarSlot.values());
+        rGlassLensFire.setCstItem(Items.BLAZE_POWDER,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
 
         rGlassLensBreak = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.BREAK.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER)
                 .addPart(OreDictAlias.ITEM_DIAMOND,
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                .addPart(Items.IRON_PICKAXE,
+                        ShapedRecipeSlot.LOWER_CENTER));
         rGlassLensBreak.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT,
                 AttunementRecipe.AttunementAltarSlot.UPPER_LEFT);
+        rGlassLensBreak.setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
 
         rGlassLensDamage = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.DAMAGE.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -441,22 +486,25 @@ public class RegistryRecipes {
         rGlassLensDamage.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
+        rGlassLensDamage.setCstItem(OreDictAlias.ITEM_IRON_INGOT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
 
         rGlassLensGrowth = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.GROW.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER)
-                .addPart(Items.WHEAT_SEEDS,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(OreDictAlias.ITEM_CARROT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(OreDictAlias.ITEM_SUGARCANE,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER));
         rGlassLensGrowth.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AttunementRecipe.AttunementAltarSlot.values());
+        rGlassLensGrowth.setCstItem(OreDictAlias.ITEM_SUGARCANE,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT);
+        rGlassLensGrowth.setCstItem(Items.WHEAT_SEEDS,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT);
 
         rGlassLensRegeneration = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.REGEN.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -468,6 +516,9 @@ public class RegistryRecipes {
         rGlassLensRegeneration.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
+        rGlassLensRegeneration.setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
 
         rGlassLensNightvision = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.NIGHT.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -477,9 +528,10 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
                         ShapedRecipeSlot.LOWER_CENTER));
-        rGlassLensNightvision.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
-                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT,
-                AttunementRecipe.AttunementAltarSlot.UPPER_LEFT);
+        rGlassLensNightvision.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AttunementAltarSlot.values());
+        rGlassLensNightvision.setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT);
 
         rAttenuationAltarRelay = registerDiscoveryRecipe(new ShapedRecipe(BlocksAS.attunementRelay)
                 .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
@@ -538,7 +590,7 @@ public class RegistryRecipes {
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER))
-                .setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AttunementAltarSlot.values());
+                .setAttItem(ItemsAS.illuminationPowder, AttunementRecipe.AttunementAltarSlot.values());
         rIlluminator.setPassiveStarlightRequirement(1500);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(ItemsAS.wand)
@@ -560,18 +612,13 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(Items.BOOK,
                         ShapedRecipeSlot.CENTER)
-                .addPart(ItemsAS.constellationPaper,
+                .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER));
         rJournal.setPassiveStarlightRequirement(20);
 
         registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 8, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(Items.COAL,
-                        ShapedRecipeSlot.CENTER)).setPassiveStarlightRequirement(20);
+                .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.values())
+                .addPart(Items.COAL, ShapedRecipeSlot.CENTER)).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
                         .addPart(OreDictAlias.BLOCK_MARBLE,

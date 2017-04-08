@@ -22,8 +22,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ItemAlignmentChargeRevealer {
 
     @SideOnly(Side.CLIENT)
-    default public boolean shouldReveal(ItemStack stack) {
+    default public boolean shouldReveal(ChargeType ct, ItemStack stack) {
         return true;
+    }
+
+    public static enum ChargeType {
+
+        TEMP,
+        PERM
+
     }
 
 }

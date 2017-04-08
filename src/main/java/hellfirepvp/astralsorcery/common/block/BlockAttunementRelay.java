@@ -58,6 +58,7 @@ public class BlockAttunementRelay extends BlockContainer {
         setHardness(0.5F);
         setHarvestLevel("pickaxe", 0);
         setResistance(1.0F);
+        setLightLevel(0.8F);
         setSoundType(SoundType.GLASS);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

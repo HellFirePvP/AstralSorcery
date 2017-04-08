@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -248,9 +249,35 @@ public class WorldSkyHandler {
         LinkedList<IConstellation> out = new LinkedList<>();
         LinkedList<Map.Entry<IConstellation, Float>> entries = new LinkedList<>();
         activeDistributions.entrySet().forEach(entries::add);
-        Collections.sort(entries, (e1, e2) -> MathHelper.floor(e2.getValue() * 1000) - MathHelper.floor(e1.getValue() * 1000));
+        entries.sort((e1, e2) -> MathHelper.floor(e2.getValue() * 1000) - MathHelper.floor(e1.getValue() * 1000));
         entries.forEach((e) -> out.addLast(e.getKey()));
         return out;
+    }
+
+    @Nullable
+    public IConstellation getHighestDistributionConstellation(Random random) {
+        return getHighestDistributionConstellation(random, (c) -> true);
+    }
+
+    @Nullable
+    public IConstellation getHighestDistributionConstellation(Random random, Predicate<IConstellation> acceptorFunc) {
+        float highest = -1F;
+        List<IConstellation> highestVal = new LinkedList<>();
+        for (Map.Entry<IConstellation, Float> entry : activeDistributions.entrySet()) {
+            if(entry.getValue() > highest) {
+                if(acceptorFunc.test(entry.getKey())) {
+                    highest = entry.getValue();
+                    highestVal.clear();
+                    highestVal.add(entry.getKey());
+                }
+            } else if(entry.getValue() == highest) {
+                if(acceptorFunc.test(entry.getKey())) {
+                    highestVal.add(entry.getKey());
+                }
+            }
+        }
+        if(highestVal.isEmpty()) return null;
+        return highestVal.get(random.nextInt(highestVal.size()));
     }
 
     @SideOnly(Side.CLIENT)
@@ -289,8 +316,8 @@ public class WorldSkyHandler {
     }
 
     private void evaluateCelestialEventTimes(World world) {
-        int solarTime = (int) ((world.getWorldTime() % 888000) - 864000);
-        dayOfSolarEclipse = solarTime > 0;
+        int solarTime = (int) (world.getWorldTime() % 864000);
+        dayOfSolarEclipse = solarTime < 24000;
         if (solarTime > 3600 && solarTime < 8400) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
@@ -301,8 +328,8 @@ public class WorldSkyHandler {
             prevSolarEclipseTick = 0;
         }
 
-        int lunarTime = (int) ((world.getWorldTime() % 1656000) - 1632000);
-        dayOfLunarEclipse = lunarTime > 0;
+        int lunarTime = (int) (world.getWorldTime() % 1632000);
+        dayOfLunarEclipse = lunarTime < 24000;
         if (lunarTime > 15600 && lunarTime < 20400) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;

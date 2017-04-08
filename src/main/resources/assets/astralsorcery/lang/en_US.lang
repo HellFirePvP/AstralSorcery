@@ -69,9 +69,9 @@ astralsorcery.journal.constellation.dst.weak=Dim
 astralsorcery.journal.constellation.dst.minor=Faint
 
 research.SHRINES.name=Ancient Shrines
-astralsorcery.journal.SHRINES.1.text=Scattered across the world are ancient shrines built from marble.<NL>Some of the bigger ones can be found on top of high hills and mountains, while smaller ones can be dug up from under the sands in deserts.<NL>While they don't seem very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends however, only 1 or 2 old chests and a strange floating crystal are ever contained within.
-astralsorcery.journal.SHRINES.2.text=The properties of the floating crystals are quite bizarre. They emit a constant shimmering light that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are man made. Their true age and origin is practically impossible to ascertain, but after some minimal experimentation and tinkering the crystals seem to be extremely resistant to any kind of environmental damage.
-astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be shaved off of them, even with the most destructive methods.<NL>Something seems strange about these crystals. The light they emit seems to ebb and flow almost like water in response to certain objects. §3Maybe placing a crafting §3table nearby would yield §3interesting results?§r
+astralsorcery.journal.SHRINES.1.text=Scattered across the world are ancient shrines built from marble by a civilization long past.<NL>Some of the most renown have been located atop high hills and mountains, while smaller ones have been dug up from under the sands in deserts.<NL>While they don't seem very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends however, only a few old chests and a stories of strange floating crystals have ever been reported within.
+astralsorcery.journal.SHRINES.2.text=The properties of the floating crystals are quite bizarre. They appear to emit a constant shimmering light that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are man made. Their true age and origin is practically impossible to ascertain, but after some minimal experimentation and tinkering the crystals seem to be almost imperviously fixed in their alignment with the stars.
+astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped from them, even with the most destructive methods.<NL>Something seems strange about these crystals. The light they emit seems to ebb and flow almost like water in response to certain objects. §3Maybe placing a crafting §3table nearby would yield §3interesting results?§r
 
 research.CPAPER.name=Constellation Paper
 astralsorcery.journal.CPAPER.1.text=Inside ancient chests found in the scattered shrines across the land, there are occasionally some blank scrolls. Unrolling one of these scrolls will cause a name to appear on the top along with a strange drawing that vaguely resembles some of the stars seen in the night sky.<NL>After collecting a number of them, it appears that each scroll shows a different set of stars to start with, but eventually they start showing up blank.
@@ -105,6 +105,9 @@ astralsorcery.journal.TOOLS.2.text=Unfortunately, crystal tools are not perfect.
 research.ROCK_CRYSTALS.name=Rock Crystal Properties
 astralsorcery.journal.ROCK_CRYSTALS.1.text=Almost every newly mined rock crystal is unique. They vary in size, purity and shape, and there seems to be no way to absulutely determine what said will be during the mining process.<NL>While changeing the size and purity of rock crystals does not seem to be possible at the moment, grinding off small bits of them with a grindstone to form them into a more suitable shape seems easy enough.
 
+research.CRYSTAL_GROWTH.name=Crystal Growth
+astralsorcery.journal.CRYSTAL_GROWTH.1.text=Upon immersing single rock crystals into this strange, cold, lightweight liquid, some of it keeps clinging onto the crystal.<NL>Upon closer inspection, it almost seems like the liquid starlight solidified on the surface but it quickly starts melting off of it again. Maybe leaving it in the liquid long enough might permanently increase its size?
+
 research.MARBLETYPES.name=Marble
 astralsorcery.journal.MARBLETYPES.1.text=A clean and light-reflecting variety of marble can be found from time to time while mining through the ground. The ancient shrines are all built entirely out of it, and its reflective capabilities do seem to interact with starlight in an interesting manner. Certain kinds of shaping and refinement could render it useful in various endeavors related to starlight manipulation.
 
@@ -113,15 +116,18 @@ astralsorcery.journal.SOOTYMARBLE.1.text=Coating the surface of marble with a ve
 
 research.ALTAR2.name=Starlight Crafting Altar
 astralsorcery.journal.ALTAR2.1.text=The starlight capacity and focusing abilities of the luminous crafting table are admirable compared to a regular crafting table, but they can be greatly inproved apon. Engineering additional reinforcements and extensions to make the table larger are not quite enough on their own though.<NL>In order to focus enough starlight to actually make use of the extensions, a large starlight collection structure made of various types of marble is required.
-astralsorcery.journal.ALTAR2.4.text=The starlight reservoir in the crafting altar is not only greater in size compared to the luminous crafting table. It has special properties that cause it to turn red if the collection structure around the table is damaged, incorrect, or incomplete.
+astralsorcery.journal.ALTAR2.4.text=The starlight reservoir in the crafting altar is not only greater in size compared to the luminous crafting table. It has special properties that cause it to turn red if the collection structure around the table is damaged, incorrect, or incomplete.<NL>In order to upgrade your table into an altar it will need to be placed in the center of the structure with a night view of the sky with the items in it then start the process with the resonating wand.
 
 research.WELL.name=Lightwell
 astralsorcery.journal.WELL.1.text=At night, a strange water-like substance seems to collect on aquamarine gems and rock crystals. On closer examination, the liquid seems to be a condensate of pure energy derived from starlight.<NL> A carefully carved basin of marble makes the collection of this liquid quite easy. The liquid emits a bright and pure light, feels very cold and a bucket full of it weighs almost nothing.
-astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an aquamarine gem or rock crystal needs to be placed on top of it. Gems and crystals used to gather starlight will constantly degrade until the point of completely shattering. Once placed on the lightwell, they cannot be used for any other purpose than collecting starlight.
+astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an aquamarine gem or rock crystal needs to be placed on top of it. Gems and crystals used to gather starlight will constantly degrade until the point of completely shattering. Once placed on the lightwell, they cannot be used for any other purpose than collecting starlight.<NL>This liquid starlight seems to have interesting interactions with rock crystals and other liquids, perhaps this warrants some experimentation.
+
+research.ILLUM_POWDER.name=Illumination Powder
+astralsorcery.journal.ILLUM_POWDER.1.text=Glowstone and aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out. Shattering aquamarine into dust and mixing it with glowstone dust creates a pile of radiant powder, illuminating the space around it. Using or throwing it might help you light up your caves a bit better.
 
 research.SKY_RESO.name=Sky Wave Resonator
 astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky it seems like any star is like the other. However the light they send varies from position to position; the light of one star overlays with others causing it to either amplify in strength or just vanish entirely.<NL>Placing your altar and whatever construct you come up with in the future to potentially collect this volatile light at positions where the light is amplified, might be very important.
-astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualize those overlaying light waves would be most convenient. It does not replace the need for exploring to find a suitable place, but should make them much easier to spot in the night.
+astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky at different positions seems tedious and very time-consuming.<NL>A device that somehow helps you visualize those overlaying light waves would be most convenient. It does not replace the need for exploring to find a suitable place, but should make them much easier to spot in the night by looking along the surface while holding the device.
 
 research.SPEC_RELAY.name=Spectral Relay
 astralsorcery.journal.SPEC_RELAY.1.text=Eventhough you found a suitable place where the starlight would be greatly amplified, moving your entire base there or travel back and forth seems unreasonable. Regardless of your ideas of convenience, you still do need certain amounts of starlight to actually craft something with it.<NL>A small setup, dedicated to collect starlight for the altar, should help solve that problem. Maybe. It should at least also have a clear view of the sky and will probably achieve better results at night.
@@ -131,9 +137,8 @@ research.QUICK_CHARGE.name=Alignment Charge
 astralsorcery.journal.QUICK_CHARGE.1.text=Being aligned with at least one constellation, you feel a strong, quick surge of power flowing through your body as you gaze at the sky.<NL>While you don't seem to be able to properly use that white-blue energy arcing around you, you get the sense that a tools, able to properly channel it, may reveal its full potential in very different ways.
 
 research.ILLUMINATOR.name=Cave Illuminator
-astralsorcery.journal.ILLUMINATOR.1.text=Glowstone and aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out, sometimes even passing through solid substances before doing so.
-astralsorcery.journal.ILLUMINATOR.3.text=The Cave Illuminator takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
-astralsorcery.journal.ILLUMINATOR.4.text=The cave illuminator forms these flares in any lightless open space located beneath the device itself. The process of formation is slow, but its radius extends an impressive distance from the main device. The cave illuminator also adapts to newly formed empty spaces made by mining and building, making it indispensable to avid spelunkers and miners.
+astralsorcery.journal.ILLUMINATOR.1.text=Recalling the illuminating effects the powder made from glowstone and aquamarine has, you came up with a device that takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
+astralsorcery.journal.ILLUMINATOR.3.text=The Cave illuminator forms these flares in any lightless open space located beneath the device itself. The process of formation is slow, but its radius extends an impressive distance from the main device. The cave illuminator also adapts to newly formed empty spaces made by mining and building, making it indispensable to avid spelunkers and miners.<NL> The Cave Illuminator requires a visible night sky to work.
 
 research.ATT_PLAYER.name=Attunement
 astralsorcery.journal.ATT_PLAYER.1.text=Crafting things with starlight and liquid starlight might be fine and all, but it seems to neglect important parts of the starlight's spectrum. Along the mundane starlight of various individual stars, you notice the light given off by the specific constellations have a much more distinct effect on you. One seems to push you in random directions, another one makes you feel much stronger.<NL>Maybe it might be possible to filter the starlight of a specific constellation and amplify it? Or maybe just collect enough to amplify its strength?
@@ -150,12 +155,16 @@ astralsorcery.journal.ATT_CRYSTAL.1.text=Just as you attune yourself to a conste
 astralsorcery.journal.ATT_CRYSTAL.2.text=You're sure you've seen those kinds of properties somewhere already...<NL>Those floating crystals inside some of the shrines around the world, right. They seem to be very capable of collecting and focusing starlight. The crystal you created seems way inferior to them, but you're certain it's the first step in the right direction when it comes to recreating them.
 
 research.INFUSER.name=Starlight Infuser
-astralsorcery.journal.INFUSER.1.text=It seems you found at least a faster way and one that allows for more generic applications: The starlight infuser.<NL>And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.
-astralsorcery.journal.INFUSER.4.text=The process in the infuser is way faster than the manual process, but it might instead of consuming just 1 bucket consume more. Sometimes it also doesn't consume any.<NL>Due to the nature of liquid starlight, you might now in this more organized process infuse many more things.<NL>However, it seems incapable of reproducing the effect that liquid starlight itself had on rock crystals by throwing them inside a pool of it.
+astralsorcery.journal.INFUSER.1.text=Liquid starlight's unique properties cause it to interact with certain solid materials in several very useful ways. Especially Aquamarine gems seem to react almost violently to liquid starlight. When immersed, they almost immediately begin to absorb the liquid, vibrating and shimmering quite energetically as they do so. The result of this reaction is a resonating gem that constantly pulses with energy.<NL>This process however is not very stable and the effect fades as soon as the gem leaves the liquid.
+astralsorcery.journal.INFUSER.3.text=However, a device, specifically built to induce liquid starlight into mundane materials, should be enough to keep this effect on the Aquamarine persistent. And because you're a phenomenal architect you already designed a structure for it, which includes the liquid starlight it needs for the infusion process. The infusion process can be started the same way as the altar.<NL>The process of infusing something with liquid starlight is a very energetic one, so only one item at a time can be held by this delicate device. On the upside though, most of the time it doesn't even consume a single bucket of the liquid.
 
 research.TREEBEACON.name=Tree Beacon
 astralsorcery.journal.TREEBEACON.1.text=Remembering the properties of the resonant gem, specifically its draining effects on liquid starlight, you wonder how you could apply that for your benefit.<NL>You came up with the idea of infusing trees just before they grow with liquid starlight so the resonant gem drains bits and bits from the tree when its grown. You came up with a tree, designed to distribute that liquid into nearby saplings.
 astralsorcery.journal.TREEBEACON.3.text=It also has its limits: Due to the nature of this harvesting process, the trees infused with starlight will be slowly consumed overtime.<NL>Additionally, there's only so many trees your tree-construct can support before it simply won't infuse them with liquid starlight because it doesn't have enough left.<NL>After breaking your artificial tree, all the previously infused ones turn back into normal trees.
+
+research.CHARGED_TOOLS.name=Infused Crystal Tools
+astralsorcery.journal.CHARGED_TOOLS.1.text=Having experienced the growth effect liquid starlight has on rock crystals, you assumed that you could kindof repair your tools in a similiar fashion. Unfortunately, the fusion of the crystals into tools seems to remove that option.<NL>But maybe with your new invention and a §obit more§r liquid starlight you could achieve something else?
+astralsorcery.journal.CHARGED_TOOLS.2.text=Indeed, after infusing the previously inert tools with §la lot§r of liquid starlight, they seem to faintly glow and reflect the sky above you.<NL>Having this liquid starlight vibrantly flowing through your tools, you feel like they could perform way above your expectations for your usual tools.<NL>However, that also comes with the possibility that the liquid might be drained at some point...
 
 research.TOOL_WANDS.name=Active Channeling
 astralsorcery.journal.TOOL_WANDS.1.text=Becoming more familiar with those strange currents of energy, the urge to use them actively instead of just letting them idle grows.<NL>However, you can't just have it shoot out of your bare hands, so creating small tool rod enhanced with the newly discovered properties of the stardust should help with that.
@@ -185,6 +194,9 @@ research.LENSES_EFFECTS.name=Colored Lenses
 astralsorcery.journal.LENSES_EFFECTS.1.text=Starlight itself seems to have a vast spectrum of underlying effects along with the energies of the constellation that created it. Under normal circumstances, those balance each other out and form almost neutral light.<NL>Filtering this light to discard other parts of the spectrum and let only the light pass that grants a possibly desired aspect might end up being really useful.
 astralsorcery.journal.LENSES_EFFECTS.2.text=By fusing mundane aquamarine gems and other materials together into a glass lens, you might be able to create such colored beams when putting the result onto your newly crafted Crystal Lenses.<NL>This is not without a price though, as an additional lens that is also discarding parts of the light itself is placed onto a lens blocks more starlight than the crystal lens alone.
 
+research.RITUAL_LINK.name=Ritual Anchor
+astralsorcery.journal.RITUAL_LINK.1.text=Focusing strlight into a ritual pedestal allowed you to manifest the attunement of the crystal into the world. Unfortunately the structure required to maintain the crytal's integrity can take up alot of space. To this end you've determined it may be possible to redirect a ritual's effect using a specially constructed linking stone placed five blocks above the ritual pedestal and then linked to a matching stone some distance away.
+
 research.LINKTOOL.name=Linking Tool
 astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects aquamarines have on liquid starlight, having multiple of those condensed into one crystal might provide enough to direct and focus the raw rays of starlight in a more organized manner.<NL>Fusing them together with a rock crystal might prove a bit tedious if you don't have sufficient starlight. Luckily your newly upgraded altar might help a bit on that end.<NL>However, holding the created crystal with your bare hands seems unreasonable.
 astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
@@ -196,7 +208,7 @@ research.SHIFT_STAR.name=Shifting Star
 astralsorcery.journal.SHIFT_STAR.1.text=Blinded by your discovery and the appeal of the powers an attunement to a constellation grants, you missed out on all the possibilities the other constellations offer that you've discovered now.<NL>You quickly come up with an idea to dissipate your current powers into your surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy left your body.
 
 research.STARMETAL_ORE.name=Iron Transmutation
-astralsorcery.journal.STARMETAL_ORE.1.text=You feel like these beams of light could have other uses than look pretty and have their effects on the world generally. How about focusing the light directly onto one mundane iron ore? As source of that focused light you might aswell use one of those floating crystals in the shrines you found. Giving that one a clear view to the sky might help too.<NL>Seems like the iron reflects it back and shimmers slightly blue... Maybe something might change over time?
+astralsorcery.journal.STARMETAL_ORE.1.text=You feel like these beams of light could have other uses than look pretty and have their effects on the world generally. How about focusing the light directly onto one mundane iron ore with your linking tool? As source of that focused light you might aswell use one of those floating crystals in the shrines you found. Giving that one a clear view to the sky might help too.<NL>Seems like the iron reflects it back and shimmers slightly blue... Maybe something might change over time?
 
 research.TRANSMUTATION_ORES.name=Block Transmutation
 astralsorcery.journal.TRANSMUTATION_ORES.1.text=Maybe iron ore is not the only block that reacts to those focused rays of starlight? You should try some other things as well...
@@ -210,10 +222,9 @@ astralsorcery.journal.PRISM.1.text=While crystal lenses are useful and all, some
 
 research.COLL_CRYSTAL.name=Collector Crystal
 astralsorcery.journal.COLL_CRYSTAL.1.text=Growing more and more familiar with handling attuned crystals and learning about their properties, you think you might be able to recreate what you found in those shrines. A simple crystal alone has proven to be too weak to properly channel the same amount that you experience from those big floating crystals.<NL>Enhancing the attuned crystals you've obtained might lead to something similar like the collector crystals, however you feel like there might be more ways to enhance them in the future.
-astralsorcery.journal.COLL_CRYSTAL.0.text=[WIP]<NL>You discovered how to create your own collector crystals. They will copy over the crystal properties and the constellation from the attuned crystal that was used to craft them had. Needs to see the sky to collect starlight. Starlight collected depends on time of the day, as well as the current constellations in the sky. Starlight type is the type of the constellation the crystal was attuned to.
 
 research.CEL_CRYSTAL_GROW.name=Crystal Clusters
-astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way better material to mess with. Its little grains occasionally flash with light and sparkle while running like sand through your hands.<NL>Accidentally, some of it dropped onto your crystals. You could hard get it off of them... They stick to the surface of them like a thin coating.
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=The stardust looks like a way better material to mess with. Its little grains occasionally flash with light and sparkle while running like sand through your hands.<NL>Accidentally, some of it dropped onto your crystals. You could hardly get it off of them... They stick to the surface of them like a thin coating.
 astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=Maybe you don't want to remove the coating but rather have it somehow fuse into the crystal? Throwing them both into liquid starlight and wait for them to fuse together might be one approach to that.<NL>After waiting a while you notice that they did indeed fuse together into a cluster of small blue crystals, consuming the liquid in the process.<NL>They still seem to grow a bit. Maybe you should just leave them like that for a while until they stop growing. Focusing some additional starlight onto them might also help.
 
 research.CEL_CRYSTALS.name=Celestial Crystals
@@ -244,10 +255,12 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
-entity.astralsorcery.EntityStardust.name=Stardust
-entity.astralsorcery.EntityAquamarine.name=Aquamarine
-entity.astralsorcery.EntityCrystal.name=Crystal
-entity.astralsorcery.EntityFlare.name=Flare
+entity.astralsorcery.entitystardust.name=Stardust
+entity.astralsorcery.entityaquamarine.name=Aquamarine
+entity.astralsorcery.entitycrystal.name=Crystal
+entity.astralsorcery.entityflare.name=Flare
+entity.astralsorcery.entitystarburst.name=Star Burst
+entity.astralsorcery.entityilluminationspark=Illumination Spark
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -268,10 +281,10 @@ item.itemcrystalpickaxe.name=Crystal Pickaxe
 item.itemcrystalshovel.name=Crystal Shovel
 item.itemcrystalaxe.name=Crystal Axe
 item.itemcrystalsword.name=Crystal Sword
-item.itemchargedcrystalpickaxe.name=Aligned Crystal Pickaxe
-item.itemchargedcrystalshovel.name=Aligned Crystal Shovel
-item.itemchargedcrystalaxe.name=Aligned Crystal Axe
-item.itemchargedcrystalsword.name=Aligned Crystal Sword
+item.itemchargedcrystalpickaxe.name=Infused Crystal Pickaxe
+item.itemchargedcrystalshovel.name=Infused Crystal Shovel
+item.itemchargedcrystalaxe.name=Infused Crystal Axe
+item.itemchargedcrystalsword.name=Infused Crystal Sword
 item.itemcoloredlens.name=Colored Lens
 item.itemhandtelescope.name=Hand Telescope
 item.itemskyresonator.name=Sky Wave Resonator
@@ -279,6 +292,7 @@ item.itemilluminationwand.name=Illumination Wand
 item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
 item.itemshiftingstar.name=Shifting Star
+item.itemilluminationpowder.name=Illumination Powder
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break
@@ -340,7 +354,7 @@ astralsorcery.constellation.discidia.info=Offensive
 astralsorcery.constellation.discidia.effect=Light from this constellation seems to be unstoppable; Forcing its way through different materials as well as living things.
 astralsorcery.constellation.armara=Armara
 astralsorcery.constellation.armara.info=Defence
-astralsorcery.constellation.armara.effect=You feel a force pushing you away from the light from this constellation, much like a shield, saving the light from being damaged.
+astralsorcery.constellation.armara.effect=You feel a repulsion force pushing you away from the light of this constellation, much like a shield or protective barrier.
 astralsorcery.constellation.vicio=Vicio
 astralsorcery.constellation.vicio.info=Travel
 astralsorcery.constellation.vicio.effect=The faint rays of this constellation make you everything around you feel slower, while you seem to be faster in whatever you want to do.
@@ -349,10 +363,10 @@ astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=Being exposed to focused light of this constellation, flowers and plants close to the source are flourishing and grow much faster.
 astralsorcery.constellation.mineralis=Mineralis
 astralsorcery.constellation.mineralis.info=Mineral
-astralsorcery.constellation.mineralis.effect=Standing in the light of this constellation, the stone in your pocket seems to strangely glow and its shape seems to change ever so slightly.
+astralsorcery.constellation.mineralis.effect=Standing in the light of this constellation, the very stone of the world seems to glow strangely and its shape seems to change ever so slightly over time.
 astralsorcery.constellation.lucerna=Lucerna
 astralsorcery.constellation.lucerna.info=Light
-astralsorcery.constellation.lucerna.effect=The light of this constellation seems way brighter than the light of any other constellation, eventhough it's further away from you than other constellations.
+astralsorcery.constellation.lucerna.effect=The light of this constellation seems immensely bright despite it being far away. It is so bright in fact that it may inhibit enemies from arising entirely in its area.
 astralsorcery.constellation.horologium=Horologium
 astralsorcery.constellation.horologium.info=Time
 astralsorcery.constellation.horologium.effect=This constellation seems to shift in time. Not only finding it seems hard, its rays seem to twist time, causing things in its way to act way faster than usual.
@@ -390,6 +404,8 @@ perk.DMG_KNOCK=Heavy blows
 perk.DMG_KNOCK.info=Increased damage to mobs that were knocked back
 perk.DMG_BLEED=Grievous wounds
 perk.DMG_BLEED.info=Apply a bleed effect when hitting something
+perk.DMG_REFLECT=Thorny Aura
+perk.DMG_REFLECT.info=Damage dealt to you will be occasionally reflected
 
 perk.CRE_GROWTH=Green thumb
 perk.CRE_GROWTH.info=Plants around you grow a bit faster
@@ -401,6 +417,8 @@ perk.CRE_REACH=Extended reach
 perk.CRE_REACH.info=Your reach increases a bit
 perk.CRE_MEND=Passive mending
 perk.CRE_MEND.info=Occasionally your armor repairs itself a bit
+perk.CRE_FLARES=Animated Sparks
+perk.CRE_FLARES.info=Occasionally creates flares to defend yourself
 
 perk.DEF_DMGREDUCTION=Tough skin
 perk.DEF_DMGREDUCTION.info=Reduces overall damage taken
@@ -412,6 +430,8 @@ perk.DEF_ELEMENTAL=Elemental shield
 perk.DEF_ELEMENTAL.info=Take less damage from elemental damage
 perk.DEF_FALLRED=Additional feathers
 perk.DEF_FALLRED.info=Take less damage from falling
+perk.DEF_CHEATDEATH=Phoenix Blessing
+perk.DEF_CHEATDEATH.info=Can save you from death in dire situations
 
 perk.TRV_MOVESPEED=Hasted
 perk.TRV_MOVESPEED.info=Grants increased movement speed
@@ -423,5 +443,7 @@ perk.TRV_LIGHT=Miner's delight
 perk.TRV_LIGHT.info=Places light sources close to you in caves
 perk.TRV_LPROT=Digging straight down
 perk.TRV_LPROT.info=Protects against lava for a short time
+perk.TRV_STEPASSIST=Hiking boots
+perk.TRV_STEPASSIST.info=Stepping up single blocks seems way easier
 
 constellation.noInformation=There is nothing here.
