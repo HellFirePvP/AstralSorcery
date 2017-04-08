@@ -103,7 +103,10 @@ public class PlayerProgress {
         if (compound.hasKey("research")) {
             int[] research = compound.getIntArray("research");
             for (int resOrdinal : research) {
-                researchProgression.add(ResearchProgression.getById(resOrdinal));
+                ResearchProgression prog = ResearchProgression.getById(resOrdinal);
+                if (prog != null) {
+                    researchProgression.add(prog);
+                }
             }
         }
 

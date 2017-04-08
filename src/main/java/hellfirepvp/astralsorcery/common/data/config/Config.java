@@ -43,7 +43,6 @@ public class Config {
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
-    @Sync public static boolean craftingLiqResoGem = true;
     @Sync public static boolean craftingLiqCrystalGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
 
@@ -59,18 +58,20 @@ public class Config {
     public static boolean flareKillsBats = true;
 
     public static boolean shouldChargedToolsRevert = true;
+    public static int revertStart = 40;
+    public static int revertChance = 80;
 
     @Sync public static double swordSharpMultiplier = 0.1;
 
-    @Sync public static double illuminationWandUseCost = 0.2;
-    @Sync public static double architectWandUseCost = 0.03;
-    @Sync public static double builderWandUseCost = 0.014;
-    @Sync public static double exchangeWandUseCost = 0.04;
+    @Sync public static float illuminationWandUseCost = 0.5F;
+    @Sync public static float architectWandUseCost = 0.03F;
+    @Sync public static float exchangeWandUseCost = 0.002F;
 
     @Sync public static int dimensionIdSkyRift = -81;
 
     public static Integer[] constellationSkyDimWhitelist = new Integer[0];
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
+    public static List<String> modidOreGenBlacklist = Lists.newArrayList();
     public static boolean performNetworkIntegrityCheck = false;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
@@ -113,17 +114,20 @@ public class Config {
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can addAmount it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
+        String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "gregtech" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
+        modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
-        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.2F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the illumination wand");
-        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the architect wand");
-        builderWandUseCost = latestConfig.getFloat("wandCost_builder", "tools", 0.014F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the builder wand");
-        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.04F, 0.0F, 100.0F, "Sets the alignment charge cost for one usage of the exchange wand");
-        shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", true, "If this is set to true, charged crystals tools can revert back to their inert state.");
+        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.5F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the illumination wand");
+        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the architect wand");
+        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the exchange wand");
 
-        craftingLiqResoGem = latestConfig.getBoolean("liquidStarlightResoGem", "crafting", true, "Set this to false to disable Aquamarine -> Resonant Gem in liquid starlight.");
+        shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", true, "If this is set to true, charged crystals tools can revert back to their inert state.");
+        revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", 40, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");
+        revertChance = latestConfig.getInt("chargedCrystalToolsRevertChance", "tools", 80, 1, Integer.MAX_VALUE, "After 'chargedCrystalToolsRevertStart' uses, it will random.nextInt(chance) == 0 try and see if the tool gets reverted to its inert crystal tool.");
+
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
 

@@ -15,6 +15,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
@@ -40,12 +41,12 @@ public class SwordSharpenHelper {
     public static List<String> blacklistedSharpenableSwordClassNames = new LinkedList<>();
 
     public static boolean isSwordSharpened(ItemStack stack) {
-        if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemSword)) return false;
+        if(!isSharpenableItem(stack)) return false;
         return NBTHelper.getData(stack).getBoolean("sharp");
     }
 
     public static void setSwordSharpened(ItemStack stack) {
-        if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemSword)) return;
+        if(!isSharpenableItem(stack)) return;
         NBTHelper.getData(stack).setBoolean("sharp", true);
     }
 
@@ -54,7 +55,7 @@ public class SwordSharpenHelper {
         Item i = stack.getItem();
         if(blacklistedSharpenableSwordClassNames.contains(i.getClass().getName())) return false;
 
-        if(stack.getItem() instanceof ItemSword) return true;
+        if(stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe) return true;
         Class<?> itemClass = stack.getItem().getClass();
         for (Class<?> clazz : otherSharpenableSwordSuperClasses) {
             if(clazz.isAssignableFrom(itemClass)) {
@@ -62,6 +63,10 @@ public class SwordSharpenHelper {
             }
         }
         return false;
+    }
+
+    public static boolean isSharpenableItem(ItemStack stack) {
+        return stack != null && stack.getItem() != null && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe);
     }
 
     public static void applySharpenModifier(ItemStack stack, EntityEquipmentSlot slot, Multimap<String, AttributeModifier> map) {

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class RecipeHelper {
         return new ShapedHandleOreRecipe(stack, recipeComponents);
     }
 
-    public static class ShapelessHandleOreRecipe implements IRecipe {
+    public static class ShapelessHandleOreRecipe extends ShapelessOreRecipe {
         protected ItemStack output = null;
         protected ArrayList<Object> input = new ArrayList<>();
 
@@ -56,6 +58,7 @@ public class RecipeHelper {
         }
 
         public ShapelessHandleOreRecipe(ItemStack result, Object... recipe) {
+            super(result.copy());
             output = result.copy();
             for (Object in : recipe) {
                 if (in instanceof ItemStack) {
@@ -83,6 +86,7 @@ public class RecipeHelper {
         }
 
         ShapelessHandleOreRecipe(ShapelessRecipes recipe, Map<ItemStack, String> replacements) {
+            super(recipe.getRecipeOutput());
             output = recipe.getRecipeOutput();
 
             for (ItemStack ingredient : recipe.recipeItems) {
@@ -180,7 +184,7 @@ public class RecipeHelper {
         }
     }
 
-    public static class ShapedHandleOreRecipe implements IRecipe {
+    public static class ShapedHandleOreRecipe extends ShapedOreRecipe {
 
         public static final int MAX_CRAFT_GRID_WIDTH = 3;
         public static final int MAX_CRAFT_GRID_HEIGHT = 3;
@@ -200,6 +204,7 @@ public class RecipeHelper {
         }
 
         public ShapedHandleOreRecipe(ItemStack result, Object... recipe) {
+            super(result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
             output = result.copy();
 
             String shape = "";
@@ -278,6 +283,7 @@ public class RecipeHelper {
         }
 
         ShapedHandleOreRecipe(ShapedRecipes recipe, Map<ItemStack, String> replacements) {
+            super(recipe.getRecipeOutput());
             output = recipe.getRecipeOutput();
             width = recipe.recipeWidth;
             height = recipe.recipeHeight;
@@ -399,8 +405,7 @@ public class RecipeHelper {
         }
 
         @Override
-        public ItemStack[] getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
-        {
+        public ItemStack[] getRemainingItems(InventoryCrafting inv) {
             return ForgeHooks.defaultRecipeGetRemainingItems(inv);
         }
 

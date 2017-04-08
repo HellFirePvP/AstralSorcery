@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.struct;
 
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +28,25 @@ import java.util.List;
  * Date: 07.02.2017 / 01:09
  */
 public class BlockDiscoverer {
+
+    public static BlockArray searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockStateCheck match) {
+        BlockArray out = new BlockArray();
+
+        BlockPos.PooledMutableBlockPos offset = BlockPos.PooledMutableBlockPos.retain();
+        for (int xx = -cubeSize; xx <= cubeSize; xx++) {
+            for (int zz = -cubeSize; zz <= cubeSize; zz++) {
+                for (int yy = -cubeSize; yy <= cubeSize; yy++) {
+                    offset.setPos(origin.getX() + xx, origin.getY() + yy, origin.getZ() + zz);
+                    IBlockState atState = world.getBlockState(offset);
+                    if(match.isStateValid(world, offset, atState)) {
+                        out.addBlock(new BlockPos(offset), atState);
+                    }
+                }
+            }
+        }
+        offset.release();
+        return out;
+    }
 
     public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
         IBlockState toMatch = world.getBlockState(origin);

@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemStarmap
+ * Class: ItemStarLens
  * Created by HellFirePvP
  * Date: 16.03.2017 / 16:55
  */
-public class ItemStarmap extends Item {
+public class ItemStarLens extends Item {
 
-    public ItemStarmap() {
+    public ItemStarLens() {
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

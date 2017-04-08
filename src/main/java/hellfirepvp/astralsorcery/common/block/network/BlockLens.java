@@ -79,7 +79,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
+        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.MAX_SIZE_CELESTIAL);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         ItemStack stack = super.getPickBlock(getActualState(state, world, pos), target, world, pos, player);
         TileCrystalLens lens = MiscUtils.getTileAt(world, pos, TileCrystalLens.class, true);
-        if(lens != null) {
+        if(lens != null && lens.getCrystalProperties() != null) {
             CrystalProperties.applyCrystalProperties(stack, lens.getCrystalProperties());
         } else {
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());

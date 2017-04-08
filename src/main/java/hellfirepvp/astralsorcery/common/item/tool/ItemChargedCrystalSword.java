@@ -40,7 +40,7 @@ public class ItemChargedCrystalSword extends ItemCrystalSword implements Charged
                 if(player.swingProgressInt == swingEndTick) {
                     worldIn.spawnEntityInWorld(new EntityStarburst(worldIn, player));
                     if(!ChargedCrystalToolBase.tryRevertMainHand(player, stack)) {
-                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 70);
+                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 150);
                     }
                 }
             }

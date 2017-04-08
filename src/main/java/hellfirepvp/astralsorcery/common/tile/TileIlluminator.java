@@ -44,7 +44,7 @@ public class TileIlluminator extends TileSkybound {
     private static final Random rand = new Random();
     public static final LightCheck illuminatorCheck = new LightCheck();
 
-    public static final int SEARCH_RADIUS = 48;
+    public static final int SEARCH_RADIUS = 64;
     public static final int STEP_WIDTH = 4;
 
     private LinkedList<BlockPos>[] validPositions = null;

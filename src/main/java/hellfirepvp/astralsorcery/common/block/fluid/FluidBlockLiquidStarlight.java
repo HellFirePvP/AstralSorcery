@@ -105,11 +105,11 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
             }
         }
 
-        if (shouldCreateBlock) {
+        if (shouldCreateBlock && world.rand.nextInt(4) == 0) {
             if (isCold) {
                 world.setBlockState(pos, Blocks.ICE.getDefaultState());
             } else {
-                if(world.rand.nextInt(600) == 0) {
+                if(world.rand.nextInt(900) == 0) {
                     world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState().withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));
                 } else {
                     world.setBlockState(pos, Blocks.SAND.getDefaultState());

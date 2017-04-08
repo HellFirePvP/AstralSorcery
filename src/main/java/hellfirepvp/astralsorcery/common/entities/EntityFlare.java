@@ -17,6 +17,8 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
@@ -35,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -49,7 +52,7 @@ public class EntityFlare extends EntityFlying {
 
     public Object texSprite = null;
     private BlockPos moveTarget = null;
-    private boolean isAmbient = true;
+    private boolean isAmbient = false;
 
     public EntityFlare(World worldIn) {
         super(worldIn);
@@ -58,8 +61,8 @@ public class EntityFlare extends EntityFlying {
 
     public EntityFlare(World worldIn, double x, double y, double z) {
         super(worldIn);
-        this.setPosition(x, y, z);
         setSize(0.7F, 0.7F);
+        this.setPositionAndRotation(x, y, z, 0, 0);
     }
 
     public EntityFlare setAmbient(boolean ambient) {
@@ -112,20 +115,45 @@ public class EntityFlare extends EntityFlying {
                     Entity closest = world.findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().expandXyz(10), this);
                     if(closest != null && closest instanceof EntityBat && ((EntityBat) closest).getHealth() > 0 && !closest.isDead) {
                         closest.attackEntityFrom(CommonProxy.dmgSourceStellar, 40F);
-                        AstralSorcery.proxy.fireLightning(world, new Vector3(this).addY(this.height / 2), new Vector3(closest).addY(closest.height / 2), new Color(0, 0, 216));
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
+                        AstralSorcery.proxy.fireLightning(world, new Vector3(this), new Vector3(closest), new Color(0, 0, 216));
                     }
                 }
 
-                if((moveTarget == null || getDistanceSq(moveTarget) < 5D) && rand.nextInt(260) == 0) {
-                    moveTarget = getPosition().add(-strollRange / 2, -strollRange / 2, -strollRange / 2).add(rand.nextInt(strollRange), rand.nextInt(strollRange), rand.nextInt(strollRange));
+                if(isAmbient) {
+                    if((moveTarget == null || getDistanceSq(moveTarget) < 5D) && rand.nextInt(260) == 0) {
+                        moveTarget = getPosition().add(-strollRange / 2, -strollRange / 2, -strollRange / 2).add(rand.nextInt(strollRange), rand.nextInt(strollRange), rand.nextInt(strollRange));
+                    }
+
+                    if(moveTarget != null && (moveTarget.getY() <= 1 || !world.isAirBlock(moveTarget) || getDistanceSq(moveTarget) < 5D)) {
+                        moveTarget = null;
+                    }
+                } else if(getAttackTarget() != null) {
+                    if(getAttackTarget().isDead) {
+                        if(rand.nextInt(30) == 0) {
+                            damageEntity(DamageSource.magic, 20F);
+                        }
+                    } else {
+                        moveTarget = new Vector3(getAttackTarget()).toBlockPos();
+                    }
+
+                    if(moveTarget != null && (moveTarget.getY() <= 1 || getDistanceSq(moveTarget) < 3D)) {
+                        moveTarget = null;
+                    }
                 }
-                if(moveTarget != null && (moveTarget.getY() <= 1 || !world.isAirBlock(moveTarget) || getDistanceSq(moveTarget) < 5D)) {
-                    moveTarget = null;
+
+                if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistanceToEntity(this) < 10 && rand.nextInt(40) == 0) {
+                    getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 4F);
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
+                    AstralSorcery.proxy.fireLightning(world, new Vector3(this), new Vector3(getAttackTarget()), new Color(0, 0, 216));
                 }
+
                 if(moveTarget != null) {
-                    this.motionX += (Math.signum(moveTarget.getX() + 0.5D - this.posX) * 0.5D - this.motionX) * 0.01D;
-                    this.motionY += (Math.signum(moveTarget.getY() + 0.5D - this.posY) * 0.7D - this.motionY) * 0.01D;
-                    this.motionZ += (Math.signum(moveTarget.getZ() + 0.5D - this.posZ) * 0.5D - this.motionZ) * 0.01D;
+                    this.motionX += (Math.signum(moveTarget.getX() + 0.5D - this.posX) * 0.5D - this.motionX) * (isAmbient ? 0.01D : 0.02D);
+                    this.motionY += (Math.signum(moveTarget.getY() + 0.5D - this.posY) * 0.7D - this.motionY) * (isAmbient ? 0.01D : 0.02D);
+                    this.motionZ += (Math.signum(moveTarget.getZ() + 0.5D - this.posZ) * 0.5D - this.motionZ) * (isAmbient ? 0.01D : 0.02D);
                     this.moveForward = 0.2F;
                 }
             }
@@ -140,11 +168,6 @@ public class EntityFlare extends EntityFlying {
     @Override
     public boolean getCanSpawnHere() {
         return false;
-    }
-
-    @Override
-    public AxisAlignedBB getEntityBoundingBox() {
-        return new AxisAlignedBB(0, 0, 0, 1, 1,1);
     }
 
     @Override
@@ -206,7 +229,9 @@ public class EntityFlare extends EntityFlying {
     @SideOnly(Side.CLIENT)
     private void deathEffectsEnd() {
         EntityFXFacingSprite p = (EntityFXFacingSprite) texSprite;
-        p.requestRemoval();
+        if(p != null) {
+            p.requestRemoval();
+        }
         for (int i = 0; i < 29; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(posX, posY + this.height / 2, posZ);
             particle.motion(-0.1 + rand.nextFloat() * 0.2, -0.1 + rand.nextFloat() * 0.2, -0.1 + rand.nextFloat() * 0.2);
@@ -215,7 +240,7 @@ public class EntityFlare extends EntityFlying {
                 particle.setColor(Color.WHITE);
             }
         }
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 35; i++) {
             EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
             particle.offset(-0.2 + rand.nextFloat() * 0.4, (this.height / 2) - 0.2 + rand.nextFloat() * 0.4, -0.2 + rand.nextFloat() * 0.4);
             particle.scale(0.1F + rand.nextFloat() * 0.2F).gravity(0.004);
@@ -249,6 +274,20 @@ public class EntityFlare extends EntityFlying {
         p.setRefreshFunc(() -> !isDead);
         EffectHandler.getInstance().registerFX(p);
         this.texSprite = p;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playParticles(PktParticleEvent pktParticleEvent) {
+        Random rand = new Random();
+        Vector3 at = pktParticleEvent.getVec();
+        for (int i = 0; i < 17; i++) {
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
+            particle.motion(-0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1, -0.05 + rand.nextFloat() * 0.1);
+            particle.scale(0.1F + rand.nextFloat() * 0.2F).gravity(-0.02);
+            if(rand.nextBoolean()) {
+                particle.setColor(Color.WHITE);
+            }
+        }
     }
 
 }

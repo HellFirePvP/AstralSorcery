@@ -17,15 +17,14 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -242,20 +241,39 @@ public class GuiProgressionClusterRenderer {
                 RenderHelper.disableStandardItemLighting();
                 GL11.glPopAttrib();
                 break;
-            /*case TEXTURE:
-                GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
-                node.getTexture().bind();
+            case TEXTURE:
+                GlStateManager.disableAlpha();
+                GlStateManager.color(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
+                BindableResource tex = node.getTexture().resolve();
+                tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
                 vb.pos(0,            zoomedWH - 1, zLevel).tex(0, 1).endVertex();
                 vb.pos(zoomedWH - 1, zoomedWH - 1, zLevel).tex(1, 1).endVertex();
                 vb.pos(zoomedWH - 1, 0,            zLevel).tex(1, 0).endVertex();
                 vb.pos(0,            0,            zLevel).tex(0, 0).endVertex();
                 t.draw();
-                GL11.glColor4f(1F, 1F, 1F, 1F);
+                GlStateManager.color(1F, 1F, 1F, 1F);
                 TextureHelper.refreshTextureBindState();
+                GlStateManager.enableAlpha();
                 break;
             case TEXTURE_SPRITE:
-                break;*/
+                GlStateManager.disableAlpha();
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
+
+                GlStateManager.color(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
+                SpriteSheetResource res = node.getSpriteTexture().resolveSprite();
+                res.getResource().bind();
+                Tuple<Double, Double> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());
+                vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+                vb.pos(0,     zoomedWH, zLevel).tex(uvTexture.key, uvTexture.value + res.getVLength()).endVertex();
+                vb.pos(zoomedWH, zoomedWH, zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value + res.getVLength()).endVertex();
+                vb.pos(zoomedWH, 0,     zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value).endVertex();
+                vb.pos(0,     0,     zLevel).tex(uvTexture.key, uvTexture.value).endVertex();
+                t.draw();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                TextureHelper.refreshTextureBindState();
+                GlStateManager.enableAlpha();
+                break;
         }
         GL11.glPopMatrix();
     }

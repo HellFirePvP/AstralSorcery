@@ -46,15 +46,15 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     @Override
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
-        int rX = (chX  * 16) + rand.nextInt(16);
-        int rZ = (chZ  * 16) + rand.nextInt(16);
+        int rX = (chX  * 16) + rand.nextInt(16) + 8;
+        int rZ = (chZ  * 16) + rand.nextInt(16) + 8;
         int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ)).getY();
         return new BlockPos(rX, rY, rZ);
     }
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= 2 && isDesertBiome(world, pos);
+        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= 4 && isDesertBiome(world, pos);
     }
 
     private boolean isDesertBiome(World world, BlockPos pos) {

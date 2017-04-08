@@ -85,6 +85,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(customOre);
         customSandOre = registerBlock(new BlockCustomSandOre());
         queueCustomNameItemBlock(customSandOre);
+        customFlower = registerBlock(new BlockCustomFlower());
+        queueCustomNameItemBlock(customFlower);
         blockMarble = registerBlock(new BlockMarble());
         queueCustomNameItemBlock(blockMarble);
         blockBlackMarble = registerBlock(new BlockBlackMarble());
@@ -146,6 +148,7 @@ public class RegistryBlocks {
         registerBlockRender(blockAltar);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
+        registerBlockRender(customFlower);
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
     }
@@ -167,7 +170,8 @@ public class RegistryBlocks {
         registerTile(TileTreeBeacon.class);
         registerTile(TileRitualLink.class);
         registerTile(TileTranslucent.class);
-        registerTile(TileMapDrawingTable.class);
+        registerTile(TileAttunementRelay.class);
+        //registerTile(TileMapDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
 
         registerTile(TileCrystalLens.class);

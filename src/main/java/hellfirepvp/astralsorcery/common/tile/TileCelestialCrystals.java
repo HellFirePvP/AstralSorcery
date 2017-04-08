@@ -44,7 +44,9 @@ public class TileCelestialCrystals extends TileSkybound {
     private static final Random rand = new Random();
 
     public int getGrowth() {
-        return world.getBlockState(getPos()).getValue(BlockCelestialCrystals.STAGE);
+        IBlockState state = world.getBlockState(getPos());
+        if(!(state.getBlock() instanceof BlockCelestialCrystals)) return 0;
+        return state.getValue(BlockCelestialCrystals.STAGE);
     }
 
     @Override

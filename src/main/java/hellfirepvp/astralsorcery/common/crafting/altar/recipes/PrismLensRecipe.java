@@ -59,6 +59,9 @@ public class PrismLensRecipe extends ConstellationRecipe {
         setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
+        setCstItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationAtlarSlot.UP_UP_RIGHT);
         setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
                 ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT);

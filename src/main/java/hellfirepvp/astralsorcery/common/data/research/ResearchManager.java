@@ -426,7 +426,7 @@ public class ResearchManager {
 
     @SideOnly(Side.CLIENT)
     private static void showBar() {
-        ClientRenderEventHandler.requestChargeReveal(200);
+        ClientRenderEventHandler.requestPermChargeReveal(160);
     }
 
     public static void informCraftingGridCompletion(EntityPlayer player, ItemStack out) {

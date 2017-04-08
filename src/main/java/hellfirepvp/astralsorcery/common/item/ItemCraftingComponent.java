@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
-import hellfirepvp.astralsorcery.common.entities.EntityAquamarine;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
@@ -52,7 +51,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     public boolean hasCustomEntity(ItemStack stack) {
         MetaType type = MetaType.fromMeta(stack.getItemDamage());
         switch (type) {
-            case AQUAMARINE:
             case STARDUST:
                 return true;
         }
@@ -70,13 +68,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
                 stardust.motionY = location.motionY;
                 stardust.motionZ = location.motionZ;
                 return stardust;
-            case AQUAMARINE:
-                EntityAquamarine aquamarine = new EntityAquamarine(world, location.posX, location.posY, location.posZ, itemstack);
-                aquamarine.setDefaultPickupDelay();
-                aquamarine.motionX = location.motionX;
-                aquamarine.motionY = location.motionY;
-                aquamarine.motionZ = location.motionZ;
-                return aquamarine;
         }
         return null;
     }

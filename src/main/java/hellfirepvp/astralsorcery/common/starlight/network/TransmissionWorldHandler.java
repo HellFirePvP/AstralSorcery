@@ -100,7 +100,7 @@ public class TransmissionWorldHandler {
                     }
                 }
 
-                if(starlight > 1D) {
+                if(starlight > 0.1D) {
                     for (IPrismTransmissionNode node : chain.getTransmissionUpdateList()) {
                         node.onTransmissionTick(world);
                     }

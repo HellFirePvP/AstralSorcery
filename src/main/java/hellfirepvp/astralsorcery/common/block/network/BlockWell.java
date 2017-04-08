@@ -22,6 +22,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -104,7 +105,7 @@ public class BlockWell extends BlockStarlightNetwork {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
 
-            if(heldItem != null && heldItem.getItem() != null) {
+            if(heldItem != null && heldItem.getItem() != null && playerIn instanceof EntityPlayerMP) {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
                 if(tw == null) return false;
 
@@ -120,7 +121,7 @@ public class BlockWell extends BlockStarlightNetwork {
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
                     worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
-                    if(entry.producing instanceof FluidLiquidStarlight) {
+                    if(!MiscUtils.isPlayerFakeMP((EntityPlayerMP) playerIn) && entry.producing instanceof FluidLiquidStarlight) {
                         //Lets assume it starts collecting right away...
                         playerIn.addStat(RegistryAchievements.achvLiqStarlight);
                     }

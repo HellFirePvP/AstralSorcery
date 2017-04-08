@@ -96,29 +96,24 @@ public class GuiHandTelescope extends GuiWHScreen {
         int width = guiWidth - 6, height = guiHeight - 6;
         random.setSeed(seed);
 
-        for (int i = 0; i < randomStars; i++) {
-            usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
+        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() % 24000);
+        for (int i = 0; i < day; i++) {
+            random.nextLong(); //Flush
         }
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         if (handle != null) {
-            LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
-            Iterator<IConstellation> iterator = active.iterator();
-            while (iterator.hasNext()) {
-                IConstellation c = iterator.next();
-                if (!(c instanceof IMajorConstellation)) {
-                    iterator.remove();
-                }
+            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(random, (c) -> c instanceof IMajorConstellation);
+            if (bestGuess != null && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
+                    bestGuess.canDiscover(ResearchManager.clientProgress)) {
+                topFound = bestGuess;
+                selectedYaw = (random.nextFloat() * 360F) - 180F;
+                selectedPitch = -90F + random.nextFloat() * 25F;
             }
-            if (!active.isEmpty()) {
-                IMajorConstellation bestGuess = (IMajorConstellation) active.getFirst();
-                if (handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
-                        bestGuess.canDiscover(ResearchManager.clientProgress)) {
-                    topFound = bestGuess;
-                    selectedYaw = (random.nextFloat() * 360F) - 180F;
-                    selectedPitch = -90F + random.nextFloat() * 25F;
-                }
-            }
+        }
+
+        for (int i = 0; i < randomStars; i++) {
+            usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
         }
     }
 
@@ -269,27 +264,28 @@ public class GuiHandTelescope extends GuiWHScreen {
     private void drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
-        Random r = new Random(Minecraft.getMinecraft().world.getSeed() * 31 + lastTracked * 31);
+        Optional<Long> seed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
+        long s = 0;
+        if(seed.isPresent()) {
+            s = seed.get();
+        }
+        Random r = new Random(s * 31 + lastTracked * 31);
 
         drawnConstellation = null;
         drawnStars = null;
 
-        if (handle != null) {
-            LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
-            Iterator<IConstellation> iterator = active.iterator();
-            while (iterator.hasNext()) {
-                IConstellation c = iterator.next();
-                if (!(c instanceof IMajorConstellation)) {
-                    iterator.remove();
-                }
+        if (handle != null && seed.isPresent()) {
+            random.setSeed(seed.get());
+            int day = (int) (Minecraft.getMinecraft().world.getWorldTime() % 24000);
+            for (int i = 0; i < day; i++) {
+                random.nextLong(); //Flush
             }
-            if (!active.isEmpty()) {
-                IMajorConstellation bestGuess = (IMajorConstellation) active.getFirst();
-                if ((topFound == null || !topFound.equals(bestGuess)) && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
-                    topFound = bestGuess;
-                    selectedYaw = (random.nextFloat() * 360F) - 180F;
-                    selectedPitch = -90F + random.nextFloat() * 45F;
-                }
+
+            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(random, (c) -> c instanceof IMajorConstellation);
+            if ((topFound == null || !topFound.equals(bestGuess)) && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
+                topFound = bestGuess;
+                selectedYaw = (random.nextFloat() * 360F) - 180F;
+                selectedPitch = -90F + random.nextFloat() * 45F;
             }
         }
 

@@ -144,7 +144,7 @@ public class ClientCameraManager implements ITickHandler {
             this.thirdPersonView = Minecraft.getMinecraft().gameSettings.thirdPersonView;
             EntityPlayer player = Minecraft.getMinecraft().player;
             this.flying = player.capabilities.isFlying;
-            this.startPosition = new Vector3(player);
+            this.startPosition = new Vector3(player.posX, player.posY, player.posZ);
             this.startYaw = player.rotationYaw;
             this.startPitch = player.rotationPitch;
             player.setVelocity(0, 0, 0);
@@ -285,19 +285,13 @@ public class ClientCameraManager implements ITickHandler {
         }
 
         public void transformToFocusOnPoint(Vector3 toFocus, float pTicks, boolean propagate) {
-            Vector3 angles = new Vector3(this).subtract(toFocus).copyToPolar();
+            Vector3 angles = new Vector3(posX, posY, posZ).subtract(toFocus).copyToPolar();
             Vector3 prevAngles = new Vector3(prevPosX, prevPosY, prevPosZ).subtract(toFocus).copyToPolar();
             double pitch = 90 - angles.getY();
             double pitchPrev = 90 - prevAngles.getY();
             double yaw = -angles.getZ();
             double yawPrev = -prevAngles.getZ();
 
-            this.rotationYawHead =     (float) yaw;
-            this.rotationYaw =         (float) yaw;
-            this.prevRotationYaw =     (float) yawPrev;
-            this.prevRotationYawHead = (float) yawPrev;
-            this.rotationPitch =       (float) pitch;
-            this.prevRotationPitch =   (float) pitchPrev;
             if(propagate) {
                 RenderingUtils.unsafe_preRenderHackCamera(this, posX, posY, posZ, prevPosX, prevPosY, prevPosZ, yaw, yawPrev, pitch, pitchPrev);
             }

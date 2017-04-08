@@ -8,10 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
@@ -91,26 +95,41 @@ public class OreTypes {
 
     @Nullable
     public static ItemStack getRandomOre(Random random) {
-        String key = null;
-        double randWeight = random.nextFloat() * totalWeight;
-        for (Map.Entry<String, Double> entry : oreDictWeights.entrySet()) {
-            randWeight -= entry.getValue();
-            if(randWeight <= 0) {
-                key = entry.getKey();
-                break;
+        ItemStack result = null;
+        int runs = 0;
+        while (result == null && runs < 150) {
+
+            String key = null;
+            double randWeight = random.nextFloat() * totalWeight;
+            for (Map.Entry<String, Double> entry : oreDictWeights.entrySet()) {
+                randWeight -= entry.getValue();
+                if(randWeight <= 0) {
+                    key = entry.getKey();
+                    break;
+                }
             }
-        }
-        if(key == null) return null;
-        List<ItemStack> ores = OreDictionary.getOres(key);
-        for (ItemStack stack : ores) {
-            if(Block.getBlockFromItem(stack.getItem()) == null) continue;
-            String className = stack.getItem().getClass().getName();
-            if(!className.toLowerCase().contains("greg")) {
-                if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) stack.setItemDamage(0);
-                return stack;
+            if(key == null) {
+                runs++;
+                continue;
             }
+            List<ItemStack> ores = OreDictionary.getOres(key);
+
+            for (ItemStack stack : ores) {
+                if(stack == null || stack.getItem() == null || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
+                Item i = stack.getItem();
+                String regModid = i.getRegistryName().getResourceDomain();
+                if(Config.modidOreGenBlacklist.contains(regModid)) continue;
+
+                String className = i.getClass().getName();
+                if(!className.toLowerCase().contains("greg")) {
+                    if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) stack.setItemDamage(0);
+                    result = stack;
+                }
+            }
+            runs++;
         }
-        return getRandomOre(random);
+
+        return result;
     }
 
 }

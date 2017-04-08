@@ -49,7 +49,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
                     }
                 }
                 if(!ChargedCrystalToolBase.tryRevertMainHand(player, itemstack)) {
-                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalAxe, 70);
+                    player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalAxe, 150);
                 }
                 return true;
             }

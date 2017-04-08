@@ -189,9 +189,10 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         Deque<BlockPos> placeable = filterBlocksToPlace(playerIn, world, architectRange);
         if(!placeable.isEmpty()) {
             for (BlockPos placePos : placeable) {
-                if(hasAtLeastCharge(playerIn, Side.SERVER, Config.architectWandUseCost)
+                if(drainTempCharge(playerIn, Config.architectWandUseCost, true)
                         && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
-                    drainCharge(playerIn, Config.architectWandUseCost);
+                    drainTempCharge(playerIn, Config.architectWandUseCost, false);
+                    gainPermCharge(playerIn, Config.architectWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }

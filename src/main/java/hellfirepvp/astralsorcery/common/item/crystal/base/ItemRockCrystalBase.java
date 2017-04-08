@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
+import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
@@ -94,7 +96,8 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
 
     @SideOnly(Side.CLIENT)
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip);
+        boolean isCelestial = this instanceof ItemCelestialCrystal || this instanceof ItemTunedCelestialCrystal;
+        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, isCelestial ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);
     }
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();

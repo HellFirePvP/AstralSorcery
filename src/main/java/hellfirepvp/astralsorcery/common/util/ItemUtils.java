@@ -119,6 +119,10 @@ public class ItemUtils {
         return consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), toConsume, simulate);
     }
 
+    public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
+        return handler instanceof IItemHandlerModifiable && consumeFromInventory((IItemHandlerModifiable) handler, toConsume, simulate);
+    }
+
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
         Map<Integer, ItemStack> contents = findItemsInInventory(handler, toConsume, false);
         if(contents.isEmpty()) return false;

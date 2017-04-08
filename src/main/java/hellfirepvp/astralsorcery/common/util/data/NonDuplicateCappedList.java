@@ -48,7 +48,7 @@ public class NonDuplicateCappedList<T> implements Iterable<T> {
     @Nullable
     public T getRandomElementByChance(Random rand, float rngMultiplier) {
         if(elements.isEmpty()) return null;
-        if(Math.max(0, rand.nextInt((cap - elements.size()) / 4 + 1) * rngMultiplier) <= 1E-4) {
+        if(Math.max(0, rand.nextInt( ((int)((cap - elements.size()) * rngMultiplier)) / 2 + 1)) == 0) {
             return getRandomElement();
         }
         return null;

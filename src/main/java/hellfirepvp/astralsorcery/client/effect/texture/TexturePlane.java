@@ -205,7 +205,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         if(dst > Config.maxEffectRenderDistanceSq) return;
 
         float alphaMul = alphaFunction.getAlpha(counter, maxAge);
-        float alphaGrad = colorOverlay.getAlpha() * alphaMul * this.alphaMultiplier;
+        float alphaGrad = (colorOverlay.getAlpha() / 255F) * alphaMul * this.alphaMultiplier;
         if(alphaGradient) {
             alphaGrad = getAlphaDistanceMultiplier(dst) * alphaMul * this.alphaMultiplier;
         }

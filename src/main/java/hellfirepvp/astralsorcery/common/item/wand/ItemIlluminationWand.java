@@ -56,24 +56,26 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                     pos = pos.offset(facing);
                 }
                 if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, null, stack) &&
-                        hasAtLeastCharge(playerIn, Side.SERVER, Config.illuminationWandUseCost)) {
+                        drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
                     if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                         worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                        drainCharge(playerIn, Config.illuminationWandUseCost);
+                        drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                        gainPermCharge(playerIn, Config.illuminationWandUseCost / 4);
                     }
                 }
             } else {
                 if(at.isNormalCube()) {
                     TileEntity te = worldIn.getTileEntity(pos);
-                    if(te == null && !at.getBlock().hasTileEntity(at) && hasAtLeastCharge(playerIn, Side.SERVER, Config.illuminationWandUseCost)) {
+                    if(te == null && !at.getBlock().hasTileEntity(at) && drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
                         worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3);
                         TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
                         if(tt == null) {
                             worldIn.setBlockState(pos, at, 3);
                         } else {
                             tt.setFakedState(at);
-                            drainCharge(playerIn, Config.illuminationWandUseCost);
+                            drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                            gainPermCharge(playerIn, Config.illuminationWandUseCost);
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

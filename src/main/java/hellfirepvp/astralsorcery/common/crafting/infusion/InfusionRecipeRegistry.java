@@ -124,6 +124,11 @@ public class InfusionRecipeRegistry {
                 return rec;
             }
         }
+        for (AbstractInfusionRecipe rec : mtRecipes) {
+            if(rec.matches(ti)) {
+                return rec;
+            }
+        }
         return null;
     }
 

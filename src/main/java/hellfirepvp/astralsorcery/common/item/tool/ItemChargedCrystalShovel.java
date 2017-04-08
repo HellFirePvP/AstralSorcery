@@ -43,7 +43,7 @@ public class ItemChargedCrystalShovel extends ItemCrystalShovel implements Charg
                         }
                     }
                     if(!ChargedCrystalToolBase.tryRevertMainHand(player, itemstack)) {
-                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalShovel, 70);
+                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalShovel, 150);
                     }
                     return true;
                 }

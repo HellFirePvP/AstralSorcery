@@ -99,12 +99,9 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
         }
         if(handle != null) {
             List<IConstellation> constellations = handle.getActiveConstellations();
-            for (IConstellation c : constellations) {
-
-            }
             List<IWeakConstellation> weakConstellations = new LinkedList<>();
             for (IConstellation c : constellations) {
-                if(c instanceof IWeakConstellation) {
+                if(c instanceof IWeakConstellation && c.canDiscover(ResearchManager.clientProgress)) {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
@@ -213,17 +210,21 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
         World world = Minecraft.getMinecraft().world;
         boolean canSeeSky = canTelescopeSeeSky(world);
 
-        IConstellation[] constellations = new IConstellation[8];
-        if(handle != null) {
+        /*if(handle != null) {
             LinkedList<IConstellation> active = handle.getSortedActiveConstellations();
+            PlayerProgress prog = ResearchManager.clientProgress;
             Iterator<IConstellation> iterator = active.iterator();
             while (iterator.hasNext()) {
                 IConstellation c = iterator.next();
-                if(!(c instanceof IMajorConstellation)) {
+                if(!(c instanceof IWeakConstellation)) {
                     iterator.remove();
-                    continue; //Telescope ignores non-major constellations
+                    continue;
                 }
-                if(handle.getCurrentDistribution((IMajorConstellation) c, (f) -> f) <= 0.5F) {
+                if(!c.canDiscover(prog)) {
+                    iterator.remove();
+                    continue;
+                }
+                if(handle.getCurrentDistribution((IWeakConstellation) c, (f) -> f) <= 0.5F) {
                     iterator.remove();
                 }
             }
@@ -232,7 +233,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
             } else {
                 active.subList(0, 8).toArray(constellations);
             }
-        }
+        }*/
 
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();

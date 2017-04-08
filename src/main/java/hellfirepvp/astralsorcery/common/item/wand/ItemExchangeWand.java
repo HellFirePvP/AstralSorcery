@@ -242,10 +242,11 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if (found.isEmpty()) return EnumActionResult.SUCCESS;
 
         for (BlockPos placePos : found.getPattern().keySet()) {
-            if(hasAtLeastCharge(playerIn, Side.SERVER, Config.exchangeWandUseCost)
+            if(drainTempCharge(playerIn, Config.exchangeWandUseCost, true)
                     && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
-                    drainCharge(playerIn, Config.exchangeWandUseCost);
+                    drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
+                    gainPermCharge(playerIn, Config.exchangeWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }

@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "flower=glow_flower": { "model":"astralsorcery:BlockCustomFlower_glow_flower" }
+    }
+}

@@ -37,18 +37,24 @@ import java.util.Random;
  */
 public class AttunementAltarRecipe extends AttunementRecipe implements INighttimeRecipe {
 
-    private static Vector3[] offsetPillars = new Vector3[] {
-        new Vector3( 3, 2,  3),
-        new Vector3(-3, 2,  3),
-        new Vector3( 3, 2, -3),
-        new Vector3(-3, 2, -3)
+    private static Vector3[] offsetPillarsT2 = new Vector3[] {
+            new Vector3( 3, 2,  3),
+            new Vector3(-3, 2,  3),
+            new Vector3( 3, 2, -3),
+            new Vector3(-3, 2, -3)
+    };
+    private static Vector3[] offsetPillarsT3 = new Vector3[] {
+            new Vector3( 4, 3,  4),
+            new Vector3(-4, 3,  4),
+            new Vector3( 4, 3, -4),
+            new Vector3(-4, 3, -4)
     };
 
     public AttunementAltarRecipe() {
         super(new ShapedRecipe(BlocksAS.attunementAltar)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(BlocksAS.attunementRelay,
@@ -75,9 +81,23 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
         p.scale(0.7F).gravity(0.02);
         if(tick % 50 == 0) {
             Vector3 vec = new Vector3(altar).add(0.5, 0.5, 0.5);
-            for (Vector3 offset : offsetPillars) {
-                EffectHandler.getInstance().lightbeam(offset.clone().add(altar.getPos()).add(0.5, 0.5, 0.5), vec, 1.2F);
-                        //.setColorOverlay(127F / 255F, 127F / 255F, 1F, 1F);
+            switch (altar.getAltarLevel()) {
+                case DISCOVERY:
+                    break;
+                case ATTUNEMENT:
+                    for (Vector3 offset : offsetPillarsT2) {
+                        EffectHandler.getInstance().lightbeam(offset.clone().add(altar.getPos()).add(0.5, 0.5, 0.5), vec, 1.2F);
+                    }
+                    break;
+                case CONSTELLATION_CRAFT:
+                    for (Vector3 offset : offsetPillarsT3) {
+                        EffectHandler.getInstance().lightbeam(offset.clone().add(altar.getPos()).add(0.5, 0.5, 0.5), vec, 1.2F);
+                    }
+                    break;
+                case TRAIT_CRAFT:
+                    break;
+                case ENDGAME:
+                    break;
             }
         }
 

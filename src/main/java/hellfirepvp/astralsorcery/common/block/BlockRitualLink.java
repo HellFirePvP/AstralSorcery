@@ -37,14 +37,15 @@ import java.util.List;
  */
 public class BlockRitualLink extends BlockContainer {
 
-    private static final AxisAlignedBB box = new AxisAlignedBB(4D / 16D, 4D / 16D, 4D / 16D, 12D / 16D, 12D / 16D, 12D / 16D);
+    private static final AxisAlignedBB box = new AxisAlignedBB(6D / 16D, 2D / 16D, 6D / 16D, 10D / 16D, 14D / 16D, 10D / 16D);
 
     public BlockRitualLink() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(3.0F);
         setSoundType(SoundType.STONE);
         setResistance(25.0F);
-        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("pickaxe", 2);
+        setLightLevel(0.6F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

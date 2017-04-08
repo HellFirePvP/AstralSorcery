@@ -101,8 +101,8 @@ public class EffectLightning extends EntityComplexFX {
         }
 
         EffectLightning lightning = buildLightning(rand.nextLong(), source, destination, defaultMinJitterDst * perc, defaultMaxJitterDst * perc, defaultForkChance, defaultMinForkAngleDeg, defaultMaxForkAngleDeg);
-        lightning.setBuildSpeed(growSpeed * perc);
-        lightning.setBuildWaitTime(fadeTime * perc);
+        lightning.setBuildSpeed(Math.max(0.01F, growSpeed * perc));
+        lightning.setBuildWaitTime(Math.max(0.0067F, fadeTime * perc));
         lightning.finalizeAndRegister();
         return lightning;
     }
@@ -117,7 +117,7 @@ public class EffectLightning extends EntityComplexFX {
         rootVertices.add(root);
 
         double l = directionVector.length();
-        int iterations = MathHelper.ceil(Math.sqrt(l));
+        int iterations = MathHelper.floor(Math.round(Math.sqrt(l)));
         for (int i = 0; i < iterations; i++) {
             LinkedList<LightningVertex> newRootVertices = new LinkedList<>();
             for (LightningVertex sourceVertex : rootVertices) {

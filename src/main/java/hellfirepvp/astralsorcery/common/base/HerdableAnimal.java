@@ -19,6 +19,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -208,8 +209,11 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
             LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
             builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
             List<ItemStack> drops = world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_SHEEP).generateLootForPools(rand, builder.build());
-            if(rand.nextFloat() <= 0.05) {
+            if(rand.nextFloat() <= 0.01) {
                 entity.setSheared(true);
+            }
+            if(!entity.getSheared() && rand.nextFloat() <= 0.05) {
+                drops.add(new ItemStack(Blocks.WOOL, rand.nextInt(2) + 1));
             }
             return drops;
         }
