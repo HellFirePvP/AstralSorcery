@@ -64,7 +64,7 @@ public class ConstellationFocusSlot extends SlotItemHandler {
     @Override
     public ItemStack decrStackSize(int amount) {
         ItemStack focus = ta.getFocusItem();
-        ta.setFocusStack(null);
+        ta.setFocusStack(ItemStack.EMPTY);
         return focus;
     }
 

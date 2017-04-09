@@ -83,21 +83,12 @@ public class BlockFlareLight extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.004);
         p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-        p.scale(0.4F + rand.nextFloat() * 0.1F);
+        p.scale(0.4F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.75F);
+        p.motion(0, rand.nextFloat() * 0.02F, 0);
         if(rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
-            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.5F + rand.nextFloat() * 0.1F);
-        }
-        if(rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.02);
-            p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.3F + rand.nextFloat() * 0.1F);
-        }
-        if(rand.nextBoolean()) {
-            p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5).gravity(0.02);
+            p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5).gravity(0.004);
             p.offset(rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1));
             p.scale(0.1F + rand.nextFloat() * 0.05F).setColor(Color.WHITE).setMaxAge(25);
         }

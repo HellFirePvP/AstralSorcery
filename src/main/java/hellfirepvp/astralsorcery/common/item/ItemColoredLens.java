@@ -29,6 +29,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -77,7 +78,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
         if(!stack.isEmpty() && stack.getItem() instanceof ItemColoredLens) {
             int dmg = stack.getItemDamage();
             if(dmg >= 0 && dmg < ColorType.values().length) {
-                tooltip.add(I18n.format("item.ItemColoredLens.effect." + ColorType.values()[dmg].name().toLowerCase() + ".name"));
+                tooltip.add(I18n.format("item.itemcoloredlens.effect." + ColorType.values()[dmg].name().toLowerCase() + ".name"));
             }
         }
     }
@@ -123,11 +124,11 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     public static enum ColorType {
 
         FIRE   (TargetType.ENTITY, 0xFF5711, 0.05F),
-        BREAK  (TargetType.BLOCK,  0xD4FF00, 0.10F),
-        GROW   (TargetType.BLOCK,  0x00D736, 0.40F),
-        DAMAGE (TargetType.ENTITY, 0x767676, 0.60F),
-        REGEN  (TargetType.ENTITY, 0xA13085, 0.90F),
-        NIGHT  (TargetType.ENTITY, 0x008EAE, 0.25F);
+        BREAK  (TargetType.BLOCK,  0xD4FF00, 0.05F),
+        GROW   (TargetType.BLOCK,  0x00D736, 0.05F),
+        DAMAGE (TargetType.ENTITY, 0x767676, 0.05F),
+        REGEN  (TargetType.ENTITY, 0xA13085, 0.05F),
+        NIGHT  (TargetType.ENTITY, 0x008EAE, 0.05F);
 
         private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
@@ -171,11 +172,12 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     break;
                 case DAMAGE:
                     if(itemRand.nextFloat() > percStrength) return;
-                    living.attackEntityFrom(CommonProxy.dmgSourceStellar, 0.6F);
+                    if(living instanceof EntityPlayer && living.getServer() != null && living.getServer().isPVPEnabled()) return;
+                    living.attackEntityFrom(CommonProxy.dmgSourceStellar, 6.5F);
                     break;
                 case REGEN:
                     if(itemRand.nextFloat() > percStrength) return;
-                    living.heal(0.6F);
+                    living.heal(3.5F);
                     break;
                 case NIGHT:
                     if(itemRand.nextFloat() > percStrength) return;
@@ -189,8 +191,8 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 case BREAK:
                     float hardness = state.getBlockHardness(world, at);
                     if(hardness < 0) return;
-                    hardness *= 3F;
-                    addProgress(world, at, hardness, percStrength);
+                    hardness *= 1.5F;
+                    addProgress(world, at, hardness, percStrength * 7.5F);
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, at);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at, 16));
                     break;
@@ -198,7 +200,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, at);
                     if(plant != null) {
-                        if(itemRand.nextInt(7) == 0) {
+                        if(itemRand.nextBoolean()) {
                             plant.tryGrow(world, world.rand);
                         }
                         PktParticleEvent packet = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);

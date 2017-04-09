@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary.tick;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

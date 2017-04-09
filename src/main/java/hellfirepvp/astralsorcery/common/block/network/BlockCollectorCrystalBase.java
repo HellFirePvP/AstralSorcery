@@ -99,11 +99,11 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
-        boolean shift = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, shift);
+        BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
+        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, type == CollectorCrystalType.CELESTIAL_CRYSTAL ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);
 
-        if(shift && missing.isPresent()) {
+        if(missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
             IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
             if(c != null) {

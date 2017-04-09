@@ -34,6 +34,9 @@ public class MultiBlockArrays {
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;
 
+    @PasteBlacklist
+    public static PatternBlockArray patternRitualPedestalWithLink;
+
     public static PatternBlockArray patternAltarAttunement;
 
     public static PatternBlockArray patternAltarConstellation;
@@ -43,6 +46,8 @@ public class MultiBlockArrays {
     public static PatternBlockArray patternAttunementFrame;
 
     public static PatternBlockArray patternStarlightInfuser;
+
+    public static PatternBlockArray patternCollectorRelay;
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)

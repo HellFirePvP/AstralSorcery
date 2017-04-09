@@ -137,7 +137,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             if(EffectHandler.STATIC_EFFECT_RAND.nextInt(chance) == 0) {
                 Vector3 from = new Vector3(this).add(0.5, 0.05, 0.5);
                 MiscUtils.applyRandomOffset(from, EffectHandler.STATIC_EFFECT_RAND, 0.05F);
-                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(7), from, 1.5F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
                 lightbeam.setAlphaMultiplier(0.5F + (0.5F * alphaDaytime));
                 lightbeam.setMaxAge(64);
             }
@@ -167,11 +167,10 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 if(ch != null) {
                     ConstellationEffect ce = ConstellationEffectRegistry.clientRenderInstance(ch);
                     if(ce != null) {
-                        BlockPos to = getPos();
                         if(ritualLink != null) {
-                            to = ritualLink;
+                            ce.playClientEffect(world, ritualLink, this, percRunning, shouldDoAdditionalEffects());
                         }
-                        ce.playClientEffect(world, to, this, percRunning, shouldDoAdditionalEffects());
+                        ce.playClientEffect(world, getPos(), this, percRunning, shouldDoAdditionalEffects());
                     }
                 }
             }
@@ -180,6 +179,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     Vector3 source = new Vector3(this).add(0.5, 0.75, 0.5);
                     Vector3 to = new Vector3(this).add(expMirror).add(0.5, 0.5, 0.5);
                     EffectHandler.getInstance().lightbeam(to, source, 0.8);
+                    if(ritualLink != null) {
+                        source = new Vector3(this).add(0.5, 5.5, 0.5);
+                        EffectLightbeam beam = EffectHandler.getInstance().lightbeam(to, source, 0.8);
+                        beam.setColorOverlay(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
+                    }
                 }
             }
         }

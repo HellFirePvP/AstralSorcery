@@ -21,22 +21,23 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: WorldStructureEntry
+ * Class: WorldGenEntry
  * Created by HellFirePvP
- * Date: 21.10.2016 / 13:13
+ * Date: 30.03.2017 / 10:36
  */
-public class WorldStructureEntry extends ConfigEntry {
+public class WorldGenEntry extends ConfigEntry {
 
-    private int generationChance = Integer.MAX_VALUE;
+    private int generationChance;
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = false;
     private BiomeDictionary.Type[] defaultBiomeTypes;
     private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
     private int minY, maxY;
 
-    public WorldStructureEntry(String key, BiomeDictionary.Type[] defaultBiomeTypes) {
+    public WorldGenEntry(String key, int defaultChance, BiomeDictionary.Type... applicableTypes) {
         super(Section.WORLDGEN, key);
-        this.defaultBiomeTypes = defaultBiomeTypes;
+        this.generationChance = defaultChance;
+        this.defaultBiomeTypes = applicableTypes;
         this.minY = 0;
         this.maxY = 255;
     }
@@ -45,7 +46,7 @@ public class WorldStructureEntry extends ConfigEntry {
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
         doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), false, "Ignore Biome specifications when trying to generate " + getKey());
-        generationChance = cfg.getInt("Chance", getConfigurationSection(), 140, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
+        generationChance = cfg.getInt("Chance", getConfigurationSection(), this.generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
         minY = cfg.getInt("MinY" , getConfigurationSection(), 0, 0, 255, "Set the minimum Y level to spawn this structure on");
         maxY = cfg.getInt("MaxY" , getConfigurationSection(), 255, 0, 255, "Set the maximum Y level to spawn this structure on");
         String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), getDefaultBiomeTypes(), "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
@@ -97,4 +98,5 @@ public class WorldStructureEntry extends ConfigEntry {
     public boolean tryGenerate(Random random) {
         return random.nextInt(generationChance) == 0;
     }
+
 }

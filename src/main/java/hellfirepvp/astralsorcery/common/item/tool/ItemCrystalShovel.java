@@ -28,6 +28,7 @@ import java.util.List;
 public class ItemCrystalShovel extends ItemCrystalToolBase {
 
     public ItemCrystalShovel() {
+        super(1);
         setDamageVsEntity(3F);
         setAttackSpeed(-1.5F);
         setHarvestLevel("shovel", 3);

@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.2.3-beta"
+version = "1.3.0-beta"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
@@ -43,7 +43,7 @@ repositories {
 dependencies {
 
     def mc_version = "1.11.2"
-    def jei_version = "4.2.9.247"
+    def jei_version = "4.3.1.257"
 
     //JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"

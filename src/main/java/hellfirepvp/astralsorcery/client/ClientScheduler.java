@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.util.Counter;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.EnumSet;
@@ -26,9 +27,10 @@ import java.util.Map;
 public class ClientScheduler implements ITickHandler {
 
     private static long clientTick = 0;
+    private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private Map<Runnable, Integer> queuedRunnables = new HashMap<>();
+    private Map<Runnable, Counter> queuedRunnables = new HashMap<>();
     private Map<Runnable, Integer> waitingRunnables = new HashMap<>();
 
     @Override
@@ -36,21 +38,22 @@ public class ClientScheduler implements ITickHandler {
         clientTick++;
 
         inTick = true;
-        Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
-        while (iterator.hasNext()) {
-            Runnable r = iterator.next();
-            int delay = queuedRunnables.get(r);
-            delay--;
-            if(delay <= 0) {
-                r.run();
-                iterator.remove();
-            } else {
-                queuedRunnables.put(r, delay);
+        synchronized (lock) {
+            inTick = true;
+            Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
+            while (iterator.hasNext()) {
+                Runnable r = iterator.next();
+                Counter delay = queuedRunnables.get(r);
+                delay.decrement();
+                if(delay.value <= 0) {
+                    r.run();
+                    iterator.remove();
+                }
             }
-        }
-        inTick = false;
-        for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
-            queuedRunnables.put(waiting.getKey(), waiting.getValue());
+            inTick = false;
+            for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
+                queuedRunnables.put(waiting.getKey(), new Counter(waiting.getValue()));
+            }
         }
         waitingRunnables.clear();
     }
@@ -75,10 +78,12 @@ public class ClientScheduler implements ITickHandler {
     }
 
     public void addRunnable(Runnable r, int tickDelay) {
-        if(inTick) {
-            waitingRunnables.put(r, tickDelay);
-        } else {
-            queuedRunnables.put(r, tickDelay);
+        synchronized (lock) {
+            if(inTick) {
+                waitingRunnables.put(r, tickDelay);
+            } else {
+                queuedRunnables.put(r, new Counter(tickDelay));
+            }
         }
     }
 

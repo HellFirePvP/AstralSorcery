@@ -107,13 +107,13 @@ public class CrystalProperties {
     }
 
     @SideOnly(Side.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip) {
-        return addPropertyTooltip(prop, tooltip, Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
+    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, int maxSize) {
+        return addPropertyTooltip(prop, tooltip, Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54), maxSize);
     }
 
     @SideOnly(Side.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended) {
-        return addPropertyTooltip(prop, tooltip, extended, ResearchManager.clientProgress.getTierReached());
+    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended, int maxSize) {
+        return addPropertyTooltip(prop, tooltip, extended, ResearchManager.clientProgress.getTierReached(), maxSize);
     }
 
     /**
@@ -126,22 +126,22 @@ public class CrystalProperties {
      * True = Everything has been displayed.
      */
     @SideOnly(Side.CLIENT)
-    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended, ProgressionTier tier) {
+    public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, boolean extended, ProgressionTier tier, int maxSize) {
         if (prop != null) {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + TextFormatting.BLUE + prop.getSize());
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + (prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + TextFormatting.BLUE + prop.getPurity() + "%");
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + (prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + TextFormatting.BLUE + prop.getCollectiveCapability() + "%");
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + (prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
                 }

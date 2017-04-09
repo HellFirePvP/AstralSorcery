@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
+import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -64,7 +65,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
                 GL11.glPopMatrix();
                 GL11.glPopAttrib();
             }
-            if(grind.getItem() instanceof ItemSword) {
+            if(SwordSharpenHelper.isSharpenableItem(grind)) {
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                 GL11.glPushMatrix();
                 GL11.glTranslated(x, y, z);

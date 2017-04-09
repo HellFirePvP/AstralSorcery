@@ -28,6 +28,7 @@ import java.util.List;
 public class ItemCrystalAxe extends ItemCrystalToolBase {
 
     public ItemCrystalAxe() {
+        super(3);
         setDamageVsEntity(11F);
         setAttackSpeed(-3F);
         setHarvestLevel("axe", 3);

@@ -39,6 +39,9 @@ public class RegistryPerks {
         map.addPerk(ConstellationPerks.DMG_BLEED,     ConstellationPerkMap.PerkOrder.DEFAULT,  13,  1,
                 ConstellationPerks.DMG_AFTERKILL);
 
+        map.addPerk(ConstellationPerks.DMG_REFLECT,   ConstellationPerkMap.PerkOrder.DEFAULT,  10, 2,
+                ConstellationPerks.DMG_AFTERKILL);
+
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.discidia, map);
 
         map = new ConstellationPerkMap();
@@ -56,6 +59,9 @@ public class RegistryPerks {
 
         map.addPerk(ConstellationPerks.TRV_LAVAPROTECT, ConstellationPerkMap.PerkOrder.DEFAULT,  13,  1,
                 ConstellationPerks.TRV_REDFOODNEED);
+
+        map.addPerk(ConstellationPerks.TRV_STEPASSIST,  ConstellationPerkMap.PerkOrder.DEFAULT,  10, 10,
+                ConstellationPerks.TRV_SWIMSPEED);
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.vicio, map);
 
@@ -75,6 +81,9 @@ public class RegistryPerks {
         map.addPerk(ConstellationPerks.DEF_NOARMOR,       ConstellationPerkMap.PerkOrder.DEFAULT,  10, 2,
                 ConstellationPerks.DEF_DODGE);
 
+        map.addPerk(ConstellationPerks.DEF_CHEATDEATH,    ConstellationPerkMap.PerkOrder.DEFAULT,  8, 6,
+                ConstellationPerks.DEF_DODGE);
+
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.armara, map);
 
         map = new ConstellationPerkMap();
@@ -92,6 +101,9 @@ public class RegistryPerks {
 
         map.addPerk(ConstellationPerks.CRE_OREGEN, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 13,
                 ConstellationPerks.CRE_MEND);
+
+        map.addPerk(ConstellationPerks.CRE_FLARES, ConstellationPerkMap.PerkOrder.DEFAULT,  12, 2,
+                ConstellationPerks.CRE_BREEDING);
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.aevitas, map);
     }

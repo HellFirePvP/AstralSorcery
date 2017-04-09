@@ -12,12 +12,12 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeAquamarine;
+import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeGlowstoneFlower;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeMarble;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeRockCrystals;
 import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
-import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -38,9 +38,10 @@ import java.util.Random;
  */
 public class AstralWorldGenerator implements IWorldGenerator {
 
-    public static final int CURRENT_WORLD_GENERATOR_VERSION = 0;
+    public static final int CURRENT_WORLD_GENERATOR_VERSION = 1;
 
-    private List<WorldGenAttributeStructure> structures = new LinkedList<>();
+    private List<WorldGenAttributeCommon> structures = new LinkedList<>();
+    private List<WorldGenAttribute> decorators = new LinkedList<>();
 
     private List<WorldGenAttribute> worldGenAttributes = new LinkedList<>();
 
@@ -52,18 +53,22 @@ public class AstralWorldGenerator implements IWorldGenerator {
         structures.add(new StructureAncientShrine());
         structures.add(new StructureDesertShrine());
         structures.add(new StructureSmallShrine());
+
+        decorators.add(new GenAttributeGlowstoneFlower());
     }
 
     public AstralWorldGenerator setupAttributes() {
         if(Config.spawnRockCrystalOres) {
-            worldGenAttributes.add(new GenAttributeRockCrystals());
+            decorators.add(new GenAttributeRockCrystals());
         }
         if(Config.marbleAmount > 0) {
-            worldGenAttributes.add(new GenAttributeMarble());
+            decorators.add(new GenAttributeMarble());
         }
         if(Config.aquamarineAmount > 0) {
-            worldGenAttributes.add(new GenAttributeAquamarine());
+            decorators.add(new GenAttributeAquamarine());
         }
+
+        worldGenAttributes.addAll(decorators);
         worldGenAttributes.addAll(structures);
         return this;
     }

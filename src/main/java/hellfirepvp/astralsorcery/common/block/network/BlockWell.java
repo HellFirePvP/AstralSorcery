@@ -22,6 +22,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -33,6 +34,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -105,7 +107,7 @@ public class BlockWell extends BlockStarlightNetwork {
         if(!worldIn.isRemote) {
 
             ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(!heldItem.isEmpty()) {
+            if(!heldItem.isEmpty() && playerIn instanceof EntityPlayerMP) {
                 TileWell tw = MiscUtils.getTileAt(worldIn, pos, TileWell.class, false);
                 if(tw == null) return false;
 
@@ -121,20 +123,22 @@ public class BlockWell extends BlockStarlightNetwork {
                     handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
                     worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 
-                    if(entry.producing instanceof FluidLiquidStarlight) {
+                    if(!MiscUtils.isPlayerFakeMP((EntityPlayerMP) playerIn) && entry.producing instanceof FluidLiquidStarlight) {
                         //Lets assume it starts collecting right away...
                         playerIn.addStat(RegistryAchievements.achvLiqStarlight);
                     }
 
                     if(!playerIn.isCreative()) {
-                        heldItem.setCount(heldItem.getCount() - 1);
+                        heldItem.shrink(1);
                     }
                     if(heldItem.getCount() <= 0) {
                         playerIn.setHeldItem(hand, ItemStack.EMPTY);
                     }
                 }
 
-                if(FluidUtil.tryFillContainerAndStow(heldItem, tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN), new InvWrapper(playerIn.inventory), 1000, playerIn).isSuccess()) {
+                FluidActionResult far = FluidUtil.tryFillContainerAndStow(heldItem, tw.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.DOWN), new InvWrapper(playerIn.inventory), 1000, playerIn);
+                if(far.isSuccess()) {
+                    playerIn.setHeldItem(hand, far.getResult());
                     SoundHelper.playSoundAround(SoundEvents.ITEM_BUCKET_FILL, worldIn, pos, 1F, 1F);
                     tw.markForUpdate();
                 }

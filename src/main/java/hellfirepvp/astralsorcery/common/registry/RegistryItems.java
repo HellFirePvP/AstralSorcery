@@ -10,13 +10,7 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
-import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
-import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
-import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
-import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
-import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
-import hellfirepvp.astralsorcery.common.item.ItemJournal;
-import hellfirepvp.astralsorcery.common.item.ItemShiftingStar;
+import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
@@ -112,7 +106,6 @@ public class RegistryItems {
         celestialCrystal = registerItem(new ItemCelestialCrystal());
         tunedCelestialCrystal = registerItem(new ItemTunedCelestialCrystal());
 
-        //entityPlacer = registerItem(new ItemEntityPlacer());
         journal = registerItem(new ItemJournal());
         handTelescope = registerItem(new ItemHandTelescope());
         linkingTool = registerItem(new ItemLinkingTool());
@@ -124,15 +117,16 @@ public class RegistryItems {
         //roseBranchBow = registerItem(new ItemRoseBranchBow());
         architectWand = registerItem(new ItemArchitectWand());
         exchangeWand = registerItem(new ItemExchangeWand());
+        illuminationPowder = registerItem(new ItemIlluminationPowder());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
         crystalAxe = registerItem(new ItemCrystalAxe());
         crystalSword = registerItem(new ItemCrystalSword());
-        //chargedCrystalAxe = registerItem(new ItemChargedCrystalAxe());
-        //chargedCrystalSword = registerItem(new ItemChargedCrystalSword());
-        //chargedCrystalPickaxe = registerItem(new ItemChargedCrystalPickaxe());
-        //chargedCrystalShovel = registerItem(new ItemChargedCrystalShovel());
+        chargedCrystalAxe = registerItem(new ItemChargedCrystalAxe());
+        chargedCrystalSword = registerItem(new ItemChargedCrystalSword());
+        chargedCrystalPickaxe = registerItem(new ItemChargedCrystalPickaxe());
+        chargedCrystalShovel = registerItem(new ItemChargedCrystalShovel());
     }
 
     //Items associated to blocks/itemblocks

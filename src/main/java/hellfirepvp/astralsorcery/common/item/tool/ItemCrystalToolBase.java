@@ -35,11 +35,13 @@ import java.util.Random;
 public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable {
 
     private static final Random rand = new Random();
+    private final int crystalCount;
 
-    public ItemCrystalToolBase() {
+    public ItemCrystalToolBase(int crystalCount) {
         super(0, 0, RegistryItems.crystalToolMaterial, Collections.emptySet());
         setMaxDamage(0);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+        this.crystalCount = crystalCount;
     }
 
     public void setDamageVsEntity(float damageVsEntity) {
@@ -53,7 +55,7 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        CrystalProperties.addPropertyTooltip(prop, tooltip);
+        CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.MAX_SIZE_CELESTIAL * crystalCount);
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
@@ -72,6 +74,21 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     public static void setToolProperties(ItemStack stack, ToolCrystalProperties properties) {
         NBTTagCompound nbt = NBTHelper.getPersistentData(stack);
         properties.writeToNBT(nbt);
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return false;
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
     }
 
     @Override

@@ -215,16 +215,9 @@ public class EventHandlerServer {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onAttack(LivingAttackEvent event) {
-        if (phoenixProtect((event.getEntityLiving()), event.getAmount())) {
-            event.setCanceled(true);
-        }
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
-        if (phoenixProtect(event.getEntityLiving(), Float.MAX_VALUE)) {
+        if (phoenixProtect(event.getEntityLiving())) {
             event.setCanceled(true);
         } else {
             if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
@@ -246,12 +239,7 @@ public class EventHandlerServer {
         }
     }
 
-    private boolean phoenixProtect(EntityLivingBase entity, float damageIn) {
-        float health = entity.getHealth();
-        if (health - damageIn > 0 && Math.floor(health - Math.ceil(damageIn)) > 0) {
-            return false; //All fine.
-        }
-
+    private boolean phoenixProtect(EntityLivingBase entity) {
         PotionEffect pe = entity.getActivePotionEffect(RegistryPotions.potionCheatDeath);
         if (pe != null) {
             int level = pe.getAmplifier();
@@ -262,15 +250,15 @@ public class EventHandlerServer {
     }
 
     private void phoenixEffects(EntityLivingBase entity, int level) {
-        entity.heal(2 + level * 2);
-        entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 300, 1, false, false));
-        entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 300, 1, false, false));
+        entity.setHealth(6 + level * 2);
+        entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 2, false, false));
+        entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 500, 1, false, false));
         List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
         for (EntityLivingBase lb : others) {
             lb.setFire(16);
             lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - entity.posZ);
         }
-        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity));
+        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.PHOENIX_PROC, new Vector3(entity.posX, entity.posY, entity.posZ));
         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(entity.world, entity.getPosition(), 32));
 
         MinecraftServer server = entity.getServer();

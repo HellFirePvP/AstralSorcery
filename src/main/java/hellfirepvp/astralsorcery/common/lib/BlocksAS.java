@@ -31,6 +31,7 @@ public class BlocksAS {
 
     public static BlockCustomOre customOre;
     public static BlockCustomSandOre customSandOre;
+    public static BlockCustomFlower customFlower;
     public static BlockMachine blockMachine;
     public static BlockAltar blockAltar;
     public static BlockRitualPedestal ritualPedestal;

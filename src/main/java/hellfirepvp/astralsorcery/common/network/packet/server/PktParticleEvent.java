@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
+import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
@@ -97,7 +98,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                trigger.trigger(message);
+                AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
             AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
@@ -132,6 +133,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_WATER_FISH,
         //CE_TREE_VORTEX,
 
+        FLARE_PROC,
         RT_DEBUG;
 
         //GOD I HATE THIS PART
@@ -163,6 +165,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return ItemArchitectWand::playArchitectPlaceEvent;
                 //case CE_MELT_BLOCK:
                 //    return CEffectFornax::playParticles;
+                case FLARE_PROC:
+                    return EntityFlare::playParticles;
                 case CE_ACCEL_TILE:
                     return CEffectHorologium::playParticles;
                 case CE_DMG_ENTITY:

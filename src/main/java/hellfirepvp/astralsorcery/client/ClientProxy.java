@@ -16,21 +16,10 @@ import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityFlare;
+import hellfirepvp.astralsorcery.client.render.entity.RenderEntityIlluminationSpark;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityStarburst;
-import hellfirepvp.astralsorcery.client.render.tile.TESRAltar;
-import hellfirepvp.astralsorcery.client.render.tile.TESRAttunementAltar;
-import hellfirepvp.astralsorcery.client.render.tile.TESRCelestialCrystals;
-import hellfirepvp.astralsorcery.client.render.tile.TESRCollectorCrystal;
-import hellfirepvp.astralsorcery.client.render.tile.TESRFakeTree;
-import hellfirepvp.astralsorcery.client.render.tile.TESRGrindstone;
-import hellfirepvp.astralsorcery.client.render.tile.TESRLens;
-import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
-import hellfirepvp.astralsorcery.client.render.tile.TESRRitualPedestal;
-import hellfirepvp.astralsorcery.client.render.tile.TESRStarlightInfuser;
-import hellfirepvp.astralsorcery.client.render.tile.TESRTelescope;
-import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
-import hellfirepvp.astralsorcery.client.render.tile.TESRWell;
+import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
@@ -46,6 +35,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
+import hellfirepvp.astralsorcery.common.entities.EntityIlluminationSpark;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.entities.EntityStarburst;
 import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
@@ -54,16 +44,7 @@ import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
-import hellfirepvp.astralsorcery.common.tile.TileTelescope;
-import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
@@ -239,6 +220,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileCrystalPrismLens.class, new TESRPrismLens());
         registerTESR(TileStarlightInfuser.class, new TESRStarlightInfuser());
         registerTESR(TileTranslucent.class, new TESRTranslucentBlock());
+        registerTESR(TileAttunementRelay.class, new TESRAttunementRelay());
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {
@@ -251,6 +233,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityItemHighlighted.class, new RenderEntityItemHighlight.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityFlare.class, new RenderEntityFlare.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntityStarburst.class, new RenderEntityStarburst.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityIlluminationSpark.Factory());
     }
 
     public void registerDisplayInformationInit() {

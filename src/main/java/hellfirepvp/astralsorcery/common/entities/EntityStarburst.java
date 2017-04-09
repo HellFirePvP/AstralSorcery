@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.entities;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
 import net.minecraft.entity.Entity;
@@ -106,21 +107,44 @@ public class EntityStarburst extends EntityThrowable {
 
     @SideOnly(Side.CLIENT)
     private void playEffects() {
-        EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
-        particle.motion(
-                rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
-                rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
-                rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F).scale(0.3F);
-        switch (rand.nextInt(4)) {
-            case 0:
-                particle.setColor(Color.WHITE);
-                break;
-            case 1:
-                particle.setColor(new Color(0x69B5FF));
-                break;
-            case 2:
-                particle.setColor(new Color(0x0078FF));
-                break;
+        EntityFXFacingParticle particle;
+        for (int i = 0; i < 2; i++) {
+            particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
+            particle.motion(
+                    rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
+                    rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F,
+                    rand.nextFloat() * 0.03F - rand.nextFloat() * 0.06F).scale(0.3F);
+            switch (rand.nextInt(4)) {
+                case 0:
+                    particle.setColor(Color.WHITE);
+                    break;
+                case 1:
+                    particle.setColor(new Color(0x69B5FF));
+                    break;
+                case 2:
+                    particle.setColor(new Color(0x0078FF));
+                    break;
+            }
+        }
+        if(ticksExisted % 12 == 0) {
+            for (Vector3 pos : MiscUtils.getCirclePositions(
+                    new Vector3(this),
+                    new Vector3(motionX, motionY, motionZ),
+                    1F, 15 + rand.nextInt(14))) {
+                particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ()).gravity(0.004);
+                particle.scale(0.4F).setAlphaMultiplier(0.5F);
+                switch (rand.nextInt(3)) {
+                    case 0:
+                        particle.setColor(Color.WHITE);
+                        break;
+                    case 1:
+                        particle.setColor(new Color(0x61A2FF));
+                        break;
+                    case 2:
+                        particle.setColor(new Color(0x3A4ABD));
+                        break;
+                }
+            }
         }
         particle = EffectHelper.genericFlareParticle(posX, posY, posZ);
         particle.scale(0.6F);
@@ -157,9 +181,7 @@ public class EntityStarburst extends EntityThrowable {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }
-                if (world.canSeeSky(new BlockPos(result.entityHit))) {
-                    CelestialStrike.play(getThrower(), world, new Vector3(result.entityHit), new Vector3(result.entityHit, true));
-                }
+                CelestialStrike.play(getThrower(), world, new Vector3(result.entityHit), new Vector3(result.entityHit, true));
             }
             setDead();
         }

@@ -34,6 +34,7 @@ import java.util.List;
 public class ItemCrystalPickaxe extends ItemCrystalToolBase {
 
     public ItemCrystalPickaxe() {
+        super(3);
         setDamageVsEntity(5F);
         setAttackSpeed(-1F);
         setHarvestLevel("pickaxe", 3);

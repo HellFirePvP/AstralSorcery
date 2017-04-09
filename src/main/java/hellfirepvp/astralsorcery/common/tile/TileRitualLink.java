@@ -10,12 +10,17 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
+import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +30,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,8 +44,6 @@ import java.util.List;
 public class TileRitualLink extends TileEntityTick implements ILinkableTile {
 
     private BlockPos linkedTo = null;
-
-    private Object clientStarSprite = null;
 
     @Override
     public void update() {
@@ -61,15 +66,25 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile {
 
     @SideOnly(Side.CLIENT)
     private void playClientEffects() {
-        if(this.linkedTo != null) {
-            if(clientStarSprite == null || ((EntityFXFacingSprite) clientStarSprite).isRemoved()) {
-                EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar1, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 0.6F, 2);
-                EffectHandler.getInstance().registerFX(sprite);
-                this.clientStarSprite = sprite;
-                sprite.setRefreshFunc(() -> clientStarSprite == sprite && !isInvalid());
+        if(this.linkedTo != null && Minecraft.getMinecraft().player.getDistanceSq(getPos()) < 1024) { //32 Squared
+            if(ticksExisted % 4 == 0) {
+                Collection<Vector3> positions = MiscUtils.getCirclePositions(
+                        new Vector3(this).add(0.5, 0.5, 0.5),
+                        Vector3.RotAxis.Y_AXIS, 0.4F - rand.nextFloat() * 0.1F, 10 + rand.nextInt(10));
+                for (Vector3 v : positions) {
+                    EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                    particle.gravity(0.004).scale(0.15F);
+                    particle.motion(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.01, 0);
+                    if(rand.nextBoolean()) {
+                        particle.setColor(Color.WHITE);
+                    }
+                }
             }
-        } else {
-            clientStarSprite = null;
+            Vector3 v = new Vector3(this).add(0.5, 0.5, 0.5);
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+            particle.gravity(0.004).scale(0.3F);
+            particle.motion(0, (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.015, 0);
+            particle.setColor(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
         }
     }
 

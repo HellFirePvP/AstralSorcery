@@ -59,7 +59,7 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        CrystalProperties.addPropertyTooltip(prop, tooltip);
+        CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.MAX_SIZE_CELESTIAL * 2);
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
@@ -76,6 +76,11 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     public static void setToolProperties(ItemStack stack, ToolCrystalProperties properties) {
         NBTTagCompound nbt = NBTHelper.getPersistentData(stack);
         properties.writeToNBT(nbt);
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
     }
 
     @Override
@@ -110,6 +115,11 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
             }
         }
         setToolProperties(stack, prop);
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return false;
     }
 
     @Override

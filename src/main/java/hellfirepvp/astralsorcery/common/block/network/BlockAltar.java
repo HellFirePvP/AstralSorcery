@@ -10,15 +10,19 @@ package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.block.BlockAttunementRelay;
 import hellfirepvp.astralsorcery.common.block.BlockCustomName;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -43,6 +47,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -131,6 +136,29 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
             pers.setInteger("lvl", type.ordinal());
             list.add(stack);
         }
+    }
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        startSearchForRelayUpdate(worldIn, pos);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+
+        startSearchForRelayUpdate(worldIn, pos);
+    }
+
+    public static void startSearchForRelayUpdate(World world, BlockPos pos) {
+        Thread searchThread = new Thread(() -> {
+            BlockArray relaysAndAltars = BlockDiscoverer.searchForBlocksAround(world, pos, 16, new BlockStateCheck.Block(BlocksAS.attunementRelay));
+            for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern().entrySet()) {
+                BlockAttunementRelay.startSearchRelayLinkThreadAt(world, entry.getKey(), false);
+            }
+        });
+        searchThread.setName("AttRelay UpdateFinder at " + pos.toString());
+        searchThread.start();
     }
 
     @Override

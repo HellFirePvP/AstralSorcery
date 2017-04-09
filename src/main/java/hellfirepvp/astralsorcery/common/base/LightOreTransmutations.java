@@ -40,15 +40,15 @@ public class LightOreTransmutations {
 
     public static void init() {
         registerTransmutation(new Transmutation(Blocks.MAGMA.getDefaultState(),              Blocks.OBSIDIAN.getDefaultState(),     400.0D));
-        registerTransmutation(new Transmutation(Blocks.SAND.getDefaultState(),               Blocks.CLAY.getDefaultState(),         200.0D));
+        registerTransmutation(new Transmutation(Blocks.SAND.getDefaultState(),               Blocks.CLAY.getDefaultState(),         400.0D));
         registerTransmutation(new Transmutation(Blocks.DIAMOND_ORE.getDefaultState(),        Blocks.EMERALD_ORE.getDefaultState(), 1000.0D));
         registerTransmutation(new Transmutation(Blocks.NETHER_WART_BLOCK.getDefaultState(),  Blocks.SOUL_SAND.getDefaultState(),    200.0D));
         registerTransmutation(new Transmutation(Blocks.SEA_LANTERN.getDefaultState(),        Blocks.LAPIS_BLOCK.getDefaultState(),  200.0D));
         registerTransmutation(new Transmutation(Blocks.SANDSTONE.getDefaultState(),          Blocks.END_STONE.getDefaultState(),    200.0D));
         registerTransmutation(new Transmutation(Blocks.NETHERRACK.getDefaultState(),         Blocks.NETHER_BRICK.getDefaultState(), 200.0D));
 
-        registerTransmutation(new Transmutation(Blocks.IRON_ORE.getDefaultState(), BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL), 400));
-        registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(), Blocks.CAKE.getDefaultState(), new ItemStack(Blocks.PUMPKIN), new ItemStack(Items.CAKE), 700.0D));
+        registerTransmutation(new Transmutation(Blocks.IRON_ORE.getDefaultState(), BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.STARMETAL), 100));
+        registerTransmutation(new Transmutation(Blocks.PUMPKIN.getDefaultState(), Blocks.CAKE.getDefaultState(), new ItemStack(Blocks.PUMPKIN), new ItemStack(Items.CAKE), 600.0D));
 
         cacheLocalFallback();
     }
