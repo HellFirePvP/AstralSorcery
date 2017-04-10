@@ -69,9 +69,9 @@ astralsorcery.journal.constellation.dst.weak=暗淡的
 astralsorcery.journal.constellation.dst.minor=微弱的
 
 research.SHRINES.name=古代神殿
-astralsorcery.journal.SHRINES.1.text=Scattered across the world are ancient shrines built from marble by a civilization long past.<NL>Some of the most renown have been located atop high hills and mountains, while smaller ones have been dug up from under the sands in deserts.<NL>While they don't seem very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends however, only a few old chests and a stories of strange floating crystals have ever been reported within.
-astralsorcery.journal.SHRINES.2.text=The properties of the floating crystals are quite bizarre. They appear to emit a constant shimmering light that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are man made. Their true age and origin is practically impossible to ascertain, but after some minimal experimentation and tinkering the crystals seem to be almost imperviously fixed in their alignment with the stars.
-astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped from them, even with the most destructive methods.<NL>Something seems strange about these crystals. The light they emit seems to ebb and flow almost like water in response to certain objects. §3Maybe placing a crafting §3table nearby would yield §3interesting results?§r
+astralsorcery.journal.SHRINES.1.text=世界各地散落着古代文明用大理石修筑的古代神殿。<NL>在高山和丘陵顶部可以很容易发现，沙漠的沙丘里也掩埋着一些较小的神殿。<NL>起初，它们看起来没什么特别的，传说里面神殿里有许多古老的宝藏。但事实上，里面只有几个旧箱子和一个奇怪的浮动水晶。
+astralsorcery.journal.SHRINES.2.text=浮动水晶的性质相当怪异。它们在不断的发出怪异而又迷人的光。<NL>毫无疑问这些水晶是人造的。它们的年代和起源早已不可考据了，在经过一些小实验和修正后，水晶看起来总是在和星座对齐。
+astralsorcery.journal.SHRINES.3.text=即使用最具破坏性的方法也无法破坏水晶一丝一毫。<NL>这些水晶看起来有些奇怪。它们发出的光就像水落潮那样流动并能影响周围的物品。§3也许在附近使用§3合成台会产生一些§3有趣的结果？§r
 
 research.CPAPER.name=星图
 astralsorcery.journal.CPAPER.1.text=在一些零散的神殿地上会发现宝箱，箱子里偶 尔有些空白卷轴。打开这些卷轴后就能知道卷 轴的名称，还会发现与星空中的星星类似的奇 怪图案。 <NL>在收集一定数量的卷轴后,每个卷轴都会显示 一些不同的图案，但之后发现的卷轴 就都是空白的了。
@@ -105,7 +105,7 @@ astralsorcery.journal.TOOLS.2.text=不幸的是，水晶工具并不完美。尽
 research.ROCK_CRYSTALS.name= 水晶石的属性
 astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的 水晶石都是独一无二的。 它们的大小，纯度和形状都不同，当然， 也没办法在挖掘出来前知晓它的信息。<NL> 虽然目前无法改变 水晶石的大小和纯度， 但你可以用砂轮把它磨细以改变成更合适的形状。
 
-research.CRYSTAL_GROWTH.name=Crystal Growth
+research.CRYSTAL_GROWTH.name=水晶种植
 astralsorcery.journal.CRYSTAL_GROWTH.1.text=Upon immersing single rock crystals into this strange, cold, lightweight liquid, some of it keeps clinging onto the crystal.<NL>Upon closer inspection, it almost seems like the liquid starlight solidified on the surface but it quickly starts melting off of it again. Maybe leaving it in the liquid long enough might permanently increase its size?
 
 research.MARBLETYPES.name=大理石
@@ -208,7 +208,7 @@ research.SHIFT_STAR.name=更替之星
 astralsorcery.journal.SHIFT_STAR.1.text=经研究发现，当你与一个星座共鸣时它将赋予 你强大的力量。与此同时你发觉你将无法再 获得其他星座的力量。<NL>很快，你找到了解决方法，释放你所有的星力 到周围，以便重新与另一个星座共鸣。<NL>不幸的是，使用后因冲击而导致的裂缝 将吸光你身上的星力。
 
 research.STARMETAL_ORE.name=铁矿转化
-astralsorcery.journal.STARMETAL_ORE.1.text=你觉得这些光束除了好看之外还有其他的用途， 或许能在一定程度上改变世界。何不用链接器把光聚集在一个普通的铁矿石上呢？你可以用 神殿里的浮动水晶作为光源。在星空下 或许能提高效率。<NL>在星辉照耀下铁矿石闪烁着微蓝色的光。 也许某些事物随时间而改变？
+astralsorcery.journal.STARMETAL_ORE.1.text=你觉得这些光束除了好看之外还有其他的用途，或许能在一定程度上改变世界。何不用链接器把光聚集在一个普通的铁矿石上呢？你可以用神殿里的浮动水晶作为光源。在星空下或许能提高效率。<NL>在星辉照耀下铁矿石闪烁着微蓝色的光。也许某些事物随时间而改变？
 
 research.TRANSMUTATION_ORES.name=方块转化
 astralsorcery.journal.TRANSMUTATION_ORES.1.text=也许铁矿石不是唯一可以被星辉改变的方块？ 你应该也试试其他的方块....
