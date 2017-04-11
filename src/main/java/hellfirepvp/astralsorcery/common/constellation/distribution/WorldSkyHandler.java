@@ -318,7 +318,7 @@ public class WorldSkyHandler {
     private void evaluateCelestialEventTimes(World world) {
         int solarTime = (int) (world.getWorldTime() % 864000);
         dayOfSolarEclipse = solarTime < 24000;
-        if (solarTime > 3600 && solarTime < 8400) {
+        if (world.getWorldTime() > 24000 && solarTime > 3600 && solarTime < 8400) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
             solarEclipseTick = solarTime - 3600;
@@ -330,7 +330,7 @@ public class WorldSkyHandler {
 
         int lunarTime = (int) (world.getWorldTime() % 1632000);
         dayOfLunarEclipse = lunarTime < 24000;
-        if (lunarTime > 15600 && lunarTime < 20400) {
+        if (world.getWorldTime() > 24000 && lunarTime > 15600 && lunarTime < 20400) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
             lunarEclipseTick = lunarTime - 15600;

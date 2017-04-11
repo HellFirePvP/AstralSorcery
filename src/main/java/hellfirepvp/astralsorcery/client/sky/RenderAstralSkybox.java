@@ -245,7 +245,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         float f1 = (float) vec3.yCoord;
         float f2 = (float) vec3.zCoord;
 
-        if (!Minecraft.getMinecraft().gameSettings.anaglyph) {
+        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
             float f4 = (f * 30.0F + f1 * 70.0F) / 100.0F;
             float f5 = (f * 30.0F + f2 * 70.0F) / 100.0F;
@@ -290,7 +290,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0F, -((float)(absPlayerHorizon - 16.0D)), 0.0F);
-        GlStateManager.callList(glSkyList2);
+        //GlStateManager.callList(glSkyList2); //TODO
         GlStateManager.popMatrix();
         GlStateManager.enableTexture2D();
         GlStateManager.depthMask(true);
@@ -543,7 +543,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         float f7 = sunsetColors[1];
         float f8 = sunsetColors[2];
 
-        if (!Minecraft.getMinecraft().gameSettings.anaglyph) {
+        if (Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f9 = (f6 * 30.0F + f7 * 59.0F + f8 * 11.0F) / 100.0F;
             float f10 = (f6 * 30.0F + f7 * 70.0F) / 100.0F;
             float f11 = (f6 * 30.0F + f8 * 70.0F) / 100.0F;

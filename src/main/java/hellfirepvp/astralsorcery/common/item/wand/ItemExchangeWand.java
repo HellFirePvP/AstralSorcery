@@ -252,6 +252,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
                     }
                     world.setBlockState(placePos, stored);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                    ev.setAdditionalData(Block.getStateId(atOrigin));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
                 }
             }

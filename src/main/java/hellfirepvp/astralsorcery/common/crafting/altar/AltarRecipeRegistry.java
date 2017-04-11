@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
@@ -139,6 +140,14 @@ public class AltarRecipeRegistry {
         }
         return recipe;
     }
+
+    public static Collection<AbstractAltarRecipe> getRecipesForLevel(TileAltar.AltarLevel al) {
+        List<AbstractAltarRecipe> cache = Lists.newLinkedList();
+        cache.addAll(recipes.get(al));
+        cache.addAll(mtRecipes.get(al));
+        return cache;
+    }
+
 
     @Nullable
     public static AbstractAltarRecipe findMatchingRecipe(TileAltar ta, boolean ignoreStarlightRequirement) {

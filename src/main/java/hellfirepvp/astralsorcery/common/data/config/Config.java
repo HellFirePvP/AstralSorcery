@@ -64,8 +64,8 @@ public class Config {
     @Sync public static double swordSharpMultiplier = 0.1;
 
     @Sync public static float illuminationWandUseCost = 0.5F;
-    @Sync public static float architectWandUseCost = 0.03F;
-    @Sync public static float exchangeWandUseCost = 0.002F;
+    @Sync public static float architectWandUseCost = 0.07F;
+    @Sync public static float exchangeWandUseCost = 0.08F;
 
     @Sync public static int dimensionIdSkyRift = -81;
 
@@ -114,7 +114,7 @@ public class Config {
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can addAmount it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
-        String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "gregtech" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
+        String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");

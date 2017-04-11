@@ -94,26 +94,26 @@ public class GuiHandTelescope extends GuiWHScreen {
     private void setupInitialStars(long seed) {
         int offsetX = 6, offsetY = 6;
         int width = guiWidth - 6, height = guiHeight - 6;
-        random.setSeed(seed);
+        Random rand = new Random(seed);
 
-        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() % 24000);
+        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / 24000);
         for (int i = 0; i < day; i++) {
-            random.nextLong(); //Flush
+            rand.nextLong(); //Flush
         }
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         if (handle != null) {
-            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(random, (c) -> c instanceof IMajorConstellation);
+            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(rand, (c) -> c instanceof IMajorConstellation);
             if (bestGuess != null && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F &&
                     bestGuess.canDiscover(ResearchManager.clientProgress)) {
                 topFound = bestGuess;
-                selectedYaw = (random.nextFloat() * 360F) - 180F;
-                selectedPitch = -90F + random.nextFloat() * 25F;
+                selectedYaw = (rand.nextFloat() * 360F) - 180F;
+                selectedPitch = -90F + rand.nextFloat() * 25F;
             }
         }
 
         for (int i = 0; i < randomStars; i++) {
-            usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
+            usedStars.add(new StarPosition(offsetX + rand.nextFloat() * width, offsetY + rand.nextFloat() * height));
         }
     }
 
@@ -274,18 +274,12 @@ public class GuiHandTelescope extends GuiWHScreen {
         drawnConstellation = null;
         drawnStars = null;
 
-        if (handle != null && seed.isPresent()) {
-            random.setSeed(seed.get());
-            int day = (int) (Minecraft.getMinecraft().world.getWorldTime() % 24000);
-            for (int i = 0; i < day; i++) {
-                random.nextLong(); //Flush
-            }
-
-            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(random, (c) -> c instanceof IMajorConstellation);
+        if (handle != null) {
+            IMajorConstellation bestGuess = (IMajorConstellation) handle.getHighestDistributionConstellation(r, (c) -> c instanceof IMajorConstellation);
             if ((topFound == null || !topFound.equals(bestGuess)) && handle.getCurrentDistribution(bestGuess, (f) -> 1F) >= 0.8F) {
                 topFound = bestGuess;
-                selectedYaw = (random.nextFloat() * 360F) - 180F;
-                selectedPitch = -90F + random.nextFloat() * 45F;
+                selectedYaw = (r.nextFloat() * 360F) - 180F;
+                selectedPitch = -90F + r.nextFloat() * 45F;
             }
         }
 
@@ -407,7 +401,7 @@ public class GuiHandTelescope extends GuiWHScreen {
             GL11.glPopMatrix();
         }
 
-        r.setSeed(Minecraft.getMinecraft().world.getSeed() * 31 + lastTracked * 31);
+        r.setSeed(lastTracked * 31);
 
         Map<StarLocation, Rectangle> rectangles = null;
         if (topFound != null) {

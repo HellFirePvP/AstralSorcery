@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -79,8 +80,12 @@ public class ItemUtils {
     @Nullable
     public static IBlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
-        if(b == null) return null;
-        return b.getStateFromMeta(stack.getMetadata());
+        if (b == Blocks.AIR) return null;
+        try {
+            return b.getStateFromMeta(stack.getMetadata());
+        } catch (Exception exc) {
+            return b.getDefaultState();
+        }
     }
 
     public static Collection<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {

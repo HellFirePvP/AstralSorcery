@@ -113,6 +113,7 @@ public class BlockAttunementRelay extends BlockContainer {
             double dstSqOtherRelay = Double.MAX_VALUE;
             BlockArray relaysAndAltars = BlockDiscoverer.searchForBlocksAround(world, pos, 16,
                     (world1, pos1, state1) -> state1.getBlock().equals(BlocksAS.blockAltar) || state1.getBlock().equals(BlocksAS.attunementRelay));
+            relaysAndAltars.getPattern().remove(pos);
             for (Map.Entry<BlockPos, BlockArray.BlockInformation> entry : relaysAndAltars.getPattern().entrySet()) {
                 if(entry.getValue().type.equals(BlocksAS.blockAltar)) {
                     if(closestAltar == null || pos.distanceSq(entry.getKey()) < pos.distanceSq(closestAltar)) {

@@ -299,7 +299,7 @@ item.ItemColoredLens.effect.break.name=Break
 item.ItemColoredLens.effect.grow.name=Growth
 item.ItemColoredLens.effect.damage.name=Damage
 item.ItemColoredLens.effect.regen.name=Regeneration
-item.ItemColoredLens.effect.night.name=Night Vision
+item.ItemColoredLens.effect.push.name=Push
 
 inventory.altar.0=Luminous Crafting Table
 inventory.altar.1=Starlight Crafting Altar

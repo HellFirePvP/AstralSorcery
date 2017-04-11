@@ -50,11 +50,6 @@ public class BlockRitualLink extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-
-    }
-
-    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return box;
     }

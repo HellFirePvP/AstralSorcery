@@ -47,7 +47,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
-import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerBasicInfusion;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
 
@@ -72,7 +71,6 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rHandTelescope;
     public static TelescopeRecipe rTelescope;
     public static GrindstoneRecipe rGrindstone;
-    public static DiscoveryRecipe rAltar;
     public static RecipeRitualPedestal rRitualPedestal;
     public static DiscoveryRecipe rLightwell;
     public static DiscoveryRecipe rSkyResonator;
@@ -98,7 +96,7 @@ public class RegistryRecipes {
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
     public static ShapedRecipe rCCParchment;
-    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensNightvision;
+    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush;
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;
@@ -516,16 +514,14 @@ public class RegistryRecipes {
                 AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
 
-        rGlassLensNightvision = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.NIGHT.asStack())
+        rGlassLensPush = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.PUSH.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER)
-                .addPart(Items.GOLDEN_CARROT,
+                .addPart(Blocks.PISTON,
                         ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,
-                        ShapedRecipeSlot.LOWER_CENTER));
-        rGlassLensNightvision.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AttunementAltarSlot.values());
-        rGlassLensNightvision.setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                        ShapedRecipeSlot.UPPER_RIGHT));
+        rGlassLensPush.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AttunementAltarSlot.values());
+        rGlassLensPush.setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT);
 
@@ -652,17 +648,6 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER))).setPassiveStarlightRequirement(20);
-
-        rAltar = registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(BlocksAS.blockAltar)
-                .addPart(OreDictAlias.BLOCK_CRAFTING_TABLE,
-                        ShapedRecipeSlot.CENTER)
-                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_LEFT, ShapedRecipeSlot.LOWER_RIGHT)));
-        rAltar.setPassiveStarlightRequirement(10);
 
         rCCGlassLens = registerDiscoveryRecipe(new ShapedRecipe(ItemCraftingComponent.MetaType.GLASS_LENS.asStack())
                 .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,

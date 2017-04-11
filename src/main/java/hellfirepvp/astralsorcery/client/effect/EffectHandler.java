@@ -245,6 +245,11 @@ public final class EffectHandler {
             toAddBuffer.clear();
             cleanRequested = false;
         }
+        if(Minecraft.getMinecraft().world == null ||
+                Minecraft.getMinecraft().player == null) {
+            cleanRequested = true;
+            return;
+        }
 
         acceptsNewParticles = false;
         for (IComplexEffect.RenderTarget target : complexEffects.keySet()) {
@@ -262,13 +267,14 @@ public final class EffectHandler {
             }
         }
 
+        Vector3 playerPos = new Vector3(Minecraft.getMinecraft().player);
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
                 fastRenderParticles.remove(null);
                 continue;
             }
             effect.tick();
-            if (effect.canRemove()) {
+            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
                 effect.flagAsRemoved();
                 fastRenderParticles.remove(effect);
             }

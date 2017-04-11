@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -198,6 +199,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                     }
                     world.setBlockState(placePos, stored);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                    ev.setAdditionalData(Block.getStateId(stored));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
                 }
             }
@@ -219,7 +221,8 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
     public static void playArchitectPlaceEvent(PktParticleEvent event) {
         AstralSorcery.proxy.scheduleClientside(() -> {
             Vector3 at = event.getVec();
-            RenderingUtils.playBlockBreakParticles(at.toBlockPos(), Minecraft.getMinecraft().world.getBlockState(at.toBlockPos()));
+            IBlockState state = Block.getStateById((int) Math.round(event.getAdditionalData()));
+            RenderingUtils.playBlockBreakParticles(at.toBlockPos(), state);
             for (int i = 0; i < 9; i++) {
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                         at.getX() + (itemRand.nextBoolean() ? -(itemRand.nextFloat() * 0.1) : 1 + (itemRand.nextFloat() * 0.1)),

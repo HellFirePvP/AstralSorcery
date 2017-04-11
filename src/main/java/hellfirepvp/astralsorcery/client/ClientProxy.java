@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.render.entity.RenderEntityIlluminationSp
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityItemHighlight;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityStarburst;
 import hellfirepvp.astralsorcery.client.render.tile.*;
+import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.client.util.MeshRegisterHelper;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
@@ -165,6 +166,8 @@ public class ClientProxy extends CommonProxy {
         ClientJournalMapping.init();
         ClientPerkTextureMapping.init();
         OBJModelLibrary.init();
+
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
     }
 
     @Override

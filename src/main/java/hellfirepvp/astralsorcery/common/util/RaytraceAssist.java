@@ -52,6 +52,7 @@ public class RaytraceAssist {
     private boolean collectEntities = false;
     private List<Integer> collected = new LinkedList<>();
     private AxisAlignedBB collectBox = null;
+    private boolean includeEnd = false;
 
     private BlockPos hit = null;
 
@@ -60,10 +61,15 @@ public class RaytraceAssist {
     }
 
     public RaytraceAssist(Vector3 start, Vector3 target) {
-        this.start = start;
-        this.target = target;
-        this.startPos = start.toBlockPos();
-        this.targetPos = target.toBlockPos();
+        this.start = start.clone();
+        this.target = target.clone();
+        this.startPos = this.start.toBlockPos();
+        this.targetPos = this.target.toBlockPos();
+    }
+
+    public RaytraceAssist includeEndPoint() {
+        this.includeEnd = true;
+        return this;
     }
 
     public void setCollectEntities(double additionalCollectRadius) {
@@ -82,8 +88,8 @@ public class RaytraceAssist {
             BlockPos at = stepVec.toBlockPos();
 
             if(collectEntities) {
-                List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
-                for (EntityLivingBase b : entities) {
+                List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, collectBox.offset(stepVec.getX(), stepVec.getY(), stepVec.getZ()));
+                for (Entity b : entities) {
                     if(!collected.contains(b.getEntityId())) {
                         collected.add(b.getEntityId());
                     }
@@ -122,12 +128,12 @@ public class RaytraceAssist {
         return hit;
     }
 
-    public List<EntityLivingBase> collectedEntities(World world) {
-        List<EntityLivingBase> entities = new LinkedList<>();
+    public List<Entity> collectedEntities(World world) {
+        List<Entity> entities = new LinkedList<>();
         for (Integer id : collected) {
             Entity e = world.getEntityByID(id);
-            if(e != null && e instanceof EntityLivingBase) {
-                entities.add((EntityLivingBase) e);
+            if(e != null && !e.isDead) {
+                entities.add(e);
             }
         }
         return entities;
@@ -144,7 +150,7 @@ public class RaytraceAssist {
     }
 
     private boolean isStartEnd(BlockPos hit) {
-        return hit.equals(startPos) || hit.equals(targetPos);
+        return hit.equals(startPos) || (!includeEnd && hit.equals(targetPos));
     }
 
     public static void addPassable(Block b, Integer... stateMetas) {

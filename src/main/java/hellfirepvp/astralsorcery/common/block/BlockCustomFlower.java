@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -59,6 +60,7 @@ public class BlockCustomFlower extends Block implements BlockCustomName, BlockVa
     public BlockCustomFlower() {
         super(Material.PLANTS);
         setLightLevel(0.2F);
+        setSoundType(SoundType.PLANT);
         setTickRandomly(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }

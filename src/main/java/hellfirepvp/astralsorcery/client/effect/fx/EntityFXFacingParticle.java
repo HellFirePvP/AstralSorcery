@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -99,6 +100,10 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         colorGreen = ((float) color.getGreen()) / 255F;
         colorBlue  = ((float) color.getBlue())  / 255F;
         return this;
+    }
+
+    public Vector3 getPosition() {
+        return new Vector3(x, y, z);
     }
 
     @Override

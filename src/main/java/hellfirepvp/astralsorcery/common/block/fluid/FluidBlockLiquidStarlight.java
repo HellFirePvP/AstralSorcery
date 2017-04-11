@@ -105,7 +105,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
             }
         }
 
-        if (shouldCreateBlock && world.rand.nextInt(4) == 0) {
+        if (shouldCreateBlock) {
             if (isCold) {
                 world.setBlockState(pos, Blocks.ICE.getDefaultState());
             } else {
