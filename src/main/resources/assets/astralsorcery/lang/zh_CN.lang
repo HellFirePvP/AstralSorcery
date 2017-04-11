@@ -195,10 +195,10 @@ astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能
 astralsorcery.journal.LENSES_EFFECTS.2.text=将海蓝宝石和其他材料的混合物涂抹在 水晶透镜上，最终你做出了彩色水晶透镜。<NL>世界万物皆是平衡的，你获得了星辉的特殊 能力的同时，所能使用的星能就减少了。
 
 research.RITUAL_LINK.name=稳定仪式
-astralsorcery.journal.RITUAL_LINK.1.text=将星能聚焦到信标基座上可以让水晶与世界的联系更加紧密。不过要保持水晶的有效需要较大的空间来搭建相应的结构。To this end you've determined it may be possible to redirect a ritual's effect using a specially constructed linking stone placed five blocks above the ritual pedestal and then linked to a matching stone some distance away.
+astralsorcery.journal.RITUAL_LINK.1.text=将星能聚焦到信标基座上可以让水晶与世界的联系更加紧密。不过要保持水晶的有效需要较大的空间来搭建相应的结构。为此，你确定可以用专门的连接石绑定到一定距离的匹配石上，以将仪式效果定位到仪式基座5个方块高度上。
 
 research.LINKTOOL.name=链接器
-astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects aquamarines have on liquid starlight, having multiple of those condensed into one crystal might provide enough to direct and focus the raw rays of starlight in a more organized manner.<NL>Fusing them together with a rock crystal might prove a bit tedious if you don't have sufficient starlight. Luckily your newly upgraded altar might help a bit on that end.<NL>However, holding the created crystal with your bare hands seems unreasonable.
+astralsorcery.journal.LINKTOOL.1.text=会想起海蓝宝石对星能液的牵引作用，将多个宝石和水晶融合可以增强它牵引星辉的能力以便于更好的掌控星能。<NL>如果你的星能不够，恐怕无法将海蓝宝石和水晶石融合。不过，你新升级的祭坛能解决这个问题。<NL>当然，你总不可能直接拿着这种新水晶吧。
 astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
 
 research.ILLUMINATION_WAND.name=照明之杖
@@ -326,7 +326,7 @@ tile.BlockAttunementAltar.name=共鸣祭坛
 tile.BlockStructural.attunement_altar_struct.name=共鸣祭坛
 tile.BlockAttunementRelay.name=光波增幅器
 tile.BlockRitualPedestal.name=信标基座
-tile.BlockFlareLight.name=挥发性火炬
+tile.BlockFlareLight.name=不稳定耀斑
 tile.BlockWorldIlluminator.name=洞穴照明器
 tile.BlockBlackMarble.raw.name=熏黑大理石
 tile.BlockMarble.raw.name=大理石
