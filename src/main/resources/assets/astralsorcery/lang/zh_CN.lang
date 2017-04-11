@@ -179,7 +179,7 @@ astralsorcery.journal.TELESCOPE.3.text=发现星座的方法与手持望远镜�
 astralsorcery.journal.TELESCOPE.4.text=虽然这些新发现的星座似乎离你很远。 无法进一步靠近它们，但你仍然可以用水晶 来吸收它们的星能。
 
 research.ALTAR3.name=天辉祭坛
-astralsorcery.journal.ALTAR3.1.text=Just as you suspected, the dust has way more interesting properties than the ingot itself. Directly looking at a pile of it, it almost feels like you can see the ground behind it through an ever shifting dark sky full of stars. Its properties to channel light are truly unique.<NL>Using that as a base, further enhancing your altar to perform even more complex creations would be most desireable.
+astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着比星辉锭更好的特性。Directly looking at a pile of it, it almost feels like you can see the ground behind it through an ever shifting dark sky full of stars. Its properties to channel light are truly unique.<NL>Using that as a base, further enhancing your altar to perform even more complex creations would be most desireable.
 astralsorcery.journal.ALTAR3.4.text=Sadly, your current setup won't really benefit much from the upgrade since its collective abilities are limited. A bigger structure around it fully exposed to the sky should be enough to collect and focus enough starlight for your purposes.
 
 research.LENS.name=水晶透镜
@@ -187,8 +187,8 @@ astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光�
 astralsorcery.journal.LENS.3.text=不断改变光线的方向会对其造成损害。而且 光线的传播距离有限。<NL>另外，这个能改变星辉方向的透镜的主要 部分是由水晶石制成的，它的属性影响着 透镜的优劣。纯度太低的水晶石会大大的 影响透镜的功效。水晶石越大，制作的透镜越多。
 astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜能接受多个光源 但只有一个输出点。无论什么方向的星辉， 透镜都能将其折射到正确的位置。星辉的 照射路径不得阻挡。
 
-research.STARLIGHT_NETWORK.name=Focused Starlight
-astralsorcery.journal.STARLIGHT_NETWORK.1.text=Having iron shimmer in a blue color is nice and all, but these focused beams of starlight are more useful than that.<NL>More specifically, since these beams are a focused form of the starlight many of your inventions need to collect by themselves from the night sky, focusing them on said machinery might supply a more steady and bigger amount than what those machines can collect on their own.
+research.STARLIGHT_NETWORK.name=聚焦星辉
+astralsorcery.journal.STARLIGHT_NETWORK.1.text=闪烁着蓝光的铁矿看起来十分养眼，但这些星能束比它更。<NL>具体来说，正因为这些星能束是从夜空中凝聚而成的，当将其聚焦在使用星能的设备上时，设备会获得更大量的稳定星能。
 
 research.LENSES_EFFECTS.name=彩色透镜
 astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能对周围的一切 造成广泛的影响。正常情况下，星辉间保持着 平衡状态，其光线也是近乎中性的。<NL>你想将星辉中的其他光谱过滤掉，只留下 需要的那部分。
@@ -199,7 +199,7 @@ astralsorcery.journal.RITUAL_LINK.1.text=将星能聚焦到信标基座上可以
 
 research.LINKTOOL.name=链接器
 astralsorcery.journal.LINKTOOL.1.text=会想起海蓝宝石对星能液的牵引作用，将多个宝石和水晶融合可以增强它牵引星辉的能力以便于更好的掌控星能。<NL>如果你的星能不够，恐怕无法将海蓝宝石和水晶石融合。不过，你新升级的祭坛能解决这个问题。<NL>当然，你总不可能直接拿着这种新水晶吧。
-astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
+astralsorcery.journal.LINKTOOL.3.text=这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。<NL>要想改变星能的方向，只需右键单击源头。然后在右键单击另一个特定的位置。在潜行时右键单击目标位置即会中断链接。只要切换物品栏就会取消选择并停止链接。
 
 research.ILLUMINATION_WAND.name=照明之杖
 astralsorcery.journal.ILLUMINATION_WAND.1.text=你在不断深入研究星力，试图来强化自己时， 你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块 或空气中，可以强化方块以抵御几乎 任何类型的伤害。用体内的星力充能后， 右键可将强化方块还原，Shift右键 将形成星核。
