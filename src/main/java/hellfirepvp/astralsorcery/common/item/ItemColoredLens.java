@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
@@ -18,21 +19,23 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
-import hellfirepvp.astralsorcery.common.util.CropHelper;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -40,6 +43,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -123,12 +127,12 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     public static enum ColorType {
 
-        FIRE   (TargetType.ENTITY, 0xFF5711, 0.05F),
-        BREAK  (TargetType.BLOCK,  0xD4FF00, 0.05F),
-        GROW   (TargetType.BLOCK,  0x00D736, 0.05F),
-        DAMAGE (TargetType.ENTITY, 0x767676, 0.05F),
-        REGEN  (TargetType.ENTITY, 0xA13085, 0.05F),
-        NIGHT  (TargetType.ENTITY, 0x008EAE, 0.05F);
+        FIRE   (TargetType.ENTITY, 0xFF5711, 0.07F),
+        BREAK  (TargetType.BLOCK,  0xD4FF00, 0.07F),
+        GROW   (TargetType.BLOCK,  0x00D736, 0.07F),
+        DAMAGE (TargetType.ENTITY, 0x767676, 0.07F),
+        REGEN  (TargetType.ENTITY, 0xA13085, 0.07F),
+        PUSH   (TargetType.ENTITY, 0x2FE1FF, 0.07F);
 
         private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
@@ -164,24 +168,44 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
             return ordinal();
         }
 
-        public void onLivingEntityInBeam(EntityLivingBase living, float percStrength) {
+        public void onEntityInBeam(Vector3 beamOrigin, Vector3 beamTarget, Entity entity, float percStrength) {
             switch (this) {
                 case FIRE:
                     if(itemRand.nextFloat() > percStrength) return;
-                    living.setFire(1);
+                    if(entity instanceof EntityItem) {
+                        ItemStack current = ((EntityItem) entity).getEntityItem();
+                        ItemStack result = FurnaceRecipes.instance().getSmeltingResult(current);
+                        if(!result.isEmpty()) {
+                            Vector3 entityPos = new Vector3(entity);
+                            ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, 1));
+                            if(current.getCount() > 1) {
+                                current.shrink(1);
+                                ((EntityItem) entity).setEntityItemStack(current);
+                            } else {
+                                entity.setDead();
+                            }
+                        }
+                    } else if(entity instanceof EntityLivingBase) {
+                        entity.setFire(1);
+                    }
                     break;
                 case DAMAGE:
+                    if(!(entity instanceof EntityLivingBase)) return;
                     if(itemRand.nextFloat() > percStrength) return;
-                    if(living instanceof EntityPlayer && living.getServer() != null && living.getServer().isPVPEnabled()) return;
-                    living.attackEntityFrom(CommonProxy.dmgSourceStellar, 6.5F);
+                    if(entity instanceof EntityPlayer && entity.getServer() != null && entity.getServer().isPVPEnabled()) return;
+                    entity.attackEntityFrom(CommonProxy.dmgSourceStellar, 6.5F);
                     break;
                 case REGEN:
+                    if(!(entity instanceof EntityLivingBase)) return;
                     if(itemRand.nextFloat() > percStrength) return;
-                    living.heal(3.5F);
+                    ((EntityLivingBase) entity).heal(3.5F);
                     break;
-                case NIGHT:
-                    if(itemRand.nextFloat() > percStrength) return;
-                    living.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 300, 0, true, true));
+                case PUSH:
+                    if(entity instanceof EntityPlayer || itemRand.nextFloat() > percStrength) return;
+                    Vector3 dir = beamTarget.clone().subtract(beamOrigin).normalize().multiply(0.5F);
+                    entity.motionX = Math.min(1F, entity.motionZ + dir.getX());
+                    entity.motionY = Math.min(1F, entity.motionY + dir.getY());
+                    entity.motionZ = Math.min(1F, entity.motionZ + dir.getZ());
                     break;
             }
         }
@@ -192,17 +216,16 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     float hardness = state.getBlockHardness(world, at);
                     if(hardness < 0) return;
                     hardness *= 1.5F;
-                    addProgress(world, at, hardness, percStrength * 7.5F);
+                    addProgress(world, at, hardness, percStrength * 4F);
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, at);
+                    pkt.data = Block.getStateId(state);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at, 16));
                     break;
                 case GROW:
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.GrowablePlant plant = CropHelper.wrapPlant(world, at);
                     if(plant != null) {
-                        if(itemRand.nextBoolean()) {
-                            plant.tryGrow(world, world.rand);
-                        }
+                        plant.tryGrow(world, world.rand);
                         PktParticleEvent packet = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
@@ -245,8 +268,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
         @SideOnly(Side.CLIENT)
         public static void blockBreakAnimation(PktPlayEffect pktPlayEffect) {
-            World w = Minecraft.getMinecraft().world;
-            RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, w.getBlockState(pktPlayEffect.pos));
+            RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, Block.getStateById(pktPlayEffect.data));
         }
 
     }
@@ -283,13 +305,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
             IBlockState nowAt = world.getBlockState(pos);
             if(nowAt.getBlock().equals(expected.getBlock()) && nowAt.getBlock().getMetaFromState(nowAt) == expected.getBlock().getMetaFromState(expected)) {
-                List<ItemStack> drops = nowAt.getBlock().getDrops(world, pos, nowAt, 5);
-                world.setBlockToAir(pos);
-                PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, pos);
-                PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
-                for (ItemStack stack : drops) {
-                    ItemUtils.dropItemNaturally(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-                }
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos);
             }
         }
 

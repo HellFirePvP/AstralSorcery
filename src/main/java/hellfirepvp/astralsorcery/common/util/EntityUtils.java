@@ -28,8 +28,8 @@ import java.util.function.Function;
  */
 public class EntityUtils {
 
-    public static void applyVortexMotion(Function<Void, Vector3> positionFunc, Function<Vector3, Object> addMotion, Vector3 to, double vortexRange, double multiplier) {
-        Vector3 pos = positionFunc.apply(null);
+    public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction, Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
+        Vector3 pos = getPositionFunction.apply(null);
         double diffX = (to.getX() - pos.getX()) / vortexRange;
         double diffY = (to.getY() - pos.getY()) / vortexRange;
         double diffZ = (to.getZ() - pos.getZ()) / vortexRange;
@@ -40,7 +40,7 @@ public class EntityUtils {
             toAdd.setX(diffX / dist * dstFactorSq * 0.15D * multiplier);
             toAdd.setY(diffY / dist * dstFactorSq * 0.25D * multiplier);
             toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
-            addMotion.apply(toAdd);
+            addMotionFunction.apply(toAdd);
         }
     }
 

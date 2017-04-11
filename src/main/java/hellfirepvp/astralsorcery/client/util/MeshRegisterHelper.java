@@ -45,7 +45,7 @@ public class MeshRegisterHelper {
     }
 
     public static BlockModelShapes getBMShapes() {
-        return getIMM().getModelManager().getBlockModelShapes();
+        return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes();
     }
 
 }

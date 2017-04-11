@@ -351,6 +351,12 @@ public class WorldProviderBrightnessInj extends WorldProvider {
 
     @Override
     public boolean isDaytime() {
+        WorldSkyHandler handle = getSkyHandler();
+        if(handle != null) {
+            if (handle.dayOfSolarEclipse && handle.solarEclipse) {
+                return true;
+            }
+        }
         return parentOvrProvider.isDaytime();
     }
 

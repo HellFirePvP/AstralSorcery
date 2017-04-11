@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalTransmissionNode;
@@ -22,6 +23,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -125,21 +127,25 @@ public class TileCrystalLens extends TileTransmissionBase {
         float str = 1F / ((float) linked.size());
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
-            RaytraceAssist rta = new RaytraceAssist(thisVec, to);
+            RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
             if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK) {
                 boolean clear = rta.isClear(world);
                 if(!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
-                    lensColor.onBlockOccupyingBeam(world, hit, world.getBlockState(hit), str);
+                    IBlockState hitState = world.getBlockState(hit);
+                    if (!hit.equals(to.toBlockPos()) || (!hitState.getBlock().equals(BlocksAS.lens) &&
+                            !hitState.getBlock().equals(BlocksAS.lensPrism))) {
+                                lensColor.onBlockOccupyingBeam(world, hit, hitState, str);
+                            }
                     this.occupiedConnections.add(hit);
                 }
             } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
-                List<EntityLivingBase> found = rta.collectedEntities(world);
-                float lessStr = str / ((float) found.size());
-                for(EntityLivingBase entity : found) {
-                    lensColor.onLivingEntityInBeam(entity, lessStr);
+                List<Entity> found = rta.collectedEntities(world);
+                float pStr = lensColor == ItemColoredLens.ColorType.FIRE ? str / 2F : str;
+                for(Entity entity : found) {
+                    lensColor.onEntityInBeam(thisVec, to, entity, pStr);
                 }
             }
         }

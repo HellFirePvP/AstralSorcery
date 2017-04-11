@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -196,7 +197,7 @@ public class PlayerProgress {
             perks.put(c.getSingleInstance(), 1);
         }
         return perks;*/
-        return Collections.unmodifiableMap(appliedPerks);
+        return appliedPerks == null ? Maps.newHashMap() : Collections.unmodifiableMap(appliedPerks);
     }
 
     public boolean hasPerkUnlocked(ConstellationPerks perk) {
@@ -246,11 +247,11 @@ public class PlayerProgress {
     }
 
     protected void modifyCharge(double charge) {
-        this.alignmentCharge = Math.max(0, this.alignmentCharge + charge);
+        this.alignmentCharge = MathHelper.clamp(this.alignmentCharge + charge, 0, 5000);
     }
 
     protected void forceCharge(int charge) {
-        this.alignmentCharge = Math.max(0, charge);
+        this.alignmentCharge = MathHelper.clamp(charge, 0, 5000);
     }
 
     protected boolean stepTier() {

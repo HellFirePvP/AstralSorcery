@@ -47,11 +47,11 @@ public class PlayerChargeHandler implements ITickHandler {
                 if(pl.isCreative()) {
                     charge = 1F;
                 } else {
-                    float chargeGain = 0.01F;
+                    float chargeGain = 0.003F;
                     float dayMult = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(pl.getEntityWorld());
                     chargeGain *= (0.5F + dayMult * 0.5F);
                     if(pl.getEntityWorld().canSeeSky(pl.getPosition().up())) {
-                        chargeGain *= 2F;
+                        chargeGain *= 3F;
                     }
                     charge = MathHelper.clamp(charge + chargeGain, 0F, 1F);
                 }

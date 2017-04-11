@@ -9,12 +9,15 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.SerializeableRecipe;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -86,7 +89,15 @@ public class PktSyncMinetweakerChanges implements IMessage, IMessageHandler<PktS
                 change.onMessage(change, ctx);
             }
             CraftingAccessManager.compile();
+            if(p.parts.size() > 0) { //Only if it's actually necessary...
+                reloadColors();
+            }
             return null;
+        }
+
+        @SideOnly(Side.CLIENT)
+        private void reloadColors() {
+            ItemColorizationHelper.instance.reloadRegistry();
         }
 
     }

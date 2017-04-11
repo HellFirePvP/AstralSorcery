@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
+import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -29,6 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, IMessage> {
 
     private byte typeOrdinal;
+    public int data = 0;
     public BlockPos pos;
 
     public PktPlayEffect() {}
@@ -41,15 +43,15 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
     @Override
     public void fromBytes(ByteBuf buf) {
         this.typeOrdinal = buf.readByte();
-        this.pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+        this.pos = ByteBufUtils.readPos(buf);
+        this.data = buf.readInt();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeByte(typeOrdinal);
-        buf.writeInt(pos.getX());
-        buf.writeInt(pos.getY());
-        buf.writeInt(pos.getZ());
+        ByteBufUtils.writePos(buf, pos);
+        buf.writeInt(data);
     }
 
     @Override
