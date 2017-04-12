@@ -84,7 +84,11 @@ public class ItemUtils {
     public static IBlockState createBlockState(ItemStack stack) {
         Block b = Block.getBlockFromItem(stack.getItem());
         if (b == Blocks.AIR) return null;
-        return b.getStateFromMeta(stack.getMetadata());
+        try {
+            return b.getStateFromMeta(stack.getMetadata());
+        } catch (Exception exc) {
+            return b.getDefaultState();
+        }
     }
 
     public static Collection<ItemStack> scanInventoryFor(IItemHandler handler, Item i) {

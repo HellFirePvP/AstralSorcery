@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.util.item;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -58,7 +59,7 @@ public class DummyVanillaBakedModel implements IBakedModel {
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return null;
+        return Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("");
     }
 
     @Override

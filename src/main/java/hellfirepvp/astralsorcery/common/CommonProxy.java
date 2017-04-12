@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common;
 
+import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLeve
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
 import hellfirepvp.astralsorcery.common.container.*;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -56,13 +58,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -75,6 +81,7 @@ public class CommonProxy implements IGuiHandler {
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
     private CommonScheduler commonScheduler = new CommonScheduler();
@@ -194,6 +201,14 @@ public class CommonProxy implements IGuiHandler {
         CraftingAccessManager.compile();
     }
 
+    public void clientFinishedLoading() {
+        ItemHandle.ignoreGatingRequirement = false;
+    }
+
+    public FakePlayer getASFakePlayerServer(WorldServer world) {
+        return FakePlayerFactory.get(world, new GameProfile(UUID.randomUUID(), "AS-FakePlayer"));
+    }
+
     public void registerVariantName(Item item, String name) {}
 
     public void registerBlockRender(Block block, int metadata, String name) {}
@@ -215,7 +230,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void scheduleDelayed(Runnable r) {
-        scheduleClientside(r, 0);
+        scheduleDelayed(r, 0);
     }
 
     public void fireLightning(World world, Vector3 from, Vector3 to) {

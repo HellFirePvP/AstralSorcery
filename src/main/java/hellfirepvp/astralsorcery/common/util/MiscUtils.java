@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -20,7 +22,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
@@ -66,6 +71,42 @@ public class MiscUtils {
             }
         }
         return max;
+    }
+
+    public static boolean breakBlockWithPlayer(BlockPos pos, EntityPlayerMP playerMP) {
+        return playerMP.interactionManager.tryHarvestBlock(pos);
+    }
+
+    //Copied from ForgeHooks.onBlockBreak & PlayerInteractionManager.tryHarvestBlock
+    //Duplicate break functionality without a active player.
+    //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
+    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
+        try {
+            FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
+            IBlockState state = world.getBlockState(pos);
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fp);
+            MinecraftForge.EVENT_BUS.post(event);
+            int exp = event.getExpToDrop();
+            if(event.isCanceled()) return false;
+
+            IBlockState iblockstate = world.getBlockState(pos);
+            TileEntity tileentity = world.getTileEntity(pos);
+            Block block = iblockstate.getBlock();
+            world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
+            boolean flag = block.canHarvestBlock(world, pos, fp);
+            boolean flag1 = block.removedByPlayer(iblockstate, world, pos, fp, flag);
+            if (flag1) {
+                block.onBlockDestroyedByPlayer(world, pos, iblockstate);
+            }
+            if (flag1 && flag) {
+                block.harvestBlock(world, fp, pos, iblockstate, tileentity, ItemStack.EMPTY);
+            }
+            if (flag1 && exp > 0) {
+                block.dropXpOnBlockBreak(world, pos, exp);
+            }
+            return flag1;
+        } catch (Exception ignored) {} //Silently fail and propagate it as "can't break this block"
+        return false;
     }
 
     public static Collection<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {

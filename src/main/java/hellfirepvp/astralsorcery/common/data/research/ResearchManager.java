@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.research;
 
+import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -31,7 +32,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,11 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -80,8 +82,9 @@ public class ResearchManager {
             progress = playerProgressServer.get(uuid);
         }
         if (progress == null) {
-            AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
-            AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
+            progress = new PlayerProgress(); //WELL we already try recovering.. so wtf.
+            //AstralSorcery.log.warn("Failed to load AstralSocery Progress data!");
+            //AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
         }
         return progress;
     }
@@ -363,6 +366,12 @@ public class ResearchManager {
         if (playerProgressServer.get(pUUID) == null) return;
         File playerFile = getPlayerFile(pUUID);
         try {
+            Files.copy(playerFile, getPlayerBackupFile(pUUID));
+        } catch (IOException exc) {
+            AstralSorcery.log.warn("Failed copying progress file contents to backup file!");
+            exc.printStackTrace();
+        }
+        try {
             NBTTagCompound cmp = new NBTTagCompound();
             playerProgressServer.get(pUUID).store(cmp);
             CompressedStreamTools.write(cmp, playerFile);
@@ -376,15 +385,57 @@ public class ResearchManager {
     public static void loadPlayerKnowledge(UUID pUUID) {
         File playerFile = getPlayerFile(pUUID);
         try {
-            NBTTagCompound compound = CompressedStreamTools.read(playerFile);
-            PlayerProgress progress = new PlayerProgress();
-            if (compound != null) {
-                progress.load(compound);
-            }
-            progress.forceGainResearch(ResearchProgression.DISCOVERY);
+            load_unsafe(pUUID, playerFile);
+        } catch (Exception e) {
+            AstralSorcery.log.warn("Unable to load progress from default progress file. Attempting loading backup.");
+            AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
+            e.printStackTrace();
 
-            playerProgressServer.put(pUUID, progress);
-        } catch (IOException e) {}
+            playerFile = getPlayerBackupFile(pUUID);
+            try {
+                load_unsafe(pUUID, playerFile);
+                Files.copy(playerFile, getPlayerFile(pUUID)); //Copying back.
+            } catch (Exception e1) {
+                AstralSorcery.log.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
+                AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
+                e1.printStackTrace();
+
+                File plOriginal = getPlayerFile(pUUID);
+                File plBackup = getPlayerBackupFile(pUUID);
+                try {
+                    Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
+                    Files.copy(plBackup,   new File(plBackup.getParent(),     plBackup.getName() + ".lerror"));
+                    AstralSorcery.log.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
+                    AstralSorcery.log.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
+                } catch (IOException e2) {
+                    AstralSorcery.log.warn("Unable to copy files to error-files.");
+                    AstralSorcery.log.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
+                    e2.printStackTrace();
+                }
+                plOriginal.delete();
+                plBackup.delete();
+
+                informPlayersAboutProgressionLoss(pUUID);
+
+                load_unsafeFromNBT(pUUID, null);
+                savePlayerKnowledge(pUUID);
+            }
+        }
+    }
+
+    private static void load_unsafe(UUID pUUID, File playerFile) throws Exception {
+        NBTTagCompound compound = CompressedStreamTools.read(playerFile); //IO-Exc thrown only here.
+        load_unsafeFromNBT(pUUID, compound);
+    }
+
+    private static void load_unsafeFromNBT(UUID pUUID, @Nullable NBTTagCompound compound) {
+        PlayerProgress progress = new PlayerProgress();
+        if (compound != null) {
+            progress.load(compound);
+        }
+        progress.forceGainResearch(ResearchProgression.DISCOVERY);
+
+        playerProgressServer.put(pUUID, progress);
     }
 
     public static File getPlayerFile(EntityPlayer player) {
@@ -392,7 +443,27 @@ public class ResearchManager {
     }
 
     public static File getPlayerFile(UUID pUUID) {
-        return new File(getPlayerDirectory(), pUUID.toString() + ".astral");
+        File f = new File(getPlayerDirectory(), pUUID.toString() + ".astral");
+        if(!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
+        }
+        return f;
+    }
+
+    public static File getPlayerBackupFile(EntityPlayer player) {
+        return getPlayerBackupFile(player.getUniqueID());
+    }
+
+    public static File getPlayerBackupFile(UUID pUUID) {
+        File f = new File(getPlayerDirectory(), pUUID.toString() + ".astralback");
+        if(!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
+        }
+        return f;
     }
 
     private static File getPlayerDirectory() {
@@ -405,7 +476,7 @@ public class ResearchManager {
     }
 
     public static void saveAndClearServerCache() {
-        playerProgressServer.keySet().forEach(hellfirepvp.astralsorcery.common.data.research.ResearchManager::savePlayerKnowledge);
+        playerProgressServer.keySet().forEach(ResearchManager::savePlayerKnowledge);
         playerProgressServer.clear();
     }
 
@@ -489,6 +560,23 @@ public class ResearchManager {
             }
         } else {
 
+        }
+    }
+
+    private static void informPlayersAboutProgressionLoss(UUID pUUID) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if(server != null) {
+            EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(pUUID);
+            if(player != null) {
+                player.sendMessage(new TextComponentString("AstralSorcery: Your progression could not be loaded and can't be recovered from backup. Please contact an administrator to lookup what went wrong and/or potentially recover your data from a backup.").setStyle(new Style().setColor(TextFormatting.RED)));
+            }
+            String resolvedName = player != null ? player.getName() : pUUID.toString() + " (Not online)";
+            for (String opName : server.getPlayerList().getOppedPlayerNames()) {
+                EntityPlayer pl = server.getPlayerList().getPlayerByUsername(opName);
+                if(pl != null) {
+                    pl.sendMessage(new TextComponentString("AstralSorcery: The progression of " + resolvedName + " could not be loaded and can't be recovered from backup. Error files might be created from the unloadable progression files, check the console for additional information!").setStyle(new Style().setColor(TextFormatting.RED)));
+                }
+            }
         }
     }
 

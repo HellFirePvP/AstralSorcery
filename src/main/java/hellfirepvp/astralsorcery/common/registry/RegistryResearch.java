@@ -18,7 +18,6 @@ import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
 import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
-import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
@@ -33,7 +32,6 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -101,7 +99,7 @@ public class RegistryResearch {
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensDamage));
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensGrowth));
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensRegeneration));
-        resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensNightvision));
+        resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensPush));
 
         ResearchNode resRitualLink = new ResearchNode(new ItemStack(BlocksAS.ritualLink), "RITUAL_LINK", 1, 0);
         resRitualLink.addPage(getTextPage("RITUAL_LINK.1"));
