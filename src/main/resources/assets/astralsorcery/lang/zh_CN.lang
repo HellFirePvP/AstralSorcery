@@ -122,7 +122,7 @@ research.WELL.name=聚星缸
 astralsorcery.journal.WELL.1.text=在晚上，海蓝宝石和水晶石表面凝结了 一层奇怪的液体。在仔细观察后，你发现 这种液体似乎是由星辉中的能量冷凝成的。<NL>一个精心雕琢的大理石盆将更容易收集这种 液体。这种液体散发着明亮而纯净的光， 看上去感觉非常冷，即使一整桶也几乎感觉不到重量。
 astralsorcery.journal.WELL.3.text=只有将水晶石或海蓝宝石放置顶部才能使用聚星缸。用于收集星光的宝石与水晶将不断碎裂，直到完全粉碎为止。一旦放置在聚星缸上，就只能用于收集星能液！<NL>这种星能液似乎和水晶石以及其他流体会产生特别的效果，不妨实验下。
 
-research.ILLUM_POWDER.name=荧光粉
+research.ILLUM_POWDER.name=辉光粉
 astralsorcery.journal.ILLUM_POWDER.1.text=萤石和海蓝宝石在靠近时会产生共振反应。它们之间会生成微小的不断闪烁的火焰般的火花。这些火花能散播到离源头很远的距离。将海蓝宝石打碎后与萤石粉混合就产生了一种有辐射能力的粉尘，它能照亮周围的空间。右键使用或抛出它可以帮你更方便的照明洞穴。
 
 research.SKY_RESO.name=天波共振器
@@ -137,8 +137,8 @@ research.QUICK_CHARGE.name=同调充能
 astralsorcery.journal.QUICK_CHARGE.1.text=首先，与一个星座对应，此时你凝视着天空，能感觉到强大的力量在四肢百骸中流淌。<NL>虽然你无法直接使用身边的蓝白色能量，但你的直觉告诉你可以用些工具以非同寻常的方式来激发它的全部潜力。
 
 research.ILLUMINATOR.name=洞穴照明器
-astralsorcery.journal.ILLUMINATOR.1.text=Recalling the illuminating effects the powder made from glowstone and aquamarine has, you came up with a device that takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
-astralsorcery.journal.ILLUMINATOR.3.text=The Cave illuminator forms these flares in any lightless open space located beneath the device itself. The process of formation is slow, but its radius extends an impressive distance from the main device. The cave illuminator also adapts to newly formed empty spaces made by mining and building, making it indispensable to avid spelunkers and miners.<NL> The Cave Illuminator requires a visible night sky to work.
+astralsorcery.journal.ILLUMINATOR.1.text=会想起萤石粉和海蓝宝石所制作的粉末的强大照明效果，你设计了一个能充分利用这种特性的设备。使用水晶石大大加剧了萤石粉和海蓝宝石的反应，并将火花分割成小型的蓝色耀斑而非持续的点亮。这些耀斑能够穿透任何物质还相互排斥，这使得被照亮的区域趋向于均匀分布。
+astralsorcery.journal.ILLUMINATOR.3.text=洞穴照明器会在它下方的黑暗空间中缓慢形成这些耀斑。它的工作范围极大，但工作速度较慢。洞穴照明器也兼容那些因挖矿和建筑而出现的新空间，这使得它深受矿工和建筑师的青睐。<NL>洞穴照明器需要在夜空下才能工作。
 
 research.ATT_PLAYER.name=共鸣之力
 astralsorcery.journal.ATT_PLAYER.1.text=用星辉或者星能液制作的东西的确不错， 但你似乎忽略了一些重要的东西。宇宙中 有数之不尽的星星，但只有特定星座的星辉 才对你有较大的影响。星辉下，你感到身边 有许多推力在不断的挤压，还感觉自己变得 更强大了。<NL>也许可以放大某个特定星座的星能？亦或者 只要收集够强化自身的星能？
@@ -167,11 +167,11 @@ astralsorcery.journal.CHARGED_TOOLS.1.text=Having experienced the growth effect 
 astralsorcery.journal.CHARGED_TOOLS.2.text=Indeed, after infusing the previously inert tools with §la lot§r of liquid starlight, they seem to faintly glow and reflect the sky above you.<NL>Having this liquid starlight vibrantly flowing through your tools, you feel like they could perform way above your expectations for your usual tools.<NL>However, that also comes with the possibility that the liquid might be drained at some point...
 
 research.TOOL_WANDS.name=接引之力
-astralsorcery.journal.TOOL_WANDS.1.text=你对星能的使用越加得心应手了，你也应积极的使用星能而不是将其闲置在那看着它增长。<NL>当然，你无法仅靠自身来使用星能，所以so creating small tool rod enhanced with the newly discovered properties of the stardust should help with that.
-astralsorcery.journal.TOOL_WANDS.3.text=Pick the block you want to place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from your inventory.<NL>Upon channeling some of this spectral energy through you, you feel a bit drained afterwards. Maybe you should keep an eye out on your alignment when using those kinds of gadgets, to avoid an overload of some sort..
+astralsorcery.journal.TOOL_WANDS.1.text=你对星能的使用越加得心应手了，你也应积极的使用星能而不是将其闲置在那看着它增长。<NL>当然，你无法仅靠自身来使用星能，所以为什么不利用新发现的星尘所具有的特性做个辅助工具呢。
+astralsorcery.journal.TOOL_WANDS.3.text=潜行右键选择你想要放置或替换的方块。将直接使用背包内的相应物品。<NL>在使用了一些星能后，你感觉有些虚弱。也许你在使用这些工具时应注意下自身所存的星能，以防止星能不足。
 
 research.RIT_PEDESTAL.name=信标基座
-astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到 能改变世界的力量。但要真正让其生效 需要用水晶石作为底座，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸 那样解体。你可以加些星能液来预防水晶石解体。
+astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到能改变世界的力量。但要真正让其生效需要用水晶石作为底座，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸那样解体。你可以加些星能液来预防水晶石解体。
 
 research.TELESCOPE.name=天文望远镜
 astralsorcery.journal.TELESCOPE.1.text=手持望远镜虽然使用方便，但一直拿着太累了， 使用体验也不好。而且一晚只能观测到一个星座， 想发现所有星座不知道要到猴年马月了。<NL>你需要一个支架来固定望远镜。只有这样， 你才能更深入的探索深邃的星空，发现更远 的星星已及更多的星座。
@@ -292,7 +292,7 @@ item.ItemIlluminationWand.name=照明之杖
 item.ItemArchitectWand.name=秩序之杖
 item.ItemExchangeWand.name=转位之杖
 item.ItemShiftingStar.name=更替之星
-item.ItemIlluminationPowder.name=荧光粉
+item.ItemIlluminationPowder.name=辉光粉
 
 item.ItemColoredLens.effect.fire.name=点火
 item.ItemColoredLens.effect.break.name=中断
