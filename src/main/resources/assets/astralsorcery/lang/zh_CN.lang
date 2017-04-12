@@ -167,7 +167,7 @@ astralsorcery.journal.CHARGED_TOOLS.1.text=Having experienced the growth effect 
 astralsorcery.journal.CHARGED_TOOLS.2.text=Indeed, after infusing the previously inert tools with §la lot§r of liquid starlight, they seem to faintly glow and reflect the sky above you.<NL>Having this liquid starlight vibrantly flowing through your tools, you feel like they could perform way above your expectations for your usual tools.<NL>However, that also comes with the possibility that the liquid might be drained at some point...
 
 research.TOOL_WANDS.name=接引之力
-astralsorcery.journal.TOOL_WANDS.1.text=Becoming more familiar with those strange currents of energy, the urge to use them actively instead of just letting them idle grows.<NL>However, you can't just have it shoot out of your bare hands, so creating small tool rod enhanced with the newly discovered properties of the stardust should help with that.
+astralsorcery.journal.TOOL_WANDS.1.text=你对星能的使用越加得心应手了，你也应积极的使用星能而不是将其闲置在那看着它增长。<NL>当然，你无法仅靠自身来使用星能，所以so creating small tool rod enhanced with the newly discovered properties of the stardust should help with that.
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block you want to place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from your inventory.<NL>Upon channeling some of this spectral energy through you, you feel a bit drained afterwards. Maybe you should keep an eye out on your alignment when using those kinds of gadgets, to avoid an overload of some sort..
 
 research.RIT_PEDESTAL.name=信标基座
@@ -179,8 +179,8 @@ astralsorcery.journal.TELESCOPE.3.text=发现星座的方法与手持望远镜�
 astralsorcery.journal.TELESCOPE.4.text=虽然这些新发现的星座似乎离你很远。 无法进一步靠近它们，但你仍然可以用水晶 来吸收它们的星能。
 
 research.ALTAR3.name=天辉祭坛
-astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着比星辉锭更好的特性。Directly looking at a pile of it, it almost feels like you can see the ground behind it through an ever shifting dark sky full of stars. Its properties to channel light are truly unique.<NL>Using that as a base, further enhancing your altar to perform even more complex creations would be most desireable.
-astralsorcery.journal.ALTAR3.4.text=Sadly, your current setup won't really benefit much from the upgrade since its collective abilities are limited. A bigger structure around it fully exposed to the sky should be enough to collect and focus enough starlight for your purposes.
+astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着比星辉锭更好的特性。直视着星尘，你恍惚间看到了一片大地后面那布满星星的夜空。它有能传输光的特性。<NL>以其为基础可以强化你的祭坛来完成那些令人期待的新发明。
+astralsorcery.journal.ALTAR3.4.text=遗憾的是，受限于你目前的结构，你还无法驾驭升级后的祭坛力量。要满足你对星能的大量需求，需要用一个充分暴露在夜空下的更大的建筑结构。
 
 research.LENS.name=水晶透镜
 astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光源的位置 可能不太合适，又或者你要到达的目标太远了。 <NL>你突然灵光一现，用透镜改变光源的方向并 聚集足够的星能以便你随时使用。
@@ -299,7 +299,7 @@ item.ItemColoredLens.effect.break.name=中断
 item.ItemColoredLens.effect.grow.name=生长
 item.ItemColoredLens.effect.damage.name=伤害
 item.ItemColoredLens.effect.regen.name=再生
-item.ItemColoredLens.effect.night.name=夜视
+item.itemcoloredlens.effect.push.name=抗拒
 
 inventory.altar.0=星辉合成台
 inventory.altar.1=星辉祭坛
