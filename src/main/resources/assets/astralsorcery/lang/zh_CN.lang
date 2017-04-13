@@ -50,7 +50,7 @@ achievement.astralsorcery.liquidstarlight.desc=获得星能液
 achievement.astralsorcery.playerAttunement=与星星共舞
 achievement.astralsorcery.playerAttunement.desc=让自己与星座共鸣
 
-progress.missing.knowledge=你无法理解这其中所蕴含的奥秘
+progress.missing.knowledge=你浅陋的学识还无法理解这其中所蕴含的奥秘！
 progress.gain.progress.chat=你的学识增长了。
 progress.gain.research.chat=你对'%s'更了解了。
 progress.discover.constellation.chat=发现%s星座!
@@ -294,7 +294,7 @@ item.ItemExchangeWand.name=转位之杖
 item.ItemShiftingStar.name=更替之星
 item.ItemIlluminationPowder.name=辉光粉
 
-item.ItemColoredLens.effect.fire.name=点火
+item.ItemColoredLens.effect.fire.name=燃烧
 item.ItemColoredLens.effect.break.name=中断
 item.ItemColoredLens.effect.grow.name=生长
 item.ItemColoredLens.effect.damage.name=伤害
