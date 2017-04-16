@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -69,14 +70,16 @@ public final class EffectHandler {
     }
 
     public static int getDebugEffectCount() {
-        int amt = 0;
+        final Counter c = new Counter(0);
         for (Map<Integer, List<IComplexEffect>> effects : complexEffects.values()) {
             for (List<IComplexEffect> eff : effects.values()) {
-                amt += eff.size();
+                c.value += eff.size();
             }
         }
-        amt += fastRenderParticles.size();
-        return amt;
+        c.value += fastRenderParticles.size();
+        c.value += fastRenderLightnings.size();
+        objects.values().stream().forEach((l) -> c.value += l.size());
+        return c.value;
     }
 
     @SubscribeEvent

@@ -187,7 +187,7 @@ public final class ItemHandle {
                 }
                 return false;
             case FLUID:
-                return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false);
+                return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false).isSuccess();
         }
         return false;
     }

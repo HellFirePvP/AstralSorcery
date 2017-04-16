@@ -212,6 +212,10 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         return stack;
     }
 
+    public void setStack(@Nonnull ItemStack stack) {
+        this.stack = stack;
+    }
+
     public boolean hasMultiblock() {
         return hasMultiblock;
     }

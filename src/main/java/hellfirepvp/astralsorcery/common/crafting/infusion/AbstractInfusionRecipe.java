@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -79,7 +80,10 @@ public abstract class AbstractInfusionRecipe {
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
         if(!stack.isEmpty()) {
-            ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            if(fas.isSuccess()) {
+                infuser.setStack(fas.getResult());
+            }
         }
     }
 

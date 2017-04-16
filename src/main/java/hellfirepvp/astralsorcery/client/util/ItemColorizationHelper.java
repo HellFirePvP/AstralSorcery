@@ -104,8 +104,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             if(ar instanceof TraitRecipe) {
                 TraitRecipe tr = (TraitRecipe) ar;
                 toPrepare.add(tr.getOutputForRender());
-                for (TraitRecipe.TraitAltarSlot tas : TraitRecipe.TraitAltarSlot.values()) {
-                    ItemHandle handle = tr.getTraitItemHandle(tas);
+                for (ItemHandle handle : tr.getTraitItemHandles()) {
                     if(handle != null && handle.handleType != ItemHandle.Type.OREDICT) {
                         toPrepare.addAll(handle.getApplicableItemsForRender());
                     }
@@ -116,8 +115,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             if(ar instanceof TraitRecipe) {
                 TraitRecipe tr = (TraitRecipe) ar;
                 toPrepare.add(tr.getOutputForRender());
-                for (TraitRecipe.TraitAltarSlot tas : TraitRecipe.TraitAltarSlot.values()) {
-                    ItemHandle handle = tr.getTraitItemHandle(tas);
+                for (ItemHandle handle : tr.getTraitItemHandles()) {
                     if(handle != null && handle.handleType != ItemHandle.Type.OREDICT) {
                         toPrepare.addAll(handle.getApplicableItemsForRender());
                     }

@@ -55,8 +55,9 @@ public class ClientLightbeamHandler implements ITickHandler {
                 Map<BlockPos, List<BlockPos>> positions = connections.getClientConnections(dimId);
                 if(positions != null) {
                     Iterator<Map.Entry<BlockPos, List<BlockPos>>> iterator = positions.entrySet().iterator();
-                    while (iterator.hasNext()) { //TODO cme
+                    while (iterator.hasNext()) {
                         Map.Entry<BlockPos, List<BlockPos>> entry = iterator.next();
+                        if(entry == null) continue;
                         BlockPos at = entry.getKey();
                         if (rView.getDistanceSq(at) <= Config.maxEffectRenderDistanceSq) {
                             Vector3 source = new Vector3(at).add(0.5, 0.5, 0.5);

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -22,12 +23,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -85,6 +81,11 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandAstralSorcery());
+    }
+
+    @Mod.EventHandler
+    public void onServerStarted(FMLServerStartedEvent event) {
+        //CelestialGatewaySystem.instance.onServerStart();
     }
 
     @SubscribeEvent

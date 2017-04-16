@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -23,6 +24,7 @@ import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -68,7 +70,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack lens = super.getOutput(centralGridMap, altar);
@@ -78,12 +80,14 @@ public class PrismLensRecipe extends ConstellationRecipe {
     }
 
     @Override
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
-        super.onCraftClientTick(altar, tick, rand);
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        super.onCraftClientTick(altar, state, tick, rand);
 
-        Vector3 altarVec = new Vector3(altar);
-        if(tick % 48 == 0 && rand.nextBoolean()) {
-            EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(altarVec.add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            Vector3 altarVec = new Vector3(altar);
+            if(tick % 48 == 0 && rand.nextBoolean()) {
+                EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(altarVec.add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+            }
         }
     }
 }

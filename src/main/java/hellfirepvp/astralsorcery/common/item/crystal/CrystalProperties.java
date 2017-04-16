@@ -160,20 +160,16 @@ public class CrystalProperties {
     @Nullable
     public CrystalProperties grindCopy(Random rand) {
         CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability);
-        float percGrinded = 0F;
-        while (rand.nextInt(2) == 0 && percGrinded <= 0.1F)
-            percGrinded += 0.01F;
-
-        int sizeToRemove = Math.min(3 + rand.nextInt(3), (int) (size * percGrinded));
+        int grind = 3 + rand.nextInt(4);
         double purity = ((double) this.purity) / 100D;
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < (size > 300 ? 5 : 2); j++) {
             if (purity <= rand.nextFloat()) {
-                sizeToRemove += sizeToRemove;
+                grind += grind;
             }
         }
-        int collectToAdd = Math.max(0, Math.round((100 - collectiveCapability) * percGrinded));
-        copy.size = percGrinded > 0F ? size - sizeToRemove : size;
-        copy.collectiveCapability = percGrinded > 0F ? Math.min(100, collectiveCapability + collectToAdd) : collectiveCapability;
+        int collectToAdd = 1 + rand.nextInt(2);
+        copy.size = size - grind;
+        copy.collectiveCapability = Math.min(100, collectiveCapability + collectToAdd);
         if(copy.size <= 0)
             return null;
         return copy;
