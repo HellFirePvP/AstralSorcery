@@ -37,7 +37,7 @@ public class ChunkVersionBuffer extends CachedWorldData {
 
     public void markChunkGeneration(ChunkPos c) {
         chunkVersions.put(c, AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION);
-        markDirty();
+        //markDirty();
     }
 
     @Nullable
@@ -51,7 +51,6 @@ public class ChunkVersionBuffer extends CachedWorldData {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         chunkVersions.clear();
-        if(!Config.enableChunkVersioning) return;
 
         for (String key : compound.getKeySet()) {
             String[] chunkCoords = key.split(";");
@@ -63,12 +62,10 @@ public class ChunkVersionBuffer extends CachedWorldData {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        if(!Config.enableChunkVersioning) return;
-
-        for (Map.Entry<ChunkPos, Integer> versionEntry : chunkVersions.entrySet()) {
-            ChunkPos cp = versionEntry.getKey();
-            compound.setInteger(String.format("%d;%d", cp.chunkXPos, cp.chunkZPos), versionEntry.getValue());
-        }
+        //for (Map.Entry<ChunkPos, Integer> versionEntry : chunkVersions.entrySet()) {
+        //    ChunkPos cp = versionEntry.getKey();
+        //    compound.setInteger(String.format("%d;%d", cp.chunkXPos, cp.chunkZPos), versionEntry.getValue());
+        //}
 
     }
 

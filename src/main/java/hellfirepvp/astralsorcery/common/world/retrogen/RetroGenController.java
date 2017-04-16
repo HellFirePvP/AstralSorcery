@@ -34,10 +34,6 @@ public class RetroGenController {
 
     private static List<ChunkPos> retroGenActive = new LinkedList<>();
 
-    public ChunkVersionBuffer getVersionBuffer(World world) {
-        return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
-    }
-
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         ChunkPos pos = event.getChunk().getChunkCoordIntPair();
@@ -45,7 +41,7 @@ public class RetroGenController {
 
         Integer chunkVersion = -1;
         if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.chunkXPos, pos.chunkZPos)) {
-            chunkVersion = getVersionBuffer(event.getWorld()).getGenerationVersion(pos);
+            chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
             if(chunkVersion == null) {
                 AstralSorcery.log.info("[AstralSorcery] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
                 return;

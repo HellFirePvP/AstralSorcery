@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -135,17 +136,19 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
-        super.onCraftClientTick(altar, tick, rand);
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        super.onCraftClientTick(altar, state, tick, rand);
 
-        Vector3 pos = new Vector3(altar).add(0.5, 0.5, 0.5);
-        EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
-        particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-        particle.motion(
-                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.1  * (rand.nextBoolean() ? 1 : -1),
-                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
-        particle.scale(0.2F);
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            Vector3 pos = new Vector3(altar).add(0.5, 0.5, 0.5);
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ());
+            particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+            particle.motion(
+                    rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.1  * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+            particle.scale(0.2F);
+        }
     }
 
     @Nonnull

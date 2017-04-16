@@ -8,10 +8,15 @@
 
 package hellfirepvp.astralsorcery.client.effect.compound;
 
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +29,10 @@ import java.util.List;
  */
 public class CompoundEffectSphere extends CompoundObjectEffect {
 
-    private List<Face> sphereFaces = new LinkedList<>();
+    private double alphaFadeMaxDist = -1;
+    private boolean removeIfInvisible = false;
+
+    private List<SolidColorTriangleFace> sphereFaces = new LinkedList<>();
     private Vector3 offset;
     private Vector3 axis;
 
@@ -36,31 +44,105 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
         buildFaces(fractionsSplit, fractionsCircle);
     }
 
+    public CompoundEffectSphere setAlphaFadeDistance(double fadeDistance) {
+        this.alphaFadeMaxDist = fadeDistance;
+        return this;
+    }
+
+    public CompoundEffectSphere setRemoveIfInvisible(boolean removeIfInvisible) {
+        this.removeIfInvisible = removeIfInvisible;
+        return this;
+    }
+
     private void buildFaces(int fractionsSplit, int fractionsCircle) {
         Vector3 centerPerp = axis.clone().perpendicular();
         double degSplit =       180D / ((double) fractionsSplit);
         double degCircleSplit = 360D / ((double) fractionsCircle);
-        Vector3 prev = offset.clone().add(axis);
-        for (int i = 0; i <= fractionsSplit; i++) {
-            Vector3 splitVec = axis.clone().rotate(Math.toRadians(degSplit * i), centerPerp);
-            //TODO finish
+        double degCircleOffsetShifted = degCircleSplit / 2D;
+        boolean shift = false;
 
-            prev = splitVec;
+        Vector3[] prevArray = new Vector3[fractionsCircle];
+        Vector3 prev = axis.clone();
+        Arrays.fill(prevArray, prev.clone());
+        for (int i = 1; i <= fractionsSplit; i++) {
+            Vector3 splitVec = axis.clone().rotate(Math.toRadians(degSplit * i), centerPerp);
+
+            Vector3[] circlePositions = new Vector3[fractionsCircle];
+            for (int j = 0; j < fractionsCircle; j++) {
+                double deg = shift ? degCircleOffsetShifted : 0;
+                deg += degCircleSplit * j;
+                circlePositions[j] = splitVec.clone().rotate(Math.toRadians(deg), axis);
+            }
+
+            for (int k = 0; k < fractionsCircle; k++) {
+                int prevIndex = shift ? k : k - 1;
+                if(prevIndex < 0) {
+                    prevIndex = fractionsCircle - 1;
+                }
+                int nextIndex = shift ? k + 1 : k;
+                if(nextIndex >= fractionsCircle) {
+                    nextIndex = 0;
+                }
+                sphereFaces.add(new SolidColorTriangleFace(prevArray[prevIndex], prevArray[nextIndex], circlePositions[k]));
+                int nextCircle = k + 1;
+                if(nextCircle >= fractionsCircle) {
+                    nextCircle = 0;
+                }
+                sphereFaces.add(new SolidColorTriangleFace(circlePositions[k], prevArray[nextIndex], circlePositions[nextCircle]));
+            }
+
+            prevArray = circlePositions;
+            shift = !shift;
         }
+    }
+
+    public Vector3 getPosition() {
+        return offset;
     }
 
     @Override
     public void render(VertexBuffer vb, float pTicks) {
-
+        RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
+        GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
+        vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+        float alpha = 1F;
+        if(alphaFadeMaxDist != -1 && Minecraft.getMinecraft().player != null) {
+            Vector3 plVec = new Vector3(Minecraft.getMinecraft().player);
+            double dst = plVec.distance(getPosition());
+            alpha *= 1D - (dst / alphaFadeMaxDist);
+            if(removeIfInvisible && alpha <= 0) {
+                requestRemoval();
+            }
+            alpha = MathHelper.clamp(alpha, 0, 1);
+        }
+        for (SolidColorTriangleFace face : this.sphereFaces) {
+            vb.pos(face.v1.getX(), face.v1.getY(), face.v1.getZ()).color(0, 0, 0, alpha).endVertex();
+            vb.pos(face.v2.getX(), face.v2.getY(), face.v2.getZ()).color(0, 0, 0, alpha).endVertex();
+            vb.pos(face.v3.getX(), face.v3.getY(), face.v3.getZ()).color(0, 0, 0, alpha).endVertex();
+        }
     }
 
     @Override
     public ObjectGroup getGroup() {
-        return ObjectGroup.GASEOUS_SPHERE;
+        return ObjectGroup.SOLID_COLOR_SPHERE;
     }
 
     @Override
     public void tick() {
+        if(alphaFadeMaxDist == -1 || !removeIfInvisible) {
+            super.tick();
+        }
+    }
+
+    public static class SolidColorTriangleFace {
+
+        private Vector3 v1, v2, v3;
+
+        public SolidColorTriangleFace(Vector3 v1, Vector3 v2, Vector3 v3) {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+        }
 
     }
 

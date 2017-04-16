@@ -42,7 +42,7 @@ public class MultiblockAltarAttunement extends PatternBlockArray {
         IBlockState mpl = marble.getDefaultState().withProperty(MARBLE_TYPE, BlockMarble.MarbleBlockType.PILLAR);
         IBlockState mbl = darkMarble.getDefaultState().withProperty(BlockBlackMarble.BLACK_MARBLE_TYPE, BlockBlackMarble.BlackMarbleBlockType.RAW);
 
-        addBlockCube(Blocks.AIR.getDefaultState(), -3,  0, -3, 3,  2, 3);
+        //addBlockCube(Blocks.AIR.getDefaultState(), -3,  0, -3, 3,  2, 3);
         addBlockCube(mbl,                          -3, -1, -3, 3, -1, 3);
 
         addBlock(0, 0, 0, BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_2));

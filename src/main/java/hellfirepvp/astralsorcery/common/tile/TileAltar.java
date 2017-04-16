@@ -182,7 +182,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @SideOnly(Side.CLIENT)
     private void doCraftEffects() {
-        craftingTask.getRecipeToCraft().onCraftClientTick(this, ClientScheduler.getClientTick(), rand);
+        craftingTask.getRecipeToCraft().onCraftClientTick(this, craftingTask.getState(), ClientScheduler.getClientTick(), rand);
     }
 
     private boolean matchLevel(boolean needUpdate) {
@@ -199,8 +199,13 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private boolean doTryCraft(boolean needUpdate) {
         if(craftingTask == null) return needUpdate;
         AbstractAltarRecipe altarRecipe = craftingTask.getRecipeToCraft();
-        if(!altarRecipe.matches(this, getInventoryHandler(), false)) {
+        if(!altarRecipe.matches(this, getInventoryHandler(), true)) {
             abortCrafting();
+            return true;
+        }
+        if(!altarRecipe.fulfillesStarlightRequirement(this) &&
+                craftingTask.shouldPersist()) {
+            craftingTask.setState(ActiveCraftingTask.CraftingState.PAUSED);
             return true;
         }
         if((ticksExisted % 5) == 0) {
@@ -213,9 +218,14 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             finishCrafting();
             return true;
         }
-        craftingTask.tick(this);
-        craftingTask.getRecipeToCraft().onCraftServerTick(this, craftingTask.getTicksCrafting(), rand);
-        return needUpdate;
+        if(!craftingTask.tick(this)) {
+            craftingTask.setState(ActiveCraftingTask.CraftingState.WAITING);
+            return true;
+        }
+        ActiveCraftingTask.CraftingState prev = craftingTask.getState();
+        craftingTask.setState(ActiveCraftingTask.CraftingState.ACTIVE);
+        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), rand);
+        return (prev != craftingTask.getState()) || needUpdate;
     }
 
     private void finishCrafting() {
@@ -475,17 +485,8 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.mbState = compound.getBoolean("mbState");
 
         this.craftingTask = null;
-        if(compound.hasKey("recipeId") && compound.hasKey("recipeTick")) {
-            int recipeId = compound.getInteger("recipeId");
-            AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipe(recipeId);
-            if(recipe == null) {
-                AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Altar at " + getPos());
-            } else {
-                UUID uuidCraft = compound.getUniqueId("crafterUUID");
-                int tick = compound.getInteger("recipeTick");
-                this.craftingTask = new ActiveCraftingTask(recipe, uuidCraft);
-                this.craftingTask.forceTick(tick);
-            }
+        if(compound.hasKey("craftingTask")) {
+            this.craftingTask = ActiveCraftingTask.deserialize(compound.getCompoundTag("craftingTask"));
         }
 
         this.focusItem = null;
@@ -510,9 +511,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
 
         if(craftingTask != null) {
-            compound.setInteger("recipeId", craftingTask.getRecipeToCraft().getUniqueRecipeId());
-            compound.setInteger("recipeTick", craftingTask.getTicksCrafting());
-            compound.setUniqueId("crafterUUID", craftingTask.getPlayerCraftingUUID());
+            compound.setTag("craftingTask", craftingTask.serialize());
         }
     }
 

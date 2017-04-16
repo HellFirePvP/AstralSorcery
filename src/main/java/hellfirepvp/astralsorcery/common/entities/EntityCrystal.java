@@ -38,7 +38,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
-    public static final int TOTAL_MERGE_TIME = 160 * 20;
+    public static final int TOTAL_MERGE_TIME = 100 * 20;
     private int inertMergeTick = 0;
 
     public EntityCrystal(World worldIn) {

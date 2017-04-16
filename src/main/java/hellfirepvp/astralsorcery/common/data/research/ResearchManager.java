@@ -451,10 +451,14 @@ public class ResearchManager {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astral");
         if(!f.exists()) {
             try {
-                f.createNewFile();
+                CompressedStreamTools.write(new NBTTagCompound(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
         return f;
+    }
+
+    public static boolean doesPlayerFileExist(EntityPlayer player) {
+        return new File(getPlayerDirectory(), player.getUniqueID().toString() + ".astral").exists();
     }
 
     public static File getPlayerBackupFile(EntityPlayer player) {
@@ -465,7 +469,7 @@ public class ResearchManager {
         File f = new File(getPlayerDirectory(), pUUID.toString() + ".astralback");
         if(!f.exists()) {
             try {
-                f.createNewFile();
+                CompressedStreamTools.write(new NBTTagCompound(), f);
             } catch (IOException ignored) {} //Will be created later anyway... just as fail-safe.
         }
         return f;

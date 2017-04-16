@@ -73,27 +73,10 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         String unloc = constellation.getUnlocalizedName() + ".effect";
         String text = I18n.format(unloc);
         if(unloc.equals(text)) return;
-        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
 
         List<String> lines = new LinkedList<>();
         for (String segment : text.split("<NL>")) {
-            StringBuilder cache = new StringBuilder();
-            for(String element : segment.split(" ")) {
-                String cacheStr = cache.toString();
-                String built = cacheStr.isEmpty() ? element : cacheStr + " " + element;
-                if(fr.getStringWidth(built) > IJournalPage.DEFAULT_WIDTH - 20) {
-                    lines.add(cacheStr);
-                    cache = new StringBuilder();
-                    cache.append(element);
-                } else {
-                    if(cacheStr.isEmpty()) {
-                        cache.append(element);
-                    } else {
-                        cache.append(' ').append(element);
-                    }
-                }
-            }
-            lines.add(cache.toString());
+            lines.addAll(fontRendererObj.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
             lines.add("");
         }
         locText.addAll(lines);

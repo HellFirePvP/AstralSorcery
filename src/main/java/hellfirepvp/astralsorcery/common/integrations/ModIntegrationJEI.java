@@ -19,7 +19,6 @@ package hellfirepvp.astralsorcery.common.integrations;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
@@ -27,21 +26,17 @@ import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeHandler;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarConstellationRecipeHandler;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarDiscoveryRecipeHandler;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategortAltarAttunement;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarAttunement;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarConstellation;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarDiscovery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -86,7 +81,7 @@ public class ModIntegrationJEI implements IModPlugin {
                 new CategoryInfuser(guiHelper),
                 new CategoryTransmutation(guiHelper),
                 new CategoryAltarConstellation(guiHelper),
-                new CategortAltarAttunement(guiHelper),
+                new CategoryAltarAttunement(guiHelper),
                 new CategoryAltarDiscovery(guiHelper));
 
         registry.addRecipeHandlers(

@@ -74,6 +74,12 @@ public class RenderingUtils {
         }
     }
 
+    public static void sortVertexData(VertexBuffer vb) {
+        vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX,
+                (float) TileEntityRendererDispatcher.staticPlayerY,
+                (float) TileEntityRendererDispatcher.staticPlayerZ);
+    }
+
     public static Color clampToColor(int rgb) {
         return clampToColorWithMultiplier(rgb, 1F);
     }

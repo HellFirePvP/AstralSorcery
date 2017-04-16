@@ -21,9 +21,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -156,32 +158,12 @@ public class ItemUtils {
         }
     }
 
-    public static boolean drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
+    public static ItemStack drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
         return drainFluidFromItem(stack, new FluidStack(fluid, mbAmount), doDrain);
     }
 
-    //Returns true if the fluid with the specified amount could be drained, false if not.
-    public static boolean drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
-        if(stack.getItem() instanceof IFluidContainerItem) {
-            IFluidContainerItem ifci = (IFluidContainerItem) stack.getItem();
-            FluidStack containing = ifci.getFluid(stack);
-            if(containing != null && containing.getFluid() != null) {
-                if(containing.getFluid().equals(fluidStack.getFluid())) {
-                    FluidStack drained = ifci.drain(stack, fluidStack.amount, doDrain);
-                    if(drained != null && drained.amount >= fluidStack.amount) {
-                        return true;
-                    }
-                }
-            }
-        }
-        IFluidHandler handle = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-        if(handle != null) {
-            FluidStack tryDrain = handle.drain(fluidStack.copy(), doDrain);
-            if(tryDrain != null && tryDrain.amount >= fluidStack.amount) {
-                return true;
-            }
-        }
-        return false;
+    public static ItemStack drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
+        return FluidUtil.tryEmptyContainer(stack, FluidHandlerVoid.INSTANCE, fluidStack.amount, null, doDrain);
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
@@ -323,6 +305,33 @@ public class ItemUtils {
                 return true;
         }
         return false;
+    }
+
+    private static class FluidHandlerVoid implements IFluidHandler {
+
+        private static FluidHandlerVoid INSTANCE = new FluidHandlerVoid();
+
+        @Override
+        public IFluidTankProperties[] getTankProperties() {
+            return new IFluidTankProperties[0];
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            return resource.amount;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            return null;
+        }
     }
 
 }

@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -113,25 +114,27 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
-        super.onCraftClientTick(altar, tick, rand);
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        super.onCraftClientTick(altar, state, tick, rand);
 
-        Vector3 altarVec = new Vector3(altar);
-        Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
-        for (int i = 0; i < 3; i++) {
-            Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
-            dir.multiply(rand.nextFloat()).add(thisAltar.clone());
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            Vector3 altarVec = new Vector3(altar);
+            Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
+            for (int i = 0; i < 3; i++) {
+                Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
+                dir.multiply(rand.nextFloat()).add(thisAltar.clone());
 
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
-            particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
-        }
+                EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
+                particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
+            }
 
-        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-        if(rand.nextInt(12) == 0) {
-            pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
-        }
-        if(tick % 48 == 0 && rand.nextInt(2) == 0) {
-            EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(new Vector3(altar).add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+            ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+            if(rand.nextInt(12) == 0) {
+                pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
+            }
+            if(tick % 48 == 0 && rand.nextInt(2) == 0) {
+                EffectHandler.getInstance().textureSpritePlane(SpriteLibrary.spriteCraftBurst, Vector3.RotAxis.Y_AXIS.clone()).setPosition(new Vector3(altar).add(0.5, 0.05, 0.5)).setScale(5 + rand.nextInt(2)).setNoRotation(rand.nextInt(360));
+            }
         }
     }
 

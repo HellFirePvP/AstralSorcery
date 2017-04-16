@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -91,12 +92,14 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
-        super.onCraftClientTick(altar, tick, rand);
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        super.onCraftClientTick(altar, state, tick, rand);
 
-        ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-        if(rand.nextInt(6) == 0) {
-            pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
+            if(rand.nextInt(6) == 0) {
+                pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
+            }
         }
     }
 

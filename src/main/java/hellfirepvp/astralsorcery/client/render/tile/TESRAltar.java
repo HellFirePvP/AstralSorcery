@@ -66,6 +66,29 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     GL11.glPopMatrix();
                 }
                 break;
+            case TRAIT_CRAFT:
+                if(te.getMultiblockState()) {
+                    IConstellation c = te.getFocusedConstellation();
+                    if(c != null) {
+                        GL11.glPushMatrix();
+                        float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(te.getWorld());
+                        alphaDaytime *= 0.8F;
+
+                        int max = 5000;
+                        int t = (int) (ClientScheduler.getClientTick() % max);
+                        float halfAge = max / 2F;
+                        float tr = 1F - (Math.abs(halfAge - t) / halfAge);
+                        tr *= 2;
+
+                        RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
+
+                        float br = 0.6F * alphaDaytime;
+
+                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.04, 0.5), 5 + tr, 2, 0.1F + br);
+                        GL11.glPopMatrix();
+                    }
+                }
+                break;
         }
     }
 

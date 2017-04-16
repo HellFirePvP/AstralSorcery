@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeAquamarine;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeGlowstoneFlower;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeMarble;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeRockCrystals;
+import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
@@ -46,10 +47,6 @@ public class AstralWorldGenerator implements IWorldGenerator {
 
     private List<WorldGenAttribute> worldGenAttributes = new LinkedList<>();
 
-    public ChunkVersionBuffer getVersionBuffer(World world) {
-        return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
-    }
-
     public void pushConfigEntries() {
         structures.add(new StructureAncientShrine());
         structures.add(new StructureDesertShrine());
@@ -75,7 +72,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
     }
 
     public void handleRetroGen(World world, ChunkPos pos, Integer lastKnownChunkVersion) {
-        getVersionBuffer(world).markChunkGeneration(pos);
+        ChunkVersionController.instance.setGenerationVersion(pos, CURRENT_WORLD_GENERATOR_VERSION);
 
         generateWithLastKnownVersion(pos.chunkXPos, pos.chunkZPos, world, lastKnownChunkVersion);
     }
@@ -84,9 +81,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if(world.getWorldType().equals(WorldType.FLAT)) return;
 
-        if(Config.enableChunkVersioning) {
-            getVersionBuffer(world).markChunkGeneration(new ChunkPos(chunkX, chunkZ));
-        }
+        ChunkVersionController.instance.setGenerationVersion(new ChunkPos(chunkX, chunkZ), CURRENT_WORLD_GENERATOR_VERSION);
         generateWithLastKnownVersion(chunkX, chunkZ, world, -1);
 
         /*for (int xx = 0; xx < 16; xx++) {

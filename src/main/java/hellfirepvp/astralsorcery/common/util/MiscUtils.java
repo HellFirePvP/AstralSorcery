@@ -47,6 +47,7 @@ public class MiscUtils {
 
     @Nullable
     public static <T> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
+        if(world == null || pos == null) return null; //Duh.
         if(world instanceof World) {
             if(!((World) world).isBlockLoaded(pos) && !forceChunkLoad) return null;
         }

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -144,18 +145,19 @@ public class ConstellationRecipe extends AttunementRecipe {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {
-        super.onCraftClientTick(altar, tick, rand);
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        super.onCraftClientTick(altar, state, tick, rand);
 
-        Vector3 altarVec = new Vector3(altar);
-        Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
-        for (int i = 0; i < 4; i++) {
-            Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
-            dir.multiply(rand.nextFloat()).add(thisAltar.clone());
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            Vector3 altarVec = new Vector3(altar);
+            Vector3 thisAltar = altarVec.clone().add(0.5, 0.5, 0.5);
+            for (int i = 0; i < 4; i++) {
+                Vector3 dir = offsetPillars[rand.nextInt(offsetPillars.length)].clone();
+                dir.multiply(rand.nextFloat()).add(thisAltar.clone());
 
-            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
-            particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
+                EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(dir.getX(), dir.getY(), dir.getZ());
+                particle.setColor(MiscUtils.calcRandomConstellationColor(rand.nextFloat())).scale(0.2F + (0.2F * rand.nextFloat())).gravity(0.004);
+            }
         }
 
     }

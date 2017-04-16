@@ -79,7 +79,10 @@ public abstract class AbstractInfusionRecipe {
     public void handleInputDecrement(TileStarlightInfuser infuser) {
         ItemStack stack = infuser.getInputStack();
         if(stack != null) {
-            ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            ItemStack result = ItemUtils.drainFluidFromItem(stack, input.getFluidTypeAndAmount(), true);
+            if(result != null) {
+                infuser.setStack(result);
+            }
         }
     }
 

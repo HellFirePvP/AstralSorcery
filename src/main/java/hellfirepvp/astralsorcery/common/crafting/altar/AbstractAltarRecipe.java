@@ -83,7 +83,7 @@ public abstract class AbstractAltarRecipe {
     }
 
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        if(!ignoreStarlightRequirement && altar.getStarlightStored() < getPassiveStarlightRequired()) return false;
+        if(!ignoreStarlightRequirement && !fulfillesStarlightRequirement(altar)) return false;
 
         if(this instanceof IGatedRecipe) {
             if(altar.getWorld().isRemote) {
@@ -102,6 +102,10 @@ public abstract class AbstractAltarRecipe {
         RecipeAdapter adapter = new RecipeAdapter(altar.getCraftingRecipeWidth(), altar.getCraftingRecipeHeight());
         adapter.fill(altarInv);
         return recipe.matches(adapter, altar.getWorld());
+    }
+
+    public boolean fulfillesStarlightRequirement(TileAltar altar) {
+        return altar.getStarlightStored() >= getPassiveStarlightRequired();
     }
 
     public AbstractAltarRecipe setPassiveStarlightRequirement(int starlightRequirement) {
@@ -166,7 +170,10 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotID());
         if(stack != null) {
-            ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            ItemStack result = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            if(result != null) {
+                inventory.setStackInSlot(slot.getSlotID(), result);
+            }
         }
     }
 
@@ -179,7 +186,10 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(stack != null) {
-            ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            ItemStack result = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            if(result != null) {
+                inventory.setStackInSlot(slot.getSlotId(), result);
+            }
         }
     }
 
@@ -192,7 +202,10 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(stack != null) {
-            ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            ItemStack result = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            if(result != null) {
+                inventory.setStackInSlot(slot.getSlotId(), result);
+            }
         }
     }
 
@@ -201,10 +214,10 @@ public abstract class AbstractAltarRecipe {
 
     public void onCraftServerFinish(TileAltar altar, Random rand) {}
 
-    public void onCraftServerTick(TileAltar altar, int tick, Random rand) {}
+    public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, long tick, Random rand) {}
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
     public void onCraftTESRRender(TileAltar te, double x, double y, double z, float partialTicks) {}
