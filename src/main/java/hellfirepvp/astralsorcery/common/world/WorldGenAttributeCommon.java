@@ -11,8 +11,11 @@ package hellfirepvp.astralsorcery.common.world;
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.WorldGenEntry;
+import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.util.struct.StructureBlockArray;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
+import hellfirepvp.astralsorcery.common.world.structure.WorldGenAttributeStructure;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
@@ -73,8 +76,22 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
     public abstract BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand);
 
     public boolean canGenerateAtAll(int chX, int chZ, World world, Random rand) {
+        if(!cfgEntry.shouldGenerate()) return false;
         if(onlyGenerateInSkyDimensions && !DataWorldSkyHandlers.hasWorldHandler(world, Side.SERVER)) return false;
-        return cfgEntry.shouldGenerate() && cfgEntry.tryGenerate(rand);
+        double chanceMultiplier = 1F;
+        if(Config.respectIdealDistances && this instanceof WorldGenAttributeStructure) {
+            StructureGenBuffer.StructureType type = ((WorldGenAttributeStructure) this).getStructureType();
+            StructureGenBuffer buf = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_GEN);
+            BlockPos pos = new BlockPos(chX * 16, 0, chZ * 16);
+            double dst = buf.getDstToClosest(type, new BlockPos(pos.getX(), world.getTopSolidOrLiquidBlock(pos).getY(), pos.getZ()));
+            if(dst != -1) {
+                double ideal = ((WorldGenAttributeStructure) this).getIdealDistance();
+                chanceMultiplier = ideal / dst;
+            } else {
+                chanceMultiplier = 0F;
+            }
+        }
+        return cfgEntry.tryGenerate(rand, chanceMultiplier);
     }
 
     public static interface StructureQuery {
