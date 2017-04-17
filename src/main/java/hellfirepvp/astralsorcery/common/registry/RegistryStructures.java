@@ -37,6 +37,7 @@ public class RegistryStructures {
         patternAttunementFrame = new MultiblockAttunementFrame();
         patternStarlightInfuser = new MultiblockStarlightInfuser();
         patternCollectorRelay = new MultiblockStarlightRelay();
+        patternCelestialGateway = new MultiblockGateway();
 
         patternRitualPedestalWithLink = new MultiblockRitualPedestal();
         patternRitualPedestalWithLink.addBlock(0, 5, 0, BlocksAS.ritualLink.getDefaultState());
