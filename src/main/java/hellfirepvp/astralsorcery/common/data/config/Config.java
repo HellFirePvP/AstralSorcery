@@ -34,6 +34,7 @@ public class Config {
 
     //public static boolean stopOnIllegalState = true;
     public static boolean spawnRockCrystalOres = true;
+    public static boolean respectIdealDistances = true;
     public static int crystalDensity = 15;
     public static int aquamarineAmount = 64;
     public static int marbleAmount = 4, marbleVeinSize = 20;
@@ -145,6 +146,7 @@ public class Config {
         aquamarineAmount = latestConfig.getInt("generateAquamarineAmount", "worldgen", 64, 0, 2048, "Defines how many aquamarine ores it'll attempt to generate in per chunk. 0 = disabled");
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
+        respectIdealDistances = latestConfig.getBoolean("respectIdealStructureDistances", "worldgen", respectIdealDistances, "If this is set to true, the world generator will try and spawn structures more evenly distributed by their 'ideal' distance set in their config entries. WARNING: might add additional worldgen time.");
 
         enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
 

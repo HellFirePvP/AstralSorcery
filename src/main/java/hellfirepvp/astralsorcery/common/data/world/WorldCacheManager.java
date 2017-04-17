@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.data.world;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
-import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
-import hellfirepvp.astralsorcery.common.data.world.data.LightNetworkBuffer;
-import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
+import hellfirepvp.astralsorcery.common.data.world.data.*;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -199,7 +196,8 @@ public class WorldCacheManager implements ITickHandler {
         ROCK_CRYSTAL("rcrystals", RockCrystalBuffer::new),
         LIGHT_NETWORK("lightnetwork", LightNetworkBuffer::new),
         CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new),
-        GATEWAY_DATA("gateway", GatewayCache::new);
+        GATEWAY_DATA("gateway", GatewayCache::new),
+        STRUCTURE_GEN("structures", StructureGenBuffer::new);
 
         private final String identifier;
         private final DataProvider<CachedWorldData> instanceProvider;

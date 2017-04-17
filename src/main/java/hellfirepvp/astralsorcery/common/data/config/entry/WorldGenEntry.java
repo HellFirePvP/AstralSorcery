@@ -95,8 +95,8 @@ public class WorldGenEntry extends ConfigEntry {
         return doIgnoreBiomeSpecifications;
     }
 
-    public boolean tryGenerate(Random random) {
-        return random.nextInt(generationChance) == 0;
+    public boolean tryGenerate(Random random, double chanceMultiplier) {
+        return random.nextInt(Math.max((int) Math.round(generationChance * chanceMultiplier), 1)) == 0;
     }
 
 }
