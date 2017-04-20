@@ -8,10 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.compound.CompoundEffectSphere;
+import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,7 +44,7 @@ public class TileCelestialGateway extends TileEntityTick {
             playEffects();
         } else {
             if((ticksExisted & 15) == 0) {
-                updateSkyState(world.canSeeSky(getPos()));
+                updateSkyState(world.canSeeSky(getPos().up()));
             }
 
             if((ticksExisted & 15) == 0) {
@@ -63,9 +69,51 @@ public class TileCelestialGateway extends TileEntityTick {
         }
     }
 
+    public boolean hasMultiblock() {
+        return hasMultiblock;
+    }
+
+    public boolean doesSeeSky() {
+        return doesSeeSky;
+    }
+
     @SideOnly(Side.CLIENT)
     private void playEffects() {
+        if(hasMultiblock && doesSeeSky) {
+            Vector3 sphereVec = new Vector3(pos).add(0.5, 2.62, 0.5);
+            if(clientSphere == null) {
+                CompoundEffectSphere sphere = new CompoundEffectSphere(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 8, 10);
+                sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
+                EffectHandler.getInstance().registerFX(sphere);
+                clientSphere = sphere;
+            }
+            double playerDst = new Vector3(Minecraft.getMinecraft().player).distance(sphereVec);
+            if(clientSphere != null) {
+                if(!((CompoundEffectSphere) clientSphere).getPosition().equals(sphereVec)) {
+                    ((CompoundEffectSphere) clientSphere).requestRemoval();
 
+                    CompoundEffectSphere sphere = new CompoundEffectSphere(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 5, 8);
+                    sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
+                    EffectHandler.getInstance().registerFX(sphere);
+                    clientSphere = sphere;
+                }
+                if(((EntityComplexFX) clientSphere).isRemoved() && playerDst < 5) {
+                    EffectHandler.getInstance().registerFX((EntityComplexFX) clientSphere);
+                }
+            }
+            if(playerDst < 5.5) {
+                Minecraft.getMinecraft().gameSettings.thirdPersonView = 0;
+            }
+            if(playerDst < 2.5) {
+                EffectHandler.getInstance().requestGatewayUIFor(world, sphereVec, 5.5);
+            }
+        } else {
+            if(clientSphere != null) {
+                if(!((EntityComplexFX) clientSphere).isRemoved()) {
+                    ((EntityComplexFX) clientSphere).requestRemoval();
+                }
+            }
+        }
     }
 
     @Override

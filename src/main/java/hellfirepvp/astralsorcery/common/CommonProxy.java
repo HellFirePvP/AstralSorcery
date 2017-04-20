@@ -161,7 +161,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
         MinecraftForge.EVENT_BUS.register(BlockDropCaptureAssist.instance);
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
-        //MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
+        MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {

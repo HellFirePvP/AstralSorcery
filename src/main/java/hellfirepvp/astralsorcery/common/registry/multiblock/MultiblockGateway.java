@@ -29,9 +29,8 @@ public class MultiblockGateway extends PatternBlockArray {
 
     private void load() {
         IBlockState mar = BlockMarble.MarbleBlockType.ARCH.asBlock();
-        IBlockState mch = BlockMarble.MarbleBlockType.CHISELED.asBlock();
         IBlockState mru = BlockMarble.MarbleBlockType.RUNED.asBlock();
-        IBlockState mpl = BlockMarble.MarbleBlockType.PILLAR.asBlock();
+        IBlockState mgr = BlockMarble.MarbleBlockType.ENGRAVED.asBlock();
         IBlockState sooty = BlockBlackMarble.BlackMarbleBlockType.RAW.asBlock();
 
         addBlockCube(mar, -3, 0, -3, 3, 0, 3);
@@ -43,20 +42,10 @@ public class MultiblockGateway extends PatternBlockArray {
         addBlock( 3, 0,  3, mru);
         addBlock(-3, 0,  3, mru);
 
-        addBlock(-3, 1, -3, mpl);
-        addBlock( 3, 1, -3, mpl);
-        addBlock( 3, 1,  3, mpl);
-        addBlock(-3, 1,  3, mpl);
-
-        addBlock(-3, 2, -3, mpl);
-        addBlock( 3, 2, -3, mpl);
-        addBlock( 3, 2,  3, mpl);
-        addBlock(-3, 2,  3, mpl);
-
-        addBlock(-3, 3, -3, mch);
-        addBlock( 3, 3, -3, mch);
-        addBlock( 3, 3,  3, mch);
-        addBlock(-3, 3,  3, mch);
+        addBlock(-3, 1, -3, mgr);
+        addBlock( 3, 1, -3, mgr);
+        addBlock( 3, 1,  3, mgr);
+        addBlock(-3, 1,  3, mgr);
     }
 
 }

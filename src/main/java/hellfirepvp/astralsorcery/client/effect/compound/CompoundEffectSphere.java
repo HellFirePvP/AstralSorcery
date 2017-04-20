@@ -109,7 +109,8 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
         float alpha = 1F;
         if(alphaFadeMaxDist != -1 && Minecraft.getMinecraft().player != null) {
             Vector3 plVec = new Vector3(Minecraft.getMinecraft().player);
-            double dst = plVec.distance(getPosition());
+            double dst = plVec.distance(getPosition()) - 1.2;
+
             alpha *= 1D - (dst / alphaFadeMaxDist);
             if(removeIfInvisible && alpha <= 0) {
                 requestRemoval();

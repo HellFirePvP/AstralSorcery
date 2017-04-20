@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
+import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.RenderEntityFlare;
@@ -148,6 +149,7 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(new ClientRenderEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientConnectionEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ClientGatewayHandler());
         MinecraftForge.EVENT_BUS.register(EffectHandler.getInstance());
 
         registerDisplayInformationInit();

@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.core;
 
 import net.minecraftforge.fml.common.FMLLog;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
 import javax.annotation.Nonnull;
 
@@ -138,6 +135,24 @@ public abstract class ClassPatch {
             currentIndex = mn.instructions.indexOf(node) + 1;
         }
         return node;
+    }
+
+    @Nonnull
+    public static LabelNode getFirstLabelBefore(MethodNode mn, int startIndex) {
+        for (int i = startIndex; i >= 0; i--) {
+            AbstractInsnNode isn = mn.instructions.get(i);
+            if(isn instanceof LabelNode) return (LabelNode) isn;
+        }
+        throw new ASMTransformationException("Couldn't find LabelNode before index " + startIndex);
+    }
+
+    @Nonnull
+    public static LabelNode getNextLabelAfter(MethodNode mn, int startIndex) {
+        for (int i = startIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode isn = mn.instructions.get(i);
+            if(isn instanceof LabelNode) return (LabelNode) isn;
+        }
+        throw new ASMTransformationException("Couldn't find LabelNode after index " + startIndex);
     }
 
 }

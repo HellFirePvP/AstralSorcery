@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
+import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
@@ -27,6 +28,7 @@ import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -58,6 +60,9 @@ public final class EffectHandler {
     private static boolean acceptsNewParticles = true, cleanRequested = false;
     private static List<IComplexEffect> toAddBuffer = new LinkedList<>();
 
+    private UIGateway uiGateway = null;
+    private int gatewayUITicks = 0;
+
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
     public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
@@ -67,6 +72,18 @@ public final class EffectHandler {
 
     public static EffectHandler getInstance() {
         return instance;
+    }
+
+    public void requestGatewayUIFor(World world, Vector3 pos, double sphereRadius) {
+        if(uiGateway == null || !uiGateway.getPos().equals(pos)) {
+            uiGateway = UIGateway.initialize(world, pos, sphereRadius);
+        }
+        gatewayUITicks = 20;
+    }
+
+    @Nullable
+    public UIGateway getUiGateway() {
+        return uiGateway;
     }
 
     public static int getDebugEffectCount() {
@@ -113,10 +130,17 @@ public final class EffectHandler {
     public void onRender(RenderWorldLastEvent event) {
         TESRPrismLens.renderColoredPrismsLast();
         acceptsNewParticles = false;
-        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+        for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
+            og.prepareGLContext();
+            for (CompoundObjectEffect effect : objects.get(og)) {
+                effect.render(event.getPartialTicks());
+            }
+            og.revertGLContext();
+        }
         EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
         EffectLightning.renderFast(event.getPartialTicks(), fastRenderLightnings);
-        //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
+
+        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         for (int i = 0; i <= 2; i++) {
             for (IComplexEffect effect : layeredEffects.get(i)) {
                 GL11.glPushMatrix();
@@ -128,12 +152,9 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRTranslucentBlock.renderTranslucentBlocks();
-        for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
-            og.prepareGLContext();
-            for (CompoundObjectEffect effect : objects.get(og)) {
-                effect.render(event.getPartialTicks());
-            }
-            og.revertGLContext();
+
+        if(uiGateway != null) {
+            uiGateway.renderIntoWorld(event.getPartialTicks());
         }
     }
 
@@ -244,12 +265,19 @@ public final class EffectHandler {
             fastRenderLightnings.clear();
             objects.clear();
             toAddBuffer.clear();
+            uiGateway = null;
+            gatewayUITicks = 0;
             cleanRequested = false;
         }
-        if(Minecraft.getMinecraft().world == null ||
-                Minecraft.getMinecraft().player == null) {
-            cleanRequested = true;
+        if(Minecraft.getMinecraft().player == null) {
             return;
+        }
+
+        if(gatewayUITicks > 0) {
+            gatewayUITicks--;
+            if(gatewayUITicks <= 0) {
+                uiGateway = null;
+            }
         }
 
         acceptsNewParticles = false;
