@@ -21,7 +21,8 @@ public enum Mods {
 
     TICONSTRUCT("tconstruct"),
     CRAFTTWEAKER("crafttweaker"),
-    JEI("jei");
+    JEI("jei"),
+    BOTANIA("botania");
 
     public final String modid;
 

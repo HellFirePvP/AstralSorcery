@@ -116,8 +116,8 @@ public class UIGateway {
                 while (!foundSpace && tries > 0) {
                     boolean mayAdd = true;
                     for (GatewayEntry entry : gateway.gatewayEntries) {
-                        if(Math.abs(entry.pitch - potentialEntry.pitch) < 10 &&
-                                (Math.abs(entry.yaw - potentialEntry.yaw) <= 10 || Math.abs(entry.yaw - potentialEntry.yaw - 360F) <= 10)) {
+                        if(Math.abs(entry.pitch - potentialEntry.pitch) < 25 &&
+                                (Math.abs(entry.yaw - potentialEntry.yaw) <= 25 || Math.abs(entry.yaw - potentialEntry.yaw - 360F) <= 25)) {
                             mayAdd = false;
                         }
                     }

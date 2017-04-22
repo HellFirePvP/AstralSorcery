@@ -16,7 +16,9 @@ import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.ItemHandRender;
@@ -86,9 +88,13 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         if(blockStackStored.isEmpty()) return;
 
         int amtFound = 0;
-        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
-        for (ItemStack stack : stacks) {
-            amtFound += stack.getCount();
+        if(Mods.BOTANIA.isPresent()) {
+            amtFound = ModIntegrationBotania.getItemCount(Minecraft.getMinecraft().player, lastCacheInstance, ItemUtils.createBlockState(blockStackStored));
+        } else {
+            Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
+            for (ItemStack stack : stacks) {
+                amtFound += stack.getCount();
+            }
         }
 
         int height  =  26;
@@ -127,6 +133,9 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
         String amtString = String.valueOf(amtFound);
+        if(amtFound == -1) {
+            amtString = "∞";
+        }
         GL11.glTranslated(-Minecraft.getMinecraft().fontRenderer.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
         if(amtString.length() > 3) {
@@ -194,11 +203,11 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         if(!placeable.isEmpty()) {
             for (BlockPos placePos : placeable) {
                 if(drainTempCharge(playerIn, Config.architectWandUseCost, true)
-                        && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
+                        && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                     drainTempCharge(playerIn, Config.architectWandUseCost, false);
                     gainPermCharge(playerIn, Config.architectWandUseCost / 4);
                     if(!playerIn.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
+                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }
                     world.setBlockState(placePos, stored);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);

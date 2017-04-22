@@ -8,23 +8,38 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestTeleport;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.GuiIngameForge;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opencl.CL;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.Collections;
@@ -39,18 +54,37 @@ import java.util.List;
  */
 public class ClientGatewayHandler {
 
-    private static UIGateway.GatewayEntry focusingEntry = null;
-    private static int focusTicks = 0;
+    public static UIGateway.GatewayEntry focusingEntry = null;
+    public static int focusTicks = 0;
+
+    private static int screenshotCooldown = 0;
+    private static WorldBlockPos lastScreenshotPos = null;
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onClientTick(TickEvent.ClientTickEvent event) {
+        if(screenshotCooldown > 0) {
+            screenshotCooldown--;
+            if(screenshotCooldown <= 0) {
+                lastScreenshotPos = null;
+                screenshotCooldown = 0;
+            }
+        }
+
         UIGateway ui = EffectHandler.getInstance().getUiGateway();
         if(ui != null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
             TileCelestialGateway gate = MiscUtils.getTileAt(player.world, new Vector3(player, true).toBlockPos().down(), TileCelestialGateway.class, true);
             if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
-                captureScreenshot(gate);
+                if(lastScreenshotPos != null) {
+                    WorldBlockPos currentPos = new WorldBlockPos(gate);
+                    if(!lastScreenshotPos.equals(currentPos)) {
+                        lastScreenshotPos = null;
+                        screenshotCooldown = 0;
+                    }
+                } else {
+                    captureScreenshot(gate);
+                }
 
                 UIGateway.GatewayEntry entry = ui.findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
                 if(entry == null) {
@@ -88,7 +122,7 @@ public class ClientGatewayHandler {
             Vector3 mov = dir.clone().normalize().multiply(0.25F).negate();
             Vector3 pos = focusingEntry.relativePos.clone().add(ui.getPos());
             if(focusTicks > 40) {
-                for (Vector3 v : MiscUtils.getCirclePositions(pos, dir, EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.3 + 0.15, EffectHandler.STATIC_EFFECT_RAND.nextInt(20) + 30)) {
+                for (Vector3 v : MiscUtils.getCirclePositions(pos, dir, EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.3 + 0.2, EffectHandler.STATIC_EFFECT_RAND.nextInt(20) + 30)) {
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
                     Vector3 m = mov.clone().multiply(0.5 + EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.5);
                     p.gravity(0.004).scale(0.1F).motion(
@@ -118,10 +152,10 @@ public class ClientGatewayHandler {
                     Vector3 v = positions.get(i);
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
                     p.gravity(0.004).scale(0.08F);
-                    if(perc <= 0.85 && EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
+                    if(EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
                         Vector3 to = pos.clone().subtract(v);
                         to.normalize().multiply(0.02);
-                        p.motion(to.getX(), to.getY(), to.getZ());
+                        p.motion(to.getX(), to.getY(), to.getZ()).setAlphaMultiplier(0.1F);
                     }
                     switch (EffectHandler.STATIC_EFFECT_RAND.nextInt(4)) {
                         case 0:
@@ -144,10 +178,10 @@ public class ClientGatewayHandler {
                     Vector3 v = positions.get(i);
                     EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
                     p.gravity(0.004).scale(0.08F);
-                    if(perc <= 0.85 && EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
+                    if(EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
                         Vector3 to = pos.clone().subtract(v);
                         to.normalize().multiply(0.02);
-                        p.motion(to.getX(), to.getY(), to.getZ());
+                        p.motion(to.getX(), to.getY(), to.getZ()).setAlphaMultiplier(0.1F);
                     }
                     switch (EffectHandler.STATIC_EFFECT_RAND.nextInt(4)) {
                         case 0:
@@ -173,27 +207,37 @@ public class ClientGatewayHandler {
 
     @SideOnly(Side.CLIENT)
     private void captureScreenshot(TileCelestialGateway gate) {
-        //ScreenShotHelper.saveScreenshot()
+        ResourceLocation gatewayScreenshot = ClientScreenshotCache.tryQueryTextureFor(gate.getWorld().provider.getDimension(), gate.getPos());
+        if(gatewayScreenshot == null && Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.rotationPitch <= 0 &&
+                Minecraft.getMinecraft().currentScreen == null && Minecraft.getMinecraft().renderGlobal.getRenderedChunks() > 200) {
+            screenshotCooldown = 10;
+            lastScreenshotPos = new WorldBlockPos(gate);
+
+            ClientScreenshotCache.takeViewScreenshotFor(gate.getWorld().provider.getDimension(), gate.getPos());
+        }
     }
 
     //40 circle, 40 portal, 15 drag
 
     private float fovPre = 70F;
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void onRenderTransform(TickEvent.RenderTickEvent event) {
-        if(event.phase == TickEvent.Phase.START) {
-            fovPre = Minecraft.getMinecraft().gameSettings.fovSetting;
-            if(focusTicks < 80) {
-                return;
+        UIGateway ui = EffectHandler.getInstance().getUiGateway();
+        if(ui != null) {
+            if(event.phase == TickEvent.Phase.START) {
+                fovPre = Minecraft.getMinecraft().gameSettings.fovSetting;
+                if(focusTicks < 80) {
+                    return;
+                }
+                float percDone = 1F - ((focusTicks - 80F + event.renderTickTime) / 15F);
+                float targetFov = 10F;
+                float diff = fovPre - targetFov;
+                Minecraft.getMinecraft().gameSettings.fovSetting = Math.max(targetFov, targetFov + diff * percDone);
+            } else {
+                Minecraft.getMinecraft().gameSettings.fovSetting = fovPre;
             }
-            float percDone = 1F - ((focusTicks - 80F + event.renderTickTime) / 15F);
-            float targetFov = 10F;
-            float diff = fovPre - targetFov;
-            Minecraft.getMinecraft().gameSettings.fovSetting = Math.max(targetFov, targetFov + diff * percDone);
-        } else {
-            Minecraft.getMinecraft().gameSettings.fovSetting = fovPre;
         }
     }
 

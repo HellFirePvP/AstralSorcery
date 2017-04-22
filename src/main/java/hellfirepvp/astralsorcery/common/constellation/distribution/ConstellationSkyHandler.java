@@ -98,7 +98,11 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     public Optional<Long> getSeedIfPresent(World world) {
-        int dim = world.provider.getDimension();
+        return getSeedIfPresent(world.provider.getDimension());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public Optional<Long> getSeedIfPresent(int dim) {
         if(!cacheSeedLookup.containsKey(dim)) {
             PktRequestSeed req = new PktRequestSeed(activeSession, dim);
             PacketChannel.CHANNEL.sendToServer(req);

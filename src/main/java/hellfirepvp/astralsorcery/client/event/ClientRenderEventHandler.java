@@ -290,7 +290,7 @@ public class ClientRenderEventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
@@ -319,7 +319,7 @@ public class ClientRenderEventHandler {
                 vb.pos(offsetLeft,            offsetTop + 27, 10).tex(uvPos.key, uvPos.value + ssr.getVLength()).endVertex();
                 vb.pos(offsetLeft + barWidth * percFilled, offsetTop + 27, 10).tex(uvPos.key + uLength, uvPos.value + ssr.getVLength()).endVertex();
                 vb.pos(offsetLeft + barWidth * percFilled, offsetTop,          10).tex(uvPos.key + uLength, uvPos.value).endVertex();
-                vb.pos(offsetLeft,            offsetTop,          10).tex(uvPos.key, uvPos.value).endVertex();
+                vb.pos(offsetLeft,            offsetTop,         10).tex(uvPos.key, uvPos.value).endVertex();
                 tes.draw();
                 GlStateManager.enableAlpha();
 

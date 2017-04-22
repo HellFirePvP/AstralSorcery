@@ -10,10 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
@@ -127,7 +124,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CEL_STRIKE,
 
         CE_CROP_INTERACT,
-        //CE_MELT_BLOCK,
+        CE_MELT_BLOCK,
         CE_ACCEL_TILE,
         CE_DMG_ENTITY,
         CE_WATER_FISH,
@@ -163,8 +160,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectAevitas::playParticles;
                 case ARCHITECT_PLACE:
                     return ItemArchitectWand::playArchitectPlaceEvent;
-                //case CE_MELT_BLOCK:
-                //    return CEffectFornax::playParticles;
+                case CE_MELT_BLOCK:
+                    return CEffectFornax::playParticles;
                 case FLARE_PROC:
                     return EntityFlare::playParticles;
                 case CE_ACCEL_TILE:

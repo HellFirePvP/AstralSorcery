@@ -234,13 +234,17 @@ public class RegistryConstellations {
         bootes.addConnection(sl4, sl5);
         bootes.addConnection(sl5, sl6);
 
-        fornax = new ConstellationBase.Minor("fornax");
-        sl1 = fornax.addStar(4, 9);
-        sl2 = fornax.addStar(13, 13);
-        sl3 = fornax.addStar(27, 8);
+        fornax = new ConstellationBase.Weak("fornax");
+        sl1 = fornax.addStar(3, 20);
+        sl2 = fornax.addStar(13, 23);
+        sl3 = fornax.addStar(27, 16);
+        sl4 = fornax.addStar(10, 13);
+        sl5 = fornax.addStar(15, 11);
 
         fornax.addConnection(sl1, sl2);
         fornax.addConnection(sl2, sl3);
+        fornax.addConnection(sl2, sl4);
+        fornax.addConnection(sl2, sl5);
 
         gelu = new ConstellationBase.Minor("gelu");
         sl1 = gelu.addStar(8, 7);

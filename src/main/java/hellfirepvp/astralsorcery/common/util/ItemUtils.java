@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -104,30 +106,54 @@ public class ItemUtils {
         return out;
     }
 
-    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, Item i, int meta) {
-        return scanInventoryForMatching(handler, new ItemStack(i, 1, meta), false);
-    }
-
     public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match, boolean strict) {
-        return findItemsInInventory(handler, match, strict).values();
+        return findItemsInInventory(handler, match, strict);
     }
 
-    public static Map<Integer, ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
+    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
         return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match, strict);
     }
 
-    public static Map<Integer, ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
-        Map<Integer, ItemStack> slotsOut = new HashMap<>();
+    public static Collection<ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        List<ItemStack> stacksOut = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match))
-                slotsOut.put(j, copyStackWithSize(s, s.getCount()));
+            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+                stacksOut.add(copyStackWithSize(s, s.getCount()));
+            }
         }
-        return slotsOut;
+        return stacksOut;
     }
 
-    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack toConsume, boolean simulate) {
-        return consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), toConsume, simulate);
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        Map<Integer, ItemStack> stacksOut = new HashMap<>();
+        for (int j = 0; j < handler.getSlots(); j++) {
+            ItemStack s = handler.getStackInSlot(j);
+            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+                stacksOut.put(j, copyStackWithSize(s, s.getCount()));
+            }
+        }
+        return stacksOut;
+    }
+
+    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
+        int consumed = 0;
+        if (Mods.BOTANIA.isPresent()) {
+            IBlockState consumeState = createBlockState(toConsume);
+            if (consumeState != null) {
+                Block b = consumeState.getBlock();
+                int meta = b.damageDropped(consumeState);
+
+                for (int i = 0; i < toConsume.getCount(); i++) {
+                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, simulate);
+                    if (!res.isEmpty()) {
+                        consumed++;
+                    }
+                }
+            }
+        }
+        ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
+        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);
     }
 
     public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
@@ -135,7 +161,7 @@ public class ItemUtils {
     }
 
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
-        Map<Integer, ItemStack> contents = findItemsInInventory(handler, toConsume, false);
+        Map<Integer, ItemStack> contents = findItemsIndexedInInventory(handler, toConsume, false);
         if (contents.isEmpty()) return false;
 
         int cAmt = toConsume.getCount();

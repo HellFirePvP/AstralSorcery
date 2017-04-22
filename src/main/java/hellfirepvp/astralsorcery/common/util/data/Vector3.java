@@ -381,6 +381,7 @@ public class Vector3 {
         Vector3 rand = random();
         return rand.setY(Math.abs(rand.getY()));
     }
+
     public static Vector3 positiveYRandom(Random r) {
         Vector3 rand = random(r);
         return rand.setY(Math.abs(rand.getY()));

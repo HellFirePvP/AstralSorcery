@@ -17,8 +17,12 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
+import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -28,6 +32,12 @@ import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -62,6 +72,7 @@ public final class EffectHandler {
 
     private UIGateway uiGateway = null;
     private int gatewayUITicks = 0;
+    public boolean renderGateway = true;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
@@ -126,7 +137,7 @@ public final class EffectHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onRender(RenderWorldLastEvent event) {
         TESRPrismLens.renderColoredPrismsLast();
         acceptsNewParticles = false;
@@ -136,6 +147,15 @@ public final class EffectHandler {
                 effect.render(event.getPartialTicks());
             }
             og.revertGLContext();
+        }
+
+        if(uiGateway != null) {
+            if(renderGateway) {
+                uiGateway.renderIntoWorld(event.getPartialTicks());
+            }
+            if(ClientGatewayHandler.focusingEntry != null) {
+                renderGatewayTarget(event.getPartialTicks());
+            }
         }
         EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
         EffectLightning.renderFast(event.getPartialTicks(), fastRenderLightnings);
@@ -152,9 +172,34 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRTranslucentBlock.renderTranslucentBlocks();
+    }
 
-        if(uiGateway != null) {
-            uiGateway.renderIntoWorld(event.getPartialTicks());
+    private void renderGatewayTarget(float pTicks) {
+        int focusTicks = ClientGatewayHandler.focusTicks;
+        UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
+        float perc = (Math.min(40F, focusTicks) / 40F) * 0.3F;
+        if(focusTicks > 70) {
+            perc = ((float) (focusTicks - 70)) / 25F;
+            perc = MathHelper.clamp(perc, 0.3F, 1F);
+        }
+        ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
+        if(screenshot != null) {
+            GlStateManager.pushMatrix();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(screenshot);
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
+            GlStateManager.disableAlpha();
+            Tessellator tes = Tessellator.getInstance();
+            VertexBuffer vb = tes.getBuffer();
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+            Vector3 pos = focusingEntry.relativePos.clone().multiply(0.85).add(uiGateway.getPos());
+            RenderingUtils.renderFacingFullQuadVB(vb, pos.getX(), pos.getY(), pos.getZ(),
+                    pTicks, 0.4F, 0,
+                    1F, 1F, 1F, perc);
+            tes.draw();
+            GlStateManager.enableAlpha();
+            GlStateManager.popMatrix();
         }
     }
 

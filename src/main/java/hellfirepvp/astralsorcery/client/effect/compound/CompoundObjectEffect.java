@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
@@ -31,6 +32,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
         VertexBuffer vb = tes.getBuffer();
+        getGroup().beginDrawing(vb);
         render(vb, pTicks);
         tes.draw();
         GL11.glPopMatrix();
@@ -44,6 +46,14 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
 
         SOLID_COLOR_SPHERE;
 
+        public void beginDrawing(VertexBuffer vb) {
+            switch (this) {
+                case SOLID_COLOR_SPHERE:
+                    vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+                    break;
+            }
+        }
+
         public void prepareGLContext() {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
@@ -54,7 +64,6 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
                     GL11.glDisable(GL11.GL_CULL_FACE);
 
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
-                    GL11.glEnable(GL11.GL_COLOR_MATERIAL);
                     break;
             }
         }
@@ -63,7 +72,6 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
                     GL11.glPopAttrib();
-                    GL11.glDisable(GL11.GL_COLOR_MATERIAL);
                     break;
             }
         }
