@@ -76,13 +76,26 @@ public class TileCrystalLens extends TileTransmissionBase {
         ItemColoredLens.ColorType old = this.lensColor;
         this.lensColor = type;
         markForUpdate();
-        if(lensColor != null) {
-            IPrismTransmissionNode node = getNode();
-            if(node != null) {
-                if(node instanceof CrystalTransmissionNode) {
+        IPrismTransmissionNode node = getNode();
+        if(node != null) {
+            boolean shouldIgnore = type == ItemColoredLens.ColorType.SPECTRAL;
+            if(node instanceof CrystalTransmissionNode) {
+                if(shouldIgnore != ((CrystalTransmissionNode) node).ignoresBlockCollision()) {
+                    ((CrystalTransmissionNode) node).updateIgnoreBlockCollisionState(world, shouldIgnore);
+                }
+                if(lensColor != null) {
                     ((CrystalTransmissionNode) node)     .updateAdditionalLoss(1F - lensColor.getFlowReduction());
-                } else if(node instanceof CrystalPrismTransmissionNode) {
-                    ((CrystalPrismTransmissionNode) node).updateAdditionalLoss(1F - lensColor.getFlowReduction());
+                } else {
+                    ((CrystalTransmissionNode) node)     .updateAdditionalLoss(1F);
+                }
+            } else if(node instanceof CrystalPrismTransmissionNode) {
+                if(shouldIgnore != ((CrystalPrismTransmissionNode) node).ignoresBlockCollision()) {
+                    ((CrystalPrismTransmissionNode) node).updateIgnoreBlockCollisionState(world, shouldIgnore);
+                }
+                if(lensColor != null) {
+                    ((CrystalPrismTransmissionNode) node)     .updateAdditionalLoss(1F - lensColor.getFlowReduction());
+                } else {
+                    ((CrystalPrismTransmissionNode) node)     .updateAdditionalLoss(1F);
                 }
             }
         }
