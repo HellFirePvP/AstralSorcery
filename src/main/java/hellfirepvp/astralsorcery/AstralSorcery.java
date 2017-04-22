@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -40,7 +41,7 @@ public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.3.1-beta";
+    public static final String VERSION = "1.3.3-beta";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
@@ -85,7 +86,7 @@ public class AstralSorcery {
 
     @Mod.EventHandler
     public void onServerStarted(FMLServerStartedEvent event) {
-        //CelestialGatewaySystem.instance.onServerStart();
+        CelestialGatewaySystem.instance.onServerStart();
     }
 
     @SubscribeEvent

@@ -9,15 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectAevitas;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectArmara;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectBootes;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectDiscidia;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectHorologium;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectLucerna;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectMineralis;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectOctans;
-import hellfirepvp.astralsorcery.common.constellation.effect.aoe.CEffectVicio;
+import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -51,6 +43,7 @@ public class ConstellationEffectRegistry {
         register(Constellations.bootes,     CEffectBootes::new);
         register(Constellations.horologium, CEffectHorologium::new);
         register(Constellations.octans,     CEffectOctans::new);
+        register(Constellations.fornax,     CEffectFornax::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
@@ -66,6 +59,7 @@ public class ConstellationEffectRegistry {
         Config.addDynamicEntry(new CEffectLucerna());
         Config.addDynamicEntry(new CEffectBootes());
         Config.addDynamicEntry(new CEffectOctans());
+        Config.addDynamicEntry(new CEffectFornax());
     }
 
     private static void register(IWeakConstellation c, ConstellationEffectProvider provider) {

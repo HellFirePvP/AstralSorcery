@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -55,6 +56,7 @@ public class EventHandlerNetwork {
 
         ResearchManager.sendInitClientKnowledge(p);
 
+        CelestialGatewaySystem.instance.syncTo(p);
         SyncDataHolder.syncAllDataTo(p);
     }
 

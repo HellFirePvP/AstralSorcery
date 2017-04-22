@@ -32,8 +32,8 @@ public class Constellations {
     public static IWeakConstellation bootes;
     public static IWeakConstellation octans;
     public static IWeakConstellation horologium;
+    public static IWeakConstellation fornax;
 
-    public static IMinorConstellation fornax;
     public static IMinorConstellation gelu;
     public static IMinorConstellation ulteria;
     public static IMinorConstellation alcara;

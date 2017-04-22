@@ -3,6 +3,10 @@ package hellfirepvp.astralsorcery.common.base;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateGateways;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -11,7 +15,9 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +35,7 @@ public class CelestialGatewaySystem {
 
     public static CelestialGatewaySystem instance = new CelestialGatewaySystem();
     private Map<Integer, List<BlockPos>> serverCache = new HashMap<>();
+    private Map<Integer, List<BlockPos>> clientCache = new HashMap<>();
 
     private CelestialGatewaySystem() {}
 
@@ -42,6 +49,7 @@ public class CelestialGatewaySystem {
             loadWorldCache(world);
         }
         startup = false;
+        syncToAll();
     }
 
     @SubscribeEvent
@@ -52,6 +60,25 @@ public class CelestialGatewaySystem {
         if(world.isRemote) return;
 
         loadWorldCache(world);
+        syncToAll();
+    }
+
+    public void syncTo(EntityPlayer pl) {
+        PktUpdateGateways pkt = new PktUpdateGateways(serverCache);
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) pl);
+    }
+
+    public void syncToAll() {
+        PktUpdateGateways pkt = new PktUpdateGateways(serverCache);
+        PacketChannel.CHANNEL.sendToAll(pkt);
+    }
+
+    public List<BlockPos> getGatewaysForWorld(World world, Side side) {
+        return (side == Side.SERVER ? serverCache : clientCache).get(world.provider.getDimension());
+    }
+
+    public Map<Integer, List<BlockPos>> getGatewayCache(Side side) {
+        return Collections.unmodifiableMap(side == Side.SERVER ? serverCache : clientCache);
     }
 
     public void addPosition(World world, BlockPos pos) {
@@ -69,6 +96,7 @@ public class CelestialGatewaySystem {
         List<BlockPos> cache = serverCache.get(dim);
         if(!cache.contains(pos)) {
             cache.add(pos);
+            syncToAll();
         }
     }
 
@@ -79,7 +107,9 @@ public class CelestialGatewaySystem {
         if(!serverCache.containsKey(dim)) {
             return;
         }
-        serverCache.get(dim).remove(pos);
+        if(serverCache.get(dim).remove(pos)) {
+            syncToAll();
+        }
     }
 
     private void forceLoad(int dim) {
@@ -87,6 +117,10 @@ public class CelestialGatewaySystem {
         if(serv == null) {
             DimensionManager.initDimension(dim);
         }
+    }
+
+    public void updateClientCache(Map<Integer, List<BlockPos>> positions) {
+        this.clientCache = positions;
     }
 
     private void loadWorldCache(World world) {

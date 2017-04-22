@@ -55,7 +55,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
     }
 
     private boolean hasHandlerForSide(EnumFacing facing) {
-        return applicableSides.contains(facing);
+        return facing == null || applicableSides.contains(facing);
     }
 
     @Override

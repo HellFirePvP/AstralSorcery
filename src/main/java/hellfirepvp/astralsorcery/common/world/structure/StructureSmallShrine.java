@@ -34,6 +34,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
         getStructureTemplate().placeInWorld(world, pos);
+        getBuffer(world).markStructureGeneration(pos, getStructureType());
     }
 
     @Override

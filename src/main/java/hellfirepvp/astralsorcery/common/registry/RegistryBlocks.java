@@ -122,8 +122,8 @@ public class RegistryBlocks {
         //queueCustomNameItemBlock(drawingTable);
         //celestialOrrery = registerBlock(new BlockCelestialOrrery());
         //queueDefaultItemBlock(celestialOrrery);
-        //celestialGateway = registerBlock(new BlockCelestialGateway());
-        //queueDefaultItemBlock(celestialGateway);
+        celestialGateway = registerBlock(new BlockCelestialGateway());
+        queueDefaultItemBlock(celestialGateway);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -175,7 +175,7 @@ public class RegistryBlocks {
         registerTile(TileAttunementRelay.class);
         //registerTile(TileMapDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
-        //registerTile(TileCelestialGateway.class);
+        registerTile(TileCelestialGateway.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

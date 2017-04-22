@@ -104,11 +104,10 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
     public void render(VertexBuffer vb, float pTicks) {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
         GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
-        vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
         float alpha = 1F;
         if(alphaFadeMaxDist != -1 && Minecraft.getMinecraft().player != null) {
             Vector3 plVec = new Vector3(Minecraft.getMinecraft().player);
-            double dst = plVec.distance(getPosition());
+            double dst = plVec.distance(getPosition()) - 1.2;
             alpha *= 1D - (dst / alphaFadeMaxDist);
             if(removeIfInvisible && alpha <= 0) {
                 requestRemoval();

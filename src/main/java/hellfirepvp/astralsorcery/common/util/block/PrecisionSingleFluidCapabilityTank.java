@@ -28,7 +28,6 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     private boolean allowInput = true, allowOutput = true;
 
     public List<EnumFacing> accessibleSides = new ArrayList<>();
-    private boolean acceptNullCapabilityAccess;
 
     private PrecisionSingleFluidCapabilityTank() {}
 
@@ -36,18 +35,9 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         this(maxCapacity, EnumFacing.VALUES);
     }
 
-    public PrecisionSingleFluidCapabilityTank(int maxCapacity, boolean acceptNull) {
-        this(maxCapacity, acceptNull, EnumFacing.VALUES);
-    }
-
     public PrecisionSingleFluidCapabilityTank(int capacity, EnumFacing... accessibleFrom) {
-        this(capacity, false, accessibleFrom);
-    }
-
-    public PrecisionSingleFluidCapabilityTank(int capacity, boolean acceptNull, EnumFacing... accessibleFrom) {
         this.maxCapacity = Math.max(0, capacity);
         this.accessibleSides = Arrays.asList(accessibleFrom);
-        this.acceptNullCapabilityAccess = acceptNull;
     }
 
     public void setAllowInput(boolean allowInput) {
@@ -193,7 +183,6 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         if(this.fluid != null) {
             tag.setString("fluid", this.fluid.getName());
         }
-        tag.setBoolean("allowNull", this.acceptNullCapabilityAccess);
         int[] sides = new int[accessibleSides.size()];
         for (int i = 0; i < accessibleSides.size(); i++) {
             EnumFacing side = accessibleSides.get(i);
@@ -213,7 +202,6 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         } else {
             this.fluid = null;
         }
-        this.acceptNullCapabilityAccess = tag.getBoolean("allowNull");
         int[] sides = tag.getIntArray("sides");
         for (int i : sides) {
             this.accessibleSides.add(EnumFacing.values()[i]);
@@ -227,7 +215,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     }
 
     public boolean hasCapability(EnumFacing facing) {
-        return (facing == null && acceptNullCapabilityAccess) || accessibleSides.contains(facing);
+        return (facing == null) || accessibleSides.contains(facing);
     }
 
     public IFluidHandler getCapability(EnumFacing facing) {

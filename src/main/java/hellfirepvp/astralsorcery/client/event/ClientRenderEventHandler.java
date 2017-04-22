@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.event;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
@@ -273,7 +274,7 @@ public class ClientRenderEventHandler {
                             EffectHelper.genericFlareParticle(top.getX() + rand.nextFloat(), top.getY() + 0.15, top.getZ() + rand.nextFloat())
                                     .scale(4F)
                                     .setColor(c)
-                                    .enableAlphaFade()
+                                    .enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
                                     .gravity(0.004)
                                     .setAlphaMultiplier(nightPerc * fPerc);
                             if (opF >= 0.8F && rand.nextInt(3) == 0) {
@@ -292,7 +293,7 @@ public class ClientRenderEventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     @SideOnly(Side.CLIENT)
     public void onOverlay(RenderGameOverlayEvent.Post event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {

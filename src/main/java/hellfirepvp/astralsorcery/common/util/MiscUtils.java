@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -110,7 +111,19 @@ public class MiscUtils {
         return false;
     }
 
-    public static Collection<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {
+    public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {
+        if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
+        if(entity.getEntityWorld().provider.getDimension() != targetDimId) {
+            if(entity instanceof EntityPlayerMP) {
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) entity, targetDimId, new NoOpTeleporter(((EntityPlayerMP) entity).getServerWorld()));
+            } else {
+                entity.changeDimension(targetDimId);
+            }
+        }
+        entity.setPositionAndUpdate(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
+    }
+
+    public static List<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {
         List<Vector3> out = new LinkedList<>();
         Vector3 circleVec = axis.clone().perpendicular().normalize().multiply(radius);
         double degPerPoint = 360D / ((double) amountOfPointsOnCircle);

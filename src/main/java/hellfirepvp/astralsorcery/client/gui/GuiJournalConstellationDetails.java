@@ -76,7 +76,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
         List<String> lines = new LinkedList<>();
         for (String segment : text.split("<NL>")) {
-            lines.addAll(fontRendererObj.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+            lines.addAll(Minecraft.getMinecraft().fontRendererObj.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
             lines.add("");
         }
         locText.addAll(lines);

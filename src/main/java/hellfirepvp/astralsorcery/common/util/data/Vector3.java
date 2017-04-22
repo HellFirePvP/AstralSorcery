@@ -372,8 +372,18 @@ public class Vector3 {
         return new Vector3(RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1), RAND.nextDouble() * (RAND.nextBoolean() ? 1 : -1));
     }
 
+    public static Vector3 random(Random rand) {
+        return new Vector3(rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1), rand.nextDouble() * (rand.nextBoolean() ? 1 : -1));
+    }
+
     public static Vector3 positiveYRandom() {
-        return random().setY(Math.abs(random().getY()));
+        Vector3 rand = random();
+        return rand.setY(Math.abs(rand.getY()));
+    }
+
+    public static Vector3 positiveYRandom(Random r) {
+        Vector3 rand = random(r);
+        return rand.setY(Math.abs(rand.getY()));
     }
 
     //RIP ChunkCoordinates BibleThump

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item;
 
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -43,7 +44,7 @@ public abstract class ItemBlockStorage extends Item {
     public static ItemStack getStoredStateAsStack(ItemStack stack) {
         IBlockState stored = getStoredState(stack);
         if(stored == null) return null; //Guarantees also that the block has an itemblock.
-        return new ItemStack(stored.getBlock(), 1, stored.getBlock().damageDropped(stored));
+        return ItemUtils.createBlockStack(stored);
     }
 
     @Nullable

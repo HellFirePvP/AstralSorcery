@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.tile.network;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectCollector;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
@@ -19,6 +21,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
@@ -48,6 +51,17 @@ import java.util.Random;
  */
 public class TileCollectorCrystal extends TileSourceBase {
 
+    public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
+            new BlockPos(-1, -4, -1),
+            new BlockPos( 0, -4, -1),
+            new BlockPos( 1, -4, -1),
+            new BlockPos( 1, -4,  0),
+            new BlockPos( 1, -4,  1),
+            new BlockPos( 0, -4,  1),
+            new BlockPos(-1, -4,  1),
+            new BlockPos(-1, -4,  0),
+    };
+
     private static final Random rand = new Random();
 
     private BlockCollectorCrystalBase.CollectorCrystalType type;
@@ -69,10 +83,17 @@ public class TileCollectorCrystal extends TileSourceBase {
             if(isEnhanced() && getTicksExisted() % 10 == 0) {
                 checkAdjacentBlocks();
             }
-        }
-
-        if(world.isRemote && isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-            playEnhancedEffects();
+            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && getTicksExisted() % 40 == 0) {
+                boolean match = usedCrystalProperties != null && usedCrystalProperties.getSize() > 400 &&
+                        MultiBlockArrays.patternCollectorEnhancement.matches(world, pos);
+                if (match != enhanced) {
+                    setEnhanced(match);
+                }
+            }
+        } else {
+            if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                playEnhancedEffects();
+            }
         }
     }
 
@@ -120,6 +141,31 @@ public class TileCollectorCrystal extends TileSourceBase {
                     orbitals[i] = null;
                 }
             }
+        }
+
+        BlockPos randomPos = offsetsLiquidStarlight[rand.nextInt(offsetsLiquidStarlight.length)].add(pos);
+        Vector3 from = new Vector3(randomPos).add(rand.nextFloat(), 0.8, rand.nextFloat());
+        Vector3 to = new Vector3(this).add(0.5, 0.5, 0.5);
+        Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1);
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
+        p.motion(mov.getX(), mov.getY(), mov.getZ()).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        p.gravity(0.004).scale(0.25F).setMaxAge(30 + rand.nextInt(10));
+        Color c = new Color(60, 0, 255);
+        switch (rand.nextInt(4)) {
+            case 0:
+                c = Color.WHITE;
+                break;
+            case 1:
+                c = new Color(0x69B5FF);
+                break;
+            case 2:
+                c = new Color(0x0078FF);
+                break;
+        }
+        p.setColor(c);
+
+        if(usedCrystalProperties != null && (usedCrystalProperties.getPurity() > 90 || usedCrystalProperties.getCollectiveCapability() > 90) && rand.nextInt(100) == 0) {
+            AstralSorcery.proxy.fireLightning(world, to, from, c);
         }
     }
 

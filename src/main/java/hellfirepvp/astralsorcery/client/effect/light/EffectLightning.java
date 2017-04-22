@@ -223,7 +223,7 @@ public class EffectLightning extends EntityComplexFX {
 
     @Override
     public boolean canRemove() {
-        return (buildSpeed + buildWaitTime) * 20F <= age;
+        return Math.max((buildSpeed + buildWaitTime) * 20F, 1) < age;
     }
 
     @Override

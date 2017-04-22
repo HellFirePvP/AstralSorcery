@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.client.util.AirBlockRenderWorld;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.ItemHandRender;
@@ -97,9 +99,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if(blockStackStored == null) return;
 
         int amtFound = 0;
-        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
-        for (ItemStack stack : stacks) {
-            amtFound += stack.stackSize;
+        if(Mods.BOTANIA.isPresent()) {
+            amtFound = ModIntegrationBotania.getItemCount(Minecraft.getMinecraft().player, lastCacheInstance, ItemUtils.createBlockState(blockStackStored));
+        } else {
+            Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
+            for (ItemStack stack : stacks) {
+                amtFound += stack.stackSize;
+            }
         }
 
         int height  =  26;
@@ -138,6 +144,9 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX + 14, offsetY + 16, 0);
         String amtString = String.valueOf(amtFound);
+        if(amtFound == -1) {
+            amtString = "∞";
+        }
         GL11.glTranslated(-Minecraft.getMinecraft().fontRendererObj.getStringWidth(amtString) / 3, 0, 0);
         GL11.glScaled(0.7, 0.7, 0.7);
         if(amtString.length() > 3) {
@@ -178,8 +187,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if (pl.isCreative()) {
             amt = -1;
         } else {
-            for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false).values()) {
-                amt += st.stackSize;
+            if(Mods.BOTANIA.isPresent()) {
+                amt = ModIntegrationBotania.getItemCount(Minecraft.getMinecraft().player, stack, stored);
+            } else {
+                for (ItemStack st : ItemUtils.findItemsInPlayerInventory(pl, matchStack, false)) {
+                    amt += st.stackSize;
+                }
             }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, amt, false);
@@ -234,8 +247,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if (playerIn.isCreative()) {
             amt = -1;
         } else {
-            for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false).values()) {
-                amt += st.stackSize;
+            if(Mods.BOTANIA.isPresent()) {
+                amt = ModIntegrationBotania.getItemCount(Minecraft.getMinecraft().player, stack, stored);
+            } else {
+                for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, stack, false)) {
+                    amt += st.stackSize;
+                }
             }
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, amt, false);
@@ -243,12 +260,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
 
         for (BlockPos placePos : found.getPattern().keySet()) {
             if(drainTempCharge(playerIn, Config.exchangeWandUseCost, true)
-                    && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
+                    && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
                     drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
                     gainPermCharge(playerIn, Config.exchangeWandUseCost / 4);
                     if(!playerIn.isCreative()) {
-                        ItemUtils.consumeFromPlayerInventory(playerIn, ItemUtils.copyStackWithSize(consumeStack, 1), false);
+                        ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }
                     world.setBlockState(placePos, stored);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);

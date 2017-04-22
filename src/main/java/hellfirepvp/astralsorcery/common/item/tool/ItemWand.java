@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -120,7 +121,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
             particle.setColor(BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
             particle.motion(velX * (0.2 + 0.8 * rand.nextFloat()), velY * (0.4 + 0.6 * rand.nextFloat()), velZ * (0.2 + 0.8 * rand.nextFloat()));
             particle.scale(0.7F).setMaxAge(70);
-            particle.enableAlphaFade().setAlphaMultiplier((float) ((150 * dstr) / 255F));
+            particle.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier((float) ((150 * dstr) / 255F));
         }
 
     }

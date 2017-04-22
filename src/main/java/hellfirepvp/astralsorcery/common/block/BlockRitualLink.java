@@ -42,7 +42,7 @@ public class BlockRitualLink extends BlockContainer {
     public BlockRitualLink() {
         super(Material.ROCK, MapColor.QUARTZ);
         setHardness(3.0F);
-        setSoundType(SoundType.STONE);
+        setSoundType(SoundType.GLASS);
         setResistance(25.0F);
         setHarvestLevel("pickaxe", 2);
         setLightLevel(0.6F);
