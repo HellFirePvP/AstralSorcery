@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.starlight.transmission.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
+import hellfirepvp.astralsorcery.common.starlight.network.TransmissionWorldHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
@@ -37,6 +39,8 @@ import java.util.stream.Collectors;
  */
 public class SimpleTransmissionNode implements ITransmissionNode {
 
+    private boolean ignoreBlockCollision = false;
+
     private boolean nextReachable = false;
     private BlockPos nextPos = null;
     private double dstToNextSq = 0;
@@ -53,6 +57,22 @@ public class SimpleTransmissionNode implements ITransmissionNode {
     @Override
     public BlockPos getPos() {
         return thisPos;
+    }
+
+    public void updateIgnoreBlockCollisionState(World world, boolean ignoreBlockCollision) {
+        this.ignoreBlockCollision = ignoreBlockCollision;
+        TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(world);
+        if(assistNext != null && handle != null) {
+            boolean oldState = this.nextReachable;
+            this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
+            if(nextReachable != oldState) {
+                handle.notifyTransmissionNodeChange(this);
+            }
+        }
+    }
+
+    public boolean ignoresBlockCollision() {
+        return ignoreBlockCollision;
     }
 
     @Override
@@ -90,7 +110,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         double dstEnd = nextPos.distanceSq(at.getX(), at.getY(), at.getZ());
         if(dstStart > dstToNextSq || dstEnd > dstToNextSq) return false; //out of range
         boolean oldState = this.nextReachable;
-        this.nextReachable = assistNext.isClear(world);
+        this.nextReachable = ignoreBlockCollision || assistNext.isClear(world);
         return this.nextReachable != oldState;
     }
 

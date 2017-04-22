@@ -84,6 +84,9 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
             BlockPos pos = new BlockPos(chX * 16, 0, chZ * 16);
             double dst = buf.getDstToClosest(type, new BlockPos(pos.getX(), world.getTopSolidOrLiquidBlock(pos).getY(), pos.getZ()));
             if(dst != -1) {
+                if(dst < 32) {
+                    return false;
+                }
                 double ideal = ((WorldGenAttributeStructure) this).getIdealDistance();
                 chanceMultiplier = ideal / dst;
             } else {
