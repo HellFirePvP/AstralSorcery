@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
@@ -32,23 +33,29 @@ public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
     @Override
     public void renderTileEntityAt(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y + 1.28, z + 0.5);
-        GL11.glRotated(180, 1, 0, 0);
-        GL11.glRotated(180, 0, 1, 0);
-        GL11.glRotated(te.getRotation().ordinal() * 45, 0, 1, 0);
-        GL11.glScaled(0.053, 0.053, 0.053);
-        RenderHelper.disableStandardItemLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + 0.5, y + 1.28, z + 0.5);
+        GlStateManager.rotate(180, 1, 0, 0);
+        GlStateManager.rotate(180, 0, 1, 0);
+        GlStateManager.rotate(te.getRotation().ordinal() * 45, 0, 1, 0);
+        GlStateManager.scale(0.053, 0.053, 0.053);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate((te.getRotation().ordinal()) * 45 + 152.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(165.0F, 1.0F, 0.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
+
         renderModel(te, 1);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         GL11.glPopAttrib();
     }
 
     private void renderModel(TileTelescope te, float partialTicks) {
         texTelescope.bind();
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableCull();
         modelTelescope.render(null, 0, 0, 0, 0, 0, 1);
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GlStateManager.enableCull();
     }
 
 }

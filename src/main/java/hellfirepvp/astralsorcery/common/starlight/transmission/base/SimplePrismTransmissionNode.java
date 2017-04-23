@@ -136,6 +136,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     public void readFromNBT(NBTTagCompound compound) {
         this.thisPos = NBTUtils.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
+        this.ignoreBlockCollision = compound.getBoolean("ignoreBlockCollision");
 
         NBTTagList list = compound.getTagList("sources", 10);
         for (int i = 0; i < list.tagCount(); i++) {
@@ -154,6 +155,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         NBTUtils.writeBlockPosToNBT(thisPos, compound);
+        compound.setBoolean("ignoreBlockCollision", this.ignoreBlockCollision);
 
         NBTTagList sources = new NBTTagList();
         for (BlockPos source : sourcesToThis) {

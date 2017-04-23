@@ -40,11 +40,13 @@ public class TimeoutList<V> implements ITickHandler {
         }
     }
 
-    public void add(@Nonnull V value) {
+    public void add(V value) {
         this.add(0, value);
     }
 
-    public void add(int timeout, @Nonnull V value) {
+    public void add(int timeout, V value) {
+        if(value == null) return;
+
         this.tickEntries.add(new TimeoutEntry<>(timeout, value));
     }
 

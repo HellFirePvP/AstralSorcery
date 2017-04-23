@@ -188,7 +188,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.type = type;
 
         this.needsUpdate = true;
-        markDirty();
+        markForUpdate();
     }
 
     public void setEnhanced(boolean enhanced) {

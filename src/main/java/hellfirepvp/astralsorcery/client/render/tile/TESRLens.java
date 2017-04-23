@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.BlockPos;
@@ -63,7 +64,6 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
         Blending.DEFAULT.apply();
 
         GL11.glPushMatrix();
-        RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.335, z + 0.5);
         GL11.glScaled(0.055, 0.055, 0.055);
         GL11.glRotated(180, 1, 0, 0);
@@ -87,8 +87,16 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
     }
 
     private void renderHandle(float yaw, float pitch) {
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(165.0F, 1.0F, 0.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
+
         texLensPart.bind();
         modelLensPart.render(null, yaw, pitch, 0, 0, 0, 1);
+        RenderHelper.disableStandardItemLighting();
     }
 
 }

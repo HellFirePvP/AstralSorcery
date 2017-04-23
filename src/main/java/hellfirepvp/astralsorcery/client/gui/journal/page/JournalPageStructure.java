@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.gui.journal.page;
 import hellfirepvp.astralsorcery.client.util.BlockArrayRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,6 +23,7 @@ import net.minecraftforge.fluids.UniversalBucket;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.LinkedList;
@@ -38,33 +40,41 @@ public class JournalPageStructure implements IJournalPage {
 
     private BlockArray structure;
     private String unlocName;
+    private Vector3 shift;
 
     public JournalPageStructure(BlockArray struct) {
         this(struct, null);
     }
 
     public JournalPageStructure(BlockArray struct, @Nullable String unlocName) {
+        this(struct, unlocName, new Vector3());
+    }
+
+    public JournalPageStructure(BlockArray struct, @Nullable String unlocName, @Nonnull Vector3 shift) {
         this.structure = struct;
         this.unlocName = unlocName;
+        this.shift = shift;
     }
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(structure, unlocName);
+        return new Render(structure, unlocName, shift.clone());
     }
 
     public static class Render implements IGuiRenderablePage {
 
         private final BlockArrayRenderHelper structRender;
         private final BlockArray blocks;
+        private final Vector3 shift;
         private final List<Tuple<ItemStack, String>> descriptionStacks = new LinkedList<>();
         private final String unlocName;
         private long totalRenderFrame = 0;
 
-        public Render(BlockArray structure, @Nullable String unlocName) {
+        public Render(BlockArray structure, @Nullable String unlocName, @Nonnull Vector3 shift) {
             this.structRender = new BlockArrayRenderHelper(structure);
             this.blocks = structure;
             this.unlocName = unlocName;
+            this.shift = shift;
             List<ItemStack> stacksNeeded = structure.getAsDescriptiveStacks();
             for (ItemStack stack : stacksNeeded) {
                 if(stack.getItem() instanceof UniversalBucket) {
@@ -145,7 +155,7 @@ public class JournalPageStructure implements IJournalPage {
                 structRender.rotate(0.25*Mouse.getDY(), 0.25*Mouse.getDX(), 0);
             }
 
-            structRender.render3DGUI(offset.x, offset.y, pTicks);
+            structRender.render3DGUI(offset.x + shift.getX(), offset.y +shift.getY(), pTicks);
         }
 
         private Point.Double renderOffset(float stdPageOffsetX, float stdPageOffsetY) {
