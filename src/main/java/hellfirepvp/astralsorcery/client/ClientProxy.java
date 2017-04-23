@@ -226,6 +226,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileStarlightInfuser.class, new TESRStarlightInfuser());
         registerTESR(TileTranslucent.class, new TESRTranslucentBlock());
         registerTESR(TileAttunementRelay.class, new TESRAttunementRelay());
+        registerTESR(TileMapDrawingTable.class, new TESRMapDrawingTable());
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {

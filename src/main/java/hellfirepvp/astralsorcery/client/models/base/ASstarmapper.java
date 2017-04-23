@@ -1,5 +1,4 @@
-/*
-package model;
+package hellfirepvp.astralsorcery.client.models.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -8,8 +7,9 @@ import net.minecraft.entity.Entity;
 /**
  * AS_starmapper - wiiv
  * Created using Tabula 4.1.1
- *//*
-public class AS_starmapper extends ModelBase {
+ */
+public class ASstarmapper extends ModelBase {
+
     public ModelRenderer treated_glass;
     public ModelRenderer leg1;
     public ModelRenderer leg2;
@@ -25,7 +25,7 @@ public class AS_starmapper extends ModelBase {
     public ModelRenderer platform;
     public ModelRenderer basin;
 
-    public AS_starmapper() {
+    public ASstarmapper() {
         this.textureWidth = 128;
         this.textureHeight = 128;
         this.leg_base4 = new ModelRenderer(this, 16, 95);
@@ -76,7 +76,9 @@ public class AS_starmapper extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.leg_base4.render(f5);
-        this.parchment.render(f5);
+        if(f != 0) {
+            this.parchment.render(f5);
+        }
         this.platform.render(f5);
         this.leg_base2.render(f5);
         this.leg4.render(f5);
@@ -93,11 +95,10 @@ public class AS_starmapper extends ModelBase {
 
     /**
      * This is a helper function from Tabula to set the rotation of model parts
-     *//*
+     */
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
 }
-*/

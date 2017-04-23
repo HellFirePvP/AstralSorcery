@@ -10,6 +10,9 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,10 +47,15 @@ public class TileMapDrawingTable extends TileSkybound {
     }
 
     @Override
-    public void writeNetNBT(NBTTagCompound compound) {
+    public void writeCustomNBT(NBTTagCompound compound) {
         super.writeNetNBT(compound);
 
         compound.setBoolean("parchment", this.hasParchment);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().expand(0.5, 0.5, 0.5);
+    }
 }
