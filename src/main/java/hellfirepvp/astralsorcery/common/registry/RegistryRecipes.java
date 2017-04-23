@@ -87,7 +87,9 @@ public class RegistryRecipes {
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
     public static ShapedRecipe rCCParchment;
-    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush;
+    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth,
+            rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush,
+            rGlassLensSpectral;
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;
@@ -267,6 +269,17 @@ public class RegistryRecipes {
         dr.setPassiveStarlightRequirement(50);
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
+
+        rGlassLensSpectral = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.SPECTRAL.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemsAS.illuminationPowder,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rGlassLensSpectral.setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(), AttunementRecipe.AttunementAltarSlot.values());
 
         rIlluminationPowder = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.illuminationPowder, 16))
                 .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,

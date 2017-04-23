@@ -12,12 +12,15 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -44,6 +47,10 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
         }
     }
 
-
+    @Nonnull
+    @Override
+    public ItemStack getDecriptor(IBlockState state) {
+        return new ItemStack(BlocksAS.collectorCrystal);
+    }
 
 }

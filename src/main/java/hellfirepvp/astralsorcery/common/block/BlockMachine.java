@@ -130,7 +130,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return state.getValue(MACHINE_TYPE) != null;
+        return true;
     }
 
     @Override

@@ -23,14 +23,17 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -85,9 +88,9 @@ public class RegistryResearch {
         resChargedTools.addPage(getTextPage("CHARGED_TOOLS.1"));
         resChargedTools.addPage(getTextPage("CHARGED_TOOLS.2"));
 
-        ItemStack[] stacks = new ItemStack[ItemColoredLens.ColorType.values().length];
+        ItemStack[] stacks = new ItemStack[ItemColoredLens.ColorType.values().length - 1];
         ItemColoredLens.ColorType[] values = ItemColoredLens.ColorType.values();
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < values.length - 1; i++) {
             ItemColoredLens.ColorType ct = values[i];
             stacks[i] = ct.asStack();
         }
@@ -100,6 +103,10 @@ public class RegistryResearch {
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensGrowth));
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensRegeneration));
         resColoredLenses.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensPush));
+
+        ResearchNode resSpectralLens = new ResearchNode(ItemColoredLens.ColorType.SPECTRAL.asStack(), "SPECTRAL_LENS", 1, 2);
+        resSpectralLens.addPage(getTextPage("SPECTRAL_LENS.1"));
+        resSpectralLens.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rGlassLensSpectral));
 
         ResearchNode resRitualLink = new ResearchNode(new ItemStack(BlocksAS.ritualLink), "RITUAL_LINK", 1, 0);
         resRitualLink.addPage(getTextPage("RITUAL_LINK.1"));
@@ -127,6 +134,12 @@ public class RegistryResearch {
         resCollCrystal.addPage(getTextPage("COLL_CRYSTAL.1"));
         resCollCrystal.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rCollectRock));
 
+        ItemStack cel = new ItemStack(BlocksAS.celestialCollectorCrystal);
+        ItemCollectorCrystal.setType(cel, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL);
+        ResearchNode resEnhancedCollCrystal = new ResearchNode(cel, "ENHANCED_COLLECTOR", 7, 4);
+        resEnhancedCollCrystal.addPage(getTextPage("ENHANCED_COLLECTOR.1"));
+        resEnhancedCollCrystal.addPage(new JournalPageStructure(MultiBlockArrays.patternCollectorEnhancement, null, new Vector3(0, -36, 0)));
+
         ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystals, 1, 3), "CEL_CRYSTAL_GROW", 2, 2);
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.1"));
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.2"));
@@ -138,13 +151,19 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.celestialCrystals, 1, OreDictionary.WILDCARD_VALUE), resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.collectorCrystal, 1, OreDictionary.WILDCARD_VALUE),  resCollCrystal,       0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.lensPrism, 1, OreDictionary.WILDCARD_VALUE),         resPrism,             0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(ItemsAS.coloredLens, 1, OreDictionary.WILDCARD_VALUE),        resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.FIRE.asStack(),                                           resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.BREAK.asStack(),                                          resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.GROW.asStack(),                                           resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.DAMAGE.asStack(),                                         resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.REGEN.asStack(),                                          resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.PUSH.asStack(),                                           resColoredLenses,     0, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemColoredLens.ColorType.SPECTRAL.asStack(),                                       resSpectralLens,      0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(ItemsAS.illuminationWand, 1, OreDictionary.WILDCARD_VALUE),   resIllWand,           0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),       resShiftStar,         0, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),     resInfuser,        1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),           resTreeBeacon,     1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(BlocksAS.ritualLink, 1, OreDictionary.WILDCARD_VALUE),   resRitualLink,             1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                             resInfuser,                1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.starlightInfuser, 1, OreDictionary.WILDCARD_VALUE),  resInfuser,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),        resTreeBeacon,        1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.ritualLink, 1, OreDictionary.WILDCARD_VALUE),        resRitualLink,        1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                  resInfuser,           1, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);
@@ -153,6 +172,8 @@ public class RegistryResearch {
         resCollCrystal.addSourceConnectionFrom(resInfuser);
         resTreeBeacon.addSourceConnectionFrom(resInfuser);
         resChargedTools.addSourceConnectionFrom(resInfuser);
+        resSpectralLens.addSourceConnectionFrom(resColoredLenses);
+        resEnhancedCollCrystal.addSourceConnectionFrom(resCollCrystal);
 
         regConstellation.register(resColoredLenses);
         regConstellation.register(resPrism);
@@ -165,6 +186,8 @@ public class RegistryResearch {
         regConstellation.register(resTreeBeacon);
         regConstellation.register(resChargedTools);
         regConstellation.register(resRitualLink);
+        regConstellation.register(resSpectralLens);
+        regConstellation.register(resEnhancedCollCrystal);
     }
 
     private static void initAttunement() {

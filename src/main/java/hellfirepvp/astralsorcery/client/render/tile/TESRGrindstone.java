@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -40,13 +41,19 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
     @Override
     public void renderTileEntityAt(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5, y + 1.65, z + 0.5);
-        GL11.glRotated(180, 1, 0, 0);
-        GL11.glScaled(0.067, 0.067, 0.067);
-        RenderHelper.disableStandardItemLighting();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + 0.5, y + 1.65, z + 0.5);
+        GlStateManager.rotate(180, 1, 0, 0);
+        GlStateManager.scale(0.067, 0.067, 0.067);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(165.0F, 1.0F, 0.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
+
         renderModel(te, 1);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         GL11.glPopAttrib();
 
         ItemStack grind = te.getGrindingItem();

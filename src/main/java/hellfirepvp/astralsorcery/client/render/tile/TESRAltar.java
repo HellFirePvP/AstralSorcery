@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
@@ -99,9 +100,17 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glScaled(0.0625, 0.0625, 0.0625);
+        RenderHelper.disableStandardItemLighting();
+
+        GlStateManager.pushMatrix();
+        //GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
 
         texAltar3.bind();
         modelAltar3.render(null, (float) jump, 0, 0, 0, 0, 1F);
+        RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }
@@ -109,14 +118,20 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     private void renderT2Additions(TileAltar te, double x, double y, double z, double jump) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
-        RenderHelper.disableStandardItemLighting();
         GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
         GL11.glRotated(180, 1, 0, 0);
         GL11.glScaled(0.0625, 0.0625, 0.0625);
-        float h = (float) (Math.sin(jump) * 0.625);
+        RenderHelper.disableStandardItemLighting();
+
+        GlStateManager.pushMatrix();
+        //GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
 
         texAltar2.bind();
         modelAltar2.render(null, (float) jump, 0, 0, 0, 0, 1F);
+        RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
         GL11.glPopAttrib();
     }

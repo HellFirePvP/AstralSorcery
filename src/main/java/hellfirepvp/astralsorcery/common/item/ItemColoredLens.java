@@ -133,6 +133,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
         DAMAGE  (TargetType.ENTITY, 0x767676, 0.07F),
         REGEN   (TargetType.ENTITY, 0xA13085, 0.07F),
         PUSH    (TargetType.ENTITY, 0x2FE1FF, 0.07F),
+
         SPECTRAL(TargetType.NONE,   0x551BA0, 0.10F);
 
         private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
