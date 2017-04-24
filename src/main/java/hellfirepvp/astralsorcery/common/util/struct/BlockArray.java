@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
+import hellfirepvp.astralsorcery.common.item.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -201,6 +202,8 @@ public class BlockArray {
                 //Item i = Item.getItemFromBlock(otherState.getBlock());
                 //if(i == null) continue;
                 //s = new ItemStack(i, 1, otherState.getBlock().getMetaFromState(otherState));
+            } else if(info.type instanceof ISpecialStackDescriptor) {
+                s = ((ISpecialStackDescriptor) info.type).getDecriptor(info.state);
             } else {
                 Item i = Item.getItemFromBlock(info.type);
                 if(i == Items.AIR) continue;

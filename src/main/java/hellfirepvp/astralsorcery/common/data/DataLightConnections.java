@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,7 +33,7 @@ public class DataLightConnections extends AbstractData {
     private final Object lock = new Object();
 
     public boolean clientReceivingData = false;
-    private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new HashMap<>();
+    private Map<Integer, Map<BlockPos, List<BlockPos>>> clientPosBuffer = new ConcurrentHashMap<>();
     private Map<Integer, Map<BlockPos, List<BlockPos>>> serverPosBuffer = new HashMap<>();
 
     //Boolean flag: true=addition, false=removal
@@ -202,7 +203,7 @@ public class DataLightConnections extends AbstractData {
                 NBTTagList list = ((DataLightConnections) serverData).clientReadBuffer.getTagList(dimStr, 10);
                 Map<BlockPos, List<BlockPos>> connectionMap = clientPosBuffer.get(dimId);
                 if(connectionMap == null) {
-                    connectionMap = new HashMap<>();
+                    connectionMap = new ConcurrentHashMap<>();
                     clientPosBuffer.put(dimId, connectionMap);
                 }
                 for (int i = 0; i < list.tagCount(); i++) {

@@ -42,6 +42,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
     private float scale = 1F;
 
     private AlphaFunction fadeFunction = AlphaFunction.CONSTANT;
+    private RenderOffsetController renderOffsetController = null;
     private float alphaMultiplier = 1F;
     private float colorRed = 1F, colorGreen = 1F, colorBlue = 1F;
     private double motionX = 0, motionY = 0, motionZ = 0;
@@ -71,6 +72,11 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
 
     public EntityFXFacingParticle enableAlphaFade(@Nonnull AlphaFunction function) {
         this.fadeFunction = function;
+        return this;
+    }
+
+    public EntityFXFacingParticle setRenderOffsetController(RenderOffsetController renderOffsetController) {
+        this.renderOffsetController = renderOffsetController;
         return this;
     }
 
@@ -151,7 +157,16 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
     public void renderFast(float pTicks, VertexBuffer vbDrawing) {
         float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
-        RenderingUtils.renderFacingFullQuadVB(vbDrawing, interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, colorRed, colorGreen, colorBlue, alpha);
+        double intX = RenderingUtils.interpolate(oldX, x, pTicks);
+        double intY = RenderingUtils.interpolate(oldY, y, pTicks);
+        double intZ = RenderingUtils.interpolate(oldZ, z, pTicks);
+        if(renderOffsetController != null) {
+            Vector3 result = renderOffsetController.changeRenderPosition(this, new Vector3(intX, intY, intZ), new Vector3(motionX, motionY - yGravity, motionZ), pTicks);
+            intX = result.getX();
+            intY = result.getY();
+            intZ = result.getZ();
+        }
+        RenderingUtils.renderFacingFullQuadVB(vbDrawing, intX, intY, intZ, pTicks, scale, 0, colorRed, colorGreen, colorBlue, alpha);
     }
 
     @Override

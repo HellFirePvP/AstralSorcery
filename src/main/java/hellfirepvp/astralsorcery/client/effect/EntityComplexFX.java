@@ -24,11 +24,19 @@ import java.util.function.Function;
  */
 public abstract class EntityComplexFX implements IComplexEffect {
 
+    private static long counter = 0;
+
+    public final long id;
     protected int age = 0;
     protected int maxAge = 40;
     protected boolean removeRequested = false;
 
     private boolean flagRemoved = true;
+
+    public EntityComplexFX() {
+        this.id = counter;
+        counter++;
+    }
 
     public void setMaxAge(int maxAge) {
         this.maxAge = maxAge;
@@ -94,6 +102,12 @@ public abstract class EntityComplexFX implements IComplexEffect {
             }
             return 1F;
         }
+
+    }
+
+    public static interface RenderOffsetController {
+
+        public Vector3 changeRenderPosition(EntityComplexFX fx, Vector3 currentRenderPos, Vector3 currentMotion, float pTicks);
 
     }
 

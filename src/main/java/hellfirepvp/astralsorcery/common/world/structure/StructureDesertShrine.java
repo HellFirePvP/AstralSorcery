@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.world.structure;
 
+import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
 import net.minecraft.util.math.BlockPos;
@@ -28,12 +29,14 @@ import java.util.Random;
 public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     public StructureDesertShrine() {
-        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, BiomeDictionary.Type.SANDY);
+        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, StructureGenBuffer.StructureType.DESERT, BiomeDictionary.Type.SANDY);
+        this.idealDistance = 512F;
     }
 
     @Override
     public void generate(BlockPos pos, World world, Random rand) {
         getStructureTemplate().placeInWorld(world, pos.down());
+        getBuffer(world).markStructureGeneration(pos, getStructureType());
     }
 
     @Override

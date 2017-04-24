@@ -58,7 +58,7 @@ public class TileInventoryBase extends TileEntityTick {
     }
 
     private boolean hasHandlerForSide(EnumFacing facing) {
-        return applicableSides.contains(facing);
+        return facing == null || applicableSides.contains(facing);
     }
 
     @Override

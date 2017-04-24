@@ -11,10 +11,13 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 /**
@@ -34,11 +39,14 @@ import net.minecraft.world.World;
  */
 public class BlockMapDrawingTable extends BlockContainer {
 
+    private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(-1.0 / 2.0, 0, -1.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0);
+
     public BlockMapDrawingTable() {
         super(Material.ROCK);
         setHardness(2F);
+        setSoundType(SoundType.WOOD);
         setResistance(15F);
-        setHarvestLevel("pickaxe", 2);
+        setHarvestLevel("axe", 1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
@@ -50,6 +58,7 @@ public class BlockMapDrawingTable extends BlockContainer {
                 TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
                 if (tm != null && !tm.hasParchment()) {
                     tm.addParchment();
+                    worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
                     if (!playerIn.isCreative()) {
                         held.setCount(held.getCount() - 1);
                         if (held.getCount() <= 0) {
@@ -67,6 +76,21 @@ public class BlockMapDrawingTable extends BlockContainer {
             return true;
         }
         return true;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return drawingTableBox;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
     }
 
     @Override

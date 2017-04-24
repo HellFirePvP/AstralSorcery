@@ -133,6 +133,9 @@ public class CEffectArmara extends ConstellationEffect {
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
                 entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));
+                if (entity instanceof EntityPlayer) {
+                    entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 30, potionAmplifier));
+                }
             }
         }
 

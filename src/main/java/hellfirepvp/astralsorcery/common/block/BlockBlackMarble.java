@@ -129,6 +129,10 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
             return new ItemStack(BlocksAS.blockBlackMarble, 1, meta);
         }
 
+        public IBlockState asBlock() {
+            return BlocksAS.blockBlackMarble.getStateFromMeta(meta);
+        }
+
         public int getMeta() {
             return meta;
         }

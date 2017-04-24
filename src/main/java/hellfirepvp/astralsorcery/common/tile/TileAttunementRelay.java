@@ -109,7 +109,7 @@ public class TileAttunementRelay extends TileInventoryBase {
                 }
             }
         } else {
-            if(!slotted.isEmpty()) {
+            if(!slotted.isEmpty() && hasMultiblock) {
                 if(ItemUtils.matchStackLoosely(slotted, ItemCraftingComponent.MetaType.GLASS_LENS.asStack())) {
                     if(rand.nextInt(3) == 0) {
                         Vector3 at = new Vector3(this);
@@ -123,7 +123,7 @@ public class TileAttunementRelay extends TileInventoryBase {
                         }
                     }
 
-                    if(linked != null && hasMultiblock && doesSeeSky() && rand.nextInt(4) == 0) {
+                    if(linked != null && doesSeeSky() && rand.nextInt(4) == 0) {
                         Vector3 at = new Vector3(this);
                         Vector3 dir = new Vector3(linked).subtract(new Vector3(this)).normalize().multiply(0.05);
                         at.add(rand.nextFloat() * 0.4 + 0.3, rand.nextFloat() * 0.3 + 0.1, rand.nextFloat() * 0.4 + 0.3);

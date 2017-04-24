@@ -98,7 +98,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
 
     @Override
     public IMessage onMessage(PktSyncData message, MessageContext ctx) {
-        SyncDataHolder.receiveServerPacket(message.data);
+        AstralSorcery.proxy.scheduleClientside(() -> SyncDataHolder.receiveServerPacket(message.data));
         return null;
     }
 

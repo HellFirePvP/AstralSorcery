@@ -17,15 +17,28 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
+import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -57,6 +70,10 @@ public final class EffectHandler {
     private static boolean acceptsNewParticles = true, cleanRequested = false;
     private static List<IComplexEffect> toAddBuffer = new LinkedList<>();
 
+    private UIGateway uiGateway = null;
+    private int gatewayUITicks = 0;
+    public boolean renderGateway = true;
+
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
     public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
@@ -68,15 +85,29 @@ public final class EffectHandler {
         return instance;
     }
 
+    public void requestGatewayUIFor(World world, Vector3 pos, double sphereRadius) {
+        if(uiGateway == null || !uiGateway.getPos().equals(pos)) {
+            uiGateway = UIGateway.initialize(world, pos, sphereRadius);
+        }
+        gatewayUITicks = 20;
+    }
+
+    @Nullable
+    public UIGateway getUiGateway() {
+        return uiGateway;
+    }
+
     public static int getDebugEffectCount() {
-        int amt = 0;
+        final Counter c = new Counter(0);
         for (Map<Integer, List<IComplexEffect>> effects : complexEffects.values()) {
             for (List<IComplexEffect> eff : effects.values()) {
-                amt += eff.size();
+                c.value += eff.size();
             }
         }
-        amt += fastRenderParticles.size();
-        return amt;
+        c.value += fastRenderParticles.size();
+        c.value += fastRenderLightnings.size();
+        objects.values().stream().forEach((l) -> c.value += l.size());
+        return c.value;
     }
 
     @SubscribeEvent
@@ -106,14 +137,30 @@ public final class EffectHandler {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onRender(RenderWorldLastEvent event) {
         TESRPrismLens.renderColoredPrismsLast();
         acceptsNewParticles = false;
-        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+        for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
+            og.prepareGLContext();
+            for (CompoundObjectEffect effect : objects.get(og)) {
+                effect.render(event.getPartialTicks());
+            }
+            og.revertGLContext();
+        }
+
+        if(uiGateway != null) {
+            if(renderGateway) {
+                uiGateway.renderIntoWorld(event.getPartialTicks());
+            }
+            if(ClientGatewayHandler.focusingEntry != null) {
+                renderGatewayTarget(event.getPartialTicks());
+            }
+        }
         EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
         EffectLightning.renderFast(event.getPartialTicks(), fastRenderLightnings);
-        //EffectLightbeam.renderFast(fastRenderBeams); Not done atm since translations seem to be wrong w/e i do o_o
+
+        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         for (int i = 0; i <= 2; i++) {
             for (IComplexEffect effect : layeredEffects.get(i)) {
                 GL11.glPushMatrix();
@@ -125,12 +172,34 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRTranslucentBlock.renderTranslucentBlocks();
-        for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
-            og.prepareGLContext();
-            for (CompoundObjectEffect effect : objects.get(og)) {
-                effect.render(event.getPartialTicks());
-            }
-            og.revertGLContext();
+    }
+
+    private void renderGatewayTarget(float pTicks) {
+        int focusTicks = ClientGatewayHandler.focusTicks;
+        UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
+        float perc = (Math.min(40F, focusTicks) / 40F) * 0.3F;
+        if(focusTicks > 70) {
+            perc = ((float) (focusTicks - 70)) / 25F;
+            perc = MathHelper.clamp(perc, 0.3F, 1F);
+        }
+        ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
+        if(screenshot != null) {
+            GlStateManager.pushMatrix();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(screenshot);
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
+            GlStateManager.disableAlpha();
+            Tessellator tes = Tessellator.getInstance();
+            VertexBuffer vb = tes.getBuffer();
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+            Vector3 pos = focusingEntry.relativePos.clone().multiply(0.85).add(uiGateway.getPos());
+            RenderingUtils.renderFacingFullQuadVB(vb, pos.getX(), pos.getY(), pos.getZ(),
+                    pTicks, 0.4F, 0,
+                    1F, 1F, 1F, perc);
+            tes.draw();
+            GlStateManager.enableAlpha();
+            GlStateManager.popMatrix();
         }
     }
 
@@ -241,12 +310,19 @@ public final class EffectHandler {
             fastRenderLightnings.clear();
             objects.clear();
             toAddBuffer.clear();
+            uiGateway = null;
+            gatewayUITicks = 0;
             cleanRequested = false;
         }
-        if(Minecraft.getMinecraft().world == null ||
-                Minecraft.getMinecraft().player == null) {
-            cleanRequested = true;
+        if(Minecraft.getMinecraft().player == null) {
             return;
+        }
+
+        if(gatewayUITicks > 0) {
+            gatewayUITicks--;
+            if(gatewayUITicks <= 0) {
+                uiGateway = null;
+            }
         }
 
         acceptsNewParticles = false;

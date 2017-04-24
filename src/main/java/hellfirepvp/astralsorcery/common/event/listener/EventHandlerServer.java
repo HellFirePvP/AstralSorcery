@@ -320,7 +320,7 @@ public class EventHandlerServer {
     public void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (Config.giveJournalFirst) {
             EntityPlayer pl = event.player;
-            if (!ResearchManager.getPlayerFile(pl).exists()) {
+            if (!ResearchManager.doesPlayerFileExist(pl)) {
                 pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
             }
         }

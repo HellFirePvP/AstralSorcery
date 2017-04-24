@@ -8,13 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.world.retrogen;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
-import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -34,10 +29,6 @@ public class RetroGenController {
 
     private static List<ChunkPos> retroGenActive = new LinkedList<>();
 
-    public ChunkVersionBuffer getVersionBuffer(World world) {
-        return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.CHUNK_VERSIONING);
-    }
-
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         ChunkPos pos = event.getChunk().getPos();
@@ -45,15 +36,11 @@ public class RetroGenController {
 
         Integer chunkVersion = -1;
         if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.chunkXPos, pos.chunkZPos)) {
-            chunkVersion = getVersionBuffer(event.getWorld()).getGenerationVersion(pos);
+            chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
             if(chunkVersion == null) {
-                AstralSorcery.log.info("[AstralSorcery] No ChunkVersion found for Chunk: " + pos.toString() + " - Skipping RetroGen...");
                 return;
             }
         }
-        AstralSorcery.log.info("[AstralSorcery] Attempting AstralSorcery retrogen for chunk "+ pos.toString() +
-                " - Version " + chunkVersion + " -> " + AstralWorldGenerator.CURRENT_WORLD_GENERATOR_VERSION +
-                " - Stack: " + retroGenActive.size());
         retroGenActive.add(pos);
         CommonProxy.worldGenerator.handleRetroGen(event.getWorld(), pos, chunkVersion);
         retroGenActive.remove(pos);

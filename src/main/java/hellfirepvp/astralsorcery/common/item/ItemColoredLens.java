@@ -127,12 +127,14 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     public static enum ColorType {
 
-        FIRE   (TargetType.ENTITY, 0xFF5711, 0.07F),
-        BREAK  (TargetType.BLOCK,  0xD4FF00, 0.07F),
-        GROW   (TargetType.BLOCK,  0x00D736, 0.07F),
-        DAMAGE (TargetType.ENTITY, 0x767676, 0.07F),
-        REGEN  (TargetType.ENTITY, 0xA13085, 0.07F),
-        PUSH   (TargetType.ENTITY, 0x2FE1FF, 0.07F);
+        FIRE    (TargetType.ENTITY, 0xFF5711, 0.07F),
+        BREAK   (TargetType.BLOCK,  0xD4FF00, 0.07F),
+        GROW    (TargetType.BLOCK,  0x00D736, 0.07F),
+        DAMAGE  (TargetType.ENTITY, 0x767676, 0.07F),
+        REGEN   (TargetType.ENTITY, 0xA13085, 0.07F),
+        PUSH    (TargetType.ENTITY, 0x2FE1FF, 0.07F),
+
+        SPECTRAL(TargetType.NONE,   0x551BA0, 0.10F);
 
         private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
 
@@ -319,7 +321,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     //Respectively only Entity-checks or only block-checks will be done.
     public static enum TargetType {
 
-        ENTITY, BLOCK
+        ENTITY, BLOCK, NONE
 
     }
 

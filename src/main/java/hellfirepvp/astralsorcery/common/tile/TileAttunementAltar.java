@@ -180,12 +180,13 @@ public class TileAttunementAltar extends TileEntityTick {
                         if(playerAttunementWaitTick == 0) {
                             setAttunementState(0, null);
                             playerAttunementWaitTick = -1;
-                        }
-                        this.serverSyncAttTick++;
-                        if(EventHandlerServer.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
-                            EventHandlerServer.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
                         } else {
-                            EventHandlerServer.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
+                            this.serverSyncAttTick++;
+                            if(EventHandlerServer.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
+                                EventHandlerServer.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
+                            } else {
+                                EventHandlerServer.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
+                            }
                         }
                         markForUpdate();
                     }

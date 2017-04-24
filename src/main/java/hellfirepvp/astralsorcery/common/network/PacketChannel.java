@@ -9,11 +9,7 @@
 package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktAttuneConstellation;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktRotateTelescope;
-import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
+import hellfirepvp.astralsorcery.common.network.packet.client.*;
 import hellfirepvp.astralsorcery.common.network.packet.server.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -56,6 +52,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktOreScan.class, PktOreScan.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncCharge.class, PktSyncCharge.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncStepAssist.class, PktSyncStepAssist.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktUpdateGateways.class, PktUpdateGateways.class, id++, Side.CLIENT);
 
         //(client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);
@@ -64,6 +61,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktAttuneConstellation.class, PktAttuneConstellation.class, id++, Side.SERVER);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.SERVER);
+        CHANNEL.registerMessage(PktRequestTeleport.class, PktRequestTeleport.class, id++, Side.SERVER);
 
         /*Method registerPacket = ReflectionHelper.findMethod(
                 EnumConnectionState.class,

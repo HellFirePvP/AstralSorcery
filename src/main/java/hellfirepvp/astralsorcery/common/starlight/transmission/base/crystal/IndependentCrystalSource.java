@@ -86,7 +86,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
 
     private Function<Float, Float> getDistributionFunc() {
         if(enhanced) {
-            return (in) -> 0.7F + (0.15F * in);
+            return (in) -> 0.6F + (1.1F * in);
         } else {
             return (in) -> 0.2F + (0.8F * in);
         }

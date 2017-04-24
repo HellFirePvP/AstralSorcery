@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -22,9 +24,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -101,30 +106,54 @@ public class ItemUtils {
         return out;
     }
 
-    public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, Item i, int meta) {
-        return scanInventoryForMatching(handler, new ItemStack(i, 1, meta), false);
-    }
-
     public static Collection<ItemStack> scanInventoryForMatching(IItemHandler handler, ItemStack match, boolean strict) {
-        return findItemsInInventory(handler, match, strict).values();
+        return findItemsInInventory(handler, match, strict);
     }
 
-    public static Map<Integer, ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
+    public static Collection<ItemStack> findItemsInPlayerInventory(EntityPlayer player, ItemStack match, boolean strict) {
         return findItemsInInventory(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), match, strict);
     }
 
-    public static Map<Integer, ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
-        Map<Integer, ItemStack> slotsOut = new HashMap<>();
+    public static Collection<ItemStack> findItemsInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        List<ItemStack> stacksOut = new LinkedList<>();
         for (int j = 0; j < handler.getSlots(); j++) {
             ItemStack s = handler.getStackInSlot(j);
-            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match))
-                slotsOut.put(j, copyStackWithSize(s, s.getCount()));
+            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+                stacksOut.add(copyStackWithSize(s, s.getCount()));
+            }
         }
-        return slotsOut;
+        return stacksOut;
     }
 
-    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack toConsume, boolean simulate) {
-        return consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), toConsume, simulate);
+    public static Map<Integer, ItemStack> findItemsIndexedInInventory(IItemHandler handler, ItemStack match, boolean strict) {
+        Map<Integer, ItemStack> stacksOut = new HashMap<>();
+        for (int j = 0; j < handler.getSlots(); j++) {
+            ItemStack s = handler.getStackInSlot(j);
+            if (strict ? matchStacks(s, match) : matchStackLoosely(s, match)) {
+                stacksOut.put(j, copyStackWithSize(s, s.getCount()));
+            }
+        }
+        return stacksOut;
+    }
+
+    public static boolean consumeFromPlayerInventory(EntityPlayer player, ItemStack requestingItemStack, ItemStack toConsume, boolean simulate) {
+        int consumed = 0;
+        if (Mods.BOTANIA.isPresent()) {
+            IBlockState consumeState = createBlockState(toConsume);
+            if (consumeState != null) {
+                Block b = consumeState.getBlock();
+                int meta = b.damageDropped(consumeState);
+
+                for (int i = 0; i < toConsume.getCount(); i++) {
+                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, simulate);
+                    if (!res.isEmpty()) {
+                        consumed++;
+                    }
+                }
+            }
+        }
+        ItemStack tryConsume = copyStackWithSize(toConsume, toConsume.getCount() - consumed);
+        return tryConsume.isEmpty() || consumeFromInventory((IItemHandlerModifiable) player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), tryConsume, simulate);
     }
 
     public static boolean tryConsumeFromInventory(IItemHandler handler, ItemStack toConsume, boolean simulate) {
@@ -132,7 +161,7 @@ public class ItemUtils {
     }
 
     public static boolean consumeFromInventory(IItemHandlerModifiable handler, ItemStack toConsume, boolean simulate) {
-        Map<Integer, ItemStack> contents = findItemsInInventory(handler, toConsume, false);
+        Map<Integer, ItemStack> contents = findItemsIndexedInInventory(handler, toConsume, false);
         if (contents.isEmpty()) return false;
 
         int cAmt = toConsume.getCount();
@@ -159,29 +188,12 @@ public class ItemUtils {
         }
     }
 
-    public static boolean drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
+    public static FluidActionResult drainFluidFromItem(ItemStack stack, Fluid fluid, int mbAmount, boolean doDrain) {
         return drainFluidFromItem(stack, new FluidStack(fluid, mbAmount), doDrain);
     }
 
-    //Returns true if the fluid with the specified amount could be drained, false if not.
-    public static boolean drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
-        if (tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.UP), fluidStack, doDrain) ||
-                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP), fluidStack, doDrain) ||
-                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null), fluidStack, doDrain) ||
-                tryDrain(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null), fluidStack, doDrain)) {
-            return true;
-        }
-        return false;
-    }
-
-    private static boolean tryDrain(@Nullable IFluidHandler cap, FluidStack stack, boolean doDrain) {
-        if (cap != null) {
-            FluidStack tryDrain = cap.drain(stack.copy(), doDrain);
-            if (tryDrain != null && tryDrain.amount >= stack.amount) {
-                return true;
-            }
-        }
-        return false;
+    public static FluidActionResult drainFluidFromItem(ItemStack stack, FluidStack fluidStack, boolean doDrain) {
+        return FluidUtil.tryEmptyContainer(stack, FluidHandlerVoid.INSTANCE, fluidStack.amount, null, doDrain);
     }
 
     /*public static void decrStackInInventory(ItemStack[] stacks, int slot) {
@@ -323,6 +335,33 @@ public class ItemUtils {
                 return true;
         }
         return false;
+    }
+
+    private static class FluidHandlerVoid implements IFluidHandler {
+
+        private static FluidHandlerVoid INSTANCE = new FluidHandlerVoid();
+
+        @Override
+        public IFluidTankProperties[] getTankProperties() {
+            return new IFluidTankProperties[0];
+        }
+
+        @Override
+        public int fill(FluidStack resource, boolean doFill) {
+            return resource.amount;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(FluidStack resource, boolean doDrain) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public FluidStack drain(int maxDrain, boolean doDrain) {
+            return null;
+        }
     }
 
 }

@@ -157,6 +157,7 @@ public class BlockAttunementRelay extends BlockContainer {
                         ItemStack stack = mod.getStackInSlot(0);
                         ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, stack).setNoPickupDelay();
                         mod.setStackInSlot(0, ItemStack.EMPTY);
+                        tar.markForUpdate();
                     }
 
                     if(!worldIn.isAirBlock(pos.up())) {
@@ -168,6 +169,7 @@ public class BlockAttunementRelay extends BlockContainer {
                     if(!playerIn.isCreative()) {
                         held.shrink(1);
                     }
+                    tar.markForUpdate();
                 }
             } else {
                 TileAttunementRelay tar = MiscUtils.getTileAt(worldIn, pos, TileAttunementRelay.class, true);
@@ -177,6 +179,7 @@ public class BlockAttunementRelay extends BlockContainer {
                         ItemStack stack = mod.getStackInSlot(0);
                         ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, stack).setNoPickupDelay();
                         mod.setStackInSlot(0, ItemStack.EMPTY);
+                        tar.markForUpdate();
                     }
                 }
             }

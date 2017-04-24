@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +56,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
     }
 
     private boolean hasHandlerForSide(EnumFacing facing) {
-        return applicableSides.contains(facing);
+        return facing == null || applicableSides.contains(facing);
     }
 
     @Override
@@ -115,7 +116,7 @@ public abstract class TileReceiverBaseInventory extends TileReceiverBase {
             return super.insertItem(slot, stack, simulate);
         }
 
-        public boolean canInsertItem(int slot, ItemStack toAdd, @Nullable ItemStack existing) {
+        public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
             return true;
         }
 

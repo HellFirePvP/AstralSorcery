@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SPacketCustomPayload;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -42,7 +44,7 @@ public class EventHandlerNetwork {
 
     private static final String AS_WORLDHANDLERS_PAYLOAD = "AS|WH";
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
         AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
@@ -53,7 +55,7 @@ public class EventHandlerNetwork {
         }
 
         ResearchManager.sendInitClientKnowledge(p);
-
+        CelestialGatewaySystem.instance.syncTo(p);
         SyncDataHolder.syncAllDataTo(p);
     }
 

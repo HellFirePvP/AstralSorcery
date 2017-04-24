@@ -15,17 +15,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementAltarRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CollectorCrystalRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CrystalToolRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.LensRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.PrismLensRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.RecipeRitualPedestal;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TelescopeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
@@ -85,6 +75,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rShiftStar;
     public static ConstellationRecipe rRitualLink;
     public static DiscoveryRecipe rIlluminationPowder;
+    public static CelestialGatewayRecipe rCelestialGateway;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -96,7 +87,9 @@ public class RegistryRecipes {
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
     public static ShapedRecipe rCCParchment;
-    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth, rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush;
+    public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth,
+            rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush,
+            rGlassLensSpectral;
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;
@@ -275,6 +268,19 @@ public class RegistryRecipes {
 
         DiscoveryRecipe dr = registerDiscoveryRecipe(rCCParchment);
         dr.setPassiveStarlightRequirement(50);
+
+        rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
+
+        rGlassLensSpectral = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.SPECTRAL.asStack())
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemsAS.illuminationPowder,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER));
+        rGlassLensSpectral.setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(), AttunementRecipe.AttunementAltarSlot.values());
 
         rIlluminationPowder = registerDiscoveryRecipe(new ShapedRecipe(new ItemStack(ItemsAS.illuminationPowder, 16))
                 .addPart(OreDictAlias.ITEM_GLOWSTONE_DUST,

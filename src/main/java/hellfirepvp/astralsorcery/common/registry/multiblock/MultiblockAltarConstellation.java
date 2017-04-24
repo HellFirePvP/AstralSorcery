@@ -42,7 +42,7 @@ public class MultiblockAltarConstellation extends PatternBlockArray {
         IBlockState bml = BlocksAS.blockBlackMarble.getDefaultState().withProperty(BlockBlackMarble.BLACK_MARBLE_TYPE, BlockBlackMarble.BlackMarbleBlockType.RAW);
         IBlockState air = Blocks.AIR.getDefaultState();
 
-        addBlockCube(air, -4,  0, -4,  4,  3,  4);
+        //addBlockCube(air, -4,  0, -4,  4,  3,  4);
         addBlockCube(mbr, -4, -1, -4,  4, -1,  4);
         addBlockCube(bml, -3, -1, -3,  3, -1,  3);
 

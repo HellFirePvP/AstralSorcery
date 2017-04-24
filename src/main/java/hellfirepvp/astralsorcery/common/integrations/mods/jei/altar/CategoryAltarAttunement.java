@@ -21,15 +21,15 @@ import net.minecraft.util.ResourceLocation;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: CategortAltarAttunement
+ * Class: CategoryAltarAttunement
  * Created by HellFirePvP
  * Date: 15.02.2017 / 18:11
  */
-public class CategortAltarAttunement extends JEIBaseCategory<AltarAttunementRecipeWrapper> {
+public class CategoryAltarAttunement extends JEIBaseCategory<AltarAttunementRecipeWrapper> {
 
     private final IDrawable background;
 
-    public CategortAltarAttunement(IGuiHelper guiHelper) {
+    public CategoryAltarAttunement(IGuiHelper guiHelper) {
         super("jei.category.altar.attunement", ModIntegrationJEI.idAltarAttunement);
         ResourceLocation location = new ResourceLocation("astralsorcery", "textures/gui/jei/recipeTemplateAltarAttunement.png");
         background = guiHelper.createDrawable(location, 0, 0, 116, 162);

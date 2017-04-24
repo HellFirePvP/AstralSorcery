@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -55,7 +56,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 19:03
  */
-public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork {
+public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 

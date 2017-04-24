@@ -10,10 +10,12 @@ package hellfirepvp.astralsorcery.common.registry.multiblock;
 
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * This class is part of the 1.11.2 port of Reika's mods.
@@ -67,6 +69,10 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(2, 4, 3, mBrick);
 
         addBlock(0, 0, 0, BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
+
+        for (BlockPos offset : TraitRecipe.offsetRelays) {
+            addBlock(offset, BlocksAS.attunementRelay.getDefaultState());
+        }
     }
 
 }

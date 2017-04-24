@@ -48,6 +48,7 @@ import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
+import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -159,6 +160,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
         MinecraftForge.EVENT_BUS.register(new LootTableUtil());
         MinecraftForge.EVENT_BUS.register(BlockDropCaptureAssist.instance);
+        MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
+        MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
