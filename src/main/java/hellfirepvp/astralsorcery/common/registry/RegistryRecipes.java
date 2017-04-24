@@ -76,6 +76,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rRitualLink;
     public static DiscoveryRecipe rIlluminationPowder;
     public static CelestialGatewayRecipe rCelestialGateway;
+    public static DrawingTableRecipe rDrawingTable;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -269,6 +270,7 @@ public class RegistryRecipes {
         dr.setPassiveStarlightRequirement(50);
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
+        rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
 
         rGlassLensSpectral = registerConstellationRecipe(new ShapedRecipe(ItemColoredLens.ColorType.SPECTRAL.asStack())
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
