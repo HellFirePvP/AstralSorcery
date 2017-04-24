@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
@@ -16,6 +19,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -29,6 +33,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,6 +57,46 @@ public class BlockMapDrawingTable extends BlockContainer {
         setResistance(15F);
         setHarvestLevel("axe", 1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        for (int i = 0; i < rand.nextInt(2) + 1; i++) {
+            Vector3 offset = new Vector3(-6.0 / 16.0, 1.505, -6.0 / 16.0);
+            if(rand.nextBoolean()) {
+                offset.addX(26.0 / 16.0);
+            }
+            int random = rand.nextInt(6);
+            offset.addZ(random * (5.0 / 16.0));
+            if(random > 2) {
+                offset.addZ(1.0 / 16.0D); //Gap in the middle..
+            }
+            offset.add(rand.nextFloat() * 0.1, 0, rand.nextFloat() * 0.1).add(pos);
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
+            p.scale(rand.nextFloat() * 0.1F + 0.15F).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.gravity(0.004F).setMaxAge(rand.nextInt(30) + 35);
+            switch (random) {
+                case 0:
+                    p.setColor(new Color(0xFF0800));
+                    break;
+                case 1:
+                    p.setColor(new Color(0xFFCC00));
+                    break;
+                case 2:
+                    p.setColor(new Color(0x6FFF00));
+                    break;
+                case 3:
+                    p.setColor(new Color(0x00FCFF));
+                    break;
+                case 4:
+                    p.setColor(new Color(0x0028FF));
+                    break;
+                case 5:
+                    p.setColor(new Color(0xFF00FE));
+                    break;
+            }
+        }
     }
 
     @Override

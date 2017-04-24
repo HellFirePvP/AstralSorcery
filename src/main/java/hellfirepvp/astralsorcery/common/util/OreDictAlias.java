@@ -27,6 +27,7 @@ public class OreDictAlias {
     public static String ITEM_STICKS = "stickWood";
     public static String ITEM_GOLD_NUGGET = "nuggetGold";
     public static String ITEM_DYE_PURPLE = "dyePurple";
+    public static String ITEM_DYE_ALL = "dye";
 
     public static String BLOCK_CRAFTING_TABLE = "workbench";
     public static String BLOCK_MARBLE = "stoneMarble";
