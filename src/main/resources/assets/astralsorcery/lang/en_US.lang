@@ -268,6 +268,7 @@ item.itemcraftingcomponent.stardust.name=Stardust
 item.itemcraftingcomponent.glass_lens.name=Glass lens
 item.itemcraftingcomponent.reso_gem.name=Resonating Gem
 item.itemcraftingcomponent.parchment.name=Parchment
+item.itemcraftingcomponent.infused_glass.name=Infused Glass
 
 item.itemconstellationpaper.name=Constellation Paper
 item.itemrockcrystalsimple.name=Rock Crystal

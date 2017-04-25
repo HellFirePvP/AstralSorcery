@@ -50,30 +50,10 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
         GlStateManager.popMatrix();
 
         texDrawingTable.bind();
-        modelDrawingTable.render(null, te.hasParchment() ? 1 : 0, 0, 0, 0, 0, 1F);
+        modelDrawingTable.render(null, te.hasParchment() ? 1 : 0, te.hasGlassLens() ? 1 : 0, 0, 0, 0, 1F);
         RenderHelper.disableStandardItemLighting();
         TextureHelper.refreshTextureBindState();
         GlStateManager.popMatrix();
-
-
-        //GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        //GL11.glPushMatrix();
-        //GL11.glTranslated(x + 0.5, y + 1.5, z + 0.5);
-        //GL11.glRotated(180, 1, 0, 0);
-        //GL11.glScaled(0.0625, 0.0625, 0.0625);
-        //RenderHelper.disableStandardItemLighting();
-
-        //GlStateManager.pushMatrix();
-        ////GlStateManager.rotate(-30.0F, 0.0F, 1.0F, 0.0F);
-        //GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-        //RenderHelper.enableStandardItemLighting();
-        //GlStateManager.popMatrix();
-
-        //texAltar2.bind();
-        //modelAltar2.render(null, (float) jump, 0, 0, 0, 0, 1F);
-        //RenderHelper.disableStandardItemLighting();
-        //GL11.glPopMatrix();
-        //GL11.glPopAttrib();
     }
 
 }

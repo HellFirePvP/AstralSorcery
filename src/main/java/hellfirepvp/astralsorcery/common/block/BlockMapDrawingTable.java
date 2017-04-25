@@ -103,28 +103,58 @@ public class BlockMapDrawingTable extends BlockContainer {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack held = playerIn.getHeldItem(hand);
-            if (!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent && held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
-                TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
-                if (tm != null && !tm.hasParchment()) {
-                    tm.addParchment();
-                    worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
-                    if (!playerIn.isCreative()) {
-                        held.setCount(held.getCount() - 1);
-                        if (held.getCount() <= 0) {
-                            playerIn.setHeldItem(hand, ItemStack.EMPTY);
+            TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
+            if (tm != null) {
+                if(!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent) {
+                    if(held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+                        int remaining = tm.addParchment(held.getCount());
+                        if(remaining < held.getCount()) {
+                            worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
+                            if (!playerIn.isCreative()) {
+                                held.setCount(remaining);
+                                if(held.getCount() <= 0) {
+                                    playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                } else {
+                                    playerIn.setHeldItem(hand, held);
+                                }
+                            }
+                        }
+                    } else if(held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()) {
+                        if(!tm.hasGlassLens()) {
+                             tm.putGlassLens(held);
+                             if(!playerIn.isCreative()) {
+                                 held.shrink(1);
+                                 if(held.getCount() <= 0) {
+                                     playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                 } else {
+                                     playerIn.setHeldItem(hand, held);
+                                 }
+                             }
                         }
                     }
                 }
             }
         } else {
             ItemStack held = playerIn.getHeldItem(hand);
-            if (!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent && held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+            if (!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent &&
+                    (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta() ||
+                    held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta())) {
                 return true;
             }
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.MAP_DRAWING, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
+        if(tm != null) {
+            tm.dropContents();
+        }
+
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

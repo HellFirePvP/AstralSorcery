@@ -86,7 +86,7 @@ public class BlockFlareLight extends Block {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.004);
         p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
         p.scale(0.4F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.75F);
-        p.motion(0, rand.nextFloat() * 0.02F, 0);
+        p.motion(0, rand.nextFloat() * 0.02F, 0).setColor(new Color(0xFFEB00));
         if(rand.nextBoolean()) {
             p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5).gravity(0.004);
             p.offset(rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1));

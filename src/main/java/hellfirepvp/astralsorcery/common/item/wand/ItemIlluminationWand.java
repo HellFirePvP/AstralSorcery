@@ -59,7 +59,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
         }
         if (!worldIn.isRemote) {
             IBlockState at = worldIn.getBlockState(pos);
-            if(playerIn.isSneaking()) {
+            if(!playerIn.isSneaking()) {
                 IBlockState iblockstate = worldIn.getBlockState(pos);
                 Block block = iblockstate.getBlock();
                 if (!block.isReplaceable(worldIn, pos)) {
