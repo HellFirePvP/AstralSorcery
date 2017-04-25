@@ -118,8 +118,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(treeBeacon);
         translucentBlock = registerBlock(new BlockTranslucentBlock());
         queueDefaultItemBlock(translucentBlock);
-        //drawingTable = registerBlock(new BlockMapDrawingTable());
-        //queueCustomNameItemBlock(drawingTable);
+        drawingTable = registerBlock(new BlockMapDrawingTable());
+        queueCustomNameItemBlock(drawingTable);
         //celestialOrrery = registerBlock(new BlockCelestialOrrery());
         //queueDefaultItemBlock(celestialOrrery);
         celestialGateway = registerBlock(new BlockCelestialGateway());
@@ -173,7 +173,7 @@ public class RegistryBlocks {
         registerTile(TileRitualLink.class);
         registerTile(TileTranslucent.class);
         registerTile(TileAttunementRelay.class);
-        //registerTile(TileMapDrawingTable.class);
+        registerTile(TileMapDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
         registerTile(TileCelestialGateway.class);
 
