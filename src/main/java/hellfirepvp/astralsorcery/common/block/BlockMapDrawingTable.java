@@ -6,6 +6,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -88,21 +89,42 @@ public class BlockMapDrawingTable extends BlockContainer {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             ItemStack held = playerIn.getHeldItem(hand);
-            if (held != null && held.getItem() != null && held.getItem() instanceof ItemCraftingComponent && held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
-                TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
-                if (tm != null && !tm.hasParchment()) {
-                    tm.addParchment();
-                    if (!playerIn.isCreative()) {
-                        held.stackSize--;
-                        if (held.stackSize <= 0) {
-                            playerIn.setHeldItem(hand, null);
+            TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
+            if (tm != null) {
+                if(held != null && held.getItem() != null && held.getItem() instanceof ItemCraftingComponent) {
+                    if(held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+                        int remaining = tm.addParchment(held.stackSize);
+                        if(remaining < held.stackSize) {
+                            worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
+                            if (!playerIn.isCreative()) {
+                                held.stackSize = remaining;
+                                if(held.stackSize <= 0) {
+                                    playerIn.setHeldItem(hand, null);
+                                } else {
+                                    playerIn.setHeldItem(hand, held);
+                                }
+                            }
+                        }
+                    } else if(held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()) {
+                        if(!tm.hasGlassLens()) {
+                            tm.putGlassLens(held);
+                            if(!playerIn.isCreative()) {
+                                held.stackSize -= 1;
+                                if(held.stackSize <= 0) {
+                                    playerIn.setHeldItem(hand, null);
+                                } else {
+                                    playerIn.setHeldItem(hand, held);
+                                }
+                            }
                         }
                     }
                 }
             }
         } else {
             ItemStack held = playerIn.getHeldItem(hand);
-            if (held != null && held.getItem() != null && held.getItem() instanceof ItemCraftingComponent && held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+            if (held != null && held.getItem() != null && held.getItem() instanceof ItemCraftingComponent &&
+                    (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta() ||
+                    held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta())) {
                 return true;
             }
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.MAP_DRAWING, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());

@@ -49,7 +49,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             IBlockState at = worldIn.getBlockState(pos);
-            if(playerIn.isSneaking()) {
+            if(!playerIn.isSneaking()) {
                 IBlockState iblockstate = worldIn.getBlockState(pos);
                 Block block = iblockstate.getBlock();
                 if (!block.isReplaceable(worldIn, pos)) {
