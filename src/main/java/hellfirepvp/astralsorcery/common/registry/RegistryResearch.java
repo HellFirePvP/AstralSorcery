@@ -441,12 +441,13 @@ public class RegistryResearch {
         resOres.addPage(getTextPage("ORES.1"));
         resOres.addPage(getTextPage("ORES.2"));
 
-        ItemStack[] stacks = new ItemStack[BlockMarble.MarbleBlockType.values().length];
+        ItemStack[] stacks = new ItemStack[BlockMarble.MarbleBlockType.values().length + 1];
         BlockMarble.MarbleBlockType[] values = BlockMarble.MarbleBlockType.values();
         for (int i = 0; i < values.length; i++) {
             BlockMarble.MarbleBlockType mbt = values[i];
             stacks[i] = new ItemStack(BlocksAS.blockMarble, 1, mbt.getMeta());
         }
+        stacks[stacks.length - 1] = new ItemStack(BlocksAS.blockMarbleStairs);
         ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 1);
         resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleBricks));
@@ -455,6 +456,7 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleArch));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleRuned));
         resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleEngraved));
+        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleStairs));
 
         ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
@@ -466,22 +468,23 @@ public class RegistryResearch {
         resTable.addPage(getTextPage("ALTAR1.3"));
         resTable.addPage(getTextPage("ALTAR1.4"));
 
-        registerItemLookup(new ItemStack(BlocksAS.blockAltar,        1, BlockAltar.AltarType.ALTAR_1.ordinal()), resTable,        1, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(BlocksAS.blockBlackMarble,  1, OreDictionary.WILDCARD_VALUE),            resSootyMarble, 0, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.BRICKS.asStack(),            resMarbleTypes, 1, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.PILLAR.asStack(),            resMarbleTypes, 2, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.CHISELED.asStack(),            resMarbleTypes, 3, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.ARCH.asStack(),            resMarbleTypes, 4, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.RUNED.asStack(),            resMarbleTypes, 5, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),            resMarbleTypes, 6, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), resTable,       1, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(BlocksAS.blockBlackMarble, 1, OreDictionary.WILDCARD_VALUE),     resSootyMarble, 0, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.BRICKS.asStack(),                                          resMarbleTypes, 1, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.PILLAR.asStack(),                                          resMarbleTypes, 2, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.CHISELED.asStack(),                                        resMarbleTypes, 3, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.ARCH.asStack(),                                            resMarbleTypes, 4, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.RUNED.asStack(),                                           resMarbleTypes, 5, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),                                        resMarbleTypes, 6, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(BlocksAS.blockMarbleStairs, 1, OreDictionary.WILDCARD_VALUE),    resMarbleTypes, 7, ResearchProgression.DISCOVERY);
         registerItemLookup(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),                                   resOres,        0, ResearchProgression.DISCOVERY);
-        registerItemLookup(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),                                    resConPaper,            3, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(ItemsAS.rockCrystal,        1, OreDictionary.WILDCARD_VALUE),            resOres,        0, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(ItemsAS.wand,               1, OreDictionary.WILDCARD_VALUE),            resWand,        0, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(ItemsAS.journal,            1, OreDictionary.WILDCARD_VALUE),            resConPaper,    0, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(ItemsAS.constellationPaper, 1, OreDictionary.WILDCARD_VALUE),            resConPaper,    0, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockCustomOre.OreType.ROCK_CRYSTAL.asStack(),                                         resOres,        0, ResearchProgression.DISCOVERY);
-        registerItemLookup(BlockCustomSandOre.OreType.AQUAMARINE.asStack(),                                       resOres,        0, ResearchProgression.DISCOVERY);
+        registerItemLookup(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),                                    resConPaper,    3, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(ItemsAS.rockCrystal, 1, OreDictionary.WILDCARD_VALUE),           resOres,        0, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(ItemsAS.wand, 1, OreDictionary.WILDCARD_VALUE),                  resWand,        0, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(ItemsAS.journal, 1, OreDictionary.WILDCARD_VALUE),               resConPaper,    0, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(ItemsAS.constellationPaper, 1, OreDictionary.WILDCARD_VALUE),    resConPaper,    0, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockCustomOre.OreType.ROCK_CRYSTAL.asStack(),                                          resOres,       0, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockCustomSandOre.OreType.AQUAMARINE.asStack(),                                        resOres,       0, ResearchProgression.DISCOVERY);
 
         regDiscovery.register(resShrines);
         regDiscovery.register(resWand);

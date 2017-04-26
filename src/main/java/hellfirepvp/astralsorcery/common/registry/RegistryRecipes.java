@@ -49,7 +49,7 @@ import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeR
  */
 public class RegistryRecipes {
 
-    public static ShapedRecipe rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks;
+    public static ShapedRecipe rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks, rMarbleStairs;
     public static ShapedRecipe rBlackMarbleRaw;
 
     //LightProximityRecipes
@@ -220,6 +220,14 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER);
+        rMarbleStairs = new ShapedRecipe(new ItemStack(BlocksAS.blockMarbleStairs, 8))
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_RIGHT);
 
         rSmeltStarmetalOre = new SmeltingRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
@@ -241,6 +249,7 @@ public class RegistryRecipes {
         manager.addRecipe(rMarbleEngraved.make());
         manager.addRecipe(rMarbleChiseled.make());
         manager.addRecipe(rMarbleBricks.make());
+        manager.addRecipe(rMarbleStairs.make());
 
         rSmeltStarmetalOre.register();
         rSmeltAquamarineOre.register();
@@ -621,11 +630,13 @@ public class RegistryRecipes {
                 .addPart(Items.COAL, ShapedRecipeSlot.CENTER)).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
-                        .addPart(OreDictAlias.BLOCK_MARBLE,
-                                ShapedRecipeSlot.UPPER_LEFT,
-                                ShapedRecipeSlot.UPPER_RIGHT)
-                        .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
-                                ShapedRecipeSlot.UPPER_CENTER))).setPassiveStarlightRequirement(20);
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER))).setPassiveStarlightRequirement(20);
+
+        registerAltarRecipe(new DiscoveryRecipe(rMarbleStairs)).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,

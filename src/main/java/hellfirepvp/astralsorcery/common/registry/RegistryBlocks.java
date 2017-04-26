@@ -89,6 +89,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(customFlower);
         blockMarble = registerBlock(new BlockMarble());
         queueCustomNameItemBlock(blockMarble);
+        blockMarbleStairs = registerBlock(new BlockMarbleStairs());
+        queueDefaultItemBlock(blockMarbleStairs);
         blockBlackMarble = registerBlock(new BlockBlackMarble());
         queueCustomNameItemBlock(blockBlackMarble);
         blockVolatileLight = registerBlock(new BlockFlareLight());

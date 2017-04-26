@@ -37,6 +37,7 @@ public class BlocksAS {
     public static BlockRitualPedestal ritualPedestal;
     public static BlockWell blockWell;
     public static BlockMarble blockMarble;
+    public static BlockMarbleStairs blockMarbleStairs;
     public static BlockBlackMarble blockBlackMarble;
     public static BlockFlareLight blockVolatileLight;
     public static BlockWorldIlluminator blockIlluminator;
