@@ -39,6 +39,8 @@ public class TileCelestialGateway extends TileEntityTick {
     private boolean hasMultiblock = false;
     private boolean doesSeeSky = false;
 
+    private boolean gatewayRegistered = false;
+
     private Object clientSphere = null;
 
     @Override
@@ -55,8 +57,25 @@ public class TileCelestialGateway extends TileEntityTick {
             if((ticksExisted & 15) == 0) {
                 updateMultiblockState(MultiBlockArrays.patternCelestialGateway.matches(world, pos));
             }
+
+            if(gatewayRegistered) {
+                if(!hasMultiblock() || !doesSeeSky()) {
+                    GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                    cache.removePosition(world, pos);
+                    gatewayRegistered = false;
+                }
+            } else {
+                if(hasMultiblock() && doesSeeSky()) {
+                    GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                    cache.offerPosition(world, pos);
+                    gatewayRegistered = true;
+                }
+            }
         }
     }
+
+    @Override
+    protected void onFirstTick() {}
 
     private void updateMultiblockState(boolean matches) {
         boolean update = hasMultiblock != matches;
@@ -155,14 +174,6 @@ public class TileCelestialGateway extends TileEntityTick {
             }
             p.setColor(c);
         }
-    }
-
-    @Override
-    protected void onFirstTick() {
-        if(world.isRemote) return;
-
-        GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
-        cache.offerPosition(world, pos);
     }
 
     @Override
