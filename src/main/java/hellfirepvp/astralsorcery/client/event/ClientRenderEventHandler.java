@@ -250,7 +250,6 @@ public class ClientRenderEventHandler {
 
     @SideOnly(Side.CLIENT)
     private void spawnSurfaceParticles() {
-        if (!DataWorldSkyHandlers.hasWorldHandler(Minecraft.getMinecraft().world, Side.CLIENT)) return;
         if (!ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world).isPresent()) return;
 
         float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);

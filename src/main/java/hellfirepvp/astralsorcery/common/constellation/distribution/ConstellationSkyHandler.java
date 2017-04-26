@@ -55,7 +55,7 @@ public class ConstellationSkyHandler implements ITickHandler {
     public void tick(TickEvent.Type type, Object... context) {
         if(type == TickEvent.Type.WORLD) {
             World w = (World) context[0];
-            if(DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.SERVER)) {
+            if(!w.isRemote) {
                 WorldSkyHandler handle = worldHandlersServer.get(w.provider.getDimension());
                 if(handle == null) {
                     handle = new WorldSkyHandler(w.getSeed());
@@ -71,7 +71,7 @@ public class ConstellationSkyHandler implements ITickHandler {
     @SideOnly(Side.CLIENT)
     private void handleClientTick() {
         World w = Minecraft.getMinecraft().world;
-        if(w != null && DataWorldSkyHandlers.hasWorldHandler(w.provider.getDimension(), Side.CLIENT)) {
+        if(w != null) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if(handle == null) {
                 int dim = w.provider.getDimension();

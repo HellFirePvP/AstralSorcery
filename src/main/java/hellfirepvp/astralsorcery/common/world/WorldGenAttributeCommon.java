@@ -76,7 +76,7 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
 
     public boolean canGenerateAtAll(int chX, int chZ, World world, Random rand) {
         if(!cfgEntry.shouldGenerate()) return false;
-        if(onlyGenerateInSkyDimensions && !DataWorldSkyHandlers.hasWorldHandler(world, Side.SERVER)) return false;
+        if(onlyGenerateInSkyDimensions && !Config.worldGenDimWhitelist.contains(world.provider.getDimension())) return false;
         double chanceMultiplier = 1F;
         if(Config.respectIdealDistances && this instanceof WorldGenAttributeStructure) {
             StructureGenBuffer.StructureType type = ((WorldGenAttributeStructure) this).getStructureType();
