@@ -338,6 +338,7 @@ tile.blockmarble.chiseled.name=Chiseled Marble
 tile.blockmarble.arch.name=Marble Arch
 tile.blockmarble.runed.name=Runed Marble
 tile.blockmarble.engraved.name=Engraved Marble
+tile.blockmarblestairs.name=Marble Stairs
 tile.blockprism.name=PrismLens
 tile.blocklens.name=Lens
 tile.blockcelestialcrystals.name=Celestial Crystal Cluster

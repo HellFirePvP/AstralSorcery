@@ -110,7 +110,8 @@ public class ModIntegrationJEI implements IModPlugin {
                 RegistryRecipes.rMarbleChiseled.makeNative(),
                 RegistryRecipes.rMarbleEngraved.makeNative(),
                 RegistryRecipes.rMarblePillar  .makeNative(),
-                RegistryRecipes.rMarbleRuned   .makeNative()));
+                RegistryRecipes.rMarbleRuned   .makeNative(),
+                RegistryRecipes.rMarbleStairs  .makeNative()));
 
         jeiRegistrationPhase = false;
     }
