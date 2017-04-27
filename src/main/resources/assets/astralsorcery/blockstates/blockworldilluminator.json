@@ -3,6 +3,7 @@
     "defaults": {
         "model": "forge:multi-layer",
         "custom": {
+            "base": "astralsorcery:blockworldilluminator#trans",
             "Solid": "astralsorcery:blockworldilluminator#base",
             "Translucent": "astralsorcery:blockworldilluminator#trans"
         },
