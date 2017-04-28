@@ -46,6 +46,12 @@ repositories {
         url = "http://dvs1.progwml6.com/files/maven"
     }
 
+    maven {
+      // CraftTweaker
+       name 'jared maven'
+       url "http://maven.blamejared.com/"
+   }
+
 }
 
 dependencies {
@@ -56,7 +62,7 @@ dependencies {
     //JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-
+    deobfCompile "MineTweaker3:MineTweaker3-MC1102-Main:1.10.2-3.0.+"
 }
 
 jar {
@@ -76,11 +82,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
