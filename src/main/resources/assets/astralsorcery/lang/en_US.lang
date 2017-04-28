@@ -351,6 +351,8 @@ tile.blockstarlightinfuser.name=Starlight Infuser
 tile.blocktreebeacon.name=Tree Beacon
 tile.blockrituallink.name=Ritual Anchor
 tile.blocktranslucentblock.name=Translucent Block
+tile.blockmapdrawingtable.name=Starmap Drawing Table
+tile.blockcelestialgateway.name=Celestial Gateway
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive

@@ -18,7 +18,11 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -32,6 +36,8 @@ import javax.annotation.Nullable;
  */
 public class BlockCelestialGateway extends BlockContainer {
 
+    private static final AxisAlignedBB box = new AxisAlignedBB(1D / 16D, 0D / 16D, 1D / 16D, 15D / 16D, 1D / 16D, 10D / 15D);
+
     public BlockCelestialGateway() {
         super(Material.ROCK, MapColor.BLACK);
         setSoundType(SoundType.STONE);
@@ -39,6 +45,11 @@ public class BlockCelestialGateway extends BlockContainer {
         setResistance(40F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return box;
     }
 
     @Override
@@ -69,5 +80,30 @@ public class BlockCelestialGateway extends BlockContainer {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileCelestialGateway();
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 }
