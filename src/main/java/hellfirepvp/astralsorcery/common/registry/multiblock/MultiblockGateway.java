@@ -33,19 +33,19 @@ public class MultiblockGateway extends PatternBlockArray {
         IBlockState mgr = BlockMarble.MarbleBlockType.ENGRAVED.asBlock();
         IBlockState sooty = BlockBlackMarble.BlackMarbleBlockType.RAW.asBlock();
 
-        addBlockCube(mar, -3, 0, -3, 3, 0, 3);
-        addBlockCube(sooty, -2, 0, -2, 2, 0, 2);
+        addBlockCube(mar, -3, -1, -3, 3, -1, 3);
+        addBlockCube(sooty, -2, -1, -2, 2, -1, 2);
         addBlock(0, 0, 0, BlocksAS.celestialGateway.getDefaultState());
 
-        addBlock(-3, 0, -3, mru);
-        addBlock( 3, 0, -3, mru);
-        addBlock( 3, 0,  3, mru);
-        addBlock(-3, 0,  3, mru);
+        addBlock(-3, -1, -3, mru);
+        addBlock( 3, -1, -3, mru);
+        addBlock( 3, -1,  3, mru);
+        addBlock(-3, -1,  3, mru);
 
-        addBlock(-3, 1, -3, mgr);
-        addBlock( 3, 1, -3, mgr);
-        addBlock( 3, 1,  3, mgr);
-        addBlock(-3, 1,  3, mgr);
+        addBlock(-3,  0, -3, mgr);
+        addBlock( 3,  0, -3, mgr);
+        addBlock( 3,  0,  3, mgr);
+        addBlock(-3,  0,  3, mgr);
     }
 
 }

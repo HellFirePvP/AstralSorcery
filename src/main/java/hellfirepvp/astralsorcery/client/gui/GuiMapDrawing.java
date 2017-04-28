@@ -55,17 +55,17 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
 
         PlayerProgress client = ResearchManager.clientProgress;
 
-        WorldSkyHandler wh = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
-        if (wh != null) {
-            LinkedList<IConstellation> sorted = wh.getSortedActiveConstellations();
-            for (int i = 0, j = 0; j < Math.min(offsetPoints.size(), sorted.size()) && i < sorted.size(); i++) {
-                IConstellation c = sorted.get(i);
-                if (wh.isActive(c) && client.getKnownConstellations().contains(c.getUnlocalizedName())) {
-                    drawConstellation(c, offsetPoints.get(j));
-                    j++;
-                }
-            }
-        }
+        //WorldSkyHandler wh = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
+        //if (wh != null) {
+        //    LinkedList<IConstellation> sorted = wh.getSortedActiveConstellations();
+        //    for (int i = 0, j = 0; j < Math.min(offsetPoints.size(), sorted.size()) && i < sorted.size(); i++) {
+        //        IConstellation c = sorted.get(i);
+        //        if (wh.isActive(c) && client.getKnownConstellations().contains(c.getUnlocalizedName())) {
+        //            drawConstellation(c, offsetPoints.get(j));
+        //            j++;
+        //        }
+        //    }
+        //}
 
         TextureHelper.refreshTextureBindState();
     }

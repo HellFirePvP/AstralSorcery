@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -105,13 +106,52 @@ public class BlockMapDrawingTable extends BlockContainer {
             ItemStack held = playerIn.getHeldItem(hand);
             TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
             if (tm != null) {
-                if(!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent) {
-                    if(held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
-                        int remaining = tm.addParchment(held.getCount());
-                        if(remaining < held.getCount()) {
-                            worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
-                            if (!playerIn.isCreative()) {
-                                held.setCount(remaining);
+                if(playerIn.isSneaking()) {
+                    if(!tm.getSlotIn().isEmpty()) {
+                        BlockPos p = tm.getPos();
+                        ItemUtils.dropItemNaturally(worldIn, p.getX() + 0.5, p.getY() + 1.5, p.getZ() + 0.5, tm.getSlotIn());
+                        tm.putSlotIn(ItemStack.EMPTY);
+                        return true;
+                    }
+                    if(!tm.getSlotGlassLens().isEmpty()) {
+                        BlockPos p = tm.getPos();
+                        ItemUtils.dropItemNaturally(worldIn, p.getX() + 0.5, p.getY() + 1.5, p.getZ() + 0.5, tm.getSlotGlassLens());
+                        tm.putGlassLens(ItemStack.EMPTY);
+                        return true;
+                    }
+                } else {
+                    if(!held.isEmpty()) {
+                        if(held.getItem() instanceof ItemCraftingComponent) {
+                            if(held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+                                int remaining = tm.addParchment(held.getCount());
+                                if(remaining < held.getCount()) {
+                                    worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
+                                    if (!playerIn.isCreative()) {
+                                        held.setCount(remaining);
+                                        if(held.getCount() <= 0) {
+                                            playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                        } else {
+                                            playerIn.setHeldItem(hand, held);
+                                        }
+                                    }
+                                }
+                            } else if(held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()) {
+                                if(tm.getSlotGlassLens().isEmpty()) {
+                                    tm.putGlassLens(held);
+                                    if(!playerIn.isCreative()) {
+                                        held.shrink(1);
+                                        if(held.getCount() <= 0) {
+                                            playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                        } else {
+                                            playerIn.setHeldItem(hand, held);
+                                        }
+                                    }
+                                }
+                            }
+                        } else if(held.isItemEnchantable() && tm.getSlotIn().isEmpty()) {
+                            tm.putSlotIn(held);
+                            if(!playerIn.isCreative()) {
+                                held.shrink(1);
                                 if(held.getCount() <= 0) {
                                     playerIn.setHeldItem(hand, ItemStack.EMPTY);
                                 } else {
@@ -119,30 +159,22 @@ public class BlockMapDrawingTable extends BlockContainer {
                                 }
                             }
                         }
-                    } else if(held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()) {
-                        if(!tm.hasGlassLens()) {
-                             tm.putGlassLens(held);
-                             if(!playerIn.isCreative()) {
-                                 held.shrink(1);
-                                 if(held.getCount() <= 0) {
-                                     playerIn.setHeldItem(hand, ItemStack.EMPTY);
-                                 } else {
-                                     playerIn.setHeldItem(hand, held);
-                                 }
-                             }
-                        }
                     }
                 }
             }
         } else {
-            ItemStack held = playerIn.getHeldItem(hand);
-            if (!held.isEmpty() && held.getItem() instanceof ItemCraftingComponent &&
-                    (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta() ||
-                    held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta())) {
-                return true;
+            if(!playerIn.isSneaking()) {
+                ItemStack held = playerIn.getHeldItem(hand);
+                if (!held.isEmpty()) {
+                    if((held.getItem() instanceof ItemCraftingComponent &&
+                            (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta() ||
+                                    held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()))
+                            || held.isItemEnchantable()) {
+                        return true;
+                    }
+                }
+                AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.MAP_DRAWING, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
-            AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.MAP_DRAWING, playerIn, worldIn, pos.getX(), pos.getY(), pos.getZ());
-            return true;
         }
         return true;
     }

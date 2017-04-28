@@ -74,7 +74,7 @@ public class ClientGatewayHandler {
         UIGateway ui = EffectHandler.getInstance().getUiGateway();
         if(ui != null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
-            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, new Vector3(player, true).toBlockPos().down(), TileCelestialGateway.class, true);
+            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, new Vector3(player, true).toBlockPos(), TileCelestialGateway.class, true);
             if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                 if(lastScreenshotPos != null) {
                     WorldBlockPos currentPos = new WorldBlockPos(gate);
