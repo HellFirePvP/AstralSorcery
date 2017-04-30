@@ -92,8 +92,8 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
 
     @Override
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
-        int rX = (chX  * 16) + rand.nextInt(16);
-        int rZ = (chZ  * 16) + rand.nextInt(16);
+        int rX = (chX  * 16) + rand.nextInt(16) + 8;
+        int rZ = (chZ  * 16) + rand.nextInt(16) + 8;
         int rY = world.getPrecipitationHeight(new BlockPos(rX, 0, rZ)).getY();
         return new BlockPos(rX, rY, rZ);
     }
