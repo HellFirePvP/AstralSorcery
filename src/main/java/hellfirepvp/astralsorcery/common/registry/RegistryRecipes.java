@@ -220,7 +220,7 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER);
-        rMarbleStairs = new ShapedRecipe(new ItemStack(BlocksAS.blockMarbleStairs, 8))
+        rMarbleStairs = new ShapedRecipe(new ItemStack(BlocksAS.blockMarbleStairs, 4))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LEFT,

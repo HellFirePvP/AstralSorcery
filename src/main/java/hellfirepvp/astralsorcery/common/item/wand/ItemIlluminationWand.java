@@ -55,7 +55,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if (!block.isReplaceable(worldIn, pos)) {
                     pos = pos.offset(facing);
                 }
-                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, null, stack) &&
+                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, true, facing, null, stack) &&
                         drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
                     if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);

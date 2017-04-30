@@ -45,7 +45,7 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
             RenderHelper.enableStandardItemLighting();
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
-            
+
             GlStateManager.translate(0.5, 1.02, 0.25);
             GlStateManager.rotate(90, 1, 0, 0);
             GlStateManager.scale(2, 2, 2);

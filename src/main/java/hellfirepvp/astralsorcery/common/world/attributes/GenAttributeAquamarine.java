@@ -39,9 +39,9 @@ public class GenAttributeAquamarine extends WorldGenAttribute {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world) {
         for (int i = 0; i < Config.aquamarineAmount; i++) {
-            int rX = (chunkX  * 16) + random.nextInt(16);
+            int rX = (chunkX  * 16) + random.nextInt(16) + 8;
             int rY = 48 + random.nextInt(19);
-            int rZ = (chunkZ  * 16) + random.nextInt(16);
+            int rZ = (chunkZ  * 16) + random.nextInt(16) + 8;
             BlockPos pos = new BlockPos(rX, rY, rZ);
             IBlockState stateAt = world.getBlockState(pos);
             if(!stateAt.getBlock().equals(Blocks.SAND)) {

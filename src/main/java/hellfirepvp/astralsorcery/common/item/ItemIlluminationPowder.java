@@ -56,7 +56,7 @@ public class ItemIlluminationPowder extends Item {
         if (!block.isReplaceable(worldIn, pos)) {
             pos = pos.offset(facing);
         }
-        if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, false, facing, playerIn, stack)) {
+        if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.canBlockBePlaced(BlocksAS.blockVolatileLight, pos, true, facing, playerIn, stack)) {
             if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
                 SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                 worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);

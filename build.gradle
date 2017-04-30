@@ -46,6 +46,12 @@ repositories {
         url = "http://dvs1.progwml6.com/files/maven"
     }
 
+    maven {
+        // CraftTweaker
+        name 'jared maven'
+        url "http://maven.blamejared.com/"
+    }
+
 }
 
 dependencies {
@@ -56,6 +62,12 @@ dependencies {
     //JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+
+    def ct_mc_version = "MC1102"
+    def ct_version = "3.0.24.82"
+
+    deobfCompile "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
+    runtime "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
 
 }
 
