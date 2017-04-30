@@ -38,6 +38,8 @@ import java.util.List;
  */
 public class ShapedLightProximityRecipe implements IRecipe {
 
+    public static BlockPos clientWorkbenchPosition = null;
+
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
     protected ItemStack output = null;
@@ -158,14 +160,13 @@ public class ShapedLightProximityRecipe implements IRecipe {
         if (pos == null) return false;
         if (world.isRemote) {
             GuiScreen sc = Minecraft.getMinecraft().currentScreen;
-            if (sc == null || !(sc instanceof GuiCrafting)) return false;
-            c = ((GuiCrafting) sc).inventorySlots;
-            if (c == null || !(c instanceof ContainerWorkbench)) return false;
-            pos = ((ContainerWorkbench) c).pos;
-            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).doesPositionReceiveStarlightClient(world, pos))
+            if (sc == null || !(sc instanceof GuiCrafting) || clientWorkbenchPosition == null) return false;
+            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                    .doesPositionReceiveStarlightClient(world, clientWorkbenchPosition))
                 return false;
         } else {
-            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).doesPositionReceiveStarlightServer(world, pos))
+            if (!((DataLightBlockEndpoints) SyncDataHolder.getDataServer(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS))
+                    .doesPositionReceiveStarlightServer(world, pos))
                 return false;
         }
         return true;

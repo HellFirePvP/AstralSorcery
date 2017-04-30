@@ -9,6 +9,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -52,13 +54,24 @@ public class TileMapDrawingTable extends TileSkybound {
         }
     }
 
-    public void putGlassLens(ItemStack glassLens) {
-        this.slotGlassLens = ItemUtils.copyStackWithSize(glassLens, Math.min(glassLens.stackSize, 1));
+    @Nullable
+    public ItemStack getSlotGlassLens() {
+        return slotGlassLens;
+    }
+
+    @Nullable
+    public ItemStack getSlotIn() {
+        return slotIn;
+    }
+
+    public void putSlotIn(ItemStack stack) {
+        this.slotIn = ItemUtils.copyStackWithSize(stack, 1);
         markForUpdate();
     }
 
-    public boolean hasGlassLens() {
-        return slotGlassLens != null && slotGlassLens.getItem() != null; //Change to differ between engraved & normal lens..
+    public void putGlassLens(ItemStack glassLens) {
+        this.slotGlassLens = ItemUtils.copyStackWithSize(glassLens, Math.min(glassLens.stackSize, 1));
+        markForUpdate();
     }
 
     public boolean hasParchment() {

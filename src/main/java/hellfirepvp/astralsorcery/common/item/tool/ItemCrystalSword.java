@@ -83,6 +83,11 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
         damageProperties(stack, damage);
     }
 
+    @Override
+    public boolean isItemTool(ItemStack stack) {
+        return true;
+    }
+
     private void damageProperties(ItemStack stack, int damage) {
         ToolCrystalProperties prop = getToolProperties(stack);
         if(prop == null) {

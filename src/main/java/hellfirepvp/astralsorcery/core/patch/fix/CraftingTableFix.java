@@ -35,9 +35,9 @@ public class CraftingTableFix extends ClassPatch {
         AbstractInsnNode newNode = findFirstInstruction(mn, Opcodes.NEW).getPrevious();
         int index = mn.instructions.indexOf(newNode);
 
-        for (int i = 0; i < 7; i++) {
-            mn.instructions.remove(mn.instructions.get(index));
-        }
+        //for (int i = 0; i < 7; i++) {
+        //    mn.instructions.remove(mn.instructions.get(index));
+        //}
         AbstractInsnNode insertPrev = mn.instructions.get(index);
         mn.instructions.insertBefore(insertPrev, new VarInsnNode(Opcodes.ALOAD, 4));
         mn.instructions.insertBefore(insertPrev, new VarInsnNode(Opcodes.ALOAD, 2));

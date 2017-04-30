@@ -1,5 +1,22 @@
 {
+    "forge_marker": 1,
+    "defaults": {
+        "model": "forge:multi-layer",
+        "custom": {
+            "base": "astralsorcery:BlockWorldIlluminator#base",
+            "Solid": "astralsorcery:BlockWorldIlluminator#base",
+            "Translucent": "astralsorcery:BlockWorldIlluminator#trans"
+        },
+        "transform": "forge:default-block"
+    },
     "variants": {
-        "normal": { "model":"astralsorcery:BlockWorldIlluminator" }
+        "normal": [{}],
+        "inventory": [{}],
+        "base": [{
+            "model": "astralsorcery:BlockWorldIlluminatorCenter"
+        }],
+        "trans": [{
+            "model": "astralsorcery:BlockWorldIlluminator"
+        }]
     }
 }

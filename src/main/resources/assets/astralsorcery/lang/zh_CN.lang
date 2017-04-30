@@ -349,6 +349,8 @@ tile.BlockStarlightInfuser.name=星能聚合器
 tile.BlockTreeBeacon.name=树之信标
 tile.BlockRitualLink.name=水晶信标
 tile.BlockTranslucentBlock.name=半透明方块
+tile.BlockMapDrawingTable.name=星图绘制台
+tile.BlockCelestialGateway.name=天体调谐器
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive

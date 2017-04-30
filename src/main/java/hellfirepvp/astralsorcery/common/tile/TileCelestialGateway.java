@@ -104,7 +104,7 @@ public class TileCelestialGateway extends TileEntityTick {
     @SideOnly(Side.CLIENT)
     private void setupGatewayUI(boolean preconditionsFulfilled) {
         if(preconditionsFulfilled) {
-            Vector3 sphereVec = new Vector3(pos).add(0.5, 2.62, 0.5);
+            Vector3 sphereVec = new Vector3(pos).add(0.5, 1.62, 0.5);
             if(clientSphere == null) {
                 CompoundEffectSphere sphere = new CompoundGatewayShield(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 8, 10);
                 sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
@@ -143,7 +143,7 @@ public class TileCelestialGateway extends TileEntityTick {
     @SideOnly(Side.CLIENT)
     private void playFrameParticles() {
         for (int i = 0; i < 2; i++) {
-            Vector3 offset = new Vector3(pos).add(-2, 1, -2);
+            Vector3 offset = new Vector3(pos).add(-2, 0, -2);
             if(rand.nextBoolean()) {
                 offset.add(5 * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * 5);
             } else {

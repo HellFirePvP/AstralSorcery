@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -62,6 +63,16 @@ public class BlockWorldIlluminator extends BlockContainer {
     }
 
     @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -79,6 +90,11 @@ public class BlockWorldIlluminator extends BlockContainer {
                 ti.setPlayerPlaced();
             }
         }
+    }
+
+    @Override
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
