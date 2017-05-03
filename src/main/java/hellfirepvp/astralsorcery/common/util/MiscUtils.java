@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEndPortal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -33,11 +31,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -224,7 +220,18 @@ public class MiscUtils {
 
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {
         if(player instanceof FakePlayer) return true;
-        if(player.getClass() != EntityPlayerMP.class) return true;
+
+        if(Mods.GALACTICRAFT_CORE.isPresent()) {
+            Class<?> plClass = Mods.getGCPlayerClass();
+            if(plClass != null) {
+                if(player.getClass() != EntityPlayerMP.class && player.getClass() != plClass) return true;
+            } else {
+                if(player.getClass() != EntityPlayerMP.class) return true;
+            }
+        } else {
+            if(player.getClass() != EntityPlayerMP.class) return true;
+        }
+
         if(player.connection == null) return true;
         try {
             player.getPlayerIP().length();
