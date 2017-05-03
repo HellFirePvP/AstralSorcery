@@ -72,7 +72,7 @@ public class TileMapDrawingTable extends TileSkybound {
                                 slotIn = new ItemStack(Items.ENCHANTED_BOOK);
                             }
                             map.tryApplyEnchantments(slotIn);
-                            if(slotGlassLens.attemptDamageItem(2, rand)) {
+                            if(slotGlassLens.attemptDamageItem(1, rand)) {
                                 slotGlassLens.stackSize--;
                                 if(slotGlassLens.stackSize <= 0) {
                                     slotGlassLens = null;

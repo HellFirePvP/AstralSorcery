@@ -137,7 +137,7 @@ public class RegistryResearch {
 
         ItemStack cel = new ItemStack(BlocksAS.celestialCollectorCrystal);
         ItemCollectorCrystal.setType(cel, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL);
-        ResearchNode resEnhancedCollCrystal = new ResearchNode(cel, "ENHANCED_COLLECTOR", 7, 4);
+        ResearchNode resEnhancedCollCrystal = new ResearchNode(cel, "ENHANCED_COLLECTOR", 4, 5);
         resEnhancedCollCrystal.addPage(getTextPage("ENHANCED_COLLECTOR.1"));
         resEnhancedCollCrystal.addPage(new JournalPageStructure(MultiBlockArrays.patternCollectorEnhancement, null, new Vector3(0, -36, 0)));
 
@@ -145,16 +145,18 @@ public class RegistryResearch {
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.1"));
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.2"));
 
-        ResearchNode resCelCrystals = new ResearchNode(new ItemStack(ItemsAS.celestialCrystal), "CEL_CRYSTALS", 1, 4);
+        ResearchNode resCelCrystals = new ResearchNode(new ItemStack(ItemsAS.celestialCrystal), "CEL_CRYSTALS", 3, 4);
         resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.1"));
 
         ResearchNode resDrawing = new ResearchNode(new ItemStack(BlocksAS.drawingTable), "DRAWING_TABLE", 3, 3);
         resDrawing.addPage(getTextPage("DRAWING_TABLE.1"));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.2"));
         resDrawing.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rDrawingTable));
-        resDrawing.addPage(getTextPage("DRAWING_TABLE.3"));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.4"));
         resDrawing.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rInfusedGlass));
-        resDrawing.addPage(getTextPage("DRAWING_TABLE.5"));
         resDrawing.addPage(getTextPage("DRAWING_TABLE.6"));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.7"));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.8"));
 
         registerItemLookup(new ItemStack(ItemsAS.celestialCrystal, 1, OreDictionary.WILDCARD_VALUE),   resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.celestialCrystals, 1, OreDictionary.WILDCARD_VALUE), resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
@@ -185,6 +187,8 @@ public class RegistryResearch {
         resSpectralLens.addSourceConnectionFrom(resColoredLenses);
         resEnhancedCollCrystal.addSourceConnectionFrom(resCollCrystal);
         resDrawing.addSourceConnectionFrom(resColoredLenses);
+        resDrawing.addSourceConnectionFrom(resInfuser);
+        resEnhancedCollCrystal.addSourceConnectionFrom(resCelCrystals);
 
         regConstellation.register(resColoredLenses);
         regConstellation.register(resPrism);

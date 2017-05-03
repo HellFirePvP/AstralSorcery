@@ -397,8 +397,12 @@ public final class EffectHandler {
     }
 
     public static boolean mayAcceptParticle(IComplexEffect effect) {
-        if(effect instanceof IComplexEffect.PreventRemoval || Config.particleAmount == 2) return true;
-        return Config.particleAmount == 1 && STATIC_EFFECT_RAND.nextInt(4) == 0;
+        int cfg = Config.particleAmount;
+        if(cfg > 1 && !Minecraft.isFancyGraphicsEnabled()) {
+            cfg = 1;
+        }
+        if(effect instanceof IComplexEffect.PreventRemoval || cfg == 2) return true;
+        return cfg == 1 && STATIC_EFFECT_RAND.nextInt(3) == 0;
     }
 
     static {

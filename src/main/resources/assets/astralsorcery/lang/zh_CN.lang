@@ -268,7 +268,6 @@ item.ItemCraftingComponent.stardust.name=星尘
 item.ItemCraftingComponent.glass_lens.name=玻璃透镜
 item.ItemCraftingComponent.reso_gem.name=共振宝石
 item.ItemCraftingComponent.parchment.name=羊皮纸
-item.ItemCraftingComponent.infused_glass.name=聚能玻璃
 
 item.ItemConstellationPaper.name=星图
 item.ItemRockCrystalSimple.name=水晶石
@@ -294,6 +293,7 @@ item.ItemArchitectWand.name=秩序之杖
 item.ItemExchangeWand.name=转位之杖
 item.ItemShiftingStar.name=更替之星
 item.ItemIlluminationPowder.name=辉光粉
+item.ItemInfusedGlass.name=聚能玻璃
 
 item.ItemColoredLens.effect.fire.name=燃烧
 item.ItemColoredLens.effect.break.name=中断

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 
 import java.awt.*;
@@ -191,7 +192,7 @@ public class ActiveStarMap {
         if (rand.nextInt(30) == 0) {
             applicableEffects.add(new PotionEffect(RegistryPotions.potionCheatDeath, 2 * 1200 + Math.round(rand.nextFloat() * 6 * 1200), 0, false, true));
         }
-        stack.setStackDisplayName("Stardew"); //Big RIP. 1.10.2 has no dynamic translateable name integration here.
+        stack.setStackDisplayName(TextFormatting.RESET + "Stardew"); //Big RIP. 1.10.2 has no dynamic translateable name integration here.
         //stack.setTranslatableName("potion.as.crafted.name");
         Collections.shuffle(applicableEffects);
         PotionUtils.appendEffects(stack, applicableEffects);
