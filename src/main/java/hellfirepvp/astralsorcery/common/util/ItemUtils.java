@@ -299,7 +299,7 @@ public class ItemUtils {
         return getOreDictNames(stack).contains(name);
     }
 
-    public static List<String> getOreDictNames(ItemStack stack) {
+    private static List<String> getOreDictNames(ItemStack stack) {
         List<String> out = Lists.newArrayList();
         for (int id : OreDictionary.getOreIDs(stack)) {
             out.add(OreDictionary.getOreName(id).toLowerCase());

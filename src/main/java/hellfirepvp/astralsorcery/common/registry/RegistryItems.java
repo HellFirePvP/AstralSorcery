@@ -98,6 +98,7 @@ public class RegistryItems {
     private static void registerItems() {
         craftingComponent = registerItem(new ItemCraftingComponent());
         constellationPaper = registerItem(new ItemConstellationPaper());
+        infusedGlass = registerItem(new ItemInfusedGlass());
 
         rockCrystal = registerItem(new ItemRockCrystalSimple());
         tunedRockCrystal = registerItem(new ItemTunedRockCrystal());

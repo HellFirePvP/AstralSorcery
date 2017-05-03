@@ -131,8 +131,7 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
         STARDUST,
         GLASS_LENS,
         RESO_GEM,
-        PARCHMENT,
-        INFUSED_GLASS;
+        PARCHMENT;
 
         public ItemStack asStack() {
             return new ItemStack(ItemsAS.craftingComponent, 1, getMeta());

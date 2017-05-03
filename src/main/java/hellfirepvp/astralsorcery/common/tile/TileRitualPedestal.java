@@ -565,7 +565,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         }
 
         private void doTraitEffect(World world, ConstellationEffect ce) {
-            double maxDrain = 20D;
+            double maxDrain = 7D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
             int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);
@@ -600,7 +600,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
         //TODO occasionally returns with <0?
         private void doMainEffect(World world, ConstellationEffect ce, @Nullable IMinorConstellation trait, boolean mayDoTrait) {
-            double maxDrain = 20D;
+            double maxDrain = 7D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
             int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);

@@ -125,8 +125,9 @@ public class RegistryResearch {
         ResearchNode resIllWand = new ResearchNode(new ItemStack(ItemsAS.illuminationWand), "ILLUMINATION_WAND", 6, 1);
         resIllWand.addPage(getTextPage("ILLUMINATION_WAND.1"));
         resIllWand.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rIlluminationWand));
+        resIllWand.addPage(getTextPage("ILLUMINATION_WAND.3"));
 
-        ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 3, 3);
+        ResearchNode resPrism = new ResearchNode(new ItemStack(BlocksAS.lensPrism), "PRISM", 4, 1);
         resPrism.addPage(getTextPage("PRISM.1"));
         resPrism.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rPrism));
 
@@ -140,12 +141,20 @@ public class RegistryResearch {
         resEnhancedCollCrystal.addPage(getTextPage("ENHANCED_COLLECTOR.1"));
         resEnhancedCollCrystal.addPage(new JournalPageStructure(MultiBlockArrays.patternCollectorEnhancement, null, new Vector3(0, -36, 0)));
 
-        ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystals, 1, 3), "CEL_CRYSTAL_GROW", 2, 2);
+        ResearchNode resCelCrystalCluster = new ResearchNode(new ItemStack(BlocksAS.celestialCrystals, 1, 3), "CEL_CRYSTAL_GROW", 2, 3);
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.1"));
         resCelCrystalCluster.addPage(getTextPage("CEL_CRYSTAL_GROW.2"));
 
         ResearchNode resCelCrystals = new ResearchNode(new ItemStack(ItemsAS.celestialCrystal), "CEL_CRYSTALS", 1, 4);
         resCelCrystals.addPage(getTextPage("CEL_CRYSTALS.1"));
+
+        ResearchNode resDrawing = new ResearchNode(new ItemStack(BlocksAS.drawingTable), "DRAWING_TABLE", 3, 3);
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.1"));
+        resDrawing.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rDrawingTable));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.3"));
+        resDrawing.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rInfusedGlass));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.5"));
+        resDrawing.addPage(getTextPage("DRAWING_TABLE.6"));
 
         registerItemLookup(new ItemStack(ItemsAS.celestialCrystal, 1, OreDictionary.WILDCARD_VALUE),   resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.celestialCrystals, 1, OreDictionary.WILDCARD_VALUE), resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
@@ -164,6 +173,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.treeBeacon, 1, OreDictionary.WILDCARD_VALUE),        resTreeBeacon,        1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.ritualLink, 1, OreDictionary.WILDCARD_VALUE),        resRitualLink,        1, ResearchProgression.CONSTELLATION);
         registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                  resInfuser,           1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),      resDrawing,           1, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);
@@ -174,6 +184,7 @@ public class RegistryResearch {
         resChargedTools.addSourceConnectionFrom(resInfuser);
         resSpectralLens.addSourceConnectionFrom(resColoredLenses);
         resEnhancedCollCrystal.addSourceConnectionFrom(resCollCrystal);
+        resDrawing.addSourceConnectionFrom(resColoredLenses);
 
         regConstellation.register(resColoredLenses);
         regConstellation.register(resPrism);
@@ -188,6 +199,7 @@ public class RegistryResearch {
         regConstellation.register(resRitualLink);
         regConstellation.register(resSpectralLens);
         regConstellation.register(resEnhancedCollCrystal);
+        regConstellation.register(resDrawing);
     }
 
     private static void initAttunement() {
@@ -278,7 +290,7 @@ public class RegistryResearch {
         ResearchNode resStarlightNetwork = new ResearchNode(new ItemStack(BlocksAS.lens), "STARLIGHT_NETWORK", 3, 5);
         resStarlightNetwork.addPage(getTextPage("STARLIGHT_NETWORK.1"));
 
-        ResearchNode resCelestialGateway = new ResearchNode(new ItemStack(BlocksAS.celestialGateway), "CELESTIAL_GATEWAY", 4, 7);
+        ResearchNode resCelestialGateway = new ResearchNode(new ItemStack(BlocksAS.celestialGateway), "CELESTIAL_GATEWAY", 6, 5);
         resCelestialGateway.addPage(getTextPage("CELESTIAL_GATEWAY.1"));
         resCelestialGateway.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rCelestialGateway));
         resCelestialGateway.addPage(getTextPage("CELESTIAL_GATEWAY.3"));

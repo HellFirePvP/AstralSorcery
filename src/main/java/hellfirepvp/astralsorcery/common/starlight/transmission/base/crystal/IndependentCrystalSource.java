@@ -75,7 +75,7 @@ public class IndependentCrystalSource extends SimpleIndependentSource {
         Function<Float, Float> distrFunction = getDistributionFunc();
         double perc = distrFunction.apply(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
         perc *= collectionDstMultiplier;
-        perc *= (0.2 + (0.8 * posDistribution));
+        perc *= (0.7 + (0.3 * posDistribution));
         return (float) (perc * CrystalCalculations.getCollectionAmt(crystalProperties, handle.getCurrentDistribution(cst, distrFunction)));
     }
 

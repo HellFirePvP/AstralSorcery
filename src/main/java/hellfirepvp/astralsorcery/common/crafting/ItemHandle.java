@@ -83,6 +83,15 @@ public final class ItemHandle {
         this.handleType = Type.STACK;
     }
 
+    public ItemHandle(List<ItemStack> matchStacks) {
+        for (ItemStack stack : matchStacks) {
+            if(stack != null && stack.getItem() != null) {
+                this.applicableItems.add(ItemUtils.copyStackWithSize(stack, stack.stackSize));
+            }
+        }
+        this.handleType = Type.STACK;
+    }
+
     public static ItemHandle getCrystalVariant(boolean hasToBeTuned, boolean hasToBeCelestial) {
         if(hasToBeTuned) {
             if(hasToBeCelestial) {

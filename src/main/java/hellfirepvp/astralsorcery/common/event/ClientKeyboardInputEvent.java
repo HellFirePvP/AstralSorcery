@@ -36,6 +36,9 @@ public class ClientKeyboardInputEvent extends Event {
                 runKeyboardTick.invoke(calling);
             } catch (Exception e) {
                 e.printStackTrace();
+                if(e.getMessage().equals("Manually triggered debug crash")) {
+                    throw new RuntimeException(e); //WELL....
+                }
             }
         }
     }
