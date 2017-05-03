@@ -90,9 +90,6 @@ public class ASstarmapper extends ModelBase {
         this.leg3.render(f5);
         this.leg_base1.render(f5);
         this.basin.render(f5);
-        if(renderGlass != 0) {
-            this.treated_glass.render(f5);
-        }
     }
 
     /**

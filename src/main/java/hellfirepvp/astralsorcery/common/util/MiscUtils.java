@@ -18,12 +18,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderPearl;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -31,13 +33,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.soap.Text;
 import java.awt.*;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 
 /**
@@ -48,6 +51,8 @@ import java.util.function.Function;
  * Date: 01.08.2016 / 13:38
  */
 public class MiscUtils {
+
+    private static Map<EnumDyeColor, Color> prettierColorMapping = new HashMap<>();
 
     @Nullable
     public static <T> T getTileAt(IBlockAccess world, BlockPos pos, Class<T> tileClass, boolean forceChunkLoad) {
@@ -76,6 +81,60 @@ public class MiscUtils {
             }
         }
         return max;
+    }
+
+    @Nonnull
+    public static Color flareColorFromDye(EnumDyeColor color) {
+        Color c = prettierColorMapping.get(color);
+        if(c == null) c = Color.WHITE;
+        return c;
+    }
+
+    @Nonnull
+    public static TextFormatting textFormattingForDye(EnumDyeColor color) {
+        switch (color) {
+            case WHITE:
+                return TextFormatting.WHITE;
+            case ORANGE:
+                return TextFormatting.GOLD;
+            case MAGENTA:
+                return TextFormatting.DARK_PURPLE;
+            case LIGHT_BLUE:
+                return TextFormatting.DARK_AQUA;
+            case YELLOW:
+                return TextFormatting.YELLOW;
+            case LIME:
+                return TextFormatting.GREEN;
+            case PINK:
+                return TextFormatting.LIGHT_PURPLE;
+            case GRAY:
+                return TextFormatting.DARK_GRAY;
+            case SILVER:
+                return TextFormatting.GRAY;
+            case CYAN:
+                return TextFormatting.BLUE;
+            case PURPLE:
+                return TextFormatting.DARK_PURPLE;
+            case BLUE:
+                return TextFormatting.DARK_BLUE;
+            case BROWN:
+                return TextFormatting.GOLD;
+            case GREEN:
+                return TextFormatting.DARK_GREEN;
+            case RED:
+                return TextFormatting.DARK_RED;
+            case BLACK:
+                return TextFormatting.DARK_GRAY; //Black is unreadable. fck that.
+            default:
+                return TextFormatting.WHITE;
+        }
+    }
+
+    public static String capitalizeFirst(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
     }
 
     public static boolean breakBlockWithPlayer(BlockPos pos, EntityPlayerMP playerMP) {
@@ -194,6 +253,25 @@ public class MiscUtils {
             }
         }
         return found;
+    }
+
+    static {
+        prettierColorMapping.put(EnumDyeColor.WHITE, new Color(0xFFFFFF));
+        prettierColorMapping.put(EnumDyeColor.ORANGE, new Color(0xFF8C1D));
+        prettierColorMapping.put(EnumDyeColor.MAGENTA, new Color(0xEF0EFF));
+        prettierColorMapping.put(EnumDyeColor.LIGHT_BLUE, new Color(0x06E5FF));
+        prettierColorMapping.put(EnumDyeColor.YELLOW, new Color(0xFFEB00));
+        prettierColorMapping.put(EnumDyeColor.LIME, new Color(0x93FF10));
+        prettierColorMapping.put(EnumDyeColor.PINK, new Color(0xFF18D9));
+        prettierColorMapping.put(EnumDyeColor.GRAY, new Color(0x5E5E5E));
+        prettierColorMapping.put(EnumDyeColor.SILVER, new Color(0xBDBDBD));
+        prettierColorMapping.put(EnumDyeColor.CYAN, new Color(0x5498B4));
+        prettierColorMapping.put(EnumDyeColor.PURPLE, new Color(0xB721F7));
+        prettierColorMapping.put(EnumDyeColor.BLUE, new Color(0x3C00FF));
+        prettierColorMapping.put(EnumDyeColor.BROWN, new Color(0xB77109));
+        prettierColorMapping.put(EnumDyeColor.GREEN, new Color(0x00AA00));
+        prettierColorMapping.put(EnumDyeColor.RED, new Color(0xFF0000));
+        prettierColorMapping.put(EnumDyeColor.BLACK, new Color(0x000000));
     }
 
 }

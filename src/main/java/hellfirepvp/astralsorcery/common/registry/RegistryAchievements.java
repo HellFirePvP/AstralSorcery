@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -65,7 +66,7 @@ public class RegistryAchievements {
         achvLiqStarlight.registerStat();
         achvPlayerAttunement.registerStat();
 
-        achievementPageAstralSorcery = new AchievementPage("Astral Sorcery",
+        achievementPageAstralSorcery = new AchievementPage(AstralSorcery.NAME,
                 achvRockCrystal, achvCelestialCrystal, achvBuildHandTelescope,
                 achvDiscoverConstellation, achvBuildActTelescope, achvLiqStarlight,
                 achvPlayerAttunement);

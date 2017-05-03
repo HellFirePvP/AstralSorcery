@@ -17,10 +17,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
-import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
-import hellfirepvp.astralsorcery.common.tile.TileWell;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -122,6 +119,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         TREE_VORTEX,
         ARCHITECT_PLACE,
         CEL_STRIKE,
+        BURN_PARCHMENT,
+        ENGRAVE_LENS,
 
         CE_CROP_INTERACT,
         CE_MELT_BLOCK,
@@ -176,6 +175,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return RaytraceAssist::playDebug;
                 case CEL_STRIKE:
                     return CelestialStrike::playEffects;
+                case BURN_PARCHMENT:
+                    return TileMapDrawingTable::burnParchmentEffects;
+                case ENGRAVE_LENS:
+                    return TileMapDrawingTable::engraveLensEffects;
             }
             return null;
         }

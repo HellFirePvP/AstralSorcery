@@ -255,12 +255,12 @@ crystal.attuned=调整到
 crystal.trait=特性
 crystal.collect.type=收集星能于
 
-entity.astralsorcery.entitystardust.name=星尘
-entity.astralsorcery.entityaquamarine.name=海蓝宝石
-entity.astralsorcery.entitycrystal.name=水晶
-entity.astralsorcery.entityflare.name=耀斑
-entity.astralsorcery.entitystarburst.name=星爆
-entity.astralsorcery.entityilluminationspark=荧光火花
+entity.EntityStardust.name=星尘
+entity.EntityAquamarine.name=海蓝宝石
+entity.EntityCrystal.name=水晶
+entity.EntityFlare.name=耀斑
+entity.EntityStarburst.name=星爆
+entity.EntityIlluminationSpark=荧光火花
 
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭

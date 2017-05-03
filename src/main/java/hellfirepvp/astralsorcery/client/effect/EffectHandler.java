@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.effect.texture.TexturePlane;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
+import hellfirepvp.astralsorcery.client.render.tile.TESRMapDrawingTable;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -140,37 +141,39 @@ public final class EffectHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onRender(RenderWorldLastEvent event) {
         TESRPrismLens.renderColoredPrismsLast();
+        float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
         for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
             og.prepareGLContext();
             for (CompoundObjectEffect effect : objects.get(og)) {
-                effect.render(event.getPartialTicks());
+                effect.render(pTicks);
             }
             og.revertGLContext();
         }
 
         if(uiGateway != null) {
             if(renderGateway) {
-                uiGateway.renderIntoWorld(event.getPartialTicks());
+                uiGateway.renderIntoWorld(pTicks);
             }
             if(ClientGatewayHandler.focusingEntry != null) {
-                renderGatewayTarget(event.getPartialTicks());
+                renderGatewayTarget(pTicks);
             }
         }
-        EntityFXFacingParticle.renderFast(event.getPartialTicks(), fastRenderParticles);
-        EffectLightning.renderFast(event.getPartialTicks(), fastRenderLightnings);
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
+        EffectLightning.renderFast(pTicks, fastRenderLightnings);
 
         Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         for (int i = 0; i <= 2; i++) {
             for (IComplexEffect effect : layeredEffects.get(i)) {
                 GL11.glPushMatrix();
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                effect.render(event.getPartialTicks());
+                effect.render(pTicks);
                 GL11.glPopAttrib();
                 GL11.glPopMatrix();
             }
         }
         acceptsNewParticles = true;
+        TESRMapDrawingTable.renderRemainingGlasses(pTicks);
         TESRTranslucentBlock.renderTranslucentBlocks();
     }
 

@@ -48,7 +48,7 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
                 ConstellationAtlarSlot.UP_UP_RIGHT,
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
-        setCstItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+        setCstItem(ItemsAS.illuminationPowder,
                 ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT,

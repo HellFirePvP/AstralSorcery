@@ -9,6 +9,18 @@ jei.category.altar.discovery=Luminous Crafting Table
 jei.category.altar.attunement=Starlight Crafting Altar
 jei.category.altar.constellation=Celestial Altar
 
+potion.potency.1=I
+potion.potency.2=II
+potion.potency.3=III
+potion.potency.4=IV
+potion.potency.5=VI
+potion.potency.6=VI
+potion.potency.7=VII
+potion.potency.8=VIII
+potion.potency.9=IX
+potion.potency.10=X
+potion.as.crafted.name=Stardew
+
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
 misc.journal.info.1=Hover over one of the clusters and zoom in
@@ -202,7 +214,8 @@ astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects aqu
 astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
 
 research.ILLUMINATION_WAND.name=Illumination Wand
-astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage. Given sufficient charge, right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form. Shift-right-clicking will create a small flare.
+astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage.
+astralsorcery.journal.ILLUMINATION_WAND.3.text=Given sufficient charge, shift-right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form.<NL>Right-clicking will create a small yellow flare. Applying a color to the wand by crafting it together with any sort of colored dye will allow for the created flare to keep the color of the dye on the wand.
 
 research.SHIFT_STAR.name=Shifting Star
 astralsorcery.journal.SHIFT_STAR.1.text=Blinded by your discovery and the appeal of the powers an attunement to a constellation grants, you missed out on all the possibilities the other constellations offer that you've discovered now.<NL>You quickly come up with an idea to dissipate your current powers into your surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy left your body.
@@ -234,6 +247,22 @@ research.PED_ACCEL.name=Ritual Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
 astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the ritual pedestal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
 
+research.CELESTIAL_GATEWAY.name=Celestial Gateway
+astralsorcery.journal.CELESTIAL_GATEWAY.1.text=-
+astralsorcery.journal.CELESTIAL_GATEWAY.3.text=-
+
+research.ENHANCED_COLLECTOR.name=Enhanced Collector Crystal
+astralsorcery.journal.ENHANCED_COLLECTOR.1.text=-
+
+research.SPECTRAL_LENS.name=Spectral Lens
+astralsorcery.journal.SPECTRAL_LENS.1.text=-
+
+research.DRAWING_TABLE.name=-
+astralsorcery.journal.DRAWING_TABLE.1.text=-
+astralsorcery.journal.DRAWING_TABLE.3.text=-
+astralsorcery.journal.DRAWING_TABLE.5.text=-
+astralsorcery.journal.DRAWING_TABLE.6.text=-
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.upgrade=Upgrades the altar to the next tier
@@ -255,12 +284,12 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
-entity.astralsorcery.entitystardust.name=Stardust
-entity.astralsorcery.entityaquamarine.name=Aquamarine
-entity.astralsorcery.entitycrystal.name=Crystal
-entity.astralsorcery.entityflare.name=Flare
-entity.astralsorcery.entitystarburst.name=Star Burst
-entity.astralsorcery.entityilluminationspark=Illumination Spark
+entity.EntityStardust.name=Stardust
+entity.EntityAquamarine.name=Aquamarine
+entity.EntityCrystal.name=Crystal
+entity.EntityFlare.name=Flare
+entity.EntityStarburst.name=Star Burst
+entity.EntityIlluminationSpark=Illumination Spark
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -268,7 +297,6 @@ item.itemcraftingcomponent.stardust.name=Stardust
 item.itemcraftingcomponent.glass_lens.name=Glass lens
 item.itemcraftingcomponent.reso_gem.name=Resonating Gem
 item.itemcraftingcomponent.parchment.name=Parchment
-item.itemcraftingcomponent.infused_glass.name=Infused Glass
 
 item.itemconstellationpaper.name=Constellation Paper
 item.itemrockcrystalsimple.name=Rock Crystal
@@ -294,6 +322,8 @@ item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
 item.itemshiftingstar.name=Shifting Star
 item.itemilluminationpowder.name=Illumination Powder
+item.iteminfusedglass.name=Infused Glass
+item.iteminfusedglass.active.name=Engraved Glass
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break

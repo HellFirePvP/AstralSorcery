@@ -44,16 +44,16 @@ public class RegistryConstellations {
     private static void registerEffects() {
         ConstellationMapEffectRegistry.registerMapEffect(discidia, Enchantments.SHARPNESS, MobEffects.STRENGTH).setMaxEnchLevel(6);
         ConstellationMapEffectRegistry.registerMapEffect(armara, Enchantments.PROTECTION, MobEffects.RESISTANCE).setMaxEnchLevel(5);
-        ConstellationMapEffectRegistry.registerMapEffect(vicio, Enchantments.FEATHER_FALLING, MobEffects.SPEED).setMaxEnchLevel(3);
+        ConstellationMapEffectRegistry.registerMapEffect(vicio, Enchantments.FEATHER_FALLING, MobEffects.SPEED).setMaxEnchLevel(5);
         ConstellationMapEffectRegistry.registerMapEffect(aevitas, Enchantments.MENDING, MobEffects.REGENERATION).setMaxEnchLevel(3);
 
         ConstellationMapEffectRegistry.registerMapEffect(lucerna, EnchantmentsAS.enchantmentNightVision, MobEffects.NIGHT_VISION).setMaxEnchLevel(1);
         ConstellationMapEffectRegistry.registerMapEffect(mineralis, Enchantments.EFFICIENCY, MobEffects.HASTE).setMaxEnchLevel(6).setMaxPotionAmplifier(3);
         ConstellationMapEffectRegistry.registerMapEffect(horologium, Enchantments.FORTUNE, MobEffects.HASTE).setMinEnchLevel(4).setMaxEnchLevel(6).setMinPotionAmplifier(5).setMaxPotionAmplifier(8);
         ConstellationMapEffectRegistry.registerMapEffect(octans, Enchantments.RESPIRATION, MobEffects.WATER_BREATHING).setMinEnchLevel(2).setMaxEnchLevel(4).setMinPotionAmplifier(2).setMaxPotionAmplifier(4);
-        ConstellationMapEffectRegistry.registerMapEffect(bootes, Enchantments.SILK_TOUCH, MobEffects.SATURATION).setMaxEnchLevel(1).setMinPotionAmplifier(3).setMaxPotionAmplifier(8);
-
+        ConstellationMapEffectRegistry.registerMapEffect(bootes, Enchantments.SILK_TOUCH, MobEffects.SATURATION).setMaxEnchLevel(1).setMinPotionAmplifier(2).setMaxPotionAmplifier(5);
         ConstellationMapEffectRegistry.registerMapEffect(fornax, Enchantments.FIRE_ASPECT, MobEffects.FIRE_RESISTANCE).setMaxEnchLevel(3).setMaxPotionAmplifier(0);
+
         ConstellationMapEffectRegistry.registerMapEffect(gelu, Enchantments.FROST_WALKER, MobEffects.RESISTANCE).setMaxPotionAmplifier(1);
         ConstellationMapEffectRegistry.registerMapEffect(ulteria, Enchantments.UNBREAKING, MobEffects.ABSORPTION).setMaxEnchLevel(4).setMaxPotionAmplifier(4);
         ConstellationMapEffectRegistry.registerMapEffect(alcara, Enchantments.POWER, MobEffects.JUMP_BOOST).setMaxEnchLevel(4).setMaxEnchLevel(6).setMaxPotionAmplifier(1);
@@ -72,9 +72,9 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(horologium);
         ConstellationRegistry.registerConstellation(octans);
         ConstellationRegistry.registerConstellation(bootes);
+        ConstellationRegistry.registerConstellation(fornax);
 
         //Minor
-        ConstellationRegistry.registerConstellation(fornax);
         ConstellationRegistry.registerConstellation(gelu);
         ConstellationRegistry.registerConstellation(ulteria);
         ConstellationRegistry.registerConstellation(alcara);

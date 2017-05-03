@@ -402,7 +402,7 @@ public class StructureAncientShrine extends StructureBlockArray {
             public void onPlace(IBlockAccess access, BlockPos at, TileEntity te) {
                     if(te instanceof TileCollectorCrystal) {
                     ((TileCollectorCrystal) te).onPlace(
-                            MiscUtils.getRandomEntry(ConstellationRegistry.getWeakConstellations(), STATIC_RAND),
+                            MiscUtils.getRandomEntry(ConstellationRegistry.getMajorConstellations(), STATIC_RAND),
                             CrystalProperties.getMaxRockProperties(), false,
                             BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
                 }

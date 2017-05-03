@@ -12,13 +12,17 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
@@ -45,11 +49,14 @@ import java.util.Random;
  */
 public class BlockFlareLight extends Block {
 
+    public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum.<EnumDyeColor>create("color", EnumDyeColor.class);
+
     public BlockFlareLight() {
         super(RegistryItems.materialTransparentReplaceable, MapColor.QUARTZ);
         setLightLevel(1F);
         setBlockUnbreakable();
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+        setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.YELLOW));
     }
 
     @Override
@@ -76,6 +83,21 @@ public class BlockFlareLight extends Block {
     }
 
     @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(COLOR).getMetadata();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(COLOR, EnumDyeColor.byMetadata(meta));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, COLOR);
+    }
+
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }
@@ -86,7 +108,8 @@ public class BlockFlareLight extends Block {
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5).gravity(0.004);
         p.offset(rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
         p.scale(0.4F + rand.nextFloat() * 0.1F).setAlphaMultiplier(0.75F);
-        p.motion(0, rand.nextFloat() * 0.02F, 0).setColor(new Color(0xFFEB00));
+        p.motion(0, rand.nextFloat() * 0.02F, 0).setMaxAge(50 + rand.nextInt(20));
+        p.setColor(MiscUtils.flareColorFromDye(stateIn.getValue(COLOR)));
         if(rand.nextBoolean()) {
             p = EffectHelper.genericFlareParticle(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5).gravity(0.004);
             p.offset(rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1), rand.nextFloat() * 0.02 * (rand.nextBoolean() ? 1 : -1));

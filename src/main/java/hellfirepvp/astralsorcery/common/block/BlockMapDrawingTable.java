@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.ItemInfusedGlass;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
@@ -26,7 +27,11 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.PotionTypes;
+import net.minecraft.item.ItemBook;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -122,25 +127,13 @@ public class BlockMapDrawingTable extends BlockContainer {
                 } else {
                     if(!held.isEmpty()) {
                         if(held.getItem() instanceof ItemCraftingComponent) {
-                            if(held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
+                            if (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()) {
                                 int remaining = tm.addParchment(held.getCount());
-                                if(remaining < held.getCount()) {
+                                if (remaining < held.getCount()) {
                                     worldIn.playSound(null, pos, Sounds.bookFlip, Sounds.bookFlip.getCategory(), 1F, 1F);
                                     if (!playerIn.isCreative()) {
                                         held.setCount(remaining);
-                                        if(held.getCount() <= 0) {
-                                            playerIn.setHeldItem(hand, ItemStack.EMPTY);
-                                        } else {
-                                            playerIn.setHeldItem(hand, held);
-                                        }
-                                    }
-                                }
-                            } else if(held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()) {
-                                if(tm.getSlotGlassLens().isEmpty()) {
-                                    tm.putGlassLens(held);
-                                    if(!playerIn.isCreative()) {
-                                        held.shrink(1);
-                                        if(held.getCount() <= 0) {
+                                        if (held.getCount() <= 0) {
                                             playerIn.setHeldItem(hand, ItemStack.EMPTY);
                                         } else {
                                             playerIn.setHeldItem(hand, held);
@@ -148,7 +141,29 @@ public class BlockMapDrawingTable extends BlockContainer {
                                     }
                                 }
                             }
-                        } else if(held.isItemEnchantable() && tm.getSlotIn().isEmpty()) {
+                        } else if(held.getItem() instanceof ItemInfusedGlass) {
+                            if (tm.getSlotGlassLens().isEmpty()) {
+                                tm.putGlassLens(held);
+                                if (!playerIn.isCreative()) {
+                                    held.shrink(1);
+                                    if (held.getCount() <= 0) {
+                                        playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                    } else {
+                                        playerIn.setHeldItem(hand, held);
+                                    }
+                                }
+                            }
+                        } else if((held.getItem() instanceof ItemBook || held.isItemEnchantable()) && tm.getSlotIn().isEmpty()) {
+                            tm.putSlotIn(ItemUtils.copyStackWithSize(held, 1));
+                            if(!playerIn.isCreative()) {
+                                held.shrink(1);
+                                if(held.getCount() <= 0) {
+                                    playerIn.setHeldItem(hand, ItemStack.EMPTY);
+                                } else {
+                                    playerIn.setHeldItem(hand, held);
+                                }
+                            }
+                        } else if(held.getItem() instanceof ItemPotion && PotionUtils.getEffectsFromStack(held).isEmpty() && tm.getSlotIn().isEmpty()) {
                             tm.putSlotIn(held);
                             if(!playerIn.isCreative()) {
                                 held.shrink(1);
@@ -167,9 +182,11 @@ public class BlockMapDrawingTable extends BlockContainer {
                 ItemStack held = playerIn.getHeldItem(hand);
                 if (!held.isEmpty()) {
                     if((held.getItem() instanceof ItemCraftingComponent &&
-                            (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta() ||
-                                    held.getItemDamage() == ItemCraftingComponent.MetaType.INFUSED_GLASS.getMeta()))
-                            || held.isItemEnchantable()) {
+                            (held.getItemDamage() == ItemCraftingComponent.MetaType.PARCHMENT.getMeta()))
+                            || held.getItem() instanceof ItemInfusedGlass
+                            || held.isItemEnchantable()
+                            || held.getItem() instanceof ItemBook
+                            || (held.getItem() instanceof ItemPotion && PotionUtils.getEffectsFromStack(held).isEmpty())) {
                         return true;
                     }
                 }

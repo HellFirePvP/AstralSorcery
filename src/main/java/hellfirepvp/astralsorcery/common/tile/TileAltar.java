@@ -376,10 +376,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
 
                 float dstr;
-                if(yLevel > 140) {
+                if(yLevel > 120) {
                     dstr = 1F;
                 } else {
-                    dstr = (yLevel - 40) / 100F;
+                    dstr = (yLevel - 20) / 100F;
                 }
 
                 if(posDistribution == -1) {

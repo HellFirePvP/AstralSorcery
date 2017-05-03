@@ -18,12 +18,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLLog;
-import scala.actors.threadpool.Arrays;
 
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 

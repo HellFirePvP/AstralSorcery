@@ -237,10 +237,10 @@ crystal.attuned=Настроено на
 crystal.trait=Черта
 crystal.collect.type=Собирает свет звезд
 
-entity.astralsorcery.entitystardust.name=Звёздная пыль
-entity.astralsorcery.entityaquamarine.name=Аквамарин
-entity.astralsorcery.entitycrystal.name=Кристалл
-entity.astralsorcery.entityflare.name=Вспышка
+entity.EntityStardust.name=Звёздная пыль
+entity.EntityAquamarine.name=Аквамарин
+entity.EntityCrystal.name=Кристалл
+entity.EntityFlare.name=Вспышка
 
 item.itemcraftingcomponent.aquamarine.name=Аквамарин
 item.itemcraftingcomponent.starmetal_ingot.name=Слиток Звёздного металла
