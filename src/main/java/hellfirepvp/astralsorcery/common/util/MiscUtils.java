@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -219,7 +220,18 @@ public class MiscUtils {
 
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {
         if(player instanceof FakePlayer) return true;
-        if(player.getClass() != EntityPlayerMP.class) return true;
+
+        if(Mods.GALACTICRAFT_CORE.isPresent()) {
+            Class<?> plClass = Mods.getGCPlayerClass();
+            if(plClass != null) {
+                if(player.getClass() != EntityPlayerMP.class && player.getClass() != plClass) return true;
+            } else {
+                if(player.getClass() != EntityPlayerMP.class) return true;
+            }
+        } else {
+            if(player.getClass() != EntityPlayerMP.class) return true;
+        }
+
         if(player.connection == null) return true;
         try {
             player.getPlayerIP().length();
