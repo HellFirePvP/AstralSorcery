@@ -137,7 +137,7 @@ public class TileCollectorCrystal extends TileSourceBase {
                 ctrl.setTicksPerRotation(60);
                 orbitals[i] = ctrl;
             } else {
-                if(ctrl.canRemove() && ctrl.isRemoved()) {
+                if(ctrl.canRemove() || ctrl.isRemoved()) {
                     orbitals[i] = null;
                 }
             }

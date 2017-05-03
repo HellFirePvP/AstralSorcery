@@ -81,7 +81,7 @@ public class TileMapDrawingTable extends TileSkybound {
                                 slotIn = new ItemStack(Items.ENCHANTED_BOOK);
                             }
                             map.tryApplyEnchantments(slotIn);
-                            if(slotGlassLens.attemptDamageItem(2, rand)) {
+                            if(slotGlassLens.attemptDamageItem(1, rand)) {
                                 slotGlassLens.shrink(1);
                                 world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, rand.nextFloat() * 0.5F + 1F, rand.nextFloat() * 0.2F + 0.8F);
                             }
