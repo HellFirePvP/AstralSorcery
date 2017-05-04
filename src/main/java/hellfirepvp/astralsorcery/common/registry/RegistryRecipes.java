@@ -76,7 +76,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rIlluminationWand;
     public static AttunementRecipe rArchitectWand;
     public static AttunementRecipe rExchangeWand;
-    public static ConstellationRecipe rShiftStar;
+    public static AttunementRecipe rShiftStar;
     public static ConstellationRecipe rRitualLink;
     public static DiscoveryRecipe rIlluminationPowder;
     public static CelestialGatewayRecipe rCelestialGateway;
@@ -376,21 +376,21 @@ public class RegistryRecipes {
         rExchangeWand.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(), AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
         rExchangeWand.setPassiveStarlightRequirement(1600);
 
-        rShiftStar = registerConstellationRecipe(new ShapedRecipe(ItemsAS.shiftingStar)
+        rShiftStar = registerAttenuationRecipe(new ShapedRecipe(ItemsAS.shiftingStar)
                 .addPart(ItemsAS.illuminationPowder,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT,
+                        ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                .addPart(BlocksAS.fluidLiquidStarlight,
                         ShapedRecipeSlot.CENTER)
                 .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER));
-        rShiftStar.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(), ConstellationRecipe.ConstellationAtlarSlot.values());
+        rShiftStar.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AttunementRecipe.AttunementAltarSlot.values());
 
         rIlluminationWand = registerConstellationRecipe(new ShapedRecipe(ItemsAS.illuminationWand)
                 .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
