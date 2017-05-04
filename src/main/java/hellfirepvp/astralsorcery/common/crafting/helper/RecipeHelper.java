@@ -189,12 +189,6 @@ public class RecipeHelper {
         public static final int MAX_CRAFT_GRID_WIDTH = 3;
         public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-        protected ItemStack output = null;
-        protected Object[] input = null;
-        protected int width = 0;
-        protected int height = 0;
-        protected boolean mirrored = true;
-
         public ShapedHandleOreRecipe(Block result, Object... recipe) {
             this(new ItemStack(result), recipe);
         }
@@ -205,6 +199,13 @@ public class RecipeHelper {
 
         public ShapedHandleOreRecipe(ItemStack result, Object... recipe) {
             super(result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
+            output = null;
+            input = null;
+            height = 0;
+            width = 0;
+            mirrored = true;
+            //Resetting done.
+
             output = result.copy();
 
             String shape = "";
