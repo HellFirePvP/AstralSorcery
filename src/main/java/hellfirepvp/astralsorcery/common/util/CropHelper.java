@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
@@ -50,6 +51,11 @@ public class CropHelper {
                 return new GrowableReedWrapper(pos);
             }
         }
+        if(state.getBlock().equals(Blocks.CACTUS)) {
+            if(isCactusBase(world, pos)) {
+                return new GrowableCactusWrapper(pos);
+            }
+        }
         if(state.getBlock().equals(Blocks.NETHER_WART)) {
             return new GrowableNetherwartWrapper(pos);
         }
@@ -64,6 +70,9 @@ public class CropHelper {
         if(state.getBlock().equals(Blocks.REEDS) && growable instanceof GrowableReedWrapper) {
             return (GrowableReedWrapper) growable;
         }
+        if(state.getBlock().equals(Blocks.CACTUS) && growable instanceof GrowableCactusWrapper) {
+            return (GrowableCactusWrapper) growable;
+        }
         if(state.getBlock().equals(Blocks.NETHER_WART) && growable instanceof GrowableNetherwartWrapper) {
             return (GrowableNetherwartWrapper) growable;
         }
@@ -75,6 +84,10 @@ public class CropHelper {
 
     private static boolean isReedBase(World world, BlockPos pos) {
         return !world.getBlockState(pos.down()).getBlock().equals(Blocks.REEDS);
+    }
+
+    private static boolean isCactusBase(World world, BlockPos pos) {
+        return !world.getBlockState(pos.down()).getBlock().equals(Blocks.CACTUS);
     }
 
     public static interface GrowablePlant extends CEffectPositionListGen.CEffectGenListEntry {
@@ -218,6 +231,79 @@ public class CropHelper {
         @Override
         public void writeToNBT(NBTTagCompound nbt) {}
 
+    }
+
+    public static class GrowableCactusWrapper implements HarvestablePlant {
+
+        private final BlockPos pos;
+
+        public GrowableCactusWrapper(BlockPos pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public boolean canHarvest(World world) {
+            return world.getBlockState(pos.up()).getBlock().equals(Blocks.CACTUS);
+        }
+
+        @Override
+        public boolean isValid(World world, boolean forceChunkLoad) {
+            if(!forceChunkLoad && !MiscUtils.isChunkLoaded(world, new ChunkPos(pos))) return true; //We stall until it's loaded.
+            return world.getBlockState(pos).getBlock().equals(Blocks.CACTUS);
+        }
+
+        @Override
+        public List<ItemStack> harvestDropsAndReplant(World world, Random rand, int harvestFortune) {
+            List<ItemStack> drops = Lists.newLinkedList();
+            for (int i = 2; i > 0; i--) {
+                BlockPos bp = pos.up(i);
+                IBlockState at = world.getBlockState(bp);
+                if(at.getBlock().equals(Blocks.CACTUS)) {
+                    MiscUtils.breakBlockWithoutPlayer((WorldServer)  world, bp);
+                }
+            }
+            return drops;
+        }
+
+        @Override
+        public boolean canGrow(World world) {
+            BlockPos cache = pos;
+            for (int i = 1; i < 3; i++) {
+                cache = cache.up();
+                if(world.isAirBlock(cache)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean tryGrow(World world, Random rand) {
+            BlockPos cache = pos;
+            for (int i = 1; i < 3; i++) {
+                cache = cache.up();
+                if(world.isAirBlock(cache)) {
+                    if(rand.nextBoolean()) {
+                        world.setBlockState(cache, Blocks.CACTUS.getDefaultState());
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public BlockPos getPos() {
+            return pos;
+        }
+
+        @Override
+        public void readFromNBT(NBTTagCompound nbt) {}
+
+        @Override
+        public void writeToNBT(NBTTagCompound nbt) {}
     }
 
     public static class GrowableReedWrapper implements HarvestablePlant {
