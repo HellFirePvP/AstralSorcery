@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -52,8 +53,19 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
                 pos.getY(),
                 pos.getZ());
         p.setMaxAge(25);
+        switch (rand.nextInt(3)) {
+            case 0:
+                p.setColor(Color.WHITE);
+                break;
+            case 1:
+                p.setColor(new Color(0xFEFF9E));
+                break;
+            case 2:
+                p.setColor(new Color(0xFFE539));
+                break;
+        }
         p.scale(0.1F).gravity(0.004);
-        if(rand.nextInt(3) == 0) {
+        if(rand.nextInt(4) == 0) {
             p = EffectHelper.genericFlareParticle(
                     pos.getX(),
                     pos.getY(),
@@ -62,6 +74,14 @@ public class OrbitalPropertiesIlluminator implements OrbitalEffectController.Orb
                      (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
                      (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
             p.setMaxAge(35);
+            switch (rand.nextInt(2)) {
+                case 0:
+                    p.setColor(new Color(0xFEFF9E));
+                    break;
+                case 1:
+                    p.setColor(new Color(0xFFE539));
+                    break;
+            }
             p.scale(0.15F);
         }
         /*if(rand.nextBoolean()) {

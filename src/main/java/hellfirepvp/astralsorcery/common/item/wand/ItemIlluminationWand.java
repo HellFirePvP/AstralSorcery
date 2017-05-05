@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.wand;
 
+import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
@@ -16,20 +17,29 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,8 +57,40 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        EnumDyeColor color = getConfiguredColor(stack);
+        if(color != null) {
+            tooltip.add(MiscUtils.textFormattingForDye(color) + MiscUtils.capitalizeFirst(I18n.format(color.getUnlocalizedName())));
+            tooltip.add("");
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public boolean shouldReveal(ChargeType ct, ItemStack stack) {
         return ct != ChargeType.PERM;
+    }
+
+    public static void setConfiguredColor(ItemStack stack, EnumDyeColor color) {
+        NBTHelper.getPersistentData(stack).setInteger("color", color.getDyeDamage());
+    }
+
+    @Nullable
+    public static EnumDyeColor getConfiguredColor(ItemStack stack) {
+        NBTTagCompound tag = NBTHelper.getPersistentData(stack);
+        if(tag != null && tag.hasKey("color")) {
+            return EnumDyeColor.byDyeDamage(NBTHelper.getPersistentData(stack).getInteger("color"));
+        }
+        return null;
+    }
+
+    public static IBlockState getPlacingState(ItemStack wand) {
+        EnumDyeColor config = getConfiguredColor(wand);
+        if(config != null) {
+            return BlocksAS.blockVolatileLight.getDefaultState().withProperty(BlockFlareLight.COLOR, config);
+        }
+        return BlocksAS.blockVolatileLight.getDefaultState();
     }
 
     @Override
@@ -59,15 +101,15 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
         }
         if (!worldIn.isRemote) {
             IBlockState at = worldIn.getBlockState(pos);
-            if(playerIn.isSneaking()) {
+            if(!playerIn.isSneaking()) {
                 IBlockState iblockstate = worldIn.getBlockState(pos);
                 Block block = iblockstate.getBlock();
                 if (!block.isReplaceable(worldIn, pos)) {
                     pos = pos.offset(facing);
                 }
-                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, false, facing, null) &&
+                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null) &&
                         drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
-                    if (worldIn.setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState(), 3)) {
+                    if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                         worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                         drainTempCharge(playerIn, Config.illuminationWandUseCost, false);

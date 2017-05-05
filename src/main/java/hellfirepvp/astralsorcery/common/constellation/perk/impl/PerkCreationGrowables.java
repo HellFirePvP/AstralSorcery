@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class PerkCreationGrowables extends ConstellationPerk {
 
-    private static int chanceToBonemeal = 12;
+    private static int chanceToBonemeal = 6;
 
     public PerkCreationGrowables() {
         super("CRE_GROWTH", Target.PLAYER_TICK);
@@ -50,7 +50,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
                 if(plant != null) {
                     if(plant.tryGrow(w, rand)) {
                         pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
-                        addAlignmentCharge(player, 0.7);
+                        addAlignmentCharge(player, 0.4);
                     }
                 } else {
                     IBlockState at = w.getBlockState(pos);
@@ -62,7 +62,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
                     } else*/ if(at.getBlock() instanceof BlockDirt && at.getValue(BlockDirt.VARIANT).equals(BlockDirt.DirtType.DIRT)) {
                         w.setBlockState(pos, Blocks.GRASS.getDefaultState());
                         pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, pos);
-                        addAlignmentCharge(player, 0.5);
+                        addAlignmentCharge(player, 0.2);
                     }
                 }
                 if(pkt != null) {
@@ -79,7 +79,7 @@ public class PerkCreationGrowables extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), 12, 2, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
+        chanceToBonemeal = cfg.getInt(getKey() + "ChanceForBonemeal", getConfigurationSection(), chanceToBonemeal, 2, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random plant near the player gets bonemeal'd");
     }
 
 }

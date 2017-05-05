@@ -279,6 +279,7 @@ public class PlayerProgress {
     }
 
     protected void discoverConstellation(String name) {
+        memorizeConstellation(name);
         if (!knownConstellations.contains(name)) knownConstellations.add(name);
     }
 

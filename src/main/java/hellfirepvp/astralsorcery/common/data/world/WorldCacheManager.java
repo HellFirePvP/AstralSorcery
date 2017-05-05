@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.data.world;
 
+import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.world.data.*;
@@ -50,16 +51,10 @@ public class WorldCacheManager implements ITickHandler {
     public static <T extends CachedWorldData> T getOrLoadData(World world, SaveKey key) {
         CachedWorldData data = getFromCache(world, key);
         if(data != null) return (T) data;
-        try {
-            return (T) loadAndCache(world, key);
-        } catch (IOException e) {
-            AstralSorcery.log.warn("Unable to load WorldData!");
-            AstralSorcery.log.warn("Affected data: Dim=" + world.provider.getDimension() + " key=" + key.identifier);
-            throw new RuntimeException(e);
-        }
+        return (T) loadAndCache(world, key);
     }
 
-    private synchronized static File getDataFile(World world, String key) {
+    private synchronized static DataFileSet getDataFile(World world, String key) {
         if(world.isRemote)
             throw new IllegalArgumentException("Tried to access data structure on clientside. This is a severe implementation error!");
         if(saveDir == null) {
@@ -76,7 +71,7 @@ public class WorldCacheManager implements ITickHandler {
         } else {
             ensureFolder(worldDir);
         }
-        return new File(worldDir, key + ".dat");
+        return new DataFileSet(new File(worldDir, key + ".dat"));
     }
 
     private static void ensureFolder(File f) {
@@ -94,7 +89,7 @@ public class WorldCacheManager implements ITickHandler {
         return dataMap.get(key);
     }
 
-    private static CachedWorldData loadAndCache(World world, SaveKey key) throws IOException {
+    private static CachedWorldData loadAndCache(World world, SaveKey key) {
         CachedWorldData data = getFromCache(world, key);
         if(data != null) return data;
 
@@ -114,29 +109,98 @@ public class WorldCacheManager implements ITickHandler {
         return loaded;
     }
 
-    private static CachedWorldData loadDataFromFile(World world, SaveKey key) throws IOException {
-        File f = getDataFile(world, key.identifier);
-        if (!f.exists()) {
+    private static CachedWorldData loadDataFromFile(World world, SaveKey key) {
+        DataFileSet f = getDataFile(world, key.identifier);
+        if (!f.actualFile.exists() && !f.backupFile.exists()) {
             return key.getNewInstance();
         }
         AstralSorcery.log.info("Load CachedWorldData '" + key.identifier + "' for world " + world.provider.getDimension());
-        //AstralSorcery.log.info("[AstralSorcery] Any error that appears in connection to some load issue may be related to this world.");
-        CachedWorldData data = key.getNewInstance();
-        NBTTagCompound cmp = CompressedStreamTools.read(f);
-        data.readFromNBT(cmp);
+        boolean errored = false;
+        CachedWorldData data = null;
+        try {
+            if(f.actualFile.exists()) {
+                data = attemptLoad(key, f.actualFile);
+            }
+        } catch (Exception exc) {
+            AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its actual save file. Attempting load from backup file.");
+            errored = true;
+        }
+        if(data == null) {
+            try {
+                if(f.backupFile.exists()) {
+                    data = attemptLoad(key, f.backupFile);
+                }
+            } catch (Exception exc) {
+                AstralSorcery.log.info("Loading worlddata '" + key.identifier + "' failed for its backup save file. Creating empty one for current runtime and copying erroneous files to error files.");
+                errored = true;
+            }
+        }
+        if(data == null && errored) {
+            DataFileSet errorSet = f.getErrorFileSet();
+            try {
+                if(f.actualFile.exists()) {
+                    Files.copy(f.actualFile, errorSet.actualFile);
+                    f.actualFile.delete();
+                }
+                if(f.backupFile.exists()) {
+                    Files.copy(f.backupFile, errorSet.backupFile);
+                    f.backupFile.delete();
+                }
+            } catch (Exception e) {
+                AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
+                e.printStackTrace();
+            }
+        }
+        if(data == null) {
+            if(errored) {
+                DataFileSet errorSet = f.getErrorFileSet();
+                try {
+                    if(f.actualFile.exists()) {
+                        Files.copy(f.actualFile, errorSet.actualFile);
+                        f.actualFile.delete();
+                    }
+                    if(f.backupFile.exists()) {
+                        Files.copy(f.backupFile, errorSet.backupFile);
+                        f.backupFile.delete();
+                    }
+                } catch (Exception e) {
+                    AstralSorcery.log.info("Attempting to copy erroneous worlddata '" + key.identifier + "' to its error files failed.");
+                    e.printStackTrace();
+                }
+            }
+            data = key.getNewInstance();
+        }
         AstralSorcery.log.info("Loading of '" + key.identifier + "' for world " + world.provider.getDimension() + " finished.");
         return data;
     }
 
+    private static CachedWorldData attemptLoad(SaveKey key, File f) throws IOException {
+        CachedWorldData data = key.getNewInstance();
+        NBTTagCompound cmp = CompressedStreamTools.read(f);
+        data.readFromNBT(cmp);
+        return data;
+    }
+
     private static void saveDataToFile(World world, CachedWorldData data) throws IOException {
-        File f = getDataFile(world, data.getSaveKey().identifier);
-        if (!f.exists()) {
-            f.getParentFile().mkdirs();
-            f.createNewFile();
+        SaveKey key = data.getSaveKey();
+        DataFileSet f = getDataFile(world, key.identifier);
+        if(!f.actualFile.getParentFile().exists()) {
+            f.actualFile.getParentFile().mkdirs();
+        }
+        if(f.actualFile.exists()) {
+            try {
+                Files.copy(f.actualFile, f.backupFile);
+            } catch (Exception exc) {
+                AstralSorcery.log.info("Copying '" + key.identifier + "' 's actual file to its backup file failed!");
+                exc.printStackTrace();
+            }
+        }
+        if (!f.actualFile.exists()) {
+            f.actualFile.createNewFile();
         }
         NBTTagCompound tag = new NBTTagCompound();
         data.writeToNBT(tag);
-        CompressedStreamTools.write(tag, f);
+        CompressedStreamTools.write(tag, f.actualFile);
     }
 
     @Override
@@ -219,6 +283,22 @@ public class WorldCacheManager implements ITickHandler {
 
             public T provideDataInstance();
 
+        }
+
+    }
+
+    private static class DataFileSet {
+
+        private final File actualFile;
+        private final File backupFile;
+
+        private DataFileSet(File actualFile) {
+            this.actualFile = actualFile;
+            this.backupFile = new File(actualFile.getParent(), actualFile.getName() + ".back");
+        }
+
+        private DataFileSet getErrorFileSet() {
+            return new DataFileSet(new File(actualFile.getParent(), actualFile.getName() + ".error"));
         }
 
     }

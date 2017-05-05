@@ -72,6 +72,7 @@ public class Config {
     public static Integer[] constellationSkyDimWhitelist = new Integer[0];
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static List<String> modidOreGenBlacklist = Lists.newArrayList();
+    public static List<Integer> worldGenDimWhitelist = Lists.newArrayList();
     public static boolean performNetworkIntegrityCheck = false;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
@@ -106,12 +107,10 @@ public class Config {
     }
 
     private static void loadData() {
-        //stopOnIllegalState = latestConfig.getBoolean("stopOnIllegalState", "general", Boolean.TRUE, "If this is set to 'true' the server or client will exit the game with a crash in case it encounters a state that might lead to severe issues but doesn't actually crash the server/client. If this is set to 'false' it will only print a warning in the console.");
-
         giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
-        String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering + constellation handling (and thus starlight collection, ...)");
+        String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
@@ -147,15 +146,32 @@ public class Config {
         constellationPaperRarity = latestConfig.getInt("constellationPaperRarity", "worldgen", 10, 1, 128, "Defines the rarity of the constellation paper item in loot chests.");
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
         respectIdealDistances = latestConfig.getBoolean("respectIdealStructureDistances", "worldgen", respectIdealDistances, "If this is set to true, the world generator will try and spawn structures more evenly distributed by their 'ideal' distance set in their config entries. WARNING: might add additional worldgen time.");
+        String[] dimGenWhitelist = latestConfig.getStringList("worldGenWhitelist", "worldgen", new String[] { "0" }, "the Astral Sorcery-specific worldgen will only run in Dimension ID's listed here.");
 
         enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
 
         fillWhitelistIDs(dimWhitelist);
         fillWeakSkyRenders(weakSkyRenders);
+        fillDimGenWhitelist(dimGenWhitelist);
 
         for (ConfigEntry ce : dynamicConfigEntries) {
             ce.loadFromConfig(latestConfig);
         }
+    }
+
+    private static void fillDimGenWhitelist(String[] dimGenWhitelist) {
+        List<Integer> out = new ArrayList<>();
+        for (String s : dimGenWhitelist) {
+            if(s.isEmpty()) continue;
+            try {
+                out.add(Integer.parseInt(s));
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'worldGenWhitelist': " + s + " is not a number!");
+            }
+        }
+        worldGenDimWhitelist = new ArrayList<>(out.size());
+        worldGenDimWhitelist.addAll(out);
+        Collections.sort(worldGenDimWhitelist);
     }
 
     private static void fillWeakSkyRenders(String[] weakSkyRenders) {

@@ -138,6 +138,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
         List<BlockPos> linked = getLinkedPositions();
         float str = 1F / ((float) linked.size());
+        str *= 0.7F;
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();

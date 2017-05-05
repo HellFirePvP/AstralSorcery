@@ -52,8 +52,6 @@ public class TileIlluminator extends TileSkybound {
     private int ticksUntilNext = 180;
     private boolean playerPlaced = false;
 
-    private Object[] orbitals = new Object[5];
-
     @Override
     public void update() {
         super.update();
@@ -94,23 +92,17 @@ public class TileIlluminator extends TileSkybound {
             p.motion((rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.25F).setColor(Color.WHITE);
-        }
-
-        for (int i = 0; i < orbitals.length; i++) {
-            OrbitalEffectController ctrl = (OrbitalEffectController) orbitals[i];
-            if(ctrl == null) {
-                OrbitalPropertiesIlluminator prop = new OrbitalPropertiesIlluminator(this);
-                ctrl = EffectHandler.getInstance().orbital(prop, null, null);
-                ctrl.setOffset(new Vector3(this).add(0.5, 0.5, 0.5));
-                ctrl.setOrbitRadius(0.3 + rand.nextFloat() * 0.2);
-                ctrl.setOrbitAxis(Vector3.random());
-                ctrl.setTicksPerRotation(50);
-                orbitals[i] = ctrl;
-            } else {
-                if(ctrl.canRemove() && ctrl.isRemoved()) {
-                    orbitals[i] = null;
-                }
+            p.scale(0.25F);
+            switch (rand.nextInt(3)) {
+                case 0:
+                    p.setColor(Color.WHITE);
+                    break;
+                case 1:
+                    p.setColor(new Color(0xFEFF9E));
+                    break;
+                case 2:
+                    p.setColor(new Color(0xFFE539));
+                    break;
             }
         }
     }

@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -45,6 +46,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
+        GlStateManager.color(1F, 1F, 1F,1F);
 
         if(batchDList == -1) {
             batchBlocks();

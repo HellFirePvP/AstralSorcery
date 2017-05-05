@@ -74,9 +74,9 @@ public class ASstarmapper extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float renderParchment, float renderGlass, float f2, float f3, float f4, float f5) {
         this.leg_base4.render(f5);
-        if(f != 0) {
+        if(renderParchment != 0) {
             this.parchment.render(f5);
         }
         this.platform.render(f5);
@@ -87,7 +87,6 @@ public class ASstarmapper extends ModelBase {
         this.leg2.render(f5);
         this.top_fitting1.render(f5);
         this.leg1.render(f5);
-        this.treated_glass.render(f5);
         this.leg3.render(f5);
         this.leg_base1.render(f5);
         this.basin.render(f5);

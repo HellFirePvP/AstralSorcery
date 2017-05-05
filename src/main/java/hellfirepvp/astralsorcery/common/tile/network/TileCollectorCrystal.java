@@ -137,7 +137,7 @@ public class TileCollectorCrystal extends TileSourceBase {
                 ctrl.setTicksPerRotation(60);
                 orbitals[i] = ctrl;
             } else {
-                if(ctrl.canRemove() && ctrl.isRemoved()) {
+                if(ctrl.canRemove() || ctrl.isRemoved()) {
                     orbitals[i] = null;
                 }
             }
@@ -188,7 +188,7 @@ public class TileCollectorCrystal extends TileSourceBase {
         this.type = type;
 
         this.needsUpdate = true;
-        markForUpdate();
+        markDirty();
     }
 
     public void setEnhanced(boolean enhanced) {

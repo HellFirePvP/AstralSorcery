@@ -39,6 +39,8 @@ public class TileCelestialGateway extends TileEntityTick {
     private boolean hasMultiblock = false;
     private boolean doesSeeSky = false;
 
+    private boolean gatewayRegistered = false;
+
     private Object clientSphere = null;
 
     @Override
@@ -55,8 +57,25 @@ public class TileCelestialGateway extends TileEntityTick {
             if((ticksExisted & 15) == 0) {
                 updateMultiblockState(MultiBlockArrays.patternCelestialGateway.matches(world, pos));
             }
+
+            if(gatewayRegistered) {
+                if(!hasMultiblock() || !doesSeeSky()) {
+                    GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                    cache.removePosition(world, pos);
+                    gatewayRegistered = false;
+                }
+            } else {
+                if(hasMultiblock() && doesSeeSky()) {
+                    GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
+                    cache.offerPosition(world, pos);
+                    gatewayRegistered = true;
+                }
+            }
         }
     }
+
+    @Override
+    protected void onFirstTick() {}
 
     private void updateMultiblockState(boolean matches) {
         boolean update = hasMultiblock != matches;
@@ -94,7 +113,7 @@ public class TileCelestialGateway extends TileEntityTick {
     @SideOnly(Side.CLIENT)
     private void setupGatewayUI(boolean preconditionsFulfilled) {
         if(preconditionsFulfilled) {
-            Vector3 sphereVec = new Vector3(pos).add(0.5, 2.62, 0.5);
+            Vector3 sphereVec = new Vector3(pos).add(0.5, 1.62, 0.5);
             if(clientSphere == null) {
                 CompoundEffectSphere sphere = new CompoundGatewayShield(sphereVec.clone(), Vector3.RotAxis.Y_AXIS, 6, 8, 10);
                 sphere.setRemoveIfInvisible(true).setAlphaFadeDistance(4);
@@ -133,7 +152,7 @@ public class TileCelestialGateway extends TileEntityTick {
     @SideOnly(Side.CLIENT)
     private void playFrameParticles() {
         for (int i = 0; i < 2; i++) {
-            Vector3 offset = new Vector3(pos).add(-2, 1, -2);
+            Vector3 offset = new Vector3(pos).add(-2, 0, -2);
             if(rand.nextBoolean()) {
                 offset.add(5 * (rand.nextBoolean() ? 1 : 0), 0, rand.nextFloat() * 5);
             } else {
@@ -155,14 +174,6 @@ public class TileCelestialGateway extends TileEntityTick {
             }
             p.setColor(c);
         }
-    }
-
-    @Override
-    protected void onFirstTick() {
-        if(world.isRemote) return;
-
-        GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
-        cache.offerPosition(world, pos);
     }
 
     @Override

@@ -1,5 +1,20 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockmodel_nothing" }
+        "color=white": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=orange": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=magenta": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=light_blue": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=yellow": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=lime": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=pink": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=gray": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=silver": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=cyan": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=purple": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=blue": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=brown": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=green": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=red": { "model":"astralsorcery:blockmodel_nothing" },
+        "color=black": { "model":"astralsorcery:blockmodel_nothing" }
     }
 }

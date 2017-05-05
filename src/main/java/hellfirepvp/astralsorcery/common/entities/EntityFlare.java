@@ -270,7 +270,7 @@ public class EntityFlare extends EntityFlying {
     @SideOnly(Side.CLIENT)
     private void setupSprite() {
         EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteFlare1, posX, posY, posZ, 0.8F, 2);
-        p.setPositionUpdateFunction((fx, v, m) -> new Vector3(this).addY(this.height / 2));
+        p.setPositionUpdateFunction((fx, v, m) -> new Vector3(this, true).addY(this.height / 2));
         p.setRefreshFunc(() -> !isDead);
         EffectHandler.getInstance().registerFX(p);
         this.texSprite = p;

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import net.minecraft.item.EnumDyeColor;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -16,6 +18,16 @@ package hellfirepvp.astralsorcery.common.util;
  * Date: 26.12.2016 / 18:20
  */
 public class OreDictAlias {
+
+    private static final String[] DYE_COLORS_BY_META = new String[] {
+            "dyeWhite", "dyeOrange", "dyeMagenta", "dyeLightBlue",
+            "dyeYellow", "dyeLime", "dyePink", "dyeGray",
+            "dyeLightGray", "dyeCyan", "dyePurple", "dyeBlue",
+            "dyeBrown", "dyeGreen", "dyeRed", "dyeBlack" };
+
+    public static String getDyeOreDict(EnumDyeColor color) {
+        return DYE_COLORS_BY_META[color.getMetadata()];
+    }
 
     public static String ITEM_ENDERPEARL = "enderpearl";
     public static String ITEM_DIAMOND = "gemDiamond";
@@ -27,6 +39,7 @@ public class OreDictAlias {
     public static String ITEM_STICKS = "stickWood";
     public static String ITEM_GOLD_NUGGET = "nuggetGold";
     public static String ITEM_DYE_PURPLE = "dyePurple";
+    public static String ITEM_DYE_ALL = "dye";
 
     public static String BLOCK_CRAFTING_TABLE = "workbench";
     public static String BLOCK_MARBLE = "stoneMarble";

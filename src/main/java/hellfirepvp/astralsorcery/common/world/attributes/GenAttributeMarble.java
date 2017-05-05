@@ -37,6 +37,8 @@ public class GenAttributeMarble extends WorldGenAttribute {
                 Config.marbleVeinSize);
     }
 
+    //WorldGenMinable has the offset built-in.
+    //shifting it by 8 myself would just shift it 16 in total, not solving the problem.
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world) {
         for (int i = 0; i < Config.marbleAmount; i++) {

@@ -43,6 +43,7 @@ public class ItemsAS {
     public static ItemArchitectWand architectWand;
     public static ItemExchangeWand exchangeWand;
     public static ItemIlluminationPowder illuminationPowder;
+    public static ItemInfusedGlass infusedGlass;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

@@ -9,6 +9,18 @@ jei.category.altar.discovery=Luminous Crafting Table
 jei.category.altar.attunement=Starlight Crafting Altar
 jei.category.altar.constellation=Celestial Altar
 
+potion.potency.1=I
+potion.potency.2=II
+potion.potency.3=III
+potion.potency.4=IV
+potion.potency.5=VI
+potion.potency.6=VI
+potion.potency.7=VII
+potion.potency.8=VIII
+potion.potency.9=IX
+potion.potency.10=X
+potion.as.crafted.name=Stardew
+
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
 misc.journal.info.1=Hover over one of the clusters and zoom in
@@ -134,7 +146,7 @@ astralsorcery.journal.SPEC_RELAY.1.text=Eventhough you found a suitable place wh
 astralsorcery.journal.SPEC_RELAY.4.text=Being placed high up, close to your altar, it will collect and focus starlight if a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many of those close to each other will result into one collecting the others' starlight and will most likely result in much more... §odisappointing§r results..
 
 research.QUICK_CHARGE.name=Alignment Charge
-astralsorcery.journal.QUICK_CHARGE.1.text=Being aligned with at least one constellation, you feel a strong, quick surge of power flowing through your body as you gaze at the sky.<NL>While you don't seem to be able to properly use that white-blue energy arcing around you, you get the sense that a tools, able to properly channel it, may reveal its full potential in very different ways.
+astralsorcery.journal.QUICK_CHARGE.1.text=Being aligned with a constellation, you feel a strong, quick surge of power flowing through your body as you gaze at the sky.<NL>While you don't seem to be able to properly use that white-blue energy arcing around you, you get the sense that a tools, able to properly channel it, may reveal its full potential in very different ways.
 
 research.ILLUMINATOR.name=Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=Recalling the illuminating effects the powder made from glowstone and aquamarine has, you came up with a device that takes advantage of these properties to a massive degree. It drastically amplifies and focuses the sparks emmited by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
@@ -202,7 +214,8 @@ astralsorcery.journal.LINKTOOL.1.text=Recalling the slightly pulling effects aqu
 astralsorcery.journal.LINKTOOL.3.text=The crystal wand created by this fusion of gems seems to bend starlight around it at will, persistently altering the flow of said light.<NL>To select the source of starlight you want to redirect, simply right-click the source. To direct it to a specific location, right-click the other location afterwards. To dissolve the link, right-click the destination location while sneaking. To unselect the source and stop a linking process, change your active item to another item.
 
 research.ILLUMINATION_WAND.name=Illumination Wand
-astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage. Given sufficient charge, right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form. Shift-right-clicking will create a small flare.
+astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out for your own empowering perks, you feel that you could use this internal power of yours also to illuminate the world around you.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air around you, you can reinforce those blocks to withstand almost all kinds of damage.
+astralsorcery.journal.ILLUMINATION_WAND.3.text=Given sufficient charge, shift-right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form.<NL>Right-clicking will create a small yellow flare. Applying a color to the wand by crafting it together with any sort of colored dye will allow for the created flare to keep the color of the dye on the wand.
 
 research.SHIFT_STAR.name=Shifting Star
 astralsorcery.journal.SHIFT_STAR.1.text=Blinded by your discovery and the appeal of the powers an attunement to a constellation grants, you missed out on all the possibilities the other constellations offer that you've discovered now.<NL>You quickly come up with an idea to dissipate your current powers into your surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy left your body.
@@ -234,6 +247,24 @@ research.PED_ACCEL.name=Ritual Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal you've set up is nice and all, but it seems a bit slow and its need to have a view to the sky in order for it to focus and disperse its constellation's starlight makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation the central focus crystal that's required to run it, you could provide that as a more focused beam of light with the crystal lenses you designed.
 astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that you've seen on the lightwell. Luckily, due to your design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern and you're sure that placing crystal lenses on those places and linking it back onto the ritual pedestal will yield an even stronger effect. Now you only have to be careful not to break your precious crystal by doing so...
 
+research.CELESTIAL_GATEWAY.name=Celestial Gateway
+astralsorcery.journal.CELESTIAL_GATEWAY.1.text=The endless stars above form intricate constellations that guide all things. For eons the world has drawn upon them for references in navigation and direction, finding the morrow by the nights stars. It seems the stars acted as a guide for the crystal makers long ago, but in a much more literal sense.<NL>By focusing illumination and embedding into starlight to surround a rock crystal a base can be built to connect distant locations, even to those in another world.
+astralsorcery.journal.CELESTIAL_GATEWAY.3.text=After constructing a suitable structure to support the gateway and stepping into the center the celestial alignment of all other of these gateways across the world should become evident.<NL>When an individual focuses on a point in the direction desired they will be whisked away as pure starlight and brought to their destination. Once a gateway has linked with a destination the first time, remnant images of that place will remain for future observations.
+
+research.ENHANCED_COLLECTOR.name=Enhanced Collector Crystal
+astralsorcery.journal.ENHANCED_COLLECTOR.1.text=Infusing star metal dust with rock crystal created a superior collector crystal that is able to grow much larger and more stable than most other collectors. Still, the collection of starlight wanes greatly with the passing of the night. There may be a way to further stabilize and even out the collective properties of this new crystal by constructing a specialized platform and surrounding it in liquid starlight to continually adjust the crystals resonance. This should not only even the ebb and flow of starlight throughout the day, but strengthen it overall.
+
+research.SPECTRAL_LENS.name=Spectral Lens
+astralsorcery.journal.SPECTRAL_LENS.1.text=Starlight transmission seems to be paramount to powering all the rituals, lenses and effects emanating from the starlight source. Working under and open sky affords freedom of movement and transmission but becomes impractical in some situations where working behind closed doors or underground is more ideal. By infusing illumination powder with star metal dust and using resonating gems as a regulator it is possible to create a starlight transmission that phases through any amount of solid matter in its path at the cost of some of the light's potency.
+
+research.DRAWING_TABLE.name=Stellar Refraction Table
+astralsorcery.journal.DRAWING_TABLE.1.text=Further research into the ritual properties of the constellations has led to new design. A table can now be created that can accommodate all of the known constellations and through a series of refraction, focus that light into a central working area to imbue their power as enchantments that may potentially exceed all other known levels of enchanting.
+astralsorcery.journal.DRAWING_TABLE.2.text=The table seems to be able to work with up to three different constellations at once before the overlapping luminescence begins to create too much light pollution. Additionally, the table seems to require the deep cover of night to work best, eliminating other sources of interfering light from the sky.<NL>The placement of the constellations seems to have great impact as to their dominance in the final pattern. The few overlapping points from each constellation, the stronger their presence will be in the final drawing.
+astralsorcery.journal.DRAWING_TABLE.4.text=Reinforcing paper with aquamarine's ability to absorb starlight has allowed the creation specialized parchment that should be able to retain the constellation placement on the table.<NL>A specialized type of glass that is able to hold the enchanting properties of the constellation will be required. Building on the altered nature of colored lenses and further joining star metal and resonating gems a glass can be made that is both strong enough and receptive enough to transfer the starlight enchantments.
+astralsorcery.journal.DRAWING_TABLE.6.text=By placing the paper and infused glass on the table and directing the placement of the constellations on the paper, a new interconnected master constellation is created on the page.<NL>Too much light interference as dawn or dusk approaches increased the chance the parchment will be unable to handle such raw energy and burn. Once all three constellations have been placed onto the paper without burning the pattern will become etched into infused glass.
+astralsorcery.journal.DRAWING_TABLE.7.text=The final enchantment step involves directing the new pattern of constellations onto something usable. A book should certainly be able to retain the enchantments as would most armors and weapons as appropriate to what is granted by the constellations.
+astralsorcery.journal.DRAWING_TABLE.8.text=Lastly it should also be possible to bottle these enchantments. By placing a water bottle, mundane, thick or awkward potion into the table the starlight can coalesce into pure stardew.<NL>It seems likely that creating potions and books in this manner has a chance of damaging the glass, enchanting directly is almost guaranteed to damage it as well.
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.upgrade=Upgrades the altar to the next tier
@@ -255,12 +286,12 @@ crystal.attuned=Tuned to
 crystal.trait=Trait of
 crystal.collect.type=Collects starlight from
 
-entity.astralsorcery.entitystardust.name=Stardust
-entity.astralsorcery.entityaquamarine.name=Aquamarine
-entity.astralsorcery.entitycrystal.name=Crystal
-entity.astralsorcery.entityflare.name=Flare
-entity.astralsorcery.entitystarburst.name=Star Burst
-entity.astralsorcery.entityilluminationspark=Illumination Spark
+entity.EntityStardust.name=Stardust
+entity.EntityAquamarine.name=Aquamarine
+entity.EntityCrystal.name=Crystal
+entity.EntityFlare.name=Flare
+entity.EntityStarburst.name=Star Burst
+entity.EntityIlluminationSpark=Illumination Spark
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
@@ -293,6 +324,8 @@ item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
 item.itemshiftingstar.name=Shifting Star
 item.itemilluminationpowder.name=Illumination Powder
+item.iteminfusedglass.name=Infused Glass
+item.iteminfusedglass.active.name=Engraved Glass
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break
@@ -337,6 +370,7 @@ tile.blockmarble.chiseled.name=Chiseled Marble
 tile.blockmarble.arch.name=Marble Arch
 tile.blockmarble.runed.name=Runed Marble
 tile.blockmarble.engraved.name=Engraved Marble
+tile.blockmarblestairs.name=Marble Stairs
 tile.blockprism.name=PrismLens
 tile.blocklens.name=Lens
 tile.blockcelestialcrystals.name=Celestial Crystal Cluster
@@ -349,6 +383,8 @@ tile.blockstarlightinfuser.name=Starlight Infuser
 tile.blocktreebeacon.name=Tree Beacon
 tile.blockrituallink.name=Ritual Anchor
 tile.blocktranslucentblock.name=Translucent Block
+tile.blockmapdrawingtable.name=Stellar Refraction Table
+tile.blockcelestialgateway.name=Celestial Gateway
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive
