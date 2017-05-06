@@ -9,16 +9,15 @@ jei.category.altar.discovery=Luminous Crafting Table
 jei.category.altar.attunement=Starlight Crafting Altar
 jei.category.altar.constellation=Celestial Altar
 
-potion.potency.1=I
-potion.potency.2=II
-potion.potency.3=III
-potion.potency.4=IV
+potion.potency.1=II
+potion.potency.2=III
+potion.potency.3=IV
+potion.potency.4=V
 potion.potency.5=VI
-potion.potency.6=VI
-potion.potency.7=VII
-potion.potency.8=VIII
-potion.potency.9=IX
-potion.potency.10=X
+potion.potency.6=VII
+potion.potency.7=VIII
+potion.potency.8=IX
+potion.potency.9=X
 potion.as.crafted.name=Stardew
 
 misc.moreInformation=<Hold SHIFT for more details>
@@ -45,6 +44,7 @@ death.attack.as.stellar=%1$s disintegrated into stardust
 death.attack.as.bleed=%1$s bled to death
 
 enchantment.as.nightvision=Night Vision
+enchantment.as.smelting=Scorching Heat
 
 achievementpage.astralsorcery.name=AstralSorcery
 achievement.astralsorcery.minerockcrystal=Such pure crystals

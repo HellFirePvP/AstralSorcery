@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentNightVision;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentScorchingHeat;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.enchantmentNightVision;
+import static hellfirepvp.astralsorcery.common.lib.EnchantmentsAS.enchantmentScorchingHeat;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,6 +35,7 @@ public class RegistryEnchantments {
 
     public static void init() {
         enchantmentNightVision = register(new EnchantmentNightVision());
+        enchantmentScorchingHeat = register(new EnchantmentScorchingHeat());
     }
 
     private static <T extends Enchantment> T register(T e) {

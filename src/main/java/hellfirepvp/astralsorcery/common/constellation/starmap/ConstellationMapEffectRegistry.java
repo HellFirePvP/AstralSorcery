@@ -13,8 +13,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.potion.Potion;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,50 +27,62 @@ public class ConstellationMapEffectRegistry {
     private static Map<IConstellation, MapEffect> effectRegistry = new HashMap<>();
 
     @Nullable
-    public static MapEffect getEffects(IConstellation c) {
+    static MapEffect getEffects(IConstellation c) {
         return effectRegistry.get(c);
     }
 
-    public static MapEffect registerMapEffect(IConstellation c, Enchantment e, Potion p) {
-        MapEffect me = new MapEffect(e, p);
+    public static MapEffect registerMapEffect(IConstellation c, Collection<EnchantmentMapEffect> enchantmentEffects, Collection<PotionMapEffect> potionEffects) {
+        MapEffect me = new MapEffect(enchantmentEffects, potionEffects);
         effectRegistry.put(c, me);
         return me;
     }
 
     public static class MapEffect {
 
-        public final Enchantment ench;
-        public final Potion potion;
-        public int minEnchLevel, maxEnchLevel;
-        public int minPotionAmplifier, maxPotionAmplifier;
+        public final Collection<EnchantmentMapEffect> enchantmentEffects;
+        public final Collection<PotionMapEffect> potionEffects;
 
-        public MapEffect(Enchantment ench, Potion potion) {
-            this.ench = ench;
+        private MapEffect(Collection<EnchantmentMapEffect> enchantments, Collection<PotionMapEffect> potions) {
+            this.enchantmentEffects = Collections.unmodifiableCollection(enchantments);
+            this.potionEffects = Collections.unmodifiableCollection(potions);
+        }
+
+    }
+
+    public static class PotionMapEffect {
+
+        public final Potion potion;
+        public final int minPotionAmplifier, maxPotionAmplifier;
+
+        public PotionMapEffect(Potion potion) {
             this.potion = potion;
-            this.maxEnchLevel = ench.getMaxLevel();
-            this.minEnchLevel = ench.getMinLevel();
             this.minPotionAmplifier = 0;
             this.maxPotionAmplifier = 2;
         }
 
-        public MapEffect setMaxEnchLevel(int maxEnchLevel) {
-            this.maxEnchLevel = maxEnchLevel;
-            return this;
+        public PotionMapEffect(Potion potion, int min, int max) {
+            this.potion = potion;
+            this.minPotionAmplifier = min;
+            this.maxPotionAmplifier = max;
         }
 
-        public MapEffect setMinEnchLevel(int minEnchLevel) {
-            this.minEnchLevel = minEnchLevel;
-            return this;
+    }
+
+    public static class EnchantmentMapEffect {
+
+        public final Enchantment ench;
+        public final int minEnchLevel, maxEnchLevel;
+
+        public EnchantmentMapEffect(Enchantment ench) {
+            this.ench = ench;
+            this.maxEnchLevel = ench.getMaxLevel();
+            this.minEnchLevel = ench.getMinLevel();
         }
 
-        public MapEffect setMaxPotionAmplifier(int maxPotionAmplifier) {
-            this.maxPotionAmplifier = maxPotionAmplifier;
-            return this;
-        }
-
-        public MapEffect setMinPotionAmplifier(int minPotionAmplifier) {
-            this.minPotionAmplifier = minPotionAmplifier;
-            return this;
+        public EnchantmentMapEffect(Enchantment ench, int min, int max) {
+            this.ench = ench;
+            this.maxEnchLevel = min;
+            this.minEnchLevel = max;
         }
 
     }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.base.GuiTileBase;
@@ -33,6 +34,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -273,6 +275,12 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
 
             if(ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world) <= 1E-4) {
                 dragging = null;
+            }
+        }
+
+        for (Rectangle r : mapRenderedConstellations.keySet()) {
+            if(r.contains(mouseX - guiLeft, mouseY - guiTop)) {
+                tooltip = Lists.newArrayList(I18n.format(mapRenderedConstellations.get(r).getUnlocalizedName()));
             }
         }
 
