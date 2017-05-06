@@ -20,6 +20,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Arrays;
+
+import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.registerMapEffect;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
 /**
@@ -42,21 +45,54 @@ public class RegistryConstellations {
     }
 
     private static void registerEffects() {
-        ConstellationMapEffectRegistry.registerMapEffect(discidia, Enchantments.SHARPNESS, MobEffects.STRENGTH).setMaxEnchLevel(6);
-        ConstellationMapEffectRegistry.registerMapEffect(armara, Enchantments.PROTECTION, MobEffects.RESISTANCE).setMaxEnchLevel(5);
-        ConstellationMapEffectRegistry.registerMapEffect(vicio, Enchantments.FEATHER_FALLING, MobEffects.SPEED).setMaxEnchLevel(5);
-        ConstellationMapEffectRegistry.registerMapEffect(aevitas, Enchantments.MENDING, MobEffects.REGENERATION).setMaxEnchLevel(3);
+        registerMapEffect(discidia,
+                Arrays.asList(
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 7),
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.POWER, 3, 7)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.STRENGTH, 0, 3)));
+        registerMapEffect(armara,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.PROTECTION, 1, 5)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.RESISTANCE)));
+        registerMapEffect(vicio,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 1, 5)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.SPEED, 0, 3)));
+        registerMapEffect(aevitas,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.MENDING, 1, 3)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.REGENERATION, 0, 3)));
 
-        ConstellationMapEffectRegistry.registerMapEffect(lucerna, EnchantmentsAS.enchantmentNightVision, MobEffects.NIGHT_VISION).setMaxEnchLevel(1);
-        ConstellationMapEffectRegistry.registerMapEffect(mineralis, Enchantments.EFFICIENCY, MobEffects.HASTE).setMaxEnchLevel(6).setMaxPotionAmplifier(3);
-        ConstellationMapEffectRegistry.registerMapEffect(horologium, Enchantments.FORTUNE, MobEffects.HASTE).setMinEnchLevel(4).setMaxEnchLevel(6).setMinPotionAmplifier(5).setMaxPotionAmplifier(8);
-        ConstellationMapEffectRegistry.registerMapEffect(octans, Enchantments.RESPIRATION, MobEffects.WATER_BREATHING).setMinEnchLevel(2).setMaxEnchLevel(4).setMinPotionAmplifier(2).setMaxPotionAmplifier(4);
-        ConstellationMapEffectRegistry.registerMapEffect(bootes, Enchantments.SILK_TOUCH, MobEffects.SATURATION).setMaxEnchLevel(1).setMinPotionAmplifier(2).setMaxPotionAmplifier(5);
-        ConstellationMapEffectRegistry.registerMapEffect(fornax, Enchantments.FIRE_ASPECT, MobEffects.FIRE_RESISTANCE).setMaxEnchLevel(3).setMaxPotionAmplifier(0);
+        registerMapEffect(lucerna,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(EnchantmentsAS.enchantmentNightVision, 1, 1)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.NIGHT_VISION)));
+        registerMapEffect(mineralis,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.EFFICIENCY, 1, 6)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.HASTE, 0, 3)));
+        registerMapEffect(horologium,
+                Arrays.asList(
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.FORTUNE, 4, 6),
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.LOOTING, 3, 5)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.HASTE, 5, 8)));
+        registerMapEffect(octans,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.RESPIRATION, 2, 4)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.WATER_BREATHING, 2, 4)));
+        registerMapEffect(bootes,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.SATURATION, 2, 5)));
+        registerMapEffect(fornax,
+                Arrays.asList(
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.FIRE_ASPECT, 1, 3),
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.FLAME, 1, 2),
+                        new ConstellationMapEffectRegistry.EnchantmentMapEffect(EnchantmentsAS.enchantmentScorchingHeat, 1, 1)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0)));
 
-        ConstellationMapEffectRegistry.registerMapEffect(gelu, Enchantments.FROST_WALKER, MobEffects.RESISTANCE).setMaxPotionAmplifier(1);
-        ConstellationMapEffectRegistry.registerMapEffect(ulteria, Enchantments.UNBREAKING, MobEffects.ABSORPTION).setMaxEnchLevel(4).setMaxPotionAmplifier(4);
-        ConstellationMapEffectRegistry.registerMapEffect(alcara, Enchantments.POWER, MobEffects.JUMP_BOOST).setMaxEnchLevel(4).setMaxEnchLevel(6).setMaxPotionAmplifier(1);
+        registerMapEffect(gelu,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.FROST_WALKER)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.RESISTANCE, 1, 2)));
+        registerMapEffect(ulteria,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.UNBREAKING, 1, 4)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.ABSORPTION, 0, 4)));
+        registerMapEffect(alcara,
+                Arrays.asList(new ConstellationMapEffectRegistry.EnchantmentMapEffect(Enchantments.DEPTH_STRIDER, 1, 4)),
+                Arrays.asList(new ConstellationMapEffectRegistry.PotionMapEffect(MobEffects.JUMP_BOOST, 0, 2)));
     }
 
     private static void registerConstellations() {

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -321,7 +322,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         RenderConstellation.BrightnessFunction func = new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
-                return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), pTicks, 5 + r.nextInt(15));
+                return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + r.nextInt(15));
             }
         };
 
@@ -392,7 +393,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         for (StarPosition stars : usedStars) {
             r.setSeed(stars.seed);
             GL11.glPushMatrix();
-            float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
+            float brightness = 0.3F + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
             brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
             brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
             GL11.glColor4f(brightness, brightness, brightness, brightness);
@@ -430,7 +431,7 @@ public class GuiHandTelescope extends GuiWHScreen {
                 rectangles = RenderConstellation.renderConstellationIntoGUI(
                         topFound,
                         offsetX + wPart + MathHelper.floor((diffYaw / sFactor) * width),
-                        offsetY + hPart + MathHelper.floor((diffPitch / sFactor) * height),
+                        offsetY + hPart + MathHelper.floor((diffPitch / sFactor) *  height),
                         zLevel,
                         width - (((int) (wPart * 1.5F))),
                         height - (((int) (hPart * 1.5F))),
@@ -438,7 +439,7 @@ public class GuiHandTelescope extends GuiWHScreen {
                         new RenderConstellation.BrightnessFunction() {
                             @Override
                             public float getBrightness() {
-                                return (0.3F + 0.7F * RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + r.nextInt(15))) * transparency;
+                                return (0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency;
                             }
                         },
                         ResearchManager.clientProgress.hasConstellationDiscovered(topFound.getUnlocalizedName()),

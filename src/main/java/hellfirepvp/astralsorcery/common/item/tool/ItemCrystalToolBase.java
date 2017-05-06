@@ -117,7 +117,7 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
                 double purity = ((double) prop.getPurity()) / 100D;
                 for (int j = 0; j < 3; j++) {
                     if(purity <= rand.nextFloat()) {
-                        if(rand.nextInt(3) == 0) prop.damageCutting();
+                        if(rand.nextInt(15) == 0) prop.damageCutting();
                     }
                 }
             }

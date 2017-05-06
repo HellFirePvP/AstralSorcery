@@ -251,7 +251,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
             for (int i = 0; i < 72 + r.nextInt(144); i++) {
                 float innerOffsetX = starSize + r.nextInt(MathHelper.floor(guiWidth  - starSize));
                 float innerOffsetY = starSize + r.nextInt(MathHelper.floor(guiHeight - starSize));
-                float brightness = 0.3F + (RenderConstellation.stdFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
+                float brightness = 0.3F + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
                 brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
                 GL11.glColor4f(brightness, brightness, brightness, brightness);
                 drawRectDetailed(guiLeft + innerOffsetX - starSize, guiTop + innerOffsetY - starSize, starSize * 2, starSize * 2);
@@ -279,7 +279,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
                             new RenderConstellation.BrightnessFunction() {
                                 @Override
                                 public float getBrightness() {
-                                    return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), partialTicks, 5 + r.nextInt(15));
+                                    return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15));
                                 }
                             },
                             ResearchManager.clientProgress.hasConstellationDiscovered(entry.getValue().getUnlocalizedName()),
@@ -320,7 +320,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
         RenderConstellation.BrightnessFunction func = new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
-                return RenderConstellation.conCFlicker(Minecraft.getMinecraft().world.getWorldTime(), pTicks, 5 + r.nextInt(15));
+                return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + r.nextInt(15));
             }
         };
 

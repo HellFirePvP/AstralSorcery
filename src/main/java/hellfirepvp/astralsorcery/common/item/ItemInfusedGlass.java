@@ -5,7 +5,10 @@ import hellfirepvp.astralsorcery.common.constellation.starmap.ActiveStarMap;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,9 +35,34 @@ public class ItemInfusedGlass extends Item {
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
+    //isEnchantable in 1.11.2 - that's also a better name for this method...
     @Override
     public boolean isItemTool(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return 15;
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return false;
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        if(damage < getDamage(stack)) return;
+        int lvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        if(lvl > 0) {
+            for (int i = 0; i < lvl; i++) {
+                if(itemRand.nextFloat() > 0.7) {
+                    return;
+                }
+            }
+        }
+        super.setDamage(stack, damage);
     }
 
     @Override

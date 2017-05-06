@@ -123,9 +123,13 @@ public class EntityStarburst extends EntityThrowable {
             for (Vector3 pos : MiscUtils.getCirclePositions(
                     new Vector3(this),
                     new Vector3(motionX, motionY, motionZ),
-                    1F, 15 + rand.nextInt(14))) {
+                    1F, 25 + rand.nextInt(14))) {
                 particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ()).gravity(0.004);
                 particle.scale(0.4F).setAlphaMultiplier(0.5F);
+                particle.motion(
+                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
+                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F,
+                        rand.nextFloat() * 0.02F - rand.nextFloat() * 0.04F);
                 switch (rand.nextInt(3)) {
                     case 0:
                         particle.setColor(Color.WHITE);
