@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.util.AirBlockRenderWorld;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -20,7 +21,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -71,7 +74,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     }
 
     private static void batchBlocks() {
-        World w = Minecraft.getMinecraft().world;
+        IBlockAccess iba = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
         batchDList = GLAllocation.generateDisplayLists(1);
         GL11.glEnable(GL11.GL_BLEND);
         Blending.ADDITIVEDARK.apply();
@@ -80,7 +83,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         VertexBuffer vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (TranslucentBlockState tbs : blocks) {
-            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tbs.state, tbs.pos, w, vb);
+            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tbs.state, tbs.pos, iba, vb);
         }
         tes.draw();
         GL11.glEndList();

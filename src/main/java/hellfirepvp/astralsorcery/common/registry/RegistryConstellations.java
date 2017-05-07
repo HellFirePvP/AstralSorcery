@@ -271,11 +271,11 @@ public class RegistryConstellations {
         bootes.addConnection(sl5, sl6);
 
         fornax = new ConstellationBase.Weak("fornax");
-        sl1 = fornax.addStar(3, 20);
-        sl2 = fornax.addStar(13, 23);
-        sl3 = fornax.addStar(27, 16);
-        sl4 = fornax.addStar(10, 13);
-        sl5 = fornax.addStar(15, 11);
+        sl1 = fornax.addStar(4, 20);
+        sl2 = fornax.addStar(14, 23);
+        sl3 = fornax.addStar(28, 16);
+        sl4 = fornax.addStar(12, 13);
+        sl5 = fornax.addStar(16, 11);
 
         fornax.addConnection(sl1, sl2);
         fornax.addConnection(sl2, sl3);

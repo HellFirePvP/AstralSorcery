@@ -40,7 +40,7 @@ public class WellLiquefaction {
     private static Map<ItemStack, LiquefactionEntry> localFallback = new HashMap<>();
 
     public static void init() {
-        registerLiquefaction(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), BlocksAS.fluidLiquidStarlight, 0.2F, 4, new Color(0x00, 0x88, 0xDD));
+        registerLiquefaction(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), BlocksAS.fluidLiquidStarlight, 0.3F, 6, new Color(0x00, 0x88, 0xDD));
         registerLiquefaction(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), BlocksAS.fluidLiquidStarlight, 0.8F, 12, new Color(0x00, 0x88, 0xDD));
         registerLiquefaction(new ItemStack(ItemsAS.tunedCelestialCrystal), BlocksAS.fluidLiquidStarlight, 5F, 70, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
         registerLiquefaction(new ItemStack(ItemsAS.celestialCrystal), BlocksAS.fluidLiquidStarlight, 1.8F, 60, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
