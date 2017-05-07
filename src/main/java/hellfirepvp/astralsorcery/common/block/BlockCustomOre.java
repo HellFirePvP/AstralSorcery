@@ -112,8 +112,10 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
             case ROCK_CRYSTAL:
                 if(world != null && world instanceof World && checkSafety((World) world, pos) && securityCheck((World) world, pos, harvesters.get())) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
-                    if(((World) world).rand.nextBoolean()) {
-                        drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                    for (int i = 0; i < (fortune + 1); i++) {
+                        if(((World) world).rand.nextBoolean()) {
+                            drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
+                        }
                     }
                     if(((World) world).rand.nextBoolean()) {
                         drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
