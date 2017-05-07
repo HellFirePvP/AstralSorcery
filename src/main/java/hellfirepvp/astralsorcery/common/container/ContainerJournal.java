@@ -65,10 +65,10 @@ public class ContainerJournal extends Container {
     }
 
     private void buildSlots(IItemHandler handle) {
-        for (int xx = 0; xx < 9; xx++) {
-            addSlotToContainer(new ConstellationPaperSlot(handle, this,      xx, 8 + xx * 18, 13));
-            addSlotToContainer(new ConstellationPaperSlot(handle, this, 9 +  xx, 8 + xx * 18, 31));
-            addSlotToContainer(new ConstellationPaperSlot(handle, this, 18 + xx, 8 + xx * 18, 49));
+        for (int i = 0; i < 3; i++) {
+            for (int xx = 0; xx < 9; xx++) {
+                addSlotToContainer(new ConstellationPaperSlot(handle, this, (i * 9) + xx,8 + xx * 18, 13 + (i * 18)));
+            }
         }
     }
 
@@ -80,6 +80,14 @@ public class ContainerJournal extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
+
+            if(!itemstack1.isEmpty() && itemstack1.getItem() instanceof ItemConstellationPaper && ItemConstellationPaper.getConstellation(itemstack1) != null) {
+                if(index >= 0 && index < 36) {
+                    if(!this.mergeItemStack(itemstack1, 36, 63, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+            }
 
             if (index >= 0 && index < 27) {
                 if (!this.mergeItemStack(itemstack1, 27, 36, false)) {
