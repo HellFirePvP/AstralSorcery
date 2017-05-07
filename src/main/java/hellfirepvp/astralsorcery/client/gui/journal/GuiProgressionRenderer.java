@@ -248,19 +248,46 @@ public class GuiProgressionRenderer {
         }
 
         if(focusedClusterMouse != null) {
-            String name = focusedClusterMouse.getUnlocalizedName();
-            name = I18n.format(name);
-            TextureHelper.refreshTextureBindState();
-            Point mouse = parentGui.getCurrentMousePoint();
-            GL11.glPushMatrix();
-            GL11.glTranslated(mouse.x, mouse.y - 15, 0);
-            GL11.glScaled(1.4, 1.4, 1.4);
-            FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-            fr.drawStringWithShadow(name, 0, 0, 0xBB5A28FF);
-            GL11.glPopMatrix();
-            GlStateManager.color(1F, 1F, 1F, 1F); //Resetting.
-            GL11.glColor4f(1F, 1F, 1F, 1F);
-            TextureHelper.refreshTextureBindState();
+            ClientJournalMapping.JournalCluster cluster = ClientJournalMapping.getClusterMapping(focusedClusterMouse);
+            if(cluster != null) {
+                double lX = sizeHandler.evRelativePosX(cluster.leftMost );
+                double rX = sizeHandler.evRelativePosX(cluster.rightMost);
+                double lY = sizeHandler.evRelativePosY(cluster.upperMost);
+                double rY = sizeHandler.evRelativePosY(cluster.lowerMost);
+                double scaledLeft = this.mousePointScaled.getScaledPosX() - sizeHandler.widthToBorder;
+                double scaledTop =  this.mousePointScaled.getScaledPosY() - sizeHandler.heightToBorder;
+                double xAdd = lX - scaledLeft;
+                double yAdd = lY - scaledTop;
+                double offsetX = realCoordLowerX + xAdd;
+                double offsetY = realCoordLowerY + yAdd;
+
+                double scale = sizeHandler.getScalingFactor();
+                float br = 1F;
+                if(scale > 8.01) {
+                    br = 0F;
+                } else if (scale >= 6) {
+                    br = (float) (1F - ((scale - 6) / 2));
+                }
+
+                String name = focusedClusterMouse.getUnlocalizedName();
+                name = I18n.format(name);
+                TextureHelper.refreshTextureBindState();
+                GL11.glPushMatrix();
+                GL11.glTranslated(offsetX + ((rX - lX) / 2), offsetY + ((rY - lY) / 3), 0);
+                FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+                int width = fr.getStringWidth(name);
+                GL11.glTranslated(-width / 2, 0, 0);
+                GL11.glScaled(1.4, 1.4, 1.4);
+                int alpha = 0xCC;
+                alpha *= br;
+                alpha = Math.max(alpha, 5);
+                int color = 0x5A28FF | (alpha << 24);
+                fr.drawStringWithShadow(name, 0, 0, color);
+                GL11.glPopMatrix();
+                GlStateManager.color(1F, 1F, 1F, 1F); //Resetting.
+                GL11.glColor4f(1F, 1F, 1F, 1F);
+                TextureHelper.refreshTextureBindState();
+            }
             /*if(clusterText != null && !clusterText.getText().equalsIgnoreCase(name)) {
                 clusterText = null;
             }
