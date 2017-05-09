@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.*;
@@ -42,10 +43,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -462,37 +460,38 @@ public class ClientRenderEventHandler {
         if(obj == null) return;
         if(event.getEntityPlayer().getUniqueID().hashCode() != 1529485240) return;
 
-        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
-        GL11.glPushMatrix();
-        GL11.glTranslated(event.getX(), event.getY(), event.getZ());
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(event.getX(), event.getY(), event.getZ());
         Minecraft.getMinecraft().renderEngine.bindTexture(tex);
         boolean f = event.getEntityPlayer().capabilities.isFlying;
         double ma = f ? 15 : 5;
         double r = (ma * (Math.abs((ClientScheduler.getClientTick() % 80) - 40) / 40D)) +
                 ((65 - ma) * Math.max(0, Math.min(1, new Vector3(event.getEntityPlayer().motionX, 0, event.getEntityPlayer().motionZ).length())));
         float rot = RenderingUtils.interpolateRotation(event.getEntityPlayer().prevRenderYawOffset, event.getEntityPlayer().renderYawOffset, event.getPartialRenderTick());
-        GL11.glRotatef(180.0F - rot, 0.0F, 1.0F, 0.0F);
-        GL11.glScaled(0.07, 0.07, 0.07);
-        GL11.glTranslated(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
+        GlStateManager.rotate(180F - rot, 0F, 1F, 0F);
+        GlStateManager.scale(0.07, 0.07, 0.07);
+        GlStateManager.translate(0, 5.5, 0.7 - (((float) (r / ma)) * (f ? 0.5D : 0.2D)));
         if(dList == -1) {
             dList = GLAllocation.generateDisplayLists(2);
-            GL11.glNewList(dList, GL11.GL_COMPILE);
+            GlStateManager.glNewList(dList, GL11.GL_COMPILE);
             obj.renderOnly(true, "wR");
-            GL11.glEndList();
-            GL11.glNewList(dList + 1, GL11.GL_COMPILE);
+            GlStateManager.glEndList();
+            GlStateManager.glNewList(dList + 1, GL11.GL_COMPILE);
             obj.renderOnly(true, "wL");
-            GL11.glEndList();
+            GlStateManager.glEndList();
         }
-        GL11.glPushMatrix();
-        GL11.glRotated(20D + r, 0, -1, 0);
-        GL11.glCallList(dList);
-        GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        GL11.glRotated(20D + r, 0, 1, 0);
-        GL11.glCallList(dList + 1);
-        GL11.glPopMatrix();
-        GL11.glPopMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate((float) (20.0 + r), 0, -1, 0);
+        GlStateManager.callList(dList);
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate((float) (20.0 + r), 0, 1, 0);
+        GlStateManager.callList(dList + 1);
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     private static class ItemStackHudRenderInstance {

@@ -57,7 +57,7 @@ public class Config {
     public static int ambientFlareChance = 20;
     public static boolean flareKillsBats = true;
 
-    public static boolean shouldChargedToolsRevert = true;
+    public static boolean shouldChargedToolsRevert = false;
     public static int revertStart = 40;
     public static int revertChance = 80;
 
@@ -123,9 +123,9 @@ public class Config {
         architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the architect wand");
         exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the exchange wand");
 
-        shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", true, "If this is set to true, charged crystals tools can revert back to their inert state.");
-        revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", 40, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");
-        revertChance = latestConfig.getInt("chargedCrystalToolsRevertChance", "tools", 80, 1, Integer.MAX_VALUE, "After 'chargedCrystalToolsRevertStart' uses, it will random.nextInt(chance) == 0 try and see if the tool gets reverted to its inert crystal tool.");
+        shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
+        revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");
+        revertChance = latestConfig.getInt("chargedCrystalToolsRevertChance", "tools", revertChance, 1, Integer.MAX_VALUE, "After 'chargedCrystalToolsRevertStart' uses, it will random.nextInt(chance) == 0 try and see if the tool gets reverted to its inert crystal tool.");
 
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");

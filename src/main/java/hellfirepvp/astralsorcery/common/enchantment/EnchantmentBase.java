@@ -10,22 +10,20 @@ package hellfirepvp.astralsorcery.common.enchantment;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: EnchantmentPlayerWornTick
+ * Class: EnchantmentBase
  * Created by HellFirePvP
- * Date: 18.03.2017 / 17:41
+ * Date: 05.05.2017 / 15:05
  */
-public abstract class EnchantmentPlayerWornTick extends EnchantmentBase {
+public class EnchantmentBase extends Enchantment {
 
-    public EnchantmentPlayerWornTick(String name, Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
-        super(name, rarityIn, typeIn, slots);
+    protected EnchantmentBase(String unlocName, Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot... slots) {
+        super(rarityIn, typeIn, slots);
+        setName(unlocName);
     }
-
-    public void onWornTick(boolean isClient, EntityPlayer base, int level) {}
 
 }

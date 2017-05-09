@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.4.0-beta"
+version = "1.4.0"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
@@ -67,7 +67,6 @@ dependencies {
     def ct_version = "3.0.24.82"
 
     deobfCompile "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
-    runtime "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
 
 }
 

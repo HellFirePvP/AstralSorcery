@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentNightVision;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentScorchingHeat;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,5 +21,6 @@ import hellfirepvp.astralsorcery.common.enchantment.EnchantmentNightVision;
 public class EnchantmentsAS {
 
     public static EnchantmentNightVision enchantmentNightVision;
+    public static EnchantmentScorchingHeat enchantmentScorchingHeat;
 
 }

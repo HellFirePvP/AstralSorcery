@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.item.tool.ChargedCrystalToolBase;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -48,11 +50,21 @@ public class InfusionRecipeChargeTool extends BasicInfusionRecipe {
     public ItemStack getOutput(@Nullable TileStarlightInfuser infuser) {
         if (infuser != null) {
             ItemStack in = infuser.getInputStack();
-            if(!in.isEmpty() && in.getItem() instanceof ChargedCrystalToolBase) {
-                ToolCrystalProperties prop = ChargedCrystalToolBase.getToolProperties(in);
-                ItemStack out = output.copy();
-                ChargedCrystalToolBase.applyToolProperties(out, prop);
-                return out;
+            if(!in.isEmpty()) {
+                if(in.getItem() instanceof ChargedCrystalToolBase) {
+                    ToolCrystalProperties prop = ChargedCrystalToolBase.getToolProperties(in);
+                    ItemStack out = output.copy();
+                    ChargedCrystalToolBase.applyToolProperties(out, new ToolCrystalProperties(prop.getSize(), prop.getPurity(), 100));
+                    ChargedCrystalToolBase.removeChargeRevertCounter(out);
+                    return out;
+                }
+                if(in.getItem() instanceof ItemCrystalToolBase || in.getItem() instanceof ItemCrystalSword) {
+                    ToolCrystalProperties prop = in.getItem() instanceof ItemCrystalToolBase ? ItemCrystalToolBase.getToolProperties(in) : ItemCrystalSword.getToolProperties(in);
+                    ItemStack out = output.copy();
+                    prop = new ToolCrystalProperties(prop.getSize(), prop.getPurity(), 100);
+                    ChargedCrystalToolBase.applyToolProperties(out, prop);
+                    return out;
+                }
             }
         }
         ItemStack out = output.copy();

@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class RenderConstellation {
 
+    //TODO sometimes on certain sky positions, completely vertical or completely horizontal lines go invisible due to the crossproduct returning a NAN vec
+
     @SideOnly(Side.CLIENT)
     public static void renderConstellation(IConstellation c, ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
         Tessellator tessellator = Tessellator.getInstance();

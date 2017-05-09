@@ -141,42 +141,49 @@ public class ActiveStarMap {
 
     public boolean tryApplyEnchantments(ItemStack stack) {
         if(stack.isEmpty()) return false;
-        Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> effectMap = new HashMap<>();
+        Map<IConstellation, List<ConstellationMapEffectRegistry.EnchantmentMapEffect>> effectMap = new HashMap<>();
 
         for (IConstellation c : starProportions.keySet()) {
             ConstellationMapEffectRegistry.MapEffect e = ConstellationMapEffectRegistry.getEffects(c);
             if (e != null) {
-                Enchantment ench = e.ench;
-                if ((((stack.getItem() instanceof ItemBook || stack.getItem() instanceof ItemEnchantedBook) && ench.isAllowedOnBooks()) || ench.canApply(stack))) {
-                    effectMap.put(c, e);
+                List<ConstellationMapEffectRegistry.EnchantmentMapEffect> applicable = new LinkedList<>();
+                for (ConstellationMapEffectRegistry.EnchantmentMapEffect enchEffect : e.enchantmentEffects) {
+                    Enchantment ench = enchEffect.ench;
+                    if ((((stack.getItem() instanceof ItemBook || stack.getItem() instanceof ItemEnchantedBook) && ench.isAllowedOnBooks()) || ench.canApply(stack))) {
+                        applicable.add(enchEffect);
+                    }
                 }
+                effectMap.put(c, applicable);
             }
         }
         if (effectMap.isEmpty()) return false;
 
         boolean appliedSomething = false;
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-        lblEnchantments: for (Map.Entry<IConstellation, ConstellationMapEffectRegistry.MapEffect> entry : effectMap.entrySet()) {
-            if (enchantments.containsKey(entry.getValue().ench)) continue;
-            for (Enchantment existing : enchantments.keySet()) {
-                if(!existing.func_191560_c(entry.getValue().ench)) {
-                    continue lblEnchantments;
+
+        lblEnchantments:
+        for (Map.Entry<IConstellation, List<ConstellationMapEffectRegistry.EnchantmentMapEffect>> entry : effectMap.entrySet()) {
+            for (ConstellationMapEffectRegistry.EnchantmentMapEffect effect : entry.getValue()) {
+                if (enchantments.containsKey(effect.ench)) continue;
+                for (Enchantment existing : enchantments.keySet()) {
+                    if(!existing.func_191560_c(effect.ench)) {
+                        continue lblEnchantments;
+                    }
                 }
-            }
 
-            ConstellationMapEffectRegistry.MapEffect me = entry.getValue();
-            Float perc = starProportions.get(entry.getKey());
-            if (perc == null) continue;
+                Float perc = starProportions.get(entry.getKey());
+                if (perc == null) continue;
 
-            float p = MathHelper.clamp(perc, 0F, 1F);
-            int lvl = me.minEnchLevel + Math.round((me.maxEnchLevel - me.minEnchLevel) * p);
-            if(stack.getItem() instanceof ItemEnchantedBook) {
-                ((ItemEnchantedBook) stack.getItem()).addEnchantment(stack, new EnchantmentData(entry.getValue().ench, lvl));
-            } else {
-                stack.addEnchantment(entry.getValue().ench, lvl);
+                float p = MathHelper.clamp(perc, 0F, 1F);
+                int lvl = effect.minEnchLevel + Math.round((effect.maxEnchLevel - effect.minEnchLevel) * p);
+                if(stack.getItem() instanceof ItemEnchantedBook) {
+                    ((ItemEnchantedBook) stack.getItem()).addEnchantment(stack, new EnchantmentData(effect.ench, lvl));
+                } else {
+                    stack.addEnchantment(effect.ench, lvl);
+                }
+                enchantments = EnchantmentHelper.getEnchantments(stack); //Update
+                appliedSomething = true;
             }
-            enchantments = EnchantmentHelper.getEnchantments(stack); //Update
-            appliedSomething = true;
         }
         return appliedSomething;
     }
@@ -188,11 +195,13 @@ public class ActiveStarMap {
         for (IConstellation c : starProportions.keySet()) {
             ConstellationMapEffectRegistry.MapEffect me = ConstellationMapEffectRegistry.getEffects(c);
             if (me != null) {
-                float perc = starProportions.get(c);
-                perc = MathHelper.clamp(perc, 0F, 1F);
-                int amp = me.minPotionAmplifier + Math.round((me.maxPotionAmplifier - me.minPotionAmplifier) * perc);
-                int tDuration = 4 * 1200 + Math.round(rand.nextFloat() * 2 * 1200);
-                applicableEffects.add(new PotionEffect(me.potion, tDuration, amp, false, true));
+                for (ConstellationMapEffectRegistry.PotionMapEffect effect : me.potionEffects) {
+                    float perc = starProportions.get(c);
+                    perc = MathHelper.clamp(perc, 0F, 1F);
+                    int amp = effect.minPotionAmplifier + Math.round((effect.maxPotionAmplifier - effect.minPotionAmplifier) * perc);
+                    int tDuration = 4 * 1200 + Math.round(rand.nextFloat() * 2 * 1200);
+                    applicableEffects.add(new PotionEffect(effect.potion, tDuration, amp, false, true));
+                }
             }
         }
         if (rand.nextInt(30) == 0) {

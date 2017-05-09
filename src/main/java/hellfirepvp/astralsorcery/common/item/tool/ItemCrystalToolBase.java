@@ -113,11 +113,11 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(3) == 0) prop.damageCutting();
+                if(rand.nextInt(40) == 0) prop.damageCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
                 for (int j = 0; j < 3; j++) {
                     if(purity <= rand.nextFloat()) {
-                        if(rand.nextInt(3) == 0) prop.damageCutting();
+                        if(rand.nextInt(40) == 0) prop.damageCutting();
                     }
                 }
             }
