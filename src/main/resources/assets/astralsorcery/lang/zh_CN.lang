@@ -9,6 +9,17 @@ jei.category.altar.discovery=星辉合成台
 jei.category.altar.attunement=星辉祭坛
 jei.category.altar.constellation=天辉祭坛
 
+potion.potency.1=II
+potion.potency.2=III
+potion.potency.3=IV
+potion.potency.4=V
+potion.potency.5=VI
+potion.potency.6=VII
+potion.potency.7=VIII
+potion.potency.8=IX
+potion.potency.9=X
+potion.as.crafted.name=星露
+
 misc.moreInformation=<按住 SHIFT 来查看详细内容>
 misc.craftInformation=§7点击查看合成
 misc.journal.info.1=将鼠标悬停在一个星团上
@@ -33,6 +44,7 @@ death.attack.as.stellar=%1$s崩解成星尘
 death.attack.as.bleed=%1$s出血过多
 
 enchantment.as.nightvision=夜视
+enchantment.as.smelting=灼热
 
 achievementpage.astralsorcery.name=星辉魔法
 achievement.astralsorcery.minerockcrystal=多么纯净的水晶啊！
@@ -202,7 +214,8 @@ astralsorcery.journal.LINKTOOL.1.text=会想起海蓝宝石对星能液的牵引
 astralsorcery.journal.LINKTOOL.3.text=这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。<NL>要想改变星能的方向，只需右键单击源头。然后在右键单击另一个特定的位置。在潜行时右键单击目标位置即会中断链接。只要切换物品栏就会取消选择并停止链接。
 
 research.ILLUMINATION_WAND.name=照明之杖
-astralsorcery.journal.ILLUMINATION_WAND.1.text=你在不断深入研究星力，试图来强化自己时，你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块或空气中，可以强化方块以抵御几乎任何类型的伤害。用体内的星力充能后，右键可将强化方块还原，Shift右键将形成星核。
+astralsorcery.journal.ILLUMINATION_WAND.1.text=你在不断深入研究星力，试图来强化自己时，你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块或在空气中凝聚，可以强化方块以抵御几乎任何类型的伤害。
+astralsorcery.journal.ILLUMINATION_WAND.3.text=当能量足够时，按住shift右键一个方块会将其变为荧光状态或正常状态<NL>右键会生成一个小的黄色的耀斑。通过和任意染料合成会改变法杖及新生成的耀斑的颜色。
 
 research.SHIFT_STAR.name=更替之星
 astralsorcery.journal.SHIFT_STAR.1.text=经研究发现，当你与一个星座共鸣时它将赋予你强大的力量。与此同时你发觉你将无法再获得其他星座的力量。<NL>很快，你找到了解决方法，释放你所有的星力到周围，以便重新与另一个星座共鸣。<NL>不幸的是，使用后因冲击而导致的裂缝将吸光你身上的星力。
@@ -233,6 +246,24 @@ astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色�
 research.PED_ACCEL.name=信标强化
 astralsorcery.journal.PED_ACCEL.1.text=你对信标基座的设定是完全正确的，但它的效率还是很低，或许它需要在星空下来吸收星座的力量减轻负担。<NL>同样，你可以放个水晶石提升吸收星能的效率，水晶透镜也对其有效果。
 astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的压力，如同在聚星缸那样。幸运的是，得益于信标基座的优良设计，水晶石所承受的压力会分散到四周。<NL>其中一些星辉将显现出奇怪的图案，你确信水晶透镜能增强信标基座的效果。你现在需要做的是保护好你的水晶防止它崩碎。
+
+research.CELESTIAL_GATEWAY.name=天体星门
+astralsorcery.journal.CELESTIAL_GATEWAY.1.text=那些由无尽的星星而形成的错综复杂的星座将引导着世间的一切。他们永恒不灭，只要你能在夜空发现星星，你就能根据星座所描绘的星空而确认自己的方位。似乎很久以前这些水晶是参照星星而制作的，这恐怕无法用文件来描述。<NL>通过在水晶石外面涂抹上辉光粉并注入星能，可以形成一个远距离连接的基座，甚至还有突破位面屏障的力量。
+astralsorcery.journal.CELESTIAL_GATEWAY.3.text=在搭建完适合星门的结构并进入其中时，世间的天体星门将与其产生共鸣并变的异常显眼。<NL>当你专注于你的目标方向上的一点时，星辉将充斥你的视野，并将你带到目的地。当星门首次建立连接时，会将附近的地形记录下来以便以后使用。
+
+research.ENHANCED_COLLECTOR.name=强力增幅水晶
+astralsorcery.journal.ENHANCED_COLLECTOR.1.text=用水晶石和星尘制作的强力水晶收集装置比大部分水晶收集装置更强大更稳定。不过，随着夜晚的过去，能使用的星能大大减少。好像可以构建一个环绕星能液的平台来不断的调整水晶的共振频率，以进一步平衡和稳定这种新型水晶聚集星能的力量。这使得星能不再受时间影响而增减，反而还更加强大。
+
+research.SPECTRAL_LENS.name=汇聚透镜
+astralsorcery.journal.SPECTRAL_LENS.1.text=星能的传输深受增幅仪式，透镜和星能源的特殊效果影响。在天空下可以更轻松自如的进行星能的传输，但在幽暗的地下室或密闭空间进行的想法是不切实际的。通过将星尘注入到辉光粉中并用共振宝石进行调和，最终可以使星辉进行透射，当然这是以降低星能为代价的。
+
+research.DRAWING_TABLE.name=恒星映射台
+astralsorcery.journal.DRAWING_TABLE.1.text=对星座的组成特性的深入研究让你产生了新的想法。A table can now be created that can accommodate all of the known constellations and through a series of refraction, focus that light into a central working area to imbue their power as enchantments that may potentially exceed all other known levels of enchanting.
+astralsorcery.journal.DRAWING_TABLE.2.text=The table seems to be able to work with up to three different constellations at once before the overlapping luminescence begins to create too much light pollution. Additionally, the table seems to require the deep cover of night to work best, eliminating other sources of interfering light from the sky.<NL>The placement of the constellations seems to have great impact as to their dominance in the final pattern. The few overlapping points from each constellation, the stronger their presence will be in the final drawing.
+astralsorcery.journal.DRAWING_TABLE.4.text=Reinforcing paper with aquamarine's ability to absorb starlight has allowed the creation specialized parchment that should be able to retain the constellation placement on the table.<NL>A specialized type of glass that is able to hold the enchanting properties of the constellation will be required. Building on the altered nature of colored lenses and further joining star metal and resonating gems a glass can be made that is both strong enough and receptive enough to transfer the starlight enchantments.
+astralsorcery.journal.DRAWING_TABLE.6.text=By placing the paper and infused glass on the table and directing the placement of the constellations on the paper, a new interconnected master constellation is created on the page.<NL>Too much light interference as dawn or dusk approaches increased the chance the parchment will be unable to handle such raw energy and burn. Once all three constellations have been placed onto the paper without burning the pattern will become etched into infused glass.
+astralsorcery.journal.DRAWING_TABLE.7.text=The final enchantment step involves directing the new pattern of constellations onto something usable. A book should certainly be able to retain the enchantments as would most armors and weapons as appropriate to what is granted by the constellations.
+astralsorcery.journal.DRAWING_TABLE.8.text=Lastly it should also be possible to bottle these enchantments. By placing a water bottle, mundane, thick or awkward potion into the table the starlight can coalesce into pure stardew.<NL>It seems likely that creating potions and books in this manner has a chance of damaging the glass, enchanting directly is almost guaranteed to damage it as well.
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -294,6 +325,7 @@ item.itemexchangewand.name=转位之杖
 item.itemshiftingstar.name=更替之星
 item.itemilluminationpowder.name=辉光粉
 item.iteminfusedglass.name=聚能玻璃
+item.iteminfusedglass.active.name=Engraved Glass
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
@@ -351,7 +383,7 @@ tile.blockstarlightinfuser.name=星能聚合器
 tile.blocktreebeacon.name=树之信标
 tile.blockrituallink.name=水晶信标
 tile.blocktranslucentblock.name=半透明方块
-tile.blockmapdrawingtable.name=星图绘制台 //TODO name has changed. See en_US
+tile.blockmapdrawingtable.name=恒星映射台
 tile.blockcelestialgateway.name=天体调谐器
 
 astralsorcery.constellation.discidia=Discidia
