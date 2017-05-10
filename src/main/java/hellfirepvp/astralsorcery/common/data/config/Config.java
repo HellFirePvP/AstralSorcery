@@ -45,6 +45,7 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
     @Sync public static boolean craftingLiqCrystalGrowth = true;
+    @Sync public static boolean craftingLiqCrystalToolGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
 
     public static boolean enableRetroGen = false;
@@ -131,6 +132,7 @@ public class Config {
 
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
+        craftingLiqCrystalToolGrowth = latestConfig.getBoolean("liquidStarlightCrystalToolGrowth", "crafting", craftingLiqCrystalToolGrowth, "Set this to false to disable Crystal Tool growth in liquid starlight");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");

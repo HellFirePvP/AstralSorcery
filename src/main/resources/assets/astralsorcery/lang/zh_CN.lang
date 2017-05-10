@@ -260,7 +260,7 @@ entity.astralsorcery.entityaquamarine.name=海蓝宝石
 entity.astralsorcery.entitycrystal.name=水晶
 entity.astralsorcery.entityflare.name=耀斑
 entity.astralsorcery.entitystarburst.name=星爆
-entity.astralsorcery.entityilluminationspark=荧光火花
+entity.astralsorcery.entityilluminationspark.name=荧光火花
 
 item.ItemCraftingComponent.aquamarine.name=海蓝宝石
 item.ItemCraftingComponent.starmetal_ingot.name=星辉锭

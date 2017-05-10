@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import hellfirepvp.astralsorcery.common.entities.EntityCrystalTool;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
@@ -15,12 +16,15 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -52,6 +56,10 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
         this.attackSpeed = attackSpeed;
     }
 
+    public int getCrystalCount() {
+        return crystalCount;
+    }
+
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         ToolCrystalProperties prop = getToolProperties(stack);
@@ -74,6 +82,21 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     public static void setToolProperties(ItemStack stack, ToolCrystalProperties properties) {
         NBTTagCompound nbt = NBTHelper.getPersistentData(stack);
         properties.writeToNBT(nbt);
+    }
+
+    @Override
+    public boolean hasCustomEntity(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public Entity createEntity(World world, Entity ei, ItemStack itemstack) {
+        EntityCrystalTool newItem = new EntityCrystalTool(ei.world, ei.posX, ei.posY, ei.posZ, itemstack);
+        newItem.motionX = ei.motionX;
+        newItem.motionY = ei.motionY;
+        newItem.motionZ = ei.motionZ;
+        newItem.setPickupDelay(40);
+        return newItem;
     }
 
     @Override
