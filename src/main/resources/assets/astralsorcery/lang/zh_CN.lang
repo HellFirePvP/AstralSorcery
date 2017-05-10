@@ -258,10 +258,10 @@ research.SPECTRAL_LENS.name=汇聚透镜
 astralsorcery.journal.SPECTRAL_LENS.1.text=星能的传输深受增幅仪式，透镜和星能源的特殊效果影响。在天空下可以更轻松自如的进行星能的传输，但在幽暗的地下室或密闭空间进行的想法是不切实际的。通过将星尘注入到辉光粉中并用共振宝石进行调和，最终可以使星辉进行透射，当然这是以降低星能为代价的。
 
 research.DRAWING_TABLE.name=恒星映射台
-astralsorcery.journal.DRAWING_TABLE.1.text=对星座的组成特性的深入研究让你产生了新的想法。A table can now be created that can accommodate all of the known constellations and through a series of refraction, focus that light into a central working area to imbue their power as enchantments that may potentially exceed all other known levels of enchanting.
-astralsorcery.journal.DRAWING_TABLE.2.text=The table seems to be able to work with up to three different constellations at once before the overlapping luminescence begins to create too much light pollution. Additionally, the table seems to require the deep cover of night to work best, eliminating other sources of interfering light from the sky.<NL>The placement of the constellations seems to have great impact as to their dominance in the final pattern. The few overlapping points from each constellation, the stronger their presence will be in the final drawing.
-astralsorcery.journal.DRAWING_TABLE.4.text=Reinforcing paper with aquamarine's ability to absorb starlight has allowed the creation specialized parchment that should be able to retain the constellation placement on the table.<NL>A specialized type of glass that is able to hold the enchanting properties of the constellation will be required. Building on the altered nature of colored lenses and further joining star metal and resonating gems a glass can be made that is both strong enough and receptive enough to transfer the starlight enchantments.
-astralsorcery.journal.DRAWING_TABLE.6.text=By placing the paper and infused glass on the table and directing the placement of the constellations on the paper, a new interconnected master constellation is created on the page.<NL>Too much light interference as dawn or dusk approaches increased the chance the parchment will be unable to handle such raw energy and burn. Once all three constellations have been placed onto the paper without burning the pattern will become etched into infused glass.
+astralsorcery.journal.DRAWING_TABLE.1.text=对星座的组成特性的深入研究让你产生了新的想法。你创建了一个能够映射所有已知星座能量的台子，将星辉聚集在工作区中央，这产生的能量将远超所有已知的能量的强度。
+astralsorcery.journal.DRAWING_TABLE.2.text=在重叠的星辉产生严重的光污染前，这个台子能同时处理多达3个不同的星座。另外，这个台子必须要深夜才能工作，记得消除天空上多余的其他光的干扰源。<NL>星座的放置似乎影响它们在最终图形的主导地位。在映射完成时，星座之间的重叠点会变的更加强大。
+astralsorcery.journal.DRAWING_TABLE.4.text=利用海蓝宝石吸收星辉的能力而专门制作的羊皮纸可以将星座映射到台子上。<NL>这需要一个专门容纳星座的特殊力量的玻璃。基于彩色透镜变化的性质，并进一步加入星辉锭和共振宝石，就做出了既坚固又灵敏的星辉魔能玻璃
+astralsorcery.journal.DRAWING_TABLE.6.text=将羊皮纸和注能玻璃放在桌子上并将星座映射在羊皮纸上，就创建了一个能够扩展的主星座。<NL>黎明与黄昏的光线将导致羊皮纸无法吸收这种原始能量而燃烧，一旦所以3个星座都映射到羊皮纸上且没有起火，那么这个图形将蚀刻在玻璃上。
 astralsorcery.journal.DRAWING_TABLE.7.text=The final enchantment step involves directing the new pattern of constellations onto something usable. A book should certainly be able to retain the enchantments as would most armors and weapons as appropriate to what is granted by the constellations.
 astralsorcery.journal.DRAWING_TABLE.8.text=Lastly it should also be possible to bottle these enchantments. By placing a water bottle, mundane, thick or awkward potion into the table the starlight can coalesce into pure stardew.<NL>It seems likely that creating potions and books in this manner has a chance of damaging the glass, enchanting directly is almost guaranteed to damage it as well.
 
@@ -325,7 +325,7 @@ item.itemexchangewand.name=转位之杖
 item.itemshiftingstar.name=更替之星
 item.itemilluminationpowder.name=辉光粉
 item.iteminfusedglass.name=聚能玻璃
-item.iteminfusedglass.active.name=Engraved Glass
+item.iteminfusedglass.active.name=蚀刻玻璃
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
