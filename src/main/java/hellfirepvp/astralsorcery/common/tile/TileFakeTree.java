@@ -189,6 +189,7 @@ public class TileFakeTree extends TileEntityTick {
 
         @Override
         public void update(TileFakeTree tft) {
+            if(tft.ticksExisted <= 10) return;
             if(player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && tft.fakedState != null) {
                 NonNullList<ItemStack> out = NonNullList.create();
                 harvestAndAppend(tft, out);
