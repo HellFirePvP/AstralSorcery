@@ -294,7 +294,7 @@ entity.EntityCrystal.name=Crystal
 entity.EntityFlare.name=Flare
 entity.EntityStarburst.name=Star Burst
 entity.EntityCrystalTool.name=Crystal Tool
-entity.EntityIlluminationSpark=Illumination Spark
+entity.EntityIlluminationSpark.name=Illumination Spark
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
 item.itemcraftingcomponent.starmetal_ingot.name=Starmetal Ingot
