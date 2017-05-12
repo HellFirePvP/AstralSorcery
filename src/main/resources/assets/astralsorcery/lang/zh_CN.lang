@@ -119,25 +119,26 @@ astralsorcery.journal.GRINDSTONE.1.text=尽管工作台可以使用所有材料�
 astralsorcery.journal.GRINDSTONE.3.text=把水晶石磨成更合适的形状将是一个极为繁琐的过程。时常检查是一个明智的行为，否则一不小心就把水晶磨碎了。
 
 research.TOOLS.name=水晶工具
-astralsorcery.journal.TOOLS.1.text=经过一番仔细的测试后，你发觉纯净的水晶石不像刚挖出来的那样脆弱。用它们制作的工具比其他的材料所制成的普通工具具有更高的耐久。具体来说，它们并不影响日常的活动。水晶工具的属性由合成时的材料决定，例如攻击伤害和挖掘速度。
-astralsorcery.journal.TOOLS.2.text=不幸的是，水晶工具并不完美。尽管它们更不易损坏，但在使用后就不在那么锋利了，这导致攻击伤害变低，挖掘速度变慢等等。可以用砂轮让其焕然一新，但将减少它们的耐久就如同普通的水晶一样。不可能将被砂轮磨损的耐久恢复到刚制作出工具时的大小。
-astralsorcery.journal.TOOLS.3.text=However such artificial growth of crystal tools also results in uncontrolled and deformed crystal growth, and sharpening of tools will be necessary again. It is not possible to increase the stats of a crystal tool above the amounts present when it is newly crafted by grinding it more than normal.
+astralsorcery.journal.TOOLS.1.text=经过一番仔细的检测后，你发觉纯净的水晶石并不像刚挖出来的那样脆弱。用它们制作的工具比其他的材料所制成的普通工具具有更高的耐久。具体来说，它们并不影响日常的活动。水晶工具的属性由合成时的材料决定，例如攻击伤害和挖掘速度。
+astralsorcery.journal.TOOLS.2.text=不幸的是，水晶工具并不完美。尽管它们更不易损坏，但在使用后就不在那么锋利了，这导致攻击伤害变低，挖掘速度变慢等等。可以用砂轮让其焕然一新，但将减少它们的耐久就如同普通的水晶一样。据推测，水晶工具和水晶石在某些方面类似。为了弄回原来的大小，可以将其浸没在星能液中来恢复。
+astralsorcery.journal.TOOLS.3.text=然而这样增长的水晶因变形而无法控制，新工具还需要重新打磨。无论再这么磨，水晶工具的属性不可能超越现有数值。
 
 research.ROCK_CRYSTALS.name=水晶石的属性
-astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的水晶石都是独一无二的。它们的大小，纯度和形状都不同，当然，绝对无法在挖掘出来前知晓它的信息。<NL>虽然目前无法改变水晶石的大小和纯度，但你可以用砂轮把它磨细以改变成更合适的形状。
+astralsorcery.journal.ROCK_CRYSTALS.1.text=几乎每一个新开采的水晶石都是独一无二的。它们的大小，纯度和形状都不同，没有办法在挖出前确认其属性。<NL>虽然目前无法提高水晶石的纯度，但你可以用砂轮把它磨细以改变成更合适的形状。
 
 research.CRYSTAL_GROWTH.name=水晶生长
-astralsorcery.journal.CRYSTAL_GROWTH.1.text=一旦水晶石浸没在这种冰冷怪异的轻质液体中，其中一些液体将会暂时粘附在水晶石上。<NL>进一步观察后，你发现星能液几乎固化在表面了，但很快就再次熔化。也许在液体中浸泡足够长的时间能永久增加它的大小？
+astralsorcery.journal.CRYSTAL_GROWTH.1.text=一旦水晶石浸没在这种冰冷怪异的轻质液体中，其中一些液体将会暂时粘附在水晶石上。<NL>进一步观察后，你发现星能液几乎固化在表面了，但很快就再次熔化，那些临时增加的质量也消失了。如果一个水晶变的更大，那就能用来做更多的物品。也许在液体中浸泡足够长的时间能永久增加它的大小？
 
 research.MARBLETYPES.name=大理石
-astralsorcery.journal.MARBLETYPES.1.text=当你在地表开掘时可以不时的发现一些洁净透亮的大理石。那些古代神殿都是用大理石建成的，它似乎能以一种独特的方式反射并使用星辉中蕴含的能量。某些精雕细砌的大理石能获得更多可利用的星能。
+astralsorcery.journal.MARBLETYPES.1.text=在地下挖矿时会发现一些原生且会反光的大理石。那些古代神殿也是用大理石建成的，它似乎能以一种独特的方式反射并使用星辉中蕴含的能量。如果古代建筑师确认大理石在星辉感应结构中的重要性，那么它就是未来的基石。
 
 research.SOOTYMARBLE.name=熏黑大理石
-astralsorcery.journal.SOOTYMARBLE.1.text=用颜色较深的材料（比如煤）涂覆在大理石的表面能将其先天的反射性质改变成吸收性质。熏黑大理石在白天收集日光和热量，在晚上释放热量。这种新型的大理石的作用将被证明与普通大理石一样重要。
+astralsorcery.journal.SOOTYMARBLE.1.text=用颜色较深的材料（比如煤）涂覆在大理石的表面能将其先天的反射性质反转成吸收性质。熏黑大理石在白天受热吸收日光并在晚上释放。这种新型的大理石的作用将被证明与普通大理石一样重要。
 
 research.ALTAR2.name=星辉祭坛
-astralsorcery.journal.ALTAR2.1.text=星辉祭坛有比星辉合成台更强大的吸收能力，这种能力还能被改进。升级后所附带的组件扩大了合成格的大小。<NL>为了能够使用这些组件，你需要一个由各种大理石组装的大型星能收集结构。
-astralsorcery.journal.ALTAR2.4.text=星辉祭坛与星辉合成台相比不仅具有更大的星能存储量。还具有一个特殊的属性，如果祭坛祭坛周围的结构损坏，摆法不正确或者不完整星能将会变红。<NL>要将星辉合成台升级到星辉祭坛，需要将合成台放置在能直视夜空的结构中心，放好相关物品并使用共鸣之杖激活即可。
+astralsorcery.journal.ALTAR2.1.text=星辉合成台比普通的工作台有着更强的星能聚集能力和星能缓存，就像个升级版。它仍然有改善的空间，可以改造成大型的祭坛，扩展的建筑结构可以获得更多的星能和放置物品，以应对越加庞大的星能需求。<NL>为了能够使用这些组件，当然需要一个由各种大理石组装的大型星能收集结构。
+
+astralsorcery.journal.ALTAR2.4.text=星辉祭坛与星辉合成台相比不仅具有更大的星能存储量。还具有一个特殊的属性，如果祭坛祭坛周围的结构损坏，摆法不正确或者不完整星能将会变红。<NL>要将星辉合成台升级到星辉祭坛，需要将合成台放置在能直视夜空的大理石建筑的结构中心。需要共鸣之杖使用祭坛。
 
 research.WELL.name=聚星缸
 astralsorcery.journal.WELL.1.text=在晚上，海蓝宝石和水晶石表面凝结了一层奇怪的液体。在仔细观察后，你发现这种液体似乎是由星辉中的能量冷凝成的。<NL>一个精心雕琢的大理石盆将更容易收集这种液体。这种液体散发着明亮而纯净的光，看上去感觉非常冷，即使一整桶也几乎感觉不到重量。
