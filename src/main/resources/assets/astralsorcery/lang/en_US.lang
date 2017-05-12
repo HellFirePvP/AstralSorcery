@@ -293,6 +293,7 @@ entity.EntityAquamarine.name=Aquamarine
 entity.EntityCrystal.name=Crystal
 entity.EntityFlare.name=Flare
 entity.EntityStarburst.name=Star Burst
+entity.EntityCrystalTool.name=Crystal Tool
 entity.EntityIlluminationSpark=Illumination Spark
 
 item.itemcraftingcomponent.aquamarine.name=Aquamarine
