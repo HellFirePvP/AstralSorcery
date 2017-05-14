@@ -149,87 +149,84 @@ research.ILLUM_POWDER.name=辉光粉
 astralsorcery.journal.ILLUM_POWDER.1.text=萤石和海蓝宝石在靠近时会产生共振反应。它们之间会生成微小的不断闪烁的火焰般的火花。这些火花能散播到离源头很远的距离。将海蓝宝石打碎后与萤石粉混合就产生了一种有辐射能力的粉尘，它能照亮周围的空间。这种粉末可以用来代替那些简陋的火把。
 
 research.SKY_RESO.name=天波共振器
-astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky with the naked eye, it is nearly impossible to discern the magnitude of starlight  emitted in a given area. However there is empirical evidence based on the starlight crafting altar’s reservoir alone that the  light stars send varies from position to position; the light of one star can overlay with others causing it to either amplify in strength or just vanish entirely.<NL>Altars and other structures that rely on starlight can perform at a higher capacity in an amplified starlight field.
+astralsorcery.journal.SKY_RESO.1.text=用肉眼是无法直接分辨出特定区域的星辉强弱的。然而根据长期使用星辉祭坛内的星能缓存库的经验，星辉的强弱因地而异，当星辉相互重叠时，星能可能增强或减弱。<NL>星辉祭坛以及其他需求星辉的结构在这个强星能区域将有更多的星能缓存。
 
-astralsorcery.journal.SKY_RESO.3.text=通过简单的观测星空来找到这样的位置，既乏味有耗时。<NL>一个能将星能投影到现实的设备将对你有极大助益。你仍然需要寻找合适的地方，但在使用该设备时可以在晚上的地表更容易的找到适合的地方
+astralsorcery.journal.SKY_RESO.3.text=想要通过简单的观测星空或在不同位置查看祭坛的缓存来找到这样的位置，既乏味又低效。<NL>一个能与强星能场进行共振并投影到现实的设备将是最好的解决方案。你仍然需要寻找合适的地方，但在使用该设备时可以在晚上的地表更容易的找到适合的地方。但是，经过初步计算结果说明强星能场比较罕见，其间相距数百到上千米的距离。
 
 research.SPEC_RELAY.name=光波增幅器
-astralsorcery.journal.SPEC_RELAY.1.text=尽管你找到了一个能放大星能的地方，但你总不可能把基地搬过去。无论你是否在意，你仍然需要一定数量的星能来制作其他物品。<NL>或许一个专门收集星能的小型祭坛能解决这个问题。当然，它必须要有个清晰的视野，晚上的效果应该会更好。
-astralsorcery.journal.SPEC_RELAY.4.text=将它安置在祭坛附近的高处并放上透镜，它将收集星能。星能随小火花导向到附近最近的祭坛。<NL>然而在同一位置放置太多聚能祭坛将只有一个会工作。很可能会导致许多§o不可预知的§r结果。
+astralsorcery.journal.SPEC_RELAY.1.text=星辉共振器可以找到强星能场以及可用星能。但问题是不可能把基地搬迁到那附近或让星辉进行远距离传输。随着对古代历史的深入研究，无疑需要大量的星能，必须有个替代品了。
+astralsorcery.journal.SPEC_RELAY.4.text=或许一个专门收集附近星能的小型设备能解决这个问题。当然必须在天空下，晚上可能会有更好的效果。<NL>在增幅器放置在祭坛附近的高处时，放上玻璃透镜就能聚集星辉。星辉会像小火花一样被重定向到附近最近的祭坛。<NL>然而在同一位置放置太多聚能祭坛将只有一个会工作。很可能会导致许多§o不可预知的§r结果。
 
 research.QUICK_CHARGE.name=同调充能
-astralsorcery.journal.QUICK_CHARGE.1.text=首先，与一个星座对应，此时你凝视着天空，能感觉到强大的力量在四肢百骸中流淌。<NL>虽然你无法直接使用身边的蓝白色能量，但你的直觉告诉你可以用些工具以非同寻常的方式来激发它的全部潜力。
+astralsorcery.journal.QUICK_CHARGE.1.text=根据那些已经与至少一个星座进行天体共振的人所汇报，在凝视星空时，感觉到有强大的力量在体内快速激增。<NL>在此期间从体内溢出的蓝白色能量并不容易被身体掌控，但某些工具或许可以引导它们。以此种方式使用的能量可能以非同寻常的方式来展示其威力。
+
 
 research.ILLUMINATOR.name=洞穴照明器
-astralsorcery.journal.ILLUMINATOR.1.text=会想起萤石粉和海蓝宝石所制作的粉末的强大照明效果，你设计了一个能充分利用这种特性的设备。使用水晶石大大加剧了萤石粉和海蓝宝石的反应，并将火花分割成小型的蓝色耀斑而非持续的点亮。这些耀斑能够穿透任何物质还相互排斥，这使得被照亮的区域趋向于均匀分布。
-astralsorcery.journal.ILLUMINATOR.3.text=洞穴照明器会在它下方的黑暗空间中缓慢形成这些耀斑。它的工作范围极大，但工作速度较慢。洞穴照明器也兼容那些因挖矿和建筑而出现的新空间，这使得它深受矿工和建筑师的青睐。<NL>洞穴照明器需要在夜空下才能工作。
+astralsorcery.journal.ILLUMINATOR.1.text=会想起萤石粉和海蓝宝石所制作的粉末的强大照明特性，想要一个大规模利用这些特性的设备不过是时间问题。使用水晶石大大加剧了萤石粉和海蓝宝石的反应，并将火花分割成小型的蓝色耀斑而非持续的点亮。这些耀斑能够穿透任何物质还相互排斥，这使得被照亮的区域趋向于均匀分布。
+astralsorcery.journal.ILLUMINATOR.3.text=洞穴照明器会在它下方的黑暗空间中形成耀斑，这意味着它可以穿透地表就行工作。它的工作范围极大，但工作速度较慢。洞穴照明器也兼容那些因挖矿和建筑而出现的新空间，这使得它深受矿工和建筑师的青睐。<NL>洞穴照明器需要在夜空下才能工作。
 
 research.ATT_PLAYER.name=共鸣之力
-astralsorcery.journal.ATT_PLAYER.1.text=用星辉或者星能液制作的东西的确不错，但你似乎忽略了一些重要的东西。宇宙中有数之不尽的星星，但只有特定星座的星辉才对你有较大的影响。星辉下，你感到身边有许多推力在不断的挤压，还感觉自己变得更强大了。<NL>也许可以放大某个特定星座的星能？亦或者只要收集够强化自身的星能？
-astralsorcery.journal.ATT_PLAYER.2.text=虽然你无法将光线聚集在一个合适的位置，但你可以建立一个大型装置来扩大吸收范围，同时尽可能将星辉引导到中心。<<NL>然而你的共鸣祭坛还不足以聚集够所需的星能，为了应对这个问题，你想起了那些用光波增幅器所制作的星能中继结构。可能对其也有效果。
-astralsorcery.journal.ATT_PLAYER.4.text=如果没有星辉汇聚点是无法与星能进行共鸣的。在结构中心的共鸣祭坛将会作为整个结构的中心来汇聚星辉。<NL>那么，增幅器该如何放置呢？也许星图可以帮你找到你所感兴趣的星座的最适合的位置。<NL>白天的星能似乎不够，晚上试试？
-astralsorcery.journal.ATT_PLAYER.6.text=即使光波增幅器放置在正确的位置，共鸣祭坛仍可能无法工作。这是因为你的目标星座必须在晚上可见。<NL>当一切就绪后，共鸣祭坛与光波增幅器将发出亮蓝色的光并连成星座的样子。正如你所计划的那样，所有星能都汇聚在中心。巨量的星能甚至把祭坛外边的金色点缀物托起到半空。如果你走入星光中会发生什么呢？还是说先扔个水晶石进去看看呢？
+astralsorcery.journal.ATT_PLAYER.1.text=用星辉或者星能液制作的东西的确不错，但你似乎忽略了一些重要的东西。只有特定星座的星辉才对相应的环境以及接触者有明显的影响，那些单独的星星没有任何作用。星辉下，你感到身边有许多推力在不断的挤压，还获得了强大的力量。
+astralsorcery.journal.ATT_PLAYER.2.text=也许可以放大某个特定星座的星能？亦或者只要收集够强化自身的星能？<NL>可以建立一个像祭坛一样的非传统结构来吸收更多的星能。
+astralsorcery.journal.ATT_PLAYER.4.text=然而这种被动吸收需要用光波增幅器将星辉聚集到结构中心。光波增幅器的放置需要仔细考虑，因为它将决定与祭坛进行共鸣的星座。星图可以作为放置增幅器的指示，前提是当晚有此星座，且要拿着星图。<NL>在星能汇聚结构上放好增幅器后，最后放上共鸣祭坛作为聚集中心。
+astralsorcery.journal.ATT_PLAYER.6.text=当一切就绪后，共鸣祭坛与光波增幅器将发出亮蓝色的光并连成星座的样子。正如你所推算的那样，所有星能都汇聚在中心。巨量的星能甚至把祭坛外边的金色点缀物托起到半空。唯一的问题是什么物品可以进行共鸣呢？比如那些水晶石以及水晶工具？如果人体进入其中，能承受吗？
 
 research.ATT_PERKS.name=等级强化
-astralsorcery.journal.ATT_PERKS.1.text=沐浴在浓郁的星辉下，你在天空看到了一个奇怪的图案。你的认知中并没有这种星座的存在。星座似乎变成了其他的图案。这些星星与你近在咫尺。几乎就能抓到它们了。<NL>本能促使你这么做的同时，你看到了一束光，你感觉你变的§o不一样了。
-astralsorcery.journal.ATT_PERKS.2.text=虽然你不能真正的触摸到这些星星，但你真切的感觉到了自身的强大。与此同时，另一颗星星的光聚集在了你身上，在对你进行着潜移默化的影响。<NL>你觉得这种能力能让你更亲和其他的星星。<NL>为了深入研究这种能力，你在书中预留了一个标签进行记录。你应在获得新能力后去看看。
+astralsorcery.journal.ATT_PERKS.1.text=在与一个星座进行共鸣连接后，就无法与其他星座进行连接了。这是正常现象，你能够吸收共鸣的星座的星能，要和另一个星座连接需要重置你与星座间的联系。共鸣后将体会到各方面的好处，比如增加力量，耐力，让你的日常生活更方便。
+astralsorcery.journal.ATT_PERKS.2.text=据报道说晚上所看到的星星与调整的星座松散度有关。这些新的星座有助于增强共鸣现象，对那些共鸣过的人来说是极为有益的。
 
 research.ATT_CRYSTAL.name=水晶共振
-astralsorcery.journal.ATT_CRYSTAL.1.text=就像你与星座进行共鸣一样，水晶石也可以与星座形成共鸣。星座将大大的增强水晶石的力量，并赋予其特殊的属性。<NL>你不知道这样有什么用，但你突然有了个构想，建个能放大其效果的建筑，使其强大到能对周围环境进行物理上的改变。也许你可以用这种特性做其他事呢?
-astralsorcery.journal.ATT_CRYSTAL.2.text=你确信你曾在某些地方看过类似的东西。<NL>不错，就是分布于世界各地的古代神殿内的浮动水晶。它们对星能有着极高的亲和性。虽然你制作的水晶与其还有些差距，但你确信这是通往正确道路的第一步。
+astralsorcery.journal.ATT_CRYSTAL.1.text=就像他们与星座进行共鸣，来增强星座的契合度。水晶石也可以这么做。星座将大大的增强水晶石的力量，并赋予其特殊的属性。<NL>应用后不会立即显现其特性，或许可以用某种方式放大它的能力，甚至有可能对现实世界产生影响。这种聚集特性也可以用于其他方面。
+
+astralsorcery.journal.ATT_CRYSTAL.2.text=这种水晶的特性与记载中的十分相似。<NL>这与分布于世界各地的古代神殿内的浮动水晶非常相似。它们以独特的方式聚集星能。虽然现在人造水晶远逊色于它们，但这是通往正确道路的第一步。
 
 research.INFUSER.name=星能聚合器
 astralsorcery.journal.INFUSER.1.text=星能液所具有的独特性质可以强化其他的固体材料，使其更加有用。海蓝宝石对星能液的反应尤为距离。当它一浸入其中，就立刻开始吸收星能液，并伴有剧烈的闪光与振动。最终，海蓝宝石变成了一个能不间断发射星能脉冲的共振宝石。<NL>然而，该过程并不稳定，并且一旦海蓝宝石离开液体，反应就会中止。
-astralsorcery.journal.INFUSER.3.text=身为出色建筑师的你设计了一个附带星能液的建筑结构。以便于将星能液和普通材料混合，这也同样适用于海蓝宝石的强化。注能的开始方法和祭坛相同。<NL>用星能液一次只能对一样物品进行活化注能。注能时有很小的几率会消耗掉星能液。
+astralsorcery.journal.INFUSER.3.text=专门将星能液和普通材料混合的建筑应该能对海蓝宝石进行永久强化。基于过去的设计，只需微不足道的修改就行。结构中要包含需求的星能液用以注能。注能的开始方法和祭坛相同。<NL>用星能液一次只能对一样物品进行活化注能。注能时有很小的几率会消耗掉星能液。
 
 research.TREEBEACON.name=树之信标
-astralsorcery.journal.TREEBEACON.1.text=共振宝石的特性令你记忆犹新，尤其是对星能液的排斥效应，你想到利用这个特性的方法。<NL>你在树苗生长时注入星能液，只要一长出新的部分就会被共振宝石从树上弹出。你设计了一种树来将星能液均分在附近的树苗里。
-astralsorcery.journal.TREEBEACON.3.text=当然无形中也是有限制存在的：这归咎于它的收获方式，注入星能的树将缓慢的消耗星能液。<NL>另外，过大的树其超出部分无法注入星能液。<NL>如果人工树种被破坏，所有注能树将恢复为普通的树。
+astralsorcery.journal.TREEBEACON.1.text=发现了共振宝石的对星能液的排斥特性，提出该如何利用这个特性的问题？<NL>你设计在树苗生长时注入星能液，只要一长出新的部分就会被共振宝石从树上弹出。由星光感应材料做成的树状结构就像个信标。
+astralsorcery.journal.TREEBEACON.3.text=当然无形中也是有限制存在的：这归咎于它的收获方式，注入星能的树将缓慢的消耗星能液。<NL>另外，过大的树其超出部分无法注入星能液。<NL>如果人工树种被破坏，所有注能树将恢复成普通的树。
 
 research.CHARGED_TOOLS.name=充能水晶工具
-astralsorcery.journal.CHARGED_TOOLS.1.text=体验过星能液对水晶石的再生效果后，你认为也能用类似的方式来修复你的工具。不幸的是，当水晶石被制作成工具时就失去了这个特性。<NL>但也许用你的新发明以及§o大量的§r星能液能达成其他成果？
-astralsorcery.journal.CHARGED_TOOLS.2.text=事实上，在将§l大量的§r星能液注入惰性工具后，它们似乎在与你身后的星空相呼应并发出微弱的光。<NL>用星能液作为淬火剂来活化你的工具，你觉得这会让你的工具有着出乎意料的改变。<NL>然而，这种强化也有可能失败并排出废液。
+astralsorcery.journal.CHARGED_TOOLS.1.text=体验过星能液对水晶石的再生效果后，应该能用类似的方式来修复你的工具。虽然因为用水晶石做的工具让这个过程十分艰难，但也是有可能成功的。不过，正因为是工具，水晶石在星辉中重生后需要重新切割打磨。<NL>但也许用这个新发明以及§o大量的§r星能液能达成其他成果？
+astralsorcery.journal.CHARGED_TOOLS.2.text=事实上，在将§l大量的§r星能液注入惰性工具后，它们似乎在与身后的星空相呼应并发出微弱的光。<NL>用星能液作为淬火剂来活化工具后，似乎有着出乎意料的改变。<NL>然而，这种强化也有可能失败并排出废液。
 
 research.TOOL_WANDS.name=接引之力
-astralsorcery.journal.TOOL_WANDS.1.text=你对星能的使用越加得心应手了，你也应积极的使用星能而不是将其闲置在那看着它增长。<NL>当然，你无法仅靠自身来使用星能，所以为什么不利用新发现的星尘所具有的特性做个辅助工具呢。
-astralsorcery.journal.TOOL_WANDS.3.text=潜行右键选择你想要放置或替换的方块。将直接使用背包内的相应物品。<NL>在使用了一些星能后，你感觉有些虚弱。也许你在使用这些工具时应注意下自身所存的星能，以防止星能不足。
+astralsorcery.journal.TOOL_WANDS.1.text=你对星能的使用越加得心应手了，你也应积极的使用星能而不是将其闲置在那看着它增长。<NL>当然，无法直接从手上发出星能，毕竟共鸣后将有大量的星能存储于体内。用新发现的星尘所具有的特性做个工具来辅助使用吧。
+astralsorcery.journal.TOOL_WANDS.3.text=潜行右键选择想要放置或替换的方块。将直接使用持有者背包内的相应物品。<NL>在使用了一些星能后，使用者将感觉有些虚弱。在使用这类小工具时应注意下自身所存的星能，以防止星能不足。
 
 research.RIT_PEDESTAL.name=信标基座
-astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到能改变世界的力量。但要真正让其生效需要用水晶石作为底座，以便能收集够星能。<NL>在初次尝试后，你发现水晶石会像在聚星缸那样解体。你可以加些星能液来预防水晶石解体。
+astralsorcery.journal.RIT_PEDESTAL.1.text=正如你所怀疑的那样，共鸣水晶石有强大到能改变世界的力量。但要真正让其生效需要用水晶石作为底座，以及一个特殊构造来收集星能。<NL>在初次尝试后，水晶石似乎会像在聚星缸那样解体。可以加些星能液来预防水晶石解体。
 
 research.TELESCOPE.name=天文望远镜
-astralsorcery.journal.TELESCOPE.1.text=手持望远镜虽然使用方便，但一直拿着太累了，使用体验也不好。而且一晚只能观测到一个星座，想发现所有星座不知道要到猴年马月了。<NL>你需要一个支架来固定望远镜。只有这样，你才能更深入的探索深邃的星空，发现更远的星星已及更多的星座。
-astralsorcery.journal.TELESCOPE.3.text=发现星座的方法与手持望远镜一样。使用它能够看到更清晰的星空。<NL>虽然每次只能看到一部分星空。但你可以用左右箭头改变望远镜的方向。远离望远镜或改变其方向将中断星座的绘制。
-astralsorcery.journal.TELESCOPE.4.text=虽然这些新发现的星座似乎离你很远。无法进一步靠近它们，但你仍然可以用水晶来吸收它们的星能。
+astralsorcery.journal.TELESCOPE.1.text=手持望远镜虽然使用方便，但一直拿着太累了，使用体验也不好。而且一晚只能观测到一个星座，想找到所有星座不知道要到猴年马月了。<NL>望远镜将需要一个固定装置。这样一来，应该可以深入天空，寻找更遥远的星星和星座。
+astralsorcery.journal.TELESCOPE.3.text=发现星座的方法与手持望远镜一样。要使用它，必须能够直视夜空。<NL>每次只能看到一部分星空。但可以用左右箭头旋转望远镜的方向来移动视野。远离望远镜或改变其方向将中断星座的绘制。
+astralsorcery.journal.TELESCOPE.4.text=虽然这些新发现的星座比那些明亮的星座更遥远。无法与它们进行联系，但仍然可以用水晶来吸收它们的星辉。
 
 research.ALTAR3.name=天辉祭坛
-astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着比星辉锭更好的特性。直视着星尘，你恍惚间看到了一片大地后面那布满星星的夜空。它有能传输光的特性。<NL>以其为基础可以强化你的祭坛来完成那些令人期待的新发明。
-astralsorcery.journal.ALTAR3.4.text=遗憾的是，受限于你目前的结构，你还无法驾驭升级后的祭坛力量。要满足你对星能的大量需求，需要用一个充分暴露在夜空下的更大的建筑结构。
+astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着比星辉锭更有趣的特性。以静止的物品作为参照物，比如地面，来观察星尘，可以看到一个满是星星的黑暗天空。
+astralsorcery.journal.ALTAR3.4.text=唯一想到的用途是强化星辉祭坛的星辉收集能力。就和以前一样，将海蓝宝石，大理石以及水晶石混合增加额外的星能存储。<NL>不幸的是，目前的大理石结构对星能的利用不高，不适合天辉祭坛。可以扩建周围的结构，并完全在天空下，以增强聚集星辉的能力来进一步发展。
 
 research.LENS.name=水晶透镜
-astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光源的位置可能不太合适，又或者你要到达的目标太远了。<NL>你突然灵光一现，用透镜改变光源的方向并聚集足够的星能以便你随时使用。
+astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光源的位置可能不太合适，又或者距离目的地太远。<NL>突然灵光一现，用透镜改变光源的方向并聚集足够的星能以便随时使用。
 astralsorcery.journal.LENS.3.text=不断改变光线的方向会对其造成损害。而且光线的传播距离有限。<NL>另外，这个能改变星辉方向的透镜的主要部分是由水晶石制成的，它的属性影响着透镜的优劣。纯度太低的水晶石会大大的影响透镜的功效。水晶石越大，制作的透镜越多。
-astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜能接受多个光源但只有一个输出点。无论什么方向的星辉，透镜都能将其折射到正确的位置。星辉的照射路径不得阻挡。
+astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜能接受多个光源但只有一个输出点。无论什么方向的星辉，透镜都能将其折射到正确的位置。为了正确的发射星辉，照射路径不得阻挡。
 
 research.STARLIGHT_NETWORK.name=聚焦星辉
-astralsorcery.journal.STARLIGHT_NETWORK.1.text=闪烁着蓝光的铁矿看起来十分养眼，但这些星能束比它更。<NL>具体来说，正因为这些星能束是从夜空中凝聚而成的，当将其聚焦在使用星能的设备上时，设备会获得更大量的稳定星能。
+astralsorcery.journal.STARLIGHT_NETWORK.1.text=闪烁着蓝光的铁矿看起来十分养眼，但这些星能束比它更有用。<NL>具体来说，正因为这些星能束是由星辉凝聚而成的，许多新发明，仪式，祭坛以及更多需要星能的设备在接受到这些星光束时将受到增益。这样的结构所收集的星能比设备自身吸收的更稳定，更多。
 
 research.LENSES_EFFECTS.name=彩色透镜
 astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能对周围的一切造成广泛的影响。正常情况下，星辉间保持着平衡状态，其光线也是近乎中性的。<NL>你想将星辉中的其他光谱过滤掉，只留下需要的那部分。
-astralsorcery.journal.LENSES_EFFECTS.2.text=将海蓝宝石和其他材料的混合物涂抹在水晶透镜上，最终你做出了彩色水晶透镜。<NL>世界万物皆是平衡的，你获得了星辉的特殊能力的同时，所能使用的星能就减少了。
+astralsorcery.journal.LENSES_EFFECTS.2.text=将海蓝宝石和其他材料的混合物涂抹在水晶透镜上，最终你做出了能发射彩色光束的透镜。<NL>世界万物皆是平衡的，你获得了星辉的特殊能力的同时，所能使用的星能就减少了。
 
 research.RITUAL_LINK.name=稳定仪式
-astralsorcery.journal.RITUAL_LINK.1.text=将星能聚焦到信标基座上可以让水晶与世界的联系更加紧密。不过要保持水晶的有效需要较大的空间来搭建相应的结构。为此，你确定可以用专门的连接石绑定到一定距离的匹配石上，以将仪式效果定位到仪式基座5个方块高度上。
+astralsorcery.journal.RITUAL_LINK.1.text=将星辉聚焦到信标基座上可以让水晶与世界的联系更加紧密。不幸的是，需要一个较大的空间来保证水晶的完整性。为此，你可以用水晶信标将仪式效果重定位，水晶信标在信标基座上方5格高处，可以连接到附近的基石上来确定范围。
 
 research.LINKTOOL.name=链接器
-astralsorcery.journal.LINKTOOL.1.text=会想起海蓝宝石对星能液的牵引作用，将多个宝石和水晶融合可以增强它牵引星辉的能力以便于更好的掌控星能。<NL>如果你的星能不够，恐怕无法将海蓝宝石和水晶石融合。不过，你新升级的祭坛能解决这个问题。<NL>当然，你总不可能直接拿着这种新水晶吧。
-astralsorcery.journal.LINKTOOL.3.text=这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。<NL>要想改变星能的方向，只需右键单击源头。然后在右键单击另一个特定的位置。在潜行时右键单击目标位置即会中断链接。只要切换物品栏就会取消选择并停止链接。
-
-
-
-
-
-
+astralsorcery.journal.LINKTOOL.1.text=回想起海蓝宝石对星能液的牵引作用，将多个宝石和水晶融合可以增强它牵引星辉的能力以便于更好的掌控星能。<NL>如果你的星能不足，水晶石的融合将失败。不过，你新升级的祭坛能解决这个问题。
+astralsorcery.journal.LINKTOOL.3.text=然而直接用手抓着水晶会使其受到污染，还会减低星辉操纵力，因此链接器最好做出魔杖的样子。<NL>这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。
+astralsorcery.journal.LINKTOOL.4.text=要选择星辉源，只需右键单击源头，比如神殿里的浮动水晶。要选定目标，只要右键单击目标的位置。要断开连接，在潜行时右键单击目标位置即会中断链接。要取消选择星辉源并停止连接过程，只要切换物品栏即可。
 
 research.ILLUMINATION_WAND.name=照明之杖
 astralsorcery.journal.ILLUMINATION_WAND.1.text=在不断试图强化星力时，你发现可以用体内的星力来点亮周围的世界。<NL>通过聚集环境中游离的星力，并将其注入方块或在空气中凝聚，可以强化方块以抵御几乎任何类型的伤害。
