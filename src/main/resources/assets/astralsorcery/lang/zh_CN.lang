@@ -94,6 +94,7 @@ astralsorcery.journal.CPAPER.3.text=在进一步观察后你发现，这些卷�
 
 research.WAND.name=共鸣之杖
 astralsorcery.journal.WAND.1.text=当你在分散的古遗址内那奇怪的水晶旁使用合成台时，水晶将聚焦一束光到合成台上。这束光很暗淡，但经研究发现在合成台时它能影响某些材料的密度和延展性。<NL>这解锁了一些正常情况下不可能实现的合成表。但一开始能做的最简单的物品是能和各种星辉识别装置进行交互的基础法杖。
+
 astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特性。在晚上拿着它时，它会颤动着并看似随意的在周围的地表发出一束火花。地表看上去并没有什么特殊的地方。§3也许，§3地底深处有什么东西？§r
 
 research.ORES.name=矿物
