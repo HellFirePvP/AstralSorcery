@@ -310,6 +310,7 @@ entity.EntityStarburst.name=星爆
 entity.EntityIlluminationSpark.name=荧光火花
 entity.EntityCrystalTool.name=水晶工具
 
+
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭
 item.itemcraftingcomponent.stardust.name=星尘

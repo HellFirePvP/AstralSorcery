@@ -207,6 +207,7 @@ public class RegistryResearch {
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
         resLinkTool.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rLinkTool));
         resLinkTool.addPage(getTextPage("LINKTOOL.3"));
+        resLinkTool.addPage(getTextPage("LINKTOOL.4"));
 
         ResearchNode resLens = new ResearchNode(new ItemStack(BlocksAS.lens), "LENS", 0, 4);
         resLens.addPage(getTextPage("LENS.1"));
@@ -384,6 +385,7 @@ public class RegistryResearch {
                 }, "TOOLS", 2, 5);
         resTools.addPage(getTextPage("TOOLS.1"));
         resTools.addPage(getTextPage("TOOLS.2"));
+        resTools.addPage(getTextPage("TOOLS.3"));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolSword));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolPick));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolAxe));
@@ -485,9 +487,10 @@ public class RegistryResearch {
 
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 3);
         resTable.addPage(getTextPage("ALTAR1.1"));
+        resTable.addPage(getTextPage("ALTAR1.2"));
         resTable.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRAltar));
-        resTable.addPage(getTextPage("ALTAR1.3"));
         resTable.addPage(getTextPage("ALTAR1.4"));
+        resTable.addPage(getTextPage("ALTAR1.5"));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), resTable,       1, ResearchProgression.DISCOVERY);
         registerItemLookup(new ItemStack(BlocksAS.blockBlackMarble, 1, OreDictionary.WILDCARD_VALUE),     resSootyMarble, 0, ResearchProgression.DISCOVERY);
