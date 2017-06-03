@@ -39,7 +39,7 @@ public class ItemInfusedGlass extends Item {
 
     public ItemInfusedGlass() {
         setMaxStackSize(1);
-        setMaxDamage(5);
+        setMaxDamage(3);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

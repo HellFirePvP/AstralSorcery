@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import hellfirepvp.astralsorcery.common.data.config.Config;
+
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.LinkedList;

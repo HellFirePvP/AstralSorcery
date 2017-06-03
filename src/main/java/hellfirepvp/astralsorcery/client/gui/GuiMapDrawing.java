@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandl
 import hellfirepvp.astralsorcery.common.constellation.starmap.ActiveStarMap;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemInfusedGlass;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;

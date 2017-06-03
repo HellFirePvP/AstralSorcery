@@ -102,6 +102,18 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();
 
+    public static ItemStack createMaxBaseCrystal() {
+        ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);
+        CrystalProperties.applyCrystalProperties(crystal, CrystalProperties.getMaxRockProperties());
+        return crystal;
+    }
+
+    public static ItemStack createMaxCelestialCrystal() {
+        ItemStack crystal = new ItemStack(ItemsAS.celestialCrystal);
+        CrystalProperties.applyCrystalProperties(crystal, CrystalProperties.getMaxCelestialProperties());
+        return crystal;
+    }
+
     public static ItemStack createRandomBaseCrystal() {
         ItemStack crystal = new ItemStack(ItemsAS.rockCrystal);
         CrystalProperties.applyCrystalProperties(crystal, CrystalProperties.createRandomRock());

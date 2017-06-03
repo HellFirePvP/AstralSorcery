@@ -37,6 +37,7 @@ public abstract class ItemBlockStorage extends Item {
         if(w.getTileEntity(pos) != null) return;
         IBlockState stateToStore = w.getBlockState(pos);
         if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
+        if(stateToStore.getBlockHardness(w, pos) == -1) return;
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
         cmp.setString("storedBlock", stateToStore.getBlock().getRegistryName().toString());
         cmp.setInteger("storedMeta", stateToStore.getBlock().damageDropped(stateToStore));

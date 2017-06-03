@@ -69,10 +69,6 @@ public class MultiblockAltarTrait extends PatternBlockArray {
         addBlock(2, 4, 3, mBrick);
 
         addBlock(0, 0, 0, BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, BlockAltar.AltarType.ALTAR_4));
-
-        for (BlockPos offset : TraitRecipe.offsetRelays) {
-            addBlock(offset, BlocksAS.attunementRelay.getDefaultState());
-        }
     }
 
 }

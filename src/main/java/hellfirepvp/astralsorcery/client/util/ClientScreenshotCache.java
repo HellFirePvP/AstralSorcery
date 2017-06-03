@@ -124,6 +124,7 @@ public class ClientScreenshotCache {
 
         try {
             loadScreenshots(getDirectoryForCurrentContext());
+            AstralSorcery.log.info("Using gateway screenshots for folder '" + addrContext + "'");
         } catch (Exception exc) {
             AstralSorcery.log.info("Couldn't load screenshots from local cache for address " + addrContext);
             exc.printStackTrace();

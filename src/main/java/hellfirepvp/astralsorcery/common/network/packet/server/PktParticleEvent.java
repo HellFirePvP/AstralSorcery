@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -92,12 +93,18 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
             ParticleEventType type = ParticleEventType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
+                triggerClientside(trigger, message);
             }
         } catch (Exception exc) {
             AstralSorcery.log.warn("Error executing ParticleEventType " + message.typeOrdinal + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void triggerClientside(EventAction trigger, PktParticleEvent message) {
+        if(Minecraft.getMinecraft().world == null) return;
+        AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
     }
 
     public Vector3 getVec() {

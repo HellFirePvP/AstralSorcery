@@ -30,8 +30,10 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -251,6 +253,11 @@ public class TileCollectorCrystal extends TileSourceBase {
             compound.setInteger("collectorType", type.ordinal());
         }
         compound.setBoolean("enhanced", enhanced);
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return Block.FULL_BLOCK_AABB.expandXyz(1).offset(getPos());
     }
 
     @Nullable

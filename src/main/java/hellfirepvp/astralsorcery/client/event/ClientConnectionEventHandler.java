@@ -30,11 +30,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -78,9 +81,25 @@ public class ClientConnectionEventHandler {
                 if(is != null) {
                     addr = is.getWorldName();
                 }
+            } else {
+                int id = addr.indexOf('\\');
+                if(id != -1) {
+                    addr = addr.substring(0, MathHelper.clamp(id, 1, addr.length()));
+                }
             }
+            addr = sanitizeFileName(addr);
             ClientScreenshotCache.loadAndInitScreenshotsFor(addr);
         });
+    }
+
+    private String sanitizeFileName(String addr) {
+        addr = addr.trim();
+        addr = addr.replace(' ', '_');
+        addr = addr.toLowerCase();
+        for (char c0 : ChatAllowedCharacters.ILLEGAL_FILE_CHARACTERS) {
+            addr = addr.replace(c0, '_');
+        }
+        return addr;
     }
 
 }
