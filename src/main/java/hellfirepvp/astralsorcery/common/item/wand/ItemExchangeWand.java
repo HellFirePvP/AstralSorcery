@@ -191,6 +191,9 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
         BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, amt, false);
         if(found.isEmpty()) return;
+        if(atOrigin.getBlockHardness(Minecraft.getMinecraft().world, origin) == -1) {
+            return;
+        }
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
@@ -236,15 +239,19 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if(stored.getBlock().equals(atOrigin.getBlock()) && stored.getBlock().getMetaFromState(stored) == atOrigin.getBlock().getMetaFromState(atOrigin)) {
             return EnumActionResult.SUCCESS;
         }
+        IBlockState atState = world.getBlockState(origin);
+        if(atState.getBlockHardness(world, origin) == -1) {
+            return EnumActionResult.SUCCESS;
+        }
 
         int amt = 0;
         if (playerIn.isCreative()) {
             amt = -1;
         } else {
             if(Mods.BOTANIA.isPresent()) {
-                amt = ModIntegrationBotania.getItemCount(playerIn, stack, stored);
+                amt = ModIntegrationBotania.getItemCount(playerIn, consumeStack, stored);
             } else {
-                for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, stack, false)) {
+                for (ItemStack st : ItemUtils.findItemsInPlayerInventory(playerIn, consumeStack, false)) {
                     amt += st.stackSize;
                 }
             }

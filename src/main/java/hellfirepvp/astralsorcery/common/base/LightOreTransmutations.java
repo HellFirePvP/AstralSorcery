@@ -118,6 +118,9 @@ public class LightOreTransmutations {
         for (Transmutation tr : registeredTransmutations) {
             if(tr.input.equals(tryStateIn)) return tr;
         }
+        for (Transmutation tr : mtTransmutations) {
+            if(tr.input.equals(tryStateIn)) return tr;
+        }
         return null;
     }
 

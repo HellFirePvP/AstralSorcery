@@ -188,6 +188,16 @@ public class BlockMapDrawingTable extends BlockContainer {
     }
 
     @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileMapDrawingTable tm = MiscUtils.getTileAt(worldIn, pos, TileMapDrawingTable.class, true);
+        if(tm != null) {
+            tm.dropContents();
+        }
+
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return drawingTableBox;
     }

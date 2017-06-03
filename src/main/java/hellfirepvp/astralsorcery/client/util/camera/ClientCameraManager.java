@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -261,12 +262,13 @@ public class ClientCameraManager implements ITickHandler {
 
     }
 
-    public static abstract class EntityRenderViewReplacement extends EntityPlayer {
+    public static abstract class EntityRenderViewReplacement extends EntityPlayerSP {
 
         private Vector3 cameraFocus = null;
 
         public EntityRenderViewReplacement() {
-            super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().player.getGameProfile());
+            super(Minecraft.getMinecraft(), Minecraft.getMinecraft().world,
+                    Minecraft.getMinecraft().player.connection, Minecraft.getMinecraft().player.getStatFileWriter());
             capabilities.allowFlying = true;
             capabilities.isFlying = true;
         }

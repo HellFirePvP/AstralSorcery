@@ -13,18 +13,23 @@ import hellfirepvp.astralsorcery.client.models.base.ASaltarT2;
 import hellfirepvp.astralsorcery.client.models.base.ASaltarT3;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -70,7 +75,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
             case TRAIT_CRAFT:
                 if(te.getMultiblockState()) {
                     IConstellation c = te.getFocusedConstellation();
-                    if(c != null) {
+                    if (c != null) {
                         GL11.glPushMatrix();
                         float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(te.getWorld());
                         alphaDaytime *= 0.8F;
@@ -83,11 +88,28 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
                         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
 
-                        float br = 0.6F * alphaDaytime;
+                        float br = 0.9F * alphaDaytime;
 
-                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.04, 0.5), 5 + tr, 2, 0.1F + br);
+                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
                         GL11.glPopMatrix();
                     }
+                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(x + 0.5, y + 4, z + 0.5);
+                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.YELLOW, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
+                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
+                    TESRCollectorCrystal.renderCrystal(false, true);
+                    GL11.glPopMatrix();
+                    GL11.glPushMatrix();
+                    SpriteSheetResource ssr = SpriteLibrary.spriteHalo2;
+                    ssr.getResource().bind();
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glDisable(GL11.GL_ALPHA_TEST);
+                    Tuple<Double, Double> uv = ssr.getUVOffset(ClientScheduler.getClientTick());
+                    RenderingUtils.renderAngleRotatedTexturedRect(new Vector3(te).add(0.5, 0.06, 0.5), Vector3.RotAxis.Y_AXIS, 0, 5, uv.key, uv.value, ssr.getULength(), ssr.getVLength(), partialTicks);
+                    TextureHelper.refreshTextureBindState();
+                    GL11.glPopMatrix();
+                    GL11.glPopAttrib();
                 }
                 break;
         }

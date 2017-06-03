@@ -17,6 +17,8 @@ import minetweaker.MineTweakerAPI;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -77,7 +79,7 @@ public class ModIntegrationCrafttweaker {
 
             CraftingAccessManager.compile();
 
-            if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+            if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
                 PacketChannel.CHANNEL.sendToAll(compileRecipeChangePacket());
             }
         }

@@ -81,6 +81,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
 

@@ -76,6 +76,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -360,6 +362,9 @@ public class EventHandlerServer {
     @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         if(event.getWorld().isRemote) return;
+        if (!Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
+            return; //Thanks BuildCraft.
+        }
         BlockPos at = event.getPos();
         WorldNetworkHandler.getNetworkHandler(event.getWorld()).informBlockChange(at);
 

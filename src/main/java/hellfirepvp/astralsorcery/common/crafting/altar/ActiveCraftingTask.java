@@ -58,6 +58,10 @@ public class ActiveCraftingTask {
         return playerCraftingUUID;
     }
 
+    public NBTTagCompound getCraftingData() {
+        return craftingData;
+    }
+
     @Nullable
     public EntityPlayer tryGetCraftingPlayerServer() {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerCraftingUUID);
@@ -66,7 +70,7 @@ public class ActiveCraftingTask {
     //True if the recipe progressed, false if it's stuck
     public boolean tick(TileAltar altar) {
         if(recipeToCraft instanceof ICraftingProgress) {
-            if (((ICraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting)) {
+            if (!((ICraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting)) {
                 return false;
             }
         }
@@ -100,6 +104,7 @@ public class ActiveCraftingTask {
             ActiveCraftingTask task = new ActiveCraftingTask(recipe, uuidCraft);
             task.ticksCrafting = tick;
             task.setState(state);
+            task.craftingData = compound.getCompoundTag("craftingData");
             return task;
         }
     }
@@ -111,6 +116,7 @@ public class ActiveCraftingTask {
         compound.setInteger("recipeTick", getTicksCrafting());
         compound.setUniqueId("crafterUUID", getPlayerCraftingUUID());
         compound.setInteger("craftingState", getState().ordinal());
+        compound.setTag("craftingData", craftingData);
         return compound;
     }
 

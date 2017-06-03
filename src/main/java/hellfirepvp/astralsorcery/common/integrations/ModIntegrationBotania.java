@@ -85,7 +85,7 @@ public class ModIntegrationBotania {
             }
         }
 
-        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(Minecraft.getMinecraft().player.inventory), blockStackStored, false);
+        Collection<ItemStack> stacks = ItemUtils.scanInventoryForMatching(new InvWrapper(requestingPlayer.inventory), blockStackStored, false);
         for (ItemStack stack : stacks) {
             amtFound += stack.stackSize;
         }

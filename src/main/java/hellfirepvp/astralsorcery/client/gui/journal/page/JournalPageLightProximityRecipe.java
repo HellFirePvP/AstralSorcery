@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
 
@@ -149,7 +150,11 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             for (Rectangle rect : thisFrameStackFrames.keySet()) {
                 if(rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
-                    tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                    try {
+                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                    } catch (Throwable tr) {
+                        tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
+                    }
                     RegistryBookLookups.LookupInfo lookup = RegistryBookLookups.tryGetPage(Minecraft.getMinecraft().player, Side.CLIENT, stack);
                     if(lookup != null) {
                         tooltip.add("");

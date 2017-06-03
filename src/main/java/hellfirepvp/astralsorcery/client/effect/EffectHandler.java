@@ -145,6 +145,8 @@ public final class EffectHandler {
         TESRPrismLens.renderColoredPrismsLast();
         float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
+        EffectLightning.renderFast(pTicks, fastRenderLightnings);
         for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
             og.prepareGLContext();
             for (CompoundObjectEffect effect : objects.get(og)) {
@@ -152,17 +154,6 @@ public final class EffectHandler {
             }
             og.revertGLContext();
         }
-
-        if(uiGateway != null) {
-            if(renderGateway) {
-                uiGateway.renderIntoWorld(pTicks);
-            }
-            if(ClientGatewayHandler.focusingEntry != null) {
-                renderGatewayTarget(pTicks);
-            }
-        }
-        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
-        EffectLightning.renderFast(pTicks, fastRenderLightnings);
 
         Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         for (int i = 0; i <= 2; i++) {
@@ -176,6 +167,14 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRMapDrawingTable.renderRemainingGlasses(pTicks);
+        if(uiGateway != null) {
+            if(renderGateway) {
+                uiGateway.renderIntoWorld(pTicks);
+            }
+            if(ClientGatewayHandler.focusingEntry != null) {
+                renderGatewayTarget(pTicks);
+            }
+        }
         TESRTranslucentBlock.renderTranslucentBlocks();
     }
 

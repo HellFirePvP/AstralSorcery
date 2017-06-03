@@ -58,7 +58,7 @@ public class Config {
     public static int ambientFlareChance = 20;
     public static boolean flareKillsBats = true;
 
-    public static boolean shouldChargedToolsRevert = false;
+    public static boolean shouldChargedToolsRevert = true;
     public static int revertStart = 40;
     public static int revertChance = 80;
 

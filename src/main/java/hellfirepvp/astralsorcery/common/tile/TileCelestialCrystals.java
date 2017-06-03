@@ -125,7 +125,7 @@ public class TileCelestialCrystals extends TileSkybound {
         r *= Math.abs(mul);
         r = Math.max(1, r);
 
-        if(world.rand.nextInt(r) == 0) {
+        if(world.rand.nextInt(Math.max(r, 1)) == 0) {
             grow();
         }
     }

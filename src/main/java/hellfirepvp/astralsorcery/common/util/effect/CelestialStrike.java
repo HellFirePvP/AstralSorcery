@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,7 +47,9 @@ public class CelestialStrike {
             livingEntities.remove(except);
         }
 
-        float dmg = 25 + ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 30F;
+        float dmg = 10;
+        dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 20F;
+        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 40F;
         for (EntityLivingBase living : livingEntities) {
             if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
                 float dstPerc = (float) (new Vector3(living).distance(position) / radius);
