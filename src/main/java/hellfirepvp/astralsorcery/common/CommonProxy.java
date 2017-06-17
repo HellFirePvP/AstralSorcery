@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -198,6 +199,8 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit() {
+        ModIntegrationBloodMagic.sendIMC();
+
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 
         CraftingAccessManager.compile();

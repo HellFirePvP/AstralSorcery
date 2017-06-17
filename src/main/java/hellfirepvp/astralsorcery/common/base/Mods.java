@@ -8,7 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import javax.annotation.Nullable;
 
@@ -24,6 +30,7 @@ public enum Mods {
     TICONSTRUCT("tconstruct"),
     MINETWEAKER("MineTweaker3"),
     JEI("JEI"),
+    BLOODMAGIC("BloodMagic"),
     BOTANIA("Botania"),
     GALACTICRAFT_CORE("galacticraftcore");
 
@@ -37,6 +44,30 @@ public enum Mods {
 
     public boolean isPresent() {
         return Loader.isModLoaded(modId);
+    }
+
+    public void sendIMC(String message, NBTTagCompound value) {
+        FMLInterModComms.sendMessage(this.modId, message, value);
+    }
+
+    public void sendIMC(String message, String value) {
+        FMLInterModComms.sendMessage(this.modId, message, value);
+    }
+
+    public void sendIMC(String message, Block value) {
+        sendIMC(message, new ItemStack(value));
+    }
+
+    public void sendIMC(String message, Item value) {
+        sendIMC(message, new ItemStack(value));
+    }
+
+    public void sendIMC(String message, ItemStack value) {
+        FMLInterModComms.sendMessage(this.modId, message, value);
+    }
+
+    public void sendIMC(String message, ResourceLocation value) {
+        FMLInterModComms.sendMessage(this.modId, message, value);
     }
 
     @Nullable

@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -24,6 +26,8 @@ import net.minecraftforge.common.config.Configuration;
  * Date: 30.03.2017 / 10:51
  */
 public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon {
+
+    private static boolean generatingStructure = false;
 
     protected final StructureGenBuffer.StructureType type;
     protected float idealDistance = 256F;
@@ -49,6 +53,17 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
 
     protected StructureGenBuffer getBuffer(World world) {
         return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_GEN);
+    }
+
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world) {
+        if(generatingStructure) return;
+        generatingStructure = true;
+        try {
+            super.generate(random, chunkX, chunkZ, world);
+        } finally {
+            generatingStructure = false;
+        }
     }
 
     @Override

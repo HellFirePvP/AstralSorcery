@@ -136,7 +136,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private void doCraftSound() {
         if(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) > 0) {
             if(clientCraftSound == null || ((PositionedLoopSound) clientCraftSound).hasStoppedPlaying()) {
-                clientCraftSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this), 0.7F, 1F,
+                clientCraftSound = SoundHelper.playSoundLoopClient(Sounds.attunement, new Vector3(this), 0.3F, 1F,
                         () -> isInvalid() ||
                                 Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER) <= 0 ||
                                 craftingTask == null);
