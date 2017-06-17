@@ -48,6 +48,11 @@ public class PerkDefensiveCheatDeath extends ConstellationPerk {
     }
 
     @Override
+    public boolean hasConfigEntries() {
+        return true;
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
         thresholdApplyPerkHealth = cfg.getFloat(getKey() + "ThresholdHealth", getConfigurationSection(), thresholdApplyPerkHealth, 0F, 20F, "If the player drops below this value of health, the potion effect will apply in case it isn't on cooldown.");
         thresholdApplyPerkDamage = cfg.getFloat(getKey() + "ThresholdDamage", getConfigurationSection(), thresholdApplyPerkDamage, 1F, 100F, "If the player takes damage equals/higher to the amount of damage configured here, the potion effect will apply in case it isn't on cooldown.");

@@ -143,8 +143,6 @@ public final class EffectHandler {
         TESRPrismLens.renderColoredPrismsLast();
         float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
-        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
-        EffectLightning.renderFast(pTicks, fastRenderLightnings);
         for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
             og.prepareGLContext();
             for (CompoundObjectEffect effect : objects.get(og)) {
@@ -152,6 +150,16 @@ public final class EffectHandler {
             }
             og.revertGLContext();
         }
+        if(uiGateway != null) {
+            if(renderGateway) {
+                uiGateway.renderIntoWorld(pTicks);
+            }
+            if(ClientGatewayHandler.focusingEntry != null) {
+                renderGatewayTarget(pTicks);
+            }
+        }
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
+        EffectLightning.renderFast(pTicks, fastRenderLightnings);
 
         Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
         for (int i = 0; i <= 2; i++) {
@@ -165,24 +173,16 @@ public final class EffectHandler {
         }
         acceptsNewParticles = true;
         TESRMapDrawingTable.renderRemainingGlasses(pTicks);
-        if(uiGateway != null) {
-            if(renderGateway) {
-                uiGateway.renderIntoWorld(pTicks);
-            }
-            if(ClientGatewayHandler.focusingEntry != null) {
-                renderGatewayTarget(pTicks);
-            }
-        }
         TESRTranslucentBlock.renderTranslucentBlocks();
     }
 
     private void renderGatewayTarget(float pTicks) {
         int focusTicks = ClientGatewayHandler.focusTicks;
         UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
-        float perc = (Math.min(40F, focusTicks) / 40F) * 0.3F;
-        if(focusTicks > 70) {
-            perc = ((float) (focusTicks - 70)) / 25F;
-            perc = MathHelper.clamp(perc, 0.3F, 1F);
+        float perc = (Math.min(40F, focusTicks) / 40F) * 0.5F;
+        if(focusTicks > 50) {
+            perc = ((float) (focusTicks - 50)) / 25F;
+            perc = MathHelper.clamp(perc, 0.5F, 1F);
         }
         ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
         if(screenshot != null) {

@@ -498,7 +498,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         held = (IWeakConstellation) cst;
                     }
                 }
-                if(held != null && held.canDiscover(ResearchManager.clientProgress)) {
+                if(held != null && ResearchManager.clientProgress.hasConstellationDiscovered(held.getUnlocalizedName())) {
                     highlightConstellation(held);
                 }
             }

@@ -49,6 +49,11 @@ public class PerkCreationFlares extends ConstellationPerk {
     }
 
     @Override
+    public boolean hasConfigEntries() {
+        return true;
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
         spawnCooldown = cfg.getInt(getKey() + "SpawnCooldown", getConfigurationSection(), spawnCooldown, 1, Integer.MAX_VALUE, "Defines the minimum cooldown/time between 2 flare spawns caused by this perk.");
         defensiveFlareChance = cfg.getInt(getKey() + "FlareChance", getConfigurationSection(), defensiveFlareChance, 1, 6000, "Defines the chance (random.nextInt(chance) == 0) that a flare spawns to attack the attacking entity");
