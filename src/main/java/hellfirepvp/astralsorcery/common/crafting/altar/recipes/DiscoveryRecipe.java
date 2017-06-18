@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -43,7 +45,7 @@ public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe
     }
 
     public DiscoveryRecipe(AbstractCacheableRecipe recipe) {
-        this(recipe.make());
+        this(recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
     }
 
     public DiscoveryRecipe(IAccessibleRecipe recipe) {

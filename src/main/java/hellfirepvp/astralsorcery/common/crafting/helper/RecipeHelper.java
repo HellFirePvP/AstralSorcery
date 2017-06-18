@@ -166,6 +166,7 @@ public class RecipeHelper {
 
         public ShapedHandleOreRecipe(ResourceLocation name, ItemStack result, Object... recipe) {
             super(name, result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
+            setRegistryName(name);
             output = result.copy();
 
             String shape = "";

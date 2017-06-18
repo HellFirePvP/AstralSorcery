@@ -247,20 +247,21 @@ public class RegistryRecipes {
         rec = rLPRAltar.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/altar"));
         GameRegistry.register(rec);
         rec = rLPRWand.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/wand"));
+        GameRegistry.register(rec);
         rRJournal.register(new ResourceLocation(AstralSorcery.MODID, "recipes/journal"));
         rCCParchment.register(new ResourceLocation(AstralSorcery.MODID, "recipes/parchment"));
 
-        rBlackMarbleRaw.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"));
-        rMarbleArch    .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"));
-        rMarblePillar  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"));
-        rMarbleRuned   .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"));
+        rBlackMarbleRaw.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"   ));
+        rMarbleArch    .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"    ));
+        rMarblePillar  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"  ));
+        rMarbleRuned   .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"   ));
         rMarbleEngraved.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_engraved"));
         rMarbleChiseled.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_chiseled"));
-        rMarbleBricks  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"));
-        rMarbleStairs  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"));
+        rMarbleBricks  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"  ));
+        rMarbleStairs  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"  ));
 
-        rSmeltStarmetalOre.register();
-        rSmeltAquamarineOre.register();
+        rSmeltStarmetalOre.registerSmelting();
+        rSmeltAquamarineOre.registerSmelting();
     }
 
     public static void initAltarRecipes() {

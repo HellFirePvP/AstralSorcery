@@ -213,7 +213,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
                         if(serverSyncAttTick >= TICKS_CRYSTAL_ATTUNEMENT) {
 
-                            ItemStack current = ((EntityItem) activeEntity).getEntityItem();
+                            ItemStack current = ((EntityItem) activeEntity).getItem();
                             Item tuned = ((ItemRockCrystalBase) current.getItem()).getTunedItemVariant();
                             ItemStack tunedStack = new ItemStack(tuned);
                             ItemTunedCrystalBase.applyMainConstellation(tunedStack, activeFound);
@@ -239,7 +239,7 @@ public class TileAttunementAltar extends TileEntityTick {
     private void checkForAttunements() {
         if((ticksExisted & 31) != 0) return;
 
-        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos());
+        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos());
 
         if(activeFound instanceof IMajorConstellation) {
             Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
@@ -455,7 +455,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
     @SideOnly(Side.CLIENT)
     private boolean isClientCloseEnough() {
-        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
+        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos()));
         return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
     }
 

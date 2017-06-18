@@ -68,7 +68,7 @@ public class PerkCreationBreedables extends ConstellationPerk {
         chanceToAge = cfg.getInt(getKey() + "ChanceToAge", getConfigurationSection(), 30, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will grow into an adult");
         chanceToBreed = cfg.getInt(getKey() + "ChangeToBreed", getConfigurationSection(), 70, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will create a child");
         float search = cfg.getFloat(getKey() + "EffectRadius", getConfigurationSection(), 6F, 1F, 40F, "Sets the radius in which this effect tries to find animals");
-        boxSearch = new AxisAlignedBB(0, 0, 0, 0, 0, 0).expandXyz(search);
+        boxSearch = new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(search);
     }
 
 }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
@@ -22,6 +23,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,7 +49,7 @@ public abstract class AbstractAltarRecipe {
     private int uniqueRecipeId = -1;
 
     public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        this(neededLevel, recipe.make());
+        this(neededLevel, recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
     }
 
     public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {

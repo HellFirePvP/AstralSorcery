@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class EntityStarburst extends EntityThrowable {
 
-    private static final AxisAlignedBB searchBox = new AxisAlignedBB(-1, -1, -1, 1, 1, 1).expandXyz(17);
+    private static final AxisAlignedBB searchBox = new AxisAlignedBB(-1, -1, -1, 1, 1, 1).grow(17);
     private static final double descendingDst = 17.0D;
 
     private int targetId = -1;

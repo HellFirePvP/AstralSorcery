@@ -32,7 +32,6 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -152,12 +151,12 @@ public class EventHandlerServer {
 
         DamageSource source = event.getSource();
         lblIn:
-        if (source.getSourceOfDamage() != null) {
+        if (source.getTrueSource() != null) {
             EntityPlayer p;
-            if (source.getSourceOfDamage() instanceof EntityPlayer) {
-                p = (EntityPlayer) source.getSourceOfDamage();
-            } else if (source.getSourceOfDamage() instanceof EntityArrow) {
-                Entity shooter = ((EntityArrow) source.getSourceOfDamage()).shootingEntity;
+            if (source.getTrueSource() instanceof EntityPlayer) {
+                p = (EntityPlayer) source.getTrueSource();
+            } else if (source.getTrueSource() instanceof EntityArrow) {
+                Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
                 if (shooter != null && shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
@@ -237,8 +236,8 @@ public class EventHandlerServer {
             if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
 
             DamageSource source = event.getSource();
-            if (source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
-                EntityPlayer p = (EntityPlayer) source.getEntity();
+            if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityPlayer) {
+                EntityPlayer p = (EntityPlayer) source.getImmediateSource();
                 PlayerProgress prog = ResearchManager.getProgress(p);
                 if (prog != null) {
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
@@ -267,7 +266,7 @@ public class EventHandlerServer {
         entity.setHealth(6 + level * 2);
         entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 2, false, false));
         entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 500, 1, false, false));
-        List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
+        List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(3), (e) -> !e.isDead && e != entity);
         for (EntityLivingBase lb : others) {
             lb.setFire(16);
             lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - entity.posZ);
@@ -335,7 +334,8 @@ public class EventHandlerServer {
             Block blockCrafted = Block.getBlockFromItem(crafted);
             if (blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
                 if (event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
-                    event.player.addStat(RegistryAchievements.achvBuildActTelescope);
+                    //FIXME RE-ADD AFTER ADVANCEMENTS
+                    //event.player.addStat(RegistryAchievements.achvBuildActTelescope);
                 }
             }
         }

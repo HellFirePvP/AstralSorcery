@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileWell;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -125,7 +124,8 @@ public class BlockWell extends BlockStarlightNetwork {
 
                     if(!MiscUtils.isPlayerFakeMP((EntityPlayerMP) playerIn) && entry.producing instanceof FluidLiquidStarlight) {
                         //Lets assume it starts collecting right away...
-                        playerIn.addStat(RegistryAchievements.achvLiqStarlight);
+                        //FIXME RE-ADD AFTER ADVANCEMENTS
+                        //playerIn.addStat(RegistryAchievements.achvLiqStarlight);
                     }
 
                     if(!playerIn.isCreative()) {

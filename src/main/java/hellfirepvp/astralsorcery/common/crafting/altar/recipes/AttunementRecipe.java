@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -23,6 +24,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,7 +57,7 @@ public class AttunementRecipe extends DiscoveryRecipe {
     }
 
     public AttunementRecipe(AbstractCacheableRecipe recipe) {
-        this(recipe.make());
+        this(recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
     }
 
     public AttunementRecipe(IAccessibleRecipe recipe) {

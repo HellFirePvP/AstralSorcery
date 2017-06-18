@@ -94,32 +94,32 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
 
     @Nullable
     private ToolCrystalProperties getProperties() {
-        if(getEntityItem().isEmpty()) return null;
-        if(getEntityItem().getItem() instanceof ItemCrystalToolBase) {
-            return ItemCrystalToolBase.getToolProperties(getEntityItem());
+        if(getItem().isEmpty()) return null;
+        if(getItem().getItem() instanceof ItemCrystalToolBase) {
+            return ItemCrystalToolBase.getToolProperties(getItem());
         }
-        if(getEntityItem().getItem() instanceof ItemCrystalSword) {
-            return ItemCrystalSword.getToolProperties(getEntityItem());
+        if(getItem().getItem() instanceof ItemCrystalSword) {
+            return ItemCrystalSword.getToolProperties(getItem());
         }
         return null;
     }
 
     private void applyProperties(ToolCrystalProperties properties) {
-        if(getEntityItem().isEmpty()) return;
-        if(getEntityItem().getItem() instanceof ItemCrystalToolBase) {
-            ItemCrystalToolBase.setToolProperties(getEntityItem(), properties);
+        if(getItem().isEmpty()) return;
+        if(getItem().getItem() instanceof ItemCrystalToolBase) {
+            ItemCrystalToolBase.setToolProperties(getItem(), properties);
         }
-        if(getEntityItem().getItem() instanceof ItemCrystalSword) {
-            ItemCrystalSword.setToolProperties(getEntityItem(), properties);
+        if(getItem().getItem() instanceof ItemCrystalSword) {
+            ItemCrystalSword.setToolProperties(getItem(), properties);
         }
     }
 
     private int getMaxSize() {
-        if(getEntityItem().isEmpty()) return CrystalProperties.MAX_SIZE_CELESTIAL;
-        if(getEntityItem().getItem() instanceof ItemCrystalToolBase) {
-            return ((ItemCrystalToolBase) getEntityItem().getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
+        if(getItem().isEmpty()) return CrystalProperties.MAX_SIZE_CELESTIAL;
+        if(getItem().getItem() instanceof ItemCrystalToolBase) {
+            return ((ItemCrystalToolBase) getItem().getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
         }
-        if(getEntityItem().getItem() instanceof ItemCrystalSword) {
+        if(getItem().getItem() instanceof ItemCrystalSword) {
             return 2 * CrystalProperties.MAX_SIZE_CELESTIAL;
         }
         return CrystalProperties.MAX_SIZE_CELESTIAL;
@@ -127,7 +127,7 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
 
     private void increaseSize() {
         world.setBlockToAir(getPosition());
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1),
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1),
                 Predicates.or(EntityUtils.selectItemClassInstaceof(ItemCrystalToolBase.class), EntityUtils.selectItemClassInstaceof(ItemCrystalSword.class)));
         if(foundItems.size() <= 0) {
             CrystalProperties prop = getProperties();

@@ -36,6 +36,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -111,7 +112,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                     if(custom != null) {
                         fr = custom;
                     }
-                    tooltip = in.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
+                    tooltip = in.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
                 }
             }
             in = tile.getSlotGlassLens();
@@ -132,7 +133,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                     if(custom != null) {
                         fr = custom;
                     }
-                    tooltip = in.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
+                    tooltip = in.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
                 }
             }
 

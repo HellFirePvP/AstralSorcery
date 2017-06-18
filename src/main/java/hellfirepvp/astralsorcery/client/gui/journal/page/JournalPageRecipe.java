@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.gui.journal.page;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -26,6 +27,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
@@ -52,7 +54,7 @@ public class JournalPageRecipe implements IJournalPage {
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(recipe.make());
+        return new Render(recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/render_recipe")));
     }
 
     public static class Render implements IGuiRenderablePage {

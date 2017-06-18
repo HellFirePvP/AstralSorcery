@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +50,8 @@ public class TelescopeRecipe extends AttunementRecipe {
     public void onCraftServerFinish(TileAltar altar, Random rand) {
         EntityPlayer crafter = altar.getActiveCraftingTask().tryGetCraftingPlayerServer();
         if(crafter != null) {
-            crafter.addStat(RegistryAchievements.achvBuildActTelescope);
+            //FIXME RE-ADD AFTER ADVANCEMENTS
+            //crafter.addStat(RegistryAchievements.achvBuildActTelescope);
         }
         super.onCraftServerFinish(altar, rand);
     }

@@ -297,7 +297,7 @@ public class ClientProxy extends CommonProxy {
             return;
         }
         NonNullList<ItemStack> list = NonNullList.create();
-        item.getSubItems(item, item.getCreativeTab(), list);
+        item.getSubItems(item.getCreativeTab(), list);
         if (list.size() > 0) {
             for (ItemStack i : list) {
                 registerItemRender(item, i.getItemDamage(), name);

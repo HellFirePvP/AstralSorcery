@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class ShapedRecipe extends AbstractCacheableRecipe {
 
+    //TODO Change recipe system into a builder/factory system
+
     protected ShapeMap crafingShape = new ShapeMap();
 
     //If set to true, forces the exact places specified in the craftingShape map.

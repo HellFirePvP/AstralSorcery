@@ -36,7 +36,7 @@ public class TransmissionChunkTracker {
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
         if(handle != null) {
             Chunk ch = event.getChunk();
-            handle.informChunkLoad(new ChunkPos(ch.xPosition, ch.zPosition));
+            handle.informChunkLoad(new ChunkPos(ch.x, ch.z));
         }
     }
 
@@ -45,7 +45,7 @@ public class TransmissionChunkTracker {
         TransmissionWorldHandler handle = StarlightTransmissionHandler.getInstance().getWorldHandler(event.getWorld());
         if(handle != null) {
             Chunk ch = event.getChunk();
-            handle.informChunkUnload(new ChunkPos(ch.xPosition, ch.zPosition));
+            handle.informChunkUnload(new ChunkPos(ch.x, ch.z));
         }
     }
 

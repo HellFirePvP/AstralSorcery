@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -29,6 +30,7 @@ import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -102,16 +104,16 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT));
 
         registry.addRecipes(Lists.newArrayList(
-                RegistryRecipes.rCCParchment   .makeNative(),
-                RegistryRecipes.rRJournal      .makeNative(),
-                RegistryRecipes.rBlackMarbleRaw.makeNative(),
-                RegistryRecipes.rMarbleArch    .makeNative(),
-                RegistryRecipes.rMarbleBricks  .makeNative(),
-                RegistryRecipes.rMarbleChiseled.makeNative(),
-                RegistryRecipes.rMarbleEngraved.makeNative(),
-                RegistryRecipes.rMarblePillar  .makeNative(),
-                RegistryRecipes.rMarbleRuned   .makeNative(),
-                RegistryRecipes.rMarbleStairs  .makeNative()));
+                RegistryRecipes.rCCParchment   .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/parchment")),
+                RegistryRecipes.rRJournal      .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/journal")),
+                RegistryRecipes.rBlackMarbleRaw.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"   )),
+                RegistryRecipes.rMarbleArch    .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"    )),
+                RegistryRecipes.rMarbleBricks  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"  )),
+                RegistryRecipes.rMarbleChiseled.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_chiseled")),
+                RegistryRecipes.rMarbleEngraved.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_engraved")),
+                RegistryRecipes.rMarblePillar  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"  )),
+                RegistryRecipes.rMarbleRuned   .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"   )),
+                RegistryRecipes.rMarbleStairs  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"  ))));
 
         jeiRegistrationPhase = false;
     }

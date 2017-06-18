@@ -123,7 +123,8 @@ public class CommonProxy implements IGuiHandler {
         ConstellationEffectRegistry.init();
 
         registerOreDictEntries();
-        RegistryAchievements.init();
+        //FIXME RE-ADD AFTER ADVANCEMENTS
+        //RegistryAchievements.init();
         RegistryPerks.init();
 
         registerCapabilities();

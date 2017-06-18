@@ -39,7 +39,7 @@ public class BlockDropCaptureAssist {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrop(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityItem && capturing) {
-            ItemStack stack = ((EntityItem) event.getEntity()).getEntityItem();
+            ItemStack stack = ((EntityItem) event.getEntity()).getItem();
             event.setCanceled(true);
             if(!stack.isEmpty()) {
                 if(!expectCaptureStone) {

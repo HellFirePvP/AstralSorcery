@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -55,8 +56,12 @@ public class SmeltingRecipe extends AbstractRecipe {
         return this;
     }
 
+    public void registerSmelting() {
+        register(null);
+    }
+
     @Override
-    public void register() {
+    protected void register(ResourceLocation unused_name) {
         FurnaceRecipes.instance().addSmeltingRecipe(smelted, getOutput(), exp);
     }
 

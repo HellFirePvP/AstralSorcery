@@ -33,6 +33,6 @@ public abstract class AbstractRecipe {
         return output;
     }
 
-    public abstract void register(ResourceLocation name);
+    abstract void register(ResourceLocation name);
 
 }

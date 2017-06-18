@@ -74,8 +74,10 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for (ColorType ct : ColorType.values()) {
-            subItems.add(new ItemStack(this, 1, ct.getMeta()));
+        if(this.isInCreativeTab(tab)) {
+            for (ColorType ct : ColorType.values()) {
+                subItems.add(new ItemStack(this, 1, ct.getMeta()));
+            }
         }
     }
 

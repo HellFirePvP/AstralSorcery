@@ -269,7 +269,8 @@ public class ClientCameraManager implements ITickHandler {
 
         public EntityRenderViewReplacement() {
             super(Minecraft.getMinecraft(), Minecraft.getMinecraft().world,
-                    Minecraft.getMinecraft().player.connection, Minecraft.getMinecraft().player.getStatFileWriter());
+                    Minecraft.getMinecraft().player.connection, Minecraft.getMinecraft().player.getStatFileWriter(),
+                    Minecraft.getMinecraft().player.getRecipeBook());
             capabilities.allowFlying = true;
             capabilities.isFlying = true;
         }
