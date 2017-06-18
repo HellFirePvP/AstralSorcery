@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -43,7 +42,7 @@ public abstract class AbstractAltarRecipe {
 
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
-    private final IAccessibleRecipe recipe;
+    private final AccessibleRecipe recipe;
     private ItemStack out = ItemStack.EMPTY;
 
     private int uniqueRecipeId = -1;
@@ -52,7 +51,7 @@ public abstract class AbstractAltarRecipe {
         this(neededLevel, recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
     }
 
-    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         this.neededLevel = neededLevel;
         this.recipe = recipe;
         this.out = recipe.getRecipeOutput();
@@ -71,7 +70,7 @@ public abstract class AbstractAltarRecipe {
         return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
-    public IAccessibleRecipe getNativeRecipe() {
+    public AccessibleRecipe getNativeRecipe() {
         return recipe;
     }
 

@@ -16,23 +16,27 @@ import javax.annotation.Nonnull;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: AbstractRecipe
+ * Class: AbstractRecipeData
  * Created by HellFirePvP
  * Date: 10.08.2016 / 15:21
  */
-public abstract class AbstractRecipe {
+public abstract class AbstractRecipeData {
 
-    private ItemStack output = ItemStack.EMPTY;
+    private final ItemStack output;
+    private final ResourceLocation registryName;
 
-    public AbstractRecipe(@Nonnull ItemStack output) {
+    public AbstractRecipeData(ResourceLocation registryName, @Nonnull ItemStack output) {
         this.output = output;
+        this.registryName = registryName;
+    }
+
+    public ResourceLocation getRegistryName() {
+        return registryName;
     }
 
     @Nonnull
     public ItemStack getOutput() {
         return output;
     }
-
-    abstract void register(ResourceLocation name);
 
 }

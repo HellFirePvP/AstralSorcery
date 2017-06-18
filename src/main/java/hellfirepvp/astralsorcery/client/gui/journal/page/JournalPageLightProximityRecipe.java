@@ -17,7 +17,8 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
@@ -34,7 +35,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,9 +46,9 @@ import java.util.Map;
  */
 public class JournalPageLightProximityRecipe implements IJournalPage {
 
-    private final ShapedRecipe shapedLightProxRecipe;
+    private final AccessibleRecipeAdapater shapedLightProxRecipe;
 
-    public JournalPageLightProximityRecipe(ShapedRecipe shapedLightProxRecipe) {
+    public JournalPageLightProximityRecipe(AccessibleRecipeAdapater shapedLightProxRecipe) {
         this.shapedLightProxRecipe = shapedLightProxRecipe;
     }
 
@@ -61,11 +61,11 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "griddisc");
 
-        private final ShapedRecipe recipe;
+        private final AccessibleRecipeAdapater recipe;
 
         private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
 
-        public Render(ShapedRecipe recipe) {
+        public Render(AccessibleRecipeAdapater recipe) {
             this.recipe = recipe;
         }
 
@@ -94,7 +94,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
 
         protected void renderOutputOnGrid(float offsetX, float offsetY, float zLevel) {
             RenderHelper.enableGUIStandardItemLighting();
-            ItemStack out = recipe.getOutput();
+            ItemStack out = recipe.getRecipeOutput();
             GL11.glPushMatrix();
             GL11.glTranslated(offsetX + 78, offsetY + 25, zLevel + 60);
             GL11.glScaled(1.4, 1.4, 1.4);
@@ -106,7 +106,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
             RenderHelper.disableStandardItemLighting();
         }
 
-        protected void renderDefaultExpectedItems(float offsetX, float offsetY, float zLevel, IAccessibleRecipe recipe) {
+        protected void renderDefaultExpectedItems(float offsetX, float offsetY, float zLevel, AccessibleRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
             double offX = offsetX + 55;
             double offY = offsetY + 103;
@@ -142,7 +142,7 @@ public class JournalPageLightProximityRecipe implements IJournalPage {
 
             renderOutputOnGrid(offsetX, offsetY, zLevel);
 
-            renderDefaultExpectedItems(offsetX, offsetY, zLevel, recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/render_recipe")));
+            renderDefaultExpectedItems(offsetX, offsetY, zLevel, recipe);
 
             TextureHelper.refreshTextureBindState();
             TextureHelper.setActiveTextureToAtlasSprite();

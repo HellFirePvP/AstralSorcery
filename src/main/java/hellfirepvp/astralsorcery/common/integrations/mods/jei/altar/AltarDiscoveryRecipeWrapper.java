@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -38,7 +38,7 @@ public class AltarDiscoveryRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        IAccessibleRecipe underlyingRecipe = recipe.getNativeRecipe();
+        AccessibleRecipe underlyingRecipe = recipe.getNativeRecipe();
 
         boolean r = ItemHandle.ignoreGatingRequirement;
         ItemHandle.ignoreGatingRequirement = true;

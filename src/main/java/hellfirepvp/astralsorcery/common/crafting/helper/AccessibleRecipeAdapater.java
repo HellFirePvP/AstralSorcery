@@ -8,22 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -32,12 +29,12 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 06.10.2016 / 14:26
  */
-public class AccessibleRecipeAdapater extends IAccessibleRecipe {
+public class AccessibleRecipeAdapater extends AccessibleRecipe {
 
-    private final IRecipe parent;
-    private final AbstractCacheableRecipe abstractRecipe;
+    private final BasePlainRecipe parent;
+    private final AbstractRecipeAccessor abstractRecipe;
 
-    public AccessibleRecipeAdapater(IRecipe parent, AbstractCacheableRecipe abstractRecipe) {
+    public AccessibleRecipeAdapater(BasePlainRecipe parent, AbstractRecipeAccessor abstractRecipe) {
         super(parent.getRegistryName());
         this.parent = parent;
         this.abstractRecipe = abstractRecipe;
@@ -85,11 +82,25 @@ public class AccessibleRecipeAdapater extends IAccessibleRecipe {
     }
 
     @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return parent.getIngredients();
+    }
+
+    @Override
+    public String getGroup() {
+        return parent.getGroup();
+    }
+
+    @Override
+    public boolean isHidden() {
+        return parent.isHidden();
+    }
+
+    @Override
     public boolean matches(InventoryCrafting inv, World worldIn) {
         return parent.matches(inv, worldIn);
     }
 
-    @Nullable
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
         return parent.getCraftingResult(inv);
@@ -100,7 +111,6 @@ public class AccessibleRecipeAdapater extends IAccessibleRecipe {
         return parent.canFit(width, height);
     }
 
-    @Nullable
     @Override
     public ItemStack getRecipeOutput() {
         return parent.getRecipeOutput();

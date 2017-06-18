@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
-import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
@@ -32,14 +30,11 @@ import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
 
+import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
+import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.*;
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
@@ -52,14 +47,6 @@ import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeR
  * Date: 31.07.2016 / 10:49
  */
 public class RegistryRecipes {
-
-    public static ShapedRecipe rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks, rMarbleStairs;
-    public static ShapedRecipe rBlackMarbleRaw;
-
-    //LightProximityRecipes
-    public static ShapedRecipe rLPRAltar;
-    public static ShapedRecipe rLPRWand;
-    public static ShapedRecipe rRJournal;
 
     public static DiscoveryRecipe rJournal;
     public static DiscoveryRecipe rHandTelescope;
@@ -92,14 +79,9 @@ public class RegistryRecipes {
 
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
-    public static ShapedRecipe rCCParchment;
     public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth,
             rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush,
             rGlassLensSpectral;
-
-    //Smelting
-    public static SmeltingRecipe rSmeltStarmetalOre;
-    public static SmeltingRecipe rSmeltAquamarineOre;
 
     //Tools
     public static CrystalToolRecipe rCToolPick, rCToolShovel, rCToolAxe, rCToolSword;
@@ -146,13 +128,13 @@ public class RegistryRecipes {
     }
 
     public static void initVanillaRecipes() {
-        RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-        RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-        RecipeSorter.register("RecipeChangeIlluminationWandColor", RecipeChangeWandColor.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
+        //RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+        //RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+        //RecipeSorter.register("RecipeChangeIlluminationWandColor", RecipeChangeWandColor.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
         GameRegistry.register(RecipeChangeWandColor.INSTANCE);
 
-        rLPRAltar = new ShapedRecipe(BlocksAS.blockAltar)
+        rLPRAltar = newShapedRecipe("altar_tier_1", BlocksAS.blockAltar)
                 .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(OreDictAlias.BLOCK_MARBLE,
@@ -163,8 +145,9 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(OreDictAlias.BLOCK_CRAFTING_TABLE,
-                        ShapedRecipeSlot.CENTER);
-        rLPRWand = new ShapedRecipe(ItemsAS.wand)
+                        ShapedRecipeSlot.CENTER)
+                .buildAndRegisterLightCraftingRecipe();
+        rLPRWand = newShapedRecipe("tool_basicwand", ItemsAS.wand)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.RIGHT)
@@ -172,8 +155,10 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT);
-        rRJournal = new ShapedRecipe(ItemsAS.journal)
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .buildAndRegisterLightCraftingRecipe();
+
+        rRJournal = newShapedRecipe("journal", ItemsAS.journal)
                 .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Items.BOOK,
@@ -181,87 +166,77 @@ public class RegistryRecipes {
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER);
-        rCCParchment = new ShapedRecipe(ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), 4))
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rCCParchment = newShapedRecipe("cc_parchment", ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.PARCHMENT.asStack(), 4))
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.CENTER)
                 .addPart(Items.PAPER,
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.RIGHT);
+                        ShapedRecipeSlot.RIGHT)
+                .buildAndRegisterShapedRecipe();
 
-        rBlackMarbleRaw = new ShapedRecipe(new ItemStack(BlocksAS.blockBlackMarble, 8, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
+        rBlackMarbleRaw = newShapedRecipe("marble_black_raw", new ItemStack(BlocksAS.blockBlackMarble, 8, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.values())
-                .addPart(Items.COAL, ShapedRecipeSlot.CENTER);
-
-        rMarbleEngraved = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
+                .addPart(Items.COAL, ShapedRecipeSlot.CENTER)
+                .buildAndRegisterShapedRecipe();
+        rMarbleArch = newShapedRecipe("marble_arch", new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.ARCH.ordinal()))
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .buildAndRegisterShapedRecipe();
+        rMarbleBricks = newShapedRecipe("marble_bricks", new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.BRICKS.ordinal()))
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER)
+                .buildAndRegisterShapedRecipe();
+        rMarbleChiseled = newShapedRecipe("marble_chiseled", new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.CHISELED.ordinal()))
+                .addPart(OreDictAlias.BLOCK_MARBLE,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rMarbleEngraved = newShapedRecipe("marble_engraved", new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
-                        ShapedRecipeSlot.CENTER);
-        rMarbleRuned = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
+                        ShapedRecipeSlot.CENTER)
+                .buildAndRegisterShapedRecipe();
+        rMarbleRuned = newShapedRecipe("marble_runed", new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.RUNED.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
-                        ShapedRecipeSlot.UPPER_CENTER);
-        rMarbleChiseled = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.CHISELED.ordinal()))
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_CENTER);
-        rMarbleArch = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.ARCH.ordinal()))
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rMarblePillar = newShapedRecipe("marble_pillar", new ItemStack(BlocksAS.blockMarble, 2, BlockMarble.MarbleBlockType.PILLAR.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.UPPER_RIGHT);
-        rMarblePillar = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 2, BlockMarble.MarbleBlockType.PILLAR.ordinal()))
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.LEFT);
-        rMarbleBricks = new ShapedRecipe(new ItemStack(BlocksAS.blockMarble, 4, BlockMarble.MarbleBlockType.BRICKS.ordinal()))
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER);
-        rMarbleStairs = new ShapedRecipe(new ItemStack(BlocksAS.blockMarbleStairs, 4))
+                        ShapedRecipeSlot.LEFT)
+                .buildAndRegisterShapedRecipe();
+        rMarbleStairs = newShapedRecipe("marble_stairs", new ItemStack(BlocksAS.blockMarbleStairs, 4))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.CENTER,
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_RIGHT);
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .buildAndRegisterShapedRecipe();
 
-        rSmeltStarmetalOre = new SmeltingRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
+        rSmeltStarmetalOre = SmeltingRecipe.Builder.newSmelting("smelting_starmetal_ore", ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
-                .setExp(2F);
-
-        rSmeltAquamarineOre = new SmeltingRecipe(ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), 3))
+                .setExp(2F)
+                .buildAndRegister();
+        rSmeltAquamarineOre = SmeltingRecipe.Builder.newSmelting("smelting_aquamarine_ore", ItemUtils.copyStackWithSize(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), 3))
                 .setInput(new ItemStack(BlocksAS.customSandOre, 1, BlockCustomSandOre.OreType.AQUAMARINE.ordinal()))
-                .setExp(1F);
-
-        IRecipe rec;
-        rec = rLPRAltar.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/altar"));
-        GameRegistry.register(rec);
-        rec = rLPRWand.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/wand"));
-        GameRegistry.register(rec);
-        rRJournal.register(new ResourceLocation(AstralSorcery.MODID, "recipes/journal"));
-        rCCParchment.register(new ResourceLocation(AstralSorcery.MODID, "recipes/parchment"));
-
-        rBlackMarbleRaw.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"   ));
-        rMarbleArch    .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"    ));
-        rMarblePillar  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"  ));
-        rMarbleRuned   .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"   ));
-        rMarbleEngraved.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_engraved"));
-        rMarbleChiseled.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_chiseled"));
-        rMarbleBricks  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"  ));
-        rMarbleStairs  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"  ));
-
-        rSmeltStarmetalOre.registerSmelting();
-        rSmeltAquamarineOre.registerSmelting();
+                .setExp(1F)
+                .buildAndRegister();
     }
 
     public static void initAltarRecipes() {
@@ -472,6 +447,7 @@ public class RegistryRecipes {
         rStarlightInfuser.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
+        rStarlightInfuser.setPassiveStarlightRequirement(2500);
 
         rHandTelescope = registerDiscoveryRecipe(new ShapedRecipe(ItemsAS.handTelescope)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),

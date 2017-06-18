@@ -6,8 +6,9 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting;
+package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.item.ItemStack;
@@ -24,17 +25,13 @@ import java.util.List;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IAccessibleRecipe
+ * Class: AccessibleRecipe
  * Created by HellFirePvP
  * Date: 06.10.2016 / 14:18
  */
-public abstract class IAccessibleRecipe extends BasePlainRecipe {
+public abstract class AccessibleRecipe extends BasePlainRecipe {
 
-    protected IAccessibleRecipe(@Nonnull String recipeName) {
-        super(recipeName);
-    }
-
-    protected IAccessibleRecipe(@Nullable ResourceLocation registryName) {
+    protected AccessibleRecipe(@Nullable ResourceLocation registryName) {
         super(registryName);
     }
 

@@ -101,7 +101,6 @@ public class ItemInfusedGlass extends Item {
             } else {
                 tooltip.add(TextFormatting.DARK_GRAY + TextFormatting.ITALIC.toString() + I18n.format("misc.moreInformation"));
             }
-            tooltip.add("");
         }
     }
 

@@ -34,6 +34,7 @@ import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
@@ -449,13 +450,13 @@ public class RegistryResearch {
 
         ResearchNode resConPaper = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "CPAPER", 1, 0);
         resConPaper.addPage(getTextPage("CPAPER.1"));
-        resConPaper.addPage(new JournalPageRecipe(RegistryRecipes.rRJournal));
+        resConPaper.addPage(new JournalPageRecipe(RecipesAS.rRJournal));
         resConPaper.addPage(getTextPage("CPAPER.3"));
-        resConPaper.addPage(new JournalPageRecipe(RegistryRecipes.rCCParchment));
+        resConPaper.addPage(new JournalPageRecipe(RecipesAS.rCCParchment));
 
         ResearchNode resWand = new ResearchNode(new ItemStack(ItemsAS.wand), "WAND", 2, 2);
         resWand.addPage(getTextPage("WAND.1"));
-        resWand.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRWand));
+        resWand.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRWand));
         resWand.addPage(getTextPage("WAND.3"));
 
         ResearchNode resOres = new ResearchNode(new ItemStack[] {
@@ -474,22 +475,22 @@ public class RegistryResearch {
         stacks[stacks.length - 1] = new ItemStack(BlocksAS.blockMarbleStairs);
         ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 1);
         resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleBricks));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarblePillar));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleChiseled));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleArch));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleRuned));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleEngraved));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleStairs));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleBricks));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarblePillar));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleChiseled));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleArch));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleRuned));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleEngraved));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
 
         ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
-        resSootyMarble.addPage(new JournalPageRecipe(RegistryRecipes.rBlackMarbleRaw));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRaw));
 
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 3);
         resTable.addPage(getTextPage("ALTAR1.1"));
         resTable.addPage(getTextPage("ALTAR1.2"));
-        resTable.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRAltar));
+        resTable.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRAltar));
         resTable.addPage(getTextPage("ALTAR1.4"));
         resTable.addPage(getTextPage("ALTAR1.5"));
 

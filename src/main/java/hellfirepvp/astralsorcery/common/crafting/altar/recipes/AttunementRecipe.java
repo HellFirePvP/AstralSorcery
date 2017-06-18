@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
@@ -24,7 +22,6 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,19 +45,11 @@ public class AttunementRecipe extends DiscoveryRecipe {
 
     private Map<AttunementAltarSlot, ItemHandle> additionalSlots = new HashMap<>();
 
-    protected AttunementRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    protected AttunementRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
     }
 
-    protected AttunementRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        super(neededLevel, recipe);
-    }
-
-    public AttunementRecipe(AbstractCacheableRecipe recipe) {
-        this(recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
-    }
-
-    public AttunementRecipe(IAccessibleRecipe recipe) {
+    public AttunementRecipe(AccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.ATTUNEMENT, recipe);
         setPassiveStarlightRequirement(1400);
     }

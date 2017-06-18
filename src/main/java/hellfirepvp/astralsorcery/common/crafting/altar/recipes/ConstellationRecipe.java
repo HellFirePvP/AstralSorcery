@@ -12,13 +12,9 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
-import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
-import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
@@ -35,7 +31,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,19 +54,11 @@ public class ConstellationRecipe extends AttunementRecipe {
 
     private Map<ConstellationAtlarSlot, ItemHandle> matchStacks = new HashMap<>();
 
-    protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
     }
 
-    protected ConstellationRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        super(neededLevel, recipe);
-    }
-
-    public ConstellationRecipe(AbstractCacheableRecipe recipe) {
-        this(recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
-    }
-
-    public ConstellationRecipe(IAccessibleRecipe recipe) {
+    public ConstellationRecipe(AccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.CONSTELLATION_CRAFT, recipe);
         setPassiveStarlightRequirement(3200);
     }

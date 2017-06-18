@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 public abstract class BasePlainRecipe implements IRecipe {
 
     private ResourceLocation registryName;
+    private String group = "";
 
     protected BasePlainRecipe(@Nonnull String recipeName) {
         this(new ResourceLocation(AstralSorcery.MODID, recipeName));
@@ -24,6 +25,10 @@ public abstract class BasePlainRecipe implements IRecipe {
 
     protected BasePlainRecipe(@Nullable ResourceLocation registryName) {
         this.registryName = registryName;
+    }
+
+    public final void setGroup(String group) {
+        this.group = group == null ? "" : group;
     }
 
     @Override
@@ -41,6 +46,11 @@ public abstract class BasePlainRecipe implements IRecipe {
     @Override
     public Class<IRecipe> getRegistryType() {
         return IRecipe.class;
+    }
+
+    @Override
+    public String getGroup() {
+        return group;
     }
 
 }

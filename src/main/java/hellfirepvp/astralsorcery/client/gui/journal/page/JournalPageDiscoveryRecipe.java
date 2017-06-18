@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
@@ -115,7 +115,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             RenderHelper.disableStandardItemLighting();
         }
 
-        protected void renderDefaultExpectedItems(float offsetX, float offsetY, float zLevel, IAccessibleRecipe recipe) {
+        protected void renderDefaultExpectedItems(float offsetX, float offsetY, float zLevel, AccessibleRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
             double offX = offsetX + 55;
             double offY = offsetY + 103;
