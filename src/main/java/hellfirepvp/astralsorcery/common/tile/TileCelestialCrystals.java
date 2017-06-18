@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
@@ -124,7 +125,7 @@ public class TileCelestialCrystals extends TileSkybound {
         }
         r *= Math.abs(mul);
 
-        if(world.rand.nextInt(r) == 0) {
+        if(world.rand.nextInt(Math.max(r, 1)) == 0) {
             grow();
         }
     }

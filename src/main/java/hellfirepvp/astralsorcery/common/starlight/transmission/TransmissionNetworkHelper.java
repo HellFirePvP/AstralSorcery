@@ -131,7 +131,7 @@ public class TransmissionNetworkHelper {
         if(node == null) {
             AstralSorcery.log.warn("Placed a network tile that didn't produce a network node! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
         } else if(node.needsUpdate()) {
-            StarlightUpdateHandler.getInstance().addNode(((IStarlightTransmission) tileNetwork).getTrWorld(), node);
+            StarlightUpdateHandler.getInstance().addNode(tileNetwork.getWorld(), node);
         }
     }
 

@@ -44,6 +44,11 @@ public class PerkDamageReflect extends ConstellationPerk {
     }
 
     @Override
+    public boolean hasConfigEntries() {
+        return true;
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
         reflectChance = cfg.getInt(getKey() + "ReflectChance", getConfigurationSection(), reflectChance, 1, 5000, "Defines the chance that a incoming attack (if it can be resolved to an attacker) can be reflected (random.nextInt(chance) == 0 check)");
         reflectPerc = cfg.getFloat(getKey() + "ReflectPercentage", getConfigurationSection(), reflectPerc, 0.001F, 1F, "Defines the percentage of damage that the attacker will also take upon attacking the player.");

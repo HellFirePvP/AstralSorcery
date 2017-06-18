@@ -8,16 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
-import hellfirepvp.astralsorcery.common.entities.EntityStarburst;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
@@ -31,20 +30,17 @@ import javax.annotation.Nonnull;
 public class ItemChargedCrystalSword extends ItemCrystalSword implements ChargedCrystalToolBase {
 
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (isSelected && !worldIn.isRemote && entityIn instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) entityIn;
-            if(!MiscUtils.isPlayerFakeMP(player) && player.swingProgressInt > 0 && !player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalSword)) {
-                int swingEndTick = player.isPotionActive(MobEffects.HASTE) ? 6 - (1 + player.getActivePotionEffect(MobEffects.HASTE).getAmplifier()) : (player.isPotionActive(MobEffects.MINING_FATIGUE) ? 6 + (1 + player.getActivePotionEffect(MobEffects.MINING_FATIGUE).getAmplifier()) * 2 : 6);
-                swingEndTick -= 1;
-                if(player.swingProgressInt == swingEndTick) {
-                    worldIn.spawnEntity(new EntityStarburst(worldIn, player));
-                    if(!ChargedCrystalToolBase.tryRevertMainHand(player, stack)) {
-                        player.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 150);
-                    }
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+        if (!player.getEntityWorld().isRemote && player instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMp = (EntityPlayerMP) player;
+            if(!MiscUtils.isPlayerFakeMP(playerMp) && !playerMp.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalSword)) {
+                CelestialStrike.play(player, player.getEntityWorld(), new Vector3(entity), new Vector3(entity, true));
+                if(!ChargedCrystalToolBase.tryRevertMainHand(playerMp, stack)) {
+                    playerMp.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 80);
                 }
             }
         }
+        return false;
     }
 
     @Nonnull

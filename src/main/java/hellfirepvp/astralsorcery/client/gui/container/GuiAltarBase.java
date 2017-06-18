@@ -41,7 +41,6 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
     }
 
     public AbstractAltarRecipe findCraftableRecipe(boolean ignoreStarlightRequirement) {
-        if(!containerAltarBase.tileAltar.getMultiblockState()) return null;
         AbstractAltarRecipe rec = AltarRecipeRegistry.findMatchingRecipe(containerAltarBase.tileAltar, ignoreStarlightRequirement);
         if(rec != null) {
             if(rec instanceof IGatedRecipe) {

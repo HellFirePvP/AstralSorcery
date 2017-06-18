@@ -282,7 +282,13 @@ public class LightNetworkBuffer extends CachedWorldData {
             NBTUtils.writeBlockPosToNBT(pos, sourceTag);
             NBTTagCompound source = new NBTTagCompound();
             IIndependentStarlightSource sourceNode = starlightSources.get(pos);
-            sourceNode.writeToNBT(source);
+            try {
+                sourceNode.writeToNBT(source);
+            } catch (Exception exc) {
+                AstralSorcery.log.warn("Couldn't write source-node data for network node at " + pos.toString() + "!");
+                AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                continue;
+            }
             source.setString("sTypeId", sourceNode.getProvider().getIdentifier());
             sourceTag.setTag("source", source);
             sourceList.appendTag(sourceTag);
@@ -532,16 +538,33 @@ public class LightNetworkBuffer extends CachedWorldData {
 
         private void writeToNBT(NBTTagList sectionData) {
             for (Map.Entry<BlockPos, IPrismTransmissionNode> node : nodes.entrySet()) {
-                NBTTagCompound nodeComp = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
+                try {
+                    NBTTagCompound nodeComp = new NBTTagCompound();
+                    NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
 
-                NBTTagCompound prismComp = new NBTTagCompound();
-                IPrismTransmissionNode prismNode = node.getValue();
-                prismNode.writeToNBT(prismComp);
-                prismComp.setString("trNodeId", prismNode.getProvider().getIdentifier());
+                    NBTTagCompound prismComp = new NBTTagCompound();
+                    IPrismTransmissionNode prismNode = node.getValue();
+                    prismNode.writeToNBT(prismComp);
+                    prismComp.setString("trNodeId", prismNode.getProvider().getIdentifier());
 
-                nodeComp.setTag("nodeTag", prismComp);
-                sectionData.appendTag(nodeComp);
+                    nodeComp.setTag("nodeTag", prismComp);
+                    sectionData.appendTag(nodeComp);
+                } catch (Exception exc) {
+                    try {
+                        BlockPos at = node.getKey();
+                        AstralSorcery.log.warn("Couldn't write node data for network node at " + at.toString() + "!");
+                        AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                    } catch (Exception exc2) {
+                        try {
+                            BlockPos at = node.getValue().getPos();
+                            AstralSorcery.log.warn("Couldn't write node data for network node at " + at.toString() + "!");
+                            AstralSorcery.log.warn("This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
+                        } catch (Exception exc3) {
+                            //Duh. we don't have much information if everything's inaccessible
+                            AstralSorcery.log.warn("Couldn't write node data for a network node! Skipping...");
+                        }
+                    }
+                }
             }
         }
 

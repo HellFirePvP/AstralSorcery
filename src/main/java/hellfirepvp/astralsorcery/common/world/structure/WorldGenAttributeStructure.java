@@ -28,6 +28,8 @@ import java.util.Random;
  */
 public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon {
 
+    private static boolean generatingStructure = false;
+
     protected final StructureGenBuffer.StructureType type;
     protected float idealDistance = 256F;
     private final StructureQuery query;
@@ -52,6 +54,17 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
 
     protected StructureGenBuffer getBuffer(World world) {
         return WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.STRUCTURE_GEN);
+    }
+
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world) {
+        if(generatingStructure) return;
+        generatingStructure = true;
+        try {
+            super.generate(random, chunkX, chunkZ, world);
+        } finally {
+            generatingStructure = false;
+        }
     }
 
     @Override

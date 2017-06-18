@@ -150,7 +150,6 @@ public final class EffectHandler {
             }
             og.revertGLContext();
         }
-
         if(uiGateway != null) {
             if(renderGateway) {
                 uiGateway.renderIntoWorld(pTicks);
@@ -180,10 +179,10 @@ public final class EffectHandler {
     private void renderGatewayTarget(float pTicks) {
         int focusTicks = ClientGatewayHandler.focusTicks;
         UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
-        float perc = (Math.min(40F, focusTicks) / 40F) * 0.3F;
-        if(focusTicks > 70) {
-            perc = ((float) (focusTicks - 70)) / 25F;
-            perc = MathHelper.clamp(perc, 0.3F, 1F);
+        float perc = (Math.min(40F, focusTicks) / 40F) * 0.5F;
+        if(focusTicks > 50) {
+            perc = ((float) (focusTicks - 50)) / 25F;
+            perc = MathHelper.clamp(perc, 0.5F, 1F);
         }
         ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
         if(screenshot != null) {

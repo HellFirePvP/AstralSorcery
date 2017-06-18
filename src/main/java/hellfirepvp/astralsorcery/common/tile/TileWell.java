@@ -94,10 +94,10 @@ public class TileWell extends TileReceiverBaseInventory {
                 double sbDayDistribution = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
                 int yLevel = getPos().getY();
                 float dstr;
-                if(yLevel > 140) {
+                if(yLevel > 120) {
                     dstr = 1F;
                 } else {
-                    dstr = yLevel / 140F;
+                    dstr = yLevel / 120F;
                 }
                 sbDayDistribution *= dstr;
                 starlightBuffer += Math.max(0.0001, sbDayDistribution);
