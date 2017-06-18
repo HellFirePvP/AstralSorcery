@@ -30,8 +30,8 @@ public class SmeltingRecipe extends AbstractRecipeData {
     private final ItemStack input;
     private final float exp;
 
-    private SmeltingRecipe(ResourceLocation registryName, ItemStack input, ItemStack output, float exp) {
-        super(registryName, output);
+    private SmeltingRecipe(ItemStack input, ItemStack output, float exp) {
+        super(output);
         this.input = input;
         this.exp = exp;
 
@@ -96,7 +96,7 @@ public class SmeltingRecipe extends AbstractRecipeData {
                 throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             }
             registered = true;
-            return new SmeltingRecipe(this.entry, this.input, this.output, this.exp);
+            return new SmeltingRecipe(this.input, this.output, this.exp);
         }
 
     }

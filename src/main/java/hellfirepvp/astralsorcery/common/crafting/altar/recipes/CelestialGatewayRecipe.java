@@ -34,7 +34,7 @@ import java.util.Random;
 public class CelestialGatewayRecipe extends AttunementRecipe {
 
     public CelestialGatewayRecipe() {
-        super(new ShapedRecipe(BlocksAS.celestialGateway)
+        super(shapedRecipe("gateway", BlocksAS.celestialGateway)
                 .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemsAS.illuminationPowder,
@@ -47,7 +47,8 @@ public class CelestialGatewayRecipe extends AttunementRecipe {
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+        .unregisteredAccessibleShapedRecipe());
         setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(), AttunementAltarSlot.values());
     }
 

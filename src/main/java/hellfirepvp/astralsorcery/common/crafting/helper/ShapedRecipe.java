@@ -15,20 +15,13 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,8 +34,8 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
 
     private final ShapeMap rawShapeMap;
 
-    private ShapedRecipe(ResourceLocation name, @Nonnull ItemStack output, ShapeMap rawShapeMap) {
-        super(name, output);
+    private ShapedRecipe(@Nonnull ItemStack output, ShapeMap rawShapeMap) {
+        super(output);
         this.rawShapeMap = rawShapeMap;
     }
 
@@ -131,11 +124,20 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
             return this;
         }
 
+        public AccessibleRecipeAdapater unregisteredAccessibleShapedRecipe() {
+            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            registered = true; //Cache it please instead.
+            BasePlainRecipe actual = RecipeHelper.getShapedOredictRecipe(entry, output, crafingShape.bake());
+            ShapedRecipe access = new ShapedRecipe(output, crafingShape);
+            return new AccessibleRecipeAdapater(actual, access);
+        }
+
         public AccessibleRecipeAdapater buildAndRegisterLightCraftingRecipe() {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = new ShapedLightProximityRecipe(entry, output, crafingShape.bake());
-            ShapedRecipe access = new ShapedRecipe(entry, output, crafingShape);
+            GameRegistry.register(actual);
+            ShapedRecipe access = new ShapedRecipe(output, crafingShape);
             return new AccessibleRecipeAdapater(actual, access);
         }
 
@@ -143,7 +145,8 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapedOredictRecipe(entry, output, crafingShape.bake());
-            ShapedRecipe access = new ShapedRecipe(entry, output, crafingShape);
+            GameRegistry.register(actual);
+            ShapedRecipe access = new ShapedRecipe(output, crafingShape);
             return new AccessibleRecipeAdapater(actual, access);
         }
 

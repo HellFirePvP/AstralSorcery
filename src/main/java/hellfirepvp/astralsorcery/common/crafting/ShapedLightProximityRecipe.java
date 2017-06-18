@@ -102,7 +102,7 @@ public class ShapedLightProximityRecipe extends BasePlainRecipe {
                 if (subX >= 0 && subY >= 0 && subX < grid.getWidth() && subY < grid.getHeight()) {
                     target = grid.get(ShapedRecipeSlot.getByRowColumnIndex(subX, subY));
 
-                    if (!target.apply(inv.getStackInRowAndColumn(x, y))) {
+                    if (!target.apply(inv.getStackInRowAndColumn(y, x))) {
                         return false;
                     }
                 }

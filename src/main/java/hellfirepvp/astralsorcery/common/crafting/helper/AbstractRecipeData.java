@@ -23,15 +23,9 @@ import javax.annotation.Nonnull;
 public abstract class AbstractRecipeData {
 
     private final ItemStack output;
-    private final ResourceLocation registryName;
 
-    public AbstractRecipeData(ResourceLocation registryName, @Nonnull ItemStack output) {
+    public AbstractRecipeData(@Nonnull ItemStack output) {
         this.output = output;
-        this.registryName = registryName;
-    }
-
-    public ResourceLocation getRegistryName() {
-        return registryName;
     }
 
     @Nonnull

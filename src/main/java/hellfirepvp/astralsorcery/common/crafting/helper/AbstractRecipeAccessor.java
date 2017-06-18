@@ -16,8 +16,8 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractRecipeAccessor extends AbstractRecipeData {
 
-    public AbstractRecipeAccessor(ResourceLocation name, @Nonnull ItemStack output) {
-        super(name, output);
+    public AbstractRecipeAccessor(@Nonnull ItemStack output) {
+        super(output);
     }
 
     @Nullable

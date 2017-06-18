@@ -37,8 +37,8 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
 
     private final NonNullList<ItemHandle> inputs;
 
-    public ShapelessRecipe(ResourceLocation name, @Nonnull ItemStack output, NonNullList<ItemHandle> inputs) {
-        super(name, output);
+    public ShapelessRecipe(@Nonnull ItemStack output, NonNullList<ItemHandle> inputs) {
+        super(output);
         this.inputs = inputs;
     }
 
@@ -125,7 +125,8 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapelessOreDictRecipe(entry, output, compileIngredients());
-            ShapelessRecipe access = new ShapelessRecipe(entry, output, inputs);
+            GameRegistry.register(actual);
+            ShapelessRecipe access = new ShapelessRecipe(output, inputs);
             return new AccessibleRecipeAdapater(actual, access);
         }
 

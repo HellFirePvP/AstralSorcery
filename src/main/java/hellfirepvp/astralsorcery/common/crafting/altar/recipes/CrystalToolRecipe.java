@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -33,7 +33,7 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
 
     private final ShapedRecipeSlot[] positions;
 
-    public CrystalToolRecipe(AbstractCacheableRecipe recipe, ShapedRecipeSlot... crystalPositions) {
+    public CrystalToolRecipe(AccessibleRecipeAdapater recipe, ShapedRecipeSlot... crystalPositions) {
         super(recipe);
         this.positions = crystalPositions;
     }

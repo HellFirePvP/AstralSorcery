@@ -123,7 +123,7 @@ public final class ItemHandle {
             NonNullList<ItemStack> out = NonNullList.create();
             for (ItemStack oreDictIn : stacks) {
                 if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                    oreDictIn.getItem().getSubItems(CreativeTabs.BUILDING_BLOCKS, out);
+                    oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
                 } else {
                     out.add(oreDictIn);
                 }

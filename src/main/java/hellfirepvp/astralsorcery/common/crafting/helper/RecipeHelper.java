@@ -30,7 +30,6 @@ import java.util.Iterator;
  */
 public class RecipeHelper {
 
-    //Also automatically registers the recipe! handle with care.
     public static BasePlainRecipe getShapelessOreDictRecipe(ResourceLocation name, ItemStack output, NonNullList<Ingredient> craftingComponents) {
         return new ShapelessIngredientRecipe(name, output, craftingComponents);
     }
@@ -48,7 +47,6 @@ public class RecipeHelper {
             super(registryName);
             this.out = out;
             this.inputs = inputs;
-            GameRegistry.register(this);
         }
 
         @Override
@@ -112,7 +110,6 @@ public class RecipeHelper {
             super(name);
             this.out = out;
             this.grid = grid;
-            GameRegistry.register(this);
         }
 
         @Override
@@ -138,7 +135,7 @@ public class RecipeHelper {
                     if (subX >= 0 && subY >= 0 && subX < grid.getWidth() && subY < grid.getHeight()) {
                         target = grid.get(ShapedRecipeSlot.getByRowColumnIndex(subX, subY));
 
-                        if (!target.apply(inv.getStackInRowAndColumn(x, y))) {
+                        if (!target.apply(inv.getStackInRowAndColumn(y, x))) {
                             return false;
                         }
                     }

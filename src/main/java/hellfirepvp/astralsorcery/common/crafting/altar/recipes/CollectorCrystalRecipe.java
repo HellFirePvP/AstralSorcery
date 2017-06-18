@@ -39,9 +39,10 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
     private final ItemStack renderOutput;
 
     public CollectorCrystalRecipe(boolean celestial) {
-        super(new ShapedRecipe(celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal)
+        super(shapedRecipe((celestial ? "celestial" : "") + "collectorcrystal", celestial ? BlocksAS.celestialCollectorCrystal : BlocksAS.collectorCrystal)
                 .addPart((celestial ? ItemsAS.tunedCelestialCrystal : ItemsAS.tunedRockCrystal),
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+        .unregisteredAccessibleShapedRecipe());
         setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AttunementAltarSlot.values());
         setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
                 ConstellationAtlarSlot.UP_UP_LEFT,

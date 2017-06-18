@@ -39,7 +39,7 @@ import java.util.Random;
 public class DrawingTableRecipe extends ConstellationRecipe {
 
     public DrawingTableRecipe() {
-        super(new ShapedRecipe(BlocksAS.drawingTable)
+        super(shapedRecipe("drawingtable", BlocksAS.drawingTable)
                 .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
@@ -49,7 +49,8 @@ public class DrawingTableRecipe extends ConstellationRecipe {
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
         setAttItem(OreDictAlias.ITEM_DYE_ALL,
                 AttunementAltarSlot.UPPER_LEFT,
                 AttunementAltarSlot.UPPER_RIGHT);

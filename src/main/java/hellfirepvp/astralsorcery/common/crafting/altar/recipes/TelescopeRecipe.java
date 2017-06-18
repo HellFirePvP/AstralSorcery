@@ -32,7 +32,7 @@ import java.util.Random;
 public class TelescopeRecipe extends AttunementRecipe {
 
     public TelescopeRecipe() {
-        super(new ShapedRecipe(BlockMachine.MachineType.TELESCOPE.asStack())
+        super(shapedRecipe("telescope", BlockMachine.MachineType.TELESCOPE.asStack())
                 .addPart(ItemsAS.handTelescope,
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
@@ -43,7 +43,8 @@ public class TelescopeRecipe extends AttunementRecipe {
                 .addPart(OreDictAlias.ITEM_STICKS,
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

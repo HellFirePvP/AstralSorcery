@@ -8,22 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.*;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,10 +43,6 @@ public abstract class AbstractAltarRecipe {
     private ItemStack out = ItemStack.EMPTY;
 
     private int uniqueRecipeId = -1;
-
-    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        this(neededLevel, recipe.make(new ResourceLocation(AstralSorcery.MODID, "recipes/internal/altar_compare")));
-    }
 
     public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         this.neededLevel = neededLevel;
@@ -209,6 +202,18 @@ public abstract class AbstractAltarRecipe {
                 inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
             }
         }
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, Item out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, Block out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, ItemStack out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
     }
 
     //Can be used to applyServer modifications to items on the shapeMap.

@@ -56,11 +56,6 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
     protected final void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         renderGuiBackground(partialTicks, mouseX, mouseY);
         TextureHelper.refreshTextureBindState();

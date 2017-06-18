@@ -98,25 +98,29 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
                 if(mid) {
                     if(right) {
                         width = 3;
+                    } else {
+                        width = 2;
                     }
-                    width = 2;
                 } else {
                     if(right) {
                         width = 3;
+                    } else {
+                        width = 1;
                     }
-                    width = 1;
                 }
             } else {
                 if(mid) {
                     if(right) {
                         width = 2;
+                    } else {
+                        width = 1;
                     }
-                    width = 1;
                 } else {
                     if(right) {
                         width = 1;
+                    } else {
+                        width = 0;
                     }
-                    width = 0;
                 }
             }
             return width;
@@ -151,25 +155,29 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
                 if(mid) {
                     if(down) {
                         height = 3;
+                    } else {
+                        height = 2;
                     }
-                    height = 2;
                 } else {
                     if(down) {
                         height = 3;
+                    } else {
+                        height = 1;
                     }
-                    height = 1;
                 }
             } else {
                 if(mid) {
                     if(down) {
                         height = 2;
+                    } else {
+                        height = 1;
                     }
-                    height = 1;
                 } else {
                     if(down) {
                         height = 1;
+                    } else {
+                        height = 0;
                     }
-                    height = 0;
                 }
             }
             return height;

@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class LensRecipe extends AttunementRecipe {
 
     public LensRecipe() {
-        super(new ShapedRecipe(new ItemStack(BlocksAS.lens))
+        super(shapedRecipe("crystallens", BlocksAS.lens)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
@@ -48,7 +48,8 @@ public class LensRecipe extends AttunementRecipe {
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(OreDictAlias.BLOCK_WOOD_LOGS,
                         ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,

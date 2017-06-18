@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.helper.RecipeHelper;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeHandler;
@@ -23,12 +24,14 @@ import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAlta
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarConstellation;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarDiscovery;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -87,33 +90,33 @@ public class ModIntegrationJEI implements IModPlugin {
                 new AltarAttunementRecipeHandler(),
                 new AltarDiscoveryRecipeHandler());
 
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockWell), idWell);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lens), idTransmutation);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.lensPrism), idTransmutation);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), idAltarDiscovery);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), idAltarAttunement);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockWell), idWell);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.lens), idTransmutation);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.lensPrism), idTransmutation);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), idAltarDiscovery);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), idAltarAttunement);
+        registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), idAltarConstellation);
 
-        registry.addRecipes(InfusionRecipeRegistry.recipes);
-        registry.addRecipes(LightOreTransmutations.getRegisteredTransmutations());
-        registry.addRecipes(WellLiquefaction.getRegisteredLiquefactions());
+        registry.addRecipes(InfusionRecipeRegistry.recipes, idInfuser);
+        registry.addRecipes(LightOreTransmutations.getRegisteredTransmutations(), idTransmutation);
+        registry.addRecipes(WellLiquefaction.getRegisteredLiquefactions(), idWell);
 
-        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.DISCOVERY));
-        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.ATTUNEMENT));
-        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT));
+        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.DISCOVERY), idAltarDiscovery);
+        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.ATTUNEMENT), idAltarAttunement);
+        registry.addRecipes(AltarRecipeRegistry.recipes.get(TileAltar.AltarLevel.CONSTELLATION_CRAFT), idAltarConstellation);
 
         registry.addRecipes(Lists.newArrayList(
-                RegistryRecipes.rCCParchment   .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/parchment")),
-                RegistryRecipes.rRJournal      .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/journal")),
-                RegistryRecipes.rBlackMarbleRaw.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"   )),
-                RegistryRecipes.rMarbleArch    .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"    )),
-                RegistryRecipes.rMarbleBricks  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"  )),
-                RegistryRecipes.rMarbleChiseled.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_chiseled")),
-                RegistryRecipes.rMarbleEngraved.makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_engraved")),
-                RegistryRecipes.rMarblePillar  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"  )),
-                RegistryRecipes.rMarbleRuned   .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"   )),
-                RegistryRecipes.rMarbleStairs  .makeNative(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"  ))));
+                RecipesAS.rCCParchment   ,
+                RecipesAS.rRJournal      ,
+                RecipesAS.rBlackMarbleRaw,
+                RecipesAS.rMarbleArch    ,
+                RecipesAS.rMarbleBricks  ,
+                RecipesAS.rMarbleChiseled,
+                RecipesAS.rMarbleEngraved,
+                RecipesAS.rMarblePillar  ,
+                RecipesAS.rMarbleRuned   ,
+                RecipesAS.rMarbleStairs  ), VanillaRecipeCategoryUid.CRAFTING);
 
         jeiRegistrationPhase = false;
     }
