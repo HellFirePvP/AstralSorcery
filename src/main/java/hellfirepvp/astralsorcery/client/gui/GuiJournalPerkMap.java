@@ -33,7 +33,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentString;
@@ -126,7 +126,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         Iterator<ConstellationPerks> iterator = unlockPlayMap.keySet().iterator();
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
@@ -249,7 +249,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     private void drawConnections(ConstellationPerkMap mapToDisplay, double offsetX, double offsetY, double whBetweenStars, double linebreadth) {
         PlayerProgress prog = ResearchManager.clientProgress;
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
         GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -314,7 +314,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         PlayerProgress prog = ResearchManager.clientProgress;
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         Vector3 offset = new Vector3(offsetX, offsetY, zLevel);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         for (Map.Entry<ConstellationPerks, ConstellationPerkMap.Position> star : perks.entrySet()) {
@@ -386,7 +386,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
         overlayTex.bind();
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(cX,                 cY + overlayWH * 2, zLevel).tex(0, 1).endVertex();
         vb.pos(cX + overlayWH * 2, cY + overlayWH * 2, zLevel).tex(1, 1).endVertex();
@@ -405,7 +405,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
         GL11.glDisable(GL11.GL_BLEND);
         textureResBack.bind();
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(guiLeft + 10,            guiTop - 10 + guiHeight, zLevel).tex(0, 1).endVertex();
         vb.pos(guiLeft - 10 + guiWidth, guiTop - 10 + guiHeight, zLevel).tex(1, 1).endVertex();

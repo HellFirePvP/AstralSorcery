@@ -30,6 +30,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -99,7 +100,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
         BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
         Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, type == CollectorCrystalType.CELESTIAL_CRYSTAL ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);

@@ -81,7 +81,7 @@ public class Vector3 {
     }
 
     public Vector3(Vec3d vec) {
-        this(vec.xCoord, vec.yCoord, vec.zCoord);
+        this(vec.x, vec.y, vec.z);
     }
 
     public Vector3 add(Vec3i vec) {
@@ -218,9 +218,9 @@ public class Vector3 {
     }
 
     public double distanceSquared(Vec3d o) {
-        double difX = x - o.xCoord;
-        double difY = y - o.yCoord;
-        double difZ = z - o.zCoord;
+        double difX = x - o.x;
+        double difY = y - o.y;
+        double difZ = z - o.z;
         return difX * difX + difY * difY + difZ * difZ;
     }
 

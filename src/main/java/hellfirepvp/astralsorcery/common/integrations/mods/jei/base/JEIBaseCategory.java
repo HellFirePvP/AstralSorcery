@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.base;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -32,6 +33,11 @@ public abstract class JEIBaseCategory<T extends IRecipeWrapper> implements IReci
     public JEIBaseCategory(String unlocTitle, String uid) {
         this.locTitle = I18n.format(unlocTitle);
         this.uid = uid;
+    }
+
+    @Override
+    public String getModName() {
+        return AstralSorcery.NAME;
     }
 
     @Override

@@ -21,6 +21,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -42,11 +44,14 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
-        ItemStack stack = new ItemStack(itemIn);
-        setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));
-        subItems.add(stack);
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if(this.isInCreativeTab(tab)) {
+            CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
+            ItemStack stack = new ItemStack(this);
+            setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));
+            subItems.add(stack);
+        }
     }
 
 }

@@ -257,7 +257,7 @@ public class TileCollectorCrystal extends TileSourceBase {
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return Block.FULL_BLOCK_AABB.expandXyz(1).offset(getPos());
+        return Block.FULL_BLOCK_AABB.grow(1).offset(getPos());
     }
 
     @Nullable

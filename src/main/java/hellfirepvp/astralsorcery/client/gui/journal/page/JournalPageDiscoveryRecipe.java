@@ -29,6 +29,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -173,7 +174,7 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
                 if(rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     try {
-                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
                     } catch (Throwable tr) {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }

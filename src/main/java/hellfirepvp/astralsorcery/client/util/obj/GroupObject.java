@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.util.obj;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +43,7 @@ public class GroupObject {
     @SideOnly(Side.CLIENT)
     public void render(VertexFormat vf) {
         if (faces.size() > 0) {
-            VertexBuffer vb = Tessellator.getInstance().getBuffer();
+            BufferBuilder vb = Tessellator.getInstance().getBuffer();
             vb.begin(glDrawingMode, vf);
             render(vb);
             Tessellator.getInstance().draw();
@@ -51,7 +51,7 @@ public class GroupObject {
     }
 
     @SideOnly(Side.CLIENT)
-    public void render(VertexBuffer vb) {
+    public void render(BufferBuilder vb) {
         if (faces.size() > 0) {
             for (Face face : faces) {
                 face.addFaceForRender(vb);

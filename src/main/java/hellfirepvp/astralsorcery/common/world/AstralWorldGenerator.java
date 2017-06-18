@@ -9,8 +9,6 @@
 package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.data.world.data.ChunkVersionBuffer;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeAquamarine;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeGlowstoneFlower;
 import hellfirepvp.astralsorcery.common.world.attributes.GenAttributeMarble;
@@ -22,8 +20,8 @@ import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.LinkedList;
@@ -73,7 +71,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
     public void handleRetroGen(World world, ChunkPos pos, Integer lastKnownChunkVersion) {
         ChunkVersionController.instance.setGenerationVersion(pos, CURRENT_WORLD_GENERATOR_VERSION);
 
-        generateWithLastKnownVersion(pos.chunkXPos, pos.chunkZPos, world, lastKnownChunkVersion);
+        generateWithLastKnownVersion(pos.x, pos.z, world, lastKnownChunkVersion);
     }
 
     @Override

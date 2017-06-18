@@ -22,6 +22,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,9 +50,10 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlackMarbleBlockType t : BlackMarbleBlockType.values()) {
-            list.add(new ItemStack(item, 1, t.ordinal()));
+            list.add(new ItemStack(this, 1, t.ordinal()));
         }
     }
 
@@ -71,11 +74,6 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     @Override
     public boolean isFullBlock(IBlockState state) {
-        return true;
-    }
-
-    @Override
-    public boolean isFullyOpaque(IBlockState state) {
         return true;
     }
 

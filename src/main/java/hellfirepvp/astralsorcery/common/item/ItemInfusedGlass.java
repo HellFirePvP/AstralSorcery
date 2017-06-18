@@ -12,7 +12,9 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.starmap.ActiveStarMap;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -84,13 +87,13 @@ public class ItemInfusedGlass extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ActiveStarMap map = getMapEngravingInformations(stack);
         if(map != null) {
             if(Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)) {
                 for(IConstellation c : map.getConstellations()) {
                     String out = TextFormatting.GRAY + "- " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName());
-                    if(playerIn.isCreative()) {
+                    if(Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
                         out += TextFormatting.LIGHT_PURPLE + " (Creative) " + (int) (map.getPercentage(c) * 100) + "%";
                     }
                     tooltip.add(out);

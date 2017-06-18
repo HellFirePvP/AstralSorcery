@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
@@ -127,7 +127,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         //RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
 
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
@@ -149,7 +149,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GL11.glPopAttrib();
     }
 
-    private void renderFast(VertexBuffer vb) {
+    private void renderFast(BufferBuilder vb) {
         float tr = alphaFunction.getAlpha(age, maxAge);
         tr *= 0.6;
         tr *= alphaMultiplier;
@@ -203,7 +203,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GL11.glTranslated(-x, -y, -z);
     }
 
-    private void renderBeamOnAngles(VertexBuffer vb, Tuple<Double, Double> uvOffset, float br) {
+    private void renderBeamOnAngles(BufferBuilder vb, Tuple<Double, Double> uvOffset, float br) {
         double uWidth = SpriteLibrary.spriteLightbeam.getULength();
         double vHeight = SpriteLibrary.spriteLightbeam.getVLength();
         double u = uvOffset.key;
@@ -255,7 +255,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         Vector3 perpTo = perp.multiply(toSize);
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer buf = tes.getBuffer();
+        BufferBuilder buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         Tuple<Double, Double> uvOffset = SpriteLibrary.spriteLightbeam.getUVOffset(age);

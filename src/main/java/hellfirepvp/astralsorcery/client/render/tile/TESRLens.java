@@ -42,7 +42,7 @@ public class TESRLens extends TileEntitySpecialRenderer<TileCrystalLens> {
     private static final BindableResource texLensColorFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "lens/lens_color");
 
     @Override
-    public void renderTileEntityAt(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileCrystalLens te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         List<BlockPos> linked = te.getLinkedPositions();
         float yaw = 0; //Degree
         float pitch = 0; //Degree

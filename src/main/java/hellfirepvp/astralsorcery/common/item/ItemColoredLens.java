@@ -26,6 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,6 +50,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -70,15 +72,16 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (ColorType ct : ColorType.values()) {
-            subItems.add(new ItemStack(itemIn, 1, ct.getMeta()));
+            subItems.add(new ItemStack(this, 1, ct.getMeta()));
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if(!stack.isEmpty() && stack.getItem() instanceof ItemColoredLens) {
             int dmg = stack.getItemDamage();
             if(dmg >= 0 && dmg < ColorType.values().length) {
@@ -175,14 +178,14 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 case FIRE:
                     if(itemRand.nextFloat() > percStrength) return;
                     if(entity instanceof EntityItem) {
-                        ItemStack current = ((EntityItem) entity).getEntityItem();
+                        ItemStack current = ((EntityItem) entity).getItem();
                         ItemStack result = FurnaceRecipes.instance().getSmeltingResult(current);
                         if(!result.isEmpty()) {
                             Vector3 entityPos = new Vector3(entity);
                             ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, 1));
                             if(current.getCount() > 1) {
                                 current.shrink(1);
-                                ((EntityItem) entity).setEntityItemStack(current);
+                                ((EntityItem) entity).setItem(current);
                             } else {
                                 entity.setDead();
                             }

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -32,7 +33,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
@@ -145,9 +150,7 @@ public class RegistryRecipes {
         RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         RecipeSorter.register("RecipeChangeIlluminationWandColor", RecipeChangeWandColor.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
-        CraftingManager manager = CraftingManager.getInstance();
-
-        manager.addRecipe(new RecipeChangeWandColor());
+        GameRegistry.register(RecipeChangeWandColor.INSTANCE);
 
         rLPRAltar = new ShapedRecipe(BlocksAS.blockAltar)
                 .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
@@ -240,19 +243,21 @@ public class RegistryRecipes {
                 .setInput(new ItemStack(BlocksAS.customSandOre, 1, BlockCustomSandOre.OreType.AQUAMARINE.ordinal()))
                 .setExp(1F);
 
-        manager.addRecipe(rLPRAltar.makeLightProximityRecipe());
-        manager.addRecipe(rLPRWand.makeLightProximityRecipe());
-        manager.addRecipe(rRJournal.make());
-        manager.addRecipe(rCCParchment.make());
+        IRecipe rec;
+        rec = rLPRAltar.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/altar"));
+        GameRegistry.register(rec);
+        rec = rLPRWand.makeLightProximityRecipe(new ResourceLocation(AstralSorcery.MODID, "lightproximity/wand"));
+        rRJournal.register(new ResourceLocation(AstralSorcery.MODID, "recipes/journal"));
+        rCCParchment.register(new ResourceLocation(AstralSorcery.MODID, "recipes/parchment"));
 
-        manager.addRecipe(rBlackMarbleRaw.make());
-        manager.addRecipe(rMarbleArch.make());
-        manager.addRecipe(rMarblePillar.make());
-        manager.addRecipe(rMarbleRuned.make());
-        manager.addRecipe(rMarbleEngraved.make());
-        manager.addRecipe(rMarbleChiseled.make());
-        manager.addRecipe(rMarbleBricks.make());
-        manager.addRecipe(rMarbleStairs.make());
+        rBlackMarbleRaw.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_black"));
+        rMarbleArch    .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_arch"));
+        rMarblePillar  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_pillar"));
+        rMarbleRuned   .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_runed"));
+        rMarbleEngraved.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_engraved"));
+        rMarbleChiseled.register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_chiseled"));
+        rMarbleBricks  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_bricks"));
+        rMarbleStairs  .register(new ResourceLocation(AstralSorcery.MODID, "recipes/marble_stairs"));
 
         rSmeltStarmetalOre.register();
         rSmeltAquamarineOre.register();

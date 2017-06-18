@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -86,7 +86,7 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
 
     protected void drawRect(int offsetX, int offsetY, int width, int height, double u, double v, double uLength, double vLength) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, zLevel).tex(u,           v + vLength).endVertex();
         vb.pos(offsetX + width, offsetY + height, zLevel).tex(u + uLength, v + vLength).endVertex();
@@ -97,7 +97,7 @@ public abstract class GuiAltarBase extends GuiInventoryContainerBase {
 
     protected void drawRect(int offsetX, int offsetY, int width, int height) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
         vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();

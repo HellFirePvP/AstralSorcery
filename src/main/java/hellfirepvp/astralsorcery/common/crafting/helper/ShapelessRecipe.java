@@ -14,8 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nullable;
 
@@ -84,12 +86,12 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
     }
 
     @Override
-    public void register() {
-        CraftingManager.getInstance().addRecipe(make());
+    public void register(ResourceLocation name) {
+        GameRegistry.register(make(name));
     }
 
     @Override
-    public AccessibleRecipeAdapater make() {
+    public AccessibleRecipeAdapater make(ResourceLocation name) {
         Object[] parts = new Object[contentCounter];
         for (int i = 0; i < parts.length; i++) {
             Object obj = parts[i];
@@ -99,11 +101,11 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
                 parts[i] = contents[i];
             }
         }
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts), this);
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessOreDictRecipe(name, getOutput(), parts), this);
     }
 
     @Override
-    public IRecipe makeNative() {
+    public IRecipe makeNative(ResourceLocation name) {
         Object[] parts = new Object[contentCounter];
         for (int i = 0; i < parts.length; i++) {
             Object obj = parts[i];
@@ -113,7 +115,7 @@ public class ShapelessRecipe extends AbstractCacheableRecipe {
                 parts[i] = contents[i];
             }
         }
-        return RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts);
+        return RecipeHelper.getShapelessOreDictRecipe(name, getOutput(), parts);
     }
 
     @Nullable

@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -58,7 +59,7 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         EnumDyeColor color = getConfiguredColor(stack);
         if(color != null) {
             tooltip.add(MiscUtils.textFormattingForDye(color) + MiscUtils.capitalizeFirst(I18n.format(color.getUnlocalizedName())));

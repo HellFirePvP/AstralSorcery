@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 public class TESRStarlightInfuser extends TileEntitySpecialRenderer<TileStarlightInfuser> {
 
     @Override
-    public void renderTileEntityAt(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         ItemStack in = te.getInputStack();
         if(in.isEmpty()) return;
         EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, in);

@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -163,7 +163,7 @@ public class UIGateway {
         RenderAstralSkybox.TEX_STAR_1.bind();
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         for (int i = 0; i < 300; i++) {
             Vector3 dir = Vector3.random(rand).normalize().multiply(radius);

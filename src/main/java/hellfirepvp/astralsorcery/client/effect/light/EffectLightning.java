@@ -22,7 +22,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
@@ -162,7 +162,7 @@ public class EffectLightning extends EntityComplexFX {
         connection.bind();
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer buf = tes.getBuffer();
+        BufferBuilder buf = tes.getBuffer();
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         for (EffectLightning fl : new ArrayList<>(toBeRendered)) {
@@ -185,12 +185,12 @@ public class EffectLightning extends EntityComplexFX {
         GL11.glPopAttrib();
     }
 
-    private void renderF(float partialTicks, VertexBuffer vb) {
+    private void renderF(float partialTicks, BufferBuilder vb) {
         bufRenderDepth = Math.min(1F, (age + partialTicks) / (buildSpeed * 20F));
         renderRec(this.root, vb);
     }
 
-    private void renderRec(LightningVertex root, VertexBuffer vb) {
+    private void renderRec(LightningVertex root, BufferBuilder vb) {
         int allDepth = this.root.followingDepth;
         boolean mayRenderNext = 1F - (((float) root.followingDepth) / ((float) allDepth)) <= bufRenderDepth;
         for (LightningVertex next : root.next) {
@@ -199,12 +199,12 @@ public class EffectLightning extends EntityComplexFX {
         }
     }
 
-    private void drawLine(Vector3 from, Vector3 to, VertexBuffer vb) {
+    private void drawLine(Vector3 from, Vector3 to, BufferBuilder vb) {
         renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.05F, vb);
         renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.05F, vb);
     }
 
-    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, VertexBuffer buf) {
+    private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, BufferBuilder buf) {
         Vector3 aim = to.clone().subtract(from).normalize();
         Vector3 aimPerp = aim.clone().perpendicular().normalize();
         Vector3 perp = aimPerp.clone().rotate(angle, aim).normalize();

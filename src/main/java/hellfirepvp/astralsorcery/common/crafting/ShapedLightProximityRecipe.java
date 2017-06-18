@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.block.Block;
@@ -21,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -37,7 +39,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 02.08.2016 / 22:57
  */
-public class ShapedLightProximityRecipe implements IRecipe {
+public class ShapedLightProximityRecipe extends BasePlainRecipe {
 
     public static BlockPos clientWorkbenchPosition = null;
 
@@ -49,15 +51,16 @@ public class ShapedLightProximityRecipe implements IRecipe {
     protected int height = 0;
     protected boolean mirrored = true;
 
-    public ShapedLightProximityRecipe(Block result, Object... recipe) {
-        this(new ItemStack(result), recipe);
+    public ShapedLightProximityRecipe(ResourceLocation name, Block result, Object... recipe) {
+        this(name, new ItemStack(result), recipe);
     }
 
-    public ShapedLightProximityRecipe(Item result, Object... recipe) {
-        this(new ItemStack(result), recipe);
+    public ShapedLightProximityRecipe(ResourceLocation name, Item result, Object... recipe) {
+        this(name, new ItemStack(result), recipe);
     }
 
-    public ShapedLightProximityRecipe(ItemStack result, Object... recipe) {
+    public ShapedLightProximityRecipe(ResourceLocation name, ItemStack result, Object... recipe) {
+        super(name);
         output = result.copy();
 
         String shape = "";
@@ -141,8 +144,8 @@ public class ShapedLightProximityRecipe implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return input.length;
+    public boolean canFit(int width, int height) {
+        return width == 3 && height == 3; //Vanilla 3x3 grid ideally
     }
 
     @Override

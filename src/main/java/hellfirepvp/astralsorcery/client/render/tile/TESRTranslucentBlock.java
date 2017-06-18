@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Biomes;
@@ -80,7 +80,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         Blending.ADDITIVEDARK.apply();
         GL11.glNewList(batchDList, GL11.GL_COMPILE);
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (TranslucentBlockState tbs : blocks) {
             Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tbs.state, tbs.pos, iba, vb);
@@ -110,7 +110,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     }
 
     @Override
-    public void renderTileEntityAt(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
         TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(renderState, te.getPos()));

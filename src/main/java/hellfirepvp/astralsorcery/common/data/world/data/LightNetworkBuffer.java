@@ -267,8 +267,8 @@ public class LightNetworkBuffer extends CachedWorldData {
         for (ChunkPos pos : chunkSortedData.keySet()) {
             ChunkNetworkData data = chunkSortedData.get(pos);
             NBTTagCompound posTag = new NBTTagCompound();
-            posTag.setInteger("chX", pos.chunkXPos);
-            posTag.setInteger("chZ", pos.chunkZPos);
+            posTag.setInteger("chX", pos.x);
+            posTag.setInteger("chZ", pos.z);
             NBTTagList netData = new NBTTagList();
             data.writeToNBT(netData);
             posTag.setTag("netData", netData);

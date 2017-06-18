@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
@@ -28,9 +29,9 @@ public abstract class AbstractCacheableRecipe extends AbstractRecipe {
         super(output);
     }
 
-    public abstract IAccessibleRecipe make();
+    public abstract IAccessibleRecipe make(ResourceLocation name);
 
-    public abstract IRecipe makeNative();
+    public abstract IRecipe makeNative(ResourceLocation name);
 
     @Nullable
     public abstract ItemHandle getExpectedStack(int row, int column);

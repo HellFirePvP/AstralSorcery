@@ -20,6 +20,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -38,9 +40,10 @@ public class BlockCollectorCrystal extends BlockCollectorCrystalBase {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (IWeakConstellation major : ConstellationRegistry.getWeakConstellations()) {
-            ItemStack stack = new ItemStack(itemIn);
+            ItemStack stack = new ItemStack(this);
             ItemCollectorCrystal.setConstellation(stack, major);
             ItemCollectorCrystal.setType(stack, CollectorCrystalType.ROCK_CRYSTAL);
             CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));

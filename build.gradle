@@ -1,5 +1,3 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
@@ -9,21 +7,21 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.4.2"
+version = "1.5.1"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.11.2-13.20.0.2296"
+    version = "1.12-14.21.0.2333"
     runDir = "run"
     useDepAts = true
 
-    mappings = "snapshot_20170308"
+    mappings = "snapshot_20170617"
 }
 
 sourceCompatibility = 1.8
@@ -56,17 +54,17 @@ repositories {
 
 dependencies {
 
-    def mc_version = "1.11.2"
-    def jei_version = "4.3.4.272"
+    def mc_version = "1.12"
+    def jei_version = "4.6.0.63"
 
-    //JEI stuff
+    ////JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
 
-    def ct_mc_version = "MC1112"
-    def ct_version = "3.0.24.82"
+    //def ct_mc_version = "MC1112"
+    //def ct_version = "3.0.24.82"
 
-    deobfCompile "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
+    //deobfCompile "MineTweaker3:MineTweaker3-${ct_mc_version}-Main:${mc_version}-${ct_version}"
 
 }
 

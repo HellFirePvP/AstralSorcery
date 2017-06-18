@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -113,7 +113,7 @@ public class BlockArrayRenderHelper {
 
         TextureHelper.setActiveTextureToAtlasSprite();
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         vb.begin(GL11.GL_QUADS, blockFormat);
         for (Map.Entry<BlockPos, BakedBlockData> data : renderAccess.blockRenderData.entrySet()) {
@@ -130,7 +130,7 @@ public class BlockArrayRenderHelper {
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null && renderData.tesr != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
-                renderData.tesr.renderTileEntityAt(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0);
+                renderData.tesr.render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
             }
         }
 
@@ -147,7 +147,7 @@ public class BlockArrayRenderHelper {
             super(type, state);
             this.tileEntity = te;
             if(te != null) {
-                tesr = TileEntityRendererDispatcher.instance.getSpecialRenderer(te);
+                tesr = TileEntityRendererDispatcher.instance.getRenderer(te);
             }
         }
 

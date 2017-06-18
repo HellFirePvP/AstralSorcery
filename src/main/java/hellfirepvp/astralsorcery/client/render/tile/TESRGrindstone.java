@@ -39,7 +39,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
     private static final BindableResource texGrindstone = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/grindingstone");
 
     @Override
-    public void renderTileEntityAt(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileGrindstone te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5, y + 1.65, z + 0.5);

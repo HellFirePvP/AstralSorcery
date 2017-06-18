@@ -15,8 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nullable;
@@ -105,22 +107,22 @@ public class ShapedRecipe extends AbstractCacheableRecipe {
     }
 
     @Override
-    public void register() {
-        CraftingManager.getInstance().addRecipe(make());
+    public void register(ResourceLocation name) {
+        GameRegistry.register(make(name));
     }
 
     @Override
-    public AccessibleRecipeAdapater make() {
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapedOredictRecipe(getOutput(), getNativeObjOutArray()), this);
+    public AccessibleRecipeAdapater make(ResourceLocation name) {
+        return new AccessibleRecipeAdapater(RecipeHelper.getShapedOredictRecipe(name, getOutput(), getNativeObjOutArray()), this);
     }
 
     @Override
-    public IRecipe makeNative() {
-        return RecipeHelper.getShapedOredictRecipe(getOutput(), getNativeObjOutArray());
+    public IRecipe makeNative(ResourceLocation name) {
+        return RecipeHelper.getShapedOredictRecipe(name, getOutput(), getNativeObjOutArray());
     }
 
-    public ShapedLightProximityRecipe makeLightProximityRecipe() {
-        return new ShapedLightProximityRecipe(getOutput(), getNativeObjOutArray());
+    public ShapedLightProximityRecipe makeLightProximityRecipe(ResourceLocation name) {
+        return new ShapedLightProximityRecipe(name, getOutput(), getNativeObjOutArray());
     }
 
     private Object[] getNativeObjOutArray() {

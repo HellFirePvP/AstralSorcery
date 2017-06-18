@@ -19,10 +19,12 @@ import hellfirepvp.astralsorcery.common.item.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -46,7 +48,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase implement
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         Optional<Boolean> out = addCrystalPropertyToolTip(stack, tooltip);
         boolean shift = Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
         if(shift && out.isPresent()) {

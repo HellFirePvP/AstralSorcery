@@ -30,7 +30,6 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -141,12 +140,13 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
-        if (Mods.CRAFTTWEAKER.isPresent()) {
+        //FIXME AFTER CT PORTED
+        /*if (Mods.CRAFTTWEAKER.isPresent()) {
             AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
             ModIntegrationCrafttweaker.instance.load();
         } else {
             AstralSorcery.log.info("Crafttweaker not found!");
-        }
+        }*/
 
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 

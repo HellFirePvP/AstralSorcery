@@ -36,7 +36,8 @@ public class ItemRoseBranchBow extends ItemBow implements IOBJItem {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {}
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {}
 
     @Override
     @SideOnly(Side.CLIENT)

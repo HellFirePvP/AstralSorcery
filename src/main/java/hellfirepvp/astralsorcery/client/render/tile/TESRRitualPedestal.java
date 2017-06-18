@@ -37,7 +37,7 @@ import java.awt.*;
 public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPedestal> {
 
     @Override
-    public void renderTileEntityAt(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         renderCrystalStack(te, x, y, z);
 

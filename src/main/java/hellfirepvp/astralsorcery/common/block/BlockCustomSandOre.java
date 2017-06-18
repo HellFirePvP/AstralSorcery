@@ -24,6 +24,8 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -52,9 +54,10 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (OreType t : OreType.values()) {
-            list.add(new ItemStack(item, 1, t.ordinal()));
+            list.add(new ItemStack(this, 1, t.ordinal()));
         }
     }
 
@@ -114,7 +117,7 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     }
 
     @Override
-    public boolean isFullyOpaque(IBlockState state) {
+    public boolean isTopSolid(IBlockState state) {
         return true;
     }
 

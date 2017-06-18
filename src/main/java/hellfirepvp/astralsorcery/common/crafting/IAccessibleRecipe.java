@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,20 +28,28 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 06.10.2016 / 14:18
  */
-public interface IAccessibleRecipe extends IRecipe {
+public abstract class IAccessibleRecipe extends BasePlainRecipe {
+
+    protected IAccessibleRecipe(@Nonnull String recipeName) {
+        super(recipeName);
+    }
+
+    protected IAccessibleRecipe(@Nullable ResourceLocation registryName) {
+        super(registryName);
+    }
 
     @Nullable
     @SideOnly(Side.CLIENT)
-    public NonNullList<ItemStack> getExpectedStackForRender(int row, int column);
+    public abstract NonNullList<ItemStack> getExpectedStackForRender(int row, int column);
 
     @Nullable
-    public ItemHandle getExpectedStackHandle(int row, int column);
+    public abstract ItemHandle getExpectedStackHandle(int row, int column);
 
     @Nullable
     @SideOnly(Side.CLIENT)
-    public NonNullList<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot);
+    public abstract NonNullList<ItemStack> getExpectedStackForRender(ShapedRecipeSlot slot);
 
     @Nullable
-    public ItemHandle getExpectedStackHandle(ShapedRecipeSlot slot);
+    public abstract ItemHandle getExpectedStackHandle(ShapedRecipeSlot slot);
 
 }

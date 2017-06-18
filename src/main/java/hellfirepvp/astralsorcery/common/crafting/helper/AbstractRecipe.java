@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
@@ -32,6 +33,6 @@ public abstract class AbstractRecipe {
         return output;
     }
 
-    public abstract void register();
+    public abstract void register(ResourceLocation name);
 
 }

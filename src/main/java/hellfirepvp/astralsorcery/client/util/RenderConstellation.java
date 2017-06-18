@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +41,7 @@ public class RenderConstellation {
     @SideOnly(Side.CLIENT)
     public static void renderConstellation(IConstellation c, ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
 
         Vector3 renderOffset = renderPos.offset;
         Color rC = c.getRenderColor();
@@ -95,7 +95,7 @@ public class RenderConstellation {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         double s = 1D / 31D * scale;
 
@@ -161,7 +161,7 @@ public class RenderConstellation {
     public static void renderConstellationIntoWorld(IConstellation c, Color rC, Vector3 offsetPos, double lineBreadth, BrightnessFunction func) {
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         Vector3 dirV = new Vector3(0, 0, 1);
         Vector3 dirU = new Vector3(1, 0, 0);
@@ -218,7 +218,7 @@ public class RenderConstellation {
 
     public static Map<StarLocation, Rectangle> renderConstellationIntoGUI(Color col, IConstellation c, int offsetX, int offsetY, float zLevel, int width, int height, double linebreadth, BrightnessFunction func, boolean isKnown, boolean applyStarBrightness) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         double ulength = ((double) width) / 31;
         double vlength = ((double) height) / 31;
 

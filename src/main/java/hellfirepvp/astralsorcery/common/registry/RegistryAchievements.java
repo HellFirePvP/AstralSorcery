@@ -12,8 +12,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.client.gui.advancements.GuiScreenAdvancements;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.UniversalBucket;
 
@@ -26,17 +26,18 @@ import net.minecraftforge.fluids.UniversalBucket;
  */
 public class RegistryAchievements {
 
-    public static Achievement achvRockCrystal;
-    public static Achievement achvCelestialCrystal;
-    public static Achievement achvBuildHandTelescope;
-    public static Achievement achvDiscoverConstellation;
-    public static Achievement achvBuildActTelescope;
-    public static Achievement achvLiqStarlight;
-    public static Achievement achvPlayerAttunement;
+    public static Advancement achvRockCrystal;
+    public static Advancement achvCelestialCrystal;
+    public static Advancement achvBuildHandTelescope;
+    public static Advancement achvDiscoverConstellation;
+    public static Advancement achvBuildActTelescope;
+    public static Advancement achvLiqStarlight;
+    public static Advancement achvPlayerAttunement;
 
-    public static AchievementPage achievementPageAstralSorcery;
+    public static GuiScreenAdvancements achievementPageAstralSorcery;
 
     public static void init() {
+        GuiScreenAdvancements
         achvRockCrystal = new Achievement("achievement.as.minerockcrystal", "astralsorcery.minerockcrystal", -1, 3,
                 ItemsAS.rockCrystal, null);
         achvCelestialCrystal = new Achievement("achievement.as.celestialcrystal", "astralsorcery.celestialcrystal", -2, 1,

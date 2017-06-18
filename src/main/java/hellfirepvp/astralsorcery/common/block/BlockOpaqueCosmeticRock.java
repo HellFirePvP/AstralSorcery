@@ -23,6 +23,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -51,9 +53,10 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlockType bt : BlockType.values()) {
-            list.add(new ItemStack(item, 1, bt.ordinal()));
+            list.add(new ItemStack(this, 1, bt.ordinal()));
         }
     }
 

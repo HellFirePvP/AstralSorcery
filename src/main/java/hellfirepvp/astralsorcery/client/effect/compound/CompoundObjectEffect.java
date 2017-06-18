@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -31,7 +31,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
     public final void render(float pTicks) {
         GL11.glPushMatrix();
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         getGroup().beginDrawing(vb);
         render(vb, pTicks);
         tes.draw();
@@ -40,13 +40,13 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
 
     public abstract ObjectGroup getGroup();
 
-    public abstract void render(VertexBuffer vb, float pTicks);
+    public abstract void render(BufferBuilder vb, float pTicks);
 
     public enum ObjectGroup {
 
         SOLID_COLOR_SPHERE;
 
-        public void beginDrawing(VertexBuffer vb) {
+        public void beginDrawing(BufferBuilder vb) {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
                     vb.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);

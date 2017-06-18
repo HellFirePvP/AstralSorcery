@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
@@ -135,7 +135,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         staticFlareTex.bind();
 
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         for (EntityFXFacingParticle particle : new ArrayList<>(particles)) {
@@ -154,7 +154,7 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
 
     //Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
     //GL states have to be preinitialized.
-    public void renderFast(float pTicks, VertexBuffer vbDrawing) {
+    public void renderFast(float pTicks, BufferBuilder vbDrawing) {
         float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
         double intX = RenderingUtils.interpolate(oldX, x, pTicks);

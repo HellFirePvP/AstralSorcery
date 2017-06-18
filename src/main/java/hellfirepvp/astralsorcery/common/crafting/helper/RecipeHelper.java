@@ -17,6 +17,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
@@ -38,28 +39,21 @@ import java.util.Map;
  */
 public class RecipeHelper {
 
-    public static IRecipe getShapelessOreDictRecipe(ItemStack stack, Object... recipeComponents) {
-        return new ShapelessHandleOreRecipe(stack, recipeComponents);
+    public static IRecipe getShapelessOreDictRecipe(ResourceLocation name, ItemStack stack, Object... recipeComponents) {
+        return new ShapelessHandleOreRecipe(name, stack, recipeComponents);
     }
 
-    public static IRecipe getShapedOredictRecipe(ItemStack stack, Object... recipeComponents) {
-        return new ShapedHandleOreRecipe(stack, recipeComponents);
+    public static IRecipe getShapedOredictRecipe(ResourceLocation name, ItemStack stack, Object... recipeComponents) {
+        return new ShapedHandleOreRecipe(name, stack, recipeComponents);
     }
 
     public static class ShapelessHandleOreRecipe extends ShapelessOreRecipe {
         protected ItemStack output = ItemStack.EMPTY;
         protected NonNullList<Object> input = NonNullList.create();
 
-        public ShapelessHandleOreRecipe(Block result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapelessHandleOreRecipe(Item result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapelessHandleOreRecipe(ItemStack result, Object... recipe) {
-            super(result.copy());
+        public ShapelessHandleOreRecipe(ResourceLocation name, ItemStack result, Object... recipe) {
+            super(name, result.copy());
+            setRegistryName(name);
             output = result.copy();
             for (Object in : recipe) {
                 if (in instanceof ItemStack) {
@@ -86,28 +80,9 @@ public class RecipeHelper {
             }
         }
 
-        ShapelessHandleOreRecipe(ShapelessRecipes recipe, Map<ItemStack, String> replacements) {
-            super(recipe.getRecipeOutput());
-            output = recipe.getRecipeOutput();
-
-            for (ItemStack ingredient : recipe.recipeItems) {
-                Object finalObj = ingredient;
-                for (Map.Entry<ItemStack, String> replace : replacements.entrySet()) {
-                    if (OreDictionary.itemMatches(replace.getKey(), ingredient, false)) {
-                        finalObj = OreDictionary.getOres(replace.getValue());
-                        break;
-                    }
-                }
-                input.add(finalObj);
-            }
-        }
-
-        /**
-         * Returns the size of the recipe area
-         */
         @Override
-        public int getRecipeSize() {
-            return input.size();
+        public boolean canFit(int width, int height) {
+            return width * height >= this.input.size();
         }
 
         @Override
@@ -189,16 +164,8 @@ public class RecipeHelper {
         protected int height = 0;
         protected boolean mirrored = true;
 
-        public ShapedHandleOreRecipe(Block result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapedHandleOreRecipe(Item result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapedHandleOreRecipe(ItemStack result, Object... recipe) {
-            super(result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
+        public ShapedHandleOreRecipe(ResourceLocation name, ItemStack result, Object... recipe) {
+            super(name, result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
             output = result.copy();
 
             String shape = "";
@@ -276,30 +243,6 @@ public class RecipeHelper {
             }
         }
 
-        ShapedHandleOreRecipe(ShapedRecipes recipe, Map<ItemStack, String> replacements) {
-            super(recipe.getRecipeOutput());
-            output = recipe.getRecipeOutput();
-            width = recipe.recipeWidth;
-            height = recipe.recipeHeight;
-
-            input = new Object[recipe.recipeItems.length];
-
-            for (int i = 0; i < input.length; i++) {
-                ItemStack ingredient = recipe.recipeItems[i];
-
-                if (ingredient.isEmpty()) continue;
-
-                input[i] = recipe.recipeItems[i];
-
-                for (Map.Entry<ItemStack, String> replace : replacements.entrySet()) {
-                    if (OreDictionary.itemMatches(replace.getKey(), ingredient, true)) {
-                        input[i] = OreDictionary.getOres(replace.getValue());
-                        break;
-                    }
-                }
-            }
-        }
-
         /**
          * Returns an Item that is the result of this recipe
          */
@@ -308,12 +251,10 @@ public class RecipeHelper {
             return output.copy();
         }
 
-        /**
-         * Returns the size of the recipe area
-         */
+
         @Override
-        public int getRecipeSize() {
-            return input.length;
+        public boolean canFit(int width, int height) {
+            return width >= this.width && height >= this.height;
         }
 
         @Override

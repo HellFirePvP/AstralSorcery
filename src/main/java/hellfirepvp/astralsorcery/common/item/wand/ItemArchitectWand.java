@@ -36,7 +36,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -111,7 +111,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
         GL11.glColor4f(1F, 1F, 1F, fadeAlpha * 0.9F);
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
@@ -171,7 +171,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             World w = Minecraft.getMinecraft().world;
 
             Tessellator tes = Tessellator.getInstance();
-            VertexBuffer vb = tes.getBuffer();
+            BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             for (BlockPos pos : placeable) {
                 Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(stored, pos, w, vb);

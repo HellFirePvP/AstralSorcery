@@ -50,7 +50,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
     private static final BindableResource texAltar3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altart3");
 
     @Override
-    public void renderTileEntityAt(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileAltar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         long sBase = 7553015156732193565L;
         sBase ^= (long) te.getPos().getX();
         sBase ^= (long) te.getPos().getY();

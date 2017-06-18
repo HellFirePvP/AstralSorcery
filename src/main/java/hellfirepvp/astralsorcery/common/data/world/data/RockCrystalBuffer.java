@@ -45,7 +45,7 @@ public class RockCrystalBuffer extends CachedWorldData {
         List<BlockPos> out = new LinkedList<>();
         for (int xx = -rad; xx <= rad; xx++) {
             for (int zz = -rad; zz <= rad; zz++) {
-                ChunkPos other = new ChunkPos(center.chunkXPos + xx, center.chunkZPos + zz);
+                ChunkPos other = new ChunkPos(center.x + xx, center.z + zz);
                 List<BlockPos> saved = crystalPositions.get(other);
                 if(saved != null) {
                     out.addAll(saved);
@@ -119,8 +119,8 @@ public class RockCrystalBuffer extends CachedWorldData {
         synchronized (lock) {
             for (ChunkPos pos : crystalPositions.keySet()) {
                 NBTTagCompound comp = new NBTTagCompound();
-                comp.setInteger("chX", pos.chunkXPos);
-                comp.setInteger("chZ", pos.chunkZPos);
+                comp.setInteger("chX", pos.x);
+                comp.setInteger("chZ", pos.z);
                 NBTTagList chList = new NBTTagList();
                 for (BlockPos exactPos : crystalPositions.get(pos)) {
                     NBTTagCompound tag = new NBTTagCompound();

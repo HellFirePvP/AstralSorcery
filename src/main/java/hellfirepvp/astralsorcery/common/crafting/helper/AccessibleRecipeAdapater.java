@@ -15,6 +15,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,12 +32,13 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 06.10.2016 / 14:26
  */
-public class AccessibleRecipeAdapater implements IAccessibleRecipe {
+public class AccessibleRecipeAdapater extends IAccessibleRecipe {
 
     private final IRecipe parent;
     private final AbstractCacheableRecipe abstractRecipe;
 
     public AccessibleRecipeAdapater(IRecipe parent, AbstractCacheableRecipe abstractRecipe) {
+        super(parent.getRegistryName());
         this.parent = parent;
         this.abstractRecipe = abstractRecipe;
     }
@@ -74,7 +76,7 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
         NonNullList<ItemStack> out = NonNullList.create();
         for (ItemStack oreDictIn : applicableItems) {
             if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                oreDictIn.getItem().getSubItems(oreDictIn.getItem(), CreativeTabs.BUILDING_BLOCKS, out);
+                oreDictIn.getItem().getSubItems(CreativeTabs.BUILDING_BLOCKS, out);
             } else {
                 out.add(oreDictIn);
             }
@@ -94,8 +96,8 @@ public class AccessibleRecipeAdapater implements IAccessibleRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return parent.getRecipeSize();
+    public boolean canFit(int width, int height) {
+        return parent.canFit(width, height);
     }
 
     @Nullable

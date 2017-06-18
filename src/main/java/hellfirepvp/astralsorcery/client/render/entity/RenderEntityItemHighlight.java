@@ -41,7 +41,7 @@ public class RenderEntityItemHighlight extends Render<EntityItemHighlighted> {
         RenderingUtils.renderLightRayEffects(x, y + 0.5, z, entity.getHighlightColor(), 16024L, entity.getAge(), 16, 20, 5);
 
         GL11.glPushMatrix();
-        ItemStack stack = entity.getEntityItem();
+        ItemStack stack = entity.getItem();
         if (!stack.isEmpty()) {
             EntityItem ei = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
             ei.age = entity.getAge();

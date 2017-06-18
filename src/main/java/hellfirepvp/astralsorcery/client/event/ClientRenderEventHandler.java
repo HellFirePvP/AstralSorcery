@@ -311,7 +311,7 @@ public class ClientRenderEventHandler {
 
                 GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);
                 Tessellator tes = Tessellator.getInstance();
-                VertexBuffer vb = tes.getBuffer();
+                BufferBuilder vb = tes.getBuffer();
                 vb.begin(7, DefaultVertexFormats.POSITION_TEX);
                 vb.pos(offsetLeft,            offsetTop + 27, 10).tex(uvPos.key, uvPos.value + ssr.getVLength()).endVertex();
                 vb.pos(offsetLeft + barWidth * percFilled, offsetTop + 27, 10).tex(uvPos.key + uLength, uvPos.value + ssr.getVLength()).endVertex();
@@ -374,7 +374,7 @@ public class ClientRenderEventHandler {
 
         //Draw hud itself
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
         vb.pos(offsetX + width, offsetY + height, 10).tex(1, 1).endVertex();

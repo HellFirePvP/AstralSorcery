@@ -15,6 +15,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -36,11 +38,14 @@ public class ItemCrystalShovel extends ItemCrystalToolBase {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
-        ItemStack stack = new ItemStack(itemIn);
-        setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial));
-        subItems.add(stack);
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if(this.isInCreativeTab(tab)) {
+            CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
+            ItemStack stack = new ItemStack(this);
+            setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial));
+            subItems.add(stack);
+        }
     }
 
 }
