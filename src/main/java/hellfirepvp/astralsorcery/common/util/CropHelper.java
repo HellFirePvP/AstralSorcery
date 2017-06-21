@@ -429,6 +429,9 @@ public class CropHelper {
             IBlockState at = world.getBlockState(pos);
             if(at.getBlock() instanceof IGrowable) {
                 if(((IGrowable) at.getBlock()).canGrow(world, pos, at, false)) {
+                    if(!((IGrowable) at.getBlock()).canUseBonemeal(world, rand, pos, at)) {
+                        if(world.rand.nextInt(40) != 0) return true; //Returning true to say it could've been potentially grown - So this doesn't invalidate caches.
+                    }
                     ((IGrowable) at.getBlock()).grow(world, rand, pos, at);
                     return true;
                 }
