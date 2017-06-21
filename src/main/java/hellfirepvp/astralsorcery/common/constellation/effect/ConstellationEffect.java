@@ -100,6 +100,8 @@ public abstract class ConstellationEffect extends ConfigEntry {
         return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;
     }
 
+    public void clearCache() {}
+
     public void readFromNBT(NBTTagCompound cmp) {}
 
     public void writeToNBT(NBTTagCompound cmp) {}

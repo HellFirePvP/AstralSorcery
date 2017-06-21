@@ -62,9 +62,7 @@ public class ShapeMap extends HashMap<ShapedRecipeSlot, ItemHandle> {
             rawIngredientList = NonNullList.create();
             for (ShapedRecipeSlot srs : ShapedRecipeSlot.values()) {
                 Ingredient i = get(srs);
-                if(i != Ingredient.EMPTY) {
-                    rawIngredientList.add(i);
-                }
+                rawIngredientList.add(i);
             }
             return rawIngredientList;
         }

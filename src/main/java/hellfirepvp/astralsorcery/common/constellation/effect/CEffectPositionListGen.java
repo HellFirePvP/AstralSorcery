@@ -49,6 +49,11 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return elements.size();
     }
 
+    @Override
+    public void clearCache() {
+        this.elements.clear();
+    }
+
     //Returns only null if empty.
     @Nullable
     public T getRandomElement(Random rand) {

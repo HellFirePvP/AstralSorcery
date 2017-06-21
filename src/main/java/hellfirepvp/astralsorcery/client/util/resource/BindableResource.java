@@ -72,7 +72,9 @@ public class BindableResource {
             resource = TextureUtil.MISSING_TEXTURE;
             return;
         }
-        AstralSorcery.log.info("[AssetLibrary] Allocated " + path + " to " + resource.getGlTextureId());
+        if(AstralSorcery.isRunningInDevEnvironment()) {
+            AstralSorcery.log.info("[AssetLibrary] Allocated " + path + " to " + resource.getGlTextureId());
+        }
     }
 
     public void bind() {

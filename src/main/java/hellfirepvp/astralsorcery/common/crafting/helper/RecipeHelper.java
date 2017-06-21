@@ -130,14 +130,15 @@ public class RecipeHelper {
                 for (int y = 0; y < ShapedOreRecipe.MAX_CRAFT_GRID_HEIGHT; y++) {
                     int subX = x - startX;
                     int subY = y - startY;
-                    Ingredient target;
+                    Ingredient target = Ingredient.EMPTY;
 
                     if (subX >= 0 && subY >= 0 && subX < grid.getWidth() && subY < grid.getHeight()) {
-                        target = grid.get(ShapedRecipeSlot.getByRowColumnIndex(subX, subY));
+                        ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(subY, subX);
+                        target = grid.get(srs);
+                    }
 
-                        if (!target.apply(inv.getStackInRowAndColumn(y, x))) {
-                            return false;
-                        }
+                    if (!target.apply(inv.getStackInRowAndColumn(x, y))) {
+                        return false;
                     }
                 }
             }

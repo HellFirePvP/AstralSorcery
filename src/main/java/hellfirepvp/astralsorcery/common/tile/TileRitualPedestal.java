@@ -109,7 +109,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 if(recNode != null) {
                     recNode.updateSkyState(doesSeeSky);
                     recNode.updateMultiblockState(hasMultiblock);
-                    recNode.updateLink(ritualLink);
+                    recNode.updateLink(world, ritualLink);
 
                     recNode.markDirty(world);
                 }
@@ -855,8 +855,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             markDirty(world);
         }
 
-        public void updateLink(@Nullable BlockPos ritualLink) {
+        public void updateLink(@Nonnull World world, @Nullable BlockPos ritualLink) {
+            BlockPos prev = this.ritualLinkTo;
             this.ritualLinkTo = ritualLink;
+            if(!prev.equals(this.ritualLinkTo) && this.ce != null) {
+                this.ce.clearCache();
+                markDirty(world);
+            }
         }
     }
 
