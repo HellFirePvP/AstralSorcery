@@ -90,7 +90,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
                         float br = 0.9F * alphaDaytime;
 
-                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
+                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getTierRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
                         GL11.glPopMatrix();
                     }
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -172,7 +172,7 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(partialTicks);
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
+        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getTierRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 4 + tr, 2, 0.1F + 0.8F * alphaDaytime);
     }*/
 
     private void renderFocusLens(TileAltar te, double x, double y, double z, float partialTicks) {

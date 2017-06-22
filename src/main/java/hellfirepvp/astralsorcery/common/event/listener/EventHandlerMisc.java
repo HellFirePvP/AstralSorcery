@@ -13,6 +13,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.List;
 public class EventHandlerMisc {
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public void onToolTip(ItemTooltipEvent event) {
         List<String> toolTip = event.getToolTip();
         ItemStack stack = event.getItemStack();

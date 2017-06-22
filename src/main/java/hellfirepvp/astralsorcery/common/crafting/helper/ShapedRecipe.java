@@ -124,6 +124,11 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
             return this;
         }
 
+        public Builder forceEmptySpaces() {
+            crafingShape.setCut(false);
+            return this;
+        }
+
         public AccessibleRecipeAdapater unregisteredAccessibleShapedRecipe() {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true; //Cache it please instead.

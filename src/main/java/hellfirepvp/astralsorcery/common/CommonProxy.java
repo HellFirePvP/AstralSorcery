@@ -116,13 +116,13 @@ public class CommonProxy implements IGuiHandler {
         StarlightNetworkRegistry.setupRegistry();
 
         RegistryBlocks.initRenderRegistry();
+        registerOreDictEntries();
         RegistryRecipes.init();
         RegistryResearch.init();
 
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
 
-        registerOreDictEntries();
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //RegistryAchievements.init();
         RegistryPerks.init();

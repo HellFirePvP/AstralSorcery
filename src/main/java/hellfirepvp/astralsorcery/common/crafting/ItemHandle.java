@@ -45,6 +45,7 @@ public final class ItemHandle {
 
     private static final Constructor<CompoundIngredient> COMPOUND_CTOR;
 
+    public static ItemHandle EMPTY = new ItemHandle();
     public static boolean ignoreGatingRequirement = true;
 
     public final Type handleType;
@@ -58,6 +59,11 @@ public final class ItemHandle {
      */
     private ItemHandle(Type type) {
         this.handleType = type;
+    }
+
+    private ItemHandle() {
+        this(Type.STACK);
+        applicableItems.add(ItemStack.EMPTY);
     }
 
     public ItemHandle(String oreDictName) {

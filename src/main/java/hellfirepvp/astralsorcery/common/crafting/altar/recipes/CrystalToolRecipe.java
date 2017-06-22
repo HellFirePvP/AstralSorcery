@@ -48,7 +48,7 @@ public class CrystalToolRecipe extends DiscoveryRecipe {
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         ItemStack toolOut = super.getOutput(centralGridMap, altar);
         List<CrystalProperties> prop = new LinkedList<>();
-        for (ShapedRecipeSlot slot : positions) {
+        for (ShapedRecipeSlot slot : ShapedRecipeSlot.values()) {
             ItemHandle handle = centralGridMap.get(slot);
             if(handle == null) continue;
             if(handle.getApplicableItems().size() != 1) continue; //Force it to be the crystal. and only the crystal.

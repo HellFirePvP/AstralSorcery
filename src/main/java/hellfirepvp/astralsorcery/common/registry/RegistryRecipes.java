@@ -479,6 +479,7 @@ public class RegistryRecipes {
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensFire.setAttItem(Items.BLAZE_POWDER, AttunementRecipe.AttunementAltarSlot.values());
         rGlassLensFire.setCstItem(Items.BLAZE_POWDER,
@@ -494,6 +495,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(Items.IRON_PICKAXE,
                         ShapedRecipeSlot.LOWER_CENTER)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensBreak.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT,
@@ -513,6 +515,7 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.ITEM_IRON_INGOT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensDamage.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
@@ -529,6 +532,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensGrowth.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), AttunementRecipe.AttunementAltarSlot.values());
         rGlassLensGrowth.setCstItem(OreDictAlias.ITEM_SUGARCANE,
@@ -545,6 +549,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(OreDictAlias.ITEM_DIAMOND,
                         ShapedRecipeSlot.LOWER_CENTER)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensRegeneration.setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
@@ -559,6 +564,7 @@ public class RegistryRecipes {
                 .addPart(Blocks.PISTON,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
+                .forceEmptySpaces()
                 .unregisteredAccessibleShapedRecipe());
         rGlassLensPush.setAttItem(OreDictAlias.ITEM_GLOWSTONE_DUST, AttunementRecipe.AttunementAltarSlot.values());
         rGlassLensPush.setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
