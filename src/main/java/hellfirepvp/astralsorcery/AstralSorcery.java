@@ -35,15 +35,13 @@ import org.apache.logging.log4j.Logger;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 00:20
  */
-//required-after:forge@[14.21.0.2348,);
-//forgeversion=14.21.0.2350
-//mcp_mappings=snapshot_20170623
-@Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION, acceptedMinecraftVersions="[1.12]")
+@Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
+    acceptedMinecraftVersions="[1.12]", dependencies = "required-after:forge@[14.21.0.2371,)")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.5.2";
+    public static final String VERSION = "1.5.4";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
