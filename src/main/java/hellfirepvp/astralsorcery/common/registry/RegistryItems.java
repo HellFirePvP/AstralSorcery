@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
@@ -21,6 +22,9 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.useables.ItemIlluminationPowder;
+import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
+import hellfirepvp.astralsorcery.common.item.useables.ItemVortexDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
@@ -35,8 +39,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -119,6 +122,7 @@ public class RegistryItems {
         architectWand = registerItem(new ItemArchitectWand());
         exchangeWand = registerItem(new ItemExchangeWand());
         illuminationPowder = registerItem(new ItemIlluminationPowder());
+        vortexDust = registerItem(new ItemVortexDust());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
@@ -190,8 +194,8 @@ public class RegistryItems {
         }
     }*/
 
-    private static <T extends IForgeRegistryEntry> void register(T item, String name) {
-        GameRegistry.register(item);
+    private static <T extends IForgeRegistryEntry<T>> void register(T item, String name) {
+        CommonProxy.registryPrimer.register(item);
 
         if (item instanceof Item) {
             registerItemInformations((Item) item, name);

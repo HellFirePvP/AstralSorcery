@@ -129,7 +129,6 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
             if(type == AltarType.ALTAR_4 || type == AltarType.ALTAR_5) continue;

@@ -53,7 +53,6 @@ public class BlockOpaqueCosmeticRock extends Block implements BlockCustomName {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlockType bt : BlockType.values()) {
             list.add(new ItemStack(this, 1, bt.ordinal()));

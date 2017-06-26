@@ -40,7 +40,6 @@ public class BlockCelestialCollectorCrystal extends BlockCollectorCrystalBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (IWeakConstellation major : ConstellationRegistry.getWeakConstellations()) {
             ItemStack stack = new ItemStack(this);

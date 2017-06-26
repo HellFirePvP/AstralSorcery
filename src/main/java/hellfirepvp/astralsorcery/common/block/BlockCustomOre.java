@@ -74,7 +74,6 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (OreType t : OreType.values()) {
             list.add(new ItemStack(this, 1, t.ordinal()));

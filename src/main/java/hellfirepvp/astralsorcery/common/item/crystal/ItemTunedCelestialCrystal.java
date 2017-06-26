@@ -35,7 +35,6 @@ import java.awt.*;
 public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase implements ItemGatedVisibility {
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if(this.isInCreativeTab(tab)) {
             ItemStack stack;

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -24,6 +25,7 @@ import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -80,6 +82,19 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
     @Override
     @SideOnly(Side.CLIENT)
     public boolean addHitEffects(IBlockState state, World world, RayTraceResult target, ParticleManager manager) {
+        Color c = null;
+        if(state.getBlock() instanceof BlockCelestialCollectorCrystal) {
+            c = CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+        }
+        for (int i = 0; i < 1 + world.rand.nextInt(2); i++) {
+            AstralSorcery.proxy.fireLightning(world,
+                    new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5),
+                    new Vector3(target.getBlockPos()).add(0.5, 0.5, 0.5)
+                            .add(-0.5 + world.rand.nextFloat(),
+                                 -2 + world.rand.nextFloat() * 4,
+                                 -0.5 + world.rand.nextFloat()),
+                    c);
+        }
         return true;
     }
 

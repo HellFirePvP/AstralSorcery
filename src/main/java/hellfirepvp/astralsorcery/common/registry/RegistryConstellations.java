@@ -173,7 +173,7 @@ public class RegistryConstellations {
         vicio.addConnection(sl5, sl6);
         vicio.addConnection(sl6, sl7);
 
-        aevitas = new ConstellationBase.Major("aevitas", new Color(0xA7F62E));
+        aevitas = new ConstellationBase.Major("aevitas", new Color(0x29F615));
         sl1 = aevitas.addStar(15, 14);
         sl2 = aevitas.addStar(7, 12);
         sl3 = aevitas.addStar(3, 6);

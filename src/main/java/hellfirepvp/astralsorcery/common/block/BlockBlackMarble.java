@@ -50,7 +50,6 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlackMarbleBlockType t : BlackMarbleBlockType.values()) {
             list.add(new ItemStack(this, 1, t.ordinal()));

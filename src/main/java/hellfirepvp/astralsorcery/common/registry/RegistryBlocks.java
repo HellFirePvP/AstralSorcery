@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
@@ -35,9 +36,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.LinkedList;
@@ -71,13 +70,12 @@ public class RegistryBlocks {
         FluidRegistry.registerFluid(f);
         fluidLiquidStarlight = FluidRegistry.getFluid(f.getName());
         blockLiquidStarlight = new FluidBlockLiquidStarlight();
-        GameRegistry.register(blockLiquidStarlight
+        CommonProxy.registryPrimer.register(blockLiquidStarlight
                 .setUnlocalizedName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase())
                 .setRegistryName(blockLiquidStarlight.getClass().getSimpleName().toLowerCase()));
         fluidLiquidStarlight.setBlock(blockLiquidStarlight);
 
         FluidRegistry.addBucketForFluid(BlocksAS.fluidLiquidStarlight);
-        ItemsAS.itemBucketLiquidStarlight = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidLiquidStarlight);
     }
 
     //Blocks
@@ -194,7 +192,7 @@ public class RegistryBlocks {
     }
 
     private static <T extends Block> T registerBlock(T block, String name) {
-        GameRegistry.register(block.setUnlocalizedName(name).setRegistryName(name));
+        CommonProxy.registryPrimer.register(block.setUnlocalizedName(name).setRegistryName(name));
         if(block instanceof BlockDynamicColor) {
             pendingIBlockColorBlocks.add((BlockDynamicColor) block);
         }

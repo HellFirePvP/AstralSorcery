@@ -55,7 +55,6 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
             if(!t.obtainableInCreative()) continue;

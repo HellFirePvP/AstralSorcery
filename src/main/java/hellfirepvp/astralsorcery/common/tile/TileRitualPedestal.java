@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.tile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
@@ -135,9 +136,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             int tick = getEffectWorkTick();
             float percRunning = ((float) tick / (float) TileRitualPedestal.MAX_EFFECT_TICK);
             int chance = 15 + (int) ((1F - percRunning) * 50);
-            if(EffectHandler.STATIC_EFFECT_RAND.nextInt(chance) == 0) {
+            if(rand.nextInt(chance) == 0) {
                 Vector3 from = new Vector3(this).add(0.5, 0.05, 0.5);
-                MiscUtils.applyRandomOffset(from, EffectHandler.STATIC_EFFECT_RAND, 0.05F);
+                MiscUtils.applyRandomOffset(from, rand, 0.05F);
                 EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(6), from, 1.5F);
                 lightbeam.setAlphaMultiplier(0.5F + (0.5F * alphaDaytime));
                 lightbeam.setMaxAge(64);
@@ -153,13 +154,34 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                 }
             }
             if(shouldDoAdditionalEffects() && !isDay) {
-                if(EffectHandler.STATIC_EFFECT_RAND.nextInt(chance * 2) == 0) {
+                if(rand.nextInt(chance * 2) == 0) {
                     Vector3 from = new Vector3(this).add(0.5, 0.1, 0.5);
-                    MiscUtils.applyRandomOffset(from, EffectHandler.STATIC_EFFECT_RAND, 2F);
-                    from.setY(getPos().getY() - 0.6 + 1 * EffectHandler.STATIC_EFFECT_RAND.nextFloat() * (EffectHandler.STATIC_EFFECT_RAND.nextBoolean() ? 1 : -1));
-                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(5 + EffectHandler.STATIC_EFFECT_RAND.nextInt(3)), from, 1.3F);
+                    MiscUtils.applyRandomOffset(from, rand, 2F);
+                    from.setY(getPos().getY() - 0.6 + 1 * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
+                    EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(5 + rand.nextInt(3)), from, 1.3F);
                     lightbeam.setAlphaMultiplier(alphaDaytime);
+                    if(this.getDisplayConstellation() != null) {
+                        lightbeam.setColorOverlay(getDisplayConstellation().getConstellationColor());
+                    }
                     lightbeam.setMaxAge(64);
+                }
+                if(this.getDisplayConstellation() != null && rand.nextInt(chance * 8) == 0) {
+                    List<Vector3> positions = MiscUtils.getCirclePositions(new Vector3(pos).add(0.5, -0.3, 0.5),
+                            Vector3.RotAxis.Y_AXIS, 1 + rand.nextFloat() * 0.5, 40);
+                    Color c = getDisplayConstellation().getConstellationColor();
+                    for (Vector3 v : positions) {
+                        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                        p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                        Color col = c;
+                        if(rand.nextBoolean()) {
+                            col = col.darker();
+                            if(rand.nextBoolean()) {
+                                col = col.darker();
+                            }
+                        }
+                        p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(50 + rand.nextInt(40));
+                        p.setColor(col).motion(-0.02 + rand.nextFloat() * 0.04, rand.nextFloat() * 0.07, -0.02 + rand.nextFloat() * 0.04);
+                    }
                 }
             }
             ItemStack crystal = getInventoryHandler().getStackInSlot(0);
@@ -858,7 +880,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         public void updateLink(@Nonnull World world, @Nullable BlockPos ritualLink) {
             BlockPos prev = this.ritualLinkTo;
             this.ritualLinkTo = ritualLink;
-            if(!prev.equals(this.ritualLinkTo) && this.ce != null) {
+            if(prev == null && this.ritualLinkTo == null) return; //Wtf.
+            if((prev == null || !prev.equals(this.ritualLinkTo)) && this.ce != null) {
                 this.ce.clearCache();
                 markDirty(world);
             }

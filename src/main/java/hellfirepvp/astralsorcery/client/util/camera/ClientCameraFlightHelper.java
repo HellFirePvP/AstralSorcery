@@ -147,7 +147,7 @@ public class ClientCameraFlightHelper {
             if(delegate != null) {
                 delegate.tick(entity, replacement);
             }
-            setCameraFocus(new Vector3(replacement));
+            setCameraFocus(Vector3.atEntityCenter(replacement));
             this.expired = this.ticksExisted > totalTickDuration;
             if(flightPoints.isEmpty()) {
                 this.expired = true;

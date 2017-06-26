@@ -71,7 +71,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
         if (!world.isRemote && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             if (!player.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalPickaxe)) {
                 Thread tr = new Thread(() -> {
-                    BlockArray foundOres = OreDiscoverer.startSearch(world, new Vector3(player), 14);
+                    BlockArray foundOres = OreDiscoverer.startSearch(world, Vector3.atEntityCorner(player), 14);
                     if (!foundOres.isEmpty()) {
                         List<BlockPos> positions = new LinkedList<>();
                         BlockPos plPos = player.getPosition();

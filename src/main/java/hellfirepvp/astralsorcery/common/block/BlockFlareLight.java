@@ -61,7 +61,6 @@ public class BlockFlareLight extends Block {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {}
 
     @Override

@@ -61,7 +61,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if(this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1));

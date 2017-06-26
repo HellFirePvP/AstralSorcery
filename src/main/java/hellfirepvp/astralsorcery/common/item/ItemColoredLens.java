@@ -72,7 +72,6 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if(this.isInCreativeTab(tab)) {
             for (ColorType ct : ColorType.values()) {
@@ -183,7 +182,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         ItemStack current = ((EntityItem) entity).getItem();
                         ItemStack result = FurnaceRecipes.instance().getSmeltingResult(current);
                         if(!result.isEmpty()) {
-                            Vector3 entityPos = new Vector3(entity);
+                            Vector3 entityPos = Vector3.atEntityCenter(entity);
                             ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, 1));
                             if(current.getCount() > 1) {
                                 current.shrink(1);

@@ -34,7 +34,7 @@ public class ItemChargedCrystalSword extends ItemCrystalSword implements Charged
         if (!player.getEntityWorld().isRemote && player instanceof EntityPlayerMP) {
             EntityPlayerMP playerMp = (EntityPlayerMP) player;
             if(!MiscUtils.isPlayerFakeMP(playerMp) && !playerMp.getCooldownTracker().hasCooldown(ItemsAS.chargedCrystalSword)) {
-                CelestialStrike.play(player, player.getEntityWorld(), new Vector3(entity), new Vector3(entity, true));
+                CelestialStrike.play(player, player.getEntityWorld(), Vector3.atEntityCorner(entity), Vector3.atEntityCenter(entity));
                 if(!ChargedCrystalToolBase.tryRevertMainHand(playerMp, stack)) {
                     playerMp.getCooldownTracker().setCooldown(ItemsAS.chargedCrystalSword, 80);
                 }

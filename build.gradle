@@ -17,11 +17,11 @@ group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.12-14.21.0.2333"
+    version = "1.12-14.21.0.2373"
     runDir = "run"
     useDepAts = true
 
-    mappings = "snapshot_20170617"
+    mappings = "snapshot_20170626"
 }
 
 sourceCompatibility = 1.8
@@ -55,7 +55,7 @@ repositories {
 dependencies {
 
     def mc_version = "1.12"
-    def jei_version = "4.6.0.63"
+    def jei_version = "4.7.0.67"
 
     ////JEI stuff
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"

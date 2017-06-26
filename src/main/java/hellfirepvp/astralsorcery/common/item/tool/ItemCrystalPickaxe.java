@@ -44,7 +44,6 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if(this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();

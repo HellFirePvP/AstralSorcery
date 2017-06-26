@@ -102,6 +102,14 @@ public class RenderingUtils {
                 MathHelper.clamp((int) (((float) b)), 0, 255));
     }
 
+    public static Vector3 interpolatePosition(Entity e, float partialTicks) {
+        return new Vector3(
+                RenderingUtils.interpolate(e.lastTickPosX, e.posX, partialTicks),
+                RenderingUtils.interpolate(e.lastTickPosY, e.posY, partialTicks),
+                RenderingUtils.interpolate(e.lastTickPosZ, e.posZ, partialTicks)
+        );
+    }
+
     public static double interpolate(double oldP, double newP, float partialTicks) {
         if(oldP == newP) return oldP;
         return oldP + ((newP - oldP) * partialTicks);

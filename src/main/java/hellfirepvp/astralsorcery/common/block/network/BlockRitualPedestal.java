@@ -58,7 +58,6 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         ItemStack pedestal = new ItemStack(this);
         list.add(pedestal);

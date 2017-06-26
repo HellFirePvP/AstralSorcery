@@ -45,7 +45,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if(this.isInCreativeTab(tab)) {
             for (MetaType type : MetaType.values()) {

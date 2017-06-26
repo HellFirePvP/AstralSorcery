@@ -8,8 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.util.item;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelBlock;
@@ -21,6 +19,8 @@ import net.minecraftforge.common.model.IModelState;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -41,7 +41,7 @@ public class ItemRendererModelDummy implements IModel {
         this.parent = parent;
     }
 
-    private static final IModelState NO_STATE = part -> Optional.absent();
+    private static final IModelState NO_STATE = (part) -> Optional.empty();
 
     @Override
     public Collection<ResourceLocation> getDependencies() {

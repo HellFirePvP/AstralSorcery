@@ -35,6 +35,8 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
 import hellfirepvp.astralsorcery.common.registry.*;
+import hellfirepvp.astralsorcery.common.registry.internal.InternalRegistryPrimer;
+import hellfirepvp.astralsorcery.common.registry.internal.PrimerEventHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightNetworkRegistry;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
@@ -82,6 +84,7 @@ public class CommonProxy implements IGuiHandler {
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
     public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static InternalRegistryPrimer registryPrimer;
     private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
@@ -96,35 +99,25 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void preInit() {
+        registryPrimer = new InternalRegistryPrimer();
+        MinecraftForge.EVENT_BUS.register(new PrimerEventHandler(registryPrimer));
+
         RegistryItems.setupDefaults();
 
-        RegistryEnchantments.init();
         RegistryConstellations.init();
 
         PacketChannel.init();
 
-        RegistryBlocks.init();
-        RegistryItems.init();
         RegistryEntities.init();
-        RegistryStructures.init();
-        RegistryPotions.init();
 
         //Transmission registry
         SourceClassRegistry.setupRegistry();
         TransmissionClassRegistry.setupRegistry();
-
         StarlightNetworkRegistry.setupRegistry();
-
-        RegistryBlocks.initRenderRegistry();
-        registerOreDictEntries();
-        RegistryRecipes.init();
-        RegistryResearch.init();
 
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
 
-        //FIXME RE-ADD AFTER ADVANCEMENTS
-        //RegistryAchievements.init();
         RegistryPerks.init();
 
         registerCapabilities();
@@ -141,6 +134,10 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
+        RegistryStructures.init();
+        registerOreDictEntries();
+        RegistryResearch.init();
+
         //FIXME AFTER CT PORTED
         /*if (Mods.CRAFTTWEAKER.isPresent()) {
             AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
@@ -169,7 +166,6 @@ public class CommonProxy implements IGuiHandler {
         if(Config.enableRetroGen) {
             MinecraftForge.EVENT_BUS.register(new RetroGenController());
         }
-        RegistrySounds.init();
 
         TickManager manager = TickManager.getInstance();
         registerTickHandlers(manager);

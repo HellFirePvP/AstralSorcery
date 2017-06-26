@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
 import hellfirepvp.astralsorcery.common.block.network.BlockWell;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -56,7 +57,6 @@ public class BlocksAS {
     public static BlockTranslucentBlock translucentBlock;
     public static BlockMapDrawingTable drawingTable;
     public static BlockCelestialGateway celestialGateway;
-    //public static BlockCelestialOrrery celestialOrrery;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
@@ -132,7 +133,7 @@ public class RegistryRecipes {
         //RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         //RecipeSorter.register("RecipeChangeIlluminationWandColor", RecipeChangeWandColor.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
 
-        GameRegistry.register(RecipeChangeWandColor.INSTANCE);
+        CommonProxy.registryPrimer.register(RecipeChangeWandColor.INSTANCE);
 
         rLPRAltar = newShapedRecipe("altar_tier_1", BlocksAS.blockAltar)
                 .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),

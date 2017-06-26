@@ -65,7 +65,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
                 float br = 0.6F * (alphaDaytime * percRunning);
 
-                RenderConstellation.renderConstellationIntoWorldFlat(c, c.getTierRenderColor(), new Vector3(te).add(0.5, 0.04, 0.5), 3 + tr, 2, 0.1F + br);
+                RenderConstellation.renderConstellationIntoWorldFlat(c, c.getConstellationColor(), new Vector3(te).add(0.5, 0.04, 0.5), 3 + tr, 2, 0.1F + br);
             }
 
             GL11.glEnable(GL11.GL_ALPHA_TEST);

@@ -30,7 +30,6 @@ import java.util.List;
 public class ItemRockCrystalSimple extends ItemRockCrystalBase {
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         if(this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);

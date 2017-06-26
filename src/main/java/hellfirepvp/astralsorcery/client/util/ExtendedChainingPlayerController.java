@@ -123,13 +123,13 @@ public class ExtendedChainingPlayerController extends PlayerControllerMP {
     }
 
     @Override
-    public EntityPlayerSP func_192830_a(World p_192830_1_, StatisticsManager p_192830_2_, RecipeBook p_192830_3_) {
-        return delegate.func_192830_a(p_192830_1_, p_192830_2_, p_192830_3_);
+    public EntityPlayerSP createPlayer(World p_192830_1_, StatisticsManager p_192830_2_, RecipeBook p_192830_3_) {
+        return delegate.createPlayer(p_192830_1_, p_192830_2_, p_192830_3_);
     }
 
     @Override
-    public void func_192831_a(int p_192831_1_, List<CPacketRecipePlacement.ItemMove> p_192831_2_, List<CPacketRecipePlacement.ItemMove> p_192831_3_, EntityPlayer p_192831_4_) {
-        delegate.func_192831_a(p_192831_1_, p_192831_2_, p_192831_3_, p_192831_4_);
+    public void handleRecipePlacement(int p_192831_1_, List<CPacketRecipePlacement.ItemMove> p_192831_2_, List<CPacketRecipePlacement.ItemMove> p_192831_3_, EntityPlayer p_192831_4_) {
+        delegate.handleRecipePlacement(p_192831_1_, p_192831_2_, p_192831_3_, p_192831_4_);
     }
 
     @Override

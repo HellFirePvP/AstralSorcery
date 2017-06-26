@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.ShapedLightProximityRecipe;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -141,7 +142,7 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = new ShapedLightProximityRecipe(entry, output, crafingShape.bake());
-            GameRegistry.register(actual);
+            CommonProxy.registryPrimer.register(actual);
             ShapedRecipe access = new ShapedRecipe(output, crafingShape);
             return new AccessibleRecipeAdapater(actual, access);
         }
@@ -150,7 +151,7 @@ public class ShapedRecipe extends AbstractRecipeAccessor {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapedOredictRecipe(entry, output, crafingShape.bake());
-            GameRegistry.register(actual);
+            CommonProxy.registryPrimer.register(actual);
             ShapedRecipe access = new ShapedRecipe(output, crafingShape);
             return new AccessibleRecipeAdapater(actual, access);
         }

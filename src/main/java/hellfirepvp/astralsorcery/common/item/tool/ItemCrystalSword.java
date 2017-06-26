@@ -57,7 +57,6 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if(this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();

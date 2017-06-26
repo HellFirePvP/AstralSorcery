@@ -343,7 +343,7 @@ public final class EffectHandler {
             }
         }
 
-        Vector3 playerPos = new Vector3(Minecraft.getMinecraft().player);
+        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
                 fastRenderParticles.remove(null);

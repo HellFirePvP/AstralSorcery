@@ -38,7 +38,7 @@ public class PerkCreationFlares extends ConstellationPerk {
         if(!isCooldownActiveForPlayer(hurt)) {
             Entity cause = source.getImmediateSource();
             if(cause != null && cause instanceof EntityLivingBase && !cause.isDead) {
-                Vector3 pos = new Vector3(hurt);
+                Vector3 pos = Vector3.atEntityCenter(hurt);
                 EntityFlare flare = new EntityFlare(hurt.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
                 flare.setAttackTarget((EntityLivingBase) cause);
                 hurt.getEntityWorld().spawnEntity(flare);

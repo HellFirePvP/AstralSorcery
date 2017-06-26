@@ -294,7 +294,7 @@ public class EventHandlerServer {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
 
         EntityLivingBase toTest = event.getEntityLiving();
-        Vector3 at = new Vector3(toTest);
+        Vector3 at = Vector3.atEntityCorner(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {
             for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {

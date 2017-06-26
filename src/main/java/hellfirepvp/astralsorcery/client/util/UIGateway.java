@@ -139,7 +139,7 @@ public class UIGateway {
     public void renderIntoWorld(float pticks) {
         if(Minecraft.getMinecraft().player == null) return;
 
-        double dst = new Vector3(origin).distance(new Vector3(Minecraft.getMinecraft().player));
+        double dst = new Vector3(origin).distance(Vector3.atEntityCenter(Minecraft.getMinecraft().player));
         if(dst > 3) return;
         float alpha = 1F - ((float) (dst / 2D));
         alpha = MathHelper.clamp(alpha, 0F, 1F);

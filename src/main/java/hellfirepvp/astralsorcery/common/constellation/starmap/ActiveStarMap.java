@@ -166,7 +166,7 @@ public class ActiveStarMap {
             for (ConstellationMapEffectRegistry.EnchantmentMapEffect effect : entry.getValue()) {
                 if (enchantments.containsKey(effect.ench)) continue;
                 for (Enchantment existing : enchantments.keySet()) {
-                    if(!existing.func_191560_c(effect.ench)) {
+                    if(!existing.isCompatibleWith(effect.ench)) {
                         continue lblEnchantments;
                     }
                 }

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -56,7 +57,7 @@ public class RegistrySounds {
     }
 
     private static <T extends SoundEvent> T registerSound(T soundEvent) {
-        GameRegistry.register(soundEvent);
+        CommonProxy.registryPrimer.register(soundEvent);
         return soundEvent;
     }
 

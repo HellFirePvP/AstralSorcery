@@ -22,6 +22,7 @@ import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -177,7 +178,7 @@ public final class ItemHandle {
             case OREDICT:
                 return new OreIngredient(this.oreDictName);
             case FLUID:
-                return Ingredient.fromStacks(UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidTypeAndAmount.getFluid()));
+                return Ingredient.fromStacks(FluidUtil.getFilledBucket(new FluidStack(fluidTypeAndAmount.getFluid(), 1000)));
             case STACK:
             default:
                 List<Ingredient> ingredients = new ArrayList<>();

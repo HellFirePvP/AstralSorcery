@@ -54,7 +54,7 @@ public class PktRequestTeleport implements IMessage, IMessageHandler<PktRequestT
     @Override
     public IMessage onMessage(PktRequestTeleport message, MessageContext ctx) {
         EntityPlayer request = ctx.getServerHandler().player;
-        TileCelestialGateway gate = MiscUtils.getTileAt(request.world, new Vector3(request, true).toBlockPos(), TileCelestialGateway.class, false);
+        TileCelestialGateway gate = MiscUtils.getTileAt(request.world, Vector3.atEntityCenter(request).toBlockPos(), TileCelestialGateway.class, false);
         if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
             AstralSorcery.proxy.scheduleDelayed(() -> MiscUtils.transferEntityTo(request, message.dimId, message.pos));
         }

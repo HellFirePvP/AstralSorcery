@@ -191,8 +191,8 @@ public class Injector {
         return null;
     }
 
-    public static <E> Method findMethod(Class<? super E> clazz, String[] methodNames, Class<?>... methodTypes) {
-        return ReflectionHelper.findMethod(clazz, null, methodNames, methodTypes);
+    public static <E> Method findMethod(Class<? super E> clazz, String methodName, String methodObfName, Class<?>... methodTypes) {
+        return ReflectionHelper.findMethod(clazz, methodName, methodObfName, methodTypes);
     }
 
     public static Field findField(Class clazz, String... names) {

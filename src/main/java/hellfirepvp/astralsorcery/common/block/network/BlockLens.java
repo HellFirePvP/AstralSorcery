@@ -71,7 +71,6 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         ItemStack stack = new ItemStack(this);
         CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());

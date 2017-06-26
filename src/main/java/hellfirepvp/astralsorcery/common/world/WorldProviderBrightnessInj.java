@@ -250,18 +250,8 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     }
 
     @Override
-    public String getDepartMessage() {
-        return parentOvrProvider.getDepartMessage();
-    }
-
-    @Override
     public String getSaveFolder() {
         return parentOvrProvider.getSaveFolder();
-    }
-
-    @Override
-    public String getWelcomeMessage() {
-        return parentOvrProvider.getWelcomeMessage();
     }
 
     @Override

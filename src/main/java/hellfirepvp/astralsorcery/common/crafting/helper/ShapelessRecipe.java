@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
@@ -125,7 +126,7 @@ public class ShapelessRecipe extends AbstractRecipeAccessor {
             if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
             registered = true;
             BasePlainRecipe actual = RecipeHelper.getShapelessOreDictRecipe(entry, output, compileIngredients());
-            GameRegistry.register(actual);
+            CommonProxy.registryPrimer.register(actual);
             ShapelessRecipe access = new ShapelessRecipe(output, inputs);
             return new AccessibleRecipeAdapater(actual, access);
         }

@@ -176,18 +176,19 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
     @Nullable
     private TextureAtlasSprite getTexture(ItemStack stack) {
         if(stack.isEmpty()) return null;
-        IBakedModel model = MeshRegisterHelper.getIMM().getItemModel(stack);
-        if(model == MeshRegisterHelper.getIMM().getModelManager().getMissingModel()) {
+        ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        IBakedModel model = imm.getItemModel(stack);
+        if(model == imm.getModelManager().getMissingModel()) {
             return null;
         }
         if(stack.getItem() instanceof ItemBlock) {
             IBlockState state = ItemUtils.createBlockState(stack);
             if(state == null) return null;
-            TextureAtlasSprite tas = MeshRegisterHelper.getBMShapes().getTexture(state);
+            TextureAtlasSprite tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
             if(tas == Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) return null;
             return tas;
         } else {
-            return MeshRegisterHelper.getIMM().getItemModel(stack).getParticleTexture();
+            return imm.getItemModel(stack).getParticleTexture();
         }
     }
 

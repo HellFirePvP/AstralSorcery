@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 
 /**
@@ -24,6 +23,7 @@ public class CrystalCalculations {
     //Can collect up to 9F at max, 4F max for rock crystals
     public static float getCollectionAmt(CrystalProperties properties, float distribution) {
         float sizeDistr = (((float) properties.getSize()) / 100F);
+        sizeDistr *= 0.75F;
         return distribution * sizeDistr * (((float) properties.getCollectiveCapability()) / 100F);
     }
 
