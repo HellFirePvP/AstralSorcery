@@ -87,7 +87,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
         return isApplicableBiome(world, pos) &&
                 pos.getY() >= cfgEntry.getMinY() && pos.getY() <= cfgEntry.getMaxY() &&
                 world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) &&
-                (ignoreSnowCondition || world.canSnowAt(pos, true));
+                (ignoreSnowCondition || world.canSnowAt(pos, false));
     }
 
     @Override

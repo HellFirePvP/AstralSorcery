@@ -159,8 +159,7 @@ astralsorcery.journal.SPEC_RELAY.1.text=The starlight resonator can find fields 
 astralsorcery.journal.SPEC_RELAY.4.text=A small setup, dedicated to collecting starlight for the altar near should help solve that problem. A clear view of the sky is most certainly a necessity and better results will most likely be achieved at night.<NL>When the relay has been placed high up but close to an altar, it will collect and focus starlight once a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many relays close to each other will result in one cannibalizing the others' starlight and will most likely create  much more... §odisappointing§r results..
 
 research.QUICK_CHARGE.name=Alignment Charge
-astralsorcery.journal.QUICK_CHARGE.1.text=Those that have attained celestial alignment with at least one constellation have reported feeling strong, quick surges of powers flowing through them when gazing at the heavens.<NL>While the blue-white energy that arcs from their body during this surge doesn’t seem to be easily channeled by the body, it is likely that tools will be able to properly channel it. Using the energy in this way may reveal its full potential in very different ways.
-
+astralsorcery.journal.QUICK_CHARGE.1.text=While learning more about the patterns and effects of starlight, the everpresent waves of starlight become more and more perceivable during the ebb and flow of day and night.<NL>While in its current form, the blue-white energy is potent enough to suffice for smaller rods and wands to tap into it to channel it, a bigger focus might be required to enhance the effects of single constellations while using the body or crystals to channel this energy.
 
 research.ILLUMINATOR.name=Cave Illuminator
 astralsorcery.journal.ILLUMINATOR.1.text=Recalling the illuminating properties of the powder made from glowstone and aquamarine, it was only a matter of time until a device that takes advantage of these properties on a massive scale could be created. It drastically amplifies and focuses the sparks emitted by the glowstone and aquamarine using rock crystals, shaping them into small blue colored flares than can remain lit indefinitely. These flares can pass through solid objects and repel each other, allowing them to automatically space themselves evenly as they form.
@@ -178,7 +177,6 @@ astralsorcery.journal.ATT_PERKS.2.text=It has also been reported seeing differen
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as one can attune themselves to a constellation and become more sensitive to a constellations starlight, rock crystals can also be attuned as well. It will react stronger to that constellation and channel its effects.<NL>The application may not be immediately self evident, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it could work. Its focusing properties maye even have uses for some other things aswell...
-
 astralsorcery.journal.ATT_CRYSTAL.2.text=The properties of the crystal bare a striking resemblance to those documented before. <NL>The floating crystals inside some of the shrines around the world act in a very familiar manner. They seem to be very capable of collecting and focusing starlight. The crystals created seems far inferior to them, but certainly it's the first step in the right direction when it comes to recreating them.
 
 research.INFUSER.name=Starlight Infuser
@@ -194,8 +192,11 @@ astralsorcery.journal.CHARGED_TOOLS.1.text=Having experienced the growth effect 
 astralsorcery.journal.CHARGED_TOOLS.2.text=Indeed, after infusing the previously inert tools with §la lot§r of liquid starlight, they seem to faintly glow and reflect the sky above.<NL>Having this liquid starlight vibrantly flowing through the tools, seems like they could perform far beyond initial expectations.<NL>However, that also comes with the possibility that the liquid might be drained at some point...
 
 research.TOOL_WANDS.name=Active Channeling
-astralsorcery.journal.TOOL_WANDS.1.text=Becoming more familiar with those strange currents of energy, the urge to use them actively instead of just letting them idle grows.<NL>However, having it shoot out from bare hands would appear to be too much for most attuned creatures, so creating small tool rod enhanced with the newly discovered properties of the stardust should help to that end.
+astralsorcery.journal.TOOL_WANDS.1.text=The attempt to channel the starlight's energies with bare hands failed and brought forth nothing but maybe a small flash of light.<NL>With the properties of the newfound stardust, constructing wands that can channel this energy to produce more orderly results. Placing blocks into a straight line or replacing some with others should be easy enough for the proper wands.
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block to be place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from the wielder’s inventory.<NL>Upon channeling some of this spectral energy into the wand it leaves the wielding a bit drained afterwards. Utilizing the alignment gauge when using those kinds of gadgets may be helpful, to avoid an overload of some sort...
+
+research.GRAPPLE_WAND.name=Vortex Wand
+astralsorcery.journal.GRAPPLE_WAND.1.text=Enderpearls would be very useful if they weren't so hard to obtain, easily used up and damaging upon usage.<NL>Thanks to the the newfound knowledge about these strange patterns of starlight energy, a wand can be created that channels these energies through enderpearls to provide safer means of transportation.<NL>In contrast to the pearls though, the wand has only limited range and pulls its user towards whatever it finds rather than providing instant teleportation.
 
 research.RIT_PEDESTAL.name=Ritual Pedestal
 astralsorcery.journal.RIT_PEDESTAL.1.text=Just as suspected, the attuned crystal already seems almost strong enough to make its effects manifest in the world. To be actually useful a pedestal for it with another rock crystal to help focus enough starlight will need to be constructructed.<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, adding some liquid starlight aswell should work by filling the cracks as they appear.
@@ -339,6 +340,7 @@ item.itemskyresonator.name=Sky Wave Resonator
 item.itemilluminationwand.name=Illumination Wand
 item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
+item.itemgrapplewand.name=Vortex Wand
 item.itemshiftingstar.name=Shifting Star
 item.itemilluminationpowder.name=Illumination Powder
 item.iteminfusedglass.name=Infused Glass

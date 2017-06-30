@@ -16,11 +16,10 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.ItemIlluminationPowder;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
-import hellfirepvp.astralsorcery.common.item.useables.ItemVortexDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
-import net.minecraft.item.ItemStack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -46,7 +45,7 @@ public class ItemsAS {
     public static ItemArchitectWand architectWand;
     public static ItemExchangeWand exchangeWand;
     public static ItemIlluminationPowder illuminationPowder;
-    public static ItemVortexDust vortexDust;
+    public static ItemGrappleWand grapplingWand;
     public static ItemInfusedGlass infusedGlass;
 
     public static ItemCrystalPickaxe crystalPickaxe;

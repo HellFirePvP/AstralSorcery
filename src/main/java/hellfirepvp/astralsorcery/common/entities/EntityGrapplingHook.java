@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.common.entities;
 
 import com.google.common.collect.Lists;
@@ -40,14 +48,10 @@ import java.util.Map;
  */
 public class EntityGrapplingHook extends EntityThrowable implements IEntityAdditionalSpawnData {
 
-    public static final int DESPAWN_TICKS = 10;
     private static DataParameter<Integer> PULLING_ENTITY = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
     private static DataParameter<Boolean> PULLING = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.BOOLEAN);
-    //private static DataParameter<Integer> DESPAWNING = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
 
-    //Thrower -> GrapplingHook
-    private static final Map<Integer, Integer> currentGrappling = new HashMap<>(); //Change later to hook upon impact instead of launch
-    private boolean added = false;
+    private boolean boosted = false;
 
     //Non-moving handling
     private int timeout = 0;
@@ -65,7 +69,10 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 
     public EntityGrapplingHook(World worldIn, EntityLivingBase throwerIn) {
         super(worldIn, throwerIn);
-        setHeadingFromThrower(throwerIn, throwerIn.rotationPitch, throwerIn.rotationYaw, 0.0F, 1.4F, 0F);
+        float f = -MathHelper.sin(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
+        float f1 = -MathHelper.sin((throwerIn.rotationPitch) * 0.017453292F);
+        float f2 = MathHelper.cos(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
+        this.setThrowableHeading((double) f, (double) f1, (double) f2, 1.4F, 0F);
         this.throwingEntity = throwerIn;
         setSize(0.1F, 0.1F);
     }
@@ -91,7 +98,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 
     @Override
     protected float getGravityVelocity() {
-        return isPulling() ? 0F : 0.015F;
+        return isPulling() ? 0F : 0.03F;
     }
 
     public void setPulling(boolean pull, @Nullable EntityLivingBase hit) {
@@ -118,7 +125,6 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
     protected void entityInit() {
         super.entityInit();
 
-        //this.dataManager.register(DESPAWNING, -1);
         this.dataManager.register(PULLING, false);
         this.dataManager.register(PULLING_ENTITY, -1);
     }
@@ -136,12 +142,16 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 
         if(!isDespawning()) {
             EntityLivingBase throwing = getThrower();
-            if(!world.isRemote) {
-                register(throwing);
-            }
             double dist = Math.max(0.01, throwing.getDistanceToEntity(this));
             if(!isDead && isPulling()) {
-                if((ticksExisted > 10 && dist < 2) || timeout > 15) {
+                if(getPulling() != null) {
+                    EntityLivingBase at = getPulling();
+                    this.posX = at.posX;
+                    this.posY = at.posY;
+                    this.posZ = at.posZ;
+                }
+
+                if(((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 10 && dist < 2)) || timeout > 15) {
                     setDespawning();
                 } else {
                     getThrower().fallDistance = -5F;
@@ -159,8 +169,13 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
                         mz = v2.z / 4.0D;
                     }
                     getThrower().motionX += mx;
-                    getThrower().motionY += my + 0.033D;
+                    getThrower().motionY += my + 0.04D;
                     getThrower().motionZ += mz;
+
+                    if(!boosted) {
+                        getThrower().motionY += 0.4F;
+                        boosted = true;
+                    }
 
                     int roughDst = (int) (dist / 2.0D);
                     if (roughDst >= this.previousDist) {
@@ -256,29 +271,14 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         int iter = (int) lineLength;
         for (int xx = 1; xx < iter - 1; xx++) {
             float dist = xx * (lineLength / iter);
-            double dx = (interpThrower.getX() - interpHook.getX())                            / iter * xx + MathHelper.sin(dist / 3.0F) * pullFactor;
-            double dy = (interpThrower.getY() - interpHook.getY() + getThrower().height / 3F) / iter * xx + MathHelper.sin(dist / 1.0F) * pullFactor;
+            double dx = (interpThrower.getX() - interpHook.getX())                            / iter * xx + MathHelper.sin(dist / 10.0F) * pullFactor;
+            double dy = (interpThrower.getY() - interpHook.getY() + getThrower().height / 2F) / iter * xx + MathHelper.sin(dist / 7.0F) * pullFactor;
             double dz = (interpThrower.getZ() - interpHook.getZ())                            / iter * xx + MathHelper.sin(dist / 2.0F) * pullFactor;
             list.add(new Vector3(dx, dy, dz));
         }
         list.add(to.clone());
 
         return list;
-    }
-
-    private void register(EntityLivingBase throwingEntity) {
-        int throwerId = throwingEntity.getEntityId();
-        if(currentGrappling.containsKey(throwerId) && !added) {
-            int currentGrapple = currentGrappling.get(throwerId);
-            if(currentGrapple != getEntityId()) {
-                Entity prev = world.getEntityByID(currentGrapple);
-                if(prev != null) {
-                    prev.setDead();
-                }
-            }
-            currentGrappling.put(throwerId, getEntityId());
-            added = true;
-        }
     }
 
     @Override
@@ -299,6 +299,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 
     @Override
     protected void onImpact(RayTraceResult result) {
+        Vec3d hit = result.hitVec;
         switch (result.typeOfHit) {
             case BLOCK:
                 setPulling(true, null);
@@ -309,14 +310,15 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
                     return;
                 }
                 setPulling(true, (result.entityHit instanceof EntityLivingBase) ? (EntityLivingBase) result.entityHit : null);
+                hit = new Vec3d(hit.x, hit.y + result.entityHit.height * 3 / 4, hit.z);
                 break;
         }
         this.motionX = 0;
         this.motionY = 0;
         this.motionZ = 0;
-        this.posX = result.hitVec.x;
-        this.posY = result.hitVec.y;
-        this.posZ = result.hitVec.z;
+        this.posX = hit.x;
+        this.posY = hit.y;
+        this.posZ = hit.z;
     }
 
 }

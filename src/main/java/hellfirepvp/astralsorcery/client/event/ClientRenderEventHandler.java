@@ -319,6 +319,8 @@ public class ClientRenderEventHandler {
                 vb.pos(offsetLeft,            offsetTop,         10).tex(uvPos.key, uvPos.value).endVertex();
                 tes.draw();
                 GlStateManager.enableAlpha();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glColor4f(1F, 1F, 1F, 1F);
 
                 TextureHelper.refreshTextureBindState();
             }
@@ -334,6 +336,8 @@ public class ClientRenderEventHandler {
                         entry.getKey().onRenderInHandHUD(entry.getValue().stack, entry.getValue().visibility, event.getPartialTicks());
                     }
                 }
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glColor4f(1F, 1F, 1F, 1F);
             }
             ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
             if(!inHand.isEmpty()) {
@@ -341,6 +345,8 @@ public class ClientRenderEventHandler {
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
                         ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                        GlStateManager.color(1F, 1F, 1F, 1F);
+                        GL11.glColor4f(1F, 1F, 1F, 1F);
                     }
                 }
             }
@@ -350,6 +356,8 @@ public class ClientRenderEventHandler {
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
                         ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                        GlStateManager.color(1F, 1F, 1F, 1F);
+                        GL11.glColor4f(1F, 1F, 1F, 1F);
                     }
                 }
             }

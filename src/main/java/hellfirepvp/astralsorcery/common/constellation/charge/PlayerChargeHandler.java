@@ -70,6 +70,10 @@ public class PlayerChargeHandler implements ITickHandler {
     public float getCharge(EntityPlayer player) {
         if(!chargeMap.containsKey(player)) {
             setCharge(player, 1F);
+            if(player instanceof EntityPlayerMP) {
+                PktSyncCharge ch = new PktSyncCharge(1F);
+                PacketChannel.CHANNEL.sendTo(ch, (EntityPlayerMP) player);
+            }
         }
         Float ret = chargeMap.get(player);
         return ret == null ? 0F : ret;

@@ -36,19 +36,4 @@ public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer
         return true;
     }
 
-    default public void gainPermCharge(EntityPlayer player, double charge) {
-        if(player.isCreative()) return;
-        ResearchManager.modifyAlignmentCharge(player, charge);
-    }
-
-    default public double getPermCharge(EntityPlayer player, Side side) {
-        PlayerProgress progress = ResearchManager.getProgress(player, side);
-        if(progress == null) return 0.0D;
-        return progress.getAlignmentCharge();
-    }
-
-    default public boolean hasAtLeastPermCharge(EntityPlayer player, Side side, double required) {
-        return player.isCreative() || getPermCharge(player, side) >= required;
-    }
-
 }

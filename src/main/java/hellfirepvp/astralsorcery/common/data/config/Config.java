@@ -65,6 +65,7 @@ public class Config {
     @Sync public static double swordSharpMultiplier = 0.1;
 
     @Sync public static float illuminationWandUseCost = 0.5F;
+    @Sync public static float grappleWandUseCost = 0.7F;
     @Sync public static float architectWandUseCost = 0.07F;
     @Sync public static float exchangeWandUseCost = 0.08F;
 
@@ -120,9 +121,10 @@ public class Config {
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
-        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.5F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the illumination wand");
-        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the architect wand");
-        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the alignment charge cost for one usage of the exchange wand");
+        illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.5F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the illumination wand");
+        architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the architect wand");
+        exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the exchange wand");
+        grappleWandUseCost = latestConfig.getFloat("wandCost_grapple", "tools", grappleWandUseCost, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the grapple wand");
 
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
         revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");

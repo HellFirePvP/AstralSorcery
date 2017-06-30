@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * HellFirePvP / Astral Sorcery 2017
+ *
+ * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
+ * For further details, see the License file there.
+ ******************************************************************************/
+
 package hellfirepvp.astralsorcery.client.render.entity;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
@@ -86,7 +94,7 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
         List<Vector3> drawPoints = entity.buildPoints(partialTicks);
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        Blending.DEFAULT.applyStateManager();
+        Blending.ADDITIVE_ALPHA.applyStateManager();
 
         texConn.bind();
 
@@ -96,13 +104,14 @@ public class RenderEntityHook extends Render<EntityGrapplingHook> {
         for (Vector3 pos : drawPoints) {
             RenderingUtils.renderFacingQuadVB(bb, iPosE.getX() + pos.getX(), iPosE.getY() + pos.getY(), iPosE.getZ() + pos.getZ(),
                     partialTicks, 0.25F, 0, 0, 0, 1, 1,
-                    0.2F, 0.15F, 0.7F, 0.3F * alphaMultiplier);
+                    0.2F, 0.15F, 0.7F, 0.8F * alphaMultiplier);
         }
         GlStateManager.enableCull();
         tes.draw();
 
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
+        Blending.DEFAULT.applyStateManager();
 
         GlStateManager.enableAlpha();
         TextureHelper.refreshTextureBindState();

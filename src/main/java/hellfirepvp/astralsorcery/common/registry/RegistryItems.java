@@ -24,9 +24,9 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
 import hellfirepvp.astralsorcery.common.item.useables.ItemIlluminationPowder;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
-import hellfirepvp.astralsorcery.common.item.useables.ItemVortexDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
+import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -121,8 +121,8 @@ public class RegistryItems {
         //roseBranchBow = registerItem(new ItemRoseBranchBow());
         architectWand = registerItem(new ItemArchitectWand());
         exchangeWand = registerItem(new ItemExchangeWand());
+        grapplingWand = registerItem(new ItemGrappleWand());
         illuminationPowder = registerItem(new ItemIlluminationPowder());
-        vortexDust = registerItem(new ItemVortexDust());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

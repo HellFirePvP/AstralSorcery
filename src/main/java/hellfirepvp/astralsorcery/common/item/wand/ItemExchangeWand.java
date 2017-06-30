@@ -72,6 +72,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return ct == ChargeType.TEMP;
+    }
+
+    @Override
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         return 0;
     }
@@ -266,7 +272,6 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
                     && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
                     drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
-                    gainPermCharge(playerIn, Config.exchangeWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }

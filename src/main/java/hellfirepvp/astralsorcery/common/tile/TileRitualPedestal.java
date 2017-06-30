@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
@@ -59,6 +60,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -165,22 +167,42 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     }
                     lightbeam.setMaxAge(64);
                 }
-                if(this.getDisplayConstellation() != null && rand.nextInt(chance * 8) == 0) {
-                    List<Vector3> positions = MiscUtils.getCirclePositions(new Vector3(pos).add(0.5, -0.3, 0.5),
-                            Vector3.RotAxis.Y_AXIS, 1 + rand.nextFloat() * 0.5, 40);
-                    Color c = getDisplayConstellation().getConstellationColor();
-                    for (Vector3 v : positions) {
-                        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
-                        p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                        Color col = c;
-                        if(rand.nextBoolean()) {
-                            col = col.darker();
+                if(this.getDisplayConstellation() != null) {
+                    if(rand.nextInt(chance * 8) == 0) {
+                        List<Vector3> positions = MiscUtils.getCirclePositions(new Vector3(pos).add(0.5, -0.3, 0.5),
+                                Vector3.RotAxis.Y_AXIS, 1 + rand.nextFloat() * 0.5, 40);
+                        Color c = getDisplayConstellation().getConstellationColor();
+                        for (Vector3 v : positions) {
+                            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                            p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                            Color col = c;
                             if(rand.nextBoolean()) {
                                 col = col.darker();
+                                if(rand.nextBoolean()) {
+                                    col = col.darker();
+                                }
+                            }
+                            p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(50 + rand.nextInt(40));
+                            p.setColor(col).motion(-0.02 + rand.nextFloat() * 0.04, rand.nextFloat() * 0.07, -0.02 + rand.nextFloat() * 0.04);
+                        }
+                    }
+                    if(rand.nextInt(chance * 7) == 0) {
+                        TransmissionReceiverRitualPedestal tag = getUpdateCache();
+                        if(tag != null) {
+                            List<BlockPos> offsets = tag.offsetMirrors.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toList());
+                            if(!offsets.isEmpty()) {
+                                BlockPos to = offsets.get(rand.nextInt(offsets.size()));
+                                IWeakConstellation c = getRitualConstellation();
+                                Color col = null;
+                                if(c != null && c.getConstellationColor() != null) {
+                                    col = c.getConstellationColor();
+                                }
+                                AstralSorcery.proxy.fireLightning(getWorld(),
+                                        new Vector3(this).add(0.5, 0.8, 0.5),
+                                        new Vector3(to).add(getPos()).add(0.5, 0.5, 0.5),
+                                        col);
                             }
                         }
-                        p.gravity(0.004).scale(0.3F + rand.nextFloat() * 0.2F).setMaxAge(50 + rand.nextInt(40));
-                        p.setColor(col).motion(-0.02 + rand.nextFloat() * 0.04, rand.nextFloat() * 0.07, -0.02 + rand.nextFloat() * 0.04);
                     }
                 }
             }
@@ -240,12 +262,55 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     private void updateMultiblockState() {
         boolean found = MultiBlockArrays.patternRitualPedestal.matches(world, getPos());
+        if(found && !checkAirBox(-2, 0, -2, 2, 2, 2)) found = false;
+        if(found && !checkAirBox(-3, 0, -1, 3, 2, 1)) found = false;
+        if(found && !checkAirBox(-1, 0, -3, 1, 2, 3)) found = false;
+
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
             markForUpdate();
             flagDirty();
         }
+    }
+
+    private boolean checkAirBox(int ox, int oy, int oz, int tx, int ty, int tz) {
+        int lx, ly, lz;
+        int hx, hy, hz;
+        if(ox < tx) {
+            lx = ox;
+            hx = tx;
+        } else {
+            lx = tx;
+            hx = ox;
+        }
+        if(oy < ty) {
+            ly = oy;
+            hy = ty;
+        } else {
+            ly = ty;
+            hy = oy;
+        }
+        if(oz < tz) {
+            lz = oz;
+            hz = tz;
+        } else {
+            lz = tz;
+            hz = oz;
+        }
+
+        for (int xx = lx; xx <= hx; xx++) {
+            for (int zz = lz; zz <= hz; zz++) {
+                for (int yy = ly; yy <= hy; yy++) {
+                    if(xx == 0 && yy == 0 && zz == 0) continue;
+                    BlockPos at = new BlockPos(xx, yy, zz).add(getPos());
+                    if(!getWorld().isAirBlock(at)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     //Affects only client, i'll keep the method here for misc reasons tho.
@@ -446,7 +511,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
         private static final int MAX_MIRROR_COUNT = 5;
 
-        //TODO change to higher numbers for release.
+        //TODO change to higher numbers for release?...
         //Steps between trials: 10 minutes, 25 minutes, 50 minutes, 2 hours, 5 hours
         //private static final int[] secToNext =    new int[] { 12_000, 30_000, 60_000, 144_000, 360_000 };
         private static final int[] secToNext =    new int[] { 10, 10, 6, 10, 10 };

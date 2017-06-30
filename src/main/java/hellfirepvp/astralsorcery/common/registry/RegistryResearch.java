@@ -234,7 +234,7 @@ public class RegistryResearch {
         resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
         resStarResult.addPage(getTextPage("STARMETAL_RES.2"));
 
-        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 5, 4);
+        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 5, 3);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.2"));
         resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltar));
@@ -273,14 +273,18 @@ public class RegistryResearch {
 
         ResearchNode resToolWands = new ResearchNode(new ItemStack[] {
                 new ItemStack(ItemsAS.architectWand), new ItemStack(ItemsAS.exchangeWand)
-        }, "TOOL_WANDS", 6, 2);
+        }, "TOOL_WANDS", 4, 3);
         resToolWands.addPage(getTextPage("TOOL_WANDS.1"));
         resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rArchitectWand));
         resToolWands.addPage(getTextPage("TOOL_WANDS.3"));
         resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rExchangeWand));
 
+        ResearchNode resToolGrapple = new ResearchNode(new ItemStack(ItemsAS.grapplingWand), "GRAPPLE_WAND", 3, 2);
+        resToolGrapple.addPage(getTextPage("GRAPPLE_WAND.1"));
+        resToolGrapple.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGrappleWand));
+
         ResearchNode resQuickCharge = new ResearchNode(new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "star1", 6, 8),
-                "QUICK_CHARGE", 5, 3);
+                "QUICK_CHARGE", 4, 4);
         resQuickCharge.addPage(getTextPage("QUICK_CHARGE.1"));
 
         ResearchNode resStarlightNetwork = new ResearchNode(new ItemStack(BlocksAS.lens), "STARLIGHT_NETWORK", 3, 5);
@@ -292,7 +296,7 @@ public class RegistryResearch {
         resCelestialGateway.addPage(getTextPage("CELESTIAL_GATEWAY.3"));
         resCelestialGateway.addPage(new JournalPageStructure(MultiBlockArrays.patternCelestialGateway));
 
-        ResearchNode resShiftStar = new ResearchNode(new ItemStack(ItemsAS.shiftingStar), "SHIFT_STAR", 4, 2);
+        ResearchNode resShiftStar = new ResearchNode(new ItemStack(ItemsAS.shiftingStar), "SHIFT_STAR", 6, 2);
         resShiftStar.addPage(getTextPage("SHIFT_STAR.1"));
         resShiftStar.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rShiftStar));
 
@@ -313,6 +317,7 @@ public class RegistryResearch {
         registerItemLookup(BlockMachine.MachineType.TELESCOPE.asStack(),                                          resMountedTelescope,     1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.celestialGateway, 1, OreDictionary.WILDCARD_VALUE),     resCelestialGateway,     1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),          resShiftStar,            0, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resIlluminator);
         regAttunement.register(resLens);
@@ -332,22 +337,24 @@ public class RegistryResearch {
         regAttunement.register(resStarlightNetwork);
         regAttunement.register(resCelestialGateway);
         regAttunement.register(resShiftStar);
+        regAttunement.register(resToolGrapple);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
         resStarResult.addSourceConnectionFrom(resStarOre);
         resConstellationUpgrade.addSourceConnectionFrom(resStarResult);
         resOtherOres.addSourceConnectionFrom(resStarOre);
-        resPlayerAtt.addSourceConnectionFrom(resStarResult);
+        resPlayerAtt.addSourceConnectionFrom(resQuickCharge);
         resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
         resAttPerks.addSourceConnectionFrom(resPlayerAtt);
         resRitPedestal.addSourceConnectionFrom(resCrystalAtt);
         resRitualAccel.addSourceConnectionFrom(resRitPedestal);
         resToolWands.addSourceConnectionFrom(resQuickCharge);
-        resQuickCharge.addSourceConnectionFrom(resPlayerAtt);
+        resQuickCharge.addSourceConnectionFrom(resStarResult);
         resStarlightNetwork.addSourceConnectionFrom(resStarOre);
         resCelestialGateway.addSourceConnectionFrom(resStarResult);
         resShiftStar.addSourceConnectionFrom(resPlayerAtt);
+        resToolGrapple.addSourceConnectionFrom(resQuickCharge);
     }
 
     private static void initCrafting() {

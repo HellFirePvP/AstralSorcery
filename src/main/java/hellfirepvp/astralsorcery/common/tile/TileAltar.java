@@ -549,9 +549,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public static enum AltarLevel {
 
         DISCOVERY          (100,   (ta) -> true       ),
-        ATTUNEMENT         (1000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarAttunement), false),
-        CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(MultiBlockArrays.patternAltarConstellation), false),
-        TRAIT_CRAFT        (12000, new PatternAltarMatcher(MultiBlockArrays.patternAltarTrait), false),
+        ATTUNEMENT         (1000,  new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement), false),
+        CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation), false),
+        TRAIT_CRAFT        (12000, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait), false),
         ENDGAME            (-1,    (ta) -> true       );
 
         private final int totalExpNeededToLevelUp;
@@ -654,16 +654,22 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static class PatternAltarMatcher implements IAltarMatcher {
 
-        private final PatternBlockArray pba;
+        private final PatternQuery pba;
 
-        public PatternAltarMatcher(PatternBlockArray pba) {
+        public PatternAltarMatcher(PatternQuery pba) {
             this.pba = pba;
         }
 
         @Override
         public boolean mbAllowsForCrafting(TileAltar ta) {
-            return pba.matches(ta.getWorld(), ta.getPos());
+            return pba.getPattern().matches(ta.getWorld(), ta.getPos());
         }
+    }
+
+    public static interface PatternQuery {
+
+        public PatternBlockArray getPattern();
+
     }
 
     public static interface IAltarMatcher {

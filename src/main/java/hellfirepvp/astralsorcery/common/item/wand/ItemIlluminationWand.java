@@ -63,14 +63,13 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
         EnumDyeColor color = getConfiguredColor(stack);
         if(color != null) {
             tooltip.add(MiscUtils.textFormattingForDye(color) + MiscUtils.capitalizeFirst(I18n.format(color.getUnlocalizedName())));
-            tooltip.add("");
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldReveal(ChargeType ct, ItemStack stack) {
-        return ct != ChargeType.PERM;
+        return ct == ChargeType.TEMP;
     }
 
     public static void setConfiguredColor(ItemStack stack, EnumDyeColor color) {
@@ -114,7 +113,6 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                         worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                         drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
-                        gainPermCharge(playerIn, Config.illuminationWandUseCost / 4);
                     }
                 }
             } else {
@@ -128,7 +126,6 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                         } else {
                             tt.setFakedState(at);
                             drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
-                            gainPermCharge(playerIn, Config.illuminationWandUseCost);
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

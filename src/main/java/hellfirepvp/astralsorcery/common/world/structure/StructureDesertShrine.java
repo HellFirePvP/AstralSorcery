@@ -82,7 +82,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
     protected void loadAdditionalConfigEntries(Configuration cfg) {
         super.loadAdditionalConfigEntries(cfg);
 
-        heightThreshold = cfg.getInt("idealDistance", cfgEntry.getConfigurationSection(), heightThreshold, 1, 32,
+        heightThreshold = cfg.getInt("heightThreshold", cfgEntry.getConfigurationSection(), heightThreshold, 1, 32,
                 "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
     }
 

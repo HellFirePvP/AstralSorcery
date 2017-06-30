@@ -64,6 +64,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rIlluminationWand;
     public static AttunementRecipe rArchitectWand;
     public static AttunementRecipe rExchangeWand;
+    public static AttunementRecipe rGrappleWand;
     public static AttunementRecipe rShiftStar;
     public static ConstellationRecipe rRitualLink;
     public static DiscoveryRecipe rIlluminationPowder;
@@ -331,6 +332,22 @@ public class RegistryRecipes {
                 ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
         rRitualLink.setPassiveStarlightRequirement(2600);
+
+        rGrappleWand = registerAttenuationRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/tool_grapple", ItemsAS.grapplingWand)
+                .addPart(OreDictAlias.ITEM_ENDERPEARL,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(OreDictAlias.ITEM_DYE_PURPLE,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .unregisteredAccessibleShapedRecipe());
+        rGrappleWand.setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
+        rGrappleWand.setPassiveStarlightRequirement(1600);
 
         rArchitectWand = registerAttenuationRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/tool_architect", ItemsAS.architectWand)
                 .addPart(OreDictAlias.ITEM_DYE_PURPLE,

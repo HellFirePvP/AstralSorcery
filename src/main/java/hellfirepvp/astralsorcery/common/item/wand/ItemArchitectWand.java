@@ -19,10 +19,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
-import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
-import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
-import hellfirepvp.astralsorcery.common.item.ItemHandRender;
-import hellfirepvp.astralsorcery.common.item.ItemHudRender;
+import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -79,6 +76,12 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         setMaxDamage(0);
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return ct == ChargeType.TEMP;
     }
 
     @Override
@@ -205,7 +208,6 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                 if(drainTempCharge(playerIn, Config.architectWandUseCost, true)
                         && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                     drainTempCharge(playerIn, Config.architectWandUseCost, false);
-                    gainPermCharge(playerIn, Config.architectWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }
