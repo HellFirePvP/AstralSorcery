@@ -11,10 +11,7 @@ package hellfirepvp.astralsorcery.common.util.data;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 
 import java.util.Random;
 
@@ -67,21 +64,21 @@ public class Vector3 {
         this(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public Vector3(Entity entity) {
-        this(entity.posX - entity.width / 2, entity.posY + entity.height / 2D, entity.posZ - entity.width / 2);
-    }
-
-
-    public Vector3(Entity entity, boolean unused_NoAdjustment) {
-        this(entity.posX, entity.posY, entity.posZ);
-    }
-
     public Vector3(TileEntity te) {
         this(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
     }
 
     public Vector3(Vec3d vec) {
-        this(vec.xCoord, vec.yCoord, vec.zCoord);
+        this(vec.x, vec.y, vec.z);
+    }
+
+    public static Vector3 atEntityCorner(Entity entity) {
+        return new Vector3(entity.posX, entity.posY, entity.posZ);
+    }
+
+    public static Vector3 atEntityCenter(Entity entity) {
+        Vector3 offset = atEntityCorner(entity);
+        return offset.add(entity.width / 2, entity.height / 2, entity.height / 2);
     }
 
     public Vector3 add(Vec3i vec) {
@@ -218,9 +215,9 @@ public class Vector3 {
     }
 
     public double distanceSquared(Vec3d o) {
-        double difX = x - o.xCoord;
-        double difY = y - o.yCoord;
-        double difZ = z - o.zCoord;
+        double difX = x - o.x;
+        double difY = y - o.y;
+        double difZ = z - o.z;
         return difX * difX + difY * difY + difZ * difZ;
     }
 

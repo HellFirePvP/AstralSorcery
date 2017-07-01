@@ -68,7 +68,7 @@ public class CEffectArmara extends ConstellationEffect {
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));
         }
-        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(protectionRange));
+        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if(!e.isDead) {
@@ -110,7 +110,7 @@ public class CEffectArmara extends ConstellationEffect {
 
         EntityPlayer owner = getOwningPlayerInWorld(world, pos);
 
-        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(protectionRange));
+        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if(!e.isDead) {
@@ -129,7 +129,7 @@ public class CEffectArmara extends ConstellationEffect {
                 }
             }
         }
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(protectionRange));
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
                 entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));

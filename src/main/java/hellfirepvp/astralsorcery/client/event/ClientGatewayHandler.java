@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -74,7 +74,7 @@ public class ClientGatewayHandler {
         UIGateway ui = EffectHandler.getInstance().getUiGateway();
         if(ui != null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
-            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, new Vector3(player, true).toBlockPos(), TileCelestialGateway.class, true);
+            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCenter(player).toBlockPos(), TileCelestialGateway.class, true);
             if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                 if(lastScreenshotPos != null) {
                     WorldBlockPos currentPos = new WorldBlockPos(gate);
@@ -118,7 +118,7 @@ public class ClientGatewayHandler {
         }
 
         if(focusingEntry != null) {
-            Vector3 dir = focusingEntry.relativePos.clone().add(ui.getPos()).subtract(new Vector3(Minecraft.getMinecraft().player, true).addY(1.62));
+            Vector3 dir = focusingEntry.relativePos.clone().add(ui.getPos()).subtract(Vector3.atEntityCenter(Minecraft.getMinecraft().player).addY(1.62));
             Vector3 mov = dir.clone().normalize().multiply(0.25F).negate();
             Vector3 pos = focusingEntry.relativePos.clone().add(ui.getPos());
             if(focusTicks > 40) {

@@ -65,7 +65,7 @@ public class CEffectVicio extends ConstellationEffect {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
-        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).expandXyz(effectRange));
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(effectRange));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
                 entity.addPotionEffect(new PotionEffect(MobEffects.SPEED, 30, potionAmplifierSpeed));

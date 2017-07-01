@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class EntityStarburst extends EntityThrowable {
 
-    private static final AxisAlignedBB searchBox = new AxisAlignedBB(-1, -1, -1, 1, 1, 1).expandXyz(17);
+    private static final AxisAlignedBB searchBox = new AxisAlignedBB(-1, -1, -1, 1, 1, 1).grow(17);
     private static final double descendingDst = 17.0D;
 
     private int targetId = -1;
@@ -85,8 +85,8 @@ public class EntityStarburst extends EntityThrowable {
                 } else {
                     EntityLivingBase entity = (EntityLivingBase) e;
 
-                    Vector3 thisPos = new Vector3(this);
-                    Vector3 targetEntity = new Vector3(entity);
+                    Vector3 thisPos =  Vector3.atEntityCorner(this);
+                    Vector3 targetEntity = Vector3.atEntityCorner(entity);
                     Vector3 dirMotion = targetEntity.clone().subtract(thisPos);
                     Vector3 currentMotion = new Vector3(this.motionX, this.motionY, this.motionZ);
                     double dst = thisPos.distance(targetEntity);
@@ -128,7 +128,7 @@ public class EntityStarburst extends EntityThrowable {
         }
         if(ticksExisted % 12 == 0) {
             for (Vector3 pos : MiscUtils.getCirclePositions(
-                    new Vector3(this),
+                    Vector3.atEntityCenter(this),
                     new Vector3(motionX, motionY, motionZ),
                     1F, 25 + rand.nextInt(14))) {
                 particle = EffectHelper.genericFlareParticle(pos.getX(), pos.getY(), pos.getZ()).gravity(0.004);
@@ -185,7 +185,7 @@ public class EntityStarburst extends EntityThrowable {
                 if (result.entityHit.equals(getThrower())) {
                     return;
                 }
-                CelestialStrike.play(getThrower(), world, new Vector3(result.entityHit), new Vector3(result.entityHit, true));
+                CelestialStrike.play(getThrower(), world, Vector3.atEntityCenter(result.entityHit), Vector3.atEntityCenter(result.entityHit));
             }
             setDead();
         }

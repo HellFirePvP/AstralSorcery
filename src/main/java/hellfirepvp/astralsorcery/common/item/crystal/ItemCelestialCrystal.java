@@ -35,10 +35,12 @@ import java.awt.*;
 public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGatedVisibility {
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        ItemStack stack = new ItemStack(this);
-        CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
-        subItems.add(stack);
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if(this.isInCreativeTab(tab)) {
+            ItemStack stack = new ItemStack(this);
+            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+            subItems.add(stack);
+        }
     }
 
     @Override

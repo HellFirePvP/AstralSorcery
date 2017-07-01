@@ -15,6 +15,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -36,10 +38,13 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
-        ItemStack stack = new ItemStack(itemIn);
-        setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));
-        subItems.add(stack);
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(this.isInCreativeTab(tab)) {
+            CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
+            ItemStack stack = new ItemStack(this);
+            setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));
+            items.add(stack);
+        }
     }
+
 }

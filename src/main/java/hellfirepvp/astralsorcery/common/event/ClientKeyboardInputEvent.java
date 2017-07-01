@@ -46,7 +46,7 @@ public class ClientKeyboardInputEvent extends Event {
     static {
         Method buf = null;
         try {
-            buf = ReflectionHelper.findMethod(Minecraft.class, Minecraft.getMinecraft(), new String[] { "runTickKeyboard", "func_184118_az" });
+            buf = ReflectionHelper.findMethod(Minecraft.class, "runTickKeyboard", "func_184118_az");
         } catch (Exception exc) {
             buf = null;
         } finally {

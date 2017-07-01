@@ -24,6 +24,8 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,10 +55,10 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (MarbleBlockType t : MarbleBlockType.values()) {
             if(!t.obtainableInCreative()) continue;
-            list.add(new ItemStack(item, 1, t.getMeta()));
+            list.add(new ItemStack(this, 1, t.getMeta()));
         }
     }
 
@@ -118,7 +120,7 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
-    public boolean isFullyOpaque(IBlockState state) {
+    public boolean isTopSolid(IBlockState state) {
         return true;
     }
 

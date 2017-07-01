@@ -9,25 +9,23 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.*;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -41,16 +39,12 @@ public abstract class AbstractAltarRecipe {
 
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
-    private final IAccessibleRecipe recipe;
+    private final AccessibleRecipe recipe;
     private ItemStack out = ItemStack.EMPTY;
 
     private int uniqueRecipeId = -1;
 
-    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        this(neededLevel, recipe.make());
-    }
-
-    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    public AbstractAltarRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         this.neededLevel = neededLevel;
         this.recipe = recipe;
         this.out = recipe.getRecipeOutput();
@@ -69,7 +63,7 @@ public abstract class AbstractAltarRecipe {
         return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
-    public IAccessibleRecipe getNativeRecipe() {
+    public AccessibleRecipe getNativeRecipe() {
         return recipe;
     }
 
@@ -208,6 +202,18 @@ public abstract class AbstractAltarRecipe {
                 inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
             }
         }
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, Item out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, Block out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
+    }
+
+    protected static ShapedRecipe.Builder shapedRecipe(String basicName, ItemStack out) {
+        return ShapedRecipe.Builder.newShapedRecipe("internal/altar/" + basicName, out);
     }
 
     //Can be used to applyServer modifications to items on the shapeMap.

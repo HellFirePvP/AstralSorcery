@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -58,18 +59,17 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         EnumDyeColor color = getConfiguredColor(stack);
         if(color != null) {
             tooltip.add(MiscUtils.textFormattingForDye(color) + MiscUtils.capitalizeFirst(I18n.format(color.getUnlocalizedName())));
-            tooltip.add("");
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldReveal(ChargeType ct, ItemStack stack) {
-        return ct != ChargeType.PERM;
+        return ct == ChargeType.TEMP;
     }
 
     public static void setConfiguredColor(ItemStack stack, EnumDyeColor color) {
@@ -113,7 +113,6 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
                         worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                         drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
-                        gainPermCharge(playerIn, Config.illuminationWandUseCost / 4);
                     }
                 }
             } else {
@@ -127,7 +126,6 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                         } else {
                             tt.setFakedState(at);
                             drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
-                            gainPermCharge(playerIn, Config.illuminationWandUseCost);
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

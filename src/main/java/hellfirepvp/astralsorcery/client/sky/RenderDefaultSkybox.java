@@ -54,14 +54,14 @@ public class RenderDefaultSkybox extends IRenderHandler {
         vertexBufferFormat.addElement(new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.POSITION, 3));
 
         Tessellator tessellator = Tessellator.getInstance();
-        net.minecraft.client.renderer.VertexBuffer vb = tessellator.getBuffer();
+        net.minecraft.client.renderer.BufferBuilder vb = tessellator.getBuffer();
 
         setupStars(vb);
         setupSky1(vb);
         setupSky2(vb);
     }
 
-    private static void setupSky2(net.minecraft.client.renderer.VertexBuffer vb) {
+    private static void setupSky2(net.minecraft.client.renderer.BufferBuilder vb) {
         if (sky2VBO != null) sky2VBO.deleteGlBuffers();
 
         if (glSkyList2 >= 0) {
@@ -84,7 +84,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupSky1(net.minecraft.client.renderer.VertexBuffer vb) {
+    private static void setupSky1(net.minecraft.client.renderer.BufferBuilder vb) {
         if (skyVBO != null) skyVBO.deleteGlBuffers();
 
         if (glSkyList >= 0) {
@@ -107,7 +107,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupStars(net.minecraft.client.renderer.VertexBuffer vb) {
+    private static void setupStars(net.minecraft.client.renderer.BufferBuilder vb) {
         if (starVBO != null) starVBO.deleteGlBuffers();
 
         if (starGLCallList >= 0) {
@@ -132,7 +132,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupSkyVertices(net.minecraft.client.renderer.VertexBuffer vb, float y, boolean invert) {
+    private static void setupSkyVertices(net.minecraft.client.renderer.BufferBuilder vb, float y, boolean invert) {
         vb.begin(7, DefaultVertexFormats.POSITION);
 
         for (int k = -384; k <= 384; k += 64) {
@@ -154,7 +154,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         }
     }
 
-    private static void setupStarVertices(net.minecraft.client.renderer.VertexBuffer vb) {
+    private static void setupStarVertices(net.minecraft.client.renderer.BufferBuilder vb) {
         Random random = new Random(10842L);
         vb.begin(7, DefaultVertexFormats.POSITION);
         for (int i = 0; i < 1500; ++i) {
@@ -220,9 +220,9 @@ public class RenderDefaultSkybox extends IRenderHandler {
     private static void renderDefaultSkybox(float partialTicks) {
         GlStateManager.disableTexture2D();
         Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
-        float f = (float) vec3.xCoord;
-        float f1 = (float) vec3.yCoord;
-        float f2 = (float) vec3.zCoord;
+        float f = (float) vec3.x;
+        float f1 = (float) vec3.y;
+        float f2 = (float) vec3.z;
 
         if (Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
@@ -235,7 +235,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
 
         GlStateManager.color(f, f1, f2);
         Tessellator tessellator = Tessellator.getInstance();
-        net.minecraft.client.renderer.VertexBuffer vb = tessellator.getBuffer();
+        net.minecraft.client.renderer.BufferBuilder vb = tessellator.getBuffer();
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
         GlStateManager.color(f, f1, f2);
@@ -349,7 +349,7 @@ public class RenderDefaultSkybox extends IRenderHandler {
         GlStateManager.popMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.color(0.0F, 0.0F, 0.0F);
-        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().world.getHorizon();
+        double d0 = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y - Minecraft.getMinecraft().world.getHorizon();
 
         if (d0 < 0.0D) {
             GlStateManager.pushMatrix();

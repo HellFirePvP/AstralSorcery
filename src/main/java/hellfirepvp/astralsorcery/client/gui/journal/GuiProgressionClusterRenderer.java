@@ -222,7 +222,7 @@ public class GuiProgressionClusterRenderer {
 
         RenderItem ri = Minecraft.getMinecraft().getRenderItem();
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         switch (node.getRenderType()) {
             case ITEMSTACK:
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -339,7 +339,7 @@ public class GuiProgressionClusterRenderer {
         brightness *= renderLoopBrFactor;
         GL11.glColor4f(brightness, brightness, brightness, 0.5F * renderLoopBrFactor);
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
         vb.pos(lx, ly, zLevel).endVertex();
         vb.pos(hx, hy, zLevel).endVertex();
@@ -355,7 +355,7 @@ public class GuiProgressionClusterRenderer {
     private void drawResearchItemBackground(double zoomedWH, double xAdd, double yAdd, float zLevel) {
         GL11.glColor4f(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(renderOffsetX + xAdd,            renderOffsetY + yAdd + zoomedWH, zLevel).tex(0, 1).endVertex();
         vb.pos(renderOffsetX + xAdd + zoomedWH, renderOffsetY + yAdd + zoomedWH, zLevel).tex(1, 1).endVertex();

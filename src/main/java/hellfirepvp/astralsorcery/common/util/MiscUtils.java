@@ -196,7 +196,7 @@ public class MiscUtils {
     public static RayTraceResult rayTraceLook(EntityLivingBase entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();
-        Vec3d end = pos.addVector(lookVec.xCoord * reachDst, lookVec.yCoord * reachDst, lookVec.zCoord * reachDst);
+        Vec3d end = pos.addVector(lookVec.x * reachDst, lookVec.y * reachDst, lookVec.z * reachDst);
         return entity.world.rayTraceBlocks(pos, end);
     }
 
@@ -215,7 +215,7 @@ public class MiscUtils {
     }
 
     public static boolean isChunkLoaded(World world, ChunkPos pos) {
-        return world.getChunkProvider().getLoadedChunk(pos.chunkXPos, pos.chunkZPos) != null;
+        return world.getChunkProvider().getLoadedChunk(pos.x, pos.z) != null;
     }
 
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {

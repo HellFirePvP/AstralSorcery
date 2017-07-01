@@ -134,7 +134,7 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
     public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
         AxisAlignedBB box = iblockstate.getBoundingBox(world, blockpos).offset(blockpos);
         AxisAlignedBB entityBox = entity.getEntityBoundingBox();//.offset(entity.posX, entity.posY, entity.posZ);
-        return box.intersectsWith(entityBox) && materialIn.isLiquid();
+        return box.intersects(entityBox) && materialIn.isLiquid();
     }
 
     @Override

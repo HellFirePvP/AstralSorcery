@@ -47,7 +47,7 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     private static int dlCrystal = -1;
 
     @Override
-    public void renderTileEntityAt(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
         long sBase = 1553015L;

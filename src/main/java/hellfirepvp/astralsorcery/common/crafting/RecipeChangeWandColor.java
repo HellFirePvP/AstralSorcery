@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
+import hellfirepvp.astralsorcery.common.crafting.helper.BasePlainRecipe;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -15,8 +16,8 @@ import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -29,7 +30,13 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 02.05.2017 / 22:05
  */
-public class RecipeChangeWandColor implements IRecipe {
+public class RecipeChangeWandColor extends BasePlainRecipe {
+
+    public static final RecipeChangeWandColor INSTANCE = new RecipeChangeWandColor();
+
+    private RecipeChangeWandColor() {
+        super("recipechangewandcolor");
+    }
 
     @Override
     public boolean matches(InventoryCrafting inv, World worldIn) {
@@ -81,8 +88,8 @@ public class RecipeChangeWandColor implements IRecipe {
     }
 
     @Override
-    public int getRecipeSize() {
-        return 2;
+    public boolean canFit(int width, int height) {
+        return width * height >= 2;
     }
 
     @Override

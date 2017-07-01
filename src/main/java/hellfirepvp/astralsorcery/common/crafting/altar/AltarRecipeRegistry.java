@@ -8,13 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -109,25 +108,25 @@ public class AltarRecipeRegistry {
         return null;
     }
 
-    public static TraitRecipe registerTraitRecipe(AbstractCacheableRecipe recipe) {
+    public static TraitRecipe registerTraitRecipe(AccessibleRecipeAdapater recipe) {
         TraitRecipe tr = new TraitRecipe(recipe);
         registerAltarRecipe(tr);
         return tr;
     }
 
-    public static ConstellationRecipe registerConstellationRecipe(AbstractCacheableRecipe recipe) {
+    public static ConstellationRecipe registerConstellationRecipe(AccessibleRecipeAdapater recipe) {
         ConstellationRecipe dr = new ConstellationRecipe(recipe);
         registerAltarRecipe(dr);
         return dr;
     }
 
-    public static AttunementRecipe registerAttenuationRecipe(AbstractCacheableRecipe recipe) {
+    public static AttunementRecipe registerAttenuationRecipe(AccessibleRecipeAdapater recipe) {
         AttunementRecipe dr = new AttunementRecipe(recipe);
         registerAltarRecipe(dr);
         return dr;
     }
 
-    public static DiscoveryRecipe registerDiscoveryRecipe(AbstractCacheableRecipe recipe) {
+    public static DiscoveryRecipe registerDiscoveryRecipe(AccessibleRecipeAdapater recipe) {
         DiscoveryRecipe dr = new DiscoveryRecipe(recipe);
         registerAltarRecipe(dr);
         return dr;

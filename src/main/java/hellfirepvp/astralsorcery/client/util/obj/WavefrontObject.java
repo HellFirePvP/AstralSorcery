@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.client.util.obj;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResource;
@@ -149,7 +149,7 @@ public class WavefrontObject {
 
     @SideOnly(Side.CLIENT)
     public void renderAll(boolean expectTexture) {
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
 
         VertexFormat vf;
         if (expectTexture) {
@@ -169,7 +169,7 @@ public class WavefrontObject {
 
     @SideOnly(Side.CLIENT)
     public void renderOnly(boolean expectTexture, String... groupNames) {
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
 
         VertexFormat vf;
         if (expectTexture) {
@@ -197,7 +197,7 @@ public class WavefrontObject {
     }
 
     @SideOnly(Side.CLIENT)
-    public void tessellateAll(VertexBuffer vb) {
+    public void tessellateAll(BufferBuilder vb) {
         for (GroupObject groupObject : groupObjects) {
             groupObject.render(vb);
         }
@@ -215,7 +215,7 @@ public class WavefrontObject {
     }
 
     @SideOnly(Side.CLIENT)
-    public void tessellateOnly(VertexBuffer vb, String... groupNames) {
+    public void tessellateOnly(BufferBuilder vb, String... groupNames) {
         for (GroupObject groupObject : groupObjects) {
             for (String groupName : groupNames) {
                 if (groupName.equalsIgnoreCase(groupObject.name)) {
@@ -235,7 +235,7 @@ public class WavefrontObject {
     }
 
     @SideOnly(Side.CLIENT)
-    public void tessellatePart(VertexBuffer vb, String partName) {
+    public void tessellatePart(BufferBuilder vb, String partName) {
         for (GroupObject groupObject : groupObjects) {
             if (partName.equalsIgnoreCase(groupObject.name)) {
                 groupObject.render(vb);
@@ -259,7 +259,7 @@ public class WavefrontObject {
     }*/
 
     @SideOnly(Side.CLIENT)
-    public void tessellateAllExcept(VertexBuffer vb, String... excludedGroupNames) {
+    public void tessellateAllExcept(BufferBuilder vb, String... excludedGroupNames) {
         boolean exclude;
         for (GroupObject groupObject : groupObjects) {
             exclude = false;

@@ -22,7 +22,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
 
     @Override
-    public void renderTileEntityAt(TileFakeTree te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileFakeTree te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
         TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(renderState, te.getPos()));

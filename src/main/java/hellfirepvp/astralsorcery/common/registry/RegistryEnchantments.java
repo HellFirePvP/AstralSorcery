@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentNightVision;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentScorchingHeat;
@@ -40,7 +41,7 @@ public class RegistryEnchantments {
 
     private static <T extends Enchantment> T register(T e) {
         e.setRegistryName(new ResourceLocation(AstralSorcery.MODID, e.getName()));
-        GameRegistry.register(e);
+        CommonProxy.registryPrimer.register(e);
         if (e instanceof EnchantmentPlayerWornTick) {
             wearableTickEnchantments.add((EnchantmentPlayerWornTick) e);
         }

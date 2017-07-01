@@ -32,7 +32,6 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFix;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -57,6 +56,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -73,6 +73,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -152,12 +153,12 @@ public class EventHandlerServer {
 
         DamageSource source = event.getSource();
         lblIn:
-        if (source.getSourceOfDamage() != null) {
+        if (source.getTrueSource() != null) {
             EntityPlayer p;
-            if (source.getSourceOfDamage() instanceof EntityPlayer) {
-                p = (EntityPlayer) source.getSourceOfDamage();
-            } else if (source.getSourceOfDamage() instanceof EntityArrow) {
-                Entity shooter = ((EntityArrow) source.getSourceOfDamage()).shootingEntity;
+            if (source.getTrueSource() instanceof EntityPlayer) {
+                p = (EntityPlayer) source.getTrueSource();
+            } else if (source.getTrueSource() instanceof EntityArrow) {
+                Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
                 if (shooter != null && shooter instanceof EntityPlayer) {
                     p = (EntityPlayer) shooter;
                 } else {
@@ -193,6 +194,13 @@ public class EventHandlerServer {
                 }
                 event.setAmount(dmg);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onContainerOpen(PlayerContainerEvent.Open event) {
+        if(event.getContainer() instanceof ContainerWorkbench && !event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
+            PacketChannel.CHANNEL.sendTo(new PktCraftingTableFix(((ContainerWorkbench) event.getContainer()).pos), (EntityPlayerMP) event.getEntityPlayer());
         }
     }
 
@@ -237,8 +245,8 @@ public class EventHandlerServer {
             if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
 
             DamageSource source = event.getSource();
-            if (source.getEntity() != null && source.getEntity() instanceof EntityPlayer) {
-                EntityPlayer p = (EntityPlayer) source.getEntity();
+            if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityPlayer) {
+                EntityPlayer p = (EntityPlayer) source.getImmediateSource();
                 PlayerProgress prog = ResearchManager.getProgress(p);
                 if (prog != null) {
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
@@ -267,7 +275,7 @@ public class EventHandlerServer {
         entity.setHealth(6 + level * 2);
         entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 2, false, false));
         entity.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 500, 1, false, false));
-        List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expandXyz(3), (e) -> !e.isDead && e != entity);
+        List<EntityLivingBase> others = entity.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(3), (e) -> !e.isDead && e != entity);
         for (EntityLivingBase lb : others) {
             lb.setFire(16);
             lb.knockBack(entity, 2F, lb.posX - entity.posX, lb.posZ - entity.posZ);
@@ -286,7 +294,7 @@ public class EventHandlerServer {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
 
         EntityLivingBase toTest = event.getEntityLiving();
-        Vector3 at = new Vector3(toTest);
+        Vector3 at = Vector3.atEntityCorner(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {
             for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
@@ -335,7 +343,8 @@ public class EventHandlerServer {
             Block blockCrafted = Block.getBlockFromItem(crafted);
             if (blockCrafted != Blocks.AIR && blockCrafted instanceof BlockMachine) {
                 if (event.crafting.getItemDamage() == BlockMachine.MachineType.TELESCOPE.getMeta()) {
-                    event.player.addStat(RegistryAchievements.achvBuildActTelescope);
+                    //FIXME RE-ADD AFTER ADVANCEMENTS
+                    //event.player.addStat(RegistryAchievements.achvBuildActTelescope);
                 }
             }
         }

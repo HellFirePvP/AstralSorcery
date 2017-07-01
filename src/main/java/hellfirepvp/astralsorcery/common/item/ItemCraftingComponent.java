@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,9 +45,11 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for (MetaType type : MetaType.values()) {
-            subItems.add(new ItemStack(itemIn, 1, type.getMeta()));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(this.isInCreativeTab(tab)) {
+            for (MetaType type : MetaType.values()) {
+                items.add(new ItemStack(this, 1, type.getMeta()));
+            }
         }
     }
 

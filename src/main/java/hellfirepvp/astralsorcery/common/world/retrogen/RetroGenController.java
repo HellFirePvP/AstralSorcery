@@ -35,7 +35,7 @@ public class RetroGenController {
         if(event.getWorld().isRemote || !event.getChunk().isTerrainPopulated() || retroGenActive.contains(pos)) return;
 
         Integer chunkVersion = -1;
-        if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.chunkXPos, pos.chunkZPos)) {
+        if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.x, pos.z)) {
             chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
             if(chunkVersion == null) {
                 return;

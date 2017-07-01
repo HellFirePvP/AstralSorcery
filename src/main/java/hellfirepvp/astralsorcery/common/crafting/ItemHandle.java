@@ -8,10 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
-import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -20,20 +16,24 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +44,9 @@ import java.util.List;
  */
 public final class ItemHandle {
 
+    private static final Constructor<CompoundIngredient> COMPOUND_CTOR;
+
+    public static ItemHandle EMPTY = new ItemHandle();
     public static boolean ignoreGatingRequirement = true;
 
     public final Type handleType;
@@ -57,6 +60,11 @@ public final class ItemHandle {
      */
     private ItemHandle(Type type) {
         this.handleType = type;
+    }
+
+    private ItemHandle() {
+        this(Type.STACK);
+        applicableItems.add(ItemStack.EMPTY);
     }
 
     public ItemHandle(String oreDictName) {
@@ -122,7 +130,7 @@ public final class ItemHandle {
             NonNullList<ItemStack> out = NonNullList.create();
             for (ItemStack oreDictIn : stacks) {
                 if (oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                    oreDictIn.getItem().getSubItems(oreDictIn.getItem(), CreativeTabs.BUILDING_BLOCKS, out);
+                    oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
                 } else {
                     out.add(oreDictIn);
                 }
@@ -162,6 +170,29 @@ public final class ItemHandle {
             }
         }
         return applicable;
+    }
+
+    //CACHE THIS !!!111ELEVEN11!
+    public Ingredient getRecipeIngredient() {
+        switch (handleType) {
+            case OREDICT:
+                return new OreIngredient(this.oreDictName);
+            case FLUID:
+                return Ingredient.fromStacks(FluidUtil.getFilledBucket(new FluidStack(fluidTypeAndAmount.getFluid(), 1000)));
+            case STACK:
+            default:
+                List<Ingredient> ingredients = new ArrayList<>();
+                for (ItemStack stack : this.applicableItems) {
+                    Ingredient i = Ingredient.fromStacks(stack);
+                    if(i != Ingredient.EMPTY) {
+                        ingredients.add(i);
+                    }
+                }
+                try {
+                    return COMPOUND_CTOR.newInstance(ingredients);
+                } catch (Exception e) {}
+        }
+        return Ingredient.EMPTY;
     }
 
     @Nullable
@@ -235,6 +266,17 @@ public final class ItemHandle {
                 break;
         }
         return handle;
+    }
+
+    static {
+        Constructor<CompoundIngredient> ctor;
+        try {
+            ctor = CompoundIngredient.class.getDeclaredConstructor(Collection.class);
+        } catch (Exception exc) {
+            throw new IllegalStateException("Could not find CompoundIngredient Constructor! Recipes can't be created; Exiting execution! Try with AS and forge alone first! Please report this along with exact forge version and other mods.");
+        }
+        ctor.setAccessible(true);
+        COMPOUND_CTOR = ctor;
     }
 
     public static enum Type {

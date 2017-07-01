@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import net.minecraft.block.Block;
@@ -183,7 +182,8 @@ public class ResearchManager {
             progress.discoverConstellation(c.getUnlocalizedName());
         }
 
-        player.addStat(RegistryAchievements.achvDiscoverConstellation);
+        //FIXME RE-ADD AFTER ADVANCEMENTS
+        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -196,7 +196,8 @@ public class ResearchManager {
 
         progress.discoverConstellation(c.getUnlocalizedName());
 
-        player.addStat(RegistryAchievements.achvDiscoverConstellation);
+        //FIXME RE-ADD AFTER ADVANCEMENTS
+        //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -246,7 +247,8 @@ public class ResearchManager {
         progress.forceCharge(0);
         progress.setAttunedConstellation(constellation);
 
-        player.addStat(RegistryAchievements.achvPlayerAttunement);
+        //FIXME RE-ADD AFTER ADVANCEMENTS
+        //player.addStat(RegistryAchievements.achvPlayerAttunement);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
@@ -539,7 +541,8 @@ public class ResearchManager {
     private static void informCraft(EntityPlayer crafter, ItemStack crafted, Item itemCrafted, @Nullable Block iBlock) {
 
         if(itemCrafted instanceof ItemHandTelescope) {
-            crafter.addStat(RegistryAchievements.achvBuildHandTelescope);
+            //FIXME RE-ADD AFTER ADVANCEMENTS
+            //crafter.addStat(RegistryAchievements.achvBuildHandTelescope);
         }
         if(iBlock != null) {
             if(iBlock instanceof BlockAltar) {

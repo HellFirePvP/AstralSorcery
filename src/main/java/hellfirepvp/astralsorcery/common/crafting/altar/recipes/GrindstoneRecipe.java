@@ -23,7 +23,7 @@ import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 public class GrindstoneRecipe extends DiscoveryRecipe {
 
     public GrindstoneRecipe() {
-        super(new ShapedRecipe(BlockMachine.MachineType.GRINDSTONE.asStack())
+        super(shapedRecipe("grindstone", BlockMachine.MachineType.GRINDSTONE.asStack())
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.CENTER)
                 .addPart(OreDictAlias.BLOCK_WOOD_PLANKS,
@@ -31,7 +31,8 @@ public class GrindstoneRecipe extends DiscoveryRecipe {
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .addPart(OreDictAlias.ITEM_STICKS,
                         ShapedRecipeSlot.LOWER_CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT));
+                        ShapedRecipeSlot.LOWER_LEFT)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

@@ -8,15 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -26,107 +34,111 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 10.08.2016 / 15:21
  */
-public class ShapelessRecipe extends AbstractCacheableRecipe {
+public class ShapelessRecipe extends AbstractRecipeAccessor {
 
-    protected int contentCounter = 0;
-    protected ItemHandle[] contents = new ItemHandle[9]; //Max. 9
+    private final NonNullList<ItemHandle> inputs;
 
-    public ShapelessRecipe(Block block) {
-        this(new ItemStack(block));
-    }
-
-    public ShapelessRecipe(Item item) {
-        this(new ItemStack(item));
-    }
-
-    public ShapelessRecipe(ItemStack output) {
+    public ShapelessRecipe(@Nonnull ItemStack output, NonNullList<ItemHandle> inputs) {
         super(output);
-    }
-
-    public ShapelessRecipe add(Block block) {
-        return add(new ItemStack(block));
-    }
-
-    public ShapelessRecipe add(Item item) {
-        return add(new ItemStack(item));
-    }
-
-    public ShapelessRecipe add(ItemStack stack) {
-        if(contentCounter >= 9) return this; //Add nothing then.
-        this.contents[contentCounter++] = new ItemHandle(stack);
-        return this;
-    }
-
-    public ShapelessRecipe add(String oreDictName) {
-        if(contentCounter >= 9) return this; //Add nothing then.
-        this.contents[contentCounter++] = new ItemHandle(oreDictName);
-        return this;
-    }
-
-    public ShapelessRecipe addPart(FluidStack fluidStack) {
-        if(contentCounter >= 9) return this; //Add nothing then.
-        this.contents[contentCounter++] = new ItemHandle(fluidStack);
-        return this;
-    }
-
-    public ShapelessRecipe addPart(Fluid fluid, int mbAmount) {
-        return addPart(new FluidStack(fluid, mbAmount));
-    }
-
-    public ShapelessRecipe addPart(Fluid fluid) {
-        return addPart(fluid, 1000);
-    }
-
-    public ShapelessRecipe addPart(ItemHandle handle) {
-        if(contentCounter >= 9) return this; //Add nothing then.
-        this.contents[contentCounter++] = handle;
-        return this;
-    }
-
-    @Override
-    public void register() {
-        CraftingManager.getInstance().addRecipe(make());
-    }
-
-    @Override
-    public AccessibleRecipeAdapater make() {
-        Object[] parts = new Object[contentCounter];
-        for (int i = 0; i < parts.length; i++) {
-            Object obj = parts[i];
-            if(obj instanceof ItemHandle) {
-                parts[i] = contents[i].getObjectForRecipe();
-            } else {
-                parts[i] = contents[i];
-            }
-        }
-        return new AccessibleRecipeAdapater(RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts), this);
-    }
-
-    @Override
-    public IRecipe makeNative() {
-        Object[] parts = new Object[contentCounter];
-        for (int i = 0; i < parts.length; i++) {
-            Object obj = parts[i];
-            if(obj instanceof ItemHandle) {
-                parts[i] = contents[i].getObjectForRecipe();
-            } else {
-                parts[i] = contents[i];
-            }
-        }
-        return RecipeHelper.getShapelessOreDictRecipe(getOutput(), parts);
+        this.inputs = inputs;
     }
 
     @Nullable
     @Override
     public ItemHandle getExpectedStack(int row, int column) {
         int index = row * 3 + column;
-        return index >= contentCounter ? null : contents[index];
+        return index >= inputs.size() ? null : inputs.get(index);
     }
 
     @Nullable
     @Override
     public ItemHandle getExpectedStack(ShapedRecipeSlot slot) {
         int index = slot.rowMultipler * 3 + slot.columnMultiplier;
-        return index >= contentCounter ? null : contents[index];
+        return index >= inputs.size() ? null : inputs.get(index);
     }
+
+    public static class Builder {
+
+        private boolean registered = false;
+
+        private final ResourceLocation entry;
+        private final ItemStack output;
+        private final NonNullList<ItemHandle> inputs = NonNullList.create();
+
+        private Builder(String name, ItemStack output) {
+            this.entry = new ResourceLocation(AstralSorcery.MODID, "shapeless/" +name);
+            this.output = ItemUtils.copyStackWithSize(output, output.getCount());
+        }
+
+        public static Builder newShapelessRecipe(String name, Block output) {
+            return newShapelessRecipe(name, new ItemStack(output));
+        }
+
+        public static Builder newShapelessRecipe(String name, Item output) {
+            return newShapelessRecipe(name, new ItemStack(output));
+        }
+
+        public static Builder newShapelessRecipe(String name, ItemStack output) {
+            return new Builder(name, output);
+        }
+
+        public Builder add(Block block) {
+            return add(new ItemStack(block));
+        }
+
+        public Builder add(Item item) {
+            return add(new ItemStack(item));
+        }
+
+        public Builder add(ItemStack stack) {
+            if(inputs.size() >= 9) return this; //Add nothing then.
+            this.inputs.add(new ItemHandle(stack));
+            return this;
+        }
+
+        public Builder add(String oreDictName) {
+            if(inputs.size() >= 9) return this; //Add nothing then.
+            this.inputs.add(new ItemHandle(oreDictName));
+            return this;
+        }
+
+        public Builder addPart(FluidStack fluidStack) {
+            if(inputs.size() >= 9) return this; //Add nothing then.
+            this.inputs.add(new ItemHandle(fluidStack));
+            return this;
+        }
+
+        public Builder addPart(Fluid fluid, int mbAmount) {
+            return addPart(new FluidStack(fluid, mbAmount));
+        }
+
+        public Builder addPart(Fluid fluid) {
+            return addPart(fluid, 1000);
+        }
+
+        public Builder addPart(ItemHandle handle) {
+            if(inputs.size() >= 9) return this; //Add nothing then.
+            this.inputs.add(handle);
+            return this;
+        }
+
+        public AccessibleRecipeAdapater buildAndRegisterShapelessRecipe() {
+            if(registered) throw new IllegalArgumentException("Tried to register previously built recipe twice!");
+            registered = true;
+            BasePlainRecipe actual = RecipeHelper.getShapelessOreDictRecipe(entry, output, compileIngredients());
+            CommonProxy.registryPrimer.register(actual);
+            ShapelessRecipe access = new ShapelessRecipe(output, inputs);
+            return new AccessibleRecipeAdapater(actual, access);
+        }
+
+        private NonNullList<Ingredient> compileIngredients() {
+            NonNullList<Ingredient> ingredients = NonNullList.create();
+            for (ItemHandle handle : inputs) {
+                ingredients.add(handle.getRecipeIngredient());
+            }
+            return ingredients;
+        }
+
+    }
+
 }

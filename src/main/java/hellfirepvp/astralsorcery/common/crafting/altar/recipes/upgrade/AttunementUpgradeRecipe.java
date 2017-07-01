@@ -41,7 +41,7 @@ import java.util.Random;
 public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
 
     public AttunementUpgradeRecipe() {
-        super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
+        super(shapedRecipe("upgrade_tier2", new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.UPPER_LEFT,
@@ -53,7 +53,8 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(BlocksAS.fluidLiquidStarlight,
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+        .unregisteredAccessibleShapedRecipe());
     }
 
     @Override

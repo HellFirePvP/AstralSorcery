@@ -74,7 +74,7 @@ public class RaytraceAssist {
     public void setCollectEntities(double additionalCollectRadius) {
         this.collectEntities = true;
         this.collectBox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
-        this.collectBox = this.collectBox.expandXyz(additionalCollectRadius);
+        this.collectBox = this.collectBox.grow(additionalCollectRadius);
     }
 
     public boolean isClear(World world) {

@@ -50,7 +50,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
     };
 
     public AttunementAltarRecipe() {
-        super(new ShapedRecipe(BlocksAS.attunementAltar)
+        super(ShapedRecipe.Builder.newShapedRecipe("attunementaltar", BlocksAS.attunementAltar)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.UPPER_CENTER)
                 .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
@@ -60,7 +60,8 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT));
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
         setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                 AttunementAltarSlot.UPPER_LEFT,
                 AttunementAltarSlot.UPPER_RIGHT);

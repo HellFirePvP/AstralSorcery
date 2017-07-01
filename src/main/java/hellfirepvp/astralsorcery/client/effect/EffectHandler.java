@@ -35,7 +35,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -192,7 +192,7 @@ public final class EffectHandler {
             Blending.DEFAULT.applyStateManager();
             GlStateManager.disableAlpha();
             Tessellator tes = Tessellator.getInstance();
-            VertexBuffer vb = tes.getBuffer();
+            BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
             Vector3 pos = focusingEntry.relativePos.clone().multiply(0.85).add(uiGateway.getPos());
@@ -343,7 +343,7 @@ public final class EffectHandler {
             }
         }
 
-        Vector3 playerPos = new Vector3(Minecraft.getMinecraft().player);
+        Vector3 playerPos = Vector3.atEntityCorner(Minecraft.getMinecraft().player);
         for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderParticles)) {
             if (effect == null) {
                 fastRenderParticles.remove(null);

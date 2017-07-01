@@ -30,6 +30,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -56,8 +58,8 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     }
 
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-        ItemStack pedestal = new ItemStack(itemIn);
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        ItemStack pedestal = new ItemStack(this);
         list.add(pedestal);
     }
 

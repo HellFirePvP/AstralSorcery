@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.potion.PotionBleed;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import net.minecraft.potion.Potion;
@@ -32,7 +33,7 @@ public class RegistryPotions {
 
     private static <T extends Potion> T registerPotion(T potion) {
         potion.setRegistryName(potion.getClass().getSimpleName());
-        GameRegistry.register(potion);
+        CommonProxy.registryPrimer.register(potion);
         return potion;
     }
 

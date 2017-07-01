@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,15 +61,17 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        subItems.add(new ItemStack(this, 1));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(this.isInCreativeTab(tab)) {
+            items.add(new ItemStack(this, 1));
 
-        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-            if (c instanceof IMinorConstellation) continue;
+            for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                if (c instanceof IMinorConstellation) continue;
 
-            ItemStack cPaper = new ItemStack(this, 1);
-            setConstellation(cPaper, c);
-            subItems.add(cPaper);
+                ItemStack cPaper = new ItemStack(this, 1);
+                setConstellation(cPaper, c);
+                items.add(cPaper);
+            }
         }
     }
 
@@ -88,7 +92,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IConstellation c = getConstellation(stack);
         if (c != null) {
             tooltip.add(TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
@@ -209,7 +213,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
     @Override
     public Color getHightlightColor(ItemStack stack) {
         IConstellation c = getConstellation(stack);
-        return c == null ? Color.GRAY : c.getRenderColor();
+        return c == null ? Color.GRAY : c.getTierRenderColor();
     }
 
     public static IConstellation getConstellation(ItemStack stack) {

@@ -53,7 +53,7 @@ public class CelestialGatewaySystem {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         for (Integer id : worlds) {
             if(id == null) continue;
-            WorldServer world = server.worldServerForDimension(id);
+            WorldServer world = server.getWorld(id);
             loadWorldCache(world);
         }
         startup = false;

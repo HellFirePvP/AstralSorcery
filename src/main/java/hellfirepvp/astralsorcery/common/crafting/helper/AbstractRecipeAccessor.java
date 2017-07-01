@@ -8,30 +8,30 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: AbstractRecipe
+ * Class: AbstractRecipeAccessor
  * Created by HellFirePvP
- * Date: 10.08.2016 / 15:21
+ * Date: 18.06.2017 / 16:17
  */
-public abstract class AbstractRecipe {
+public abstract class AbstractRecipeAccessor extends AbstractRecipeData {
 
-    private ItemStack output = ItemStack.EMPTY;
-
-    public AbstractRecipe(@Nonnull ItemStack output) {
-        this.output = output;
+    public AbstractRecipeAccessor(@Nonnull ItemStack output) {
+        super(output);
     }
 
-    @Nonnull
-    public ItemStack getOutput() {
-        return output;
-    }
+    @Nullable
+    abstract ItemHandle getExpectedStack(int row, int column);
 
-    public abstract void register();
+    @Nullable
+    abstract ItemHandle getExpectedStack(ShapedRecipeSlot slot);
 
 }

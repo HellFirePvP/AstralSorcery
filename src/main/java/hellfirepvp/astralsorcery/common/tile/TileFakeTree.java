@@ -196,7 +196,7 @@ public class TileFakeTree extends TileEntityTick {
                 if(rand.nextBoolean()) {
                     harvestAndAppend(tft, out);
                 }
-                Vector3 plPos = new Vector3(player);
+                Vector3 plPos = Vector3.atEntityCenter(player);
                 for (ItemStack stack : out) {
                     ItemUtils.dropItemNaturally(player.getEntityWorld(),
                             plPos.getX() + rand.nextFloat() - rand.nextFloat(),
@@ -204,7 +204,7 @@ public class TileFakeTree extends TileEntityTick {
                             plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
                             stack);
                 }
-                PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), new Vector3(player));
+                PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), Vector3.atEntityCenter(player));
                 if(usedTool != null && usedTool.getItem() instanceof ItemChargedCrystalShovel) {
                     ev.setAdditionalData(Color.GRAY.brighter().getRGB());
                 } else {

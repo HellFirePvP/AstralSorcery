@@ -38,7 +38,7 @@ public class TESRCelestialCrystals extends TileEntitySpecialRenderer<TileCelesti
     private static int[] rotMapping = new int[] { 45, 135, 270, 90, 315, 0, 180, 225 };
 
     @Override
-    public void renderTileEntityAt(TileCelestialCrystals te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileCelestialCrystals te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
         RenderHelper.disableStandardItemLighting();

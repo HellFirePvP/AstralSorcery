@@ -34,6 +34,7 @@ import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
@@ -233,7 +234,7 @@ public class RegistryResearch {
         resStarResult.addPage(getTextPage("STARMETAL_RES.1"));
         resStarResult.addPage(getTextPage("STARMETAL_RES.2"));
 
-        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 5, 4);
+        ResearchNode resPlayerAtt = new ResearchNode(new ItemStack(BlocksAS.attunementAltar), "ATT_PLAYER", 5, 3);
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.1"));
         resPlayerAtt.addPage(getTextPage("ATT_PLAYER.2"));
         resPlayerAtt.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rAttunementAltar));
@@ -272,14 +273,18 @@ public class RegistryResearch {
 
         ResearchNode resToolWands = new ResearchNode(new ItemStack[] {
                 new ItemStack(ItemsAS.architectWand), new ItemStack(ItemsAS.exchangeWand)
-        }, "TOOL_WANDS", 6, 2);
+        }, "TOOL_WANDS", 4, 3);
         resToolWands.addPage(getTextPage("TOOL_WANDS.1"));
         resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rArchitectWand));
         resToolWands.addPage(getTextPage("TOOL_WANDS.3"));
         resToolWands.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rExchangeWand));
 
+        ResearchNode resToolGrapple = new ResearchNode(new ItemStack(ItemsAS.grapplingWand), "GRAPPLE_WAND", 3, 2);
+        resToolGrapple.addPage(getTextPage("GRAPPLE_WAND.1"));
+        resToolGrapple.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rGrappleWand));
+
         ResearchNode resQuickCharge = new ResearchNode(new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "star1", 6, 8),
-                "QUICK_CHARGE", 5, 3);
+                "QUICK_CHARGE", 4, 4);
         resQuickCharge.addPage(getTextPage("QUICK_CHARGE.1"));
 
         ResearchNode resStarlightNetwork = new ResearchNode(new ItemStack(BlocksAS.lens), "STARLIGHT_NETWORK", 3, 5);
@@ -291,7 +296,7 @@ public class RegistryResearch {
         resCelestialGateway.addPage(getTextPage("CELESTIAL_GATEWAY.3"));
         resCelestialGateway.addPage(new JournalPageStructure(MultiBlockArrays.patternCelestialGateway));
 
-        ResearchNode resShiftStar = new ResearchNode(new ItemStack(ItemsAS.shiftingStar), "SHIFT_STAR", 4, 2);
+        ResearchNode resShiftStar = new ResearchNode(new ItemStack(ItemsAS.shiftingStar), "SHIFT_STAR", 6, 2);
         resShiftStar.addPage(getTextPage("SHIFT_STAR.1"));
         resShiftStar.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rShiftStar));
 
@@ -312,6 +317,7 @@ public class RegistryResearch {
         registerItemLookup(BlockMachine.MachineType.TELESCOPE.asStack(),                                          resMountedTelescope,     1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.celestialGateway, 1, OreDictionary.WILDCARD_VALUE),     resCelestialGateway,     1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),          resShiftStar,            0, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resIlluminator);
         regAttunement.register(resLens);
@@ -331,22 +337,24 @@ public class RegistryResearch {
         regAttunement.register(resStarlightNetwork);
         regAttunement.register(resCelestialGateway);
         regAttunement.register(resShiftStar);
+        regAttunement.register(resToolGrapple);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);
         resStarResult.addSourceConnectionFrom(resStarOre);
         resConstellationUpgrade.addSourceConnectionFrom(resStarResult);
         resOtherOres.addSourceConnectionFrom(resStarOre);
-        resPlayerAtt.addSourceConnectionFrom(resStarResult);
+        resPlayerAtt.addSourceConnectionFrom(resQuickCharge);
         resCrystalAtt.addSourceConnectionFrom(resPlayerAtt);
         resAttPerks.addSourceConnectionFrom(resPlayerAtt);
         resRitPedestal.addSourceConnectionFrom(resCrystalAtt);
         resRitualAccel.addSourceConnectionFrom(resRitPedestal);
         resToolWands.addSourceConnectionFrom(resQuickCharge);
-        resQuickCharge.addSourceConnectionFrom(resPlayerAtt);
+        resQuickCharge.addSourceConnectionFrom(resStarResult);
         resStarlightNetwork.addSourceConnectionFrom(resStarOre);
         resCelestialGateway.addSourceConnectionFrom(resStarResult);
         resShiftStar.addSourceConnectionFrom(resPlayerAtt);
+        resToolGrapple.addSourceConnectionFrom(resQuickCharge);
     }
 
     private static void initCrafting() {
@@ -449,13 +457,13 @@ public class RegistryResearch {
 
         ResearchNode resConPaper = new ResearchNode(new ItemStack(ItemsAS.constellationPaper), "CPAPER", 1, 0);
         resConPaper.addPage(getTextPage("CPAPER.1"));
-        resConPaper.addPage(new JournalPageRecipe(RegistryRecipes.rRJournal));
+        resConPaper.addPage(new JournalPageRecipe(RecipesAS.rRJournal));
         resConPaper.addPage(getTextPage("CPAPER.3"));
-        resConPaper.addPage(new JournalPageRecipe(RegistryRecipes.rCCParchment));
+        resConPaper.addPage(new JournalPageRecipe(RecipesAS.rCCParchment));
 
         ResearchNode resWand = new ResearchNode(new ItemStack(ItemsAS.wand), "WAND", 2, 2);
         resWand.addPage(getTextPage("WAND.1"));
-        resWand.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRWand));
+        resWand.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRWand));
         resWand.addPage(getTextPage("WAND.3"));
 
         ResearchNode resOres = new ResearchNode(new ItemStack[] {
@@ -474,22 +482,22 @@ public class RegistryResearch {
         stacks[stacks.length - 1] = new ItemStack(BlocksAS.blockMarbleStairs);
         ResearchNode resMarbleTypes = new ResearchNode(stacks, "MARBLETYPES", 3, 1);
         resMarbleTypes.addPage(getTextPage("MARBLETYPES.1"));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleBricks));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarblePillar));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleChiseled));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleArch));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleRuned));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleEngraved));
-        resMarbleTypes.addPage(new JournalPageRecipe(RegistryRecipes.rMarbleStairs));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleBricks));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarblePillar));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleChiseled));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleArch));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleRuned));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleEngraved));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
 
         ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
-        resSootyMarble.addPage(new JournalPageRecipe(RegistryRecipes.rBlackMarbleRaw));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRaw));
 
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 3);
         resTable.addPage(getTextPage("ALTAR1.1"));
         resTable.addPage(getTextPage("ALTAR1.2"));
-        resTable.addPage(new JournalPageLightProximityRecipe(RegistryRecipes.rLPRAltar));
+        resTable.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRAltar));
         resTable.addPage(getTextPage("ALTAR1.4"));
         resTable.addPage(getTextPage("ALTAR1.5"));
 

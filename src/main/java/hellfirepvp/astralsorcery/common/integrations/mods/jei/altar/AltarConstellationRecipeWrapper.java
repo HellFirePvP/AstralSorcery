@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -39,7 +39,7 @@ public class AltarConstellationRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        IAccessibleRecipe underlyingRecipe = recipe.getNativeRecipe();
+        AccessibleRecipe underlyingRecipe = recipe.getNativeRecipe();
 
         boolean r = ItemHandle.ignoreGatingRequirement;
         ItemHandle.ignoreGatingRequirement = true;

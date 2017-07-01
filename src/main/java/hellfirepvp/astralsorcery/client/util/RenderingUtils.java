@@ -75,7 +75,7 @@ public class RenderingUtils {
         Minecraft.getMinecraft().renderGlobal.loadRenderers();
     }
 
-    public static void sortVertexData(VertexBuffer vb) {
+    public static void sortVertexData(BufferBuilder vb) {
         vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX,
                 (float) TileEntityRendererDispatcher.staticPlayerY,
                 (float) TileEntityRendererDispatcher.staticPlayerZ);
@@ -100,6 +100,14 @@ public class RenderingUtils {
                 MathHelper.clamp((int) (((float) r)), 0, 255),
                 MathHelper.clamp((int) (((float) g)), 0, 255),
                 MathHelper.clamp((int) (((float) b)), 0, 255));
+    }
+
+    public static Vector3 interpolatePosition(Entity e, float partialTicks) {
+        return new Vector3(
+                RenderingUtils.interpolate(e.lastTickPosX, e.posX, partialTicks),
+                RenderingUtils.interpolate(e.lastTickPosY, e.posY, partialTicks),
+                RenderingUtils.interpolate(e.lastTickPosZ, e.posZ, partialTicks)
+        );
     }
 
     public static double interpolate(double oldP, double newP, float partialTicks) {
@@ -222,7 +230,7 @@ public class RenderingUtils {
         int fancy_count = !FMLClientHandler.instance().getClient().gameSettings.fancyGraphics ? countNormal : countFancy;
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         RenderHelper.disableStandardItemLighting();
         float f1 = continuousTick / 400.0F;
@@ -411,7 +419,7 @@ public class RenderingUtils {
         return new Vector3(-tx, -ty, -tz);
     }
 
-    public static void renderAngleRotatedTexturedRectVB(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, Color c, int alpha, VertexBuffer vb, float partialTicks) {
+    public static void renderAngleRotatedTexturedRectVB(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, Color c, int alpha, BufferBuilder vb, float partialTicks) {
         GL11.glPushMatrix();
         //removeStandartTranslationFromTESRMatrix(partialTicks);
         Vector3 shift = getStandartTranslationRemovalVector(partialTicks);
@@ -439,7 +447,7 @@ public class RenderingUtils {
 
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer buf = tes.getBuffer();
+        BufferBuilder buf = tes.getBuffer();
 
         buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
@@ -467,7 +475,7 @@ public class RenderingUtils {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
         vb.pos(toX, y,   z).color(color.getRed(),     color.getGreen(),     color.getBlue(),     color.getAlpha())    .endVertex();
         vb.pos(x,   y,   z).color(color.getRed(),     color.getGreen(),     color.getBlue(),     color.getAlpha())    .endVertex();
@@ -480,11 +488,11 @@ public class RenderingUtils {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
-    public static void renderFacingFullQuadVB(VertexBuffer vb, double px, double py, double pz, float partialTicks, float scale, float angle, float colorRed, float colorGreen, float colorBlue, float alpha) {
+    public static void renderFacingFullQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, float colorRed, float colorGreen, float colorBlue, float alpha) {
         renderFacingQuadVB(vb, px, py, pz, partialTicks, scale, angle, 0, 0, 1, 1, colorRed, colorGreen, colorBlue, alpha);
     }
 
-    public static void renderFacingQuadVB(VertexBuffer vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, float colorRed, float colorGreen, float colorBlue, float alpha) {
+    public static void renderFacingQuadVB(BufferBuilder vb, double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, float colorRed, float colorGreen, float colorBlue, float alpha) {
         float arX =  ActiveRenderInfo.getRotationX();
         float arZ =  ActiveRenderInfo.getRotationZ();
         float arYZ = ActiveRenderInfo.getRotationYZ();
@@ -553,7 +561,7 @@ public class RenderingUtils {
             q.rotateWithMagnitude(v4);
         }
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u,           v + vLength).endVertex();
         vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).endVertex();

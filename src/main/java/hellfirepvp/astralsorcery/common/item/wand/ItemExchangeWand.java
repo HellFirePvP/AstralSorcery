@@ -34,7 +34,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,6 +69,12 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         setMaxDamage(0);
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return ct == ChargeType.TEMP;
     }
 
     @Override
@@ -116,7 +122,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
 
         GL11.glColor4f(1F, 1F, 1F, fadeAlpha * 0.9F);
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
@@ -205,7 +211,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
 
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (BlockPos pos : found.getPattern().keySet()) {
             Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(stored, pos, airWorld, vb);
@@ -266,7 +272,6 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
                     && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                 if(((EntityPlayerMP) playerIn).interactionManager.tryHarvestBlock(placePos)) {
                     drainTempCharge(playerIn, Config.exchangeWandUseCost, false);
-                    gainPermCharge(playerIn, Config.exchangeWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }

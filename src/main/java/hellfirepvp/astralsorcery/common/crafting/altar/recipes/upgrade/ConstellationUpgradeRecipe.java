@@ -55,7 +55,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
     };
 
     public ConstellationUpgradeRecipe() {
-        super(new ShapedRecipe(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()))
+        super(shapedRecipe("upgrade_tier3", new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
@@ -68,7 +68,8 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
         setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);

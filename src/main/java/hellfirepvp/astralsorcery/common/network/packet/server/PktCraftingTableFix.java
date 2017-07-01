@@ -68,18 +68,6 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
         AstralSorcery.proxy.scheduleClientside(new TaskOpenProperCraftingTable(message));
     }
 
-    public static void sendOpenCraftingTable(EntityPlayer player, BlockPos at) {
-        EntityPlayerMP mp = (EntityPlayerMP) player;
-        //BlockWorkbench.InterfaceCraftingTable containerInterface = new BlockWorkbench.InterfaceCraftingTable(mp.world, at);
-        //mp.getNextWindowId();
-        //int guiId = mp.currentWindowId;
-        PacketChannel.CHANNEL.sendTo(new PktCraftingTableFix(at), mp);
-        //mp.openContainer = containerInterface.createContainer(player.inventory, player);
-        //mp.openContainer.windowId = guiId;
-        //mp.openContainer.addListener(mp);
-        //MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(mp, mp.openContainer));
-    }
-
     public BlockPos getPos() {
         return at;
     }
@@ -96,9 +84,6 @@ public class PktCraftingTableFix implements IMessage, IMessageHandler<PktCraftin
         @Override
         public void run() {
             ShapedLightProximityRecipe.clientWorkbenchPosition = message.at;
-            //EntityPlayerSP player = Minecraft.getMinecraft().player;
-            //GuiCrafting gui = new GuiCrafting(player.inventory, player.world, message.at);
-            //Minecraft.getMinecraft().displayGuiScreen(gui);
         }
 
     }

@@ -32,7 +32,7 @@ import org.lwjgl.opengl.GL11;
 public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
 
     @Override
-    public void renderTileEntityAt(TileWell te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileWell te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         ItemStack catalyst = te.getInventoryHandler().getStackInSlot(0);
         if(!catalyst.isEmpty()) {
             EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, catalyst);

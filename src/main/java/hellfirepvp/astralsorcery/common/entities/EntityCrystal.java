@@ -76,7 +76,7 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                 spawnCraftingParticles();
             }
         } else {
-            if(CrystalProperties.getCrystalProperties(getEntityItem()) == null) {
+            if(CrystalProperties.getCrystalProperties(getItem()) == null) {
                 setDead();
             }
             if(canCraft()) {
@@ -92,9 +92,9 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
 
     private void increaseSize() {
         world.setBlockToAir(getPosition());
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         if(foundItems.size() <= 0) {
-            ItemStack stack = getEntityItem();
+            ItemStack stack = getItem();
             CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
             int max = (stack.getItem() instanceof ItemCelestialCrystal ||
                     stack.getItem() instanceof ItemTunedCelestialCrystal) ?

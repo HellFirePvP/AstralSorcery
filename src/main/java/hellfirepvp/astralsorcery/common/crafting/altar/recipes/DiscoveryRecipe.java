@@ -10,11 +10,10 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -34,19 +33,11 @@ import java.util.Random;
 */
 public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe.Progression {
 
-    protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, IAccessibleRecipe recipe) {
+    protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
         super(neededLevel, recipe);
     }
 
-    protected DiscoveryRecipe(TileAltar.AltarLevel neededLevel, AbstractCacheableRecipe recipe) {
-        super(neededLevel, recipe);
-    }
-
-    public DiscoveryRecipe(AbstractCacheableRecipe recipe) {
-        this(recipe.make());
-    }
-
-    public DiscoveryRecipe(IAccessibleRecipe recipe) {
+    public DiscoveryRecipe(AccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.DISCOVERY, recipe);
         setPassiveStarlightRequirement(700);
     }

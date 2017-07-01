@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -34,7 +35,7 @@ public class TESRAttunementAltar extends TileEntitySpecialRenderer<TileAttunemen
     private static final BindableResource texModelAttunementAltar = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/altarattunement");
 
     @Override
-    public void renderTileEntityAt(TileAttunementAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileAttunementAltar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 

@@ -40,7 +40,7 @@ import java.util.Random;
 public class PrismLensRecipe extends ConstellationRecipe {
 
     public PrismLensRecipe() {
-        super(new ShapedRecipe(BlocksAS.lensPrism)
+        super(shapedRecipe("crystalprism", BlocksAS.lensPrism)
                 .addPart(OreDictAlias.BLOCK_GLASS_PANE_NOCOLOR,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.LOWER_LEFT,
@@ -53,7 +53,8 @@ public class PrismLensRecipe extends ConstellationRecipe {
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.CENTER));
+                        ShapedRecipeSlot.CENTER)
+        .unregisteredAccessibleShapedRecipe());
 
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,

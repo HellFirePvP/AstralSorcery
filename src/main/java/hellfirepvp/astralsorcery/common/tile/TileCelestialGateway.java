@@ -121,7 +121,7 @@ public class TileCelestialGateway extends TileEntityTick {
                 EffectHandler.getInstance().registerFX(sphere);
                 clientSphere = sphere;
             }
-            double playerDst = new Vector3(Minecraft.getMinecraft().player).distance(sphereVec);
+            double playerDst = Vector3.atEntityCenter(Minecraft.getMinecraft().player).distance(sphereVec);
             if(clientSphere != null) {
                 if(!((CompoundEffectSphere) clientSphere).getPosition().equals(sphereVec)) {
                     ((CompoundEffectSphere) clientSphere).requestRemoval();

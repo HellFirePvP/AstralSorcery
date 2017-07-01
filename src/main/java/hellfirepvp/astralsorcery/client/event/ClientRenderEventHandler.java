@@ -311,7 +311,7 @@ public class ClientRenderEventHandler {
 
                 GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);
                 Tessellator tes = Tessellator.getInstance();
-                VertexBuffer vb = tes.getBuffer();
+                BufferBuilder vb = tes.getBuffer();
                 vb.begin(7, DefaultVertexFormats.POSITION_TEX);
                 vb.pos(offsetLeft,            offsetTop + 27, 10).tex(uvPos.key, uvPos.value + ssr.getVLength()).endVertex();
                 vb.pos(offsetLeft + barWidth * percFilled, offsetTop + 27, 10).tex(uvPos.key + uLength, uvPos.value + ssr.getVLength()).endVertex();
@@ -319,6 +319,8 @@ public class ClientRenderEventHandler {
                 vb.pos(offsetLeft,            offsetTop,         10).tex(uvPos.key, uvPos.value).endVertex();
                 tes.draw();
                 GlStateManager.enableAlpha();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glColor4f(1F, 1F, 1F, 1F);
 
                 TextureHelper.refreshTextureBindState();
             }
@@ -334,6 +336,8 @@ public class ClientRenderEventHandler {
                         entry.getKey().onRenderInHandHUD(entry.getValue().stack, entry.getValue().visibility, event.getPartialTicks());
                     }
                 }
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GL11.glColor4f(1F, 1F, 1F, 1F);
             }
             ItemStack inHand = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
             if(!inHand.isEmpty()) {
@@ -341,6 +345,8 @@ public class ClientRenderEventHandler {
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
                         ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                        GlStateManager.color(1F, 1F, 1F, 1F);
+                        GL11.glColor4f(1F, 1F, 1F, 1F);
                     }
                 }
             }
@@ -350,6 +356,8 @@ public class ClientRenderEventHandler {
                 if (i instanceof ItemHudRender) {
                     if(!((ItemHudRender) i).hasFadeIn()) {
                         ((ItemHudRender) i).onRenderInHandHUD(inHand, 1F, event.getPartialTicks());
+                        GlStateManager.color(1F, 1F, 1F, 1F);
+                        GL11.glColor4f(1F, 1F, 1F, 1F);
                     }
                 }
             }
@@ -374,7 +382,7 @@ public class ClientRenderEventHandler {
 
         //Draw hud itself
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
         vb.pos(offsetX + width, offsetY + height, 10).tex(1, 1).endVertex();

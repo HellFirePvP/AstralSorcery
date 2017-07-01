@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -102,12 +102,12 @@ public class CompoundEffectSphere extends CompoundObjectEffect {
     }
 
     @Override
-    public void render(VertexBuffer vb, float pTicks) {
+    public void render(BufferBuilder vb, float pTicks) {
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
         GL11.glTranslated(offset.getX(), offset.getY(), offset.getZ());
         float alpha = 1F;
         if(alphaFadeMaxDist != -1 && Minecraft.getMinecraft().player != null) {
-            Vector3 plVec = new Vector3(Minecraft.getMinecraft().player);
+            Vector3 plVec = Vector3.atEntityCenter(Minecraft.getMinecraft().player);
             double dst = plVec.distance(getPosition()) - 1.2;
 
             alpha *= 1D - (dst / alphaFadeMaxDist);

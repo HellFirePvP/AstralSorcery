@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
-import hellfirepvp.astralsorcery.common.registry.RegistryAchievements;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -27,11 +26,12 @@ public class EventHandlerAchievements {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onPick(PlayerEvent.ItemPickupEvent event) {
         if(!event.isCanceled()) {
-            if(event.pickedUp != null && !event.pickedUp.getEntityItem().isEmpty() &&
-                    event.pickedUp.getEntityItem().getItem() instanceof ItemRockCrystalBase) {
-                event.player.addStat(RegistryAchievements.achvRockCrystal);
-                if(event.pickedUp.getEntityItem().getItem() instanceof ItemCelestialCrystal) {
-                    event.player.addStat(RegistryAchievements.achvCelestialCrystal);
+            if(event.pickedUp != null && !event.pickedUp.getItem().isEmpty() &&
+                    event.pickedUp.getItem().getItem() instanceof ItemRockCrystalBase) {
+                //FIXME RE-ADD AFTER ADVANCEMENTS
+                //event.player.addStat(RegistryAchievements.achvRockCrystal);
+                if(event.pickedUp.getItem().getItem() instanceof ItemCelestialCrystal) {
+                    //event.player.addStat(RegistryAchievements.achvCelestialCrystal);
                 }
             }
         }

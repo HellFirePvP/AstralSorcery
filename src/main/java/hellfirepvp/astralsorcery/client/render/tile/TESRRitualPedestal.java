@@ -37,7 +37,7 @@ import java.awt.*;
 public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPedestal> {
 
     @Override
-    public void renderTileEntityAt(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileRitualPedestal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         renderCrystalStack(te, x, y, z);
 
@@ -65,7 +65,7 @@ public class TESRRitualPedestal extends TileEntitySpecialRenderer<TileRitualPede
 
                 float br = 0.6F * (alphaDaytime * percRunning);
 
-                RenderConstellation.renderConstellationIntoWorldFlat(c, c.getRenderColor(), new Vector3(te).add(0.5, 0.04, 0.5), 3 + tr, 2, 0.1F + br);
+                RenderConstellation.renderConstellationIntoWorldFlat(c, c.getConstellationColor(), new Vector3(te).add(0.5, 0.04, 0.5), 3 + tr, 2, 0.1F + br);
             }
 
             GL11.glEnable(GL11.GL_ALPHA_TEST);

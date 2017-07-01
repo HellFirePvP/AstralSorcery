@@ -31,7 +31,7 @@ public class ItemRendererTESR<T extends TileEntity> implements IItemRenderer {
 
     @Override
     public void render(ItemStack stack) {
-        tesr.renderTileEntityAt(tile, 0, 0, 0, 0, 0);
+        tesr.render(tile, 0, 0, 0, 0, 0, 1F);
     }
 
 }

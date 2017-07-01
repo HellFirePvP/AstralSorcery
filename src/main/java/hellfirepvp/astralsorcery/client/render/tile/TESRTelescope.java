@@ -31,7 +31,7 @@ public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
     private static final BindableResource texTelescope = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "base/telescope");
 
     @Override
-    public void renderTileEntityAt(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileTelescope te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.5, y + 1.28, z + 0.5);

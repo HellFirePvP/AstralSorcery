@@ -26,7 +26,7 @@ public class TESRCelestialOrrery extends TileEntitySpecialRenderer<TileCelestial
     public static final BindableResource texSmoke = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "smoke");
 
     @Override
-    public void renderTileEntityAt(TileCelestialOrrery te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileCelestialOrrery te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
     }
 

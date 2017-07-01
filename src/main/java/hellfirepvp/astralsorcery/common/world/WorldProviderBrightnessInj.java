@@ -22,7 +22,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
@@ -123,8 +123,8 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     }
 
     @Override
-    public boolean hasNoSky() {
-        return parentOvrProvider.hasNoSky();
+    public boolean isNether() {
+        return parentOvrProvider.isNether();
     }
 
     @Override
@@ -250,18 +250,8 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     }
 
     @Override
-    public String getDepartMessage() {
-        return parentOvrProvider.getDepartMessage();
-    }
-
-    @Override
     public String getSaveFolder() {
         return parentOvrProvider.getSaveFolder();
-    }
-
-    @Override
-    public String getWelcomeMessage() {
-        return parentOvrProvider.getWelcomeMessage();
     }
 
     @Override

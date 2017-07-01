@@ -59,7 +59,7 @@ public class CelestialStrike {
         dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 40F;
         for (EntityLivingBase living : livingEntities) {
             if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
-                float dstPerc = (float) (new Vector3(living).distance(position) / radius);
+                float dstPerc = (float) (Vector3.atEntityCenter(living).distance(position) / radius);
                 dstPerc = 1F - MathHelper.clamp(dstPerc, 0F, 1F);
                 float dmgDealt = dstPerc * dmg;
                 if(dmgDealt > 0.5) {

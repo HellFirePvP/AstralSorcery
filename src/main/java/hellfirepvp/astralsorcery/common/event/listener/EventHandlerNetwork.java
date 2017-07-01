@@ -16,7 +16,6 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLeve
 import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
@@ -51,7 +50,7 @@ public class EventHandlerNetwork {
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
         if(Mods.CRAFTTWEAKER.isPresent()) {
-            PacketChannel.CHANNEL.sendTo(ModIntegrationCrafttweaker.compileRecipeChangePacket(), p);
+            //FIXME AFTER CT PORTED PacketChannel.CHANNEL.sendTo(ModIntegrationCrafttweaker.compileRecipeChangePacket(), p);
         }
 
         ResearchManager.sendInitClientKnowledge(p);

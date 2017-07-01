@@ -53,6 +53,7 @@ public class EntityFlare extends EntityFlying {
     public Object texSprite = null;
     private BlockPos moveTarget = null;
     private boolean isAmbient = false;
+    private int entityAge = 0;
 
     public EntityFlare(World worldIn) {
         super(worldIn);
@@ -99,6 +100,8 @@ public class EntityFlare extends EntityFlying {
     public void onUpdate() {
         super.onUpdate();
 
+        entityAge++;
+
         if(world.isRemote) {
             if(texSprite == null) {
                 setupSprite();
@@ -112,12 +115,12 @@ public class EntityFlare extends EntityFlying {
             if(!isDead) {
 
                 if(Config.flareKillsBats && entityAge % 70 == 0 && rand.nextBoolean()) {
-                    Entity closest = world.findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().expandXyz(10), this);
+                    Entity closest = world.findNearestEntityWithinAABB(EntityBat.class, getEntityBoundingBox().grow(10), this);
                     if(closest != null && closest instanceof EntityBat && ((EntityBat) closest).getHealth() > 0 && !closest.isDead) {
                         closest.attackEntityFrom(CommonProxy.dmgSourceStellar, 40F);
                         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
-                        AstralSorcery.proxy.fireLightning(world, new Vector3(this), new Vector3(closest), new Color(0, 0, 216));
+                        AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(closest), new Color(0, 0, 216));
                     }
                 }
 
@@ -135,7 +138,7 @@ public class EntityFlare extends EntityFlying {
                             damageEntity(DamageSource.MAGIC, 20F);
                         }
                     } else {
-                        moveTarget = new Vector3(getAttackTarget()).toBlockPos();
+                        moveTarget = Vector3.atEntityCenter(getAttackTarget()).toBlockPos();
                     }
 
                     if(moveTarget != null && (moveTarget.getY() <= 1 || getDistanceSq(moveTarget) < 3D)) {
@@ -147,7 +150,7 @@ public class EntityFlare extends EntityFlying {
                     getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 4F);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));
-                    AstralSorcery.proxy.fireLightning(world, new Vector3(this), new Vector3(getAttackTarget()), new Color(0, 0, 216));
+                    AstralSorcery.proxy.fireLightning(world, Vector3.atEntityCenter(this), Vector3.atEntityCenter(getAttackTarget()), new Color(0, 0, 216));
                 }
 
                 if(moveTarget != null) {
@@ -183,7 +186,7 @@ public class EntityFlare extends EntityFlying {
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound() {
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return null;
     }
 
@@ -205,12 +208,14 @@ public class EntityFlare extends EntityFlying {
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
+        compound.setInteger("as_entityAge", this.entityAge);
         compound.setBoolean("isSpawnedAmbient", this.isAmbient);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
+        this.entityAge = compound.getInteger("as_entityAge");
         this.isAmbient = compound.getBoolean("isSpawnedAmbient");
     }
 
@@ -270,7 +275,7 @@ public class EntityFlare extends EntityFlying {
     @SideOnly(Side.CLIENT)
     private void setupSprite() {
         EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteFlare1, posX, posY, posZ, 0.8F, 2);
-        p.setPositionUpdateFunction((fx, v, m) -> new Vector3(this, true).addY(this.height / 2));
+        p.setPositionUpdateFunction((fx, v, m) -> Vector3.atEntityCenter(this).addY(this.height / 2));
         p.setRefreshFunc(() -> !isDead);
         EffectHandler.getInstance().registerFX(p);
         this.texSprite = p;

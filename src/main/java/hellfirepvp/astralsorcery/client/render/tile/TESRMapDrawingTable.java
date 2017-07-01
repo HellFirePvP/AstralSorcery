@@ -83,7 +83,7 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
     private static final BindableResource texDrawingTable = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MODELS, "starmapper/astralsorcery_starmapper");
 
     @Override
-    public void renderTileEntityAt(TileMapDrawingTable te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileMapDrawingTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();

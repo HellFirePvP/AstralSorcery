@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.input.Mouse;
 
@@ -111,7 +111,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawTexturedRectAtCurrentPos(double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0,         0 + height, zLevel).tex(uFrom,          vFrom + vWidth).endVertex();
         vb.pos(0 + width, 0 + height, zLevel).tex(uFrom + uWidth, vFrom + vWidth).endVertex();
@@ -122,7 +122,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawTexturedRectAtCurrentPos(double width, double height) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0,         0 + height, zLevel).tex(0, 1).endVertex();
         vb.pos(0 + width, 0 + height, zLevel).tex(1, 1).endVertex();
@@ -133,7 +133,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawRectDetailed(float offsetX, float offsetY, float width, float height) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
         vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();
@@ -144,7 +144,7 @@ public abstract class GuiWHScreen extends GuiScreen {
 
     protected void drawRect(int offsetX, int offsetY, int width, int height) {
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, zLevel).tex(0, 1).endVertex();
         vb.pos(offsetX + width, offsetY + height, zLevel).tex(1, 1).endVertex();

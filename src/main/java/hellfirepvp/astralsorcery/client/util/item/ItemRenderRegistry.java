@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class ItemRenderRegistry {
 
         //We need to register it to the IMM to prevent "misconceptions"
         //Without, the ItemRenderer assumes there is no Model defined for the Item. We dummy it out so we can redirect.
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, new DummyMeshDefinition(loc));
+        ModelLoader.setCustomMeshDefinition(item, new DummyMeshDefinition(loc));
     }
 
     private static ResourceLocation getWrappedLocation(ResourceLocation regEntry) {

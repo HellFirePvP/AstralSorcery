@@ -19,10 +19,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBotania;
-import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
-import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
-import hellfirepvp.astralsorcery.common.item.ItemHandRender;
-import hellfirepvp.astralsorcery.common.item.ItemHudRender;
+import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -36,7 +33,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -83,6 +80,12 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
     @Override
     @SideOnly(Side.CLIENT)
+    public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return ct == ChargeType.TEMP;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks) {
         ItemStack blockStackStored = getStoredStateAsStack(lastCacheInstance);
         if(blockStackStored.isEmpty()) return;
@@ -111,7 +114,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
         GL11.glColor4f(1F, 1F, 1F, fadeAlpha * 0.9F);
         Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(offsetX,         offsetY + height, 10).tex(0, 1).endVertex();
@@ -171,7 +174,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             World w = Minecraft.getMinecraft().world;
 
             Tessellator tes = Tessellator.getInstance();
-            VertexBuffer vb = tes.getBuffer();
+            BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             for (BlockPos pos : placeable) {
                 Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(stored, pos, w, vb);
@@ -205,7 +208,6 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                 if(drainTempCharge(playerIn, Config.architectWandUseCost, true)
                         && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
                     drainTempCharge(playerIn, Config.architectWandUseCost, false);
-                    gainPermCharge(playerIn, Config.architectWandUseCost / 4);
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }

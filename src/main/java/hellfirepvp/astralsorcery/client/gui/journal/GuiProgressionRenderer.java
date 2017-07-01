@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -390,7 +390,7 @@ public class GuiProgressionRenderer {
         clusterRectMap.put(r, p);
 
         Tessellator t = Tessellator.getInstance();
-        VertexBuffer vb = t.getBuffer();
+        BufferBuilder vb = t.getBuffer();
         cluster.cloudTexture.bind();
 
         double scale = sizeHandler.getScalingFactor();
@@ -436,7 +436,7 @@ public class GuiProgressionRenderer {
 
         Blending.ADDITIVEDARK.apply();
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).tex(0, 1).endVertex();
         vb.pos(realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).tex(1, 1).endVertex();
@@ -460,7 +460,7 @@ public class GuiProgressionRenderer {
         float lowV = (((float) this.topOffset) - sizeHandler.heightToBorder) / ((float) sizeHandler.getTotalHeight());
         float highV = lowV + (((float) renderHeight) / ((float) sizeHandler.getTotalHeight()));*/
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(realCoordLowerX,                   realCoordLowerY + realRenderHeight, zLevel).tex(0, 1).endVertex();
         vb.pos(realCoordLowerX + realRenderWidth, realCoordLowerY + realRenderHeight, zLevel).tex(1, 1).endVertex();
@@ -486,7 +486,7 @@ public class GuiProgressionRenderer {
         double lowV = (scalePosY - sizeHandler.heightToBorder) / th;
         double highV = lowV + (((float) realRenderHeight) / th);
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vb.pos(0,               realRenderHeight, zLevel).tex(lowU,  highV).endVertex();
         vb.pos(realRenderWidth, realRenderHeight, zLevel).tex(highU, highV).endVertex();

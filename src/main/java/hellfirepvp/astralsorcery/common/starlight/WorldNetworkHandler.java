@@ -261,7 +261,7 @@ public class WorldNetworkHandler {
         for (int xx = -1; xx <= 1; xx++) {
             for (int zz = -1; zz <= 1; zz++) {
                 for (int yy = -1; yy <= 1; yy++) {
-                    queryData(new ChunkPos(central.chunkXPos + xx, central.chunkZPos + zz), posYLevel + yy, dataList);
+                    queryData(new ChunkPos(central.x + xx, central.z + zz), posYLevel + yy, dataList);
                 }
             }
         }

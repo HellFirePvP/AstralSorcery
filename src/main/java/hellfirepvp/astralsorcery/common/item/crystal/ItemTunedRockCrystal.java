@@ -32,13 +32,15 @@ import java.util.List;
 public class ItemTunedRockCrystal extends ItemTunedCrystalBase implements ItemGatedVisibility {
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        ItemStack stack;
-        for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
-            stack = new ItemStack(this);
-            CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
-            applyMainConstellation(stack, c);
-            subItems.add(stack);
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+        if(this.isInCreativeTab(tab)) {
+            ItemStack stack;
+            for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
+                stack = new ItemStack(this);
+                CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_ROCK, 100, 100));
+                applyMainConstellation(stack, c);
+                subItems.add(stack);
+            }
         }
     }
 

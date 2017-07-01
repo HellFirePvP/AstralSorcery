@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,14 +36,20 @@ public abstract class ConstellationBase implements IConstellation {
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
 
     private final String name;
+    private final Color color;
 
     public ConstellationBase(String name) {
+        this(name, IConstellation.major);
+    }
+
+    public ConstellationBase(String name, Color color) {
         ModContainer mod = Loader.instance().activeModContainer();
         if(mod != null) {
             this.name = mod.getModId() + ".constellation." + name;
         } else {
             this.name = "unknown.constellation." + name;
         }
+        this.color = color;
     }
 
     public StarLocation addStar(int x, int y) {
@@ -64,6 +71,11 @@ public abstract class ConstellationBase implements IConstellation {
             return sc;
         }
         return null;
+    }
+
+    @Override
+    public Color getConstellationColor() {
+        return color;
     }
 
     @Override
@@ -106,6 +118,10 @@ public abstract class ConstellationBase implements IConstellation {
             super(name);
         }
 
+        public Major(String name, Color color) {
+            super(name, color);
+        }
+
         @Override
         @Nullable
         public ConstellationPerkMap getPerkMap() {
@@ -118,6 +134,10 @@ public abstract class ConstellationBase implements IConstellation {
 
         public Weak(String name) {
             super(name);
+        }
+
+        public Weak(String name, Color color) {
+            super(name, color);
         }
 
         @Nullable
@@ -133,6 +153,9 @@ public abstract class ConstellationBase implements IConstellation {
             super(name);
         }
 
+        public WeakSpecial(String name, Color color) {
+            super(name, color);
+        }
     }
 
     public static class Minor extends ConstellationBase implements IMinorConstellation {
@@ -141,6 +164,17 @@ public abstract class ConstellationBase implements IConstellation {
 
         public Minor(String name, MoonPhase... applicablePhases) {
             super(name);
+            phases = new ArrayList<>(applicablePhases.length);
+            for (MoonPhase ph : applicablePhases) {
+                if(ph == null) {
+                    throw new IllegalArgumentException("[AstralSorcery] null MoonPhase passed to Minor constellation registration for " + name);
+                }
+                phases.add(ph);
+            }
+        }
+
+        public Minor(String name, Color color, MoonPhase... applicablePhases) {
+            super(name, color);
             phases = new ArrayList<>(applicablePhases.length);
             for (MoonPhase ph : applicablePhases) {
                 if(ph == null) {

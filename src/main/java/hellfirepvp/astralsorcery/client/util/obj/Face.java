@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.client.util.obj;
 
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -26,12 +26,12 @@ public class Face {
     public TextureCoordinate[] textureCoordinates;
 
     @SideOnly(Side.CLIENT)
-    public void addFaceForRender(VertexBuffer vb) {
+    public void addFaceForRender(BufferBuilder vb) {
         addFaceForRender(vb, 0.0005F);
     }
 
     @SideOnly(Side.CLIENT)
-    public void addFaceForRender(VertexBuffer vb, float textureOffset) {
+    public void addFaceForRender(BufferBuilder vb, float textureOffset) {
         /*if (faceNormal == null) {
             faceNormal = this.calculateFaceNormal();
         }

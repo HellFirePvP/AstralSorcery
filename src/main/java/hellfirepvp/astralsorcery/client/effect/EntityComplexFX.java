@@ -134,7 +134,7 @@ public abstract class EntityComplexFX implements IComplexEffect {
             @Override
             public Vector3 updateMotion(T fx, Vector3 motion) {
                 if (target.isDead) return motion;
-                EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, new Vector3(target), 256, 1);
+                EntityUtils.applyVortexMotion((v) -> positionFunction.apply(fx), motion::add, Vector3.atEntityCorner(target), 256, 1);
                 return motion.multiply(0.9);
             }
 

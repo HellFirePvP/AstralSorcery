@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.config.Configuration;
 
 import java.util.Collection;
 import java.util.Random;
@@ -27,6 +28,8 @@ import java.util.Random;
  * Date: 21.10.2016 / 13:43
  */
 public class StructureDesertShrine extends WorldGenAttributeStructure {
+
+    private int heightThreshold = 3;
 
     public StructureDesertShrine() {
         super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, StructureGenBuffer.StructureType.DESERT, BiomeDictionary.Type.SANDY);
@@ -59,7 +62,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= 4 && isDesertBiome(world, pos);
+        return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isDesertBiome(world, pos);
     }
 
     private boolean isDesertBiome(World world, BlockPos pos) {
@@ -74,4 +77,13 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
         }
         return applicable;
     }
+
+    @Override
+    protected void loadAdditionalConfigEntries(Configuration cfg) {
+        super.loadAdditionalConfigEntries(cfg);
+
+        heightThreshold = cfg.getInt("heightThreshold", cfgEntry.getConfigurationSection(), heightThreshold, 1, 32,
+                "Defines how high/low the surface in comparison to the structure can be to be seen as 'sufficiently flat' for the structure to spawn at the given position.");
+    }
+
 }

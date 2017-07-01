@@ -172,7 +172,7 @@ public class TileAttunementAltar extends TileEntityTick {
                     }
                 } else if(mode == 1) {
                     //No isNight check since well.. we don't wanna kick him from the camera flight
-                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead || new Vector3(activeEntity).distance(new Vector3(this)) > 4) {
+                    if(!(activeEntity instanceof EntityPlayer) || activeEntity.isDead || Vector3.atEntityCorner(activeEntity).distance(new Vector3(this)) > 4) {
                         setAttunementState(0, null);
                     } else {
                         if(playerAttunementWaitTick > 0) {
@@ -213,7 +213,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
                         if(serverSyncAttTick >= TICKS_CRYSTAL_ATTUNEMENT) {
 
-                            ItemStack current = ((EntityItem) activeEntity).getEntityItem();
+                            ItemStack current = ((EntityItem) activeEntity).getItem();
                             Item tuned = ((ItemRockCrystalBase) current.getItem()).getTunedItemVariant();
                             ItemStack tunedStack = new ItemStack(tuned);
                             ItemTunedCrystalBase.applyMainConstellation(tunedStack, activeFound);
@@ -239,7 +239,7 @@ public class TileAttunementAltar extends TileEntityTick {
     private void checkForAttunements() {
         if((ticksExisted & 31) != 0) return;
 
-        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos());
+        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos());
 
         if(activeFound instanceof IMajorConstellation) {
             Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
@@ -455,7 +455,7 @@ public class TileAttunementAltar extends TileEntityTick {
 
     @SideOnly(Side.CLIENT)
     private boolean isClientCloseEnough() {
-        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).expandXyz(1).offset(getPos()));
+        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(1).offset(getPos()));
         return !players.isEmpty() && players.contains(Minecraft.getMinecraft().player);
     }
 
@@ -789,7 +789,7 @@ public class TileAttunementAltar extends TileEntityTick {
             if(spriteCrystalAttunement == null) {
                 Entity ee = world.getEntityByID(entityIdActive);
                 if(ee != null) {
-                    Vector3 posV = new Vector3(ee);
+                    Vector3 posV = Vector3.atEntityCorner(ee);
                     EntityFXFacingSprite sprite = EntityFXFacingSprite.fromSpriteSheet(SpriteLibrary.spriteStar2, posV.getX(), posV.getY(), posV.getZ(), 2.5F, 2);
                     EffectHandler.getInstance().registerFX(sprite);
                     spriteCrystalAttunement = sprite;
@@ -802,7 +802,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
                         Entity ent = world.getEntityByID(entityIdActive);
                         if(ent == null || ent.isDead) return v;
-                        return new Vector3(ent);
+                        return Vector3.atEntityCorner(ent);
                     });
                 }
             }

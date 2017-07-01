@@ -35,7 +35,10 @@ public class PerkDamageReflect extends ConstellationPerk {
     @Override
     public float onEntityHurt(EntityPlayer hurt, DamageSource source, float dmgIn) {
         if(rand.nextInt(reflectChance) == 0) {
-            Entity cause = source.getEntity();
+            Entity cause = source.getImmediateSource();
+            if(cause == null || !(cause instanceof EntityLivingBase)) {
+                cause = source.getTrueSource();
+            }
             if(cause != null && cause instanceof EntityLivingBase) {
                 cause.attackEntityFrom(DamageSource.causePlayerDamage(hurt), dmgIn * reflectPerc);
             }

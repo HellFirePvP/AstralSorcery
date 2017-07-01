@@ -54,7 +54,9 @@ public interface IConstellation {
         return "constellationName";
     }
 
-    default public Color getRenderColor() {
+    public Color getConstellationColor();
+
+    default public Color getTierRenderColor() {
         if(this instanceof IMinorConstellation) {
             return minor;
         }

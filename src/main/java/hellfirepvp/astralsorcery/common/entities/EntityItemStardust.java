@@ -87,16 +87,16 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
                 PacketChannel.pointFromPos(world, getPosition(), 64));
 
         world.setBlockState(getPosition(), BlocksAS.celestialCrystals.getDefaultState());
-        getEntityItem().setCount(getEntityItem().getCount() - 1);
-        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).expandXyz(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
+        getItem().setCount(getItem().getCount() - 1);
+        List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1), EntityUtils.selectItemClassInstaceof(ItemRockCrystalBase.class));
         if(foundItems.size() > 0) {
             EntityItem ei = (EntityItem) foundItems.get(0);
-            ItemStack stack = ei.getEntityItem();
-            getEntityItem().setCount(getEntityItem().getCount() - 1);
+            ItemStack stack = ei.getItem();
+            getItem().setCount(getItem().getCount() - 1);
             if(stack.getCount() <= 0) {
                 ei.setDead();
             } else {
-                ei.setEntityItemStack(stack);
+                ei.setItem(stack);
             }
         }
     }

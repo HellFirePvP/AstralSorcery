@@ -74,7 +74,7 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
     }
 
     @Override
-    public void renderTileEntityAt(TileCrystalPrismLens te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileCrystalPrismLens te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
 

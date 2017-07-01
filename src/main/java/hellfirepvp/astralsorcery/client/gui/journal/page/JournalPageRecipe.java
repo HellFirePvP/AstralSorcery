@@ -16,13 +16,14 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.crafting.IAccessibleRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.AbstractCacheableRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.registry.RegistryBookLookups;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
@@ -43,26 +44,26 @@ import java.util.Map;
  */
 public class JournalPageRecipe implements IJournalPage {
 
-    private final AbstractCacheableRecipe recipe;
+    private final AccessibleRecipeAdapater recipe;
 
-    public JournalPageRecipe(AbstractCacheableRecipe recipe) {
+    public JournalPageRecipe(AccessibleRecipeAdapater recipe) {
         this.recipe = recipe;
     }
 
     @Override
     public IGuiRenderablePage buildRenderPage() {
-        return new Render(recipe.make());
+        return new Render(recipe);
     }
 
     public static class Render implements IGuiRenderablePage {
 
         private static final BindableResource texGrid = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "griddisc");
 
-        private final IAccessibleRecipe recipe;
+        private final AccessibleRecipeAdapater recipe;
 
         private Map<Rectangle, ItemStack> thisFrameStackFrames = new HashMap<>();
 
-        public Render(IAccessibleRecipe recipe) {
+        public Render(AccessibleRecipeAdapater recipe) {
             this.recipe = recipe;
         }
 
@@ -140,7 +141,7 @@ public class JournalPageRecipe implements IJournalPage {
                 if(rect.contains(mouseX, mouseY)) {
                     ItemStack stack = thisFrameStackFrames.get(rect);
                     try {
-                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips));
+                        tooltip.addAll(stack.getTooltip(Minecraft.getMinecraft().player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL));
                     } catch (Throwable tr) {
                         tooltip.add(TextFormatting.RED + "<Error upon trying to get this item's tooltip>");
                     }

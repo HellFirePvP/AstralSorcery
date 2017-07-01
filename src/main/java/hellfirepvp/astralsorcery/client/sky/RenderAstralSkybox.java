@@ -102,7 +102,7 @@ public class RenderAstralSkybox extends IRenderHandler {
             starLists[i] = new StarDList();
         }
 
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
 
         Random vRand = new Random(worldSeed);
         int list = GLAllocation.generateDisplayLists(20);
@@ -142,7 +142,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
     }
 
-    private void setupStars(VertexBuffer vb, Random random, int amount, double multiplier) {
+    private void setupStars(BufferBuilder vb, Random random, int amount, double multiplier) {
         for (int i = 0; i < amount; ++i) { //Amount of stars.
             double x = (double) (random.nextFloat() * 2.0F - 1.0F);
             double y = (double) (random.nextFloat() * 2.0F - 1.0F);
@@ -219,7 +219,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     }
 
     private void setupBackground(boolean invert) {
-        VertexBuffer vb = Tessellator.getInstance().getBuffer();
+        BufferBuilder vb = Tessellator.getInstance().getBuffer();
         vb.begin(7, DefaultVertexFormats.POSITION);
 
         for (int k = -384; k <= 384; k += 64) {
@@ -241,9 +241,9 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderSky(float partialTicks) {
         GlStateManager.disableTexture2D();
         Vec3d vec3 = Minecraft.getMinecraft().world.getSkyColor(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
-        float f = (float) vec3.xCoord;
-        float f1 = (float) vec3.yCoord;
-        float f2 = (float) vec3.zCoord;
+        float f = (float) vec3.x;
+        float f1 = (float) vec3.y;
+        float f2 = (float) vec3.z;
 
         if (Minecraft.getMinecraft().gameSettings.anaglyph) {
             float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;
@@ -255,7 +255,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
 
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
 
         GlStateManager.depthMask(false);
         GlStateManager.enableFog();
@@ -274,7 +274,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         }
         renderDefaultCelestials(partialTicks);
 
-        double absPlayerHorizon = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).yCoord - Minecraft.getMinecraft().world.getHorizon();
+        double absPlayerHorizon = Minecraft.getMinecraft().player.getPositionEyes(partialTicks).y - Minecraft.getMinecraft().world.getHorizon();
         if (absPlayerHorizon < 0.0D) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 12.0F, 0.0F);
@@ -333,7 +333,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         renderConstellations(Minecraft.getMinecraft().world, partialTicks);
 
         /*Tessellator tes = Tessellator.getInstance();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
 
         List<double[]> poss = new LinkedList<>();
 
@@ -408,7 +408,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         GlStateManager.pushMatrix();
         GlStateManager.rotate(-90, 0, 1, 0);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
         TEX_SOLAR_ECLIPSE.bind();
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
         vb.pos(-xzSize, 100.0D, -xzSize).tex( u      / 7F, 0.0D).endVertex();
@@ -474,7 +474,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderMoon() {
         double xzSize = 20F;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_MOON_PHASES_PNG);
         int i = Minecraft.getMinecraft().world.getMoonPhase();
         int k = i % 4;
@@ -496,7 +496,7 @@ public class RenderAstralSkybox extends IRenderHandler {
         double xzSize = 30F;
 
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
         Minecraft.getMinecraft().renderEngine.bindTexture(MC_DEF_SUN_PNG);
 
         vb.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -514,7 +514,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         if (brightness > 0.0F) {
             Tessellator tes = Tessellator.getInstance();
-            VertexBuffer vb = tes.getBuffer();
+            BufferBuilder vb = tes.getBuffer();
             for (StarDList list : starLists) {
                 if (list.glList > 0) {
                     float sinBr = RenderConstellation.stdFlicker(w.getWorldTime(), partialTicks, list.sinDivisor) - brightness;
@@ -531,7 +531,7 @@ public class RenderAstralSkybox extends IRenderHandler {
 
     private void renderSunsetToBackground(float[] sunsetColors, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vb = tessellator.getBuffer();
+        BufferBuilder vb = tessellator.getBuffer();
 
         GlStateManager.disableTexture2D();
         GlStateManager.shadeModel(GL11.GL_SMOOTH);

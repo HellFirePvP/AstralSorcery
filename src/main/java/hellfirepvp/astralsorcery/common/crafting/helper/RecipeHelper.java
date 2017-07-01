@@ -8,26 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,127 +30,41 @@ import java.util.Map;
  */
 public class RecipeHelper {
 
-    public static IRecipe getShapelessOreDictRecipe(ItemStack stack, Object... recipeComponents) {
-        return new ShapelessHandleOreRecipe(stack, recipeComponents);
+    public static BasePlainRecipe getShapelessOreDictRecipe(ResourceLocation name, ItemStack output, NonNullList<Ingredient> craftingComponents) {
+        return new ShapelessIngredientRecipe(name, output, craftingComponents);
     }
 
-    public static IRecipe getShapedOredictRecipe(ItemStack stack, Object... recipeComponents) {
-        return new ShapedHandleOreRecipe(stack, recipeComponents);
+    public static BasePlainRecipe getShapedOredictRecipe(ResourceLocation name, ItemStack output, ShapeMap.Baked craftingComponents) {
+        return new ShapedIngredientRecipe(name, output, craftingComponents);
     }
 
-    public static class ShapelessHandleOreRecipe extends ShapelessOreRecipe {
-        protected ItemStack output = ItemStack.EMPTY;
-        protected NonNullList<Object> input = NonNullList.create();
+    public static class ShapelessIngredientRecipe extends BasePlainRecipe {
 
-        public ShapelessHandleOreRecipe(Block result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
+        private final ItemStack out;
+        private final NonNullList<Ingredient> inputs;
 
-        public ShapelessHandleOreRecipe(Item result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapelessHandleOreRecipe(ItemStack result, Object... recipe) {
-            super(result.copy());
-            output = result.copy();
-            for (Object in : recipe) {
-                if (in instanceof ItemStack) {
-                    input.add(((ItemStack) in).copy());
-                } else if (in instanceof Item) {
-                    input.add(new ItemStack((Item) in));
-                } else if (in instanceof Block) {
-                    input.add(new ItemStack((Block) in));
-                } else if (in instanceof String) {
-                    input.add(OreDictionary.getOres((String) in));
-                /*
-                 * ADDED CLAUSE TO ALLOW FOR MULTIPLE ITEMSTACK DEFINITIONS
-                 */
-                } else if (in instanceof List) {
-                    input.add(in);
-                } else {
-                    String ret = "Invalid shapeless ore recipe: ";
-                    for (Object tmp : recipe) {
-                        ret += tmp + ", ";
-                    }
-                    ret += output;
-                    throw new RuntimeException(ret);
-                }
-            }
-        }
-
-        ShapelessHandleOreRecipe(ShapelessRecipes recipe, Map<ItemStack, String> replacements) {
-            super(recipe.getRecipeOutput());
-            output = recipe.getRecipeOutput();
-
-            for (ItemStack ingredient : recipe.recipeItems) {
-                Object finalObj = ingredient;
-                for (Map.Entry<ItemStack, String> replace : replacements.entrySet()) {
-                    if (OreDictionary.itemMatches(replace.getKey(), ingredient, false)) {
-                        finalObj = OreDictionary.getOres(replace.getValue());
-                        break;
-                    }
-                }
-                input.add(finalObj);
-            }
-        }
-
-        /**
-         * Returns the size of the recipe area
-         */
-        @Override
-        public int getRecipeSize() {
-            return input.size();
+        public ShapelessIngredientRecipe(ResourceLocation registryName, ItemStack out, NonNullList<Ingredient> inputs) {
+            super(registryName);
+            this.out = out;
+            this.inputs = inputs;
         }
 
         @Override
-        public ItemStack getRecipeOutput() {
-            return output;
-        }
-
-        /**
-         * Returns an Item that is the result of this recipe
-         */
-        @Override
-        public ItemStack getCraftingResult(InventoryCrafting var1) {
-            return output.copy();
-        }
-
-        /**
-         * Used to check if a recipe matches current crafting inventory
-         */
-        @SuppressWarnings("unchecked")
-        @Override
-        public boolean matches(InventoryCrafting var1, World world) {
-            ArrayList<Object> required = new ArrayList<>(input);
-
-            for (int x = 0; x < var1.getSizeInventory(); x++) {
-                ItemStack slot = var1.getStackInSlot(x);
-
+        public boolean matches(InventoryCrafting inv, World worldIn) {
+            NonNullList<Ingredient> required = NonNullList.create();
+            required.addAll(inputs);
+            for (int x = 0; x < inv.getSizeInventory(); x++) {
+                ItemStack slot = inv.getStackInSlot(x);
                 if (!slot.isEmpty()) {
                     boolean inRecipe = false;
-                    Iterator<Object> req = required.iterator();
-
+                    Iterator<Ingredient> req = required.iterator();
                     while (req.hasNext()) {
-                        boolean match = false;
-
-                        Object next = req.next();
-
-                        if (next instanceof ItemStack) {
-                            match = OreDictionary.itemMatches((ItemStack) next, slot, false);
-                        } else if (next instanceof List) {
-                            Iterator<ItemStack> itr = ((List<ItemStack>) next).iterator();
-                            while (itr.hasNext() && !match) {
-                                match = OreDictionary.itemMatches(itr.next(), slot, false);
-                            }
-                        }
-
-                        if (match) {
+                        if (req.next().apply(slot)) {
                             inRecipe = true;
-                            required.remove(next);
+                            req.remove();
                             break;
                         }
                     }
-
                     if (!inRecipe) {
                         return false;
                     }
@@ -168,171 +74,49 @@ public class RecipeHelper {
             return required.isEmpty();
         }
 
-        public NonNullList<Object> getInput() {
-            return this.input;
+        @Override
+        public ItemStack getCraftingResult(InventoryCrafting inv) {
+            return out.copy();
+        }
+
+        @Override
+        public boolean canFit(int width, int height) {
+            return width * height >= inputs.size();
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return out.copy();
         }
 
         @Override
         public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
             return ForgeHooks.defaultRecipeGetRemainingItems(inv);
         }
+
+        @Override
+        public NonNullList<Ingredient> getIngredients() {
+            return inputs;
+        }
+
     }
 
-    public static class ShapedHandleOreRecipe extends ShapedOreRecipe {
+    public static class ShapedIngredientRecipe extends BasePlainRecipe {
 
-        public static final int MAX_CRAFT_GRID_WIDTH = 3;
-        public static final int MAX_CRAFT_GRID_HEIGHT = 3;
+        private final ItemStack out;
+        private final ShapeMap.Baked grid;
 
-        protected ItemStack output = ItemStack.EMPTY;
-        protected Object[] input = null;
-        protected int width = 0;
-        protected int height = 0;
-        protected boolean mirrored = true;
-
-        public ShapedHandleOreRecipe(Block result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapedHandleOreRecipe(Item result, Object... recipe) {
-            this(new ItemStack(result), recipe);
-        }
-
-        public ShapedHandleOreRecipe(ItemStack result, Object... recipe) {
-            super(result.copy(), "R", 'R', new ItemStack(Blocks.STONE)); //Placeholder
-            output = result.copy();
-
-            String shape = "";
-            int idx = 0;
-
-            if (recipe[idx] instanceof Boolean) {
-                mirrored = (Boolean) recipe[idx];
-                if (recipe[idx + 1] instanceof Object[]) {
-                    recipe = (Object[]) recipe[idx + 1];
-                } else {
-                    idx = 1;
-                }
-            }
-
-            if (recipe[idx] instanceof String[]) {
-                String[] parts = ((String[]) recipe[idx++]);
-
-                for (String s : parts) {
-                    width = s.length();
-                    shape += s;
-                }
-
-                height = parts.length;
-            } else {
-                while (recipe[idx] instanceof String) {
-                    String s = (String) recipe[idx++];
-                    shape += s;
-                    width = s.length();
-                    height++;
-                }
-            }
-
-            if (width * height != shape.length()) {
-                String ret = "Invalid shaped ore recipe: ";
-                for (Object tmp : recipe) {
-                    ret += tmp + ", ";
-                }
-                ret += output;
-                throw new RuntimeException(ret);
-            }
-
-            HashMap<Character, Object> itemMap = new HashMap<>();
-
-            for (; idx < recipe.length; idx += 2) {
-                Character chr = (Character) recipe[idx];
-                Object in = recipe[idx + 1];
-
-                if (in instanceof ItemStack) {
-                    itemMap.put(chr, ((ItemStack) in).copy());
-                } else if (in instanceof Item) {
-                    itemMap.put(chr, new ItemStack((Item) in));
-                } else if (in instanceof Block) {
-                    itemMap.put(chr, new ItemStack((Block) in, 1, OreDictionary.WILDCARD_VALUE));
-                } else if (in instanceof String) {
-                    itemMap.put(chr, OreDictionary.getOres((String) in));
-                /*
-                 * ADDED CLAUSE TO ALLOW FOR MULTIPLE ITEMSTACK DEFINITIONS
-                 */
-                } else if (in instanceof List) {
-                    itemMap.put(chr, in);
-                } else {
-                    String ret = "Invalid shaped ore recipe: ";
-                    for (Object tmp : recipe) {
-                        ret += tmp + ", ";
-                    }
-                    ret += output;
-                    throw new RuntimeException(ret);
-                }
-            }
-
-            input = new Object[width * height];
-            int x = 0;
-            for (char chr : shape.toCharArray()) {
-                input[x++] = itemMap.get(chr);
-            }
-        }
-
-        ShapedHandleOreRecipe(ShapedRecipes recipe, Map<ItemStack, String> replacements) {
-            super(recipe.getRecipeOutput());
-            output = recipe.getRecipeOutput();
-            width = recipe.recipeWidth;
-            height = recipe.recipeHeight;
-
-            input = new Object[recipe.recipeItems.length];
-
-            for (int i = 0; i < input.length; i++) {
-                ItemStack ingredient = recipe.recipeItems[i];
-
-                if (ingredient.isEmpty()) continue;
-
-                input[i] = recipe.recipeItems[i];
-
-                for (Map.Entry<ItemStack, String> replace : replacements.entrySet()) {
-                    if (OreDictionary.itemMatches(replace.getKey(), ingredient, true)) {
-                        input[i] = OreDictionary.getOres(replace.getValue());
-                        break;
-                    }
-                }
-            }
-        }
-
-        /**
-         * Returns an Item that is the result of this recipe
-         */
-        @Override
-        public ItemStack getCraftingResult(InventoryCrafting var1) {
-            return output.copy();
-        }
-
-        /**
-         * Returns the size of the recipe area
-         */
-        @Override
-        public int getRecipeSize() {
-            return input.length;
+        private ShapedIngredientRecipe(ResourceLocation name, ItemStack out, ShapeMap.Baked grid) {
+            super(name);
+            this.out = out;
+            this.grid = grid;
         }
 
         @Override
-        public ItemStack getRecipeOutput() {
-            return output;
-        }
-
-        /**
-         * Used to check if a recipe matches current crafting inventory
-         */
-        @Override
-        public boolean matches(InventoryCrafting inv, World world) {
-            for (int x = 0; x <= MAX_CRAFT_GRID_WIDTH - width; x++) {
-                for (int y = 0; y <= MAX_CRAFT_GRID_HEIGHT - height; ++y) {
-                    if (checkMatch(inv, x, y, false)) {
-                        return true;
-                    }
-
-                    if (mirrored && checkMatch(inv, x, y, true)) {
+        public boolean matches(InventoryCrafting inv, World worldIn) {
+            for (int x = 0; x <= ShapedOreRecipe.MAX_CRAFT_GRID_WIDTH - grid.getWidth(); x++) {
+                for (int y = 0; y <= ShapedOreRecipe.MAX_CRAFT_GRID_HEIGHT - grid.getHeight(); ++y) {
+                    if (checkMatch(inv, x, y)) {
                         return true;
                     }
                 }
@@ -341,40 +125,19 @@ public class RecipeHelper {
             return false;
         }
 
-        @SuppressWarnings("unchecked")
-        protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror) {
-            for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++) {
-                for (int y = 0; y < MAX_CRAFT_GRID_HEIGHT; y++) {
+        protected boolean checkMatch(InventoryCrafting inv, int startX, int startY) {
+            for (int x = 0; x < ShapedOreRecipe.MAX_CRAFT_GRID_WIDTH; x++) {
+                for (int y = 0; y < ShapedOreRecipe.MAX_CRAFT_GRID_HEIGHT; y++) {
                     int subX = x - startX;
                     int subY = y - startY;
-                    Object target = null;
+                    Ingredient target = Ingredient.EMPTY;
 
-                    if (subX >= 0 && subY >= 0 && subX < width && subY < height) {
-                        if (mirror) {
-                            target = input[width - subX - 1 + subY * width];
-                        } else {
-                            target = input[subX + subY * width];
-                        }
+                    if (subX >= 0 && subY >= 0 && subX < grid.getWidth() && subY < grid.getHeight()) {
+                        ShapedRecipeSlot srs = ShapedRecipeSlot.getByRowColumnIndex(subY, subX);
+                        target = grid.get(srs);
                     }
 
-                    ItemStack slot = inv.getStackInRowAndColumn(x, y);
-
-                    if (target instanceof ItemStack) {
-                        if (!OreDictionary.itemMatches((ItemStack) target, slot, false)) {
-                            return false;
-                        }
-                    } else if (target instanceof List) {
-                        boolean matched = false;
-
-                        Iterator<ItemStack> itr = ((List<ItemStack>) target).iterator();
-                        while (itr.hasNext() && !matched) {
-                            matched = OreDictionary.itemMatches(itr.next(), slot, false);
-                        }
-
-                        if (!matched) {
-                            return false;
-                        }
-                    } else if (target == null && !slot.isEmpty()) {
+                    if (!target.apply(inv.getStackInRowAndColumn(x, y))) {
                         return false;
                     }
                 }
@@ -383,13 +146,19 @@ public class RecipeHelper {
             return true;
         }
 
-        public ShapedHandleOreRecipe setMirrored(boolean mirror) {
-            mirrored = mirror;
-            return this;
+        @Override
+        public ItemStack getCraftingResult(InventoryCrafting inv) {
+            return out.copy();
         }
 
-        public Object[] getInput() {
-            return this.input;
+        @Override
+        public boolean canFit(int width, int height) {
+            return width >= grid.getWidth() && height >= grid.getHeight();
+        }
+
+        @Override
+        public ItemStack getRecipeOutput() {
+            return out.copy();
         }
 
         @Override
@@ -398,13 +167,8 @@ public class RecipeHelper {
         }
 
         @Override
-        public int getWidth() {
-            return width;
-        }
-
-        @Override
-        public int getHeight() {
-            return height;
+        public NonNullList<Ingredient> getIngredients() {
+            return grid.getRawIngredientList();
         }
 
     }

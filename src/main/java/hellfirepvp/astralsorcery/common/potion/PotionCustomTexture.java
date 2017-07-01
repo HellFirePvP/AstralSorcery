@@ -12,7 +12,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -59,7 +59,7 @@ public abstract class PotionCustomTexture extends Potion {
         float blue =  ((float) c.getBlue())  / 255F;
 
         getResource().bind();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         vb.pos(x + offsetX,      y + offsetY,      0).tex(0, 0).color(red, green, blue, 1F).endVertex();
@@ -84,7 +84,7 @@ public abstract class PotionCustomTexture extends Potion {
         float blue =  ((float) c.getBlue())  / 255F;
 
         getResource().bind();
-        VertexBuffer vb = tes.getBuffer();
+        BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         vb.pos(x + offsetX,      y + offsetY,      0).tex(0, 0).color(red, green, blue, alpha).endVertex();
