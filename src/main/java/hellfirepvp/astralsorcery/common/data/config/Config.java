@@ -16,7 +16,10 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -71,7 +74,7 @@ public class Config {
 
     @Sync public static int dimensionIdSkyRift = -81;
 
-    public static Integer[] constellationSkyDimWhitelist = new Integer[0];
+    public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static List<String> modidOreGenBlacklist = Lists.newArrayList();
     public static List<Integer> worldGenDimWhitelist = Lists.newArrayList();
@@ -203,11 +206,8 @@ public class Config {
                 AstralSorcery.log.warn("[AstralSorcery] Error while reading config entry 'skySupportedDimensions': " + s + " is not a number!");
             }
         }
-        constellationSkyDimWhitelist = new Integer[out.size()];
-        for (int i = 0; i < out.size(); i++) {
-            constellationSkyDimWhitelist[i] = out.get(i);
-        }
-        Arrays.sort(constellationSkyDimWhitelist);
+        constellationSkyDimWhitelist = Lists.newArrayList(out);
+        Collections.sort(constellationSkyDimWhitelist);
     }
 
 }

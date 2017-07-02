@@ -8,11 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileAttunementAltar;
-import hellfirepvp.astralsorcery.common.tile.TileCelestialCrystals;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
 import net.minecraft.tileentity.TileEntity;

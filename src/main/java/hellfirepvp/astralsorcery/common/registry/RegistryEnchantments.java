@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentScorchingHeat;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.LinkedList;
 import java.util.List;

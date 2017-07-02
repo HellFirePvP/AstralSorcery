@@ -19,7 +19,9 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.*;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
@@ -32,13 +34,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
-import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.*;
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
+import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
+import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -115,8 +116,8 @@ public class RegistryRecipes {
         registerLowConsumptionInfusion(new ItemStack(Items.MAGMA_CREAM, 1, 0), new ItemStack(Items.SLIME_BALL, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Items.GOLDEN_CARROT, 1, 0), new ItemStack(Items.CARROT, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Items.SPECKLED_MELON, 1, 0), new ItemStack(Items.MELON, 1, 0));
-        registerLowConsumptionInfusion(new ItemStack(Items.IRON_INGOT, 2, 0), new ItemStack(Blocks.IRON_ORE, 1, 0));
-        registerLowConsumptionInfusion(new ItemStack(Items.GOLD_INGOT, 2, 0), new ItemStack(Blocks.GOLD_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.IRON_INGOT, 3, 0), new ItemStack(Blocks.IRON_ORE, 1, 0));
+        registerLowConsumptionInfusion(new ItemStack(Items.GOLD_INGOT, 3, 0), new ItemStack(Blocks.GOLD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.LAPIS_BLOCK, 1, 0), new ItemStack(Blocks.LAPIS_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.REDSTONE_BLOCK, 1, 0), new ItemStack(Blocks.REDSTONE_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 4, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));

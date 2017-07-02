@@ -9,23 +9,15 @@
 package hellfirepvp.astralsorcery.common.integrations;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
-import hellfirepvp.astralsorcery.common.crafting.helper.RecipeHelper;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarAttunementRecipeHandler;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarConstellationRecipeHandler;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.AltarDiscoveryRecipeHandler;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarAttunement;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarConstellation;
-import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.CategoryAltarDiscovery;
+import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
-import hellfirepvp.astralsorcery.common.registry.RegistryRecipes;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
@@ -33,7 +25,6 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * This class is part of the Astral Sorcery Mod

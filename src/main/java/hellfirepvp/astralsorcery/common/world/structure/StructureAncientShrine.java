@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.world.structure;
 
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -33,7 +32,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     public StructureAncientShrine() {
         super(0, "ancientShrine", () -> MultiBlockArrays.ancientShrine, StructureGenBuffer.StructureType.MOUNTAIN, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.SNOWY);
-        this.idealDistance = 512F;
+        this.idealDistance = 768F;
     }
 
     @Override

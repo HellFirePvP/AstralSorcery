@@ -38,14 +38,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -196,7 +193,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             break;
                                     }
                                     tgr.playWheelEffect();
-                                } else if(SwordSharpenHelper.isSharpenableItem(grind)) {
+                                } else if(SwordSharpenHelper.canBeSharpened(grind)) {
                                     if(rand.nextInt(40) == 0) {
                                         SwordSharpenHelper.setSwordSharpened(grind);
                                     }
@@ -217,7 +214,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     if(!player.isCreative()) {
                                         stack.setCount(stack.getCount() - 1);
                                     }
-                                } else if(SwordSharpenHelper.isSharpenableItem(stack) && !SwordSharpenHelper.isSwordSharpened(stack)) {
+                                } else if(SwordSharpenHelper.canBeSharpened(stack) && !SwordSharpenHelper.isSwordSharpened(stack)) {
                                     ItemStack toSet = stack.copy();
                                     toSet.setCount(1);
                                     tgr.setGrindingItem(toSet);

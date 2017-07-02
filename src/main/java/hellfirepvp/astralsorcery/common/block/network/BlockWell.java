@@ -66,6 +66,11 @@ public class BlockWell extends BlockStarlightNetwork {
     }
 
     @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return null;
     }

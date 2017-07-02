@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.world.attributes;
 
 import hellfirepvp.astralsorcery.common.block.BlockCustomFlower;
-import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.config.entry.WorldGenEntry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

@@ -9,13 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttunementRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageConstellationRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageLightProximityRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
+import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
@@ -24,8 +18,6 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
@@ -36,12 +28,9 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
 
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 

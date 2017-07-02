@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -161,14 +160,15 @@ public class CrystalProperties {
     @Nullable
     public CrystalProperties grindCopy(Random rand) {
         CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability);
-        int grind = 3 + rand.nextInt(4);
+        int grind = 2 + rand.nextInt(3);
         double purity = ((double) this.purity) / 100D;
-        for (int j = 0; j < (size > 300 ? 5 : 2); j++) {
+        if(purity <= 0.5) purity = 0.5;
+        for (int j = 0; j < 3; j++) {
             if (purity <= rand.nextFloat()) {
                 grind += grind;
             }
         }
-        int collectToAdd = 1 + rand.nextInt(2);
+        int collectToAdd = 4 + rand.nextInt(6);
         copy.size = size - grind;
         copy.collectiveCapability = Math.min(100, collectiveCapability + collectToAdd);
         if(copy.size <= 0)

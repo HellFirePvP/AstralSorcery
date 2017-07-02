@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.util.nbt;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;

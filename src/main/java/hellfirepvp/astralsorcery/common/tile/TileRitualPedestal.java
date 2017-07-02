@@ -17,14 +17,12 @@ import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -54,12 +52,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -187,21 +181,17 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                         }
                     }
                     if(rand.nextInt(chance * 7) == 0) {
-                        TransmissionReceiverRitualPedestal tag = getUpdateCache();
-                        if(tag != null) {
-                            List<BlockPos> offsets = tag.offsetMirrors.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toList());
-                            if(!offsets.isEmpty()) {
-                                BlockPos to = offsets.get(rand.nextInt(offsets.size()));
-                                IWeakConstellation c = getRitualConstellation();
-                                Color col = null;
-                                if(c != null && c.getConstellationColor() != null) {
-                                    col = c.getConstellationColor();
-                                }
-                                AstralSorcery.proxy.fireLightning(getWorld(),
-                                        new Vector3(this).add(0.5, 0.8, 0.5),
-                                        new Vector3(to).add(getPos()).add(0.5, 0.5, 0.5),
-                                        col);
+                        if(!offsetMirrorPositions.isEmpty()) {
+                            BlockPos to = offsetMirrorPositions.get(rand.nextInt(offsetMirrorPositions.size()));
+                            IWeakConstellation c = getRitualConstellation();
+                            Color col = null;
+                            if(c != null && c.getConstellationColor() != null) {
+                                col = c.getConstellationColor();
                             }
+                            AstralSorcery.proxy.fireLightning(getWorld(),
+                                    new Vector3(this).add(0.5, 0.8, 0.5),
+                                    new Vector3(to).add(getPos()).add(0.5, 0.5, 0.5),
+                                    col);
                         }
                     }
                 }

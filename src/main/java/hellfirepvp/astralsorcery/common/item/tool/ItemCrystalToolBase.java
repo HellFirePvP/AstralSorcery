@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystalTool;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -19,7 +18,6 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -76,7 +74,7 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         float str = super.getStrVsBlock(stack, state);
         ToolCrystalProperties properties = getToolProperties(stack);
-        return str * properties.getEfficiencyMultiplier();
+        return str * properties.getEfficiencyMultiplier() * 1.4F;
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {

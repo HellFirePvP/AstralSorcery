@@ -10,11 +10,7 @@ package hellfirepvp.astralsorcery.core.patch.helper;
 
 import hellfirepvp.astralsorcery.core.ClassPatch;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

@@ -11,8 +11,8 @@ package hellfirepvp.astralsorcery.client.gui;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.input.Mouse;
 

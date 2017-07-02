@@ -45,7 +45,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -96,6 +95,11 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
                     c);
         }
         return true;
+    }
+
+    @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
     }
 
     @Override

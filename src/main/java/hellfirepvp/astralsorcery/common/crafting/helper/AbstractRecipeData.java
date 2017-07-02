@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 

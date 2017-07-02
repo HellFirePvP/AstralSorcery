@@ -100,6 +100,12 @@ public abstract class ConstellationPerk extends ConfigEntry {
         EventHandlerServer.perkCooldowns.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
     }
 
+    public final void forceSetCooldownForPlayer(EntityPlayer player, int cooldownTicks) {
+        if(!EventHandlerServer.perkCooldowns.getOrCreateList(player).setTimeout(cooldownTicks, getId())) {
+            setCooldownActiveForPlayer(player, cooldownTicks);
+        }
+    }
+
     public final int getActiveCooldownForPlayer(EntityPlayer player) {
         if(!EventHandlerServer.perkCooldowns.hasList(player)) {
             return -1;

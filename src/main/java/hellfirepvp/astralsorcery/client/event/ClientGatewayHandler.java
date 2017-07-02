@@ -8,13 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.event;
 
-import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.UIGateway;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestTeleport;
@@ -23,23 +20,14 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.ScreenShotHelper;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opencl.CL;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.Collections;
@@ -74,7 +62,7 @@ public class ClientGatewayHandler {
         UIGateway ui = EffectHandler.getInstance().getUiGateway();
         if(ui != null) {
             EntityPlayer player = Minecraft.getMinecraft().player;
-            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCenter(player).toBlockPos(), TileCelestialGateway.class, true);
+            TileCelestialGateway gate = MiscUtils.getTileAt(player.world, Vector3.atEntityCorner(player).toBlockPos(), TileCelestialGateway.class, true);
             if(gate != null && gate.hasMultiblock() && gate.doesSeeSky()) {
                 if(lastScreenshotPos != null) {
                     WorldBlockPos currentPos = new WorldBlockPos(gate);
@@ -118,7 +106,7 @@ public class ClientGatewayHandler {
         }
 
         if(focusingEntry != null) {
-            Vector3 dir = focusingEntry.relativePos.clone().add(ui.getPos()).subtract(Vector3.atEntityCenter(Minecraft.getMinecraft().player).addY(1.62));
+            Vector3 dir = focusingEntry.relativePos.clone().add(ui.getPos()).subtract(Vector3.atEntityCorner(Minecraft.getMinecraft().player).addY(1.62));
             Vector3 mov = dir.clone().normalize().multiply(0.25F).negate();
             Vector3 pos = focusingEntry.relativePos.clone().add(ui.getPos());
             if(focusTicks > 40) {

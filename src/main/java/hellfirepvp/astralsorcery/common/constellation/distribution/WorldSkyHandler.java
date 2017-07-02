@@ -10,13 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.distribution;
 
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositionMapping;
-import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
-import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IConstellationSpecialShowup;
-import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import net.minecraft.util.math.MathHelper;
@@ -25,13 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 

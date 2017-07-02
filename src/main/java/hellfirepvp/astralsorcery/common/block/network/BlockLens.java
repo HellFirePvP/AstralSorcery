@@ -28,7 +28,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -81,6 +80,11 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.MAX_SIZE_CELESTIAL);
+    }
+
+    @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
     }
 
     @Override

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.world.structure;
 
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.world.WorldGenAttributeCommon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -33,7 +32,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
 
     public StructureSmallShrine() {
         super(0, "smallShrine", () -> MultiBlockArrays.smallShrine, StructureGenBuffer.StructureType.SMALL, BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST);
-        this.idealDistance = 256F;
+        this.idealDistance = 512F;
     }
 
     @Override
