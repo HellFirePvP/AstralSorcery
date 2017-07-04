@@ -34,6 +34,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -59,7 +60,7 @@ public class RegistryRecipes {
     public static RecipeRitualPedestal rRitualPedestal;
     public static DiscoveryRecipe rLightwell;
     public static DiscoveryRecipe rSkyResonator;
-    public static AttunementRecipe rIlluminator;
+    public static DiscoveryRecipe rIlluminator;
     public static DiscoveryRecipe rAttenuationAltarRelay;
     public static AttunementAltarRecipe rAttunementAltar;
     public static ConstellationRecipe rStarlightInfuser;
@@ -71,6 +72,7 @@ public class RegistryRecipes {
     public static AttunementRecipe rShiftStar;
     public static ConstellationRecipe rRitualLink;
     public static DiscoveryRecipe rIlluminationPowder;
+    public static DiscoveryRecipe rNocturnalPowder;
     public static CelestialGatewayRecipe rCelestialGateway;
     public static DrawingTableRecipe rDrawingTable;
     public static ConstellationRecipe rInfusedGlass;
@@ -310,6 +312,19 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.CENTER)
                 .unregisteredAccessibleShapedRecipe());
         rIlluminationPowder.setPassiveStarlightRequirement(200);
+
+        rNocturnalPowder = registerDiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/nocturnalpowder", ItemUtils.copyStackWithSize(ItemUsableDust.DustType.NOCTURNAL.asStack(), 4))
+                .addPart(Items.COAL,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
+        rNocturnalPowder.setPassiveStarlightRequirement(300);
 
         rRitualLink = registerConstellationRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/rituallink", new ItemStack(BlocksAS.ritualLink, 2))
                 .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
@@ -640,20 +655,19 @@ public class RegistryRecipes {
                 .unregisteredAccessibleShapedRecipe());
         rLightwell.setPassiveStarlightRequirement(200);
 
-        rIlluminator = registerAttenuationRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/illuminator", BlocksAS.blockIlluminator)
+        rIlluminator = registerDiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/illuminator", BlocksAS.blockIlluminator)
                 .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT,
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(ItemHandle.getCrystalVariant(false, false),
+                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(OreDictAlias.ITEM_AQUAMARINE,
+                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .unregisteredAccessibleShapedRecipe())
-                .setAttItem(ItemUsableDust.DustType.ILLUMINATION.asStack(), AttunementRecipe.AttunementAltarSlot.values());
+                .unregisteredAccessibleShapedRecipe());
         rIlluminator.setPassiveStarlightRequirement(1500);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/tool_basicwand", ItemsAS.wand)
