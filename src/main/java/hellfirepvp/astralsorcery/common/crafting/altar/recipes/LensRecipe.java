@@ -37,7 +37,7 @@ public class LensRecipe extends AttunementRecipe {
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .addPart(OreDictAlias.ITEM_AQUAMARINE,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),

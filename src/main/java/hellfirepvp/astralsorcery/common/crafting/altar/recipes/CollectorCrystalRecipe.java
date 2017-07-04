@@ -16,9 +16,11 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -42,12 +44,12 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         .forceEmptySpaces()
         .unregisteredAccessibleShapedRecipe());
         setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AttunementAltarSlot.values());
-        setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+        setCstItem(OreDictAlias.ITEM_STARMETAL_DUST,
                 ConstellationAtlarSlot.UP_UP_LEFT,
                 ConstellationAtlarSlot.UP_UP_RIGHT,
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
-        setCstItem(ItemsAS.illuminationPowder,
+        setCstItem(ItemUsableDust.DustType.ILLUMINATION.asStack(),
                 ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT,

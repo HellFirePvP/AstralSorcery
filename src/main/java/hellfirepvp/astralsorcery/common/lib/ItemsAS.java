@@ -14,8 +14,8 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
-import hellfirepvp.astralsorcery.common.item.useables.ItemIlluminationPowder;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
@@ -44,9 +44,10 @@ public class ItemsAS {
     //public static ItemRoseBranchBow roseBranchBow;
     public static ItemArchitectWand architectWand;
     public static ItemExchangeWand exchangeWand;
-    public static ItemIlluminationPowder illuminationPowder;
     public static ItemGrappleWand grapplingWand;
     public static ItemInfusedGlass infusedGlass;
+
+    public static ItemUsableDust useableDust;
 
     public static ItemCrystalPickaxe crystalPickaxe;
     public static ItemCrystalShovel crystalShovel;

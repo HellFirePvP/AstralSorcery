@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.util.Random;
@@ -52,7 +53,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
         super(ShapedRecipe.Builder.newShapedRecipe("attunementaltar", BlocksAS.attunementAltar)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(BlocksAS.attunementRelay,
@@ -61,7 +62,7 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
         .unregisteredAccessibleShapedRecipe());
-        setAttItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+        setAttItem(OreDictAlias.ITEM_AQUAMARINE,
                 AttunementAltarSlot.UPPER_LEFT,
                 AttunementAltarSlot.UPPER_RIGHT);
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),

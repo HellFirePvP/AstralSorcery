@@ -342,9 +342,10 @@ item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
 item.itemgrapplewand.name=Vortex Wand
 item.itemshiftingstar.name=Shifting Star
-item.itemilluminationpowder.name=Illumination Powder
 item.iteminfusedglass.name=Infused Glass
 item.iteminfusedglass.active.name=Engraved Glass
+item.itemusabledust.illumination.name=Illumination Powder
+item.itemusabledust.nocturnal.name=Nocturnal Powder
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break

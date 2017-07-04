@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -400,7 +401,7 @@ public class RegistryResearch {
         resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
         resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
 
-        ResearchNode resIlluminationPowder = new ResearchNode(new ItemStack(ItemsAS.illuminationPowder), "ILLUM_POWDER", 3, 3);
+        ResearchNode resIlluminationPowder = new ResearchNode(ItemUsableDust.DustType.ILLUMINATION.asStack(), "ILLUM_POWDER", 3, 3);
         resIlluminationPowder.addPage(getTextPage("ILLUM_POWDER.1"));
         resIlluminationPowder.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rIlluminationPowder));
 
@@ -415,7 +416,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.handTelescope,   1, OreDictionary.WILDCARD_VALUE),           resTelescope,               2, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(ItemsAS.skyResonator,    1, OreDictionary.WILDCARD_VALUE),           resResonator,               1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(BlocksAS.attunementRelay,1, OreDictionary.WILDCARD_VALUE),           resRelay,                   1, ResearchProgression.BASIC_CRAFT);
-        registerItemLookup(new ItemStack(ItemsAS.illuminationPowder, 1, OreDictionary.WILDCARD_VALUE),        resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(ItemUsableDust.DustType.ILLUMINATION.asStack(),                                            resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
 
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);

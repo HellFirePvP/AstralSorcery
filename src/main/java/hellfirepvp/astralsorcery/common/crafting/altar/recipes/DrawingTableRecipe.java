@@ -39,7 +39,7 @@ public class DrawingTableRecipe extends ConstellationRecipe {
 
     public DrawingTableRecipe() {
         super(shapedRecipe("drawingtable", BlocksAS.drawingTable)
-                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),

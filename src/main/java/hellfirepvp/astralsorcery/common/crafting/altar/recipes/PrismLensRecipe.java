@@ -47,7 +47,7 @@ public class PrismLensRecipe extends ConstellationRecipe {
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.LEFT,
                         ShapedRecipeSlot.RIGHT)
-                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemHandle.getCrystalVariant(false, false),

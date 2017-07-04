@@ -41,6 +41,10 @@ public class OreDictAlias {
     public static String ITEM_DYE_PURPLE = "dyePurple";
     public static String ITEM_DYE_ALL = "dye";
 
+    public static String ITEM_AQUAMARINE = "gemAquamarine";
+    public static String ITEM_STARMETAL_INGOT = "ingotAstralStarmetal";
+    public static String ITEM_STARMETAL_DUST = "dustAstralStarmetal";
+
     public static String BLOCK_CRAFTING_TABLE = "workbench";
     public static String BLOCK_MARBLE = "stoneMarble";
     public static String BLOCK_WOOD_PLANKS = "plankWood";
