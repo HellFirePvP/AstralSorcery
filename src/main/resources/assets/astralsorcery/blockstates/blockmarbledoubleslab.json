@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "marbletype=bricks": { "model": "astralsorcery:blockmarble_bricks" }
+    }
+}

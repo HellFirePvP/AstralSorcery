@@ -49,6 +49,7 @@ public class PrimerEventHandler {
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         registry.wipe(event.getClass());
         RegistryBlocks.init();
+        RegistryBlocks.initRenderRegistry();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
