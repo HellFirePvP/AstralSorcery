@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import net.minecraft.entity.player.EntityPlayer;

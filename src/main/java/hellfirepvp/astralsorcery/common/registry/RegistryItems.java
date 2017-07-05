@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
@@ -123,6 +124,7 @@ public class RegistryItems {
         exchangeWand = registerItem(new ItemExchangeWand());
         grapplingWand = registerItem(new ItemGrappleWand());
         useableDust = registerItem(new ItemUsableDust());
+        knowledgeShare = registerItem(new ItemKnowledgeShare());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

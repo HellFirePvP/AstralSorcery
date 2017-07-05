@@ -31,9 +31,9 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeRevealer;
-import hellfirepvp.astralsorcery.common.item.ItemHandRender;
-import hellfirepvp.astralsorcery.common.item.ItemHudRender;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeRevealer;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemHandRender;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemHudRender;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;

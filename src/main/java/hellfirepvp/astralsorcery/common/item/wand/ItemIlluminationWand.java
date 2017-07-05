@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.item.wand;
 import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;

@@ -22,6 +22,9 @@ potion.as.crafted.name=Stardew
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
+misc.knowledge.missing=A empty and sparkly scroll
+misc.knowledge.inscribed=Contains knowledge from %s
+misc.knowledge.inscribed.creative=Contains massive knowledge
 misc.journal.info.1=Hover over one of the clusters and zoom in
 misc.journal.info.2=using the scroll wheel or %s and %s
 misc.link.stop=Stopped linking!
@@ -347,6 +350,7 @@ item.itemgrapplewand.name=Vortex Wand
 item.itemshiftingstar.name=Shifting Star
 item.iteminfusedglass.name=Infused Glass
 item.iteminfusedglass.active.name=Engraved Glass
+item.itemknowledgeshare.name=Scroll of written Expertise
 item.itemusabledust.illumination.name=Illumination Powder
 item.itemusabledust.nocturnal.name=Nocturnal Powder
 

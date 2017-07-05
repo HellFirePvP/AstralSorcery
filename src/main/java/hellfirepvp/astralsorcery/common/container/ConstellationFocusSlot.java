@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.container;
 
-import hellfirepvp.astralsorcery.common.item.ItemConstellationFocus;
+import hellfirepvp.astralsorcery.common.item.base.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

@@ -79,7 +79,7 @@ public class ClientGatewayHandler {
                     focusingEntry = null;
                     focusTicks = 0;
                 } else {
-                    if(!Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+                    if(!Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && !Minecraft.getMinecraft().player.isSneaking()) {
                         focusTicks = 0;
                         focusingEntry = null;
                     } else {

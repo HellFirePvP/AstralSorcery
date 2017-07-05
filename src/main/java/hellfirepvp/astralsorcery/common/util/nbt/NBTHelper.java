@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 /**
@@ -24,14 +25,17 @@ import java.util.UUID;
  */
 public class NBTHelper {
 
+    @Nonnull
     public static NBTTagCompound getPersistentData(Entity entity) {
         return getPersistentData(entity.getEntityData());
     }
 
+    @Nonnull
     public static NBTTagCompound getPersistentData(ItemStack item) {
         return getPersistentData(getData(item));
     }
 
+    @Nonnull
     public static NBTTagCompound getPersistentData(NBTTagCompound base) {
         NBTTagCompound compound;
         if (hasPersistentData(base)) {

@@ -6,10 +6,8 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,17 +15,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemGatedVisibility
+ * Class: ItemAlignmentChargeRevealer
  * Created by HellFirePvP
- * Date: 13.01.2017 / 00:06
+ * Date: 27.12.2016 / 13:36
  */
-public interface ItemGatedVisibility {
-
-    default public PlayerProgress getClientProgress() {
-        return ResearchManager.clientProgress;
-    }
+public interface ItemAlignmentChargeRevealer {
 
     @SideOnly(Side.CLIENT)
-    public boolean isSupposedToSeeInRender(ItemStack stack);
+    default public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return true;
+    }
+
+    public static enum ChargeType {
+
+        TEMP,
+        PERM
+
+    }
 
 }

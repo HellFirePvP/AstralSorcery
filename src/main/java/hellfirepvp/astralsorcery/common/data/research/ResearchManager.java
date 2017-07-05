@@ -12,6 +12,7 @@ import com.google.common.io.Files;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.event.ClientRenderEventHandler;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -60,6 +61,7 @@ public class ResearchManager {
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
     @Nullable
+    //Nonnull for server.
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
             return clientProgress;
@@ -68,12 +70,12 @@ public class ResearchManager {
         }
     }
 
-    @Nullable
+    @Nonnull
     public static PlayerProgress getProgress(EntityPlayer player) {
         return getProgress(player.getUniqueID());
     }
 
-    @Nullable
+    @Nonnull
     public static PlayerProgress getProgress(UUID uuid) {
         PlayerProgress progress = playerProgressServer.get(uuid);
         if (progress == null) {
@@ -172,6 +174,17 @@ public class ResearchManager {
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
+    }
+
+    public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, EntityPlayer player) {
+        PlayerProgress progress = getProgress(player);
+        if(progress == null) return false;
+
+        progress.acceptMergeFrom(toMergeFrom);
+
+        pushProgressToClientUnsafe(player);
+        savePlayerKnowledge(player);
+        return true;
     }
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
@@ -305,34 +318,24 @@ public class ResearchManager {
         return true;
     }
 
-    /**
-     * Returns Optional ProgressionTier:
-     *
-     * Non-present: player is at max.
-     * null: no playerdata found.
-     * some progression: New progression reached.
-     */
-    /*public static Optional<ProgressionTier> stepTier(EntityPlayer player) {
+    public static void forceMaximizeAll(EntityPlayer player) {
         PlayerProgress progress = getProgress(player);
-        if(progress == null) return Optional.of(null);
-        if(!progress.stepTier()) {
-            return Optional.empty();
+        if(progress == null) return;
+        ProgressionTier before = progress.getTierReached();
+
+        ResearchManager.discoverConstellations(ConstellationRegistry.getAllConstellations(), player);
+        ResearchManager.maximizeTier(player);
+        ResearchManager.forceMaximizeResearch(player);
+        ResearchManager.setAttunedBefore(player, true);
+
+        if(progress.getTierReached().isThisLater(before)) {
+            PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());
+            PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
-        return Optional.of(progress.getTierReached());
-    }*/
-
-    /*protected static boolean forceUnsafeResearchStep(EntityPlayer player, ResearchProgression progression) {
-        PlayerProgress progress = getProgress(player);
-        if(progress == null) return false;
-        progress.forceGainResearch(progression);
-
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
-        return true;
-    }*/
+    }
 
     public static boolean forceMaximizeResearch(EntityPlayer player) {
         PlayerProgress progress = getProgress(player);

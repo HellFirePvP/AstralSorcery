@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting;
 
-import hellfirepvp.astralsorcery.common.item.ItemGatedVisibility;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemGatedVisibility;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;

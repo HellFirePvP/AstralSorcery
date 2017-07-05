@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.item.wand;
 
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityGrapplingHook;
-import hellfirepvp.astralsorcery.common.item.ItemAlignmentChargeConsumer;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;

@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

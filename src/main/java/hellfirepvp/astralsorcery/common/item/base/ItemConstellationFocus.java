@@ -6,30 +6,23 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base;
 
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemHudRender
+ * Class: ItemConstellationFocus
  * Created by HellFirePvP
- * Date: 07.02.2017 / 03:10
+ * Date: 06.03.2017 / 14:50
  */
-public interface ItemHudRender {
+public interface ItemConstellationFocus {
 
-    default public boolean hasFadeIn() {
-        return false;
-    }
-
-    default public int getFadeInTicks() {
-        return 1;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks);
+    @Nullable
+    public IConstellation getFocusConstellation(ItemStack stack);
 
 }

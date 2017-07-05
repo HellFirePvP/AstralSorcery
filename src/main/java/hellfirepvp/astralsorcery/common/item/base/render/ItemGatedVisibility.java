@@ -6,21 +6,28 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.base;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StateBasedItem
+ * Class: ItemGatedVisibility
  * Created by HellFirePvP
- * Date: 07.05.2016 / 14:31
+ * Date: 13.01.2017 / 00:06
  */
-public interface StateBasedItem {
+public interface ItemGatedVisibility {
 
-    public ItemStack createItemFromState(ItemState state);
+    default public PlayerProgress getClientProgress() {
+        return ResearchManager.clientProgress;
+    }
 
-    public ItemState getState(ItemStack stack);
+    @SideOnly(Side.CLIENT)
+    public boolean isSupposedToSeeInRender(ItemStack stack);
 
 }

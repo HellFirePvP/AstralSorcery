@@ -145,6 +145,70 @@ public class PlayerProgress {
         cmp.setDouble("alignmentCharge", alignmentCharge);
     }
 
+    public void storeKnowledge(NBTTagCompound cmp) {
+        NBTTagList list = new NBTTagList();
+        for (String s : knownConstellations) {
+            list.appendTag(new NBTTagString(s));
+        }
+        NBTTagList l = new NBTTagList();
+        for (String s : seenConstellations) {
+            l.appendTag(new NBTTagString(s));
+        }
+        cmp.setTag("constellations", list);
+        cmp.setTag("seenConstellations", l);
+        cmp.setInteger("tierReached", tierReached.ordinal());
+        cmp.setBoolean("wasAttuned", wasOnceAttuned);
+        int[] researchArray = new int[researchProgression.size()];
+        for (int i = 0; i < researchProgression.size(); i++) {
+            ResearchProgression progression = researchProgression.get(i);
+            researchArray[i] = progression.getProgressId();
+        }
+        cmp.setIntArray("research", researchArray);
+    }
+
+    public void loadKnowledge(NBTTagCompound compound) {
+        knownConstellations.clear();
+        researchProgression.clear();
+        appliedPerks.clear();
+        attunedConstellation = null;
+        tierReached = ProgressionTier.DISCOVERY;
+        alignmentCharge = 0.0;
+        wasOnceAttuned = false;
+
+        if (compound.hasKey("seenConstellations")) {
+            NBTTagList list = compound.getTagList("seenConstellations", 8);
+            for (int i = 0; i < list.tagCount(); i++) {
+                seenConstellations.add(list.getStringTagAt(i));
+            }
+        }
+        if (compound.hasKey("constellations")) {
+            NBTTagList list = compound.getTagList("constellations", 8);
+            for (int i = 0; i < list.tagCount(); i++) {
+                String s = list.getStringTagAt(i);
+                knownConstellations.add(s);
+                if (!seenConstellations.contains(s)) {
+                    seenConstellations.add(s);
+                }
+            }
+        }
+
+        if (compound.hasKey("tierReached")) {
+            int tierOrdinal = compound.getInteger("tierReached");
+            tierReached = ProgressionTier.values()[MathHelper.clamp(tierOrdinal, 0, ProgressionTier.values().length - 1)];
+        }
+
+        if (compound.hasKey("research")) {
+            int[] research = compound.getIntArray("research");
+            for (int resOrdinal : research) {
+                ResearchProgression prog = ResearchProgression.getById(resOrdinal);
+                if (prog != null) {
+                    researchProgression.add(prog);
+                }
+            }
+        }
+        this.wasOnceAttuned = compound.getBoolean("wasAttuned");
+    }
+
     protected boolean forceGainResearch(ResearchProgression progression) {
         if(!researchProgression.contains(progression)) {
             researchProgression.add(progression);
@@ -291,6 +355,24 @@ public class PlayerProgress {
         this.appliedPerks = message.appliedPerks;
         this.alignmentCharge = message.alignmentCharge;
         this.wasOnceAttuned = message.wasOnceAttuned;
+    }
+
+    public void acceptMergeFrom(PlayerProgress toMergeFrom) {
+        for (String seen : toMergeFrom.seenConstellations) {
+            memorizeConstellation(seen);
+        }
+        for (String known : toMergeFrom.knownConstellations) {
+            discoverConstellation(known);
+        }
+        if(toMergeFrom.wasOnceAttuned) {
+            this.wasOnceAttuned = true;
+        }
+        if(toMergeFrom.tierReached.isThisLaterOrEqual(this.tierReached)) {
+            this.tierReached = toMergeFrom.tierReached;
+        }
+        for (ResearchProgression prog : toMergeFrom.researchProgression) {
+            this.forceGainResearch(prog);
+        }
     }
 
 }
