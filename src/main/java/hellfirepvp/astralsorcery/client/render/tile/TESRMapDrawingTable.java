@@ -31,7 +31,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

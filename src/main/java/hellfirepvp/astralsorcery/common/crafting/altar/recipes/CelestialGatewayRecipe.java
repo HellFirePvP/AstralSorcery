@@ -13,12 +13,13 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 
 import java.awt.*;
@@ -35,9 +36,9 @@ public class CelestialGatewayRecipe extends AttunementRecipe {
 
     public CelestialGatewayRecipe() {
         super(shapedRecipe("gateway", BlocksAS.celestialGateway)
-                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(ItemsAS.illuminationPowder,
+                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
@@ -49,7 +50,7 @@ public class CelestialGatewayRecipe extends AttunementRecipe {
                 .addPart(ItemHandle.getCrystalVariant(false, false),
                         ShapedRecipeSlot.CENTER)
         .unregisteredAccessibleShapedRecipe());
-        setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(), AttunementAltarSlot.values());
+        setAttItem(OreDictAlias.ITEM_STARMETAL_DUST, AttunementAltarSlot.values());
     }
 
     @Override

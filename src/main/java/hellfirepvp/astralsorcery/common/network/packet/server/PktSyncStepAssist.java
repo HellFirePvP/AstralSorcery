@@ -30,7 +30,7 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
     public PktSyncStepAssist() {}
 
     public PktSyncStepAssist(float stepHeight) {
-        this.stepHeight = stepHeight;
+        this.stepHeight = stepHeight - 0.4F; //FFS mojang
     }
 
     @Override

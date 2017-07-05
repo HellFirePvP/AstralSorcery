@@ -19,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.awt.color.ColorSpace;
 
 /**
  * This class is part of the Astral Sorcery Mod

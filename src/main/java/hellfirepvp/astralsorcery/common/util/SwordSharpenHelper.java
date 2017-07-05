@@ -56,7 +56,7 @@ public class SwordSharpenHelper {
         Item i = stack.getItem();
         if(blacklistedSharpenableSwordClassNames.contains(i.getClass().getName())) return false;
 
-        if(stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemAxe) return true;
+        if(isSharpenableItem(stack)) return true;
         Class<?> itemClass = stack.getItem().getClass();
         for (Class<?> clazz : otherSharpenableSwordSuperClasses) {
             if(clazz.isAssignableFrom(itemClass)) {

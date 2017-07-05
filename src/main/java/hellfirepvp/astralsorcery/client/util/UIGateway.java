@@ -12,10 +12,9 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -139,7 +138,7 @@ public class UIGateway {
     public void renderIntoWorld(float pticks) {
         if(Minecraft.getMinecraft().player == null) return;
 
-        double dst = new Vector3(origin).distance(Vector3.atEntityCenter(Minecraft.getMinecraft().player));
+        double dst = new Vector3(origin).distance(Vector3.atEntityCorner(Minecraft.getMinecraft().player));
         if(dst > 3) return;
         float alpha = 1F - ((float) (dst / 2D));
         alpha = MathHelper.clamp(alpha, 0F, 1F);

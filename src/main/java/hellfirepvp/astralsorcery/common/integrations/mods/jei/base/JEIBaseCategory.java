@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.integrations.mods.jei.base;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.resources.I18n;

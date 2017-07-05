@@ -20,13 +20,13 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -35,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -62,9 +61,9 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
                 .addPart(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                         ShapedRecipeSlot.RIGHT,
                         ShapedRecipeSlot.LEFT)
-                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                .addPart(OreDictAlias.ITEM_STARMETAL_INGOT,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .addPart(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                .addPart(OreDictAlias.ITEM_AQUAMARINE,
                         ShapedRecipeSlot.UPPER_LEFT,
                         ShapedRecipeSlot.UPPER_RIGHT)
                 .addPart(ItemHandle.getCrystalVariant(false, false),
@@ -73,7 +72,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
         setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);
-        setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+        setAttItem(OreDictAlias.ITEM_STARMETAL_DUST,
                 AttunementAltarSlot.UPPER_RIGHT,
                 AttunementAltarSlot.UPPER_LEFT);
     }

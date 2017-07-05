@@ -36,8 +36,9 @@ public class RegistryEntities {
         registerEntity(EntityFlare.class, "EntityFlare", modEid++, 64, 2, true);
         registerEntity(EntityStarburst.class, "EntityStarBurst", modEid++, 32, 1, true);
         registerEntity(EntityIlluminationSpark.class, "EntityIlluminationSpark", modEid++, 32, 1, true);
+        registerEntity(EntityNocturnalSpark.class, "EntityNocturnalSpark", modEid++, 32, 1, true);
         registerEntity(EntityCrystalTool.class, "EntityCrystalTool", modEid++, 64, 20, true);
-        registerEntity(EntityGrapplingHook.class, "EntityGrapplingHook", modEid++, 256, 1, true);
+        registerEntity(EntityGrapplingHook.class, "EntityGrapplingHook", modEid++, 128, 1, true);
     }
 
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFreq, boolean sendVelUpdates) {

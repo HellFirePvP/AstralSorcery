@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.data.world.data;
 
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;

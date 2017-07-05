@@ -30,12 +30,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -61,6 +56,11 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         ItemStack pedestal = new ItemStack(this);
         list.add(pedestal);
+    }
+
+    @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
     }
 
     @Override

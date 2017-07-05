@@ -93,6 +93,7 @@ public class EntityItemStardust extends EntityItem implements EntityStarlightRea
             EntityItem ei = (EntityItem) foundItems.get(0);
             ItemStack stack = ei.getItem();
             getItem().setCount(getItem().getCount() - 1);
+            stack.setCount(stack.getCount() - 1);
             if(stack.getCount() <= 0) {
                 ei.setDead();
             } else {

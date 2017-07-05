@@ -50,6 +50,11 @@ public class BlockAttunementAltar extends BlockContainer {
     }
 
     @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         RenderingUtils.playBlockBreakParticles(pos, BlocksAS.blockMarble.getDefaultState().withProperty(BlockMarble.MARBLE_TYPE, BlockMarble.MarbleBlockType.RAW));
         return true;

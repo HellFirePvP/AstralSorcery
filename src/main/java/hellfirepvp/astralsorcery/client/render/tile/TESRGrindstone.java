@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -72,7 +71,7 @@ public class TESRGrindstone extends TileEntitySpecialRenderer<TileGrindstone> {
                 GL11.glPopMatrix();
                 GL11.glPopAttrib();
             }
-            if(SwordSharpenHelper.isSharpenableItem(grind)) {
+            if(SwordSharpenHelper.canBeSharpened(grind)) {
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                 GL11.glPushMatrix();
                 GL11.glTranslated(x, y, z);

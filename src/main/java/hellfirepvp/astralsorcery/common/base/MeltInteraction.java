@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.base;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

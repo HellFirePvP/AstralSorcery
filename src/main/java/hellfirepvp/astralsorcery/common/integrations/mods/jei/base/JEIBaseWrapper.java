@@ -8,11 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.base;
 
-import com.google.common.collect.Lists;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod

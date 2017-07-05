@@ -9,13 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageAttunementRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageConstellationRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageDiscoveryRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageLightProximityRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageRecipe;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageStructure;
-import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageText;
+import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
@@ -24,24 +18,20 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
-import javax.annotation.Nullable;
 
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
@@ -200,11 +190,6 @@ public class RegistryResearch {
     private static void initAttunement() {
         ResearchProgression.Registry regAttunement = ResearchProgression.ATTUNEMENT.getRegistry();
 
-        ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 3, 6);
-        resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
-        resIlluminator.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rIlluminator));
-        resIlluminator.addPage(getTextPage("ILLUMINATOR.3"));
-
         ResearchNode resLinkTool = new ResearchNode(new ItemStack(ItemsAS.linkingTool), "LINKTOOL", 1, 3);
         resLinkTool.addPage(getTextPage("LINKTOOL.1"));
         resLinkTool.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rLinkTool));
@@ -309,7 +294,6 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.ritualPedestal, 1, OreDictionary.WILDCARD_VALUE),       resRitPedestal,          1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.attunementAltar, 1, OreDictionary.WILDCARD_VALUE),      resPlayerAtt,            2, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(BlocksAS.attunementRelay, 1, OreDictionary.WILDCARD_VALUE),      resPlayerAtt,            1, ResearchProgression.ATTUNEMENT);
-        registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),     resIlluminator,          1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.tunedRockCrystal, 1, OreDictionary.WILDCARD_VALUE),      resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.tunedCelestialCrystal, 1, OreDictionary.WILDCARD_VALUE), resCrystalAtt,           1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.architectWand, 1, OreDictionary.WILDCARD_VALUE),         resToolWands,            1, ResearchProgression.ATTUNEMENT);
@@ -319,7 +303,6 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),          resShiftStar,            0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
 
-        regAttunement.register(resIlluminator);
         regAttunement.register(resLens);
         regAttunement.register(resLinkTool);
         regAttunement.register(resStarOre);
@@ -400,6 +383,16 @@ public class RegistryResearch {
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolAxe));
         resTools.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rCToolShovel));
 
+        ResearchNode resIlluminator = new ResearchNode(new ItemStack(BlocksAS.blockIlluminator), "ILLUMINATOR", 4, 1);
+        resIlluminator.addPage(getTextPage("ILLUMINATOR.1"));
+        resIlluminator.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rIlluminator));
+        resIlluminator.addPage(getTextPage("ILLUMINATOR.3"));
+
+        ResearchNode resNocturnalPowder = new ResearchNode(ItemUsableDust.DustType.NOCTURNAL.asStack(), "NOC_POWDER", 4, 4);
+        resNocturnalPowder.addPage(getTextPage("NOC_POWDER.1"));
+        resNocturnalPowder.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rNocturnalPowder));
+        resNocturnalPowder.addPage(getTextPage("NOC_POWDER.3"));
+
         ResearchNode resRockCrystals = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "ROCK_CRYSTALS", 0, 4);
         resRockCrystals.addPage(getTextPage("ROCK_CRYSTALS.1"));
 
@@ -411,7 +404,7 @@ public class RegistryResearch {
         resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
         resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
 
-        ResearchNode resIlluminationPowder = new ResearchNode(new ItemStack(ItemsAS.illuminationPowder), "ILLUM_POWDER", 3, 3);
+        ResearchNode resIlluminationPowder = new ResearchNode(ItemUsableDust.DustType.ILLUMINATION.asStack(), "ILLUM_POWDER", 3, 3);
         resIlluminationPowder.addPage(getTextPage("ILLUM_POWDER.1"));
         resIlluminationPowder.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rIlluminationPowder));
 
@@ -426,8 +419,11 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(ItemsAS.handTelescope,   1, OreDictionary.WILDCARD_VALUE),           resTelescope,               2, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(ItemsAS.skyResonator,    1, OreDictionary.WILDCARD_VALUE),           resResonator,               1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(BlocksAS.attunementRelay,1, OreDictionary.WILDCARD_VALUE),           resRelay,                   1, ResearchProgression.BASIC_CRAFT);
-        registerItemLookup(new ItemStack(ItemsAS.illuminationPowder, 1, OreDictionary.WILDCARD_VALUE),        resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(ItemUsableDust.DustType.ILLUMINATION.asStack(),                                            resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(ItemUsableDust.DustType.NOCTURNAL.asStack(),                                               resNocturnalPowder,         1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),         resIlluminator,             1, ResearchProgression.BASIC_CRAFT);
 
+        regCrafting.register(resIlluminator);
         regCrafting.register(resTelescope);
         regCrafting.register(resGrindstone);
         regCrafting.register(resTools);
@@ -438,6 +434,7 @@ public class RegistryResearch {
         regCrafting.register(resRelay);
         regCrafting.register(resCrystalGrowth);
         regCrafting.register(resIlluminationPowder);
+        regCrafting.register(resNocturnalPowder);
 
         resGrindstone.addSourceConnectionFrom(resRockCrystals);
         resTools.addSourceConnectionFrom(resRockCrystals);
@@ -445,6 +442,8 @@ public class RegistryResearch {
         resResonator.addSourceConnectionFrom(resWell);
         resRelay.addSourceConnectionFrom(resResonator);
         resCrystalGrowth.addSourceConnectionFrom(resWell, resRockCrystals);
+        resIlluminator.addSourceConnectionFrom(resIlluminationPowder);
+        resNocturnalPowder.addSourceConnectionFrom(resIlluminationPowder);
     }
 
     private static void initDiscovery() {

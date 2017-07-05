@@ -10,14 +10,13 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
+import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
@@ -45,12 +44,12 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         .forceEmptySpaces()
         .unregisteredAccessibleShapedRecipe());
         setAttItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), AttunementAltarSlot.values());
-        setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+        setCstItem(OreDictAlias.ITEM_STARMETAL_DUST,
                 ConstellationAtlarSlot.UP_UP_LEFT,
                 ConstellationAtlarSlot.UP_UP_RIGHT,
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
-        setCstItem(ItemsAS.illuminationPowder,
+        setCstItem(ItemUsableDust.DustType.ILLUMINATION.asStack(),
                 ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT,

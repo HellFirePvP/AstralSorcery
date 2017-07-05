@@ -10,16 +10,8 @@ package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
-import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
-import hellfirepvp.astralsorcery.common.block.network.BlockAttunementAltar;
-import hellfirepvp.astralsorcery.common.block.network.BlockCelestialCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockLens;
-import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
-import hellfirepvp.astralsorcery.common.block.network.BlockRitualPedestal;
-import hellfirepvp.astralsorcery.common.block.network.BlockWell;
+import hellfirepvp.astralsorcery.common.block.network.*;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is part of the Astral Sorcery Mod

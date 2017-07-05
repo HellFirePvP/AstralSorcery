@@ -12,7 +12,6 @@ import com.google.common.base.Predicates;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
@@ -28,9 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,7 +40,7 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
 
     private static final AxisAlignedBB boxCraft = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
-    public static final int TOTAL_MERGE_TIME = 100 * 20;
+    public static final int TOTAL_MERGE_TIME = 50 * 20;
     private int inertMergeTick = 0;
 
 
@@ -133,9 +130,9 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
             CrystalProperties prop = getProperties();
             if(prop != null) {
                 int max = getMaxSize();
-                int grow = rand.nextInt(90) + 40;
+                int grow = rand.nextInt(100) + 50;
                 max = Math.min(prop.getSize() + grow, max);
-                int cut = Math.max(0, prop.getCollectiveCapability() - (rand.nextInt(40) + 20));
+                int cut = Math.max(0, prop.getCollectiveCapability() - (rand.nextInt(20) + 10));
                 applyProperties(new ToolCrystalProperties(max, prop.getPurity(), cut));
             }
         }

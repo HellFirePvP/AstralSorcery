@@ -13,7 +13,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.potion.Potion;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod

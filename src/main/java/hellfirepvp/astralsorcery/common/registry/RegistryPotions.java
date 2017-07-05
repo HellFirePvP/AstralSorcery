@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.potion.PotionBleed;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import net.minecraft.potion.Potion;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * This class is part of the Astral Sorcery Mod

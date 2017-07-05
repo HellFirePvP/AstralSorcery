@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
-import hellfirepvp.astralsorcery.client.util.obj.Vertex;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;

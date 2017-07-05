@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.common.util.SoundUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import static hellfirepvp.astralsorcery.common.lib.Sounds.*;
 

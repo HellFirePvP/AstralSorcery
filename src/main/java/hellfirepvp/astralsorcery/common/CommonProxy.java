@@ -13,6 +13,9 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
+import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
+import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -30,8 +33,10 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
 import hellfirepvp.astralsorcery.common.registry.*;
@@ -128,9 +133,27 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerOreDictEntries() {
-        //*sigh*
-        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, new ItemStack(BlocksAS.blockMarble, 1, 0));
-        OreDictionary.registerOre("blockMarble", new ItemStack(BlocksAS.blockMarble, 1, 0));
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.RAW.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.BRICKS.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.PILLAR.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.ARCH.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.CHISELED.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.ENGRAVED.asStack());
+        OreDictionary.registerOre(OreDictAlias.BLOCK_MARBLE, BlockMarble.MarbleBlockType.RUNED.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.RAW.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.BRICKS.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.PILLAR.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.ARCH.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.CHISELED.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.ENGRAVED.asStack());
+        OreDictionary.registerOre("blockMarble", BlockMarble.MarbleBlockType.RUNED.asStack());
+
+        OreDictionary.registerOre("oreAstralStarmetal", BlockCustomOre.OreType.STARMETAL.asStack());
+        OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_INGOT, ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
+        OreDictionary.registerOre(OreDictAlias.ITEM_STARMETAL_DUST, ItemCraftingComponent.MetaType.STARDUST.asStack());
+
+        OreDictionary.registerOre("oreAquamarine", BlockCustomSandOre.OreType.AQUAMARINE.asStack());
+        OreDictionary.registerOre(OreDictAlias.ITEM_AQUAMARINE, ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
     }
 
     public void init() {
@@ -161,6 +184,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(BlockDropCaptureAssist.instance);
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
+        MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {

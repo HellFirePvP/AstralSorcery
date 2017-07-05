@@ -22,8 +22,8 @@ import net.minecraftforge.common.MinecraftForge;
 import java.awt.*;
 import java.util.Arrays;
 
-import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
+import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

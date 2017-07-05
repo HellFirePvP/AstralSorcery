@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystalTool;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -23,9 +22,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -132,12 +129,10 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(40) == 0) prop.damageCutting();
+                if(rand.nextInt(3) == 0) prop.damageCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
-                for (int j = 0; j < 3; j++) {
-                    if(purity <= rand.nextFloat()) {
-                        if(rand.nextInt(40) == 0) prop.damageCutting();
-                    }
+                if(purity <= rand.nextFloat()) {
+                    if(rand.nextInt(3) == 0) prop.damageCutting();
                 }
             }
         }

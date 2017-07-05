@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.constellation.distribution;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
-import hellfirepvp.astralsorcery.common.data.DataWorldSkyHandlers;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktRequestSeed;
 import net.minecraft.client.Minecraft;
