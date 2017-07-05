@@ -67,7 +67,7 @@ public class ItemKnowledgeShare extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if(isCreative(stack)) {
-            tooltip.add(TextFormatting.BLUE + I18n.format("misc.knowledge.inscribed.creative"));
+            tooltip.add(TextFormatting.LIGHT_PURPLE + I18n.format("misc.knowledge.inscribed.creative"));
             return;
         }
         if(getKnowledge(stack) == null) {
