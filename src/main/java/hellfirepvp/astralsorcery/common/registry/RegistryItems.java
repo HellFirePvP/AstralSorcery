@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
@@ -95,6 +96,8 @@ public class RegistryItems {
         registerItems();
 
         registerBlockItems();
+
+        registerDispenseBehavior();
     }
 
     //"Normal" items
@@ -145,6 +148,10 @@ public class RegistryItems {
 
         registerItem(new ItemCollectorCrystal(BlocksAS.collectorCrystal));
         registerItem(new ItemCollectorCrystal(BlocksAS.celestialCollectorCrystal));
+    }
+
+    private static void registerDispenseBehavior() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(useableDust, useableDust);
     }
 
     private static <T extends Block> void registerCustomNameItemBlock(T block) {

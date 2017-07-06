@@ -107,7 +107,8 @@ public class ModIntegrationJEI implements IModPlugin {
                 RecipesAS.rMarbleEngraved,
                 RecipesAS.rMarblePillar  ,
                 RecipesAS.rMarbleRuned   ,
-                RecipesAS.rMarbleStairs  ), VanillaRecipeCategoryUid.CRAFTING);
+                RecipesAS.rMarbleStairs  ,
+                RecipesAS.rMarbleSlab     ), VanillaRecipeCategoryUid.CRAFTING);
 
         jeiRegistrationPhase = false;
     }

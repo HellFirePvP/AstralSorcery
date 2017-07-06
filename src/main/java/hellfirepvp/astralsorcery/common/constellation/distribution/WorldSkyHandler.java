@@ -279,6 +279,10 @@ public class WorldSkyHandler {
         return MoonPhase.values()[lastRecordedDay % 8];
     }
 
+    public List<IConstellation> getConstellationsForMoonPhase(MoonPhase phase) {
+        return initialValueMappings.get(phase.ordinal());
+    }
+
     /**
      * Only means at this day. Not currently active.
      */

@@ -19,10 +19,15 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.*;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 
@@ -31,6 +36,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,6 +48,8 @@ import java.util.List;
 public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     //private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
+    private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    private static final BindableResource texBg = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private IConstellation constellation;
@@ -50,6 +58,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private Rectangle rectBack;
     private List<MoonPhase> phases = new LinkedList<>();
+    private List<MoonPhase> activePhases = new LinkedList<>();
     private List<String> locText = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
@@ -66,6 +75,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         this.detailed = has;
         testPhases();
+        testActivePhases();
         buildLines();
     }
 
@@ -95,57 +105,91 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
     }
 
+    private void testActivePhases() {
+        if(Minecraft.getMinecraft().world == null) return;
+        WorldSkyHandler handler = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
+        if(handler == null) return;
+        for (MoonPhase phase : this.phases) {
+            List<IConstellation> active = handler.getConstellationsForMoonPhase(phase);
+            if(active != null && !active.isEmpty()) {
+                if(active.contains(constellation)) {
+                    activePhases.add(phase);
+                }
+            }
+        }
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        drawDefault(textureResBlank);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        drawCstBackground();
+        drawDefault(textureResShellCst);
 
         zLevel += 150;
-        drawBackArrow(partialTicks);
-        drawConstellation();
+        drawArrows(partialTicks);
+        drawConstellation(partialTicks);
         drawPhaseInformation();
         drawExtendedInformation();
         zLevel -= 150;
 
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.popMatrix();
+    }
+
+    private void drawCstBackground() {
+        texBlack.bind();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder bb = tes.getBuffer();
+        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bb.pos(guiLeft + 15,  guiTop + 240, zLevel).tex(0, 1).endVertex();
+        bb.pos(guiLeft + 200, guiTop + 240, zLevel).tex(1, 1).endVertex();
+        bb.pos(guiLeft + 200, guiTop + 10,  zLevel).tex(1, 0).endVertex();
+        bb.pos(guiLeft + 15,  guiTop + 10,  zLevel).tex(0, 0).endVertex();
+        tes.draw();
+        GlStateManager.color(0.8F, 0.8F, 1F, 0.7F);
+        texBg.bind();
+        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bb.pos(guiLeft + 35,       guiTop + guiHeight - 10, zLevel).tex(0.3, 0.9).endVertex();
+        bb.pos(guiLeft + 35 + 170, guiTop + guiHeight - 10, zLevel).tex(0.7, 0.9).endVertex();
+        bb.pos(guiLeft + 35 + 170, guiTop + 10,             zLevel).tex(0.7, 0.1).endVertex();
+        bb.pos(guiLeft + 35,       guiTop + 10,             zLevel).tex(0.3, 0.1).endVertex();
+        tes.draw();
+        GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
     private void drawExtendedInformation() {
         float br = 0.8666F;
-        GL11.glColor4f(br, br, br, 0.8F);
+        GlStateManager.color(br, br, br, 0.8F);
         String info = I18n.format(constellation.getUnlocalizedInfo()).toUpperCase();
         info = detailed ? info : "???";
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 
         double width = fr.getStringWidth(info);
-        double chX = 305 - (width * 1.8 / 2);
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glTranslated(guiLeft + chX, guiTop + 26, 0);
-        GL11.glScaled(1.8, 1.8, 1.8);
+        double chX = 305 - (width / 2);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.translate(guiLeft + chX, guiTop + 44, 0);
         fr.drawString(info, 0, 0, 0xCCDDDDDD, true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GL11.glColor4f(br, br, br, 0.8F);
+        GlStateManager.color(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
 
         if(detailed && !locText.isEmpty()) {
-            int offsetX = 220, offsetY = 70;
+            int offsetX = 220, offsetY = 77;
             for (String s : locText) {
-                GL11.glPushMatrix();
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glTranslated(guiLeft + offsetX, guiTop + offsetY, 0);
+                GlStateManager.pushMatrix();
+                GlStateManager.disableDepth();
+                GlStateManager.translate(guiLeft + offsetX, guiTop + offsetY, 0);
                 fr.drawString(s, 0, 0, 0xCCDDDDDD, true);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glPopMatrix();
+                GlStateManager.enableDepth();
+                GlStateManager.popMatrix();
                 GlStateManager.color(1F, 1F, 1F, 1F);
-                GL11.glColor4f(br, br, br, 0.8F);
+                GlStateManager.color(br, br, br, 0.8F);
                 TextureHelper.refreshTextureBindState();
                 offsetY += 13;
             }
@@ -174,26 +218,50 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private void drawPhaseInformation() {
         if(constellation instanceof IConstellationSpecialShowup) {
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GlStateManager.disableDepth();
             double scale = 1.8;
             TextureHelper.refreshTextureBindState();
             FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
             double length = fr.getStringWidth("? ? ?") * scale;
             double offsetLeft = guiLeft + 296 - length / 2;
             int offsetTop = guiTop + 199;
-            GL11.glPushMatrix();
-            GL11.glTranslated(offsetLeft + 10, offsetTop, 0);
-            GL11.glScaled(scale, scale, scale);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(offsetLeft + 10, offsetTop, 0);
+            GlStateManager.scale(scale, scale, scale);
             fr.drawStringWithShadow("? ? ?", 0, 0, 0xCCDDDDDD);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
             GlStateManager.color(1, 1, 1, 1);
-            GL11.glColor4f(1, 1, 1, 1);
             TextureHelper.refreshTextureBindState();
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GlStateManager.enableDepth();
+        } else if(ResearchManager.clientProgress.hasConstellationDiscovered(constellation.getUnlocalizedName())) {
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
+            GlStateManager.color(0.7F, 0.7F, 0.7F, 0.6F);
+            int size = 19;
+            int offsetX = 95 + (width / 2) - (phases.size() * (size + 2)) / 2;
+            int offsetY = 199 + guiTop;
+            for (int i = 0; i < phases.size(); i++) {
+                MoonPhase ph = phases.get(i);
+                if(!this.activePhases.contains(ph)) {
+                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
+                    drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+                }
+            }
+            Blending.PREALPHA.applyStateManager();
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            for (int i = 0; i < phases.size(); i++) {
+                MoonPhase ph = phases.get(i);
+                if(this.activePhases.contains(ph)) {
+                    MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
+                    drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
+                }
+            }
+            Blending.DEFAULT.applyStateManager();
+            TextureHelper.refreshTextureBindState();
         } else {
-            GL11.glEnable(GL11.GL_BLEND);
-            Blending.DEFAULT.apply();
-            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
+            GlStateManager.color(0.8F, 0.8F, 0.8F, 1F);
             int size = 19;
             int offsetX = 95 + (width / 2) - (phases.size() * (size + 2)) / 2;
             int offsetY = 199 + guiTop;
@@ -202,26 +270,27 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
                 MoonPhaseRenderHelper.getMoonPhaseTexture(ph).bind();
                 drawRect(offsetX + (i * (size + 2)), offsetY, size, size);
             }
+            TextureHelper.refreshTextureBindState();
         }
     }
 
-    private void drawConstellation() {
+    private void drawConstellation(float partial) {
         float br = 0.866F;
-        GL11.glColor4f(br, br, br, 0.8F);
+        GlStateManager.color(br, br, br, 0.8F);
         String name = I18n.format(constellation.getUnlocalizedName()).toUpperCase();
         TextureHelper.refreshTextureBindState();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         double width = fr.getStringWidth(name);
-        double offsetX = 110 - (width * 1.8 / 2);
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glTranslated(guiLeft + offsetX, guiTop + 26, 0);
-        GL11.glScaled(1.8, 1.8, 1.8);
-        fr.drawString(name, 0, 0, 0xCCDDDDDD, true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();
+        double offsetX = 305 - (width * 1.8 / 2);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.translate(guiLeft + offsetX, guiTop + 26, 0);
+        GlStateManager.scale(1.8, 1.8, 1.8);
+        fr.drawString(name, 0, 0, 0xEEDDDDDD, true);
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GL11.glColor4f(br, br, br, 0.8F);
+        GlStateManager.color(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
         String dstInfo = "astralsorcery.journal.constellation.dst.";
         if(constellation instanceof IMajorConstellation) {
@@ -236,49 +305,61 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         dstInfo = I18n.format(dstInfo);
         width = fr.getStringWidth(dstInfo);
-        offsetX = 110 - (width * 1.25 / 2);
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glTranslated(guiLeft + offsetX, guiTop + 46, 0);
-        GL11.glScaled(1.25, 1.25, 1.25);
-        fr.drawString(dstInfo, 0, 0, 0xCCDDDDDD, true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        GL11.glColor4f(br, br, br, 0.8F);
+        offsetX = 305 - (width / 2);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableDepth();
+        GlStateManager.translate(guiLeft + offsetX, guiTop + 219, 0);
+        fr.drawString(dstInfo, 0, 0, 0x99DDDDDD, true);
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
+        GlStateManager.color(1F, 1F, 1F, 0.8F);
         TextureHelper.refreshTextureBindState();
 
-        GL11.glEnable(GL11.GL_BLEND);
+        Random rand = new Random(0x4196A15C91A5E199L);
+
+        GlStateManager.enableBlend();
         Blending.DEFAULT.apply();
-        RenderConstellation.renderConstellationIntoGUI(new Color(0x00DDDDDD), constellation, guiLeft + 25, guiTop + 60, zLevel, 170, 170, 2F, new RenderConstellation.BrightnessFunction() {
+
+        boolean known = ResearchManager.clientProgress.hasConstellationDiscovered(constellation.getUnlocalizedName());
+        RenderConstellation.renderConstellationIntoGUI(known ? constellation.getConstellationColor() : constellation.getTierRenderColor(), constellation,
+                guiLeft + 40, guiTop + 60, zLevel,
+                150, 150, 2F,
+                new RenderConstellation.BrightnessFunction() {
             @Override
             public float getBrightness() {
-                return 0.5F;
+                return 0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10));
             }
         }, true, false);
+        GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
-    private void drawBackArrow(float partialTicks) {
+    private void drawArrows(float partialTicks) {
         Point mouse = getCurrentMousePoint();
         int width = 30;
         int height = 15;
         rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
-        GL11.glPushMatrix();
-        GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
         float uFrom = 0F, vFrom = 0.5F;
         if(rectBack.contains(mouse)) {
             uFrom = 0.5F;
-            GL11.glScaled(1.1, 1.1, 1.1);
+            GlStateManager.scale(1.1, 1.1, 1.1);
         } else {
             double t = ClientScheduler.getClientTick() + partialTicks;
             float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-            GL11.glScaled(sin, sin, sin);
+            GlStateManager.scale(sin, sin, sin);
         }
-        GL11.glColor4f(1F, 1F, 1F, 0.8F);
-        GL11.glTranslated(-(width / 2), -(height / 2), 0);
+        GlStateManager.color(1F, 1F, 1F, 0.8F);
+        GlStateManager.translate(-(width / 2), -(height / 2), 0);
         texArrow.bind();
         drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    protected boolean handleRightClickClose(int mouseX, int mouseY) {
+        Minecraft.getMinecraft().displayGuiScreen(origin);
+        return true;
     }
 
     @Override

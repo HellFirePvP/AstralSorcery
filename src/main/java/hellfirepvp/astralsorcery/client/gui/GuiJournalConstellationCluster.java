@@ -21,7 +21,10 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -32,6 +35,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,7 +51,10 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     //private static final BindableResource texArrowLeft = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left");
     //private static final BindableResource texArrowRight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right");
 
+    private static final int CONSTELLATIONS_PER_PAGE = 4;
+    private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
     private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
+    private static final BindableResource texBg = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
 
     private static final int width = 80, height = 110;
     private static final Map<Integer, Point> offsetMap = new HashMap<>(); //we put 6 on "1" page/screen
@@ -87,100 +94,101 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        drawDefault(textureResBlank);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        drawCstBackground();
+        drawDefault(textureResShell);
 
         zLevel += 250;
         drawNavArrows(partialTicks);
-        //fRend.zLevel = zLevel;
-        //fRend.font_size_multiplicator = 0.07F;
-        drawTitle();
         rectCRenderMap.clear();
-        drawConstellations();
+        drawConstellations(partialTicks);
         zLevel -= 250;
 
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.popMatrix();
     }
 
-    private void drawConstellations() {
+    private void drawCstBackground() {
+        texBlack.bind();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder bb = tes.getBuffer();
+        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bb.pos(guiLeft + 15,            guiTop + guiHeight - 10, zLevel).tex(0, 1).endVertex();
+        bb.pos(guiLeft + guiWidth - 15, guiTop + guiHeight - 10, zLevel).tex(1, 1).endVertex();
+        bb.pos(guiLeft + guiWidth - 15, guiTop + 10,             zLevel).tex(1, 0).endVertex();
+        bb.pos(guiLeft + 15,            guiTop + 10,             zLevel).tex(0, 0).endVertex();
+        tes.draw();
+        GlStateManager.color(0.8F, 0.8F, 1F, 0.7F);
+        texBg.bind();
+        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bb.pos(guiLeft + 15,            guiTop + guiHeight - 10, zLevel).tex(0.1, 0.9).endVertex();
+        bb.pos(guiLeft + guiWidth - 15, guiTop + guiHeight - 10, zLevel).tex(0.9, 0.9).endVertex();
+        bb.pos(guiLeft + guiWidth - 15, guiTop + 10,             zLevel).tex(0.9, 0.1).endVertex();
+        bb.pos(guiLeft + 15,            guiTop + 10,             zLevel).tex(0.1, 0.1).endVertex();
+        tes.draw();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+    }
+
+    private void drawConstellations(float partial) {
         Point mouse = getCurrentMousePoint();
-        List<IConstellation> cs = constellations.subList(pageId * 6, Math.min((pageId + 1) * 6, constellations.size()));
+        List<IConstellation> cs = constellations.subList(pageId * CONSTELLATIONS_PER_PAGE, Math.min((pageId + 1) * CONSTELLATIONS_PER_PAGE, constellations.size()));
         for (int i = 0; i < cs.size(); i++) {
             IConstellation c = cs.get(i);
             Point p = offsetMap.get(i);
-            rectCRenderMap.put(drawConstellationRect(c, guiLeft + p.x, guiTop + p.y, zLevel, mouse, null), c);
+            rectCRenderMap.put(drawConstellationRect(c, guiLeft + p.x, guiTop + p.y, zLevel, partial, mouse, null), c);
         }
-    }
-
-    private void drawTitle() {
-        //no title atm
-        if(unlocTitle != null && false) {
-            float r = 0xDD / 255F;
-            float g = 0xDD / 255F;
-            float b = 0xDD / 255F;
-
-            TextureHelper.refreshTextureBindState();
-            GL11.glColor4f(r, g, b, 1F);
-            String translated = I18n.format(unlocTitle).toUpperCase();
-            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-            fr.drawString(translated, guiLeft + 225, guiTop + 14, Color.DARK_GRAY.getRGB(), true);
-            //fRend.drawString(translated, guiLeft + 225, guiTop + 14, zLevel, Color.DARK_GRAY, 0.7F, 0);
-            GlStateManager.color(1F, 1F, 1F, 1F);
-            GL11.glColor4f(1F, 1F, 1F, 1F);
-        }
+        TextureHelper.refreshTextureBindState();
     }
 
     private void drawNavArrows(float partialTicks) {
         Point mouse = getCurrentMousePoint();
-        int cIndex = pageId * 6;
+        int cIndex = pageId * CONSTELLATIONS_PER_PAGE;
         rectBack = null;
         rectNext = null;
         rectPrev = null;
-        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         if(cIndex > 0) {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 15, guiTop + 127, width, height);
-            GL11.glPushMatrix();
-            GL11.glTranslated(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0.5F;
             if(rectPrev.contains(mouse)) {
                 uFrom = 0.5F;
-                GL11.glScaled(1.1, 1.1, 1.1);
+                GlStateManager.scale(1.1, 1.1, 1.1);
             } else {
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GL11.glScaled(sin, sin, sin);
+                GlStateManager.scale(sin, sin, sin);
             }
-            GL11.glTranslated(-(width / 2), -(height / 2), 0);
+            GlStateManager.translate(-(width / 2), -(height / 2), 0);
             texArrow.bind();
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
             TextureHelper.refreshTextureBindState();
         }
-        int nextIndex = cIndex + 6;
+        int nextIndex = cIndex + CONSTELLATIONS_PER_PAGE;
         if(constellations.size() >= (nextIndex + 1)) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 125, width, height);
-            GL11.glPushMatrix();
-            GL11.glTranslated(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0F;
             if(rectNext.contains(mouse)) {
                 uFrom = 0.5F;
-                GL11.glScaled(1.1, 1.1, 1.1);
+                GlStateManager.scale(1.1, 1.1, 1.1);
             } else {
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GL11.glScaled(sin, sin, sin);
+                GlStateManager.scale(sin, sin, sin);
             }
-            GL11.glTranslated(-(width / 2), -(height / 2), 0);
+            GlStateManager.translate(-(width / 2), -(height / 2), 0);
             texArrow.bind();
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
             TextureHelper.refreshTextureBindState();
         }
 
@@ -188,64 +196,64 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             int width = 30;
             int height = 15;
             rectBack = new Rectangle(guiLeft + 197, guiTop + 230, width, height);
-            GL11.glPushMatrix();
-            GL11.glTranslated(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rectBack.getX() + (width / 2), rectBack.getY() + (height / 2), 0);
             float uFrom = 0F, vFrom = 0.5F;
             if(rectBack.contains(mouse)) {
                 uFrom = 0.5F;
-                GL11.glScaled(1.1, 1.1, 1.1);
+                GlStateManager.scale(1.1, 1.1, 1.1);
             } else {
                 double t = ClientScheduler.getClientTick() + partialTicks;
                 float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
-                GL11.glScaled(sin, sin, sin);
+                GlStateManager.scale(sin, sin, sin);
             }
-            GL11.glTranslated(-(width / 2), -(height / 2), 0);
+            GlStateManager.translate(-(width / 2), -(height / 2), 0);
             texArrow.bind();
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
             TextureHelper.refreshTextureBindState();
         }
     }
 
-    protected static Rectangle drawConstellationRect(IConstellation display, double offsetX, double offsetY, float zLevel, Point mouse, @Nullable String specTitle) {
+    protected static Rectangle drawConstellationRect(IConstellation display, double offsetX, double offsetY, float zLevel, float partial, Point mouse, @Nullable String specTitle) {
         Rectangle rect = new Rectangle(MathHelper.floor(offsetX), MathHelper.floor(offsetY), width, height);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glTranslated(offsetX + (width / 2), offsetY + (width / 2), zLevel);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.translate(offsetX + (width / 2), offsetY + (width / 2), zLevel);
 
         if(rect.contains(mouse)) {
-            GL11.glScaled(1.1, 1.1, 1.1);
+            GlStateManager.scale(1.1, 1.1, 1.1);
         }
 
-        GL11.glTranslated(-(width / 2), -(width / 2), zLevel);
+        Random rand = new Random(0x4196A15C91A5E199L);
 
-        Color c = new Color(0x00DDDDDD);
+        GlStateManager.translate(-(width / 2), -(width / 2), zLevel);
+
         float r = 0xDD / 255F;
         float g = 0xDD / 255F;
         float b = 0xDD / 255F;
 
-        GL11.glColor4f(r, g, b, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
-        RenderConstellation.renderConstellationIntoGUI(c, display,
+        RenderConstellation.renderConstellationIntoGUI(display,
                 0, 0, 0,
-                80, 80, 2.5F, new RenderConstellation.BrightnessFunction() {
+                95, 95, 2F, new RenderConstellation.BrightnessFunction() {
                     @Override
                     public float getBrightness() {
-                        return 0.15F;
+                        return 0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partial, 12 + rand.nextInt(10));
                     }
                 }, true, false);
 
-        GL11.glColor4f(r, g, b, 1F);
+        GlStateManager.color(r, g, b, 1F);
 
         TextureHelper.refreshTextureBindState();
         String trName = specTitle == null ? I18n.format(display.getUnlocalizedName()).toUpperCase() : I18n.format(specTitle).toUpperCase();
         FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
         float fullLength = (width / 2) - (((float) fr.getStringWidth(trName)) / 2F);
-        fr.drawString(trName, fullLength, 75F, 0xBBDDDDDD, true);
+        fr.drawString(trName, fullLength, 90F, 0xBBDDDDDD, true);
 
-        GL11.glColor4f(1F, 1F, 1F, 1F);
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
         return rect;
     }
 
@@ -288,13 +296,10 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
     }
 
     static {
-        offsetMap.put(0, new Point( 30,  20));
-        offsetMap.put(1, new Point( 30, 140));
-        offsetMap.put(2, new Point(120,  80));
-
-        offsetMap.put(3, new Point(310,  20));
-        offsetMap.put(4, new Point(220, 100));
-        offsetMap.put(5, new Point(310, 140));
+        offsetMap.put(0, new Point(45, 55));
+        offsetMap.put(1, new Point(125, 105));
+        offsetMap.put(2, new Point(200, 45));
+        offsetMap.put(3, new Point(280, 110));
     }
 
 }

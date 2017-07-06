@@ -15,10 +15,15 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -33,7 +38,7 @@ import net.minecraft.world.World;
  * Created by HellFirePvP
  * Date: 03.07.2017 / 11:27
  */
-public class ItemUsableDust extends Item implements IItemVariants {
+public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDispenseItem {
 
     public ItemUsableDust() {
         setMaxStackSize(64);
@@ -107,10 +112,48 @@ public class ItemUsableDust extends Item implements IItemVariants {
         return sub;
     }
 
+    @Override
+    public ItemStack dispense(IBlockSource source, ItemStack stack) {
+        DustType type = DustType.fromMeta(stack.getItemDamage());
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemUsableDust) || type == null) {
+            return stack;
+        }
+        if(type.dispense(source)) {
+            stack.shrink(1);
+            if(stack.getCount() <= 0) {
+                stack = ItemStack.EMPTY;
+            }
+            return stack;
+        }
+        return stack;
+    }
+
     public static enum DustType {
 
         ILLUMINATION,
         NOCTURNAL;
+
+        public boolean dispense(IBlockSource source) {
+            IBlockState sourceState = source.getBlockState();
+            if(!sourceState.getBlock().equals(Blocks.DISPENSER) || !sourceState.getProperties().containsKey(BlockDispenser.FACING)) {
+                return false;
+            }
+            IPosition pos = BlockDispenser.getDispensePosition(source);
+            EnumFacing rotation = sourceState.getValue(BlockDispenser.FACING);
+            switch (this) {
+                case ILLUMINATION:
+                    EntityIlluminationSpark spark = new EntityIlluminationSpark(source.getWorld(), pos.getX(), pos.getY(), pos.getZ());
+                    spark.setThrowableHeading(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
+                    source.getWorld().spawnEntity(spark);
+                    return true;
+                case NOCTURNAL:
+                    EntityNocturnalSpark nocSpark = new EntityNocturnalSpark(source.getWorld(), pos.getX(), pos.getY(), pos.getZ());
+                    nocSpark.setThrowableHeading(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
+                    source.getWorld().spawnEntity(nocSpark);
+                    return true;
+            }
+            return false;
+        }
 
         public void rightClickAir(World worldIn, EntityPlayer player, ItemStack dustStack) {
             switch (this) {

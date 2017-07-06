@@ -94,7 +94,7 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
-        if (world.provider.getDimension() != Config.dimensionIdSkyRift) {
+        if (/*world.provider.getDimension() != Config.dimensionIdSkyRift*/ true) {
             if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
                 if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
                     world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));

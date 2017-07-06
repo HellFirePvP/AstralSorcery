@@ -72,8 +72,6 @@ public class Config {
     @Sync public static float architectWandUseCost = 0.07F;
     @Sync public static float exchangeWandUseCost = 0.08F;
 
-    @Sync public static int dimensionIdSkyRift = -81;
-
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static List<String> modidOreGenBlacklist = Lists.newArrayList();
@@ -117,7 +115,6 @@ public class Config {
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
-        dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
 

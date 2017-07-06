@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -59,8 +60,19 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
     @Override
     public PktRequestSeed onMessage(PktRequestSeed message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            WorldProvider mgr = DimensionManager.getProvider(message.dimId);
-            return new PktRequestSeed(message.session, message.dimId).seed(mgr.getSeed());
+            long seed;
+            try {
+                WorldProvider mgr = DimensionManager.getProvider(message.dimId);
+                seed = mgr.getSeed();
+            } catch (Exception exc) {
+                World plWorld = ctx.getServerHandler().player.world;
+                if(plWorld.provider.getDimension() == message.dimId) {
+                    seed = ctx.getServerHandler().player.world.getSeed();
+                } else {
+                    return null; //Who sent that packet? World desync between server and client?...
+                }
+            }
+            return new PktRequestSeed(message.session, message.dimId).seed(seed);
         } else {
             ConstellationSkyHandler.getInstance().updateSeedCache(message.dimId, message.session, message.seed);
         }

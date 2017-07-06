@@ -488,6 +488,7 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleRuned));
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleEngraved));
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
+        resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleSlab));
 
         ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
@@ -509,6 +510,7 @@ public class RegistryResearch {
         registerItemLookup(BlockMarble.MarbleBlockType.RUNED.asStack(),                                           resMarbleTypes, 5, ResearchProgression.DISCOVERY);
         registerItemLookup(BlockMarble.MarbleBlockType.ENGRAVED.asStack(),                                        resMarbleTypes, 6, ResearchProgression.DISCOVERY);
         registerItemLookup(new ItemStack(BlocksAS.blockMarbleStairs, 1, OreDictionary.WILDCARD_VALUE),    resMarbleTypes, 7, ResearchProgression.DISCOVERY);
+        registerItemLookup(new ItemStack(BlocksAS.blockMarbleSlab, 1, OreDictionary.WILDCARD_VALUE),      resMarbleTypes, 8, ResearchProgression.DISCOVERY);
         registerItemLookup(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),                                   resOres,        0, ResearchProgression.DISCOVERY);
         registerItemLookup(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),                                    resConPaper,    3, ResearchProgression.DISCOVERY);
         registerItemLookup(new ItemStack(ItemsAS.rockCrystal, 1, OreDictionary.WILDCARD_VALUE),           resOres,        0, ResearchProgression.DISCOVERY);

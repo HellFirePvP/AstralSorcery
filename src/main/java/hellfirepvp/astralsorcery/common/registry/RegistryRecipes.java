@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -235,6 +232,12 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .buildAndRegisterShapedRecipe();
+        rMarbleSlab = newShapedRecipe("marble_slab", new ItemStack(BlocksAS.blockMarbleSlab, 6, BlockMarbleSlab.EnumType.BRICKS.ordinal()))
+                .addPart(BlockMarble.MarbleBlockType.BRICKS.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+        .buildAndRegisterShapedRecipe();
 
         rSmeltStarmetalOre = SmeltingRecipe.Builder.newSmelting("smelting_starmetal_ore", ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
