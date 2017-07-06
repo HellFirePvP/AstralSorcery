@@ -367,16 +367,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             int yLevel = getPos().getY();
             if(yLevel > 40) {
                 float collect = 200;
-                if(getAltarLevel().ordinal() >= AltarLevel.ATTUNEMENT.ordinal()) {
-                    collect = 230;
-                }
-                if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
-                    collect = 260;
-                }
 
                 float dstr;
                 if(yLevel > 120) {
-                    dstr = 1F;
+                    dstr = 1F + ((yLevel - 120) / 210);
                 } else {
                     dstr = (yLevel - 20) / 100F;
                 }
