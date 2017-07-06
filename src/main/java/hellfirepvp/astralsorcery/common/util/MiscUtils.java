@@ -28,6 +28,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -141,32 +142,55 @@ public class MiscUtils {
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
+        FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
+        IBlockState state = world.getBlockState(pos);
+        int exp;
         try {
-            FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
-            IBlockState state = world.getBlockState(pos);
             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fp);
             MinecraftForge.EVENT_BUS.post(event);
-            int exp = event.getExpToDrop();
+            exp = event.getExpToDrop();
             if(event.isCanceled()) return false;
+        } catch (Exception exc) {
+            return false;
+        }
+        IBlockState iblockstate = world.getBlockState(pos);
+        TileEntity tileentity = world.getTileEntity(pos);
+        Block block = iblockstate.getBlock();
+        world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
 
-            IBlockState iblockstate = world.getBlockState(pos);
-            TileEntity tileentity = world.getTileEntity(pos);
-            Block block = iblockstate.getBlock();
-            world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
-            boolean flag = block.canHarvestBlock(world, pos, fp);
-            boolean flag1 = block.removedByPlayer(iblockstate, world, pos, fp, flag);
-            if (flag1) {
-                block.onBlockDestroyedByPlayer(world, pos, iblockstate);
+        boolean harvestable;
+        try {
+            harvestable = block.canHarvestBlock(world, pos, fp);
+        } catch (Exception exc) {
+            return false;
+        }
+        world.captureBlockSnapshots = true;
+        try {
+            if(!block.removedByPlayer(iblockstate, world, pos, fp, harvestable)) {
+                return false;
             }
-            if (flag1 && flag) {
+        } catch (Exception exc) {
+            world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+            world.capturedBlockSnapshots.clear();
+            world.captureBlockSnapshots = false;
+            return false;
+        }
+        block.onBlockDestroyedByPlayer(world, pos, iblockstate);
+        if (harvestable) {
+            try {
                 block.harvestBlock(world, fp, pos, iblockstate, tileentity, ItemStack.EMPTY);
+            } catch (Exception exc) {
+                world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+                world.capturedBlockSnapshots.clear();
+                world.captureBlockSnapshots = false;
+                return false;
             }
-            if (flag1 && exp > 0) {
-                block.dropXpOnBlockBreak(world, pos, exp);
-            }
-            return flag1;
-        } catch (Exception ignored) {} //Silently fail and propagate it as "can't break this block"
-        return false;
+        }
+        if (exp > 0) {
+            block.dropXpOnBlockBreak(world, pos, exp);
+        }
+        world.captureBlockSnapshots = false;
+        return true;
     }
 
     public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {

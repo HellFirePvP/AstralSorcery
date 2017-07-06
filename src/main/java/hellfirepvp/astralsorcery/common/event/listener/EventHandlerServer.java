@@ -59,6 +59,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderEnd;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -95,20 +97,19 @@ public class EventHandlerServer {
     private static final Random rand = new Random();
 
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
-    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<EntityPlayer, Integer>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
+    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
         World w = event.getWorld();
         int id = w.provider.getDimension();
-        if (!Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
+        if (!(w.provider instanceof WorldProviderEnd) && !(w.provider instanceof WorldProviderHell) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
             AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
             w.provider = new WorldProviderBrightnessInj(w, w.provider);
             AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");
         }
     }
-
     @SubscribeEvent
     public void onUnload(WorldEvent.Unload event) {
         World w = event.getWorld();

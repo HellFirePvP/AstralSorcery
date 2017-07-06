@@ -6,23 +6,31 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemConstellationFocus
+ * Class: ItemAlignmentChargeRevealer
  * Created by HellFirePvP
- * Date: 06.03.2017 / 14:50
+ * Date: 27.12.2016 / 13:36
  */
-public interface ItemConstellationFocus {
+public interface ItemAlignmentChargeRevealer {
 
-    @Nullable
-    public IConstellation getFocusConstellation(ItemStack stack);
+    @SideOnly(Side.CLIENT)
+    default public boolean shouldReveal(ChargeType ct, ItemStack stack) {
+        return true;
+    }
+
+    public static enum ChargeType {
+
+        TEMP,
+        PERM
+
+    }
 
 }

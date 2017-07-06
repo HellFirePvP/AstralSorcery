@@ -29,7 +29,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.item.ItemConstellationFocus;
+import hellfirepvp.astralsorcery.common.item.base.ItemConstellationFocus;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -367,16 +367,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             int yLevel = getPos().getY();
             if(yLevel > 40) {
                 float collect = 200;
-                if(getAltarLevel().ordinal() >= AltarLevel.ATTUNEMENT.ordinal()) {
-                    collect = 230;
-                }
-                if(getAltarLevel().ordinal() >= AltarLevel.CONSTELLATION_CRAFT.ordinal()) {
-                    collect = 260;
-                }
 
                 float dstr;
                 if(yLevel > 120) {
-                    dstr = 1F;
+                    dstr = 1F + ((yLevel - 120) / 210);
                 } else {
                     dstr = (yLevel - 20) / 100F;
                 }

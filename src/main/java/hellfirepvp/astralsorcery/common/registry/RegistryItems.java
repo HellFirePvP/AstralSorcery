@@ -10,9 +10,11 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.block.MaterialAirish;
 import hellfirepvp.astralsorcery.common.item.*;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockCustomName;
 import hellfirepvp.astralsorcery.common.item.block.ItemBlockRitualPedestal;
@@ -33,10 +35,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -123,6 +122,7 @@ public class RegistryItems {
         exchangeWand = registerItem(new ItemExchangeWand());
         grapplingWand = registerItem(new ItemGrappleWand());
         useableDust = registerItem(new ItemUsableDust());
+        knowledgeShare = registerItem(new ItemKnowledgeShare());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());
@@ -137,6 +137,7 @@ public class RegistryItems {
     //Items associated to blocks/itemblocks
     private static void registerBlockItems() {
         RegistryBlocks.defaultItemBlocksToRegister.forEach(RegistryItems::registerDefaultItemBlock);
+        registerItem(new ItemSlab(BlocksAS.blockMarbleSlab, BlocksAS.blockMarbleSlab, BlocksAS.blockMarbleDoubleSlab));
         RegistryBlocks.customNameItemBlocksToRegister.forEach(RegistryItems::registerCustomNameItemBlock);
 
         registerItem(new ItemBlockRitualPedestal());
@@ -218,7 +219,7 @@ public class RegistryItems {
                 }
                 AstralSorcery.proxy.registerItemRender(item, m, vName, true);
             }
-        } else {
+        } else if(!(item instanceof ItemBlockCustomName)) {
             AstralSorcery.proxy.registerFromSubItems(item, name);
         }
     }

@@ -33,7 +33,7 @@ import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
-import hellfirepvp.astralsorcery.common.item.ItemDynamicColor;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -105,8 +105,6 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
-        RegistryBlocks.initRenderRegistry();
-
         registerFluidRenderers();
         registerEntityRenderers();
         registerDisplayInformationInit();
@@ -315,15 +313,15 @@ public class ClientProxy extends CommonProxy {
     }
 
     public void registerItemRender(Item item, int metadata, String name) {
-        itemRegister.add(new RenderInfoItem(item, metadata, name, false));
+        registerItemRender(item, metadata, name, false);
     }
 
     public void registerItemRender(Item item, int metadata, String name, boolean variant) {
         itemRegister.add(new RenderInfoItem(item, metadata, name, variant));
     }
 
-    private static List<RenderInfoBlock> blockRegister = new ArrayList<RenderInfoBlock>();
-    private static List<RenderInfoItem> itemRegister = new ArrayList<RenderInfoItem>();
+    private static List<RenderInfoBlock> blockRegister = new ArrayList<>();
+    private static List<RenderInfoItem> itemRegister = new ArrayList<>();
 
     private static class RenderInfoBlock {
 

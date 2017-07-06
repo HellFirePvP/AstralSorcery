@@ -668,7 +668,7 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .unregisteredAccessibleShapedRecipe());
-        rIlluminator.setPassiveStarlightRequirement(1500);
+        rIlluminator.setPassiveStarlightRequirement(600);
 
         rWand = registerAltarRecipe(new DiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/tool_basicwand", ItemsAS.wand)
                 .addPart(OreDictAlias.ITEM_AQUAMARINE,

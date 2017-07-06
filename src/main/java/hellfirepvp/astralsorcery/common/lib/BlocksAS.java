@@ -31,6 +31,8 @@ public class BlocksAS {
     public static BlockWell blockWell;
     public static BlockMarble blockMarble;
     public static BlockMarbleStairs blockMarbleStairs;
+    public static BlockMarbleSlab blockMarbleSlab;
+    public static BlockMarbleDoubleSlab blockMarbleDoubleSlab;
     public static BlockBlackMarble blockBlackMarble;
     public static BlockFlareLight blockVolatileLight;
     public static BlockWorldIlluminator blockIlluminator;

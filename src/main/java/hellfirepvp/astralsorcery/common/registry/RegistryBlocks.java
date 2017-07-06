@@ -83,6 +83,8 @@ public class RegistryBlocks {
         queueCustomNameItemBlock(blockMarble);
         blockMarbleStairs = registerBlock(new BlockMarbleStairs());
         queueDefaultItemBlock(blockMarbleStairs);
+        blockMarbleSlab = registerBlock(new BlockMarbleSlab());
+        blockMarbleDoubleSlab = registerBlock(new BlockMarbleDoubleSlab());
         blockBlackMarble = registerBlock(new BlockBlackMarble());
         queueCustomNameItemBlock(blockBlackMarble);
         blockVolatileLight = registerBlock(new BlockFlareLight());
@@ -113,7 +115,7 @@ public class RegistryBlocks {
         translucentBlock = registerBlock(new BlockTranslucentBlock());
         queueDefaultItemBlock(translucentBlock);
         drawingTable = registerBlock(new BlockMapDrawingTable());
-        queueCustomNameItemBlock(drawingTable);
+        queueDefaultItemBlock(drawingTable);
         //celestialOrrery = registerBlock(new BlockCelestialOrrery());
         //queueDefaultItemBlock(celestialOrrery);
         celestialGateway = registerBlock(new BlockCelestialGateway());

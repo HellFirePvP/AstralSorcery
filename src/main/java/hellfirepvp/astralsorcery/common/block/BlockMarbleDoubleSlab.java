@@ -6,21 +6,20 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.base;
-
-import net.minecraft.item.ItemStack;
+package hellfirepvp.astralsorcery.common.block;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: StateBasedItem
+ * Class: BlockMarbleDoubleSlab
  * Created by HellFirePvP
- * Date: 07.05.2016 / 14:31
+ * Date: 05.07.2017 / 19:18
  */
-public interface StateBasedItem {
+public class BlockMarbleDoubleSlab extends BlockMarbleSlab {
 
-    public ItemStack createItemFromState(ItemState state);
-
-    public ItemState getState(ItemStack stack);
+    @Override
+    public boolean isDouble() {
+        return true;
+    }
 
 }

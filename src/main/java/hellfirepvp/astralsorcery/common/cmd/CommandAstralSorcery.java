@@ -208,25 +208,7 @@ public class CommandAstralSorcery extends CommandBase {
         PlayerProgress progress = prTuple.value;
         EntityPlayer other = prTuple.key;
 
-        Collection<IConstellation> constellations = ConstellationRegistry.getAllConstellations();
-        if (!ResearchManager.discoverConstellations(constellations, other)) {
-            sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
-            return;
-        }
-        sender.sendMessage(new TextComponentString("§aDiscovered all Constellations!"));
-        if(!ResearchManager.maximizeTier(other)) {
-            sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
-        } else {
-            sender.sendMessage(new TextComponentString("§aMaximized ProgressionTier for " + otherPlayerName + " !"));
-        }
-        if(!ResearchManager.forceMaximizeResearch(other)) {
-            sender.sendMessage(new TextComponentString("§cFailed! Could not load Progress for (" + otherPlayerName + ") !"));
-        } else {
-            sender.sendMessage(new TextComponentString("§aMaximized ResearchProgression for " + otherPlayerName + " !"));
-        }
-        if(!ResearchManager.setAttunedBefore(other, true)) {
-            sender.sendMessage(new TextComponentString("§cFailed! Could not set attuned-before for (" + otherPlayerName + ") !"));
-        }
+        ResearchManager.forceMaximizeAll(other);
         sender.sendMessage(new TextComponentString("§aSuccess!"));
     }
 

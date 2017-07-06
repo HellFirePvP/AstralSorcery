@@ -36,4 +36,8 @@ public enum ProgressionTier {
         return ordinal() >= other.ordinal();
     }
 
+    public boolean isThisLater(ProgressionTier other) {
+        return ordinal() > other.ordinal();
+    }
+
 }

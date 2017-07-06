@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,22 +15,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemAlignmentChargeRevealer
+ * Class: ItemHudRender
  * Created by HellFirePvP
- * Date: 27.12.2016 / 13:36
+ * Date: 07.02.2017 / 03:10
  */
-public interface ItemAlignmentChargeRevealer {
+public interface ItemHudRender {
+
+    default public boolean hasFadeIn() {
+        return false;
+    }
+
+    default public int getFadeInTicks() {
+        return 1;
+    }
 
     @SideOnly(Side.CLIENT)
-    default public boolean shouldReveal(ChargeType ct, ItemStack stack) {
-        return true;
-    }
-
-    public static enum ChargeType {
-
-        TEMP,
-        PERM
-
-    }
+    public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks);
 
 }

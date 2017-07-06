@@ -6,28 +6,23 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base;
 
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemGatedVisibility
+ * Class: ItemConstellationFocus
  * Created by HellFirePvP
- * Date: 13.01.2017 / 00:06
+ * Date: 06.03.2017 / 14:50
  */
-public interface ItemGatedVisibility {
+public interface ItemConstellationFocus {
 
-    default public PlayerProgress getClientProgress() {
-        return ResearchManager.clientProgress;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public boolean isSupposedToSeeInRender(ItemStack stack);
+    @Nullable
+    public IConstellation getFocusConstellation(ItemStack stack);
 
 }

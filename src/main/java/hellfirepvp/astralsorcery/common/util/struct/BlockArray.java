@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.util.struct;
 
 import hellfirepvp.astralsorcery.common.block.BlockStructural;
-import hellfirepvp.astralsorcery.common.item.ISpecialStackDescriptor;
+import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;

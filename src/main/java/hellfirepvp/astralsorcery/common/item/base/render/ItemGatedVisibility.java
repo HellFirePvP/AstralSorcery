@@ -6,19 +6,28 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemDynamicColor
+ * Class: ItemGatedVisibility
  * Created by HellFirePvP
- * Date: 06.12.2016 / 14:26
+ * Date: 13.01.2017 / 00:06
  */
-public interface ItemDynamicColor {
+public interface ItemGatedVisibility {
 
-    public int getColorForItemStack(ItemStack stack, int tintIndex);
+    default public PlayerProgress getClientProgress() {
+        return ResearchManager.clientProgress;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean isSupposedToSeeInRender(ItemStack stack);
 
 }

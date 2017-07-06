@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
@@ -70,6 +71,7 @@ public final class EffectHandler {
     public boolean renderGateway = true;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
+    public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
     public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
     public static final Map<CompoundObjectEffect.ObjectGroup, List<CompoundObjectEffect>> objects = new HashMap<>();
@@ -152,6 +154,9 @@ public final class EffectHandler {
                 renderGatewayTarget(pTicks);
             }
         }
+        GlStateManager.disableDepth();
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
+        GlStateManager.enableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
         EffectLightning.renderFast(pTicks, fastRenderLightnings);
 
@@ -283,6 +288,8 @@ public final class EffectHandler {
 
         if(effect instanceof EffectLightning) {
             fastRenderLightnings.add((EffectLightning) effect);
+        } else if(effect instanceof EntityFXFacingDepthParticle) {
+            fastRenderDepthParticles.add((EntityFXFacingDepthParticle) effect);
         } else if(effect instanceof EntityFXFacingParticle) {
             fastRenderParticles.add((EntityFXFacingParticle) effect);
         } else if(effect instanceof CompoundObjectEffect) {
@@ -347,6 +354,17 @@ public final class EffectHandler {
             if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
                 effect.flagAsRemoved();
                 fastRenderParticles.remove(effect);
+            }
+        }
+        for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderDepthParticles)) {
+            if (effect == null) {
+                fastRenderDepthParticles.remove(null);
+                continue;
+            }
+            effect.tick();
+            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+                effect.flagAsRemoved();
+                fastRenderDepthParticles.remove(effect);
             }
         }
         for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {

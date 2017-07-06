@@ -6,24 +6,19 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ISpecialStackDescriptor
+ * Class: ItemDynamicColor
  * Created by HellFirePvP
- * Date: 23.04.2017 / 18:14
+ * Date: 06.12.2016 / 14:26
  */
-//Intended to be implemented by blocks to give a more appropiate itemstack as descriptor
-public interface ISpecialStackDescriptor {
+public interface ItemDynamicColor {
 
-    @Nonnull
-    public ItemStack getDecriptor(IBlockState state);
+    public int getColorForItemStack(ItemStack stack, int tintIndex);
 
 }

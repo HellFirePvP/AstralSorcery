@@ -6,30 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item;
+package hellfirepvp.astralsorcery.common.item.base.render;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemHudRender
+ * Class: ISpecialStackDescriptor
  * Created by HellFirePvP
- * Date: 07.02.2017 / 03:10
+ * Date: 23.04.2017 / 18:14
  */
-public interface ItemHudRender {
+//Intended to be implemented by blocks to give a more appropiate itemstack as descriptor
+public interface ISpecialStackDescriptor {
 
-    default public boolean hasFadeIn() {
-        return false;
-    }
-
-    default public int getFadeInTicks() {
-        return 1;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void onRenderInHandHUD(ItemStack lastCacheInstance, float fadeAlpha, float pTicks);
+    @Nonnull
+    public ItemStack getDecriptor(IBlockState state);
 
 }

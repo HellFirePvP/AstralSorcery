@@ -9,12 +9,14 @@
 package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -32,7 +34,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 16.10.2016 / 16:10
  */
-public final class EntityFXFacingParticle extends EntityComplexFX {
+public class EntityFXFacingParticle extends EntityComplexFX {
 
     public static final BindableResource staticFlareTex = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flarestatic");
 
@@ -125,12 +127,12 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         z += motionZ;
     }
 
-    public static void renderFast(float parTicks, List<EntityFXFacingParticle> particles) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(false);
+    public static <T extends EntityFXFacingParticle> void renderFast(float parTicks, List<T> particles) {
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableCull();
+        GlStateManager.depthMask(false);
 
         staticFlareTex.bind();
 
@@ -138,18 +140,16 @@ public final class EntityFXFacingParticle extends EntityComplexFX {
         BufferBuilder vb = t.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
-        for (EntityFXFacingParticle particle : new ArrayList<>(particles)) {
+        for (T particle : new ArrayList<>(particles)) {
             if(particle == null) continue;
             particle.renderFast(parTicks, vb);
         }
 
         t.draw();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopAttrib();
+        GlStateManager.enableAlpha();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableCull();
     }
 
     //Vertex format: DefaultVertexFormats.POSITION_TEX_COLOR
