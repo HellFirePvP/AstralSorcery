@@ -1,12 +1,41 @@
 {
-    "parent": "block/cube",
-    "textures": {
-        "particle": "astralsorcery:blocks/marble_pillar_updown",
-        "up": "astralsorcery:blocks/marble_pillar_updown",
-        "down": "astralsorcery:blocks/marble_pillar_updown",
-        "east": "astralsorcery:blocks/marble_pillar_top",
-        "west": "astralsorcery:blocks/marble_pillar_top",
-        "north": "astralsorcery:blocks/marble_pillar_top",
-        "south": "astralsorcery:blocks/marble_pillar_top"
-    }
+	"Comment": "Designed by Wiiv with Cubik Studio - https://cubik.studio",
+	"parent": "block/block",
+	"textures": {
+		"texture": "astralsorcery:blocks/marble_pillar_top",
+		"texture1": "astralsorcery:blocks/marble_pillar_inner",
+		"texture2": "astralsorcery:blocks/marble_pillar_bottom",
+		"texture3": "astralsorcery:blocks/marble_pillar",
+		"texture4": "astralsorcery:blocks/marble_pillar_updown",
+		"texture5": "astralsorcery:blocks/marble_engraved",
+		"particle": "astralsorcery:blocks/marble_raw"
+	},
+	"elements": [
+		{
+			"comment": "top",
+			"from": [ 0, 12, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture4" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture4" },
+				"north": { "uv": [ 0, 0, 16, 4 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 0, 16, 4 ], "texture": "#texture" },
+				"west": { "uv": [ 0, 0, 16, 4 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 0, 16, 4 ], "texture": "#texture" }
+			}
+		},
+		{
+			"comment": "column_t",
+			"from": [ 2, 0, 2 ],
+			"to": [ 14, 12, 14 ],
+			"faces": {
+				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture1" },
+				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture1" },
+				"north": { "uv": [ 0, 4, 12, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 4, 12, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 0, 4, 12, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 4, 12, 16 ], "texture": "#texture" }
+			}
+		}
+	]
 }
