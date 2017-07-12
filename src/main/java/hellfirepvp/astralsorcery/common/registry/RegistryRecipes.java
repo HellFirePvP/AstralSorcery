@@ -73,6 +73,7 @@ public class RegistryRecipes {
     public static CelestialGatewayRecipe rCelestialGateway;
     public static DrawingTableRecipe rDrawingTable;
     public static ConstellationRecipe rInfusedGlass;
+    public static AttunementRecipe rKnowledgeShare;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -274,6 +275,19 @@ public class RegistryRecipes {
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
         rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
+
+        rKnowledgeShare = registerAttenuationRecipe(newShapedRecipe("internal/altar/knowledgeshare", ItemsAS.knowledgeShare)
+                .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.FEATHER,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+        .unregisteredAccessibleShapedRecipe());
+        rKnowledgeShare.setAttItem(ItemUsableDust.DustType.ILLUMINATION.asStack(), AttunementRecipe.AttunementAltarSlot.values());
 
         NonNullList<ItemStack> applicable = NonNullList.create();
         for (ItemColoredLens.ColorType type : ItemColoredLens.ColorType.values()) {

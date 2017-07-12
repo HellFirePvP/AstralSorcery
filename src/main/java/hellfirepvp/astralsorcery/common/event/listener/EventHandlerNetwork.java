@@ -52,7 +52,7 @@ public class EventHandlerNetwork {
     public void onLogout(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
 
-        PlayerChargeHandler.instance.informDisconnect(player);
+        PlayerChargeHandler.INSTANCE.informDisconnect(player);
         //ResearchManager.logoutResetClient(player);
     }
 

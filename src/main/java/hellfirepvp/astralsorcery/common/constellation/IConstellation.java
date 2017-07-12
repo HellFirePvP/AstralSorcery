@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.constellation.spell.ISpellEffect;
+import hellfirepvp.astralsorcery.common.constellation.spell.SpellEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -64,6 +66,11 @@ public interface IConstellation {
             return major;
         }
         return weak;
+    }
+
+    @Nullable
+    default public ISpellEffect getSpellEffect() {
+        return SpellEffectRegistry.getSpellEffect(this);
     }
 
     default public boolean canDiscover(PlayerProgress progress) {

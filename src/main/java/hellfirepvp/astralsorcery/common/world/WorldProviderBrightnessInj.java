@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.world;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -265,7 +266,11 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
+        if(cameraEntity == null) {
+            cameraEntity = Minecraft.getMinecraft().player;
+        }
         return parentOvrProvider.getSkyColor(cameraEntity, partialTicks);
     }
 

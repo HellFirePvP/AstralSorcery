@@ -66,6 +66,10 @@ public class WorldSkyHandler {
 
     //Fired on client and serverside - client only if it's the world the client is in obviously.
     public void tick(World w) {
+        if(!w.getGameRules().getBoolean("doDaylightCycle")) {
+            return;
+        }
+
         if(initialValueMappings.isEmpty()) {
             setupInitialFunctions();
         }

@@ -59,7 +59,7 @@ public class ClientConnectionEventHandler {
         ClientRenderEventHandler.resetPermChargeReveal();
         ClientRenderEventHandler.resetTempChargeReveal();
         AstralSorcery.proxy.scheduleClientside(TESRTranslucentBlock::cleanUp);
-        PlayerChargeHandler.instance.setClientCharge(0F);
+        PlayerChargeHandler.INSTANCE.setClientCharge(0F);
         CraftingAccessManager.clearModifications();
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();

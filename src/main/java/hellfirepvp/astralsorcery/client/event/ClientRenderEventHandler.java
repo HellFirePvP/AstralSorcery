@@ -300,7 +300,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.disableAlpha();
                 Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
 
-                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F : PlayerChargeHandler.instance.clientCharge;
+                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F : PlayerChargeHandler.INSTANCE.clientCharge;
                 double uLength = ssr.getULength() * percFilled;
 
                 GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);

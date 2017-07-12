@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class PlayerChargeHandler implements ITickHandler {
 
-    public static PlayerChargeHandler instance = new PlayerChargeHandler();
+    public static final PlayerChargeHandler INSTANCE = new PlayerChargeHandler();
 
     private Map<EntityPlayer, Float> chargeMap = new HashMap<>();
     public float clientCharge = 0F;

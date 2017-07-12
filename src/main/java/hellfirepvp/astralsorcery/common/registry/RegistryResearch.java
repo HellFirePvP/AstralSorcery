@@ -285,6 +285,10 @@ public class RegistryResearch {
         resShiftStar.addPage(getTextPage("SHIFT_STAR.1"));
         resShiftStar.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rShiftStar));
 
+        ResearchNode resKnowledgeShare = new ResearchNode(new ItemStack(ItemsAS.knowledgeShare), "KNOWLEDGE_SHARE", 2, 6);
+        resKnowledgeShare.addPage(getTextPage("KNOWLEDGE_SHARE.1"));
+        resKnowledgeShare.addPage(new JournalPageAttunementRecipe(RegistryRecipes.rKnowledgeShare));
+
         registerItemLookup(new ItemStack(BlocksAS.lens, 1, OreDictionary.WILDCARD_VALUE),                 resLens,                 0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.linkingTool, 1, OreDictionary.WILDCARD_VALUE),           resLinkTool,             0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(BlockCustomOre.OreType.STARMETAL.asStack(),                                            resStarOre,              0, ResearchProgression.ATTUNEMENT);
@@ -302,6 +306,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.celestialGateway, 1, OreDictionary.WILDCARD_VALUE),     resCelestialGateway,     1, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.shiftingStar, 1, OreDictionary.WILDCARD_VALUE),          resShiftStar,            0, ResearchProgression.ATTUNEMENT);
         registerItemLookup(new ItemStack(ItemsAS.grapplingWand, 1, OreDictionary.WILDCARD_VALUE),         resToolGrapple,          0, ResearchProgression.ATTUNEMENT);
+        registerItemLookup(new ItemStack(ItemsAS.knowledgeShare, 1, OreDictionary.WILDCARD_VALUE),        resKnowledgeShare,       0, ResearchProgression.ATTUNEMENT);
 
         regAttunement.register(resLens);
         regAttunement.register(resLinkTool);
@@ -321,6 +326,7 @@ public class RegistryResearch {
         regAttunement.register(resCelestialGateway);
         regAttunement.register(resShiftStar);
         regAttunement.register(resToolGrapple);
+        regAttunement.register(resKnowledgeShare);
 
         resStarOre.addSourceConnectionFrom(resLinkTool);
         resStarOre.addSourceConnectionFrom(resLens);

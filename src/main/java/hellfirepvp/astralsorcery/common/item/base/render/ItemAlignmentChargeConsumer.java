@@ -23,11 +23,11 @@ public interface ItemAlignmentChargeConsumer extends ItemAlignmentChargeRevealer
     default public boolean drainTempCharge(EntityPlayer player, float charge, boolean simulate) {
         if(player.isCreative()) return true;
 
-        if(!PlayerChargeHandler.instance.hasAtLeast(player, charge)) {
+        if(!PlayerChargeHandler.INSTANCE.hasAtLeast(player, charge)) {
             return false;
         }
         if(!simulate) {
-            PlayerChargeHandler.instance.drainCharge(player, charge);
+            PlayerChargeHandler.INSTANCE.drainCharge(player, charge);
         }
         return true;
     }

@@ -43,7 +43,7 @@ public class PktSyncCharge implements IMessage, IMessageHandler<PktSyncCharge, I
 
     @Override
     public IMessage onMessage(PktSyncCharge message, MessageContext ctx) {
-        PlayerChargeHandler.instance.setClientCharge(message.charge);
+        PlayerChargeHandler.INSTANCE.setClientCharge(message.charge);
         return null;
     }
 }

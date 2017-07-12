@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -61,6 +62,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -116,6 +118,13 @@ public class EventHandlerServer {
         ConstellationSkyHandler.getInstance().informWorldUnload(w);
         if (w.isRemote) {
             clientUnload();
+        }
+    }
+
+    @SubscribeEvent
+    public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
+        if(event.getObject() instanceof EntityLivingBase) {
+            event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
         }
     }
 

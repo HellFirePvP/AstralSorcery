@@ -39,12 +39,12 @@ public class RegistryConstellations {
 
         registerConstellations();
 
-        registerEffects();
+        registerMapEffects();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationRegister());
     }
 
-    private static void registerEffects() {
+    private static void registerMapEffects() {
         registerMapEffect(discidia,
                 Arrays.asList(
                         new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 7),

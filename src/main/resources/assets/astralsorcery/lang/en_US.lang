@@ -37,6 +37,7 @@ misc.sword.sharpened=Sharpened
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
+effect.as.spellplague=Spellplague
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
@@ -163,6 +164,9 @@ astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly obs
 research.SPEC_RELAY.name=Spectral Relay
 astralsorcery.journal.SPEC_RELAY.1.text=The starlight resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
 astralsorcery.journal.SPEC_RELAY.4.text=A small setup, dedicated to collecting starlight for the altar near should help solve that problem. A clear view of the sky is most certainly a necessity and better results will most likely be achieved at night.<NL>When the relay has been placed high up but close to an altar, it will collect and focus starlight once a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many relays close to each other will result in one cannibalizing the others' starlight and will most likely create  much more... §odisappointing§r results..
+
+research.KNOWLEDGE_SHARE.name=Written Expertise
+astralsorcery.journal.KNOWLEDGE_SHARE.1.text=While gaining new knowledge is certainly important, writing down said knowledge to preserve it for others or possibly another civilization uncovering your remains thousands of years later that want to follow your path is equally important.<NL>Right-click or shift-right-click to write down your knowledge onto an empty scroll or one that already has your writing on it.<NL>If only the builders of these strange shrines would've left behind something like this...
 
 research.QUICK_CHARGE.name=Alignment Charge
 astralsorcery.journal.QUICK_CHARGE.1.text=While learning more about the patterns and effects of starlight, the everpresent waves of starlight become more and more perceivable during the ebb and flow of day and night.<NL>While in its current form, the blue-white energy is potent enough to suffice for smaller rods and wands to tap into it to channel it, a bigger focus might be required to enhance the effects of single constellations while using the body or crystals to channel this energy.
