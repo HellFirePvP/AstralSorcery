@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -19,10 +20,12 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -103,17 +106,40 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
-        return true;
+        MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullCube(IBlockState state) {
-        return true;
+        MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullBlock(IBlockState state) {
-        return true;
+        MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
+        return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
+    }
+
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+        MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
+        IBlockState other = world.getBlockState(pos.offset(face));
+        if((other.getBlock() instanceof BlockLiquid || other.getBlock() instanceof BlockFluidBase) &&
+                (marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM || marbleType == MarbleBlockType.PILLAR_TOP)) {
+            return true;
+        }
+        if(marbleType == MarbleBlockType.PILLAR) {
+            return false;
+        }
+        if(marbleType == MarbleBlockType.PILLAR_TOP) {
+            return face == EnumFacing.UP;
+        }
+        if(marbleType == MarbleBlockType.PILLAR_BOTTOM) {
+            return face == EnumFacing.DOWN;
+        }
+        return state.isOpaqueCube();
     }
 
     @Override

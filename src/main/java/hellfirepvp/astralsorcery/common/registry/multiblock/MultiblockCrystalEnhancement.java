@@ -68,7 +68,7 @@ public class MultiblockCrystalEnhancement extends PatternBlockArray {
 
         addBlock(0, -2, 0, mch);
         addBlock(0, -3, 0, mpl);
-        addBlock(0, -4, 0, mpl);
+        addBlock(0, -4, 0, mgr);
 
         addBlock(-2, -4, -2, mch);
         addBlock(-2, -4,  2, mch);
