@@ -379,6 +379,16 @@ public class EventHandlerServer {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
             }
         }
+        if (event.getNewBlock().equals(BlocksAS.blockAltar)) {
+            if (!event.getOldBlock().equals(BlocksAS.blockAltar)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+            }
+        }
+        if (event.getOldBlock().equals(BlocksAS.blockAltar)) {
+            if (!event.getNewBlock().equals(BlocksAS.blockAltar)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+            }
+        }
         if (event.getOldBlock().equals(BlocksAS.customOre)) {
             IBlockState oldState = event.getOldState();
             if (oldState.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.ROCK_CRYSTAL)) {

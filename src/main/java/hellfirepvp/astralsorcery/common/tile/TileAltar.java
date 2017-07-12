@@ -98,7 +98,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public void receiveStarlight(@Nullable IWeakConstellation type, double amount) {
         if(amount <= 0.001) return;
 
-        starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 100D)));
+        starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 200D)));
         markForUpdate();
     }
 
