@@ -105,6 +105,15 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
     }
 
     @Override
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
+        if(marbleType == MarbleBlockType.PILLAR_TOP || marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM) {
+            return 0;
+        }
+        return super.getLightOpacity(state, world, pos);
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         MarbleBlockType marbleType = state.getValue(MARBLE_TYPE);
         return marbleType != MarbleBlockType.PILLAR && marbleType != MarbleBlockType.PILLAR_BOTTOM && marbleType != MarbleBlockType.PILLAR_TOP;
