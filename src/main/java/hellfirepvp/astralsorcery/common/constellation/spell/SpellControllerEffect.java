@@ -9,8 +9,12 @@
 package hellfirepvp.astralsorcery.common.constellation.spell;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleDataEvent;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 
 import java.util.Iterator;
 import java.util.List;
@@ -25,9 +29,9 @@ import java.util.Queue;
  */
 public abstract class SpellControllerEffect implements Iterable<ISpellEffect> {
 
-    private final EntityLivingBase caster;
-    private Queue<ISpellEffect> spellEffects = Lists.newLinkedList();
-    private List<ISpellComponent> activeComponents = Lists.newLinkedList();
+    protected final EntityLivingBase caster;
+    protected Queue<ISpellEffect> spellEffects = Lists.newLinkedList();
+    protected List<ISpellComponent> activeComponents = Lists.newLinkedList();
     private boolean started = false;
     private boolean finished = false;
 
@@ -68,6 +72,17 @@ public abstract class SpellControllerEffect implements Iterable<ISpellEffect> {
         startCasting();
     }
 
+    public void projectileImpact(SpellProjectile projectile, RayTraceResult result) {
+        for (ISpellEffect effect : this)  {
+            effect.impact(projectile, result);
+        }
+    }
+
+    protected void particle(PktParticleDataEvent.ParticleType type, Vector3 pos, double... data) {
+        PktParticleDataEvent pkt = new PktParticleDataEvent(type, pos.getX(), pos.getY(), pos.getZ(), data);
+        PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(caster.getEntityWorld(), pos.toBlockPos(), 64));
+    }
+
     public final void setFinished() {
         this.finished = true;
     }
@@ -79,7 +94,5 @@ public abstract class SpellControllerEffect implements Iterable<ISpellEffect> {
     public abstract void startCasting();
 
     public abstract void updateController();
-
-    public abstract void projectileImpact(SpellProjectile projectile, RayTraceResult result);
 
 }

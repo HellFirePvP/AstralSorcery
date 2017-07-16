@@ -9,22 +9,30 @@
 package hellfirepvp.astralsorcery.common.integrations;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
+import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.api.recipe.IStackHelper;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import mezz.jei.api.recipe.*;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -35,6 +43,10 @@ import net.minecraft.item.ItemStack;
  */
 @JEIPlugin
 public class ModIntegrationJEI implements IModPlugin {
+
+    private static Map<Class<?>, Tuple<IRecipeWrapperFactory, String>> factoryMap = new HashMap<>();
+    private static List<RecipeChange> recipePrimer = new LinkedList<>();
+    private static List<Tuple<Object, ModificationAction>> unresolvedRecipes = new LinkedList<>();
 
     public static boolean jeiRegistrationPhase = true;
 
@@ -58,28 +70,31 @@ public class ModIntegrationJEI implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registry) {}
 
     @Override
-    public void register(IModRegistry registry) {
-        jeiHelpers = registry.getJeiHelpers();
-        stackHelper = jeiHelpers.getStackHelper();
-        hideItems(registry.getJeiHelpers().getIngredientBlacklist());
+    public void registerCategories(IRecipeCategoryRegistration registry) {
         IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
 
-        //REMINDER: Higher tiers *must* come before lower tiers in this list.
         registry.addRecipeCategories(
                 new CategoryWell(guiHelper),
                 new CategoryInfuser(guiHelper),
                 new CategoryTransmutation(guiHelper),
+
                 new CategoryAltarConstellation(guiHelper),
                 new CategoryAltarAttunement(guiHelper),
                 new CategoryAltarDiscovery(guiHelper));
+    }
 
-        registry.addRecipeHandlers(
-                new WellRecipeHandler(),
-                new InfuserRecipeHandler(),
-                new TransmutationRecipeHandler(),
-                new AltarConstellationRecipeHandler(),
-                new AltarAttunementRecipeHandler(),
-                new AltarDiscoveryRecipeHandler());
+    @Override
+    public void register(IModRegistry registry) {
+        jeiHelpers = registry.getJeiHelpers();
+        stackHelper = jeiHelpers.getStackHelper();
+        hideItems(registry.getJeiHelpers().getIngredientBlacklist());
+
+        registerRecipeHandle(registry, WellLiquefaction.LiquefactionEntry.class,   WellRecipeWrapper::new,               idWell);
+        registerRecipeHandle(registry, AbstractInfusionRecipe.class,               InfuserRecipeWrapper::new,            idInfuser);
+        registerRecipeHandle(registry, LightOreTransmutations.Transmutation.class, TransmutationRecipeWrapper::new,      idTransmutation);
+        registerRecipeHandle(registry, ConstellationRecipe.class,                  AltarConstellationRecipeWrapper::new, idAltarConstellation);
+        registerRecipeHandle(registry, AttunementRecipe.class,                     AltarAttunementRecipeWrapper::new,    idAltarAttunement);
+        registerRecipeHandle(registry, DiscoveryRecipe.class,                      AltarDiscoveryRecipeWrapper::new,     idAltarDiscovery);
 
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockWell), idWell);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
@@ -121,9 +136,109 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
     }
 
+    private <T> void registerRecipeHandle(IModRegistry registry, Class<T> recipeClass, IRecipeWrapperFactory<T> factory, String categoryId) {
+        factoryMap.put(recipeClass, new Tuple<>(factory, categoryId));
+        registry.handleRecipes(recipeClass, factory, categoryId);
+    }
+
+    public static boolean addRecipe(Object recipe) {
+        Tuple<IRecipeWrapperFactory, String> factoryTuple = findRecipeWrapperFor(recipe);
+        if(factoryTuple != null) {
+            RecipeChange change = new RecipeChange(factoryTuple.key.getRecipeWrapper(recipe), factoryTuple.value, ModificationAction.ADDITION);
+            if(recipeRegistry == null) {
+                recipePrimer.add(change);
+            } else {
+                change.apply(recipeRegistry);
+            }
+            return true;
+        }
+        unresolvedRecipes.add(new Tuple<>(recipe, ModificationAction.ADDITION));
+        return false;
+    }
+
+    public static boolean removeRecipe(Object recipe) {
+        Tuple<IRecipeWrapperFactory, String> factoryTuple = findRecipeWrapperFor(recipe);
+        if(factoryTuple != null) {
+            RecipeChange change = new RecipeChange(factoryTuple.key.getRecipeWrapper(recipe), factoryTuple.value, ModificationAction.REMOVAL);
+            if(recipeRegistry == null) {
+                recipePrimer.add(change);
+            } else {
+                change.apply(recipeRegistry);
+            }
+            return true;
+        }
+        unresolvedRecipes.add(new Tuple<>(recipe, ModificationAction.REMOVAL));
+        return false;
+    }
+
+    @Nullable
+    private static Tuple<IRecipeWrapperFactory, String> findRecipeWrapperFor(Object recipe) {
+        Class<?> recipeClass = recipe.getClass();
+        Tuple<IRecipeWrapperFactory, String> factoryTuple = factoryMap.get(recipeClass);
+        while (factoryTuple == null && !recipeClass.equals(Object.class)) {
+            recipeClass = recipeClass.getSuperclass();
+            factoryTuple = factoryMap.get(recipeClass);
+        }
+        return factoryTuple;
+    }
+
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         recipeRegistry = jeiRuntime.getRecipeRegistry();
+
+        for (RecipeChange change : recipePrimer) {
+            change.apply(recipeRegistry);
+        }
+        recipePrimer.clear();
+
+        Iterator<Tuple<Object, ModificationAction>> iterator = unresolvedRecipes.iterator();
+        while (iterator.hasNext()) {
+            Tuple<Object, ModificationAction> action = iterator.next();
+            switch (action.value) {
+                case ADDITION:
+                    if (addRecipe(action.key)) {
+                        iterator.remove();
+                    }
+                    break;
+                case REMOVAL:
+                    if (removeRecipe(action.key)) {
+                        iterator.remove();
+                    }
+                    break;
+            }
+        }
+        if(unresolvedRecipes.size() > 0) {
+            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+        }
+    }
+
+    private static class RecipeChange {
+
+        private final IRecipeWrapper recipe;
+        private final String category;
+        private final ModificationAction action;
+
+        private RecipeChange(IRecipeWrapper recipe, String category, ModificationAction action) {
+            this.recipe = recipe;
+            this.category = category;
+            this.action = action;
+        }
+
+        private void apply(IRecipeRegistry recipeRegistry) {
+            if(action == ModificationAction.ADDITION) {
+                recipeRegistry.addRecipe(this.recipe, this.category);
+            } else {
+                recipeRegistry.removeRecipe(this.recipe, this.category);
+            }
+        }
+
+    }
+
+    private static enum ModificationAction {
+
+        ADDITION,
+        REMOVAL
+
     }
 
 }

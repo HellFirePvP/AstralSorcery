@@ -39,9 +39,6 @@ public class EventHandlerNetwork {
         AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
-        if(Mods.CRAFTTWEAKER.isPresent()) {
-            //FIXME AFTER CT PORTED PacketChannel.CHANNEL.sendTo(ModIntegrationCrafttweaker.compileRecipeChangePacket(), p);
-        }
 
         ResearchManager.sendInitClientKnowledge(p);
         CelestialGatewaySystem.instance.syncTo(p);

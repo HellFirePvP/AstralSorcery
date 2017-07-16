@@ -35,6 +35,7 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
@@ -133,6 +134,13 @@ public class CommonProxy implements IGuiHandler {
         RegistryPerks.init();
 
         registerCapabilities();
+
+        if (Mods.CRAFTTWEAKER.isPresent()) {
+            AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
+            ModIntegrationCrafttweaker.instance.load();
+        } else {
+            AstralSorcery.log.info("Crafttweaker not found!");
+        }
     }
 
     private void registerCapabilities() {
@@ -179,13 +187,9 @@ public class CommonProxy implements IGuiHandler {
         registerOreDictEntries();
         RegistryResearch.init();
 
-        //FIXME AFTER CT PORTED
-        /*if (Mods.CRAFTTWEAKER.isPresent()) {
-            AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
-            ModIntegrationCrafttweaker.INSTANCE.load();
-        } else {
-            AstralSorcery.log.info("Crafttweaker not found!");
-        }*/
+        if(Mods.CRAFTTWEAKER.isPresent()) {
+            ModIntegrationCrafttweaker.instance.pushChanges();
+        }
 
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
