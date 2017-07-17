@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiMapDrawing;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -77,7 +78,7 @@ public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchm
     private void closeTable() {
         if(Minecraft.getMinecraft().currentScreen != null &&
                 Minecraft.getMinecraft().currentScreen instanceof GuiMapDrawing) {
-            Minecraft.getMinecraft().displayGuiScreen(null);
+            AstralSorcery.proxy.scheduleClientside(() -> Minecraft.getMinecraft().displayGuiScreen(null));
         }
     }
 

@@ -142,8 +142,6 @@ public class CommonProxy implements IGuiHandler {
         } else {
             AstralSorcery.log.info("Crafttweaker not found!");
         }
-
-        ModIntegrationChisel.sendVariantIMC();
     }
 
     private void registerCapabilities() {
@@ -190,9 +188,12 @@ public class CommonProxy implements IGuiHandler {
         registerOreDictEntries();
         RegistryResearch.init();
 
+        RegistryConstellations.initMapEffects();
+
         if(Mods.CRAFTTWEAKER.isPresent()) {
             ModIntegrationCrafttweaker.instance.pushChanges();
         }
+        ModIntegrationChisel.sendVariantIMC();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 

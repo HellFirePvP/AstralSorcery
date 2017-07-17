@@ -39,9 +39,11 @@ public class RegistryConstellations {
 
         registerConstellations();
 
-        registerMapEffects();
-
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationRegister());
+    }
+
+    public static void initMapEffects() {
+        registerMapEffects();
     }
 
     private static void registerMapEffects() {
