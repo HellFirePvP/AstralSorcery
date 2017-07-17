@@ -35,6 +35,7 @@ import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
@@ -141,6 +142,8 @@ public class CommonProxy implements IGuiHandler {
         } else {
             AstralSorcery.log.info("Crafttweaker not found!");
         }
+
+        ModIntegrationChisel.sendVariantIMC();
     }
 
     private void registerCapabilities() {

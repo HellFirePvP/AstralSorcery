@@ -26,10 +26,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,12 +42,23 @@ import javax.annotation.Nullable;
  */
 public class WorldProviderBrightnessInj extends WorldProvider {
 
+    private static final Method mInit, mGenerateLightMap;
+
     protected final WorldProvider parentOvrProvider;
     protected final World parentWorld;
 
     public WorldProviderBrightnessInj(World world, WorldProvider parent) {
         this.parentOvrProvider = parent;
         this.parentWorld = world;
+        setWorld(world);
+        try {
+            if(mInit != null) {
+                mInit.invoke(parent);
+            }
+            if(mGenerateLightMap != null) {
+                mGenerateLightMap.invoke(parent);
+            }
+        } catch (Exception exc) {}
     }
 
     private WorldSkyHandler getSkyHandler() {
@@ -71,6 +84,12 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     public boolean canCoordinateBeSpawn(int x, int z) {
         return parentOvrProvider.canCoordinateBeSpawn(x, z);
     }
+
+    @Override
+    protected void generateLightBrightnessTable() {}
+
+    @Override
+    protected void init() {}
 
     @Override
     public float calculateCelestialAngle(long worldTime, float partialTicks) {
@@ -418,6 +437,17 @@ public class WorldProviderBrightnessInj extends WorldProvider {
     @Override
     public boolean hasSkyLight() {
         return parentOvrProvider.hasSkyLight();
+    }
+
+    static {
+        Method init = null;
+        Method generateLightMap = null;
+        try {
+            init = ReflectionHelper.findMethod(WorldProvider.class, "init", "func_76572_b");
+            generateLightMap = ReflectionHelper.findMethod(WorldProvider.class, "generateLightBrightnessTable", "func_76556_a");
+        } catch (Exception exc) {}
+        mInit = init;
+        mGenerateLightMap = generateLightMap;
     }
 
 }

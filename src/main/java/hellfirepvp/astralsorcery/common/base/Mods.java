@@ -32,6 +32,7 @@ public enum Mods {
     JEI("jei"),
     BLOODMAGIC("bloodmagic"),
     BOTANIA("botania"),
+    CHISEL("chisel"),
     GALACTICRAFT_CORE("galacticraftcore");
 
     public final String modid;
