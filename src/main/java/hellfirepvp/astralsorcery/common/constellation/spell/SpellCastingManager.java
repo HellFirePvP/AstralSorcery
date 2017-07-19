@@ -44,7 +44,10 @@ public class SpellCastingManager implements ITickHandler {
                 iterator.remove();
             }
         }
+    }
 
+    public void clearEffects() {
+        this.activeSpellController.clear();
     }
 
     @Override

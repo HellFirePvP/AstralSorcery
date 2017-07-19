@@ -26,7 +26,10 @@ public class EffectControllerDiscidia extends SpellControllerEffect {
 
     @Override
     public void startCasting() {
-
+        int projectiles = rand.nextInt(2) + 3;
+        for (int i = 0; i < projectiles; i++) {
+            newProjectile(80F);
+        }
     }
 
     @Override

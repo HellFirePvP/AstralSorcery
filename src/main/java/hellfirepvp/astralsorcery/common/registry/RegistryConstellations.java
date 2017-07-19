@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerAevitas;
+import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
@@ -24,6 +26,7 @@ import java.util.Arrays;
 
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
+import static hellfirepvp.astralsorcery.common.constellation.spell.SpellEffectRegistry.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +47,14 @@ public class RegistryConstellations {
 
     public static void initMapEffects() {
         registerMapEffects();
+
+        registerSpellEffects();
+    }
+
+    private static void registerSpellEffects() {
+        registerControllerEffect(discidia, EffectControllerDiscidia::new);
+        registerControllerEffect(aevitas,  EffectControllerAevitas::new);
+
     }
 
     private static void registerMapEffects() {

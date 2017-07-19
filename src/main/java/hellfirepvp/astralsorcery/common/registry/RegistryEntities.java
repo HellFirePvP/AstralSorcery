@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.spell.SpellProjectile;
+import hellfirepvp.astralsorcery.common.constellation.spell.entity.SpellProjectile;
 import hellfirepvp.astralsorcery.common.entities.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.spell.SpellCastingManager;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -99,6 +100,7 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
+        SpellCastingManager.INSTANCE.clearEffects();
     }
 
     public static boolean isRunningInDevEnvironment() {

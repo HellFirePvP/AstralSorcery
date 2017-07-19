@@ -9,8 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation.spell;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.spell.entity.SpellProjectile;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.RayTraceResult;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,9 +30,13 @@ public interface ISpellEffect {
 
     public void affect(EntityLivingBase entity, EffectType type);
 
+    //Constant tick-effects
     public void affectProjectile(SpellProjectile projectile);
 
-    public void impact(SpellProjectile projectile, RayTraceResult hit);
+    //Spell-Burst effects scheduled a few ticks inbetween
+    public void affectProjectileMajor(SpellProjectile projectile);
+
+    public void impact(SpellProjectile projectile, RayTraceResult hit, @Nullable EntityLivingBase nearbyOrDirect);
 
     public static enum EffectType {
 

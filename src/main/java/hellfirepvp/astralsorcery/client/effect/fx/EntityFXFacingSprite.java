@@ -10,15 +10,19 @@ package hellfirepvp.astralsorcery.client.effect.fx;
 
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,6 +37,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
     private double x, y, z;
     private double prevX, prevY, prevZ;
     private final float scale;
+    private Color overlayColor = Color.WHITE;
 
     private RefreshFunction refreshFunction;
     private PositionController positionUpdateFunction;
@@ -58,6 +63,10 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         this.y = y;
         this.z = z;
         return this;
+    }
+
+    public void setOverlayColor(@Nonnull Color overlayColor) {
+        this.overlayColor = overlayColor;
     }
 
     public static EntityFXFacingSprite fromSpriteSheet(SpriteSheetResource res, double x, double y, double z, float scale, int rLayer) {
@@ -122,23 +131,26 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
 
     @Override
     public void render(float pTicks) {
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDepthMask(false);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableCull();
+        GlStateManager.enableTexture2D();
+        GlStateManager.depthMask(false);
+        Color c = this.overlayColor;
+        GlStateManager.color(1F, 1F, 1F, 1F);
         int frame = getAgeBasedFrame();
         Tuple<Double, Double> uv = spriteSheet.getUVOffset(frame);
         spriteSheet.getResource().bind();
         double iX = RenderingUtils.interpolate(prevX, x, pTicks);
         double iY = RenderingUtils.interpolate(prevY, y, pTicks);
         double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);
-        RenderingUtils.renderFacingQuad(iX, iY, iZ, pTicks, scale, 0, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier());
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        RenderingUtils.renderFacingColoredQuad(iX, iY, iZ, pTicks, scale, 0, uv.key, uv.value, spriteSheet.getULength() * getULengthMultiplier(), spriteSheet.getVLength() * getVLengthMultiplier(), c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        GlStateManager.disableBlend();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.enableAlpha();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableCull();
     }
 
 }

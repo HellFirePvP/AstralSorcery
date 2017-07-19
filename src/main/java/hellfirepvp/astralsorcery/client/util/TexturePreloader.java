@@ -98,6 +98,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "unlock_perk")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare1")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")           .allocateGlId();

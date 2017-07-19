@@ -10,9 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.spell.controller;
 
 import hellfirepvp.astralsorcery.common.constellation.spell.ISpellEffect;
 import hellfirepvp.astralsorcery.common.constellation.spell.SpellControllerEffect;
-import hellfirepvp.astralsorcery.common.constellation.spell.SpellProjectile;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.RayTraceResult;
 
 /**
  * This class is part of the Astral Sorcery Mod
