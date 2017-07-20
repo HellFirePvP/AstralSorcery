@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,27 +37,28 @@ import java.util.List;
  */
 public class GatewayCache extends CachedWorldData {
 
-    private List<BlockPos> gatewayPositions = new LinkedList<>();
+    private List<GatewayNode> gatewayPositions = new LinkedList<>();
 
     public GatewayCache() {
         super(WorldCacheManager.SaveKey.GATEWAY_DATA);
     }
 
-    public List<BlockPos> getGatewayPositions() {
+    public List<GatewayNode> getGatewayPositions() {
         return new ArrayList<>(gatewayPositions);
     }
 
-    public void offerPosition(World world, BlockPos pos) {
+    public void offerPosition(World world, BlockPos pos, @Nonnull String display) {
         TileEntity te = world.getTileEntity(pos);
         if(te == null || !(te instanceof TileCelestialGateway)) {
             return;
         }
-        if(gatewayPositions.contains(pos)) {
+        GatewayNode node = new GatewayNode(pos, display);
+        if(gatewayPositions.contains(node)) {
             return;
         }
-        gatewayPositions.add(pos);
+        gatewayPositions.add(node);
         markDirty();
-        CelestialGatewaySystem.instance.addPosition(world, pos);
+        CelestialGatewaySystem.instance.addPosition(world, node);
         AstralSorcery.log.info("Added new gateway node at: dim=" + world.provider.getDimension() + ", " + pos.toString());
     }
 
@@ -72,13 +75,13 @@ public class GatewayCache extends CachedWorldData {
         AstralSorcery.log.info("Checking GatewayCache integrity for dimension " + world.provider.getDimension());
         long msStart = System.currentTimeMillis();
 
-        Iterator<BlockPos> iterator = gatewayPositions.iterator();
+        Iterator<GatewayNode> iterator = gatewayPositions.iterator();
         while (iterator.hasNext()) {
-            BlockPos pos = iterator.next();
-            TileEntity te = world.getTileEntity(pos); //Loads the chunk... uh...
-            if (te == null || !(te instanceof TileCelestialGateway)) {
+            GatewayNode node = iterator.next();
+            TileCelestialGateway gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
+            if (gateway == null) {
                 iterator.remove();
-                AstralSorcery.log.info("Invalid entry: " + pos + " - no gateway tileentity found there!");
+                AstralSorcery.log.info("Invalid entry: " + node + " - no gateway tileentity found there!");
             }
         }
 
@@ -89,16 +92,21 @@ public class GatewayCache extends CachedWorldData {
     public void readFromNBT(NBTTagCompound compound) {
         NBTTagList list = compound.getTagList("posList", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); i++) {
-            gatewayPositions.add(NBTUtils.readBlockPosFromNBT(list.getCompoundTagAt(i)));
+            NBTTagCompound tag = list.getCompoundTagAt(i);
+            BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
+            String display = tag.getString("display");
+            GatewayNode node = new GatewayNode(pos, display);
+            gatewayPositions.add(node);
         }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
         NBTTagList list = new NBTTagList();
-        for (BlockPos pos : gatewayPositions) {
+        for (GatewayNode node : gatewayPositions) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, tag);
+            NBTUtils.writeBlockPosToNBT(node, tag);
+            tag.setString("display", node.display);
             list.appendTag(tag);
         }
         compound.setTag("posList", list);
@@ -106,5 +114,16 @@ public class GatewayCache extends CachedWorldData {
 
     @Override
     public void updateTick(World world) {}
+
+    public static class GatewayNode extends BlockPos {
+
+        public final String display;
+
+        public GatewayNode(BlockPos pos, String display) {
+            super(pos.getX(), pos.getY(), pos.getZ());
+            this.display = display;
+        }
+
+    }
 
 }

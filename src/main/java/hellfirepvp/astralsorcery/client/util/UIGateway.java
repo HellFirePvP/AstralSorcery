@@ -9,13 +9,20 @@
 package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -59,12 +66,12 @@ public class UIGateway {
         UIGateway ui = new UIGateway(source, sphereRadius);
         CelestialGatewaySystem system = CelestialGatewaySystem.instance;
         int dimid = world.provider.getDimension();
-        List<BlockPos> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
+        List<GatewayCache.GatewayNode> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
         gatherStars(ui, world.provider.getDimension(), sameDimensionPositions, true, sphereRadius);
 
-        for (Map.Entry<Integer, List<BlockPos>> entries : system.getGatewayCache(Side.CLIENT).entrySet()) {
+        for (Map.Entry<Integer, List<GatewayCache.GatewayNode>> entries : system.getGatewayCache(Side.CLIENT).entrySet()) {
             if(entries.getKey() == dimid) continue;
-            List<BlockPos> otherPositions = entries.getValue();
+            List<GatewayCache.GatewayNode> otherPositions = entries.getValue();
             gatherStars(ui, entries.getKey(), otherPositions, false, sphereRadius);
         }
 
@@ -83,9 +90,9 @@ public class UIGateway {
         return null;
     }
 
-    private static void gatherStars(UIGateway gateway, int dimId, List<BlockPos> otherPositions, boolean sameWorld, double sphereRadius) {
+    private static void gatherStars(UIGateway gateway, int dimId, List<GatewayCache.GatewayNode> otherPositions, boolean sameWorld, double sphereRadius) {
         Vector3 gatePosition = gateway.getPos();
-        for (BlockPos other : otherPositions) {
+        for (GatewayCache.GatewayNode other : otherPositions) {
             Vector3 otherPos = new Vector3(other);
             if(sameWorld && otherPos.distance(gatePosition) < 16) continue;
 
@@ -138,7 +145,8 @@ public class UIGateway {
     public void renderIntoWorld(float pticks) {
         if(Minecraft.getMinecraft().player == null) return;
 
-        double dst = new Vector3(origin).distance(Vector3.atEntityCorner(Minecraft.getMinecraft().player).addY(1.5));
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        double dst = new Vector3(origin).distance(Vector3.atEntityCorner(player).addY(1.5));
         if(dst > 3) return;
         float alpha = 1F - ((float) (dst / 2D));
         alpha = MathHelper.clamp(alpha, 0F, 1F);
@@ -153,12 +161,11 @@ public class UIGateway {
         seed |= ((long) origin.getBlockZ());
         Random rand = new Random(seed);
 
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableAlpha();
+        GlStateManager.color(1F, 1F, 1F, 1F);
         RenderAstralSkybox.TEX_STAR_1.bind();
 
         Tessellator tes = Tessellator.getInstance();
@@ -187,14 +194,69 @@ public class UIGateway {
         RenderingUtils.sortVertexData(vb);
         tes.draw();
         TextureHelper.refreshTextureBindState();
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.enableAlpha();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.popMatrix();
+
+        UIGateway.GatewayEntry entry = findMatchingEntry(MathHelper.wrapDegrees(player.rotationYaw), MathHelper.wrapDegrees(player.rotationPitch));
+        if(entry != null) {
+            String display = entry.originalBlockPos.display;
+            if(display != null && !display.isEmpty()) {
+                GlStateManager.pushMatrix();
+                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+                Vector3 pos = entry.relativePos.clone().add(origin);
+                RenderingUtils.removeStandartTranslationFromTESRMatrix(pticks);
+                GlStateManager.translate(pos.getX(), pos.getY() + 0.25, pos.getZ());
+                GlStateManager.scale(0.015, -0.015, 0.015);
+                GlStateManager.glNormal3f(0.0F, 0.0F, -0.010416667F);
+                float plRot = RenderingUtils.interpolateRotation(MathHelper.wrapDegrees(player.prevRotationYaw), MathHelper.wrapDegrees(player.rotationYaw), pticks);
+                GlStateManager.rotate(-plRot + 180, 0, 1, 0);
+                GlStateManager.depthMask(false);
+                GlStateManager.disableDepth();
+                int length = fr.getStringWidth(display);
+                fr.drawString(display, -(length / 2), 0, 0x88F0BD00);
+
+                GlStateManager.depthMask(true);
+                GlStateManager.enableDepth();
+                GlStateManager.color(1F, 1F, 1F, 1F);
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    public void renderGatewayTarget(float pTicks) {
+        int focusTicks = ClientGatewayHandler.focusTicks;
+        UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
+        float perc = (Math.min(40F, focusTicks) / 40F) * 0.5F;
+        if(focusTicks > 50) {
+            perc = ((float) (focusTicks - 50)) / 25F;
+            perc = MathHelper.clamp(perc, 0.5F, 1F);
+        }
+        ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
+        if(screenshot != null) {
+            GlStateManager.pushMatrix();
+            Minecraft.getMinecraft().getTextureManager().bindTexture(screenshot);
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
+            GlStateManager.disableAlpha();
+            Tessellator tes = Tessellator.getInstance();
+            BufferBuilder vb = tes.getBuffer();
+            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+            Vector3 pos = focusingEntry.relativePos.clone().multiply(0.85).add(origin);
+            RenderingUtils.renderFacingFullQuadVB(vb, pos.getX(), pos.getY(), pos.getZ(),
+                    pTicks, 0.4F, 0,
+                    1F, 1F, 1F, perc);
+            tes.draw();
+            GlStateManager.enableAlpha();
+            GlStateManager.popMatrix();
+        }
     }
 
     public static class GatewayEntry {
 
         //Used for transfer
-        public final BlockPos originalBlockPos;
+        public final GatewayCache.GatewayNode originalBlockPos;
         public final int originalDimId;
 
         //Used for drawing
@@ -203,7 +265,7 @@ public class UIGateway {
         //Used for matching
         private final float yaw, pitch;
 
-        private GatewayEntry(BlockPos originalBlockPos, int originalDimId, Vector3 relativePos) {
+        private GatewayEntry(GatewayCache.GatewayNode originalBlockPos, int originalDimId, Vector3 relativePos) {
             this.originalBlockPos = originalBlockPos;
             this.originalDimId = originalDimId;
             this.relativePos = relativePos.clone();

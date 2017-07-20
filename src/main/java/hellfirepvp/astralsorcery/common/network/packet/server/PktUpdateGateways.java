@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -30,11 +31,11 @@ import java.util.Map;
  */
 public class PktUpdateGateways implements IMessage, IMessageHandler<PktUpdateGateways, IMessage> {
 
-    private Map<Integer, List<BlockPos>> positions;
+    private Map<Integer, List<GatewayCache.GatewayNode>> positions;
 
     public PktUpdateGateways() {}
 
-    public PktUpdateGateways(Map<Integer, List<BlockPos>> positions) {
+    public PktUpdateGateways(Map<Integer, List<GatewayCache.GatewayNode>> positions) {
         this.positions = positions;
     }
 
@@ -45,9 +46,11 @@ public class PktUpdateGateways implements IMessage, IMessageHandler<PktUpdateGat
         for (int i = 0; i < size; i++) {
             int dimId = buf.readInt();
             int posSize = buf.readInt();
-            List<BlockPos> posList = new ArrayList<>(posSize);
+            List<GatewayCache.GatewayNode> posList = new ArrayList<>(posSize);
             for (int j = 0; j < posSize; j++) {
-                posList.add(ByteBufUtils.readPos(buf));
+                BlockPos at = ByteBufUtils.readPos(buf);
+                String displ = ByteBufUtils.readString(buf);
+                posList.add(new GatewayCache.GatewayNode(at, displ));
             }
             positions.put(dimId, posList);
         }
@@ -58,10 +61,11 @@ public class PktUpdateGateways implements IMessage, IMessageHandler<PktUpdateGat
         buf.writeInt(positions.size());
         for (Integer dimKey : positions.keySet()) {
             buf.writeInt(dimKey);
-            List<BlockPos> l = positions.get(dimKey);
+            List<GatewayCache.GatewayNode> l = positions.get(dimKey);
             buf.writeInt(l.size());
-            for (BlockPos pos : l) {
+            for (GatewayCache.GatewayNode pos : l) {
                 ByteBufUtils.writePos(buf, pos);
+                ByteBufUtils.writeString(buf, pos.display);
             }
         }
     }

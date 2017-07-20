@@ -57,8 +57,8 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if(!worldIn.isRemote && handIn == EnumHand.MAIN_HAND) {
-            //EffectControllerDiscidia ctrl = new EffectControllerDiscidia(playerIn);
-            //ctrl.castEffect();
+            EffectControllerDiscidia ctrl = new EffectControllerDiscidia(playerIn);
+            ctrl.castEffect();
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
