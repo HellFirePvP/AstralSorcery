@@ -51,10 +51,7 @@ import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler
 import hellfirepvp.astralsorcery.common.starlight.network.TransmissionChunkTracker;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
-import hellfirepvp.astralsorcery.common.tile.TileTelescope;
-import hellfirepvp.astralsorcery.common.tile.TileTreeBeacon;
+import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
@@ -109,6 +106,7 @@ public class CommonProxy implements IGuiHandler {
         ConstellationEffectRegistry.addDynamicConfigEntries();
         ConstellationPerks.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
+        Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
     }
 

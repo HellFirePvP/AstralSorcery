@@ -128,6 +128,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CEL_STRIKE,
         BURN_PARCHMENT,
         ENGRAVE_LENS,
+        GEN_STRUCTURE,
 
         CE_CROP_INTERACT,
         CE_MELT_BLOCK,
@@ -186,6 +187,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileMapDrawingTable::burnParchmentEffects;
                 case ENGRAVE_LENS:
                     return TileMapDrawingTable::engraveLensEffects;
+                case GEN_STRUCTURE:
+                    return TileOreGenerator::playGenerateStructureEffect;
             }
             return null;
         }

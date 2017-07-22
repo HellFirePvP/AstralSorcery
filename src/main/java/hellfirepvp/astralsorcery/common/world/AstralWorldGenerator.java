@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.structure.StructureAncientShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureDesertShrine;
 import hellfirepvp.astralsorcery.common.world.structure.StructureSmallShrine;
+import hellfirepvp.astralsorcery.common.world.structure.StructureTreasureShrine;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -37,7 +38,7 @@ import java.util.Random;
  */
 public class AstralWorldGenerator implements IWorldGenerator {
 
-    public static final int CURRENT_WORLD_GENERATOR_VERSION = 1;
+    public static final int CURRENT_WORLD_GENERATOR_VERSION = 2;
 
     private List<WorldGenAttributeCommon> structures = new LinkedList<>();
     private List<WorldGenAttribute> decorators = new LinkedList<>();
@@ -48,6 +49,7 @@ public class AstralWorldGenerator implements IWorldGenerator {
         structures.add(new StructureAncientShrine());
         structures.add(new StructureDesertShrine());
         structures.add(new StructureSmallShrine());
+        structures.add(new StructureTreasureShrine());
 
         decorators.add(new GenAttributeGlowstoneFlower());
     }

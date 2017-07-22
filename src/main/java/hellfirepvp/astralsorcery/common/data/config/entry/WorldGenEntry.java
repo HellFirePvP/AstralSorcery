@@ -34,8 +34,11 @@ public class WorldGenEntry extends ConfigEntry {
     private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
     private int minY, maxY;
 
-    public WorldGenEntry(String key, int defaultChance, BiomeDictionary.Type... applicableTypes) {
+    private boolean loaded = false;
+
+    public WorldGenEntry(String key, int defaultChance, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... applicableTypes) {
         super(Section.WORLDGEN, key);
+        this.doIgnoreBiomeSpecifications = ignoreBiomeSpecifications;
         this.generationChance = defaultChance;
         this.defaultBiomeTypes = applicableTypes;
         this.minY = 0;
@@ -45,10 +48,10 @@ public class WorldGenEntry extends ConfigEntry {
     @Override
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
-        doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), false, "Ignore Biome specifications when trying to generate " + getKey());
+        doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), this.doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
         generationChance = cfg.getInt("Chance", getConfigurationSection(), this.generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
-        minY = cfg.getInt("MinY" , getConfigurationSection(), 0, 0, 255, "Set the minimum Y level to spawn this structure on");
-        maxY = cfg.getInt("MaxY" , getConfigurationSection(), 255, 0, 255, "Set the maximum Y level to spawn this structure on");
+        minY = cfg.getInt("MinY" , getConfigurationSection(), this.minY, 0, 255, "Set the minimum Y level to spawn this structure on");
+        maxY = cfg.getInt("MaxY" , getConfigurationSection(), this.maxY, 0, 255, "Set the maximum Y level to spawn this structure on");
         String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), getDefaultBiomeTypes(), "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
         List<BiomeDictionary.Type> resolvedTypes = new LinkedList<>();
         for (String s : strTypes) {
@@ -59,6 +62,7 @@ public class WorldGenEntry extends ConfigEntry {
             }
         }
         biomeTypes = Lists.newArrayList(resolvedTypes);
+        loaded = true;
     }
 
     @Override
@@ -73,6 +77,16 @@ public class WorldGenEntry extends ConfigEntry {
             def[i] = t.getName();
         }
         return def;
+    }
+
+    public void setMinY(int minY) {
+        if(loaded) return;
+        this.minY = minY;
+    }
+
+    public void setMaxY(int maxY) {
+        if(loaded) return;
+        this.maxY = maxY;
     }
 
     public int getMinY() {

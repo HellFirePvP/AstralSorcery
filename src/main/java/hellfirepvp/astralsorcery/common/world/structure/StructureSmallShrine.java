@@ -31,7 +31,7 @@ public class StructureSmallShrine extends WorldGenAttributeStructure {
     private int heightThreshold = 1;
 
     public StructureSmallShrine() {
-        super(0, "smallShrine", () -> MultiBlockArrays.smallShrine, StructureGenBuffer.StructureType.SMALL, BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST);
+        super(0, "smallShrine", () -> MultiBlockArrays.smallShrine, StructureGenBuffer.StructureType.SMALL, false, BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.FOREST);
         this.idealDistance = 512F;
     }
 

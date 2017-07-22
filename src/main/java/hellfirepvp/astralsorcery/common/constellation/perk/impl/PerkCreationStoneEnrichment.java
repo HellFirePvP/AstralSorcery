@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.impl;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
@@ -51,9 +52,9 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
                 if(stoneCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
                     ItemStack blockStack = OreTypes.getRandomOre(rand);
                     if(!blockStack.isEmpty()) {
-                        Block b = Block.getBlockFromItem(blockStack.getItem());
-                        if(b != Blocks.AIR) {
-                            player.getEntityWorld().setBlockState(pos, Block.getBlockFromItem(blockStack.getItem()).getStateFromMeta(blockStack.getItemDamage()));
+                        IBlockState state = ItemUtils.createBlockState(blockStack);
+                        if(state != null) {
+                            player.getEntityWorld().setBlockState(pos, state);
                             addAlignmentCharge(player, 0.45);
                         }
                     }

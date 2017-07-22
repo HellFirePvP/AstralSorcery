@@ -51,6 +51,7 @@ import java.util.Random;
  */
 public class BlockCustomOre extends Block implements BlockCustomName, BlockVariants {
 
+    public static boolean allowCrystalHarvest = false;
     private static final Random rand = new Random();
 
     public static PropertyEnum<OreType> ORE_TYPE = PropertyEnum.create("oretype", OreType.class);
@@ -98,7 +99,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     @Override
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
         OreType type = state.getValue(ORE_TYPE);
-        if(type != OreType.ROCK_CRYSTAL || (securityCheck(worldIn, pos, player) && checkSafety(worldIn, pos))) {
+        if(type != OreType.ROCK_CRYSTAL || (allowCrystalHarvest || (securityCheck(worldIn, pos, player) && checkSafety(worldIn, pos)))) {
             super.harvestBlock(worldIn, player, pos, state, te, stack);
         }
     }
@@ -109,7 +110,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
         List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case ROCK_CRYSTAL:
-                if(world != null && world instanceof World && checkSafety((World) world, pos) && securityCheck((World) world, pos, harvesters.get())) {
+                if(world != null && world instanceof World && (allowCrystalHarvest || (checkSafety((World) world, pos) && securityCheck((World) world, pos, harvesters.get())))) {
                     drops.add(ItemRockCrystalBase.createRandomBaseCrystal());
                     for (int i = 0; i < (fortune + 1); i++) {
                         if(((World) world).rand.nextBoolean()) {

@@ -31,7 +31,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
     private int heightThreshold = 3;
 
     public StructureDesertShrine() {
-        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, StructureGenBuffer.StructureType.DESERT, BiomeDictionary.Type.SANDY);
+        super(0, "desertStructure", () -> MultiBlockArrays.desertShrine, StructureGenBuffer.StructureType.DESERT, false, BiomeDictionary.Type.SANDY);
         this.idealDistance = 1024F;
     }
 

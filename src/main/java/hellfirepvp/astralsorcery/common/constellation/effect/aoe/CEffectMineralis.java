@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
@@ -87,7 +88,10 @@ public class CEffectMineralis extends CEffectPositionList {
                     ItemStack blockStack = OreTypes.getRandomOre(rand);
                     if(rand.nextInt(200_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
                     if(!blockStack.isEmpty()) {
-                        world.setBlockState(sel, Block.getBlockFromItem(blockStack.getItem()).getStateFromMeta(blockStack.getItemDamage()));
+                        IBlockState state = ItemUtils.createBlockState(blockStack);
+                        if(state != null) {
+                            world.setBlockState(sel, state);
+                        }
                     }
                 } else {
                     removeElement(entry);
