@@ -47,10 +47,10 @@ import java.util.Random;
  */
 public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
-    //private static OverlayText.OverlayFontRenderer fontRenderer = new OverlayText.OverlayFontRenderer();
-    private static final BindableResource texBlack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
-    private static final BindableResource texBg = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
-    private static final BindableResource texArrow = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
+    private static final BindableResource texBlack   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "black");
+    private static final BindableResource texBg      = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst");
+    private static final BindableResource texBgBlank = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook");
+    private static final BindableResource texArrow   = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow");
 
     private IConstellation constellation;
     private GuiJournalConstellationCluster origin;

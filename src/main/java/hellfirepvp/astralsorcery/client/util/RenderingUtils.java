@@ -19,12 +19,18 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -72,6 +78,58 @@ public class RenderingUtils {
     //You might not want to call this too often.
     public static void triggerChunkRerender() {
         Minecraft.getMinecraft().renderGlobal.loadRenderers();
+    }
+
+    public static void tryRenderItemWithColor(ItemStack stack, IBakedModel model, Color c, float alpha) {
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+
+            if (model.isBuiltInRenderer()) {
+                GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
+                GlStateManager.enableRescaleNormal();
+                TileEntityItemStackRenderer.instance.renderByItem(stack);
+            } else {
+                renderColoredItemModel(model, stack, c, alpha);
+            }
+            GlStateManager.popMatrix();
+        }
+    }
+
+    private static void renderColoredItemModel(IBakedModel model, ItemStack stack, Color color, float alpha) {
+        Color alphaColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), MathHelper.clamp(Math.round(alpha * 255F), 0, 255));
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        for (EnumFacing enumfacing : EnumFacing.values()) {
+            renderColoredQuads(bufferbuilder, model.getQuads(null, enumfacing, 0L), alphaColor, stack);
+        }
+        renderColoredQuads(bufferbuilder, model.getQuads(null, null, 0L), alphaColor, stack);
+        tessellator.draw();
+    }
+
+    private static void renderColoredQuads(BufferBuilder renderer, List<BakedQuad> quads, Color color, ItemStack stack) {
+        boolean flag = color.equals(Color.WHITE) && color.getAlpha() == 255 && !stack.isEmpty();
+        int i = 0;
+
+        ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
+        for (int j = quads.size(); i < j; ++i) {
+            BakedQuad bakedquad = quads.get(i);
+            int rgb = color.getRGB() | (color.getAlpha() << 24);
+
+            if (flag && bakedquad.hasTintIndex()) {
+                rgb = itemColors.getColorFromItemstack(stack, bakedquad.getTintIndex());
+
+                if (EntityRenderer.anaglyphEnable) {
+                    rgb = TextureUtil.anaglyphColor(rgb);
+                }
+
+                Color purify = new Color(rgb, false);
+                rgb = purify.getRGB() | (color.getAlpha() << 24);
+            }
+
+            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(renderer, bakedquad, rgb);
+        }
     }
 
     public static void sortVertexData(BufferBuilder vb) {

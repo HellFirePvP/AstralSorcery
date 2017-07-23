@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ICraftingProgress;
@@ -29,6 +31,14 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +51,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -130,8 +141,13 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         return 1000;
     }
 
+    //TODO do item consumption
     @Override
     public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick) {
+        if(!fulfillesStarlightRequirement(altar)) {
+            return false; //Duh.
+        }
+
         List<CraftingFocusStack> stacks = collectCurrentStacks(craftingData);
         if(!matchFocusStacks(altar, stacks)) {
             return false;
@@ -258,6 +274,76 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
                 }
             }
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void onCraftTESRRender(TileAltar altar, double x, double y, double z, float partialTicks) {
+        super.onCraftTESRRender(altar, x, y, z, partialTicks);
+        ActiveCraftingTask act = altar.getActiveCraftingTask();
+        if(act != null) {
+            List<CraftingFocusStack> stacks = collectCurrentStacks(act.getCraftingData());
+            for (CraftingFocusStack stack : stacks) {
+                if (stack.stackIndex < 0 || stack.stackIndex >= additionallyRequiredStacks.size()) continue; //Duh
+
+                ItemHandle required = additionallyRequiredStacks.get(stack.stackIndex);
+                TileAttunementRelay tar = MiscUtils.getTileAt(altar.getWorld(), altar.getPos().add(stack.offset), TileAttunementRelay.class, true);
+                if(tar != null) {
+                    ItemStack found = tar.getInventoryHandler().getStackInSlot(0);
+                    if(found.isEmpty() || !required.matchCrafting(found)) {
+                        NonNullList<ItemStack> stacksApplicable = required.getApplicableItemsForRender();
+                        int mod = (int) (ClientScheduler.getClientTick() % (stacksApplicable.size() * 60));
+                        ItemStack element = stacksApplicable.get(MathHelper.floor(
+                                MathHelper.clamp(stacksApplicable.size() * (mod / (stacksApplicable.size() * 60)), 0, stacksApplicable.size() - 1)));
+                        renderTranslucentItem(element, x + stack.offset.getX(), y + stack.offset.getY(), z + stack.offset.getZ(), partialTicks);
+                    }
+                } else {
+                    NonNullList<ItemStack> stacksApplicable = required.getApplicableItemsForRender();
+                    int mod = (int) (ClientScheduler.getClientTick() % (stacksApplicable.size() * 60));
+                    ItemStack element = stacksApplicable.get(MathHelper.floor(
+                            MathHelper.clamp(stacksApplicable.size() * (mod / (stacksApplicable.size() * 60)), 0, stacksApplicable.size() - 1)));
+                    renderTranslucentItem(element, x + stack.offset.getX(), y + stack.offset.getY(), z + stack.offset.getZ(), partialTicks);
+                }
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void renderTranslucentItem(ItemStack stack, double x, double y, double z, float partialTicks) {
+        Color c = ItemColorizationHelper.getDominantColorFromItemStack(stack);
+        if(c == null) {
+            c = BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+        }
+
+        GlStateManager.pushMatrix();
+
+        IBakedModel bakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, null, null);
+        float sinBobY = MathHelper.sin((ClientScheduler.getClientTick() + partialTicks) / 10.0F) * 0.1F + 0.1F;
+        GlStateManager.translate(x + 0.5, y + sinBobY + 0.25F, z + 0.5);
+        float ageRotate = ((ClientScheduler.getClientTick() + partialTicks) / 20.0F) * (180F / (float)Math.PI);
+        GlStateManager.rotate(ageRotate, 0.0F, 1.0F, 0.0F);
+        bakedModel = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
+
+        TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
+        textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+        GlStateManager.enableBlend();
+        Blending.ADDITIVE.applyStateManager();
+        GlStateManager.pushMatrix();
+
+        RenderingUtils.tryRenderItemWithColor(stack, bakedModel, c, 0.1F);
+
+        GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+        GlStateManager.popMatrix();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.disableBlend();
+        Blending.DEFAULT.applyStateManager();
+        textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        GlStateManager.popMatrix();
     }
 
     @Nullable

@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -90,28 +91,25 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
                         float br = 0.9F * alphaDaytime;
 
-                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getTierRenderColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
+                        RenderConstellation.renderConstellationIntoWorldFlat(c, c.getConstellationColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
                         GL11.glPopMatrix();
                     }
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                     GL11.glPushMatrix();
                     GL11.glTranslated(x + 0.5, y + 4, z + 0.5);
-                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.YELLOW, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
+                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
                     RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
                     TESRCollectorCrystal.renderCrystal(false, true);
                     GL11.glPopMatrix();
-                    GL11.glPushMatrix();
-                    SpriteSheetResource ssr = SpriteLibrary.spriteHalo2;
-                    ssr.getResource().bind();
-                    GL11.glEnable(GL11.GL_BLEND);
-                    GL11.glDisable(GL11.GL_ALPHA_TEST);
-                    Tuple<Double, Double> uv = ssr.getUVOffset(ClientScheduler.getClientTick());
-                    RenderingUtils.renderAngleRotatedTexturedRect(new Vector3(te).add(0.5, 0.06, 0.5), Vector3.RotAxis.Y_AXIS, 0, 5, uv.key, uv.value, ssr.getULength(), ssr.getVLength(), partialTicks);
                     TextureHelper.refreshTextureBindState();
-                    GL11.glPopMatrix();
                     GL11.glPopAttrib();
                 }
                 break;
+        }
+
+        ActiveCraftingTask task = te.getActiveCraftingTask();
+        if(task != null) {
+            task.getRecipeToCraft().onCraftTESRRender(te, x, y, z, partialTicks);
         }
     }
 

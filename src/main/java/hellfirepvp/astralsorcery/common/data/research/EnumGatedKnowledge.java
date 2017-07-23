@@ -17,8 +17,6 @@ package hellfirepvp.astralsorcery.common.data.research;
 */
 public enum EnumGatedKnowledge {
 
-    //WAND_TYPE(ProgressionTier.ATTUNEMENT),
-
     //Specifically rock and celestial crystal items
     CRYSTAL_SIZE(ProgressionTier.BASIC_CRAFT),
     CRYSTAL_PURITY(ProgressionTier.BASIC_CRAFT),
@@ -27,9 +25,11 @@ public enum EnumGatedKnowledge {
     CRYSTAL_TRAIT(ProgressionTier.TRAIT_CRAFT),
 
     COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
-    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT);
+    COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT),
 
-    //RITUAL_PL_BEACON(ProgressionTier.NETWORKING);
+    CONSTELLATION_STELLAR(ProgressionTier.CONSTELLATION_CRAFT),
+    CONSTELLATION_RITUAL(ProgressionTier.ATTUNEMENT),
+    CONSTELLATION_PAPER_CRAFT(ProgressionTier.TRAIT_CRAFT);
 
     private final ProgressionTier capability;
 

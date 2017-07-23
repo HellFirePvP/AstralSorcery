@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -185,6 +187,28 @@ public class GuiAltarTrait extends GuiAltarBase {
                     drawRect(guiLeft + 11 + from, guiTop + 104, to, 10,
                             uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
                             spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
+                }
+            }
+
+            ActiveCraftingTask task = containerAltarBase.tileAltar.getActiveCraftingTask();
+            if(task != null && task.getState() != ActiveCraftingTask.CraftingState.ACTIVE) {
+                int req = task.getRecipeToCraft().getPassiveStarlightRequired();
+                int has = containerAltarBase.tileAltar.getStarlightStored();
+                if(has < req) {
+                    int max = containerAltarBase.tileAltar.getMaxStarlightStorage();
+                    float percReq = (float) (req - has) / (float) max;
+                    int from = (int) (232 * percFilled);
+                    int to = (int) (232 * percReq);
+                    GL11.glEnable(GL11.GL_ALPHA_TEST);
+                    GL11.glAlphaFunc(GL11.GL_GREATER, 0.4F);
+                    Color c = new Color(0xFFCC00);
+                    GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
+
+                    drawRect(guiLeft + 11 + from, guiTop + 104, to, 10,
+                            uvOffset.key + spriteStarlight.getULength() * percFilled, uvOffset.value,
+                            spriteStarlight.getULength() * percReq, spriteStarlight.getVLength());
+                    GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+                    GL11.glDisable(GL11.GL_ALPHA_TEST);
                 }
             }
         }
