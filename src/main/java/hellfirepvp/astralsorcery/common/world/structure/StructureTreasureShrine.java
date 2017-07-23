@@ -13,10 +13,14 @@ import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemEnderEye;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
@@ -74,6 +78,17 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     @Override
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         BlockPos initial = new BlockPos(chX * 16 + 8, 0, chZ * 16 + 8);
+        if(world instanceof WorldServer) {
+            BlockPos blockpos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, "Stronghold", initial, false);
+            if(blockpos != null) {
+                double xDst = blockpos.getX() - initial.getX();
+                double zDst = blockpos.getZ() - initial.getZ();
+                float flatDst = MathHelper.sqrt(xDst * xDst + zDst * zDst);
+                if(flatDst <= 20) {
+                    return null;
+                }
+            }
+        }
         for (int i = 0; i < 15; i++) {
             BlockPos pos = initial.add(rand.nextInt(16), this.cfgEntry.getMinY() + rand.nextInt(this.cfgEntry.getMaxY() - this.cfgEntry.getMinY()), rand.nextInt(16));
             CaveAdjacencyInformation information = validatePosition(pos, world);
