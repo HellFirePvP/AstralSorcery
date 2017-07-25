@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AbstractRecipeAccessor;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -169,6 +170,50 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     if(inputs[al.getSlotId()] != null) cRec.setCstItem(inputs[al.getSlotId()], al);
                 }
                 return cRec;
+            case TRAIT_CRAFT:
+                TraitRecipe rRec = new TraitRecipe(buildNativeRecipe(inputs, out)) {
+                    @Override
+                    public int getPassiveStarlightRequired() {
+                        return sConsumption;
+                    }
+                    @Override
+                    public int craftingTickTime() {
+                        return craftingTickTime;
+                    }
+
+                    @Override
+                    public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotID());
+                    }
+
+                    @Override
+                    public boolean mayDecrement(TileAltar ta, AttunementAltarSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotId());
+                    }
+
+                    @Override
+                    public boolean mayDecrement(TileAltar ta, ConstellationAtlarSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotId());
+                    }
+
+                    @Override
+                    public boolean mayDecrement(TileAltar ta, TraitRecipeSlot slot) {
+                        return !fluidStacks.contains(slot.getSlotId());
+                    }
+                };
+                for (AttunementRecipe.AttunementAltarSlot al : AttunementRecipe.AttunementAltarSlot.values()) {
+                    if(inputs[al.getSlotId()] != null) rRec.setAttItem(inputs[al.getSlotId()], al);
+                }
+                for (ConstellationRecipe.ConstellationAtlarSlot al : ConstellationRecipe.ConstellationAtlarSlot.values()) {
+                    if(inputs[al.getSlotId()] != null) rRec.setCstItem(inputs[al.getSlotId()], al);
+                }
+                for (TraitRecipe.TraitRecipeSlot al : TraitRecipe.TraitRecipeSlot.values()) {
+                    if(inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
+                }
+                for (int i = 25; i < inputs.length; i++) {
+                    rRec.addOuterTraitItem(inputs[i]);
+                }
+                return rRec;
         }
         return null;
     }

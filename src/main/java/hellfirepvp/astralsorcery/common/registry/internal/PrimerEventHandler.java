@@ -43,6 +43,7 @@ public class PrimerEventHandler {
         registry.wipe(event.getClass());
         RegistryItems.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
+        RegistryConstellations.initConstellationSignatures();
     }
 
     @SubscribeEvent
@@ -77,7 +78,8 @@ public class PrimerEventHandler {
     @SubscribeEvent
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         registry.wipe(event.getClass());
-        RegistryRecipes.init();
+        RegistryRecipes.initVanillaRecipes();
+        RegistryRecipes.initAstralRecipes();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 

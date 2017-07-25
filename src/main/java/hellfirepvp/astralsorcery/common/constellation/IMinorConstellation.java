@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 

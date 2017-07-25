@@ -14,6 +14,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -21,6 +24,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,6 +38,7 @@ public abstract class ConstellationBase implements IConstellation {
 
     private List<StarLocation> starLocations = new ArrayList<>(); //32x32 locations are valid. 0-indexed.
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
+    private List<ItemHandle> signatureItems = new LinkedList<>();
 
     private final String name;
     private final Color color;
@@ -71,6 +76,16 @@ public abstract class ConstellationBase implements IConstellation {
             return sc;
         }
         return null;
+    }
+
+    public ConstellationBase addSignatureItem(ItemHandle handle) {
+        this.signatureItems.add(handle);
+        return this;
+    }
+
+    @Override
+    public List<ItemHandle> getConstellationSignatureItems() {
+        return Collections.unmodifiableList(this.signatureItems);
     }
 
     @Override

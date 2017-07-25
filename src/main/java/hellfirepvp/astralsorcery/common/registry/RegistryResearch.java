@@ -18,21 +18,26 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
-import hellfirepvp.astralsorcery.common.lib.RecipesAS;
+import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.registerTraitRecipe;
+import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
 /**
@@ -55,7 +60,25 @@ public class RegistryResearch {
     private static void initRadiance() {
         ResearchProgression.Registry regRadiance = ResearchProgression.RADIANCE.getRegistry();
 
+        TraitRecipe tr = registerTraitRecipe(newShapedRecipe("internal/altar.test", BlocksAS.blockIlluminator)
+                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .unregisteredAccessibleShapedRecipe());
+        tr.setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(), AttunementRecipe.AttunementAltarSlot.values());
+        tr.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(), ConstellationRecipe.ConstellationAtlarSlot.values());
+        tr.addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack()).addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
+                .addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack()).addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack());
+        tr.setPassiveStarlightRequirement(1000);
+        tr.setRequiredConstellation(Constellations.lucerna);
 
+        ResearchNode resTest = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "ALTAR_TEST", 1, 1);
+        resTest.addPage(getTextPage("ALTAR_TEST.1"));
+        resTest.addPage(new JournalPageTraitRecipe(tr));
+
+        regRadiance.register(resTest);
     }
 
     private static void initConstellation() {

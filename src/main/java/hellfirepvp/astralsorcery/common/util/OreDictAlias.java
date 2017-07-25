@@ -40,6 +40,16 @@ public class OreDictAlias {
     public static String ITEM_GOLD_NUGGET = "nuggetGold";
     public static String ITEM_DYE_PURPLE = "dyePurple";
     public static String ITEM_DYE_ALL = "dye";
+    public static String ITEM_NETHER_QUARTZ = "gemQuartz";
+    public static String ITEM_REDSTONE_DUST = "dustRedstone";
+    public static String ITEM_LEATHER = "leather";
+    public static String ITEM_FEATHER = "feather";
+    public static String ITEM_SUGAR_CANE = "sugarcane";
+    public static String ITEM_GUNPOWDER = "gunpowder";
+    public static String ITEM_WHEAT = "cropWheat";
+    public static String ITEM_BONE = "bone";
+
+    public static String BLOCK_IRON_ORE = "oreIron";
 
     public static String ITEM_AQUAMARINE = "gemAquamarine";
     public static String ITEM_STARMETAL_INGOT = "ingotAstralStarmetal";

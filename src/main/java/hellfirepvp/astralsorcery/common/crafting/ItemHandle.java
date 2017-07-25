@@ -223,6 +223,10 @@ public final class ItemHandle {
                 }
                 return false;
             case FLUID:
+                FluidStack contained = FluidUtil.getFluidContained(stack);
+                if(contained == null || contained.getFluid() == null || !contained.getFluid().equals(fluidTypeAndAmount.getFluid())) {
+                    return false;
+                }
                 return ItemUtils.drainFluidFromItem(stack, fluidTypeAndAmount, false).isSuccess();
         }
         return false;

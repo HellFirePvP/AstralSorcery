@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.spell.ISpellEffect;
 import hellfirepvp.astralsorcery.common.constellation.spell.SpellEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -55,6 +56,10 @@ public interface IConstellation {
     public static String getDefaultSaveKey() {
         return "constellationName";
     }
+
+    public List<ItemHandle> getConstellationSignatureItems();
+
+    public IConstellation addSignatureItem(ItemHandle item);
 
     public Color getConstellationColor();
 

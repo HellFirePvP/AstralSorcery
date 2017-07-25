@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementRelay;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
@@ -48,6 +49,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,7 +58,9 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -69,6 +73,7 @@ import java.util.Random;
 public class TraitRecipe extends ConstellationRecipe implements ICraftingProgress {
 
     private List<ItemHandle> additionallyRequiredStacks = Lists.newLinkedList();
+    private Map<TraitRecipeSlot, ItemHandle> matchTraitStacks = new HashMap<>();
     private IConstellation requiredConstellation = null;
 
     protected TraitRecipe(TileAltar.AltarLevel neededLevel, AccessibleRecipe recipe) {
@@ -80,35 +85,70 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         setPassiveStarlightRequirement(6500);
     }
 
-    public TraitRecipe addTraitItem(Item i) {
-        return addTraitItem(new ItemStack(i));
+    public TraitRecipe setInnerTraitItem(Item i, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new ItemStack(i), slots);
     }
 
-    public TraitRecipe addTraitItem(Block b) {
-        return addTraitItem(new ItemStack(b));
+    public TraitRecipe setInnerTraitItem(Block b, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new ItemStack(b), slots);
     }
 
-    public TraitRecipe addTraitItem(ItemStack stack) {
-        return addTraitItem(new ItemHandle(stack));
+    public TraitRecipe setInnerTraitItem(ItemStack stack, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new ItemHandle(stack), slots);
     }
 
-    public TraitRecipe addTraitItem(String oreDict) {
-        return addTraitItem(new ItemHandle(oreDict));
+    public TraitRecipe setInnerTraitItem(String oreDict, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new ItemHandle(oreDict), slots);
     }
 
-    public TraitRecipe addTraitItem(FluidStack fluid) {
-        return addTraitItem(new ItemHandle(fluid));
+    public TraitRecipe setInnerTraitItem(FluidStack fluid, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new ItemHandle(fluid), slots);
     }
 
-    public TraitRecipe addTraitItem(Fluid fluid, int mbAmount) {
-        return addTraitItem(new FluidStack(fluid, mbAmount));
+    public TraitRecipe setInnerTraitItem(Fluid fluid, int mbAmount, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(new FluidStack(fluid, mbAmount), slots);
     }
 
-    public TraitRecipe addTraitItem(Fluid fluid) {
-        return addTraitItem(fluid, 1000);
+    public TraitRecipe setInnerTraitItem(Fluid fluid, TraitRecipeSlot... slots) {
+        return setInnerTraitItem(fluid, 1000, slots);
     }
 
-    public TraitRecipe addTraitItem(ItemHandle handle) {
+    public TraitRecipe setInnerTraitItem(ItemHandle handle, TraitRecipeSlot... slots) {
+        for (TraitRecipeSlot slot : slots) {
+            matchTraitStacks.put(slot, handle);
+        }
+        return this;
+    }
+
+    public TraitRecipe addOuterTraitItem(Item i) {
+        return addOuterTraitItem(new ItemStack(i));
+    }
+
+    public TraitRecipe addOuterTraitItem(Block b) {
+        return addOuterTraitItem(new ItemStack(b));
+    }
+
+    public TraitRecipe addOuterTraitItem(ItemStack stack) {
+        return addOuterTraitItem(new ItemHandle(stack));
+    }
+
+    public TraitRecipe addOuterTraitItem(String oreDict) {
+        return addOuterTraitItem(new ItemHandle(oreDict));
+    }
+
+    public TraitRecipe addOuterTraitItem(FluidStack fluid) {
+        return addOuterTraitItem(new ItemHandle(fluid));
+    }
+
+    public TraitRecipe addOuterTraitItem(Fluid fluid, int mbAmount) {
+        return addOuterTraitItem(new FluidStack(fluid, mbAmount));
+    }
+
+    public TraitRecipe addOuterTraitItem(Fluid fluid) {
+        return addOuterTraitItem(fluid, 1000);
+    }
+
+    public TraitRecipe addOuterTraitItem(ItemHandle handle) {
         additionallyRequiredStacks.add(handle);
         return this;
     }
@@ -127,6 +167,20 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         return Lists.newArrayList(additionallyRequiredStacks);
     }
 
+    @Nonnull
+    public List<ItemStack> getInnerTraitItems(TraitRecipeSlot slot) {
+        ItemHandle handle = matchTraitStacks.get(slot);
+        if(handle != null) {
+            return handle.getApplicableItems();
+        }
+        return Lists.newArrayList();
+    }
+
+    @Nullable
+    public ItemHandle getInnerTraitItemHandle(TraitRecipeSlot slot) {
+        return matchTraitStacks.get(slot);
+    }
+
     public void setRequiredConstellation(IConstellation requiredConstellation) {
         this.requiredConstellation = requiredConstellation;
     }
@@ -141,7 +195,6 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         return 1000;
     }
 
-    //TODO do item consumption
     @Override
     public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick) {
         if(!fulfillesStarlightRequirement(altar)) {
@@ -186,11 +239,48 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         IConstellation req = getRequiredConstellation();
         if(req != null) {
             IConstellation focus = altar.getFocusedConstellation();
-            if(focus != null) {
-                if(!req.equals(focus)) return false;
+            if(focus == null) return false;
+            if(!req.equals(focus)) return false;
+        }
+        for (TraitRecipeSlot slot : TraitRecipeSlot.values()) {
+            ItemHandle expected = matchTraitStacks.get(slot);
+            if(expected != null) {
+                ItemStack altarItem = invHandler.getStackInSlot(slot.getSlotId());
+                if(!expected.matchCrafting(altarItem)) {
+                    return false;
+                }
+            } else {
+                if(!invHandler.getStackInSlot(slot.getSlotId()).isEmpty()) return false;
             }
         }
         return super.matches(altar, invHandler, ignoreStarlightRequirement);
+    }
+
+    public void consumeOuterInputs(TileAltar altar, ActiveCraftingTask craftingTask) {
+        List<CraftingFocusStack> stacks = collectCurrentStacks(craftingTask.getCraftingData());
+        for (CraftingFocusStack stack : stacks) {
+            if(stack.stackIndex < 0 || stack.stackIndex >= additionallyRequiredStacks.size()) continue; //Duh
+
+            ItemHandle required = additionallyRequiredStacks.get(stack.stackIndex);
+            TileAttunementRelay tar = MiscUtils.getTileAt(altar.getWorld(), altar.getPos().add(stack.offset), TileAttunementRelay.class, true);
+            if(tar != null) {
+                //We take a leap of faith and assume the required matches the found itemstack in terms of crafting matching
+                //It should match since we literally check in the same tick as we finish the recipe if it's valid...
+                ItemStack found = tar.getInventoryHandler().getStackInSlot(0);
+                if(required.getFluidTypeAndAmount() != null) {
+                    if(!found.isEmpty()) {
+                        FluidActionResult fas = ItemUtils.drainFluidFromItem(found, required.getFluidTypeAndAmount(), true);
+                        if(fas.isSuccess()) {
+                            tar.getInventoryHandler().setStackInSlot(0, fas.getResult());
+                            tar.markForUpdate();
+                        }
+                    }
+                } else {
+                    ItemUtils.decrStackInInventory(tar.getInventoryHandler(), 0);
+                    tar.markForUpdate();
+                }
+            }
+        }
     }
 
     @Nonnull
@@ -310,11 +400,6 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
 
     @SideOnly(Side.CLIENT)
     private void renderTranslucentItem(ItemStack stack, double x, double y, double z, float partialTicks) {
-        Color c = ItemColorizationHelper.getDominantColorFromItemStack(stack);
-        if(c == null) {
-            c = BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
-        }
-
         GlStateManager.pushMatrix();
 
         IBakedModel bakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, null, null);
@@ -331,11 +416,13 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         GlStateManager.enableRescaleNormal();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
         GlStateManager.enableBlend();
-        Blending.ADDITIVE.applyStateManager();
+        Blending.CONSTANT_ALPHA.applyStateManager();
         GlStateManager.pushMatrix();
+        GlStateManager.disableCull();
 
-        RenderingUtils.tryRenderItemWithColor(stack, bakedModel, c, 0.1F);
+        RenderingUtils.tryRenderItemWithColor(stack, bakedModel, Color.WHITE, 0.1F);
 
+        GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
@@ -417,6 +504,25 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         protected CraftingFocusStack(Integer stackIndex, BlockPos offset) {
             this.stackIndex = stackIndex;
             this.offset = offset;
+        }
+
+    }
+
+    public static enum TraitRecipeSlot {
+
+        UPPER_CENTER(21),
+        LEFT_CENTER(22),
+        RIGHT_CENTER(23),
+        LOWER_CENTER(24);
+
+        private final int slotId;
+
+        TraitRecipeSlot(int slotId) {
+            this.slotId = slotId;
+        }
+
+        public int getSlotId() {
+            return slotId;
         }
 
     }

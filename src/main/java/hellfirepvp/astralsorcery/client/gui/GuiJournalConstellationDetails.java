@@ -10,7 +10,9 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
+import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.gui.journal.page.IJournalPage;
+import hellfirepvp.astralsorcery.client.gui.journal.page.JournalPageTraitRecipe;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -21,7 +23,13 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
+import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
+import hellfirepvp.astralsorcery.common.lib.Sounds;
+import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -29,6 +37,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -55,11 +64,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private IConstellation constellation;
     private GuiJournalConstellationCluster origin;
     private boolean detailed;
+    private boolean hasMorePages = false, isOnNextPage = false;
 
-    private Rectangle rectBack;
+    private Rectangle rectBack, rectNext, rectPrev;
     private List<MoonPhase> phases = new LinkedList<>();
     private List<MoonPhase> activePhases = new LinkedList<>();
-    private List<String> locText = new LinkedList<>();
+
+    private List<String> locTextMain = new LinkedList<>();
+    private List<String> locTextEnchRitual = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
         super(-1);
@@ -74,12 +86,56 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             }
         }
         this.detailed = has;
+        ProgressionTier playerProgress = ResearchManager.clientProgress.getTierReached();
+        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
+                EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(playerProgress)) {
+            this.hasMorePages = true;
+        }
+
         testPhases();
         testActivePhases();
-        buildLines();
+        buildMainText();
+        buildEnchRitualText();
     }
 
-    private void buildLines() {
+    private void buildEnchRitualText() {
+        if(EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(ResearchManager.clientProgress.getTierReached())) {
+            String unlocEnch = constellation.getUnlocalizedName() + ".enchantments";
+            String textEnch = I18n.format(unlocEnch);
+            if(!unlocEnch.equals(textEnch)) {
+                String head = I18n.format("gui.journal.cst.enchantments");
+                locTextEnchRitual.add(head);
+                locTextEnchRitual.add("");
+
+                List<String> lines = new LinkedList<>();
+                for (String segment : textEnch.split("<NL>")) {
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.add("");
+                }
+                locTextEnchRitual.addAll(lines);
+                locTextEnchRitual.add("");
+            }
+        }
+
+        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchManager.clientProgress.getTierReached())) {
+            String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
+            String textRitual = I18n.format(unlocRitual);
+            if(!unlocRitual.equals(textRitual)) {
+                String head = I18n.format("gui.journal.cst.ritual");
+                locTextEnchRitual.add(head);
+                locTextEnchRitual.add("");
+
+                List<String> lines = new LinkedList<>();
+                for (String segment : textRitual.split("<NL>")) {
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.add("");
+                }
+                locTextEnchRitual.addAll(lines);
+            }
+        }
+    }
+
+    private void buildMainText() {
         String unloc = constellation.getUnlocalizedName() + ".effect";
         String text = I18n.format(unloc);
         if(unloc.equals(text)) return;
@@ -89,7 +145,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
             lines.add("");
         }
-        locText.addAll(lines);
+        locTextMain.addAll(lines);
     }
 
     private void testPhases() {
@@ -123,18 +179,113 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        drawCstBackground();
-        drawDefault(textureResShellCst);
+        if(!isOnNextPage) {
+            drawCstBackground();
+            drawDefault(textureResShellCst);
+        } else {
+            drawDefault(textureResBlank);
+        }
+        TextureHelper.refreshTextureBindState();
 
         zLevel += 150;
         drawArrows(partialTicks);
-        drawConstellation(partialTicks);
-        drawPhaseInformation();
-        drawExtendedInformation();
+        drawNavArrows(partialTicks);
+        if(!isOnNextPage) {
+            drawConstellation(partialTicks);
+            drawPhaseInformation();
+            drawExtendedInformation();
+        } else {
+            drawInformationPages(partialTicks, mouseX, mouseY);
+        }
         zLevel -= 150;
 
         GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.popMatrix();
+    }
+
+    private void drawInformationPages(float partialTicks, int mouseX, int mouseY) {
+        boolean usedLeftSide = false;
+        ProgressionTier prog = ResearchManager.clientProgress.getTierReached();
+        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(prog) ||
+                EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(prog)) {
+            usedLeftSide = true;
+
+            GlStateManager.color(0.86F, 0.86F, 0.86F, 0.8F);
+            GlStateManager.disableDepth();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(guiLeft + 30, guiTop + 30, 0);
+            for (int i = 0; i < locTextEnchRitual.size(); i++) {
+                String line = locTextEnchRitual.get(i);
+                fontRenderer.drawString(line, 0, (i * 10), 0x00DDDDDD, true);
+            }
+            GlStateManager.popMatrix();
+            GlStateManager.enableDepth();
+            GlStateManager.color(1F, 1F, 1F, 1F);
+        }
+        if(EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(prog)) {
+            ConstellationPaperRecipe recipe = RecipesAS.paperCraftingRecipes.get(this.constellation);
+            if(recipe != null) {
+                IGuiRenderablePage render = new JournalPageTraitRecipe(recipe).buildRenderPage();
+
+                GlStateManager.pushMatrix();
+                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+                render.render    (guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                render.postRender(guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                GL11.glPopAttrib();
+                GlStateManager.popMatrix();
+            }
+        }
+    }
+
+    private void drawNavArrows(float partialTicks) {
+        GlStateManager.disableDepth();
+        Point mouse = getCurrentMousePoint();
+        rectNext = null;
+        rectPrev = null;
+        if(hasMorePages && isOnNextPage) {
+            int width = 30;
+            int height = 15;
+            rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rectPrev.getX() + (width / 2), rectPrev.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0.5F;
+            if(rectPrev.contains(mouse)) {
+                uFrom = 0.5F;
+                GlStateManager.scale(1.1, 1.1, 1.1);
+            } else {
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
+                GlStateManager.scale(sin, sin, sin);
+            }
+            GlStateManager.color(1F, 1F, 1F, 0.8F);
+            GlStateManager.translate(-(width / 2), -(height / 2), 0);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            GlStateManager.popMatrix();
+        }
+        if(hasMorePages && !isOnNextPage) {
+            int width = 30;
+            int height = 15;
+            rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(rectNext.getX() + (width / 2), rectNext.getY() + (height / 2), 0);
+            float uFrom = 0F, vFrom = 0F;
+            if(rectNext.contains(mouse)) {
+                uFrom = 0.5F;
+                GlStateManager.scale(1.1, 1.1, 1.1);
+            } else {
+                double t = ClientScheduler.getClientTick() + partialTicks;
+                float sin = ((float) Math.sin(t / 4F)) / 32F + 1F;
+                GlStateManager.scale(sin, sin, sin);
+            }
+            GlStateManager.color(1F, 1F, 1F, 0.8F);
+            GlStateManager.translate(-(width / 2), -(height / 2), 0);
+            texArrow.bind();
+            drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
+            GlStateManager.popMatrix();
+        }
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableDepth();
     }
 
     private void drawCstBackground() {
@@ -179,9 +330,9 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.color(br, br, br, 0.8F);
         TextureHelper.refreshTextureBindState();
 
-        if(detailed && !locText.isEmpty()) {
+        if(detailed && !locTextMain.isEmpty()) {
             int offsetX = 220, offsetY = 77;
-            for (String s : locText) {
+            for (String s : locTextMain) {
                 GlStateManager.pushMatrix();
                 GlStateManager.disableDepth();
                 GlStateManager.translate(guiLeft + offsetX, guiTop + offsetY, 0);
@@ -383,6 +534,16 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         if(rectBack != null && rectBack.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(origin);
+            return;
+        }
+        if(rectPrev != null && rectPrev.contains(p)) {
+            this.isOnNextPage = false;
+            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
+            return;
+        }
+        if(rectNext != null && rectNext.contains(p)) {
+            this.isOnNextPage = true;
+            SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
         }
     }
 

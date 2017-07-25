@@ -8,8 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.lib;
 
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -19,6 +24,8 @@ import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
  * Date: 18.06.2017 / 14:37
  */
 public class RecipesAS {
+
+    public static Map<IConstellation, ConstellationPaperRecipe> paperCraftingRecipes = new HashMap<>();
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;

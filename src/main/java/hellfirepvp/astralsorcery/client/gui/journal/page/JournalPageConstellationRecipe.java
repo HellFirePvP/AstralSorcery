@@ -56,36 +56,19 @@ public class JournalPageConstellationRecipe implements IJournalPage {
 
         protected void renderAdditionalSlots(float offsetX, float offsetY, float zLevel, ConstellationRecipe recipe) {
             RenderHelper.enableGUIStandardItemLighting();
-            renderAdditionalSlot(offsetX +  55, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT));
-            renderAdditionalSlot(offsetX + 105, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT));
+            renderAltarSlot(offsetX +  55, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT));
+            renderAltarSlot(offsetX + 105, offsetY +  78, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT));
 
-            renderAdditionalSlot(offsetX +  30, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT));
-            renderAdditionalSlot(offsetX + 131, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT));
+            renderAltarSlot(offsetX +  30, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 103, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT));
 
-            renderAdditionalSlot(offsetX +  30, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT));
-            renderAdditionalSlot(offsetX + 131, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT));
+            renderAltarSlot(offsetX +  30, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT));
+            renderAltarSlot(offsetX + 131, offsetY + 153, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT));
 
-            renderAdditionalSlot(offsetX +  55, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT));
-            renderAdditionalSlot(offsetX + 105, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT));
+            renderAltarSlot(offsetX +  55, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT));
+            renderAltarSlot(offsetX + 105, offsetY + 178, zLevel, recipe.getCstItems(ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT));
             RenderHelper.disableStandardItemLighting();
             TextureHelper.refreshTextureBindState();
-        }
-
-        private void renderAdditionalSlot(float offsetX, float offsetY, float zLevel, List<ItemStack> stacks) {
-            if(stacks == null || stacks.isEmpty()) return;
-
-            long select = ((ClientScheduler.getClientTick() + ((int) offsetX) * 40 + ((int) offsetY) * 40) / 20);
-            select %= stacks.size();
-            ItemStack draw = stacks.get((int) select);
-
-            TextureHelper.refreshTextureBindState();
-            GL11.glPushMatrix();
-            GL11.glTranslated(offsetX, offsetY, zLevel + 60);
-            GL11.glScaled(1.1, 1.1, 1.1);
-            Rectangle r = drawItemStack(draw, 0, 0, 0);
-            r = new Rectangle((int) offsetX, (int) offsetY, (int) (r.getWidth() * 1.1), (int) (r.getHeight() * 1.1));
-            addRenderedStackRectangle(r, draw);
-            GL11.glPopMatrix();
         }
 
         @Override

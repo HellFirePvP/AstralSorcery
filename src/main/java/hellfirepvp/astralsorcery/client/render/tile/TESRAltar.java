@@ -11,26 +11,30 @@ package hellfirepvp.astralsorcery.client.render.tile;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.models.base.ASaltarT2;
 import hellfirepvp.astralsorcery.client.models.base.ASaltarT3;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.Random;
 
 /**
@@ -97,8 +101,26 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                     GL11.glPushMatrix();
                     GL11.glTranslated(x + 0.5, y + 4, z + 0.5);
-                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
-                    RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
+                    ActiveCraftingTask act = te.getActiveCraftingTask();
+                    if(act != null && act.getRecipeToCraft() instanceof TraitRecipe) {
+                        Collection<ItemHandle> requiredHandles = ((TraitRecipe) act.getRecipeToCraft()).getTraitItemHandles();
+                        int amt = 60 / requiredHandles.size();
+                        for (ItemHandle outer : requiredHandles) {
+                            NonNullList<ItemStack> stacksApplicable = outer.getApplicableItemsForRender();
+                            int mod = (int) (ClientScheduler.getClientTick() % (stacksApplicable.size() * 60));
+                            ItemStack element = stacksApplicable.get(MathHelper.floor(
+                                    MathHelper.clamp(stacksApplicable.size() * (mod / (stacksApplicable.size() * 60)), 0, stacksApplicable.size() - 1)));
+                            Color col = ItemColorizationHelper.getDominantColorFromItemStack(element);
+                            if(col == null) {
+                                col = BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+                            }
+                            RenderingUtils.renderLightRayEffects(0, 0.5, 0, col, 0x12315L | outer.hashCode(), ClientScheduler.getClientTick(), 20, 2F, amt, amt / 2);
+                        }
+                        RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0, ClientScheduler.getClientTick(), 15, 2F, 40, 25);
+                    } else {
+                        RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
+                        RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
+                    }
                     TESRCollectorCrystal.renderCrystal(false, true);
                     GL11.glPopMatrix();
                     TextureHelper.refreshTextureBindState();

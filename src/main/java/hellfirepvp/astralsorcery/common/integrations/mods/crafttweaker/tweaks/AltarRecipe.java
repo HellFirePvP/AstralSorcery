@@ -9,19 +9,20 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
-import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeAttunement;
-import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeConstellation;
-import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeDiscovery;
-import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.AltarRecipeRemove;
+import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.*;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,6 +39,7 @@ public class AltarRecipe extends BaseTweaker {
     public static int SLOT_COUNT_T1 = 9;
     public static int SLOT_COUNT_T2 = 13;
     public static int SLOT_COUNT_T3 = 21;
+    public static int SLOT_COUNT_T4 = 25;
 
     @ZenMethod
     public static void removeAltarRecipe(IItemStack output, int altarLevel) {
@@ -112,6 +114,43 @@ public class AltarRecipe extends BaseTweaker {
         ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeConstellation(handles, out, starlightRequired, craftingTickTime));
     }
 
+    @ZenMethod
+    public static void addTraitAltarrecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        addTraitAltarrecipe(output, starlightRequired, craftingTickTime, inputs, null);
+    }
+
+    @ZenMethod
+    public static void addTraitAltarrecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
+        if(true) {
+            CraftTweakerAPI.logError("[" + name + "] Skipping recipe-addition - T4 crafting not yet supported.");
+            return;
+        }
+
+        if(!matchNeededSlots(inputs, TileAltar.AltarLevel.TRAIT_CRAFT)) return;
+
+        ItemStack out = convertToItemStack(output);
+        if(out.isEmpty()) {
+            CraftTweakerAPI.logError("[" + name + "] Skipping recipe-addition due to invalid output itemstack.");
+            return;
+        }
+
+        IConstellation cst = null;
+        if(iRequiredConstellationFocusName != null) {
+            cst = ConstellationRegistry.getConstellationByName(iRequiredConstellationFocusName);
+            if(cst == null) {
+                CraftTweakerAPI.logError("[" + name + "] Skipping recipe-addition due to unknown constellation: " + iRequiredConstellationFocusName);
+                return;
+            }
+        }
+
+        ItemHandle[] handles = new ItemHandle[inputs.length];
+        for (int i = 0; i < inputs.length; i++) {
+            handles[i] = convertToHandle(inputs[i]);
+        }
+
+        ModIntegrationCrafttweaker.recipeModifications.add(new AltarRecipeTrait(handles, out, starlightRequired, craftingTickTime, cst));
+    }
+
     private static boolean isEmpty(IIngredient[] inputs) {
         for (IIngredient i : inputs) {
             if(i != null) return false;
@@ -129,11 +168,14 @@ public class AltarRecipe extends BaseTweaker {
                 reqSlots = SLOT_COUNT_T2;
                 break;
             case CONSTELLATION_CRAFT:
-            default:
                 reqSlots = SLOT_COUNT_T3;
                 break;
+            case TRAIT_CRAFT:
+            default:
+                reqSlots = SLOT_COUNT_T4;
+                break;
         }
-        if(inputs == null || inputs.length != reqSlots) {
+        if(inputs == null || inputs.length < reqSlots) {
             CraftTweakerAPI.logError("[" + name + "] Not enough slots defined for altar level " + altarLevel.name());
             return false;
         }

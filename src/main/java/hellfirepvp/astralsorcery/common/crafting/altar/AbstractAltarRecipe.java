@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -160,6 +161,13 @@ public abstract class AbstractAltarRecipe {
         return handle == null || handle.getFluidTypeAndAmount() == null;
     }
 
+    public boolean mayDecrement(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
+        if(!(this instanceof TraitRecipe)) return true;
+        TraitRecipe thisRecipe = (TraitRecipe) this;
+        ItemHandle handle = thisRecipe.getInnerTraitItemHandle(slot);
+        return handle == null || handle.getFluidTypeAndAmount() == null;
+    }
+
     //Called if the respective method above returns 'false' to allow for proper decrement-handling.
     public void handleItemConsumption(TileAltar ta, ShapedRecipeSlot slot) {
         ItemHandle handle = recipe.getExpectedStackHandle(slot);
@@ -195,6 +203,22 @@ public abstract class AbstractAltarRecipe {
         if(!(this instanceof ConstellationRecipe)) return;
         ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);
+        if(handle == null) return;
+
+        TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
+        ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
+        if(!stack.isEmpty()) {
+            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+            if(fas.isSuccess()) {
+                inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+            }
+        }
+    }
+
+    public void handleItemConsumption(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
+        if(!(this instanceof TraitRecipe)) return;
+        TraitRecipe thisRecipe = (TraitRecipe) this;
+        ItemHandle handle = thisRecipe.getInnerTraitItemHandle(slot);
         if(handle == null) return;
 
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();

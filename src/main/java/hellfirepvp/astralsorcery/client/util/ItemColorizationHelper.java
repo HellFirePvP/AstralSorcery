@@ -46,7 +46,6 @@ import java.util.List;
 public class ItemColorizationHelper implements IResourceManagerReloadListener {
 
     public static ItemColorizationHelper instance = new ItemColorizationHelper();
-    private static boolean skipSetup = true;
 
     private Table<Item, Integer, Color> colorizationMap = HashBasedTable.create();
 
@@ -126,7 +125,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             r = MathHelper.clamp(r, 0, 255);
             g = MathHelper.clamp(g, 0, 255);
             b = MathHelper.clamp(b, 0, 255);
-            return new Color(r, g, b);
+            return new Color(r, g, b).brighter();
         } catch (Exception exc) {
             AstralSorcery.log.error("Item Colorization Helper: Ignoring non-resolvable image " + tas.getIconName());
             exc.printStackTrace();
@@ -193,10 +192,6 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        if(skipSetup) {
-            skipSetup = false;
-            return;
-        }
         reloadRegistry();
     }
 

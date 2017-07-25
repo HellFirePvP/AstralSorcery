@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -31,10 +32,6 @@ public class TileInventoryBase extends TileEntityTick {
     protected int inventorySize;
     private ItemHandlerTile handle;
     private List<EnumFacing> applicableSides;
-
-    public TileInventoryBase() {
-        this(0);
-    }
 
     public TileInventoryBase(int inventorySize) {
         this(inventorySize, EnumFacing.VALUES);
@@ -82,6 +79,15 @@ public class TileInventoryBase extends TileEntityTick {
 
         this.handle = createNewItemHandler();
         this.handle.deserializeNBT(compound.getCompoundTag("inventory"));
+        if(this.handle.getSlots() != this.inventorySize) {
+            ItemHandlerTile newInv = createNewItemHandler();
+            for (int i = 0; i < Math.min(this.handle.getSlots(), this.inventorySize); i++) {
+                ItemStack old = this.handle.getStackInSlot(i);
+                old = ItemUtils.copyStackWithSize(old, old.getCount());
+                newInv.setStackInSlot(i, old);
+            }
+            this.handle = newInv;
+        }
     }
 
     @Override
