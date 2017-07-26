@@ -64,7 +64,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
             }
         }
         GL11.glEnable(GL11.GL_BLEND);
-        Blending.ADDITIVEDARK.apply();
+        Blending.CONSTANT_ALPHA.apply();
         GL11.glCallList(batchDList);
         blocks.clear();
         Blending.DEFAULT.apply();
@@ -76,7 +76,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         IBlockAccess iba = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
         batchDList = GLAllocation.generateDisplayLists(1);
         GL11.glEnable(GL11.GL_BLEND);
-        Blending.ADDITIVEDARK.apply();
+        Blending.CONSTANT_ALPHA.apply();
         GL11.glNewList(batchDList, GL11.GL_COMPILE);
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
