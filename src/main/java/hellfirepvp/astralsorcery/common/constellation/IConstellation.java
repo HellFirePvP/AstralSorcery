@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import hellfirepvp.astralsorcery.common.constellation.spell.ISpellEffect;
+import hellfirepvp.astralsorcery.common.constellation.spell.SpellEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -54,6 +57,10 @@ public interface IConstellation {
         return "constellationName";
     }
 
+    public List<ItemHandle> getConstellationSignatureItems();
+
+    public IConstellation addSignatureItem(ItemHandle item);
+
     public Color getConstellationColor();
 
     default public Color getTierRenderColor() {
@@ -64,6 +71,11 @@ public interface IConstellation {
             return major;
         }
         return weak;
+    }
+
+    @Nullable
+    default public ISpellEffect getSpellEffect() {
+        return SpellEffectRegistry.getSpellEffect(this);
     }
 
     default public boolean canDiscover(PlayerProgress progress) {

@@ -33,8 +33,14 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
     protected float idealDistance = 256F;
     private final StructureQuery query;
 
-    public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query, StructureGenBuffer.StructureType type, BiomeDictionary.Type... types) {
-        super(attributeVersion, true, entry, types);
+    public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query, StructureGenBuffer.StructureType type, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
+        super(attributeVersion, true, entry, ignoreBiomeSpecifications, types);
+        this.query = query;
+        this.type = type;
+    }
+
+    public WorldGenAttributeStructure(int attributeVersion, int defaultChance, String entry, StructureQuery query, StructureGenBuffer.StructureType type, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
+        super(attributeVersion, defaultChance, true, entry, ignoreBiomeSpecifications, types);
         this.query = query;
         this.type = type;
     }

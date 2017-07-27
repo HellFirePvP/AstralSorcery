@@ -21,8 +21,6 @@ import java.util.*;
  */
 public enum ResearchProgression {
 
-    /*DISCOVERY(0, ProgressionTier.DISCOVERY),
-    STARLIGHT(1, ProgressionTier.BASIC_CRAFT);*/
     DISCOVERY(0, ProgressionTier.DISCOVERY),
     BASIC_CRAFT(1, ProgressionTier.BASIC_CRAFT, DISCOVERY),
     ATTUNEMENT(2, ProgressionTier.ATTUNEMENT, BASIC_CRAFT),

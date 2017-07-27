@@ -142,21 +142,23 @@ public class MiscUtils {
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
+        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), true);
+    }
+
+    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState suggestedBrokenState, boolean breakBlock) {
         FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
-        IBlockState state = world.getBlockState(pos);
         int exp;
         try {
-            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, fp);
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, suggestedBrokenState, fp);
             MinecraftForge.EVENT_BUS.post(event);
             exp = event.getExpToDrop();
             if(event.isCanceled()) return false;
         } catch (Exception exc) {
             return false;
         }
-        IBlockState iblockstate = world.getBlockState(pos);
         TileEntity tileentity = world.getTileEntity(pos);
-        Block block = iblockstate.getBlock();
-        world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
+        Block block = suggestedBrokenState.getBlock();
+        world.playEvent(null, 2001, pos, Block.getStateId(suggestedBrokenState));
 
         boolean harvestable;
         try {
@@ -166,8 +168,12 @@ public class MiscUtils {
         }
         world.captureBlockSnapshots = true;
         try {
-            if(!block.removedByPlayer(iblockstate, world, pos, fp, harvestable)) {
-                return false;
+            if(breakBlock) {
+                if(!block.removedByPlayer(suggestedBrokenState, world, pos, fp, harvestable)) {
+                    return false;
+                }
+            } else {
+                block.onBlockHarvested(world, pos, suggestedBrokenState, fp);
             }
         } catch (Exception exc) {
             world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
@@ -175,10 +181,10 @@ public class MiscUtils {
             world.captureBlockSnapshots = false;
             return false;
         }
-        block.onBlockDestroyedByPlayer(world, pos, iblockstate);
+        block.onBlockDestroyedByPlayer(world, pos, suggestedBrokenState);
         if (harvestable) {
             try {
-                block.harvestBlock(world, fp, pos, iblockstate, tileentity, ItemStack.EMPTY);
+                block.harvestBlock(world, fp, pos, suggestedBrokenState, tileentity, ItemStack.EMPTY);
             } catch (Exception exc) {
                 world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
                 world.capturedBlockSnapshots.clear();

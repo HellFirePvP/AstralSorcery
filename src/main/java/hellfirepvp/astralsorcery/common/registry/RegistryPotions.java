@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.potion.PotionBleed;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
+import hellfirepvp.astralsorcery.common.potion.PotionSpellPlague;
 import net.minecraft.potion.Potion;
 
 /**
@@ -24,10 +25,12 @@ public class RegistryPotions {
 
     public static PotionCheatDeath potionCheatDeath;
     public static PotionBleed potionBleed;
+    public static PotionSpellPlague potionSpellPlague;
 
     public static void init() {
         potionCheatDeath = registerPotion(new PotionCheatDeath());
         potionBleed = registerPotion(new PotionBleed());
+        potionSpellPlague = registerPotion(new PotionSpellPlague());
     }
 
     private static <T extends Potion> T registerPotion(T potion) {

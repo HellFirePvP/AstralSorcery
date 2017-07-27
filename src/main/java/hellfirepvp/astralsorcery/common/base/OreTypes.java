@@ -30,21 +30,23 @@ import java.util.Random;
  */
 public class OreTypes {
 
-    private static Map<String, Double> oreDictWeights = new HashMap<>();
+    private static Map<String, OreEntry> oreDictWeights = new HashMap<>();
     private static double totalWeight = 0D;
+    private static double totalVanillaWeight = 0D;
 
-    private static Map<String, Double> localFallback = new HashMap<>();
+    private static Map<String, OreEntry> localFallback = new HashMap<>();
     private static double fallbackWeight = 0D;
+    private static double fallbackVanillaWeight = 0D;
 
     public static void init() {
         //Vanilla
-        registerOreEntry("oreCoal",        5200D);
-        registerOreEntry("oreIron",        2500D);
-        registerOreEntry("oreGold",         550D);
-        registerOreEntry("oreLapis",        140D);
-        registerOreEntry("oreRedstone",     700D);
-        registerOreEntry("oreDiamond",      180D);
-        registerOreEntry("oreEmerald",      100D);
+        registerOreEntry("oreCoal",        5200D, true);
+        registerOreEntry("oreIron",        2500D, true);
+        registerOreEntry("oreGold",         550D, true);
+        registerOreEntry("oreLapis",        140D, true);
+        registerOreEntry("oreRedstone",     700D, true);
+        registerOreEntry("oreDiamond",      180D, true);
+        registerOreEntry("oreEmerald",      100D, true);
         //Modded
         registerOreEntry("oreAluminum",     600D);
         registerOreEntry("oreCopper",      1100D);
@@ -70,38 +72,59 @@ public class OreTypes {
         if(localFallback.isEmpty()) {
             localFallback.putAll(oreDictWeights);
             fallbackWeight = totalWeight;
+            fallbackVanillaWeight = totalVanillaWeight;
         }
     }
 
     public static void loadFromFallback() {
         oreDictWeights.clear();
         totalWeight = fallbackWeight;
+        totalVanillaWeight = fallbackVanillaWeight;
         oreDictWeights.putAll(localFallback);
     }
 
     public static void removeOreEntry(String oreDictName) {
         if(oreDictWeights.containsKey(oreDictName)) {
-            double weight = oreDictWeights.get(oreDictName);
+            double weight = oreDictWeights.get(oreDictName).weight;
+            boolean val = oreDictWeights.get(oreDictName).isVanilla;
             oreDictWeights.remove(oreDictName);
             totalWeight -= weight;
+            if(val) {
+                totalVanillaWeight -= weight;
+            }
         }
     }
 
     public static void registerOreEntry(String oreDictName, Double weight) {
-        oreDictWeights.put(oreDictName, weight);
+        registerOreEntry(oreDictName, weight, false);
+    }
+
+    public static void registerOreEntry(String oreDictName, Double weight, boolean vanilla) {
+        oreDictWeights.put(oreDictName, new OreEntry(weight, vanilla));
         totalWeight += weight;
+        if(vanilla) {
+            totalVanillaWeight += weight;
+        }
     }
 
     @Nonnull
     public static ItemStack getRandomOre(Random random) {
+        return getRandomOre(random, false);
+    }
+
+    @Nonnull
+    public static ItemStack getRandomOre(Random random, boolean onlyVanilla) {
         ItemStack result = ItemStack.EMPTY;
         int runs = 0;
         while (result.isEmpty() && runs < 150) {
 
             String key = null;
-            double randWeight = random.nextFloat() * totalWeight;
-            for (Map.Entry<String, Double> entry : oreDictWeights.entrySet()) {
-                randWeight -= entry.getValue();
+            double randWeight = random.nextFloat() * (onlyVanilla ? totalVanillaWeight : totalWeight);
+            for (Map.Entry<String, OreEntry> entry : oreDictWeights.entrySet()) {
+                if(onlyVanilla && !entry.getValue().isVanilla) {
+                    continue;
+                }
+                randWeight -= entry.getValue().weight;
                 if(randWeight <= 0) {
                     key = entry.getKey();
                     break;
@@ -129,6 +152,18 @@ public class OreTypes {
         }
 
         return result;
+    }
+
+    private static class OreEntry {
+
+        private final double weight;
+        private final boolean isVanilla;
+
+        OreEntry(double weight, boolean isVanilla) {
+            this.weight = weight;
+            this.isVanilla = isVanilla;
+        }
+
     }
 
 }

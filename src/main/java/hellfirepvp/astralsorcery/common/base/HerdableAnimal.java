@@ -41,7 +41,6 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         return registryHerdable.get(entity.getClass());
     }
 
-    //TODO add llama
     public static void init() {
         register(new Cow());
         register(new Chicken());
@@ -52,6 +51,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         register(new Squid());
         register(new Mooshroom());
         register(new PolarBear());
+        register(new Llama());
     }
 
     public static void register(HerdableAnimal herd) {
@@ -62,6 +62,39 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
 
     @Nonnull
     public List<ItemStack> getHerdingDropsTick(T entity, World world, Random rand, float herdingLuck);
+
+    public static class Parrot implements HerdableAnimal<EntityParrot> {
+
+        @Override
+        public Class<EntityParrot> getEntityClass() {
+            return EntityParrot.class;
+        }
+
+        @Nonnull
+        @Override
+        public List<ItemStack> getHerdingDropsTick(EntityParrot entity, World world, Random rand, float herdingLuck) {
+            LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
+            builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
+            return world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_PARROT).generateLootForPools(rand, builder.build());
+        }
+
+    }
+
+    public static class Llama implements HerdableAnimal<EntityLlama> {
+
+        @Override
+        public Class<EntityLlama> getEntityClass() {
+            return EntityLlama.class;
+        }
+
+        @Nonnull
+        @Override
+        public List<ItemStack> getHerdingDropsTick(EntityLlama entity, World world, Random rand, float herdingLuck) {
+            LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
+            builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
+            return world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_LLAMA).generateLootForPools(rand, builder.build());
+        }
+    }
 
     public static class PolarBear implements HerdableAnimal<EntityPolarBear> {
 

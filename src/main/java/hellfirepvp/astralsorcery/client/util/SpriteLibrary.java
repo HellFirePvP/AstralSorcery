@@ -37,6 +37,7 @@ public class SpriteLibrary {
     private static final BindableResource texStar1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1");
     private static final BindableResource texStar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star2");
     private static final BindableResource texFlare1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare1");
+    private static final BindableResource texFlare2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2");
     private static final BindableResource texCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge");
     private static final BindableResource texHook = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "hook");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
@@ -57,6 +58,7 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteCelestialBurst3 = texBurst3.asSpriteSheet(1, 40);
     public static final SpriteSheetResource spriteCraftBurst = texCraftBurst.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteFlare1 = texFlare1.asSpriteSheet(6, 8);
+    public static final SpriteSheetResource spriteFlare2 = texFlare2.asSpriteSheet(8, 8);
     public static final SpriteSheetResource spriteCharge = texCharge.asSpriteSheet(8, 4);
     public static final SpriteSheetResource spriteHook = texHook.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(5, 16);

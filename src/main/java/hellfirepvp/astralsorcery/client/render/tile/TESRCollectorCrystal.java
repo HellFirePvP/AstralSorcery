@@ -50,16 +50,18 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
     public void render(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
-        long sBase = 1553015L;
-        sBase ^= (long) te.getPos().getX();
-        sBase ^= (long) te.getPos().getY();
-        sBase ^= (long) te.getPos().getZ();
-        Color c = type == null ? BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor : type.displayColor;
-        if(te.isEnhanced()) {
-            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 1.4F, 50, 25);
-            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, Color.WHITE, sBase, ClientScheduler.getClientTick(), 40, 2, 15, 15);
-        } else {
-            RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
+        if(te.doesSeeSky()) {
+            long sBase = 1553015L;
+            sBase ^= (long) te.getPos().getX();
+            sBase ^= (long) te.getPos().getY();
+            sBase ^= (long) te.getPos().getZ();
+            Color c = type == null ? BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor : type.displayColor;
+            if(te.isEnhanced()) {
+                RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 1.4F, 50, 25);
+                RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, Color.WHITE, sBase, ClientScheduler.getClientTick(), 40, 2, 15, 15);
+            } else {
+                RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 50, 25);
+            }
         }
 
         GL11.glPushMatrix();

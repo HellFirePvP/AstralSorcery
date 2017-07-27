@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.spell.entity.SpellProjectile;
 import hellfirepvp.astralsorcery.common.entities.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -39,6 +40,7 @@ public class RegistryEntities {
         registerEntity(EntityNocturnalSpark.class, "EntityNocturnalSpark", modEid++, 32, 1, true);
         registerEntity(EntityCrystalTool.class, "EntityCrystalTool", modEid++, 64, 20, true);
         registerEntity(EntityGrapplingHook.class, "EntityGrapplingHook", modEid++, 128, 1, true);
+        registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
     }
 
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFreq, boolean sendVelUpdates) {

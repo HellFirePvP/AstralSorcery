@@ -92,8 +92,24 @@ public class TileCollectorCrystal extends TileSourceBase {
                 }
             }
         } else {
-            if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                playEnhancedEffects();
+            if(!doesSeeSky()) {
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                        getPos().getX() + 0.5,
+                        getPos().getY() + 0.5,
+                        getPos().getZ() + 0.5);
+                p.motion((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                         (rand.nextFloat() * 0.04F) * (rand.nextBoolean() ? 1 : -1),
+                         (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+                p.scale(0.2F).setMaxAge(35);
+                if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                    p.setColor(Color.CYAN);
+                } else {
+                    p.setColor(Color.WHITE);
+                }
+            } else {
+                if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                    playEnhancedEffects();
+                }
             }
         }
     }

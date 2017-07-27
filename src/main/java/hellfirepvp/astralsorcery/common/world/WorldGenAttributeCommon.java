@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -33,14 +34,14 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
     protected final WorldGenEntry cfgEntry;
     private final boolean onlyGenerateInSkyDimensions;
 
-    public WorldGenAttributeCommon(int attributeVersion, boolean onlyGenerateInSkyDimensions, String entry, BiomeDictionary.Type... types) {
-        this(attributeVersion, 140, onlyGenerateInSkyDimensions, entry, types);
+    public WorldGenAttributeCommon(int attributeVersion, boolean onlyGenerateInSkyDimensions, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
+        this(attributeVersion, 140, onlyGenerateInSkyDimensions, entry, ignoreBiomeSpecifications, types);
     }
 
-    public WorldGenAttributeCommon(int attributeVersion, int defaultChance, boolean onlyGenerateInSkyDimensions, String entry, BiomeDictionary.Type... types) {
+    public WorldGenAttributeCommon(int attributeVersion, int defaultChance, boolean onlyGenerateInSkyDimensions, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
         super(attributeVersion);
         this.onlyGenerateInSkyDimensions = onlyGenerateInSkyDimensions;
-        this.cfgEntry = new WorldGenEntry(entry, defaultChance, types) {
+        this.cfgEntry = new WorldGenEntry(entry, defaultChance, ignoreBiomeSpecifications, types) {
             @Override
             public void loadFromConfig(Configuration cfg) {
                 super.loadFromConfig(cfg);
@@ -54,7 +55,9 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
     public void generate(Random random, int chunkX, int chunkZ, World world) {
         if(canGenerateAtAll(chunkX, chunkZ, world, random)) {
             BlockPos pos = getGenerationPosition(chunkX, chunkZ, world, random);
-            tryGenerateAtPosition(pos, world, random);
+            if(pos != null) {
+                tryGenerateAtPosition(pos, world, random);
+            }
         }
     }
 
@@ -70,6 +73,7 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
 
     public abstract boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random);
 
+    @Nullable
     public abstract BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand);
 
     public boolean canGenerateAtAll(int chX, int chZ, World world, Random rand) {

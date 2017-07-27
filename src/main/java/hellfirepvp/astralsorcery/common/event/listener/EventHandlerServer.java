@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
@@ -15,6 +16,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -31,6 +33,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFi
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
+import hellfirepvp.astralsorcery.common.tile.TileOreGenerator;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.*;
 import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
@@ -58,9 +61,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldProviderHell;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -68,6 +73,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -80,10 +86,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -99,6 +102,7 @@ public class EventHandlerServer {
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
+    public static List<TileOreGenerator> generatorQueue = Lists.newLinkedList();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLoad(WorldEvent.Load event) {
@@ -116,6 +120,13 @@ public class EventHandlerServer {
         ConstellationSkyHandler.getInstance().informWorldUnload(w);
         if (w.isRemote) {
             clientUnload();
+        }
+    }
+
+    @SubscribeEvent
+    public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
+        if(event.getObject() instanceof EntityLivingBase) {
+            event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
         }
     }
 
@@ -178,6 +189,21 @@ public class EventHandlerServer {
                     }
                 }
                 event.setAmount(dmg);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onChunkLoad(ChunkEvent.Load event) {
+        if(!event.getWorld().isRemote) {
+            Iterator<TileOreGenerator> iterator = generatorQueue.iterator();
+            while (iterator.hasNext()) {
+                TileOreGenerator gen = iterator.next();
+                BlockPos at = gen.getPos();
+                if(event.getChunk().getPos().equals(new ChunkPos(at))) {
+                    event.getChunk().getTileEntityMap().put(gen.getPos(), gen);
+                    iterator.remove();
+                }
             }
         }
     }
@@ -367,6 +393,16 @@ public class EventHandlerServer {
         }
         if (event.getOldBlock().equals(Blocks.CRAFTING_TABLE)) {
             if (!event.getNewBlock().equals(Blocks.CRAFTING_TABLE)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+            }
+        }
+        if (event.getNewBlock().equals(BlocksAS.blockAltar)) {
+            if (!event.getOldBlock().equals(BlocksAS.blockAltar)) {
+                WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTablePlacement(at);
+            }
+        }
+        if (event.getOldBlock().equals(BlocksAS.blockAltar)) {
+            if (!event.getNewBlock().equals(BlocksAS.blockAltar)) {
                 WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
             }
         }

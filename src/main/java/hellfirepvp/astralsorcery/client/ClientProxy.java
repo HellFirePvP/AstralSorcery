@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.constellation.spell.entity.SpellProjectile;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
@@ -240,6 +241,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityHook.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(SpellProjectile.class, new RenderEntitySpellProjectile.Factory());
     }
 
     public void registerDisplayInformationInit() {

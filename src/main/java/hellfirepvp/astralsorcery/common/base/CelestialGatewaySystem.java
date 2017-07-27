@@ -42,8 +42,8 @@ public class CelestialGatewaySystem {
     private boolean startup = false;
 
     public static CelestialGatewaySystem instance = new CelestialGatewaySystem();
-    private Map<Integer, List<BlockPos>> serverCache = new HashMap<>();
-    private Map<Integer, List<BlockPos>> clientCache = new HashMap<>();
+    private Map<Integer, List<GatewayCache.GatewayNode>> serverCache = new HashMap<>();
+    private Map<Integer, List<GatewayCache.GatewayNode>> clientCache = new HashMap<>();
 
     private CelestialGatewaySystem() {}
 
@@ -81,15 +81,15 @@ public class CelestialGatewaySystem {
         PacketChannel.CHANNEL.sendToAll(pkt);
     }
 
-    public List<BlockPos> getGatewaysForWorld(World world, Side side) {
+    public List<GatewayCache.GatewayNode> getGatewaysForWorld(World world, Side side) {
         return (side == Side.SERVER ? serverCache : clientCache).get(world.provider.getDimension());
     }
 
-    public Map<Integer, List<BlockPos>> getGatewayCache(Side side) {
+    public Map<Integer, List<GatewayCache.GatewayNode>> getGatewayCache(Side side) {
         return Collections.unmodifiableMap(side == Side.SERVER ? serverCache : clientCache);
     }
 
-    public void addPosition(World world, BlockPos pos) {
+    public void addPosition(World world, GatewayCache.GatewayNode pos) {
         if(world.isRemote) return;
 
         int dim = world.provider.getDimension();
@@ -101,7 +101,7 @@ public class CelestialGatewaySystem {
             return;
         }
 
-        List<BlockPos> cache = serverCache.get(dim);
+        List<GatewayCache.GatewayNode> cache = serverCache.get(dim);
         if(!cache.contains(pos)) {
             cache.add(pos);
             syncToAll();
@@ -127,7 +127,7 @@ public class CelestialGatewaySystem {
         }
     }
 
-    public void updateClientCache(Map<Integer, List<BlockPos>> positions) {
+    public void updateClientCache(Map<Integer, List<GatewayCache.GatewayNode>> positions) {
         this.clientCache = positions;
     }
 

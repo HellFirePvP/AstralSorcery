@@ -172,6 +172,7 @@ public class RegistryBlocks {
         registerTile(TileMapDrawingTable.class);
         //registerTile(TileCelestialOrrery.class);
         registerTile(TileCelestialGateway.class);
+        registerTile(TileOreGenerator.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

@@ -129,6 +129,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
     }

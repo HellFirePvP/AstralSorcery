@@ -40,6 +40,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -103,7 +104,7 @@ public final class EffectHandler {
         }
         c.value += fastRenderParticles.size();
         c.value += fastRenderLightnings.size();
-        objects.values().stream().forEach((l) -> c.value += l.size());
+        objects.values().forEach((l) -> c.value += l.size());
         return c.value;
     }
 
@@ -129,8 +130,8 @@ public final class EffectHandler {
     public void onDebugText(RenderGameOverlayEvent.Text event) {
         if(Minecraft.getMinecraft().gameSettings.showDebugInfo) {
             event.getLeft().add("");
-            event.getLeft().add("§9[AstralSorcery]§r EffectHandler:");
-            event.getLeft().add("§9[AstralSorcery]§r > Complex effects: " + getDebugEffectCount());
+            event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " EffectHandler:");
+            event.getLeft().add(TextFormatting.BLUE + "[AstralSorcery]" + TextFormatting.RESET + " > Complex effects: " + getDebugEffectCount());
         }
     }
 
@@ -151,7 +152,7 @@ public final class EffectHandler {
                 uiGateway.renderIntoWorld(pTicks);
             }
             if(ClientGatewayHandler.focusingEntry != null) {
-                renderGatewayTarget(pTicks);
+                uiGateway.renderGatewayTarget(pTicks);
             }
         }
         GlStateManager.disableDepth();
@@ -173,35 +174,6 @@ public final class EffectHandler {
         acceptsNewParticles = true;
         TESRMapDrawingTable.renderRemainingGlasses(pTicks);
         TESRTranslucentBlock.renderTranslucentBlocks();
-    }
-
-    private void renderGatewayTarget(float pTicks) {
-        int focusTicks = ClientGatewayHandler.focusTicks;
-        UIGateway.GatewayEntry focusingEntry = ClientGatewayHandler.focusingEntry;
-        float perc = (Math.min(40F, focusTicks) / 40F) * 0.5F;
-        if(focusTicks > 50) {
-            perc = ((float) (focusTicks - 50)) / 25F;
-            perc = MathHelper.clamp(perc, 0.5F, 1F);
-        }
-        ResourceLocation screenshot = ClientScreenshotCache.tryQueryTextureFor(focusingEntry.originalDimId, focusingEntry.originalBlockPos);
-        if(screenshot != null) {
-            GlStateManager.pushMatrix();
-            Minecraft.getMinecraft().getTextureManager().bindTexture(screenshot);
-            GlStateManager.enableBlend();
-            Blending.DEFAULT.applyStateManager();
-            GlStateManager.disableAlpha();
-            Tessellator tes = Tessellator.getInstance();
-            BufferBuilder vb = tes.getBuffer();
-            vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-
-            Vector3 pos = focusingEntry.relativePos.clone().multiply(0.85).add(uiGateway.getPos());
-            RenderingUtils.renderFacingFullQuadVB(vb, pos.getX(), pos.getY(), pos.getZ(),
-                    pTicks, 0.4F, 0,
-                    1F, 1F, 1F, perc);
-            tes.draw();
-            GlStateManager.enableAlpha();
-            GlStateManager.popMatrix();
-        }
     }
 
     @SubscribeEvent

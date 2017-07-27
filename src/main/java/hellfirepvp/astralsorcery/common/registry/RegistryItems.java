@@ -33,6 +33,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
@@ -95,6 +96,8 @@ public class RegistryItems {
         registerItems();
 
         registerBlockItems();
+
+        registerDispenseBehavior();
     }
 
     //"Normal" items
@@ -147,6 +150,10 @@ public class RegistryItems {
         registerItem(new ItemCollectorCrystal(BlocksAS.celestialCollectorCrystal));
     }
 
+    private static void registerDispenseBehavior() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(useableDust, useableDust);
+    }
+
     private static <T extends Block> void registerCustomNameItemBlock(T block) {
         registerItem(new ItemBlockCustomName(block), block.getClass().getSimpleName().toLowerCase());
     }
@@ -181,9 +188,9 @@ public class RegistryItems {
 
     private static <T extends IForgeRegistryEntry> T registerItem(String modId, T item, String name) {
         try {
-            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.instance());
+            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.INSTANCE());
             Object oldMod = modController.getClass().getField("activeContainer").get(modController);
-            modController.getClass().getField("activeContainer").set(modController, Loader.instance().getIndexedModList().get(modId));
+            modController.getClass().getField("activeContainer").set(modController, Loader.INSTANCE().getIndexedModList().get(modId));
 
             register(item, name);
 

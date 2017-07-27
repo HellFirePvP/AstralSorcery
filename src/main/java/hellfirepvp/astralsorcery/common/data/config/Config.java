@@ -50,6 +50,7 @@ public class Config {
     @Sync public static boolean craftingLiqCrystalGrowth = true;
     @Sync public static boolean craftingLiqCrystalToolGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
+    @Sync public static boolean canCrystalGrowthYieldDuplicates = true;
 
     public static boolean enableRetroGen = false;
 
@@ -71,8 +72,6 @@ public class Config {
     @Sync public static float grappleWandUseCost = 0.7F;
     @Sync public static float architectWandUseCost = 0.07F;
     @Sync public static float exchangeWandUseCost = 0.08F;
-
-    @Sync public static int dimensionIdSkyRift = -81;
 
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
@@ -117,7 +116,6 @@ public class Config {
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
-        dimensionIdSkyRift = latestConfig.getInt("dimensionIdSkyRift", "general", -81, Integer.MIN_VALUE, Integer.MAX_VALUE, "DimensionId for SkyRift");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
 
@@ -136,6 +134,7 @@ public class Config {
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
         craftingLiqCrystalToolGrowth = latestConfig.getBoolean("liquidStarlightCrystalToolGrowth", "crafting", craftingLiqCrystalToolGrowth, "Set this to false to disable Crystal Tool growth in liquid starlight");
+        canCrystalGrowthYieldDuplicates = latestConfig.getBoolean("canCrystalGrowthYieldDuplicates", "crafting", canCrystalGrowthYieldDuplicates, "Set this to false to disable the chance to get a 2nd crystal when growing a max-sized one in liquid starlight.");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");

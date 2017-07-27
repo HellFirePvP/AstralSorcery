@@ -37,6 +37,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
 
     public static final BindableResource textureResBlank    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook");
     public static final BindableResource textureResShell    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook");
+    public static final BindableResource textureResShellCst = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation");
     public static final BindableResource textureBookmark    = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmark");
     public static final BindableResource textureBookmarkStr = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmarkstretched");
 

@@ -151,14 +151,14 @@ public class CraftingAccessManager {
      */
     private static void addRecipe(Object o) {
         if(!ignoreJEI && Mods.JEI.isPresent()) {
-            ModIntegrationJEI.recipeRegistry.addRecipe(o);
+            ModIntegrationJEI.addRecipe(o);
         }
     }
 
     private static void removeAll(Collection objects) {
         if(!ignoreJEI && Mods.JEI.isPresent()) {
             for (Object o : objects) {
-                ModIntegrationJEI.recipeRegistry.removeRecipe(o);
+                ModIntegrationJEI.removeRecipe(o);
             }
         }
     }
@@ -167,7 +167,7 @@ public class CraftingAccessManager {
         if(!ignoreJEI && o != null) {
             lastReloadRemovedRecipes.add(o);
             if(Mods.JEI.isPresent()) {
-                ModIntegrationJEI.recipeRegistry.removeRecipe(o);
+                ModIntegrationJEI.removeRecipe(o);
             }
         }
     }

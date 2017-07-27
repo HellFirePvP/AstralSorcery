@@ -63,6 +63,8 @@ public class GuiProgressionRenderer {
     private ResearchProgression focusedClusterZoom = null, focusedClusterMouse = null;
     private GuiProgressionClusterRenderer clusterRenderer = null;
 
+    private long doubleClickLast = 0L;
+
     private boolean hasPrevOffset = false;
     private Map<Rectangle, ResearchProgression> clusterRectMap = new HashMap<>();
 
@@ -144,8 +146,23 @@ public class GuiProgressionRenderer {
 
     //Nothing to actually click here, we redirect if we can.
     public void propagateClick(Point p) {
-        if(clusterRenderer != null && sizeHandler.getScalingFactor() > 6) {
-            clusterRenderer.propagateClick(parentGui, p);
+        if(clusterRenderer != null) {
+            if(sizeHandler.getScalingFactor() > 6) {
+                clusterRenderer.propagateClick(parentGui, p);
+                return;
+            }
+        }
+        if(focusedClusterMouse != null) {
+            if(sizeHandler.getScalingFactor() <= 6) {
+                long current = System.currentTimeMillis();
+                if(current - this.doubleClickLast < 400L) {
+                    while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9) {
+                        handleZoomIn();
+                    }
+                    this.doubleClickLast = 0L;
+                }
+                this.doubleClickLast = current;
+            }
         }
     }
 

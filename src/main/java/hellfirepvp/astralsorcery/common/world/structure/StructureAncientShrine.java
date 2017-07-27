@@ -31,7 +31,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     private int heightThreshold = 4;
 
     public StructureAncientShrine() {
-        super(0, "ancientShrine", () -> MultiBlockArrays.ancientShrine, StructureGenBuffer.StructureType.MOUNTAIN, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.SNOWY);
+        super(0, "ancientShrine", () -> MultiBlockArrays.ancientShrine, StructureGenBuffer.StructureType.MOUNTAIN, false, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.SNOWY);
         this.idealDistance = 768F;
     }
 

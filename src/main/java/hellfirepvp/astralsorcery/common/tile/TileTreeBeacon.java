@@ -87,9 +87,9 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-            int runs = MathHelper.ceil(starlightCharge * 1.7D);
+            int runs = MathHelper.ceil(starlightCharge * 2.6D);
             starlightCharge = 0D;
-            for (int i = 0; i < Math.max(1, runs); i++) {
+            for (int i = 0; i < Math.max(8, runs); i++) {
                 BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
                 if(randPos != null) {
                     TileFakeTree tft = MiscUtils.getTileAt(world, randPos, TileFakeTree.class, false);
@@ -345,7 +345,7 @@ public class TileTreeBeacon extends TileReceiverBase {
 
         public static double treeBeaconRange = 16D;
         public static int maxCount = 600;
-        public static int dropsChance = 5;
+        public static int dropsChance = 4;
         public static int breakChance = 500;
         public static float speedLimiter = 1;
 
@@ -358,7 +358,7 @@ public class TileTreeBeacon extends TileReceiverBase {
             speedLimiter = cfg.getFloat(getKey() + "EfficiencyLimiter", getConfigurationSection(), 1F, 0F, 1F, "Percentage, how hard the speed limiter should slow down production of the tree beacon. 1=max, 0=no limiter");
             maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 600, 1, 4000, "Defines the amount of blocks the treeBeacon can support at max count");
             treeBeaconRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), 16F, 4F, 64F, "Defines the Range where the TreeBeacon will scan for Tree's to grow.");
-            dropsChance = cfg.getInt(getKey() + "DropsChance", getConfigurationSection(), 5, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
+            dropsChance = cfg.getInt(getKey() + "DropsChance", getConfigurationSection(), 4, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
             breakChance = cfg.getInt(getKey() + "BreakChance", getConfigurationSection(), 500, 20, Integer.MAX_VALUE, "Defines the chance that the block harvested is going to break per random-selection tick. The higher the value the lower the chance");
         }
 

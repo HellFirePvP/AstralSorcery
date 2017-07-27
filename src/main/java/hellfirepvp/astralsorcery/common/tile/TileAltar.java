@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -98,7 +99,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     public void receiveStarlight(@Nullable IWeakConstellation type, double amount) {
         if(amount <= 0.001) return;
 
-        starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 100D)));
+        starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + (amount * 200D)));
         markForUpdate();
     }
 
@@ -177,7 +178,11 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return super.getRenderBoundingBox().expand(0, 3, 0);
+        AxisAlignedBB box = super.getRenderBoundingBox().expand(0, 3, 0);
+        if(level != null && level.ordinal() >= AltarLevel.TRAIT_CRAFT.ordinal()) {
+            box = box.grow(3, 0, 3);
+        }
+        return box;
     }
 
     @SideOnly(Side.CLIENT)
@@ -263,6 +268,19 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             } else {
                 recipe.handleItemConsumption(this, slot);
             }
+        }
+
+        for (TraitRecipe.TraitRecipeSlot slot : TraitRecipe.TraitRecipeSlot.values()) {
+            int slotId = slot.getSlotId();
+            if(recipe.mayDecrement(this, slot)) {
+                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
+            } else {
+                recipe.handleItemConsumption(this, slot);
+            }
+        }
+
+        if(recipe instanceof TraitRecipe) {
+            ((TraitRecipe) recipe).consumeOuterInputs(this, craftingTask);
         }
 
         if(!out.isEmpty()) {

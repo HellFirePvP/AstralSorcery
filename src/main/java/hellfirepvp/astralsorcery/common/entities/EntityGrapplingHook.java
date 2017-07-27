@@ -134,7 +134,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         if(getThrower() == null || getThrower().isDead) {
             setDespawning();
         }
-        if(!isPulling() && ticksExisted > 15) {
+        if(!isPulling() && ticksExisted > 20) {
             setDespawning();
         }
 
@@ -149,7 +149,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
                     this.posZ = at.posZ;
                 }
 
-                if(((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 10 && dist < 2)) || timeout > 15) {
+                if(((getPulling() != null && ticksExisted > 60 && dist < 2) || (getPulling() == null && ticksExisted > 15 && dist < 2)) || timeout > 15) {
                     setDespawning();
                 } else {
                     getThrower().fallDistance = -5F;
@@ -249,8 +249,14 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
-        return distance < 512;
+        double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 64D;
+        if (Double.isNaN(d0)) {
+            d0 = 64D;
+        }
+        d0 = d0 * 64.0D;
+        return distance < d0 * d0;
     }
 
     public List<Vector3> buildPoints(float partial) {

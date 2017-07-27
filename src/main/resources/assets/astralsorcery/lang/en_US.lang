@@ -37,6 +37,7 @@ misc.sword.sharpened=Sharpened
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
+effect.as.spellplague=Spellplague
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
@@ -164,6 +165,9 @@ research.SPEC_RELAY.name=Spectral Relay
 astralsorcery.journal.SPEC_RELAY.1.text=The starlight resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
 astralsorcery.journal.SPEC_RELAY.4.text=A small setup, dedicated to collecting starlight for the altar near should help solve that problem. A clear view of the sky is most certainly a necessity and better results will most likely be achieved at night.<NL>When the relay has been placed high up but close to an altar, it will collect and focus starlight once a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many relays close to each other will result in one cannibalizing the others' starlight and will most likely create  much more... §odisappointing§r results..
 
+research.KNOWLEDGE_SHARE.name=Written Expertise
+astralsorcery.journal.KNOWLEDGE_SHARE.1.text=While gaining new knowledge is certainly important, writing down said knowledge to preserve it for others or possibly another civilization uncovering your remains thousands of years later that want to follow your path is equally important.<NL>Right-click or shift-right-click to write down your knowledge onto an empty scroll or one that already has your writing on it.<NL>If only the builders of these strange shrines would've left behind something like this...
+
 research.QUICK_CHARGE.name=Alignment Charge
 astralsorcery.journal.QUICK_CHARGE.1.text=While learning more about the patterns and effects of starlight, the everpresent waves of starlight become more and more perceivable during the ebb and flow of day and night.<NL>While in its current form, the blue-white energy is potent enough to suffice for smaller rods and wands to tap into it to channel it, a bigger focus might be required to enhance the effects of single constellations while using the body or crystals to channel this energy.
 
@@ -179,7 +183,7 @@ astralsorcery.journal.ATT_PLAYER.6.text=Once everything is arranged, the central
 
 research.ATT_PERKS.name=Alignment Perks
 astralsorcery.journal.ATT_PERKS.1.text=By nature of attunement, after exclusively connecting with a constellation, the other constellations seems to dim for the attuned. This is a natural effect as attunement of a constellation crowds out the other forms of starlight a receptacle can receive, re-attunement with another constellation would require resetting the relationship. Nevertheless subjects report experiencing various benefits such as increased strength, endurance, or even a greener thumb as they go about their daily activities.
-astralsorcery.journal.ATT_PERKS.2.text=It has also been reported seeing different stars at night that loosely relate to attuned constellation. It is suspected that these new constellations help track progress within alignment, and users with stronger alignments experienced magnified benefits. To help keep track of alignment progress, a new section in the journal is dedicated to this strange pattern. It should be possible to look back at it from time to time after using some of the newly gained powers.
+astralsorcery.journal.ATT_PERKS.2.text=It has also been reported seeing different stars at night that loosely relate to the attuned constellation. It is suspected that these new constellations help track progress within alignment, and users with stronger alignments experienced magnified benefits. To help keep track of alignment progress, a new section in the journal is dedicated to this strange pattern. It should be possible to look back at it from time to time after using some of the newly gained powers.
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as one can attune themselves to a constellation and become more sensitive to a constellations starlight, rock crystals can also be attuned as well. It will react stronger to that constellation and channel its effects.<NL>The application may not be immediately self evident, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it could work. Its focusing properties maye even have uses for some other things aswell...
@@ -414,36 +418,61 @@ tile.blocktranslucentblock.name=Translucent Block
 tile.blockmapdrawingtable.name=Stellar Refraction Table
 tile.blockcelestialgateway.name=Celestial Gateway
 
+gui.journal.cst.enchantments=Refraction Table:
+gui.journal.cst.ritual=Ritual Effect:
+
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive
 astralsorcery.constellation.discidia.effect=Light from this constellation seems to be unstoppable; Forcing its way through different materials as well as living things.
+astralsorcery.constellation.discidia.enchantments=
+astralsorcery.constellation.discidia.ritual=
 astralsorcery.constellation.armara=Armara
 astralsorcery.constellation.armara.info=Defence
 astralsorcery.constellation.armara.effect=A repulsion force pushing away from the light of this constellation, much like a shield or protective barrier.
+astralsorcery.constellation.armara.enchantments=
+astralsorcery.constellation.armara.ritual=
 astralsorcery.constellation.vicio=Vicio
 astralsorcery.constellation.vicio.info=Travel
 astralsorcery.constellation.vicio.effect=The faint rays of this constellation make everything feel slower, while seeming to make you faster in whatever you want to do.
+astralsorcery.constellation.vicio.enchantments=
+astralsorcery.constellation.vicio.ritual=
 astralsorcery.constellation.aevitas=Aevitas
 astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=Being exposed to focused light of this constellation, flowers and plants close to the source are flourishing and grow much faster.
+astralsorcery.constellation.aevitas.enchantments=
+astralsorcery.constellation.aevitas.ritual=
+
 astralsorcery.constellation.mineralis=Mineralis
 astralsorcery.constellation.mineralis.info=Mineral
 astralsorcery.constellation.mineralis.effect=Standing in the light of this constellation, the very stone of the world seems to glow strangely and its shape seems to change ever so slightly over time.
+astralsorcery.constellation.mineralis.enchantments=
+astralsorcery.constellation.mineralis.ritual=
 astralsorcery.constellation.lucerna=Lucerna
 astralsorcery.constellation.lucerna.info=Light
 astralsorcery.constellation.lucerna.effect=The light of this constellation seems immensely bright despite it being far away. It is so bright in fact that it may inhibit enemies from arising entirely in its area.
+astralsorcery.constellation.lucerna.enchantments=
+astralsorcery.constellation.lucerna.ritual=
 astralsorcery.constellation.horologium=Horologium
 astralsorcery.constellation.horologium.info=Time
 astralsorcery.constellation.horologium.effect=This constellation seems to shift in time. Not only finding it seems hard, its rays seem to twist time, causing things in its way to act way faster than usual.
+astralsorcery.constellation.horologium.enchantments=
+astralsorcery.constellation.horologium.ritual=
 astralsorcery.constellation.octans=Octans
 astralsorcery.constellation.octans.info=Fishing
 astralsorcery.constellation.octans.effect=Reflecting this constellation's light onto water makes it bubble strangely and it seems to be more lively than usual.
+astralsorcery.constellation.octans.enchantments=
+astralsorcery.constellation.octans.ritual=
 astralsorcery.constellation.bootes=Bootes
 astralsorcery.constellation.bootes.info=Herding
 astralsorcery.constellation.bootes.effect=When exposed to this kind of starlight, animals close to it seem to relax and care a bit less about their resources.
+astralsorcery.constellation.bootes.enchantments=
+astralsorcery.constellation.bootes.ritual=
 astralsorcery.constellation.fornax=Fornax
 astralsorcery.constellation.fornax.info=Heat
 astralsorcery.constellation.fornax.effect=A strong force and intense heat follow closely to this constellation's light. Looking at it already feels very unpleasant.
+astralsorcery.constellation.fornax.enchantments=
+astralsorcery.constellation.fornax.ritual=
+
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=-
 astralsorcery.constellation.ulteria=Ulteria

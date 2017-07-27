@@ -39,9 +39,6 @@ public class EventHandlerNetwork {
         AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
-        if(Mods.CRAFTTWEAKER.isPresent()) {
-            //FIXME AFTER CT PORTED PacketChannel.CHANNEL.sendTo(ModIntegrationCrafttweaker.compileRecipeChangePacket(), p);
-        }
 
         ResearchManager.sendInitClientKnowledge(p);
         CelestialGatewaySystem.instance.syncTo(p);
@@ -52,7 +49,7 @@ public class EventHandlerNetwork {
     public void onLogout(PlayerEvent.PlayerLoggedOutEvent e) {
         EntityPlayer player = e.player;
 
-        PlayerChargeHandler.instance.informDisconnect(player);
+        PlayerChargeHandler.INSTANCE.informDisconnect(player);
         //ResearchManager.logoutResetClient(player);
     }
 

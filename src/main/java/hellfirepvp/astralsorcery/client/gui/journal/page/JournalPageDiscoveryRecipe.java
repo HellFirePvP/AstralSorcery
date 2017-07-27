@@ -145,7 +145,9 @@ public class JournalPageDiscoveryRecipe implements IJournalPage {
             if(recipe.getPassiveStarlightRequired() > 0) {
                 TileAltar.AltarLevel highestPossible = altarLevel;
                 ProgressionTier reached = ResearchManager.clientProgress.getTierReached();
-                if (reached.isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT)) {
+                if (reached.isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT)) {
+                    highestPossible = TileAltar.AltarLevel.TRAIT_CRAFT;
+                } else if (reached.isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT)) {
                     highestPossible = TileAltar.AltarLevel.CONSTELLATION_CRAFT;
                 } else if(reached.isThisLaterOrEqual(ProgressionTier.ATTUNEMENT)) {
                     highestPossible = TileAltar.AltarLevel.ATTUNEMENT;

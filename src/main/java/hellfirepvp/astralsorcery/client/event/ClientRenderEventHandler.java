@@ -94,7 +94,7 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
-        if (world.provider.getDimension() != Config.dimensionIdSkyRift) {
+        if (/*world.provider.getDimension() != Config.dimensionIdSkyRift*/ true) {
             if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
                 if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
                     world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
@@ -300,7 +300,7 @@ public class ClientRenderEventHandler {
                 GlStateManager.disableAlpha();
                 Tuple<Double, Double> uvPos = ssr.getUVOffset(ClientScheduler.getClientTick());
 
-                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F : PlayerChargeHandler.instance.clientCharge;
+                float percFilled = Minecraft.getMinecraft().player.isCreative() ? 1F : PlayerChargeHandler.INSTANCE.clientCharge;
                 double uLength = ssr.getULength() * percFilled;
 
                 GlStateManager.color(1F, 1F, 1F, visibilityTempCharge);

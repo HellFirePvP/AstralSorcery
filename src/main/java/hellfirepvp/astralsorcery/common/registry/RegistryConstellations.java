@@ -11,11 +11,20 @@ package hellfirepvp.astralsorcery.common.registry;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerAevitas;
+import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
+import hellfirepvp.astralsorcery.common.util.OreDictAlias;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -24,6 +33,7 @@ import java.util.Arrays;
 
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
+import static hellfirepvp.astralsorcery.common.constellation.spell.SpellEffectRegistry.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -39,12 +49,25 @@ public class RegistryConstellations {
 
         registerConstellations();
 
-        registerEffects();
-
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationRegister());
     }
 
-    private static void registerEffects() {
+    public static void initMapEffects() {
+        registerMapEffects();
+
+        registerSpellEffects();
+    }
+
+    public static void initConstellationSignatures() {
+        registerSignatureItems();
+    }
+
+    private static void registerSpellEffects() {
+        registerControllerEffect(discidia, EffectControllerDiscidia::new);
+        registerControllerEffect(aevitas,  EffectControllerAevitas::new);
+    }
+
+    private static void registerMapEffects() {
         registerMapEffect(discidia,
                 Arrays.asList(
                         new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 7),
@@ -114,6 +137,60 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(gelu);
         ConstellationRegistry.registerConstellation(ulteria);
         ConstellationRegistry.registerConstellation(alcara);
+    }
+
+    private static void registerSignatureItems() {
+        discidia.addSignatureItem(new ItemHandle(new ItemStack(Items.FLINT)));
+        discidia.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
+        discidia.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_NETHER_QUARTZ));
+        discidia.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_REDSTONE_DUST));
+
+        armara.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
+        armara.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_LEATHER));
+        armara.addSignatureItem(new ItemHandle(new ItemStack(Items.CLAY_BALL)));
+        armara.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GLOWSTONE_DUST));
+
+        vicio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_FEATHER));
+        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.SUGAR)));
+        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.STRING)));
+        vicio.addSignatureItem(new ItemHandle(new ItemStack(Items.FISH)));
+
+        aevitas.addSignatureItem(new ItemHandle(OreDictAlias.BLOCK_SAPLING));
+        aevitas.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_STARMETAL_DUST));
+        aevitas.addSignatureItem(new ItemHandle(new ItemStack(Items.WHEAT_SEEDS)));
+        aevitas.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_SUGAR_CANE));
+
+
+
+        lucerna.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GLOWSTONE_DUST));
+        lucerna.addSignatureItem(new ItemHandle(new ItemStack(Blocks.TORCH)));
+        lucerna.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_REDSTONE_DUST));
+        lucerna.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
+
+        mineralis.addSignatureItem(new ItemHandle(OreDictAlias.BLOCK_IRON_ORE));
+        mineralis.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GOLD_INGOT));
+        mineralis.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
+        mineralis.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_REDSTONE_DUST));
+
+        horologium.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_STARMETAL_DUST));
+        horologium.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_DIAMOND));
+        horologium.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_ENDERPEARL));
+        horologium.addSignatureItem(new ItemHandle(new ItemStack(Items.CLOCK)));
+
+        octans.addSignatureItem(new ItemHandle(new ItemStack(Items.FISH)));
+        octans.addSignatureItem(new ItemHandle(new ItemStack(Items.FISHING_ROD)));
+        octans.addSignatureItem(new ItemHandle(OreDictAlias.getDyeOreDict(EnumDyeColor.BLUE)));
+        octans.addSignatureItem(new ItemHandle(new ItemStack(Items.CLAY_BALL)));
+
+        bootes.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_WHEAT));
+        bootes.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_BONE));
+        bootes.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
+        bootes.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_LEATHER));
+
+        fornax.addSignatureItem(new ItemHandle(new ItemStack(Items.COAL)));
+        fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_REDSTONE_DUST));
+        fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
+        fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
     }
 
     private static void buildConstellations() {

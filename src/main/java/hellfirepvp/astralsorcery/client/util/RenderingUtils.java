@@ -19,12 +19,18 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -72,6 +78,58 @@ public class RenderingUtils {
     //You might not want to call this too often.
     public static void triggerChunkRerender() {
         Minecraft.getMinecraft().renderGlobal.loadRenderers();
+    }
+
+    public static void tryRenderItemWithColor(ItemStack stack, IBakedModel model, Color c, float alpha) {
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+
+            if (model.isBuiltInRenderer()) {
+                GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
+                GlStateManager.enableRescaleNormal();
+                TileEntityItemStackRenderer.instance.renderByItem(stack);
+            } else {
+                renderColoredItemModel(model, stack, c, alpha);
+            }
+            GlStateManager.popMatrix();
+        }
+    }
+
+    private static void renderColoredItemModel(IBakedModel model, ItemStack stack, Color color, float alpha) {
+        Color alphaColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), MathHelper.clamp(Math.round(alpha * 255F), 0, 255));
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        for (EnumFacing enumfacing : EnumFacing.values()) {
+            renderColoredQuads(bufferbuilder, model.getQuads(null, enumfacing, 0L), alphaColor, stack);
+        }
+        renderColoredQuads(bufferbuilder, model.getQuads(null, null, 0L), alphaColor, stack);
+        tessellator.draw();
+    }
+
+    private static void renderColoredQuads(BufferBuilder renderer, List<BakedQuad> quads, Color color, ItemStack stack) {
+        boolean flag = color.equals(Color.WHITE) && color.getAlpha() == 255 && !stack.isEmpty();
+        int i = 0;
+
+        ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
+        for (int j = quads.size(); i < j; ++i) {
+            BakedQuad bakedquad = quads.get(i);
+            int rgb = color.getRGB() | (color.getAlpha() << 24);
+
+            if (flag && bakedquad.hasTintIndex()) {
+                rgb = itemColors.getColorFromItemstack(stack, bakedquad.getTintIndex());
+
+                if (EntityRenderer.anaglyphEnable) {
+                    rgb = TextureUtil.anaglyphColor(rgb);
+                }
+
+                Color purify = new Color(rgb, false);
+                rgb = purify.getRGB() | (color.getAlpha() << 24);
+            }
+
+            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(renderer, bakedquad, rgb);
+        }
     }
 
     public static void sortVertexData(BufferBuilder vb) {
@@ -566,6 +624,53 @@ public class RenderingUtils {
         vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).endVertex();
         vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u + uLength, v          ).endVertex();
         vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,           v          ).endVertex();
+        t.draw();
+    }
+
+    public static void renderFacingFullColoredQuad(double px, double py, double pz, float partialTicks, float scale, float angle, int r, int g, int b, int a) {
+        renderFacingColoredQuad(px, py, pz, partialTicks, scale, angle, 0, 0, 1, 1, r, g, b, a);
+    }
+
+    public static void renderFacingColoredQuad(double px, double py, double pz, float partialTicks, float scale, float angle, double u, double v, double uLength, double vLength, int r, int g, int b, int a) {
+        float arX =  ActiveRenderInfo.getRotationX();
+        float arZ =  ActiveRenderInfo.getRotationZ();
+        float arYZ = ActiveRenderInfo.getRotationYZ();
+        float arXY = ActiveRenderInfo.getRotationXY();
+        float arXZ = ActiveRenderInfo.getRotationXZ();
+        float cR = MathHelper.clamp(r / 255F, 0F, 1F);
+        float cG = MathHelper.clamp(g / 255F, 0F, 1F);
+        float cB = MathHelper.clamp(b / 255F, 0F, 1F);
+        float cA = MathHelper.clamp(a / 255F, 0F, 1F);
+
+        Entity e = Minecraft.getMinecraft().getRenderViewEntity();
+        if(e == null) {
+            e = Minecraft.getMinecraft().player;
+        }
+        double iPX = e.prevPosX + (e.posX - e.prevPosX) * partialTicks;
+        double iPY = e.prevPosY + (e.posY - e.prevPosY) * partialTicks;
+        double iPZ = e.prevPosZ + (e.posZ - e.prevPosZ) * partialTicks;
+
+        Vector3 v1 = new Vector3(-arX * scale - arYZ * scale, -arXZ * scale, -arZ * scale - arXY * scale);
+        Vector3 v2 = new Vector3(-arX * scale + arYZ * scale,  arXZ * scale, -arZ * scale + arXY * scale);
+        Vector3 v3 = new Vector3( arX * scale + arYZ * scale,  arXZ * scale,  arZ * scale + arXY * scale);
+        Vector3 v4 = new Vector3( arX * scale - arYZ * scale, -arXZ * scale,  arZ * scale - arXY * scale);
+        if (angle != 0.0F) {
+            Vector3 pvec = new Vector3(iPX, iPY, iPZ);
+            Vector3 tvec = new Vector3(px, py, pz);
+            Vector3 qvec = pvec.subtract(tvec).normalize();
+            Vector3.Quat q = Vector3.Quat.buildQuatFrom3DVector(qvec, angle);
+            q.rotateWithMagnitude(v1);
+            q.rotateWithMagnitude(v2);
+            q.rotateWithMagnitude(v3);
+            q.rotateWithMagnitude(v4);
+        }
+        Tessellator t = Tessellator.getInstance();
+        BufferBuilder vb = t.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        vb.pos(px + v1.getX() - iPX, py + v1.getY() - iPY, pz + v1.getZ() - iPZ).tex(u,              v + vLength).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v2.getX() - iPX, py + v2.getY() - iPY, pz + v2.getZ() - iPZ).tex(u + uLength, v + vLength).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
+        vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,              v          ).color(cR, cG, cB, cA).endVertex();
         t.draw();
     }
 

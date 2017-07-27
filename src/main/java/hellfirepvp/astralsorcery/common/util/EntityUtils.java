@@ -38,7 +38,7 @@ public class EntityUtils {
             double dstFactorSq = (1.0D - dist) * (1.0D - dist);
             Vector3 toAdd = new Vector3();
             toAdd.setX(diffX / dist * dstFactorSq * 0.15D * multiplier);
-            toAdd.setY(diffY / dist * dstFactorSq * 0.25D * multiplier);
+            toAdd.setY(diffY / dist * dstFactorSq * 0.15D * multiplier);
             toAdd.setZ(diffZ / dist * dstFactorSq * 0.15D * multiplier);
             addMotionFunction.apply(toAdd);
         }

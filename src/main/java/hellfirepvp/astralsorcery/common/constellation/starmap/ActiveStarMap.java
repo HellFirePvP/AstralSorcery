@@ -137,6 +137,12 @@ public class ActiveStarMap {
             out.put(entry.getKey(), perc);
         }
         asm.starProportions = out;
+        out = new HashMap<>();
+        for (Map.Entry<IConstellation, Float> entry : asm.starProportions.entrySet()) {
+            float perc = entry.getValue();
+            out.put(entry.getKey(), MathHelper.sqrt(perc));
+        }
+        asm.starProportions = out;
     }
 
     public boolean tryApplyEnchantments(ItemStack stack) {

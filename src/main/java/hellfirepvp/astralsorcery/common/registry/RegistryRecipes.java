@@ -8,20 +8,20 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.block.BlockBlackMarble;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.block.*;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapelessRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
@@ -37,6 +38,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
@@ -76,6 +79,7 @@ public class RegistryRecipes {
     public static CelestialGatewayRecipe rCelestialGateway;
     public static DrawingTableRecipe rDrawingTable;
     public static ConstellationRecipe rInfusedGlass;
+    public static AttunementRecipe rKnowledgeShare;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -96,9 +100,11 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rWand;
     public static AttunementRecipe rLinkTool;
 
-    public static void init() {
-        initVanillaRecipes();
+    public static void initVanillaRecipes() {
+        initVanilla();
+    }
 
+    public static void initAstralRecipes() {
         initAltarRecipes();
 
         initInfusionRecipes();
@@ -134,7 +140,7 @@ public class RegistryRecipes {
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalSword));
     }
 
-    private static void initVanillaRecipes() {
+    private static void initVanilla() {
         //RecipeSorter.register("LightProximityCrafting", ShapedLightProximityRecipe.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         //RecipeSorter.register("ShapedRecipeAdapter", AccessibleRecipeAdapater.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
         //RecipeSorter.register("RecipeChangeIlluminationWandColor", RecipeChangeWandColor.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
@@ -235,6 +241,12 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_CENTER,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .buildAndRegisterShapedRecipe();
+        rMarbleSlab = newShapedRecipe("marble_slab", new ItemStack(BlocksAS.blockMarbleSlab, 6, BlockMarbleSlab.EnumType.BRICKS.ordinal()))
+                .addPart(BlockMarble.MarbleBlockType.BRICKS.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+        .buildAndRegisterShapedRecipe();
 
         rSmeltStarmetalOre = SmeltingRecipe.Builder.newSmelting("smelting_starmetal_ore", ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
@@ -271,6 +283,44 @@ public class RegistryRecipes {
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
         rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
+
+        AccessibleRecipeAdapater shapedPaper = newShapedRecipe("internal/altar/constellationpaper", ItemsAS.constellationPaper)
+                .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.FEATHER,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+                .unregisteredAccessibleShapedRecipe();
+        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+            List<ItemHandle> signature = c.getConstellationSignatureItems();
+            if(!signature.isEmpty()) {
+                ConstellationPaperRecipe recipe = new ConstellationPaperRecipe(shapedPaper, c);
+                ItemHandle first = Iterables.getFirst(signature, null); //Never null.
+                recipe.setInnerTraitItem(first, TraitRecipe.TraitRecipeSlot.values());
+                for (ItemHandle s : signature) {
+                    recipe.addOuterTraitItem(s);
+                }
+                registerAltarRecipe(recipe);
+                RecipesAS.paperCraftingRecipes.put(c, recipe);
+            }
+        }
+
+        rKnowledgeShare = registerAttenuationRecipe(newShapedRecipe("internal/altar/knowledgeshare", ItemsAS.knowledgeShare)
+                .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.FEATHER,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.getDyeOreDict(EnumDyeColor.BLACK),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+        .unregisteredAccessibleShapedRecipe());
+        rKnowledgeShare.setAttItem(ItemUsableDust.DustType.ILLUMINATION.asStack(), AttunementRecipe.AttunementAltarSlot.values());
 
         NonNullList<ItemStack> applicable = NonNullList.create();
         for (ItemColoredLens.ColorType type : ItemColoredLens.ColorType.values()) {
@@ -493,7 +543,7 @@ public class RegistryRecipes {
         rStarlightInfuser.setAttItem(BlockMarble.MarbleBlockType.PILLAR.asStack(),
                 AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
                 AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
-        rStarlightInfuser.setPassiveStarlightRequirement(2500);
+        rStarlightInfuser.setPassiveStarlightRequirement(2000);
 
         rHandTelescope = registerDiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/handtelescope", ItemsAS.handTelescope)
                 .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),

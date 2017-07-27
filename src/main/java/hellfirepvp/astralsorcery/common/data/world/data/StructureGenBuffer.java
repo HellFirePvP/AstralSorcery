@@ -95,7 +95,8 @@ public class StructureGenBuffer extends CachedWorldData {
 
         MOUNTAIN,
         DESERT,
-        SMALL
+        SMALL,
+        TREASURE
 
     }
 

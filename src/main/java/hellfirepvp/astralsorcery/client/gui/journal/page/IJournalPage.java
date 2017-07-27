@@ -17,7 +17,7 @@ package hellfirepvp.astralsorcery.client.gui.journal.page;
  */
 public interface IJournalPage {
 
-    public static final int DEFAULT_WIDTH = 180;
+    public static final int DEFAULT_WIDTH = 175;
     public static final int DEFAULT_HEIGHT = 220;
 
     //Called if the collection of pages that contains this page is opened.
