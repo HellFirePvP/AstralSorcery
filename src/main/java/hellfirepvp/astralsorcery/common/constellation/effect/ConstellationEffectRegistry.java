@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
@@ -37,6 +38,7 @@ public class ConstellationEffectRegistry {
         register(Constellations.discidia,   CEffectDiscidia::new);
         register(Constellations.armara,     CEffectArmara::new);
         register(Constellations.vicio,      CEffectVicio::new);
+        register(Constellations.evorsio,    CEffectEvorsio::new);
 
         register(Constellations.mineralis,  CEffectMineralis::new);
         register(Constellations.lucerna,    CEffectLucerna::new);
@@ -44,30 +46,33 @@ public class ConstellationEffectRegistry {
         register(Constellations.horologium, CEffectHorologium::new);
         register(Constellations.octans,     CEffectOctans::new);
         register(Constellations.fornax,     CEffectFornax::new);
+        register(Constellations.pelotrio,   CEffectPelotrio::new);
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.ConstellationEffectRegister());
     }
 
     public static void addDynamicConfigEntries() {
-        Config.addDynamicEntry(new CEffectAevitas());
-        Config.addDynamicEntry(new CEffectDiscidia());
-        Config.addDynamicEntry(new CEffectArmara());
-        Config.addDynamicEntry(new CEffectVicio());
+        Config.addDynamicEntry(new CEffectAevitas(null));
+        Config.addDynamicEntry(new CEffectDiscidia(null));
+        Config.addDynamicEntry(new CEffectArmara(null));
+        Config.addDynamicEntry(new CEffectVicio(null));
+        Config.addDynamicEntry(new CEffectEvorsio(null));
 
-        Config.addDynamicEntry(new CEffectHorologium());
-        Config.addDynamicEntry(new CEffectMineralis());
-        Config.addDynamicEntry(new CEffectLucerna());
-        Config.addDynamicEntry(new CEffectBootes());
-        Config.addDynamicEntry(new CEffectOctans());
-        Config.addDynamicEntry(new CEffectFornax());
+        Config.addDynamicEntry(new CEffectHorologium(null));
+        Config.addDynamicEntry(new CEffectMineralis(null));
+        Config.addDynamicEntry(new CEffectLucerna(null));
+        Config.addDynamicEntry(new CEffectBootes(null));
+        Config.addDynamicEntry(new CEffectOctans(null));
+        Config.addDynamicEntry(new CEffectFornax(null));
+        Config.addDynamicEntry(new CEffectPelotrio(null));
     }
 
     private static void register(IWeakConstellation c, ConstellationEffectProvider provider) {
         providerMap.put(c, provider);
-        singleRenderInstances.put(c, provider.provideEffectInstance());
+        singleRenderInstances.put(c, provider.provideEffectInstance(null));
     }
 
-    public static void registerFromAPI(IWeakConstellation c, Function<Void, ConstellationEffect> providerFunc) {
+    public static void registerFromAPI(IWeakConstellation c, Function<ILocatable, ConstellationEffect> providerFunc) {
         providerMap.put(c, new APIConstellationProvider(providerFunc));
         singleRenderInstances.put(c, providerFunc.apply(null));
     }
@@ -78,31 +83,31 @@ public class ConstellationEffectRegistry {
     }
 
     @Nullable
-    public static ConstellationEffect getEffect(IWeakConstellation c) {
+    public static ConstellationEffect getEffect(IWeakConstellation c, ILocatable origin) {
         ConstellationEffectProvider p = providerMap.get(c);
         if(p != null) {
-            return p.provideEffectInstance();
+            return p.provideEffectInstance(origin);
         }
         return null;
     }
 
     public static interface ConstellationEffectProvider {
 
-        public ConstellationEffect provideEffectInstance();
+        public ConstellationEffect provideEffectInstance(ILocatable origin);
 
     }
 
     public static class APIConstellationProvider implements ConstellationEffectProvider {
 
-        private final Function<Void, ConstellationEffect> providerFunc;
+        private final Function<ILocatable, ConstellationEffect> providerFunc;
 
-        public APIConstellationProvider(Function<Void, ConstellationEffect> providerFunc) {
+        public APIConstellationProvider(Function<ILocatable, ConstellationEffect> providerFunc) {
             this.providerFunc = providerFunc;
         }
 
         @Override
-        public ConstellationEffect provideEffectInstance() {
-            return providerFunc.apply(null);
+        public ConstellationEffect provideEffectInstance(ILocatable origin) {
+            return providerFunc.apply(origin);
         }
     }
 

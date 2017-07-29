@@ -6,26 +6,19 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.base;
+package hellfirepvp.astralsorcery.common.util;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ISpecialInteractItem
+ * Class: ILocatable
  * Created by HellFirePvP
- * Date: 23.09.2016 / 15:10
+ * Date: 26.07.2017 / 21:44
  */
-public interface ISpecialInteractItem {
+public interface ILocatable {
 
-    public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack);
-
-    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack);
+    public BlockPos getPos();
 
 }

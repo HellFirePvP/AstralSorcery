@@ -106,6 +106,28 @@ public class RegistryPerks {
                 ConstellationPerks.CRE_BREEDING);
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.aevitas, map);
+
+        map = new ConstellationPerkMap();
+
+        map.addPerk(ConstellationPerks.DTR_DIG_SPEED, ConstellationPerkMap.PerkOrder.DEFAULT, 7, 7);
+
+        map.addPerk(ConstellationPerks.DTR_DAMAGE_ARC, ConstellationPerkMap.PerkOrder.DEFAULT, 2, 6,
+                ConstellationPerks.DTR_DIG_SPEED);
+
+        map.addPerk(ConstellationPerks.DTR_DIG_TYPES, ConstellationPerkMap.PerkOrder.DEFAULT, 7, 1,
+                ConstellationPerks.DTR_DIG_SPEED);
+
+        map.addPerk(ConstellationPerks.DTR_LOW_HEALTH, ConstellationPerkMap.PerkOrder.DEFAULT, 4, 13,
+                ConstellationPerks.DTR_DAMAGE_ARC);
+
+        map.addPerk(ConstellationPerks.DTR_ARMOR_BREAK, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 4,
+                ConstellationPerks.DTR_DIG_SPEED);
+
+        map.addPerk(ConstellationPerks.DTR_STACK, ConstellationPerkMap.PerkOrder.DEFAULT, 12, 10,
+                ConstellationPerks.DTR_LOW_HEALTH);
+
+
+        ConstellationPerkMapRegistry.registerPerkMap(Constellations.evorsio, map);
     }
 
 }

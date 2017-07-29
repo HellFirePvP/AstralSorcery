@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
+import hellfirepvp.astralsorcery.common.util.BlockBreakAssist;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
@@ -82,7 +83,7 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
                 case GRINDSTONE_WHEEL:
                     return TileGrindstone::playWheelAnimation;
                 case BEAM_BREAK:
-                    return ItemColoredLens.ColorType::blockBreakAnimation;
+                    return BlockBreakAssist::blockBreakAnimation;
             }
             return null;
         }

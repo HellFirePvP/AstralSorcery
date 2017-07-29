@@ -122,12 +122,12 @@ public class JournalPageTraitRecipe implements IJournalPage {
             if(recipe.getRequiredConstellation() != null) {
                 IConstellation focus = recipe.getRequiredConstellation();
                 GlStateManager.disableAlpha();
-                RenderConstellation.renderConstellationIntoGUI(new Color(0xAAAAAA), focus,
+                RenderConstellation.renderConstellationIntoGUI(new Color(0xEEEEEE), focus,
                         Math.round(offsetX + 30), Math.round(offsetY + 78), zLevel,
                         125, 125, 2F, new RenderConstellation.BrightnessFunction() {
                             @Override
                             public float getBrightness() {
-                                return 0.2F;
+                                return 0.4F;
                             }
                         }, true, false);
                 GlStateManager.enableAlpha();

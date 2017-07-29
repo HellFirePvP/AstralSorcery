@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -44,8 +45,8 @@ public class CEffectVicio extends ConstellationEffect {
     public static int potionAmplifierSpeed = 1;
     public static int potionAmplifierJump = 1;
 
-    public CEffectVicio() {
-        super(Constellations.vicio, "vicio");
+    public CEffectVicio(@Nullable ILocatable origin) {
+        super(origin, Constellations.vicio, "vicio");
     }
 
     @Override

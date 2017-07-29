@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -50,8 +51,8 @@ public class CEffectMineralis extends CEffectPositionList {
     public static int searchRange = 14;
     public static int maxCount = 2;
 
-    public CEffectMineralis() {
-        super(Constellations.mineralis, "mineralis", searchRange, maxCount, (world, pos) -> {
+    public CEffectMineralis(@Nullable ILocatable origin) {
+        super(origin, Constellations.mineralis, "mineralis", searchRange, maxCount, (world, pos) -> {
             IBlockState state = world.getBlockState(pos);
             return state.getBlock() == Blocks.STONE && state.getValue(BlockStone.VARIANT).equals(BlockStone.EnumType.STONE);
         });

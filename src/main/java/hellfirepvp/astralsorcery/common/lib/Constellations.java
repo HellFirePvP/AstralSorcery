@@ -25,7 +25,7 @@ public class Constellations {
     public static IMajorConstellation armara;   //Aspect of Defence
     public static IMajorConstellation vicio;    //Aspect of Travel
     public static IMajorConstellation aevitas;  //Aspect of Creation
-    //public static IMajorConstellation evorsio;  //Aspect of Destruction
+    public static IMajorConstellation evorsio;  //Aspect of Destruction
 
     public static IWeakConstellation mineralis;
     public static IWeakConstellation lucerna;
@@ -33,6 +33,7 @@ public class Constellations {
     public static IWeakConstellation octans;
     public static IWeakConstellation horologium;
     public static IWeakConstellation fornax;
+    public static IWeakConstellation pelotrio;
 
     public static IMinorConstellation gelu;
     public static IMinorConstellation ulteria;

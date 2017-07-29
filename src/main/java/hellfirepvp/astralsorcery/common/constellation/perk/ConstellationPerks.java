@@ -48,7 +48,14 @@ public enum ConstellationPerks {
     DEF_NOARMOR      (62, PerkDefensiveNoArmor::new),
     DEF_ELEMENTAL    (63, PerkDefensiveElemental::new),
     DEF_FALLREDUCTION(64, PerkDefensiveReduceFall::new),
-    DEF_CHEATDEATH   (65, PerkDefensiveCheatDeath::new);
+    DEF_CHEATDEATH   (65, PerkDefensiveCheatDeath::new),
+
+    DTR_DIG_SPEED    (80, PerkDestructionDigSpeed::new),
+    DTR_DIG_TYPES    (81, PerkDestructionDigTypes::new),
+    DTR_ARMOR_BREAK  (82, PerkDestructionArmor::new),
+    DTR_DAMAGE_ARC   (83, PerkDestructionDamageArc::new),
+    DTR_LOW_HEALTH   (84, PerkDestructionLowHealth::new),
+    DTR_STACK        (85, PerkDestructionStack::new);
 
     private final int id;
     private final PerkProvider provider;

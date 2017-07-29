@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,8 +39,8 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
     protected final Verifier verifier;
     private List<T> elements = new ArrayList<>();
 
-    public CEffectPositionListGen(IWeakConstellation constellation, String cfgName, int searchRange, int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
-        super(constellation, cfgName);
+    public CEffectPositionListGen(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, int searchRange, int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
+        super(origin, constellation, cfgName);
         this.elementProvider = emptyElementProvider;
         this.searchRange = searchRange;
         this.maxCount = maxCount;
@@ -81,12 +83,15 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     public boolean findNewPosition(World world, BlockPos pos) {
         if(maxCount > elements.size()) {
-            int offX = -searchRange + world.rand.nextInt(searchRange * 2);
-            int offY = -searchRange + world.rand.nextInt(searchRange * 2);
-            int offZ = -searchRange + world.rand.nextInt(searchRange * 2);
+            int offX = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
+            int offY = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
+            int offZ = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
             BlockPos at = pos.add(offX, offY, offZ);
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(at)) && verifier.isValid(world, at) && !containsElementAt(at)) {
-                elements.add(newElement(world, at));
+            if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
+                T element = newElement(world, at);
+                if(element != null) {
+                    elements.add(element);
+                }
                 return true;
             }
         }
@@ -114,8 +119,10 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
             NBTTagCompound tag = list.getCompoundTagAt(i);
             BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
             T element = elementProvider.apply(pos);
-            element.readFromNBT(tag);
-            elements.add(element);
+            if(element != null) {
+                element.readFromNBT(tag);
+                elements.add(element);
+            }
         }
     }
 
@@ -133,7 +140,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
 
     public static interface Verifier {
 
-        public boolean isValid(World world, BlockPos pos);
+        public boolean isValid(World world, BlockPos testPos);
 
     }
 

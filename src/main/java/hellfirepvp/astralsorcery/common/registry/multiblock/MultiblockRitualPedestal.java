@@ -111,8 +111,6 @@ public class MultiblockRitualPedestal extends PatternBlockArray {
         addBlock(-2, -1,  3, mar);
         addBlock( 2, -1, -3, mar);
         addBlock(-2, -1, -3, mar);
-
-        addBlock(0, 0, 0, BlocksAS.ritualPedestal.getDefaultState());
     }
 
 }

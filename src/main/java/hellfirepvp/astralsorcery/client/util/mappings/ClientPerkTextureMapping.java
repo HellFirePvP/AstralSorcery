@@ -34,6 +34,7 @@ public class ClientPerkTextureMapping {
         mapOverlayTextures.put(Constellations.aevitas,  AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "overlay_aevitas"));
         mapOverlayTextures.put(Constellations.vicio,    AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "overlay_vicio"));
         mapOverlayTextures.put(Constellations.armara,   AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "overlay_armara"));
+        mapOverlayTextures.put(Constellations.evorsio,  AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "overlay_evorsio"));
     }
 
     @Nullable

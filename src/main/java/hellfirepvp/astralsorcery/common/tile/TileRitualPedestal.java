@@ -558,7 +558,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
             if(channeling != null && properties != null && hasMultiblock) {
                 if(ce == null) {
-                    ce = channeling.getRitualEffect();
+                    ce = channeling.getRitualEffect(this);
                     /*if(channeling.equals(Constellations.ara)) {
                         tw = new TreeCaptureHelper.TreeWatcher(world.provider.getDimension(), getPos(), CEffectAra.treeRange);
                         if(CEffectAra.enabled) {
@@ -859,7 +859,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             }
 
             if(channeling != null) {
-                ce = channeling.getRitualEffect();
+                ce = channeling.getRitualEffect(this);
                 if(compound.hasKey("effect") && ce != null) {
                     NBTTagCompound cmp = compound.getCompoundTag("effect");
                     ce.readFromNBT(cmp);

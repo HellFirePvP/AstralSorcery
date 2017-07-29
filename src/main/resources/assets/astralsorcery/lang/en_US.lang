@@ -441,6 +441,11 @@ astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=Being exposed to focused light of this constellation, flowers and plants close to the source are flourishing and grow much faster.
 astralsorcery.constellation.aevitas.enchantments=
 astralsorcery.constellation.aevitas.ritual=
+astralsorcery.constellation.evorsio=Evorsio
+astralsorcery.constellation.evorsio.info=Destruction
+astralsorcery.constellation.evorsio.effect=
+astralsorcery.constellation.evorsio.enchantments=
+astralsorcery.constellation.evorsio.ritual=
 
 astralsorcery.constellation.mineralis=Mineralis
 astralsorcery.constellation.mineralis.info=Mineral
@@ -472,6 +477,11 @@ astralsorcery.constellation.fornax.info=Heat
 astralsorcery.constellation.fornax.effect=A strong force and intense heat follow closely to this constellation's light. Looking at it already feels very unpleasant.
 astralsorcery.constellation.fornax.enchantments=
 astralsorcery.constellation.fornax.ritual=
+astralsorcery.constellation.pelotrio=Pelotrio
+astralsorcery.constellation.pelotrio.info=Convocation
+astralsorcery.constellation.pelotrio.effect=
+astralsorcery.constellation.pelotrio.enchantments=
+astralsorcery.constellation.pelotrio.ritual=
 
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=-
@@ -540,5 +550,18 @@ perk.TRV_LPROT=Digging straight down
 perk.TRV_LPROT.info=Protects against lava for a short time
 perk.TRV_STEPASSIST=Hiking boots
 perk.TRV_STEPASSIST.info=Stepping up single blocks seems way easier
+
+perk.DTR_BREAKSPEED=Prospector
+perk.DTR_BREAKSPEED.info=Grants increased mining speed
+perk.DTR_DAMAGEARC=Static Charge
+perk.DTR_DAMAGEARC.info=Chance to damage another entity next to an attack
+perk.DTR_BREAKTYPE=Different Angles
+perk.DTR_BREAKTYPE.info=Using your pickaxe as shovel or axe
+perk.DTR_LOW_HEALTH=Last Breath
+perk.DTR_LOW_HEALTH.info=Higher attack damage and faster mining at low health
+perk.DTR_ARMORBREAK=Precise Hits
+perk.DTR_ARMORBREAK.info=Attacks have a chance of disarming the target
+perk.DTR_STACK=Stacking Destruction
+perk.DTR_STACK.info=Higher attack damage and faster mining over time
 
 constellation.noInformation=There is nothing here.
