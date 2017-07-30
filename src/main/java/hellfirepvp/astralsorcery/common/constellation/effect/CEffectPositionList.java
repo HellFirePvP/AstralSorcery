@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
@@ -22,8 +24,8 @@ import javax.annotation.Nullable;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(IWeakConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
-        super(c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
+    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
+        super(origin, c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
     public boolean offerNewBlockPos(BlockPos pos) {

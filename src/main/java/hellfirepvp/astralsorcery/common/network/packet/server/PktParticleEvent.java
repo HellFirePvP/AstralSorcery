@@ -135,6 +135,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_ACCEL_TILE,
         CE_DMG_ENTITY,
         CE_WATER_FISH,
+        CE_BREAK_BLOCK,
+        CE_SPAWN_PREPARE_EFFECTS,
         //CE_TREE_VORTEX,
 
         FLARE_PROC,
@@ -189,6 +191,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return TileMapDrawingTable::engraveLensEffects;
                 case GEN_STRUCTURE:
                     return TileOreGenerator::playGenerateStructureEffect;
+                case CE_BREAK_BLOCK:
+                    return CEffectEvorsio::playBreakEffects;
+                case CE_SPAWN_PREPARE_EFFECTS:
+                    return CEffectPelotrio::playSpawnPrepareEffects;
             }
             return null;
         }

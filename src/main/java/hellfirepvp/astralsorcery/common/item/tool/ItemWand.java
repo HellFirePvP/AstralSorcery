@@ -145,16 +145,18 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     }
 
     @Override
-    public void onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
+    public boolean onRightClick(World world, BlockPos pos, EntityPlayer entityPlayer, EnumFacing side, EnumHand hand, ItemStack stack) {
         IBlockState state = world.getBlockState(pos);
         Block b = state.getBlock();
         if(b instanceof IWandInteract) {
             ((IWandInteract) b).onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
-            return;
+            return true;
         }
         IWandInteract wandTe = MiscUtils.getTileAt(world, pos, IWandInteract.class, true);
         if(wandTe != null) {
             wandTe.onInteract(world, pos, entityPlayer, side, entityPlayer.isSneaking());
+            return true;
         }
+        return false;
     }
 }

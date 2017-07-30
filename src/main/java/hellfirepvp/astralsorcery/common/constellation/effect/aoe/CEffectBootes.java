@@ -12,6 +12,8 @@ import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -36,8 +38,8 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
     public static float herdingLuck = -5F;
     public static float dropChance = 0.01F;
 
-    public CEffectBootes() {
-        super(Constellations.bootes, "bootes", 12, EntityLivingBase.class, (e) -> HerdableAnimal.getHerdable(e) != null);
+    public CEffectBootes(@Nullable ILocatable origin) {
+        super(origin, Constellations.bootes, "bootes", 12, EntityLivingBase.class, (e) -> HerdableAnimal.getHerdable(e) != null);
     }
 
     @Override

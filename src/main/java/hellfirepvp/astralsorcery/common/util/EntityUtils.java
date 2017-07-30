@@ -11,9 +11,16 @@ package hellfirepvp.astralsorcery.common.util;
 import com.google.common.base.Predicate;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -27,6 +34,29 @@ import java.util.function.Function;
  * Date: 14.09.2016 / 20:10
  */
 public class EntityUtils {
+
+    public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey, boolean respectConditions) {
+        Entity entity = EntityList.createEntityByIDFromName(entityKey, world);
+        if(entity == null) {
+            return false;
+        }
+        entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
+        if(respectConditions) {
+            if(entity instanceof EntityLiving) {
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, false);
+                if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || (!((EntityLiving) entity).getCanSpawnHere() || !((EntityLiving) entity).isNotColliding()))) {
+                    return false;
+                }
+            }
+        }
+        return doesEntityHaveSpace(world, entity);
+    }
+
+    public static boolean doesEntityHaveSpace(World world, Entity entity) {
+        return !world.containsAnyLiquid(entity.getEntityBoundingBox())
+                && world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()
+                && world.checkNoEntityCollision(entity.getEntityBoundingBox(), entity);
+    }
 
     public static void applyVortexMotion(Function<Void, Vector3> getPositionFunction, Function<Vector3, Object> addMotionFunction, Vector3 to, double vortexRange, double multiplier) {
         Vector3 pos = getPositionFunction.apply(null);

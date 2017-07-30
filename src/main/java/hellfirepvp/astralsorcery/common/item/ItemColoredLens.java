@@ -19,10 +19,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.network.TileCrystalLens;
-import hellfirepvp.astralsorcery.common.util.CropHelper;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.SoundHelper;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -139,8 +136,6 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
         SPECTRAL(TargetType.NONE,   0x7f00bf, 0.25F);
 
-        private static final Map<Integer, TickTokenizedMap<BlockPos, BreakEntry>> breakMap = new HashMap<>();
-
         public final int colorRGB;
         public final Color wrappedColor;
         private final float flowReduction;
@@ -221,7 +216,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     float hardness = state.getBlockHardness(world, at);
                     if(hardness < 0) return;
                     hardness *= 1.5F;
-                    addProgress(world, at, hardness, percStrength * 4F);
+                    BlockBreakAssist.addProgress(world, at, hardness, percStrength * 4F);
                     PktPlayEffect pkt = new PktPlayEffect(PktPlayEffect.EffectType.BEAM_BREAK, at);
                     pkt.data = Block.getStateId(state);
                     PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, at, 16));
@@ -251,72 +246,6 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     }
                     break;*/
             }
-        }
-
-        private void addProgress(World world, BlockPos pos, float expectedHardness, float percStrength) {
-            TickTokenizedMap<BlockPos, BreakEntry> map = breakMap.get(world.provider.getDimension());
-            if(map == null) {
-                map = new TickTokenizedMap<>(TickEvent.Type.SERVER);
-                TickManager.getInstance().register(map);
-                breakMap.put(world.provider.getDimension(), map);
-            }
-
-            BreakEntry breakProgress = map.get(pos);
-            if(breakProgress == null) {
-                breakProgress = new BreakEntry(expectedHardness, world, pos, world.getBlockState(pos));
-                map.put(pos, breakProgress);
-            }
-
-            breakProgress.breakProgress -= percStrength;
-            breakProgress.idleTimeout = 0;
-        }
-
-        @SideOnly(Side.CLIENT)
-        public static void blockBreakAnimation(PktPlayEffect pktPlayEffect) {
-            RenderingUtils.playBlockBreakParticles(pktPlayEffect.pos, Block.getStateById(pktPlayEffect.data));
-        }
-
-    }
-
-    private static class BreakEntry implements TickTokenizedMap.TickMapToken<Float> {
-
-        private float breakProgress;
-        private final World world;
-        private final BlockPos pos;
-        private final IBlockState expected;
-
-        private int idleTimeout;
-
-        public BreakEntry(@Nonnull Float value, World world, BlockPos at, IBlockState expectedToBreak) {
-            this.breakProgress = value;
-            this.world = world;
-            this.pos = at;
-            this.expected = expectedToBreak;
-        }
-
-        @Override
-        public int getRemainingTimeout() {
-            return (breakProgress <= 0 || idleTimeout >= 20) ? 0 : 1;
-        }
-
-        @Override
-        public void tick() {
-            idleTimeout++;
-        }
-
-        @Override
-        public void onTimeout() {
-            if(breakProgress > 0) return;
-
-            IBlockState nowAt = world.getBlockState(pos);
-            if(nowAt.getBlock().equals(expected.getBlock()) && nowAt.getBlock().getMetaFromState(nowAt) == expected.getBlock().getMetaFromState(expected)) {
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos);
-            }
-        }
-
-        @Override
-        public Float getValue() {
-            return breakProgress;
         }
 
     }

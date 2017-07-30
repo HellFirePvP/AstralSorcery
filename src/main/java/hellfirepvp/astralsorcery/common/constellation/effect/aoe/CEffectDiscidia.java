@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -44,8 +45,8 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
     public static double potencyMultiplier = 1;
     public static float damage = 4.0F;
 
-    public CEffectDiscidia() {
-        super(Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
+    public CEffectDiscidia(@Nullable ILocatable origin) {
+        super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
     }
 
     @Override

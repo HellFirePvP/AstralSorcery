@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,8 +39,12 @@ public abstract class ConstellationEffect extends ConfigEntry {
 
     private final IWeakConstellation constellation;
 
-    public ConstellationEffect(IWeakConstellation constellation, String cfgName) {
+    //Always null on client.
+    protected final ILocatable origin;
+
+    public ConstellationEffect(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName) {
         super(Section.RITUAL_EFFECTS, cfgName);
+        this.origin = origin;
         this.constellation = constellation;
     }
 

@@ -48,6 +48,7 @@ public class OreDictAlias {
     public static String ITEM_GUNPOWDER = "gunpowder";
     public static String ITEM_WHEAT = "cropWheat";
     public static String ITEM_BONE = "bone";
+    public static String ITEM_EGG = "egg";
 
     public static String BLOCK_IRON_ORE = "oreIron";
 
@@ -61,6 +62,7 @@ public class OreDictAlias {
     public static String BLOCK_WOOD_LOGS = "logWood";
     public static String BLOCK_SAPLING = "treeSapling";
     public static String BLOCK_LEAVES = "treeLeaves";
+    public static String BLOCK_COBBLESTONE = "cobblestone";
     public static String BLOCK_GLASS_PANE_NOCOLOR = "paneGlassColorless";
 
 }

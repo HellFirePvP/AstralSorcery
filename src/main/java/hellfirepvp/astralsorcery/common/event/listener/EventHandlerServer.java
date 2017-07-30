@@ -194,6 +194,43 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
+    public void onHarvestSpeedCheck(net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event) {
+        EntityPlayer harvester = event.getEntityPlayer();
+        if (harvester != null) {
+            PlayerProgress prog = ResearchManager.getProgress(harvester, harvester.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
+            if (prog != null) {
+                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks.keySet()) {
+                    if (!prog.isPerkActive(perk)) continue;
+                    if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_SPEED)) {
+                        BlockPos p = event.getPos();
+                        event.setNewSpeed(perk.onHarvestSpeed(harvester, event.getState(), (p == null || p.getY() < 0) ? null : p, event.getNewSpeed()));
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onHarvestSpeedCheck(net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck event) {
+        EntityPlayer harvester = event.getEntityPlayer();
+        if (harvester != null) {
+            PlayerProgress prog = ResearchManager.getProgress(harvester, harvester.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
+            if (prog != null) {
+                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
+                for (ConstellationPerk perk : perks.keySet()) {
+                    if (!prog.isPerkActive(perk)) continue;
+                    if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_TYPE)) {
+                        if(perk.onCanHarvest(harvester, harvester.getHeldItemMainhand(), event.getTargetBlock(), event.canHarvest())) {
+                            event.setCanHarvest(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
         if(!event.getWorld().isRemote) {
             Iterator<TileOreGenerator> iterator = generatorQueue.iterator();
@@ -328,8 +365,9 @@ public class EventHandlerServer {
         if (hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
             if (i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
-                i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand);
-                event.setCanceled(true);
+                if(i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand)) {
+                    event.setCanceled(true);
+                }
             }
         }
     }

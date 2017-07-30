@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,8 +51,8 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
     public static int maxCropCount = 200;
     public static int potionAmplifier = 1;
 
-    public CEffectAevitas() {
-        super(Constellations.aevitas, "aevitas", searchRange, maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
+    public CEffectAevitas(@Nullable ILocatable origin) {
+        super(origin, Constellations.aevitas, "aevitas", searchRange, maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
     }
 
     @Override

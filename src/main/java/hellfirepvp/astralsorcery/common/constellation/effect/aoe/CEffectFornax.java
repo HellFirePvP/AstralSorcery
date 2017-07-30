@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.util.math.BlockPos;
@@ -49,8 +50,8 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
     public static int maxCount = 40;
     public static double meltDurationDivisor = 1;
 
-    public CEffectFornax() {
-        super(Constellations.fornax, "fornax", searchRange, maxCount, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null, WorldMeltables.ActiveMeltableEntry::new);
+    public CEffectFornax(@Nullable ILocatable origin) {
+        super(origin, Constellations.fornax, "fornax", searchRange, maxCount, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null, WorldMeltables.ActiveMeltableEntry::new);
     }
 
     @Override

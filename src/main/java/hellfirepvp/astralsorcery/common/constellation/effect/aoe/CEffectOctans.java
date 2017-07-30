@@ -16,6 +16,8 @@ import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -55,8 +57,8 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
     public static int minFishTickTime = 1000;
     public static int maxFishTickTime = 5000;
 
-    public CEffectOctans() {
-        super(Constellations.octans, "octans", searchRange, maxFishingGrounds, (world, pos) -> {
+    public CEffectOctans(@Nullable ILocatable origin) {
+        super(origin, Constellations.octans, "octans", searchRange, maxFishingGrounds, (world, pos) -> {
             IBlockState at = world.getBlockState(pos);
             return at.getBlock() instanceof BlockLiquid && at.getBlock().getMaterial(at).equals(Material.WATER) && at.getValue(BlockLiquid.LEVEL) == 0 && world.isAirBlock(pos.up());
         }, (pos) -> new GenListEntries.CounterMaxListEntry(pos, minFishTickTime + rand.nextInt(maxFishTickTime - minFishTickTime + 1)));

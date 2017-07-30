@@ -27,7 +27,9 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.UniversalBucket;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,8 +67,25 @@ public class BlockArray {
     }
 
     public void addAll(BlockArray other) {
-        this.pattern.putAll(other.getPattern());
-        this.tileCallbacks.putAll(other.getTileCallbacks());
+        addAll(other, null);
+    }
+
+    public void addAll(BlockArray other, @Nullable Function<BlockPos, BlockPos> positionTransform) {
+        for (Map.Entry<BlockPos, BlockInformation> patternEntry : other.pattern.entrySet()) {
+            BlockPos to = patternEntry.getKey();
+            if(positionTransform != null) {
+                to = positionTransform.apply(to);
+            }
+            pattern.put(to, patternEntry.getValue());
+            updateSize(to);
+        }
+        for (Map.Entry<BlockPos, TileEntityCallback> patternEntry : other.tileCallbacks.entrySet()) {
+            BlockPos to = patternEntry.getKey();
+            if(positionTransform != null) {
+                to = positionTransform.apply(to);
+            }
+            tileCallbacks.put(to, patternEntry.getValue());
+        }
     }
 
     public void addTileCallback(BlockPos pos, TileEntityCallback callback) {

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
+import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
@@ -53,8 +54,8 @@ public class CEffectArmara extends ConstellationEffect {
     private int rememberedTimeout = 0;
     public static int potionAmplifier = 0;
 
-    public CEffectArmara() {
-        super(Constellations.armara, "armara");
+    public CEffectArmara(@Nullable ILocatable origin) {
+        super(origin, Constellations.armara, "armara");
     }
 
     @Override

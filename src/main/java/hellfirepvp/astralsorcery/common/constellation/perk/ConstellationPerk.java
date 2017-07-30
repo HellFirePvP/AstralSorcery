@@ -12,13 +12,18 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -84,6 +89,14 @@ public abstract class ConstellationPerk extends ConfigEntry {
     public void onEntityKnockback(EntityPlayer attacker, EntityLivingBase attacked) {}
 
     public void onEntityKilled(EntityPlayer attacker, EntityLivingBase killed) {}
+
+    public float onHarvestSpeed(EntityPlayer harvester, IBlockState broken, @Nullable BlockPos at, float breakSpeedIn) {
+        return breakSpeedIn;
+    }
+
+    public boolean onCanHarvest(EntityPlayer harvester, @Nonnull ItemStack playerMainHand, IBlockState tryHarvest, boolean prevSuccess) {
+        return prevSuccess;
+    }
 
     public void onTimeout(EntityPlayer player) {}
 
@@ -167,7 +180,19 @@ public abstract class ConstellationPerk extends ConfigEntry {
          * Gets called on each player's tick.
          * Calls {@link #onPlayerTick(net.minecraft.entity.player.EntityPlayer, net.minecraftforge.fml.relauncher.Side)}
          */
-        PLAYER_TICK
+        PLAYER_TICK,
+
+        /**
+         * Gets called on a harvest-speed event
+         * Calls {@link #onHarvestSpeed(EntityPlayer, IBlockState, BlockPos, float)}
+         */
+        PLAYER_HARVEST_SPEED,
+
+        /**
+         * Gets called on a harvest-check event
+         * Calls {@link #onCanHarvest(EntityPlayer, IBlockState, boolean)}
+         */
+        PLAYER_HARVEST_TYPE
 
     }
 
