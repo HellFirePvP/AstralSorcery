@@ -34,6 +34,7 @@ misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 
 misc.sword.sharpened=Sharpened
+misc.wand.attuned=Attuned to %s
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
@@ -309,9 +310,9 @@ astralsorcery.journal.recipe.amt.toomuch=§cToo much
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Cutting
-crystal.attuned=Tuned to
-crystal.trait=Trait of
-crystal.collect.type=Collects starlight from
+crystal.attuned=Tuned to %s
+crystal.trait=Trait of %s
+crystal.collect.type=Collects starlight from %s
 
 entity.EntityStardust.name=Stardust
 entity.EntityAquamarine.name=Aquamarine

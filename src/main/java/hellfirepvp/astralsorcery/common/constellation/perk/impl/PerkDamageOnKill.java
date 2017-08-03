@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageOnKill extends ConstellationPerk {
 
-    private static float dmgMultiplier = 1.05F;
+    private static float dmgMultiplier = 1.6F;
     private static int ticksDuration = 60;
 
     public PerkDamageOnKill() {
@@ -50,8 +50,8 @@ public class PerkDamageOnKill extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        dmgMultiplier = cfg.getFloat(getKey() + "DamageIncrease", getConfigurationSection(), 1.05F, 1F, 2F, "Sets the damage multiplier that is applied to entity damaged after knocked back if the player has this perk.");
-        ticksDuration = cfg.getInt(getKey() + "KillDuration", getConfigurationSection(), 60, 1, 1000, "Sets the duration on how long the player gets additional damage on the mob when it was knocked back.");
+        dmgMultiplier = cfg.getFloat(getKey() + "DamageIncrease", getConfigurationSection(), dmgMultiplier, 1F, 2F, "Sets the damage multiplier that is applied to entity damaged after knocked back if the player has this perk.");
+        ticksDuration = cfg.getInt(getKey() + "KillDuration", getConfigurationSection(), ticksDuration, 1, 1000, "Sets the duration on how long the player gets additional damage on the mob when it was knocked back.");
     }
 
 }

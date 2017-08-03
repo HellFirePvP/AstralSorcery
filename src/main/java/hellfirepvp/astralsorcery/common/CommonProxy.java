@@ -30,10 +30,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerAchievements;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerMisc;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerNetwork;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
@@ -202,6 +199,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new EventHandlerServer());
         MinecraftForge.EVENT_BUS.register(new EventHandlerAchievements());
         MinecraftForge.EVENT_BUS.register(new EventHandlerMisc());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerEntity());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerIO());
         MinecraftForge.EVENT_BUS.register(TransmissionChunkTracker.getInstance());
         MinecraftForge.EVENT_BUS.register(TickManager.getInstance());
         MinecraftForge.EVENT_BUS.register(StarlightTransmissionHandler.getInstance());
@@ -241,9 +240,10 @@ public class CommonProxy implements IGuiHandler {
         manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps
-        manager.register(EventHandlerServer.spawnDenyRegions);
+        manager.register(EventHandlerEntity.spawnDenyRegions);
         manager.register(EventHandlerServer.perkCooldowns);
-        manager.register(EventHandlerServer.invulnerabilityCooldown);
+        manager.register(EventHandlerServer.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
+        manager.register(EventHandlerEntity.invulnerabilityCooldown);
     }
 
     public void postInit() {

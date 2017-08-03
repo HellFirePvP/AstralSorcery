@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
@@ -105,25 +106,33 @@ public abstract class ConstellationPerk extends ConfigEntry {
     }
 
     public final boolean isCooldownActiveForPlayer(EntityPlayer player) {
-        return EventHandlerServer.perkCooldowns.hasList(player) &&
-                EventHandlerServer.perkCooldowns.getOrCreateList(player).contains(getId());
+        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+                EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
+        return container.hasList(player) &&
+                container.getOrCreateList(player).contains(getId());
     }
 
     public final void setCooldownActiveForPlayer(EntityPlayer player, int cooldownTicks) {
-        EventHandlerServer.perkCooldowns.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
+        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+                EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
+        container.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
     }
 
     public final void forceSetCooldownForPlayer(EntityPlayer player, int cooldownTicks) {
-        if(!EventHandlerServer.perkCooldowns.getOrCreateList(player).setTimeout(cooldownTicks, getId())) {
+        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+                EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
+        if(!container.getOrCreateList(player).setTimeout(cooldownTicks, getId())) {
             setCooldownActiveForPlayer(player, cooldownTicks);
         }
     }
 
     public final int getActiveCooldownForPlayer(EntityPlayer player) {
-        if(!EventHandlerServer.perkCooldowns.hasList(player)) {
+        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+                EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
+        if(!container.hasList(player)) {
             return -1;
         }
-        return EventHandlerServer.perkCooldowns.getOrCreateList(player).getTimeout(getId());
+        return container.getOrCreateList(player).getTimeout(getId());
     }
 
     public final void addAlignmentCharge(EntityPlayer player, double charge) {

@@ -31,7 +31,7 @@ public class ConstellationPaperRecipe extends TraitRecipe {
 
     public ConstellationPaperRecipe(AccessibleRecipe recipe, IConstellation constellation) {
         super(recipe);
-        setPassiveStarlightRequirement(4000);
+        setPassiveStarlightRequirement(3000);
         this.constellation = constellation;
     }
 

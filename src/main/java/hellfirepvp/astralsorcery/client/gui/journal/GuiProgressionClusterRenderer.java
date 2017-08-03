@@ -241,8 +241,14 @@ public class GuiProgressionClusterRenderer {
                 GL11.glPopAttrib();
                 break;
             case TEXTURE:
+                Color c = node.getTextureColorHint();
+
                 GlStateManager.disableAlpha();
-                GlStateManager.color(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
+                GL11.glDisable(GL11.GL_ALPHA_TEST);
+                GlStateManager.color(renderLoopBrFactor * (c.getRed() / 255F),
+                        renderLoopBrFactor * (c.getGreen() / 255F),
+                        renderLoopBrFactor * (c.getBlue() / 255F),
+                        renderLoopBrFactor * (c.getAlpha() / 255F));
                 BindableResource tex = node.getTexture().resolve();
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -256,10 +262,15 @@ public class GuiProgressionClusterRenderer {
                 GlStateManager.enableAlpha();
                 break;
             case TEXTURE_SPRITE:
+                Color col = node.getTextureColorHint();
+
                 GlStateManager.disableAlpha();
                 GL11.glDisable(GL11.GL_ALPHA_TEST);
 
-                GlStateManager.color(renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor, renderLoopBrFactor);
+                GlStateManager.color(renderLoopBrFactor * (col.getRed() / 255F),
+                        renderLoopBrFactor * (col.getGreen() / 255F),
+                        renderLoopBrFactor * (col.getBlue() / 255F),
+                        renderLoopBrFactor * (col.getAlpha() / 255F));
                 SpriteSheetResource res = node.getSpriteTexture().resolveSprite();
                 res.getResource().bind();
                 Tuple<Double, Double> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());

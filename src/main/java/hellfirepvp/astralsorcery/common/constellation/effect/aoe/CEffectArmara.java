@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesRitualArmara;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
@@ -98,7 +99,7 @@ public class CEffectArmara extends ConstellationEffect {
 
         int toAdd = 1 + rand.nextInt(3);
         WorldBlockPos at = new WorldBlockPos(world, pos);
-        TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerServer.spawnDenyRegions.get(at);
+        TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
         if(token != null) {
             int next = token.getRemainingTimeout() + toAdd;
             if(next > 400) next = 400;
@@ -106,7 +107,7 @@ public class CEffectArmara extends ConstellationEffect {
             rememberedTimeout = next;
         } else {
             rememberedTimeout = Math.min(400, rememberedTimeout + toAdd);
-            EventHandlerServer.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>((double) protectionRange, rememberedTimeout));
+            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>((double) protectionRange, rememberedTimeout));
         }
 
         EntityPlayer owner = getOwningPlayerInWorld(world, pos);

@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.network;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.network.packet.client.*;
 import hellfirepvp.astralsorcery.common.network.packet.server.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -55,6 +55,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktUpdateGateways.class, PktUpdateGateways.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktBurnParchment.class, PktBurnParchment.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktParticleDataEvent.class, PktParticleDataEvent.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktShootEntity.class, PktShootEntity.class, id++, Side.CLIENT);
 
         //(client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);
@@ -79,7 +80,7 @@ public class PacketChannel {
         } catch (Exception e) {}*/
     }
 
-    public static NetworkRegistry.TargetPoint pointFromPos(World world, BlockPos pos, double range) {
+    public static NetworkRegistry.TargetPoint pointFromPos(World world, Vec3i pos, double range) {
         return new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), range);
     }
 

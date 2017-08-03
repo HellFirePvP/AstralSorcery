@@ -90,13 +90,13 @@ public class TileAttunementRelay extends TileInventoryBase {
                             WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(getWorld());
                             int yLevel = getPos().getY();
                             if(handle != null && yLevel > 40) {
-                                double coll = 0.2;
+                                double coll = 0.3;
 
                                 float dstr;
-                                if(yLevel > 140) {
+                                if(yLevel > 120) {
                                     dstr = 1F;
                                 } else {
-                                    dstr = (yLevel - 40) / 100F;
+                                    dstr = (yLevel - 40) / 80F;
                                 }
 
                                 coll *= dstr;

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;

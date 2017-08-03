@@ -25,7 +25,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageReflect extends ConstellationPerk {
 
-    public static int reflectChance = 5;
+    public static int reflectChance = 3;
     public static float reflectPerc = 0.6F;
 
     public PerkDamageReflect() {
