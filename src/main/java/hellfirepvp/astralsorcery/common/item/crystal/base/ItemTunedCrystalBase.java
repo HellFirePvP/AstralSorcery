@@ -56,7 +56,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase implement
             IWeakConstellation c = getMainConstellation(stack);
             if(c != null) {
                 if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.attuned") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.attuned", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
                 } else if(!out.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                     out = Optional.of(true);
@@ -66,7 +66,7 @@ public abstract class ItemTunedCrystalBase extends ItemRockCrystalBase implement
             IMinorConstellation tr = getTrait(stack);
             if(tr != null) {
                 if(EnumGatedKnowledge.CRYSTAL_TUNE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait") + " " + TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName()));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
                 } else if(!out.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }

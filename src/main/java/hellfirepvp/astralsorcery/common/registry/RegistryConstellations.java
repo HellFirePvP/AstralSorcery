@@ -114,7 +114,9 @@ public class RegistryConstellations {
                         new EnchantmentMapEffect(Enchantments.MENDING, 2, 3),
                         new EnchantmentMapEffect(Enchantments.INFINITY, 1, 1),
                         new EnchantmentMapEffect(Enchantments.LURE, 4, 6)),
-                Arrays.asList(new PotionMapEffect(MobEffects.REGENERATION, 2, 4)));
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.REGENERATION, 2, 4),
+                        new PotionMapEffect(MobEffects.ABSORPTION, 1, 4)));
 
         registerMapEffect(gelu,
                 Arrays.asList(new EnchantmentMapEffect(Enchantments.FROST_WALKER)),

@@ -129,7 +129,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
             IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
             if(c != null) {
                 if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type") + " " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName()));
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
                 } else if(!missing.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }

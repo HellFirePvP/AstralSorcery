@@ -38,21 +38,17 @@ public class PerkDestructionStack extends ConstellationPerk {
 
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
-        if(!attacker.getEntityWorld().isRemote) {
-            int mul = MathHelper.clamp(getMultiplier(attacker) + 1, 1, multiplierCap);
-            setMultiplier(attacker, mul);
-            dmgIn *= (1F + attackDamageMultiplier * mul);
-        }
+        int mul = MathHelper.clamp(getMultiplier(attacker) + 1, 1, multiplierCap);
+        setMultiplier(attacker, mul);
+        dmgIn *= (1F + attackDamageMultiplier * mul);
         return dmgIn;
     }
 
     @Override
     public float onHarvestSpeed(EntityPlayer harvester, IBlockState broken, @Nullable BlockPos at, float breakSpeedIn) {
-        if(!harvester.getEntityWorld().isRemote) {
-            int mul = MathHelper.clamp(getMultiplier(harvester) + 1, 1, multiplierCap);
-            setMultiplier(harvester, mul);
-            breakSpeedIn *= (1F + harvestSpeedMultiplier * mul);
-        }
+        int mul = MathHelper.clamp(getMultiplier(harvester) + 1, 1, multiplierCap);
+        setMultiplier(harvester, mul);
+        breakSpeedIn *= (1F + harvestSpeedMultiplier * mul);
         return breakSpeedIn;
     }
 

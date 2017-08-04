@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.ItemConstellationPaper;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -175,10 +176,10 @@ public class TileAttunementAltar extends TileEntityTick {
                             playerAttunementWaitTick = -1;
                         } else {
                             this.serverSyncAttTick++;
-                            if(EventHandlerServer.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
-                                EventHandlerServer.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
+                            if(EventHandlerEntity.invulnerabilityCooldown.contains((EntityPlayer) activeEntity)) {
+                                EventHandlerEntity.invulnerabilityCooldown.setTimeout(10, (EntityPlayer) activeEntity);
                             } else {
-                                EventHandlerServer.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
+                                EventHandlerEntity.invulnerabilityCooldown.add(10, (EntityPlayer) activeEntity);
                             }
                         }
                         markForUpdate();

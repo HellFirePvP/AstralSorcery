@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -65,6 +66,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private GuiJournalConstellationCluster origin;
     private boolean detailed;
     private boolean hasMorePages = false, isOnNextPage = false;
+
+    private IGuiRenderablePage lastFramePage = null;
 
     private Rectangle rectBack, rectNext, rectPrev;
     private List<MoonPhase> phases = new LinkedList<>();
@@ -204,6 +207,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void drawInformationPages(float partialTicks, int mouseX, int mouseY) {
+        lastFramePage = null;
+
         boolean usedLeftSide = false;
         ProgressionTier prog = ResearchManager.clientProgress.getTierReached();
         if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(prog) ||
@@ -225,12 +230,12 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         if(EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(prog)) {
             ConstellationPaperRecipe recipe = RecipesAS.paperCraftingRecipes.get(this.constellation);
             if(recipe != null) {
-                IGuiRenderablePage render = new JournalPageTraitRecipe(recipe).buildRenderPage();
+                lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
 
                 GlStateManager.pushMatrix();
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                render.render    (guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
-                render.postRender(guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                lastFramePage.render    (guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
                 GL11.glPopAttrib();
                 GlStateManager.popMatrix();
             }
@@ -544,6 +549,10 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         if(rectNext != null && rectNext.contains(p)) {
             this.isOnNextPage = true;
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
+            return;
+        }
+        if(isOnNextPage && lastFramePage != null) {
+            lastFramePage.propagateMouseClick(mouseX, mouseY);
         }
     }
 

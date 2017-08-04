@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -39,7 +40,8 @@ public class ResearchNode {
     private ItemStack[] renderItemStacks;
     private TextureQuery renderTextureQuery;
     private SpriteQuery renderSpriteQuery;
-    //private BindableResource texture;
+
+    private Color textureColorHint = new Color(0xFFFFFFFF, true);
 
     private List<ResearchNode> connectionsTo = new LinkedList<>();
     private List<IJournalPage> pages = new LinkedList<>();
@@ -113,6 +115,15 @@ public class ResearchNode {
     public boolean isSpecial() {
         return special;
     }*/
+
+    public ResearchNode setTextureColorHintWithAlpha(Color textureColorHint) {
+        this.textureColorHint = textureColorHint;
+        return this;
+    }
+
+    public Color getTextureColorHint() {
+        return textureColorHint;
+    }
 
     public RenderType getRenderType() {
         return renderType;

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerIO;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -114,7 +115,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
         this.remainingGuaranteed = compound.getInteger("remaining");
 
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-            EventHandlerServer.generatorQueue.add(this);
+            EventHandlerIO.generatorQueue.add(this);
         }
     }
 

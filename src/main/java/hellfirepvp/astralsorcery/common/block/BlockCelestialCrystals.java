@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -37,6 +38,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -149,11 +151,21 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                     if(fortune > 0 || rand.nextInt(2) == 0) {
                         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
                     }
-                    drops.add(ItemRockCrystalBase.createRandomCelestialCrystal());
                     IBlockState down = world.getBlockState(pos.down());
-                    if(down.getBlock() instanceof BlockCustomOre &&
-                            down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL) &&
-                            rand.nextInt(3) == 0) {
+                    boolean hasStarmetal = down.getBlock() instanceof BlockCustomOre &&
+                            down.getValue(BlockCustomOre.ORE_TYPE).equals(BlockCustomOre.OreType.STARMETAL);
+
+                    ItemStack celCrystal = ItemRockCrystalBase.createRandomCelestialCrystal();
+                    if(hasStarmetal) {
+                        CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
+                        int missing = 100 - prop.getPurity();
+                        if(missing > 0) {
+                            prop = new CrystalProperties(prop.getSize(), MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100), prop.getCollectiveCapability());
+                            CrystalProperties.applyCrystalProperties(celCrystal, prop);
+                        }
+                    }
+                    drops.add(celCrystal);
+                    if(hasStarmetal && rand.nextInt(3) == 0) {
                         drops.add(ItemRockCrystalBase.createRandomCelestialCrystal()); //Lucky~~
                     }
                 }

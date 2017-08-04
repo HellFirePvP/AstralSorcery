@@ -107,7 +107,7 @@ public class EntityNocturnalSpark extends EntityThrowable {
             if(spark.isDead || !spark.isSpawning()) continue;
             spark.setDead();
         }
-        if(rand.nextInt(18) == 0 && world instanceof WorldServer) {
+        if(rand.nextInt(12) == 0 && world instanceof WorldServer) {
             try {
                 BlockPos pos = getPosition().up();
                 pos.add(rand.nextInt(2) - rand.nextInt(2),

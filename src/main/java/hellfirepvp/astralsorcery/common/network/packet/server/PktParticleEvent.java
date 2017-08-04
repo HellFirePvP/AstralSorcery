@@ -13,7 +13,9 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
-import hellfirepvp.astralsorcery.common.item.tool.ItemWand;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;
 import hellfirepvp.astralsorcery.common.starlight.network.handlers.BlockTransmutationHandler;
@@ -129,6 +131,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         BURN_PARCHMENT,
         ENGRAVE_LENS,
         GEN_STRUCTURE,
+        DISCIDIA_ATTACK_STACK,
 
         CE_CROP_INTERACT,
         CE_MELT_BLOCK,
@@ -137,7 +140,6 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_WATER_FISH,
         CE_BREAK_BLOCK,
         CE_SPAWN_PREPARE_EFFECTS,
-        //CE_TREE_VORTEX,
 
         FLARE_PROC,
         RT_DEBUG;
@@ -195,6 +197,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectEvorsio::playBreakEffects;
                 case CE_SPAWN_PREPARE_EFFECTS:
                     return CEffectPelotrio::playSpawnPrepareEffects;
+                case DISCIDIA_ATTACK_STACK:
+                    return EventHandlerEntity::playDiscidiaStackAttackEffects;
             }
             return null;
         }

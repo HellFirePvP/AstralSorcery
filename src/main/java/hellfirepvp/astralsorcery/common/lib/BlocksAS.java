@@ -51,6 +51,7 @@ public class BlocksAS {
     public static BlockTranslucentBlock translucentBlock;
     public static BlockMapDrawingTable drawingTable;
     public static BlockCelestialGateway celestialGateway;
+    public static BlockVanishing blockVanishing;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

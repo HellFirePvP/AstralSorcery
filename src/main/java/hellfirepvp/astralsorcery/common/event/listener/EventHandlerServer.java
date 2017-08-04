@@ -8,12 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
-import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
@@ -23,8 +19,9 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
-import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -33,21 +30,21 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktCraftingTableFi
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
-import hellfirepvp.astralsorcery.common.tile.TileOreGenerator;
+import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.*;
-import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
+import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
+import hellfirepvp.astralsorcery.common.util.struct.OreDiscoverer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
@@ -61,24 +58,15 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderEnd;
-import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -99,97 +87,13 @@ public class EventHandlerServer {
 
     private static final Random rand = new Random();
 
-    public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
-    public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
-    public static List<TileOreGenerator> generatorQueue = Lists.newLinkedList();
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onLoad(WorldEvent.Load event) {
-        World w = event.getWorld();
-        int id = w.provider.getDimension();
-        if (!(w.provider instanceof WorldProviderEnd) && !(w.provider instanceof WorldProviderHell) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
-            AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
-            w.provider = new WorldProviderBrightnessInj(w, w.provider);
-            AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");
-        }
-    }
-    @SubscribeEvent
-    public void onUnload(WorldEvent.Unload event) {
-        World w = event.getWorld();
-        ConstellationSkyHandler.getInstance().informWorldUnload(w);
-        if (w.isRemote) {
-            clientUnload();
-        }
-    }
+    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldownsClient = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.CLIENT);
 
     @SubscribeEvent
     public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof EntityLivingBase) {
             event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void clientUnload() {
-        AstralSorcery.proxy.scheduleClientside(TESRTranslucentBlock::cleanUp);
-    }
-
-    @SubscribeEvent
-    public void onDamage(LivingHurtEvent event) {
-        EntityLivingBase living = event.getEntityLiving();
-        if (living == null || living.getEntityWorld().isRemote) return;
-
-        if (!living.isDead && living instanceof EntityPlayer) {
-            if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
-                event.setCanceled(true);
-                return;
-            }
-        }
-
-        DamageSource source = event.getSource();
-        lblIn:
-        if (source.getTrueSource() != null) {
-            EntityPlayer p;
-            if (source.getTrueSource() instanceof EntityPlayer) {
-                p = (EntityPlayer) source.getTrueSource();
-            } else if (source.getTrueSource() instanceof EntityArrow) {
-                Entity shooter = ((EntityArrow) source.getTrueSource()).shootingEntity;
-                if (shooter != null && shooter instanceof EntityPlayer) {
-                    p = (EntityPlayer) shooter;
-                } else {
-                    break lblIn;
-                }
-            } else {
-                break lblIn;
-            }
-            PlayerProgress prog = ResearchManager.getProgress(p);
-            if (prog != null) {
-                float dmg = event.getAmount();
-                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks.keySet()) {
-                    if (!prog.isPerkActive(perk)) continue;
-                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_ATTACK)) {
-                        dmg = perk.onEntityAttack(p, event.getEntityLiving(), dmg);
-                    }
-                }
-                event.setAmount(dmg);
-            }
-        }
-        if (event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer hurt = (EntityPlayer) event.getEntityLiving();
-            PlayerProgress prog = ResearchManager.getProgress(hurt);
-            if (prog != null) {
-                float dmg = event.getAmount();
-                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks.keySet()) {
-                    if (!prog.isPerkActive(perk)) continue;
-                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_HURT)) {
-                        dmg = perk.onEntityHurt(hurt, source, dmg);
-                    }
-                }
-                event.setAmount(dmg);
-            }
         }
     }
 
@@ -212,7 +116,7 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onHarvestSpeedCheck(net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck event) {
+    public void onHarvestTypeCheck(net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck event) {
         EntityPlayer harvester = event.getEntityPlayer();
         if (harvester != null) {
             PlayerProgress prog = ResearchManager.getProgress(harvester, harvester.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
@@ -231,57 +135,9 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onChunkLoad(ChunkEvent.Load event) {
-        if(!event.getWorld().isRemote) {
-            Iterator<TileOreGenerator> iterator = generatorQueue.iterator();
-            while (iterator.hasNext()) {
-                TileOreGenerator gen = iterator.next();
-                BlockPos at = gen.getPos();
-                if(event.getChunk().getPos().equals(new ChunkPos(at))) {
-                    event.getChunk().getTileEntityMap().put(gen.getPos(), gen);
-                    iterator.remove();
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
     public void onContainerOpen(PlayerContainerEvent.Open event) {
         if(event.getContainer() instanceof ContainerWorkbench && !event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
             PacketChannel.CHANNEL.sendTo(new PktCraftingTableFix(((ContainerWorkbench) event.getContainer()).pos), (EntityPlayerMP) event.getEntityPlayer());
-        }
-    }
-
-    @SubscribeEvent
-    public void onTarget(LivingSetAttackTargetEvent event) {
-        EntityLivingBase living = event.getTarget();
-        if (living != null && !living.isDead && living instanceof EntityPlayer) {
-            if (invulnerabilityCooldown.contains((EntityPlayer) living)) {
-                event.getEntityLiving().setRevengeTarget(null);
-                if (event.getEntityLiving() instanceof EntityLiving) {
-                    ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onKnockback(EntityKnockbackEvent event) {
-        Entity attacker = event.getAttacker();
-        if (attacker == null || attacker.getEntityWorld().isRemote) return;
-
-        if (attacker instanceof EntityPlayer) {
-            EntityPlayer p = (EntityPlayer) attacker;
-            PlayerProgress prog = ResearchManager.getProgress(p);
-            if (prog != null) {
-                Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                for (ConstellationPerk perk : perks.keySet()) {
-                    if (!prog.isPerkActive(perk)) continue;
-                    if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KNOCKBACK)) {
-                        perk.onEntityKnockback(p, event.getEntityLiving());
-                    }
-                }
-            }
         }
     }
 
@@ -334,24 +190,6 @@ public class EventHandlerServer {
         MinecraftServer server = entity.getServer();
         if (server != null) {
             server.addScheduledTask(() -> entity.removePotionEffect(RegistryPotions.potionCheatDeath));
-        }
-    }
-
-    @SubscribeEvent
-    public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
-        if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
-
-        EntityLivingBase toTest = event.getEntityLiving();
-        Vector3 at = Vector3.atEntityCorner(toTest);
-        boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
-        if (mayDeny) {
-            for (Map.Entry<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> entry : spawnDenyRegions.entrySet()) {
-                if (!entry.getKey().getWorld().equals(toTest.getEntityWorld())) continue;
-                if (at.distance(entry.getKey()) <= entry.getValue().getValue()) {
-                    event.setResult(Event.Result.DENY);
-                    return;
-                }
-            }
         }
     }
 
@@ -412,11 +250,6 @@ public class EventHandlerServer {
     }
 
     @SubscribeEvent
-    public void onSave(WorldEvent.Save event) {
-        WorldCacheManager.getInstance().doSave(event.getWorld());
-    }
-
-    @SubscribeEvent
     public void onChange(BlockModifyEvent event) {
         if (event.getWorld().isRemote) return;
         if (!Loader.instance().hasReachedState(LoaderState.SERVER_ABOUT_TO_START)) {
@@ -466,9 +299,42 @@ public class EventHandlerServer {
     public void onBreak(BlockEvent.BreakEvent event) {
         if (event.getWorld().isRemote) return;
         BlockPos at = event.getPos();
+        IBlockState broken = event.getState();
 
-        if (event.getState().getBlock().equals(Blocks.CRAFTING_TABLE)) {
+        if (broken.getBlock().equals(Blocks.CRAFTING_TABLE)) {
             WorldNetworkHandler.getNetworkHandler(event.getWorld()).informTableRemoval(at);
+        }
+
+        ItemStack active = event.getPlayer().getHeldItemMainhand();
+        WandAugment found = null;
+        if(!active.isEmpty() && active.getItem() instanceof ItemWand) {
+            found = ItemWand.getAugment(active);
+        }
+        active = event.getPlayer().getHeldItemOffhand();
+        if(found == null && !active.isEmpty() && active.getItem() instanceof ItemWand) {
+            found = ItemWand.getAugment(active);
+        }
+        if(found != null && found.equals(WandAugment.EVORSIO)) {
+            if(rand.nextFloat() < Config.evorsioEffectChance) {
+                World w = event.getWorld();
+                BlockArray foundBlocks = BlockDiscoverer.searchForBlocksAround(w, at, 2,
+                        ((world, pos, state) -> (
+                                pos.getY() >= event.getPlayer().getPosition().getY() &&
+                                        state.getBlockHardness(world, pos) >= 0 &&
+                                        world.getTileEntity(pos) == null &&
+                                        !world.isAirBlock(pos) &&
+                                        world.getBlockState(pos).getBlock().canHarvestBlock(world, pos, event.getPlayer()))));
+                for (BlockPos pos : foundBlocks.getPattern().keySet()) {
+                    IBlockState atState = w.getBlockState(pos);
+                    w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState());
+                    TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
+                    if(tt != null) {
+                        tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
+                    } else {
+                        w.setBlockState(pos, atState);
+                    }
+                }
+            }
         }
     }
 
@@ -504,29 +370,5 @@ public class EventHandlerServer {
             }
         }
     }
-
-    /*@SubscribeEvent
-    public void onJoin(EntityJoinWorldEvent event) {
-        if (event.getWorld().isRemote) return;
-
-        Entity joined = event.getEntity();
-        if (joined instanceof EntityItem && !(joined instanceof EntityItemHighlighted)) {
-            EntityItem ei = (EntityItem) joined;
-            if (ei.getEntityItem() != null && (ei.getEntityItem().getAttItem() instanceof ItemHighlighted)) {
-                ei.setDead();
-                EntityItemHighlighted newItem = new EntityItemHighlighted(ei.world, ei.posX, ei.posY, ei.posZ, ei.getEntityItem());
-                ItemHighlighted i = (ItemHighlighted) ei.getEntityItem().getAttItem();
-                newItem.applyColor(i.getHightlightColor(ei.getEntityItem()));
-                newItem.motionX = ei.motionX;
-                newItem.motionY = ei.motionY;
-                newItem.motionZ = ei.motionZ;
-                newItem.hoverStart = ei.hoverStart;
-                newItem.setPickupDelay(40);
-
-                event.getWorld().spawnEntityInWorld(newItem);
-                event.setCanceled(true);
-            }
-        }
-    }*/
 
 }

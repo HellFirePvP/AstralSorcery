@@ -47,6 +47,10 @@ public class Config {
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
+    @Sync public static float evorsioEffectChance = 0.08F;
+    @Sync public static int discidiaStackCap = 10;
+    @Sync public static float discidiaStackMultiplier = 1F;
+
     @Sync public static boolean craftingLiqCrystalGrowth = true;
     @Sync public static boolean craftingLiqCrystalToolGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
@@ -130,6 +134,10 @@ public class Config {
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
         revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");
         revertChance = latestConfig.getInt("chargedCrystalToolsRevertChance", "tools", revertChance, 1, Integer.MAX_VALUE, "After 'chargedCrystalToolsRevertStart' uses, it will random.nextInt(chance) == 0 try and see if the tool gets reverted to its inert crystal tool.");
+
+        evorsioEffectChance = latestConfig.getFloat("evorsioAttunedWandEffectChance", "tools", evorsioEffectChance, 0F, 1F, "Defines the chance per mined block that the effect for holding an evorsio attuned resonating wand will fire.");
+        discidiaStackCap = latestConfig.getInt("discidiaDamageStackCap", "tools", discidiaStackCap, 1, 200, "Defines the amount of stacks you have to get against the same mob until you reach 100% of the damage multiplier.");
+        discidiaStackMultiplier = latestConfig.getFloat("discidiaDamageStackMultipler", "tools", discidiaStackMultiplier, 0F, 200F, "Defines the additional damage multiplier gradually increased by gaining attack-stacks against a mob. (Applied multiplier = damage * 1 + (thisConfigOption * (currentStacks / maxStacks)) )");
 
         craftingLiqCrystalGrowth = latestConfig.getBoolean("liquidStarlightCrystalGrowth", "crafting", true, "Set this to false to disable Rock/Celestial Crystal growing in liquid starlight.");
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");

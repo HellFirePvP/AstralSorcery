@@ -32,7 +32,7 @@ public class PerkDestructionDamageArc extends ConstellationPerk {
 
     private static AxisAlignedBB searchBox = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
-    private static float arcChance = 0.4F;
+    private static float arcChance = 0.75F;
     private static float arcPercent = 1.75F;
     private static float distanceSearch = 4F;
 

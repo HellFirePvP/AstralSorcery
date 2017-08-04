@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
+import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
 import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalShovel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktDualParticleEvent;
@@ -173,7 +174,7 @@ public class TileFakeTree extends TileEntityTick {
 
         private PlayerHarvestRef(EntityPlayer player, ItemStack usedAxe) {
             this.player = player;
-            if (usedAxe != null) {
+            if (usedAxe != null && !usedAxe.isEmpty()) {
                 this.usedTool = usedAxe.copy();
                 Map<Enchantment, Integer> levels = EnchantmentHelper.getEnchantments(this.usedTool);
                 if(levels.containsKey(Enchantments.FORTUNE)) {
@@ -205,7 +206,7 @@ public class TileFakeTree extends TileEntityTick {
                             stack);
                 }
                 PktDualParticleEvent ev = new PktDualParticleEvent(PktDualParticleEvent.DualParticleEventType.CHARGE_HARVEST, new Vector3(tft), Vector3.atEntityCenter(player));
-                if(usedTool != null && usedTool.getItem() instanceof ItemChargedCrystalShovel) {
+                if(usedTool != null && (usedTool.isEmpty() || !(usedTool.getItem() instanceof ItemChargedCrystalAxe))) {
                     ev.setAdditionalData(Color.GRAY.brighter().getRGB());
                 } else {
                     ev.setAdditionalData(Color.GREEN.getRGB());

@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageDistance extends ConstellationPerk {
 
-    private static float maxMultiplier = 8F;
+    private static float maxMultiplier = 4F;
     private static double maxRelevantSqDistance = 64 * 64;
 
     public PerkDamageDistance() {
@@ -44,7 +44,7 @@ public class PerkDamageDistance extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        maxMultiplier = cfg.getFloat(getKey() + "MaxMultiplier", getConfigurationSection(), 8F, 1F, 60F, "Defines the multiplier how much the player can get additionally at max. distance defined.");
+        maxMultiplier = cfg.getFloat(getKey() + "MaxMultiplier", getConfigurationSection(), maxMultiplier, 1F, 60F, "Defines the multiplier how much the player can get additionally at max. distance defined.");
         double dst = cfg.getFloat(getKey() + "MaxDistance", getConfigurationSection(), 64F, 16F, 2048F, "Defines the max. distance that is relevant. If you hit something further away it won't grant more additional bonus than defined in MaxMultiplier");
         maxRelevantSqDistance = dst * dst;
     }

@@ -50,6 +50,7 @@ public class EventHandlerNetwork {
         EntityPlayer player = e.player;
 
         PlayerChargeHandler.INSTANCE.informDisconnect(player);
+        EventHandlerEntity.attackStack.remove(e.player.getEntityId());
         //ResearchManager.logoutResetClient(player);
     }
 
