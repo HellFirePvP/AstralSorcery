@@ -10,8 +10,6 @@
  */
 package vazkii.botania.api.item;
 
-import javax.annotation.Nullable;
-
 import vazkii.botania.api.mana.ManaProficiencyEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;

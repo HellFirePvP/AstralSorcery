@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.constellation.spell.entity;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.spell.ISpellComponent;
 import hellfirepvp.astralsorcery.common.constellation.spell.ISpellEffect;
 import hellfirepvp.astralsorcery.common.constellation.spell.SpellControllerEffect;

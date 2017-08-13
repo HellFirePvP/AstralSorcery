@@ -54,7 +54,6 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
