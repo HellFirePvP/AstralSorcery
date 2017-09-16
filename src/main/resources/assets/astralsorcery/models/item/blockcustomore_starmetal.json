@@ -1,6 +1,7 @@
 {
-    "parent": "block/cube_all",
+    "parent": "astralsorcery:block/ore",
     "textures": {
-        "all": "astralsorcery:blocks/ore_starmetal"
+        "base": "blocks/stone",
+        "ore": "astralsorcery:blocks/ore_starmetal"
     }
 }

@@ -1,5 +1,23 @@
 {
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "base": "blocks/sand",
+            "ore": "astralsorcery:blocks/ore_aquamarine"
+        },
+        "model": "astralsorcery:ore"
+    },
     "variants": {
-        "oretype=aquamarine": { "model":"astralsorcery:blockcustomsandore_aquamarine" }
+        "normal": [{
+
+        }],
+        "inventory": [{}],
+        "oretype":{
+            "aquamarine": {
+                "textures": {
+                    "ore": "astralsorcery:blocks/ore_aquamarine"
+                }
+            }
+        }
     }
 }

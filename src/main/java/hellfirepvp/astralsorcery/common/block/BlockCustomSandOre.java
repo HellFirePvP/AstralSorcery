@@ -19,6 +19,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -135,6 +136,11 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     @Override
     public String getStateName(IBlockState state) {
         return state.getValue(ORE_TYPE).getName();
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     public static enum OreType implements IStringSerializable {
