@@ -74,14 +74,16 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
     }
 
     //returns amount drained
-    public int drain(double amount) {
-        if (this.fluid == null) return 0;
+    @Nullable
+    public FluidStack drain(double amount) {
+        if (this.fluid == null) return null;
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
+        Fluid drainedFluid = this.fluid;
         if (this.amount <= 0) {
             setFluid(null);
         }
-        return drainable;
+        return new FluidStack(drainedFluid, drainable);
     }
 
     @Nullable
@@ -177,7 +179,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         if (!canDrain()) return null;
         int maxDrainable = getMaxDrainable(maxDrain);
         if (doDrain) {
-            maxDrainable = drain(maxDrainable);
+            return drain(maxDrainable);
         }
         return new FluidStack(this.fluid, maxDrainable);
     }
