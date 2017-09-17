@@ -93,11 +93,11 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
-            for (WandAugment wa : WandAugment.values()) {
-                ItemStack wand = new ItemStack(this);
-                setAugment(wand, wa);
-                items.add(wand);
-            }
+            //for (WandAugment wa : WandAugment.values()) {
+            //    ItemStack wand = new ItemStack(this);
+            //    setAugment(wand, wa);
+            //    items.add(wand);
+            //}
         }
     }
 

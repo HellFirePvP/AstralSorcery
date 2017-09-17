@@ -12,16 +12,16 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12-1.6.1"
+version = "1.12.1-1.6.2"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.12-14.21.1.2413"
+    version = "1.12.1-14.22.1.2484"
     runDir = "run"
     useDepAts = true
 
-    mappings = "snapshot_20170626"
+    mappings = "snapshot_20170624"
 }
 
 sourceCompatibility = 1.8
