@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
+import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
@@ -62,25 +63,42 @@ public class RegistryResearch {
     private static void initRadiance() {
         ResearchProgression.Registry regRadiance = ResearchProgression.RADIANCE.getRegistry();
 
-        TraitRecipe tr = registerTraitRecipe(newShapedRecipe("internal/altar.test", BlocksAS.blockIlluminator)
-                .addPart(ItemCraftingComponent.MetaType.STARDUST.asStack(),
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .unregisteredAccessibleShapedRecipe());
-        tr.setAttItem(BlockMarble.MarbleBlockType.CHISELED.asStack(), AttunementRecipe.AttunementAltarSlot.values());
-        tr.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(), ConstellationRecipe.ConstellationAtlarSlot.values());
-        tr.addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack()).addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
-                .addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack()).addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack());
-        tr.setPassiveStarlightRequirement(1000);
-        tr.setRequiredConstellation(Constellations.lucerna);
+        ResearchNode resAttWands = new ResearchNode(new ItemStack(ItemsAS.wand), "ATT_WANDS", 3, 4);
+        resAttWands.addPage(getTextPage("ATT_WANDS.1"));
+        resAttWands.addPage(getTextPage("ATT_WANDS.2"));
 
-        ResearchNode resTest = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "ALTAR_TEST", 1, 1);
-        resTest.addPage(getTextPage("ALTAR_TEST.1"));
-        resTest.addPage(new JournalPageTraitRecipe(tr));
+        ResearchNode resAttWandArmara = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_armara"), "ATT_WAND_ARMARA", 1, 5);
+        resAttWandArmara.addPage(getTextPage("ATT_WAND_ARMARA.1"));
+        resAttWandArmara.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        regRadiance.register(resTest);
+        ResearchNode resAttWandDiscidia = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_discidia"), "ATT_WAND_DISCIDIA", 1, 3);
+        resAttWandDiscidia.addPage(getTextPage("ATT_WAND_DISCIDIA.1"));
+        resAttWandDiscidia.setTextureColorHintWithAlpha(new Color(0x5613B6));
+
+        ResearchNode resAttWandAevitas = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_aevitas"), "ATT_WAND_AEVITAS", 4, 2);
+        resAttWandAevitas.addPage(getTextPage("ATT_WAND_AEVITAS.1"));
+        resAttWandAevitas.setTextureColorHintWithAlpha(new Color(0x5613B6));
+
+        ResearchNode resAttWandVicio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_vicio"), "ATT_WAND_VICIO", 5, 3);
+        resAttWandVicio.addPage(getTextPage("ATT_WAND_VICIO.1"));
+        resAttWandVicio.setTextureColorHintWithAlpha(new Color(0x5613B6));
+
+        ResearchNode resAttWandEvorsio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_evorsio"), "ATT_WAND_EVORSIO", 2, 2);
+        resAttWandEvorsio.addPage(getTextPage("ATT_WAND_EVORSIO.1"));
+        resAttWandEvorsio.setTextureColorHintWithAlpha(new Color(0x5613B6));
+
+        resAttWandArmara.addSourceConnectionFrom(resAttWands);
+        resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
+        resAttWandAevitas.addSourceConnectionFrom(resAttWands);
+        resAttWandVicio.addSourceConnectionFrom(resAttWands);
+        resAttWandEvorsio.addSourceConnectionFrom(resAttWands);
+
+        regRadiance.register(resAttWands);
+        regRadiance.register(resAttWandArmara);
+        regRadiance.register(resAttWandAevitas);
+        regRadiance.register(resAttWandDiscidia);
+        regRadiance.register(resAttWandVicio);
+        regRadiance.register(resAttWandEvorsio);
     }
 
     private static void initConstellation() {

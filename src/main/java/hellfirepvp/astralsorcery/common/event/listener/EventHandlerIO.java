@@ -12,18 +12,13 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.tile.TileOreGenerator;
-import hellfirepvp.astralsorcery.common.world.WorldProviderBrightnessInj;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProviderEnd;
-import net.minecraft.world.WorldProviderHell;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,17 +36,6 @@ import java.util.List;
 public class EventHandlerIO {
 
     public static List<TileOreGenerator> generatorQueue = Lists.newLinkedList();
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onLoad(WorldEvent.Load event) {
-        World w = event.getWorld();
-        int id = w.provider.getDimension();
-        if (!(w.provider instanceof WorldProviderEnd) && !(w.provider instanceof WorldProviderHell) && !Config.weakSkyRendersWhitelist.contains(w.provider.getDimension())) {
-            AstralSorcery.log.info("[AstralSorcery] Found worldProvider in Dimension " + id + " : " + w.provider.getClass().getName());
-            w.provider = new WorldProviderBrightnessInj(w, w.provider);
-            AstralSorcery.log.info("[AstralSorcery] Injected WorldProvider into dimension " + id + " (chaining old provider.)");
-        }
-    }
 
     @SubscribeEvent
     public void onUnload(WorldEvent.Unload event) {
