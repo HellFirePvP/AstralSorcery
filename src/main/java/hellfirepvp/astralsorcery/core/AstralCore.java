@@ -22,7 +22,7 @@ import java.util.Map;
  * Date: 07.05.2016 / 02:55
  */
 @IFMLLoadingPlugin.Name(value = "AstralCore")
-@IFMLLoadingPlugin.MCVersion(value = "1.12")
+@IFMLLoadingPlugin.MCVersion(value = "1.12.1")
 @IFMLLoadingPlugin.TransformerExclusions({"hellfirepvp.astralsorcery.core"})
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {

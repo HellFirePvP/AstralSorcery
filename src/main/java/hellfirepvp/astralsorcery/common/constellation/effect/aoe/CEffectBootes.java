@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;

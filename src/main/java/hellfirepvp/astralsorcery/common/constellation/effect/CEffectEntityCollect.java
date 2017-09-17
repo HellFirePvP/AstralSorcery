@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.constellation.effect;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
