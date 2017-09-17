@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.item.tool;
 
+import com.google.common.collect.Sets;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+
+import java.util.Set;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,6 +43,11 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
             setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial, maxCelestial, maxCelestial));
             subItems.add(stack);
         }
+    }
+
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
+        return Sets.newHashSet("pickaxe");
     }
 
 }
