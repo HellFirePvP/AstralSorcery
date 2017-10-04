@@ -92,6 +92,7 @@ public class Config {
         latestConfig.load();
         loadData();
         latestConfig.save();
+        //T
     }
 
     public static void addDynamicEntry(ConfigEntry entry) {
