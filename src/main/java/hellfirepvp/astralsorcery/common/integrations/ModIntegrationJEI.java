@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.integrations;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -131,9 +132,13 @@ public class ModIntegrationJEI implements IModPlugin {
     private void hideItems(IIngredientBlacklist blacklist) {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+            ModIntegrationGeolosys.hideJEIGeolosysSample(blacklist);
+        }
     }
 
     private <T> void registerRecipeHandle(IModRegistry registry, Class<T> recipeClass, IRecipeWrapperFactory<T> factory, String categoryId) {

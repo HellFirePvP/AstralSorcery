@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -46,13 +47,20 @@ import java.util.Random;
  */
 public class CelestialStrike {
 
-    public static void play(@Nullable EntityLivingBase except, World world, Vector3 position, Vector3 displayPosition) {
+    public static void play(@Nullable EntityLivingBase attacker, World world, Vector3 position, Vector3 displayPosition) {
         double radius = 16D;
         List<EntityLivingBase> livingEntities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 0, 0, 0).expand(radius, radius / 2, radius).offset(position.toBlockPos()), EntitySelectors.IS_ALIVE);
-        if(except != null) {
-            livingEntities.remove(except);
+        if(attacker != null) {
+            livingEntities.remove(attacker);
         }
 
+        DamageSource ds = CommonProxy.dmgSourceStellar;
+        if(attacker != null) {
+            ds = DamageSource.causeMobDamage(attacker);
+            if(attacker instanceof EntityPlayer) {
+                ds = DamageSource.causePlayerDamage((EntityPlayer) attacker);
+            }
+        }
         float dmg = 10;
         dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 20F;
         dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 40F;
@@ -62,7 +70,7 @@ public class CelestialStrike {
                 dstPerc = 1F - MathHelper.clamp(dstPerc, 0F, 1F);
                 float dmgDealt = dstPerc * dmg;
                 if(dmgDealt > 0.5) {
-                    living.attackEntityFrom(CommonProxy.dmgSourceStellar, dmgDealt);
+                    living.attackEntityFrom(ds, dmgDealt);
                 }
             }
         }

@@ -33,7 +33,9 @@ public enum Mods {
     BLOODMAGIC("bloodmagic"),
     BOTANIA("botania"),
     CHISEL("chisel"),
-    GALACTICRAFT_CORE("galacticraftcore");
+    GALACTICRAFT_CORE("galacticraftcore"),
+    GEOLOSYS("geolosys"),
+    ORESTAGES("orestages");
 
     public final String modid;
 

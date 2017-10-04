@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -372,7 +373,15 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
             spr.setPosition(new Vector3(this).add(0.5, 0.06, 0.5));
             spr.setAlphaOverDistance(true);
             spr.setNoRotation(45);
-            spr.setRefreshFunc(() -> !isInvalid() && working);
+            spr.setRefreshFunc(() -> {
+                if(isInvalid() || !working) {
+                    return false;
+                }
+                if(this.getWorld().provider == null || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider == null) {
+                    return false;
+                }
+                return this.getWorld().provider.getDimension() == Minecraft.getMinecraft().world.provider.getDimension();
+            });
             spr.setScale(6.5F);
             spritePlane = spr;
         }
@@ -547,6 +556,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
         private double collectionChannelBuffer = 0D, collectionTraitBuffer = 0D;
         private boolean doesWorkBuffer = false;
 
+        private int idleBuffer = 0;
+
         public TransmissionReceiverRitualPedestal(BlockPos thisPos, boolean doesSeeSky) {
             super(thisPos);
             this.doesSeeSky = doesSeeSky;
@@ -616,6 +627,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                     collectionChannelBuffer += collect / 2D;
                 }
                 if(collectionChannelBuffer > 0) {
+                    idleBuffer = 0;
+
                     doMainEffect(world, ce, trait, trait != null && collectionTraitBuffer > 0);
 
                     if(tryIncrementChannelingTimer())
@@ -627,14 +640,22 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
                         doTraitEffect(world, ce);
                     }
                 } else {
+                    if(idleBuffer > 2) {
+                        flagAsInactive(world);
+                        ce = null;
+                        //tw = null;
+                    } else {
+                        idleBuffer++;
+                    }
+                }
+            } else {
+                if(idleBuffer > 2) {
                     flagAsInactive(world);
                     ce = null;
                     //tw = null;
+                } else {
+                    idleBuffer++;
                 }
-            } else {
-                flagAsInactive(world);
-                ce = null;
-                //tw = null;
             }
         }
 

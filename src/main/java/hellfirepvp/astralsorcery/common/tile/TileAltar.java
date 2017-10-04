@@ -84,7 +84,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private AltarLevel level = AltarLevel.DISCOVERY;
     private boolean doesSeeSky = false;
     private boolean mbState = false;
-    private int experience = 0;
     private int starlightStored = 0;
 
     public TileAltar() {
@@ -303,7 +302,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             }
         }
 
-        addExpAndTryLevel((int) (recipe.getCraftExperience() * recipe.getCraftExperienceMultiplier()));
         starlightStored = Math.max(0, starlightStored - recipe.getPassiveStarlightRequired());
 
         if (!recipe.allowsForChaining() || !recipe.matches(this, getInventoryHandler(), false) || !matchDownMultiblocks(recipe.getNeededLevel())) {
@@ -333,19 +331,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return current;
     }
 
-    private void addExpAndTryLevel(int exp) {
-        if(level != AltarLevel.ENDGAME) {
-            experience += exp;
-            AltarLevel next = level.tryLevelUp(this);
-            if(next.ordinal() > level.ordinal()) {
-                levelUnsafe(next);
-            }
-        } else {
-            experience = Integer.MAX_VALUE;
-        }
-        markForUpdate();
-    }
-
     public boolean tryForceLevelUp(AltarLevel to, boolean doLevelUp) {
         int curr = getAltarLevel().ordinal();
         if(curr >= to.ordinal()) return false;
@@ -359,7 +344,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     private void levelUnsafe(AltarLevel to) {
         onLevelUp(level, to);
         level = to;
-        experience = 0;
         mbState = false;
         world.setBlockState(getPos(), BlocksAS.blockAltar.getDefaultState().withProperty(BlockAltar.ALTAR_TYPE, level.getCorrespondingAltarType()));
     }
@@ -411,10 +395,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Nullable
     public ActiveCraftingTask getActiveCraftingTask() {
         return craftingTask;
-    }
-
-    public int getExperience() {
-        return experience;
     }
 
     public boolean getMultiblockState() {
@@ -498,7 +478,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.readCustomNBT(compound);
 
         this.level = AltarLevel.values()[compound.getInteger("level")];
-        this.experience = compound.getInteger("exp");
         this.starlightStored = compound.getInteger("starlight");
         this.mbState = compound.getBoolean("mbState");
 
@@ -518,7 +497,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         super.writeCustomNBT(compound);
 
         compound.setInteger("level", level.ordinal());
-        compound.setInteger("exp", experience);
         compound.setInteger("starlight", starlightStored);
         compound.setBoolean("mbState", mbState);
 
@@ -545,8 +523,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return new TransmissionReceiverAltar(at);
     }
 
-    public void onPlace(int exp, AltarLevel level) {
-        this.experience = exp;
+    public void onPlace(AltarLevel level) {
         this.level = level;
         markForUpdate();
     }
@@ -558,26 +535,16 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static enum AltarLevel {
 
-        DISCOVERY          (100,   (ta) -> true       ),
-        ATTUNEMENT         (1000,  new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement), false),
-        CONSTELLATION_CRAFT(4000,  new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation), false),
-        TRAIT_CRAFT        (12000, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait), false),
-        ENDGAME            (-1,    (ta) -> true       );
+        DISCOVERY          ((ta) -> true       ),
+        ATTUNEMENT         (new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement)),
+        CONSTELLATION_CRAFT(new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation)),
+        TRAIT_CRAFT        (new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait)),
+        ENDGAME            ((ta) -> true       );
 
-        private final int totalExpNeededToLevelUp;
         private final int maxStarlightStorage;
         private final IAltarMatcher matcher;
-        private boolean canLevelToByExpGain = true;
 
-        AltarLevel(int levelExp, IAltarMatcher matcher) {
-            this.totalExpNeededToLevelUp = levelExp;
-            this.matcher = matcher;
-            this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
-        }
-
-        AltarLevel(int levelExp, IAltarMatcher matcher, boolean canLevelToByExpGain) {
-            this.totalExpNeededToLevelUp = levelExp;
-            this.canLevelToByExpGain = canLevelToByExpGain;
+        AltarLevel(IAltarMatcher matcher) {
             this.matcher = matcher;
             this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
@@ -588,26 +555,6 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         public IAltarMatcher getMatcher() {
             return matcher;
-        }
-
-        public int getTotalExpNeededForLevel() {
-            return totalExpNeededToLevelUp;
-        }
-
-        public boolean hasNextLevel() {
-            return totalExpNeededToLevelUp > 0;
-        }
-
-        public AltarLevel tryLevelUp(TileAltar ta) {
-            if(!hasNextLevel()) return this;
-            int current = ta.experience;
-            if(ordinal() + 1 >= values().length) return this;
-            AltarLevel next = values()[ordinal() + 1];
-            if(!next.canLevelToByExpGain) return this;
-            if(current >= totalExpNeededToLevelUp) {
-                return next;
-            }
-            return this;
         }
 
         public int getStarlightMaxStorage() {

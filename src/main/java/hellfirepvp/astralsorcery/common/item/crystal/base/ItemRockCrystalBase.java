@@ -55,6 +55,19 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
     }
 
     @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
+        if(prop == null) {
+            Item i = stack.getItem();
+            if(i instanceof ItemCelestialCrystal || i instanceof ItemTunedCelestialCrystal) {
+                CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomCelestial());
+            } else {
+                CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomRock());
+            }
+        }
+    }
+
+    @Override
     public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
         return true;
     }

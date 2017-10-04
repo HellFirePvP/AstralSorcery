@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageIncrease extends ConstellationPerk {
 
-    private static float dmgMultiplier = 1.2F;
+    private static float dmgMultiplier = 1.6F;
 
     public PerkDamageIncrease() {
         super("DMG_PERM", Target.ENTITY_ATTACK);

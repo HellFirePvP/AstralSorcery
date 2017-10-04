@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageOnKill extends ConstellationPerk {
 
-    private static float dmgMultiplier = 1.6F;
+    private static float dmgMultiplier = 2.4F;
     private static int ticksDuration = 60;
 
     public PerkDamageOnKill() {

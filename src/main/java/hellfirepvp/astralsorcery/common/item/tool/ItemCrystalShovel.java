@@ -12,7 +12,10 @@ import com.google.common.collect.Sets;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
@@ -38,11 +41,22 @@ public class ItemCrystalShovel extends ItemCrystalToolBase {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(this.isInCreativeTab(tab)) {
+        if (this.isInCreativeTab(tab)) {
             CrystalProperties maxCelestial = CrystalProperties.getMaxCelestialProperties();
             ItemStack stack = new ItemStack(this);
             setToolProperties(stack, ToolCrystalProperties.merge(maxCelestial));
             subItems.add(stack);
+        }
+    }
+
+    @Override
+    public boolean canHarvestBlock(IBlockState blockIn) {
+        Block block = blockIn.getBlock();
+
+        if (block == Blocks.SNOW_LAYER) {
+            return true;
+        } else {
+            return block == Blocks.SNOW;
         }
     }
 

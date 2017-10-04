@@ -143,6 +143,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
+        if(event.getSource().canHarmInCreative()) {
+            return;
+        }
         if (phoenixProtect(event.getEntityLiving())) {
             event.setCanceled(true);
         } else {

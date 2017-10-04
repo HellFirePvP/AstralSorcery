@@ -74,17 +74,17 @@ public class RegistryConstellations {
                         new EnchantmentMapEffect(Enchantments.POWER, 3, 7)),
                 Arrays.asList(new PotionMapEffect(MobEffects.STRENGTH, 0, 3)));
         registerMapEffect(armara,
-                Arrays.asList(new EnchantmentMapEffect(Enchantments.PROTECTION, 1, 5)),
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.PROTECTION, 3, 5)),
                 Arrays.asList(new PotionMapEffect(MobEffects.RESISTANCE)));
         registerMapEffect(vicio,
-                Arrays.asList(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 1, 5)),
-                Arrays.asList(new PotionMapEffect(MobEffects.SPEED, 0, 3)));
+                Arrays.asList(new EnchantmentMapEffect(Enchantments.FEATHER_FALLING, 3, 5)),
+                Arrays.asList(new PotionMapEffect(MobEffects.SPEED, 1, 3)));
         registerMapEffect(aevitas,
                 Arrays.asList(new EnchantmentMapEffect(Enchantments.MENDING, 1, 3)),
                 Arrays.asList(new PotionMapEffect(MobEffects.REGENERATION, 0, 3)));
         registerMapEffect(evorsio,
                 Arrays.asList(new EnchantmentMapEffect(Enchantments.EFFICIENCY, 3, 5)),
-                Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 0, 3)));
+                Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 1, 3)));
 
         registerMapEffect(lucerna,
                 Arrays.asList(new EnchantmentMapEffect(EnchantmentsAS.enchantmentNightVision, 1, 1)),

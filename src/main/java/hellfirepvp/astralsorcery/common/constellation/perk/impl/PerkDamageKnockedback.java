@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDamageKnockedback extends ConstellationPerk {
 
-    private static float dmgMultiplier = 1.3F;
+    private static float dmgMultiplier = 2F;
     private static int ticksDuration = 60;
 
     public PerkDamageKnockedback() {

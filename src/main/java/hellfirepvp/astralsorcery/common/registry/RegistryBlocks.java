@@ -10,10 +10,12 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidBlockLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.*;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
@@ -55,6 +57,10 @@ public class RegistryBlocks {
         registerBlocks();
 
         registerTileEntities();
+
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+            ModIntegrationGeolosys.registerGeolosysSampleBlock();
+        }
     }
 
     private static void registerFluids() {
@@ -118,8 +124,6 @@ public class RegistryBlocks {
         queueDefaultItemBlock(translucentBlock);
         drawingTable = registerBlock(new BlockMapDrawingTable());
         queueDefaultItemBlock(drawingTable);
-        //celestialOrrery = registerBlock(new BlockCelestialOrrery());
-        //queueDefaultItemBlock(celestialOrrery);
         celestialGateway = registerBlock(new BlockCelestialGateway());
         queueDefaultItemBlock(celestialGateway);
 
@@ -181,11 +185,11 @@ public class RegistryBlocks {
         registerTile(TileCrystalPrismLens.class);
     }
 
-    private static void queueCustomNameItemBlock(Block block) {
+    public static void queueCustomNameItemBlock(Block block) {
         customNameItemBlocksToRegister.add(block);
     }
 
-    private static void queueDefaultItemBlock(Block block) {
+    public static void queueDefaultItemBlock(Block block) {
         defaultItemBlocksToRegister.add(block);
     }
 
@@ -197,7 +201,7 @@ public class RegistryBlocks {
         return block;
     }
 
-    private static <T extends Block> T registerBlock(T block) {
+    public static <T extends Block> T registerBlock(T block) {
         return registerBlock(block, block.getClass().getSimpleName().toLowerCase());
     }
 
@@ -219,7 +223,7 @@ public class RegistryBlocks {
         GameRegistry.registerTileEntity(tile, name);
     }
 
-    private static void registerTile(Class<? extends TileEntity> tile) {
+    public static void registerTile(Class<? extends TileEntity> tile) {
         registerTile(tile, tile.getSimpleName().toLowerCase());
     }
 

@@ -29,11 +29,13 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientPerkTextureMapping;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.spell.entity.SpellProjectile;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
@@ -194,6 +196,10 @@ public class ClientProxy extends CommonProxy {
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCollectorCrystal), new TESRCollectorCrystal());
         ItemRenderRegistry.register(Item.getItemFromBlock(BlocksAS.celestialCrystals), new TESRCelestialCrystals());
 
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+            ModIntegrationGeolosys.registerGeolosysSampleItemRenderer();
+        }
+
         //ItemRenderRegistry.register(ItemsAS.something, new ? implements IItemRenderer());
     }
 
@@ -226,6 +232,9 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileTranslucent.class, new TESRTranslucentBlock());
         registerTESR(TileAttunementRelay.class, new TESRAttunementRelay());
         registerTESR(TileMapDrawingTable.class, new TESRMapDrawingTable());
+        if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
+            ModIntegrationGeolosys.registerGeolosysSampleRender();
+        }
     }
 
     private <T extends TileEntity> void registerTESR(Class<T> tile, TileEntitySpecialRenderer<T> renderer) {
