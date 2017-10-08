@@ -119,6 +119,10 @@ public class BlockArrayRenderHelper {
         for (Map.Entry<BlockPos, BakedBlockData> data : renderAccess.blockRenderData.entrySet()) {
             BlockPos offset = data.getKey();
             BakedBlockData renderData = data.getValue();
+            if(renderData.tileEntity != null) {
+                renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setPos(offset);
+            }
             if(renderData.type != Blocks.AIR) {
                 brd.renderBlock(renderData.state, offset, renderAccess, vb);
             }
@@ -130,6 +134,7 @@ public class BlockArrayRenderHelper {
             BakedBlockData renderData = data.getValue();
             if(renderData.tileEntity != null && renderData.tesr != null) {
                 renderData.tileEntity.setWorld(Minecraft.getMinecraft().world);
+                renderData.tileEntity.setPos(offset);
                 renderData.tesr.render(renderData.tileEntity, offset.getX(), offset.getY(), offset.getZ(), pTicks, 0, 1F);
             }
         }
