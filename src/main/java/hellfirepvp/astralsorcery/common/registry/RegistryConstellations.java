@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerAevitas;
 import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerDiscidia;
@@ -96,7 +98,9 @@ public class RegistryConstellations {
                 Arrays.asList(
                         new EnchantmentMapEffect(Enchantments.FORTUNE, 4, 6),
                         new EnchantmentMapEffect(Enchantments.LOOTING, 3, 5)),
-                Arrays.asList(new PotionMapEffect(MobEffects.HASTE, 5, 8)));
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.HASTE, 5, 8),
+                        new PotionMapEffect(MobEffects.SPEED, 1, 4)));
         registerMapEffect(octans,
                 Arrays.asList(new EnchantmentMapEffect(Enchantments.RESPIRATION, 2, 4)),
                 Arrays.asList(new PotionMapEffect(MobEffects.WATER_BREATHING, 2, 4)));
@@ -209,9 +213,9 @@ public class RegistryConstellations {
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
 
+        pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_WHEAT));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
         pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_EGG));
-        pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_WHEAT));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.ROTTEN_FLESH)));
     }
 
@@ -397,7 +401,22 @@ public class RegistryConstellations {
         fornax.addConnection(sl2, sl4);
         fornax.addConnection(sl2, sl5);
 
-        pelotrio = new ConstellationBase.Weak("pelotrio", new Color(0xEC006B));
+        pelotrio = new ConstellationBase.WeakSpecial("pelotrio", new Color(0xEC006B)) {
+            @Override
+            public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
+                return handle.getCurrentMoonPhase() == MoonPhase.NEW || handle.getCurrentMoonPhase() == MoonPhase.FULL;
+            }
+
+            @Override
+            public float getDistribution(WorldSkyHandler handle, World world, long day, boolean showingUp) {
+                if(showingUp) return 1F;
+                MoonPhase current = handle.getCurrentMoonPhase();
+                if(current == MoonPhase.WANING1_2 || current == MoonPhase.WAXING1_2) {
+                    return 0.5F;
+                }
+                return 0.75F;
+            }
+        };
         sl1 = pelotrio.addStar(4, 7);
         sl2 = pelotrio.addStar(12, 2);
         sl3 = pelotrio.addStar(20, 3);

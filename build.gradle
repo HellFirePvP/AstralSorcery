@@ -64,7 +64,7 @@ dependencies {
 
     ////JEI stuff
     deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
-    runtime "mezz.jei:jei_${jei_mc_version}:${jei_version}"
+    //runtime "mezz.jei:jei_${jei_mc_version}:${jei_version}"
 
     def mc_version = "1.12"
     def ct_mc_version = "MC1120"
