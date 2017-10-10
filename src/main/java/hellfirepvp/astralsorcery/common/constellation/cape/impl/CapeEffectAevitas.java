@@ -42,7 +42,7 @@ public class CapeEffectAevitas extends CapeArmorEffect {
     private static float potency = 1F;
     private static float turnChance = 0.2F;
 
-    protected CapeEffectAevitas(NBTTagCompound cmp) {
+    public CapeEffectAevitas(NBTTagCompound cmp) {
         super(cmp, "aevitas");
     }
 

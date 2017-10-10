@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.base.*;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
@@ -100,6 +101,7 @@ public class CommonProxy implements IGuiHandler {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
         ConstellationPerks.addDynamicConfigEntries();
+        CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());

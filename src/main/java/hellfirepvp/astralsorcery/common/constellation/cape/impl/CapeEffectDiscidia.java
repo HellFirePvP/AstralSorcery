@@ -29,7 +29,7 @@ public class CapeEffectDiscidia extends CapeArmorEffect {
 
     private static float multiplierGained = 1F;
 
-    CapeEffectDiscidia(NBTTagCompound cmp) {
+    public CapeEffectDiscidia(NBTTagCompound cmp) {
         super(cmp, "discidia");
     }
 

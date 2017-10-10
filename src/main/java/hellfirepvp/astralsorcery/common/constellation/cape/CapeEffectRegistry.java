@@ -9,6 +9,11 @@
 package hellfirepvp.astralsorcery.common.constellation.cape;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
+import hellfirepvp.astralsorcery.common.data.config.Config;
+import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -33,6 +38,12 @@ public class CapeEffectRegistry {
     public static void registerCapeArmorEffect(IConstellation cst, Class<? extends CapeArmorEffect> armorEffectClass) {
         if(getArmorEffect(cst) != null) return;
         armorEffectMap.put(cst, new CapeEffectFactory<>(armorEffectClass));
+    }
+
+    public static void addDynamicConfigEntries() {
+        Config.addDynamicEntry(new CapeEffectAevitas(new NBTTagCompound()));
+        Config.addDynamicEntry(new CapeEffectDiscidia(new NBTTagCompound()));
+        Config.addDynamicEntry(new CapeEffectFornax(new NBTTagCompound()));
     }
 
 }

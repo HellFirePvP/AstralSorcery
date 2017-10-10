@@ -13,10 +13,12 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.CropHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,6 +64,18 @@ public class EventHandlerCapeEffects implements ITickHandler {
             if(cd != null) {
                 cd.writeLastAttackDamage(event.getAmount());
             }
+            if(event.getSource().isFireDamage()) {
+                CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
+                if(cf != null) {
+                    cf.healFor(pl, event.getAmount());
+                    float mul = cf.getDamageMultiplier();
+                    if(mul <= 0) {
+                        event.setCanceled(true);
+                    } else {
+                        event.setAmount(event.getAmount() * mul);
+                    }
+                }
+            }
         }
     }
 
@@ -84,6 +98,15 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    private void tickFornaxMelting(EntityPlayer pl) {
+        if(pl.isBurning()) {
+            CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
+            if(cf != null) {
+                cf.attemptMelt(pl);
+            }
+        }
+    }
+
     private void tickAevitasEffect(EntityPlayer pl) {
         CapeEffectAevitas cd = ItemCape.getCapeEffect(pl, Constellations.aevitas);
         if(cd != null) {
@@ -100,7 +123,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     player.getFoodStats().addStats(2, 0.4F);
                 }
             }
-            if(rand.nextFloat() < cd.getTurnChance() || true) {
+            if(rand.nextFloat() < cd.getTurnChance()) {
                 int x = Math.round(-range + 1 + (2 * range * rand.nextFloat()));
                 int y = Math.round(-range + 1 + (2 * range * rand.nextFloat()));
                 int z = Math.round(-range + 1 + (2 * range * rand.nextFloat()));
@@ -111,6 +134,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     pl.getEntityWorld().setBlockState(at, state);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                } else {
+                    CropHelper.GrowablePlant growable = CropHelper.wrapPlant(pl.getEntityWorld(), at);
+                    if(growable != null) {
+                        growable.tryGrow(pl.getEntityWorld(), rand);
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                    }
                 }
             }
         }
@@ -126,6 +156,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 Side side = (Side) context[1];
                 if(side == Side.SERVER) {
                     tickAevitasEffect(pl);
+                    tickFornaxMelting(pl);
                 }
                 break;
             case CLIENT:
