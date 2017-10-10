@@ -12,7 +12,6 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
-import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -36,7 +35,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.*;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
-import hellfirepvp.astralsorcery.common.util.struct.OreDiscoverer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
@@ -92,9 +90,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EntityLivingBase) {
-            event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
-        }
+        //if(event.getObject() instanceof EntityLivingBase) {
+        //    event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
+        //}
     }
 
     @SubscribeEvent

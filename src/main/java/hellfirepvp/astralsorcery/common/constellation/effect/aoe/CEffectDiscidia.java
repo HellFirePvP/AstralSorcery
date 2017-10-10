@@ -43,7 +43,7 @@ import java.util.List;
 public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
 
     public static double potencyMultiplier = 1;
-    public static float damage = 4.0F;
+    public static float damage = 6.5F;
 
     public CEffectDiscidia(@Nullable ILocatable origin) {
         super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
@@ -92,7 +92,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
     public void loadFromConfig(Configuration cfg) {
         super.loadFromConfig(cfg);
 
-        damage = cfg.getFloat(getKey() + "DamageDealt", getConfigurationSection(), 4.0F, 0.1F, 100F, "Defines the max. possible damage dealt per damage tick.");
+        damage = cfg.getFloat(getKey() + "DamageDealt", getConfigurationSection(), damage, 0.1F, 400F, "Defines the max. possible damage dealt per damage tick.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 

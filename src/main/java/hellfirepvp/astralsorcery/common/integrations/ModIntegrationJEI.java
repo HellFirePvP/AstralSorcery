@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -136,6 +137,7 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
+        blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.armorImbuedCape));
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.hideJEIGeolosysSample(blacklist);
         }

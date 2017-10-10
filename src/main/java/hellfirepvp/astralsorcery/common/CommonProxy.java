@@ -22,8 +22,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
-import hellfirepvp.astralsorcery.common.constellation.spell.SpellCastingManager;
-import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -141,7 +139,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
+        /*CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
             @Nullable
             @Override
             public NBTBase writeNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side) {
@@ -152,7 +150,7 @@ public class CommonProxy implements IGuiHandler {
             public void readNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
-        }, new SpellPlague.Factory());
+        }, new SpellPlague.Factory());*/
     }
 
     private void registerOreDictEntries() {
@@ -209,6 +207,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
+        MinecraftForge.EVENT_BUS.register(new EventHandlerCapeEffects());
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -237,7 +236,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(new PlayerPerkHandler());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
-        manager.register(SpellCastingManager.INSTANCE);
+        //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);

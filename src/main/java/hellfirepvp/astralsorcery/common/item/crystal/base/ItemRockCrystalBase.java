@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
-import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerDiscidia;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;

@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,7 +43,6 @@ public class ItemsAS {
     public static ItemHandTelescope handTelescope;
     public static ItemIlluminationWand illuminationWand;
     public static ItemShiftingStar shiftingStar;
-    //public static ItemRoseBranchBow roseBranchBow;
     public static ItemArchitectWand architectWand;
     public static ItemExchangeWand exchangeWand;
     public static ItemGrappleWand grapplingWand;
@@ -60,6 +60,8 @@ public class ItemsAS {
     public static ItemChargedCrystalSword chargedCrystalSword;
     public static ItemChargedCrystalPickaxe chargedCrystalPickaxe;
     public static ItemChargedCrystalShovel chargedCrystalShovel;
+
+    public static ItemCape armorImbuedCape;
 
     public static ItemWand wand;
     public static ItemColoredLens coloredLens;
