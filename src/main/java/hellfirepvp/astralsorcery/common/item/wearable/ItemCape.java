@@ -8,12 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.item.wearable;
 
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectFactory;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -25,6 +28,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -37,15 +41,38 @@ public class ItemCape extends ItemArmor {
 
     public ItemCape() {
         super(RegistryItems.imbuedLeatherMaterial, -1, EntityEquipmentSlot.CHEST);
-        setCreativeTab(null);
+        setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {}
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(this.isInCreativeTab(tab)) {
+            ItemStack stack;
+            for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                stack = new ItemStack(this);
+                setAttunedConstellation(stack, c);
+                items.add(stack);
+            }
+        }
+    }
 
     @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        super.onArmorTick(world, player, itemStack);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        IConstellation cst = getAttunedConstellation(stack);
+        if(cst != null) {
+            tooltip.add(cst.getUnlocalizedName());
+        }
+    }
+
+    @Nullable
+    public static CapeArmorEffect getCapeEffect(@Nullable EntityPlayer entity) {
+        if(entity == null) return null;
+        ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        IConstellation cst = getAttunedConstellation(stack);
+        if(cst == null) {
+            return null;
+        }
+        return getCapeEffect(stack);
     }
 
     @Nullable

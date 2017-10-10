@@ -207,7 +207,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
-        MinecraftForge.EVENT_BUS.register(new EventHandlerCapeEffects());
+        MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -236,6 +236,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(new PlayerPerkHandler());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
+        manager.register(EventHandlerCapeEffects.INSTANCE);
         //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps

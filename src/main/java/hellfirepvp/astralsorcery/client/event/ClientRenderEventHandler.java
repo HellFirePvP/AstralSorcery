@@ -10,8 +10,10 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
@@ -26,6 +28,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -35,6 +39,7 @@ import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeReve
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHandRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHudRender;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
@@ -47,6 +52,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -147,6 +153,7 @@ public class ClientRenderEventHandler {
         if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
+            playCapeSparkles();
 
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
                 requestPermChargeReveal(20);
@@ -188,6 +195,15 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playCapeSparkles() {
+        EntityPlayer pl = Minecraft.getMinecraft().player;
+        CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
+        if(cae != null) {
+            cae.playActiveParticleTick(pl);
         }
     }
 
