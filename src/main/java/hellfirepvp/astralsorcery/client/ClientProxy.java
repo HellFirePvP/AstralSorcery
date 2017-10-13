@@ -249,6 +249,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityNocturnalSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityHook.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntitySpectralTool.class, new RenderSpectralTool.Factory());
         //RenderingRegistry.registerEntityRenderingHandler(SpellProjectile.class, new RenderEntitySpellProjectile.Factory());
     }
 

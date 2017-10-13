@@ -43,10 +43,14 @@ public class Config {
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
+    public static boolean lightProximityAltarRecipe = true;
+    public static boolean lightProximityResonatingWandRecipe = true;
+
     public static boolean clientPreloadTextures = true;
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
 
+    //Attuned wands configs
     @Sync public static float evorsioEffectChance = 0.08F;
     @Sync public static int discidiaStackCap = 10;
     @Sync public static float discidiaStackMultiplier = 1F;
@@ -125,6 +129,9 @@ public class Config {
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
+
+        lightProximityAltarRecipe = latestConfig.getBoolean("LightProximity-Altar", "recipes", lightProximityAltarRecipe, "If this is set to false, the luminous crafting table recipe that'd require 'light shining at a crafting table' is disabled.");
+        lightProximityResonatingWandRecipe = latestConfig.getBoolean("LightProximity-ResonatingWand", "recipes", lightProximityResonatingWandRecipe, "If this is set to false, the resonating wand recipe that'd require 'light shining at a crafting table' is disabled.");
 
         illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.5F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the illumination wand");
         architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the architect wand");

@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -44,6 +45,7 @@ public class CapeEffectRegistry {
         Config.addDynamicEntry(new CapeEffectAevitas(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectDiscidia(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectFornax(new NBTTagCompound()));
+        Config.addDynamicEntry(new CapeEffectPelotrio(new NBTTagCompound()));
     }
 
 }

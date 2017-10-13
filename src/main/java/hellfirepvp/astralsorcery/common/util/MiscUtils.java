@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -39,6 +40,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -132,6 +134,27 @@ public class MiscUtils {
             return str;
         }
         return String.valueOf(Character.toTitleCase(str.charAt(0))) + str.substring(1);
+    }
+
+    public static boolean canToolBreakBlockWithoutPlayer(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull ItemStack stack) {
+        if (state.getBlockHardness(world, pos) == -1) {
+            return false;
+        }
+        if (state.getMaterial().isToolNotRequired()) {
+            return true;
+        }
+
+        String tool = state.getBlock().getHarvestTool(state);
+        if (stack.isEmpty() || tool == null) {
+            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
+        }
+
+        int toolLevel = stack.getItem().getHarvestLevel(stack, tool, null, state);
+        if (toolLevel < 0) {
+            return state.getMaterial().isToolNotRequired() || stack.canHarvestBlock(state);
+        }
+
+        return toolLevel >= state.getBlock().getHarvestLevel(state);
     }
 
     public static boolean breakBlockWithPlayer(BlockPos pos, EntityPlayerMP playerMP) {
@@ -284,6 +307,44 @@ public class MiscUtils {
         }
         if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return true;
         return !FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().contains(player);
+    }
+
+    @Nullable
+    public static BlockPos searchAreaForFirst(World world, BlockPos center, int radius, @Nullable Vector3 offsetFrom, BlockStateCheck acceptor) {
+        for (int r = 0; r <= radius; r++) {
+            List<BlockPos> posList = new LinkedList<>();
+            for (int xx = -r; xx <= r; xx++) {
+                for (int yy = -r; yy <= r; yy++) {
+                    for (int zz = -r; zz <= r; zz++) {
+
+                        BlockPos pos = center.add(xx, yy, zz);
+                        if(isChunkLoaded(world, new ChunkPos(pos))) {
+                            IBlockState state = world.getBlockState(pos);
+                            if(acceptor.isStateValid(world, pos, state)) {
+                                posList.add(pos);
+                            }
+                        }
+                    }
+                }
+            }
+            if(!posList.isEmpty()) {
+                Vector3 offset = new Vector3(center).add(0.5, 0.5, 0.5);
+                if(offsetFrom != null) {
+                    offset = offsetFrom;
+                }
+                BlockPos closest = null;
+                double prevDst = 0;
+                for (BlockPos pos : posList) {
+                    if(closest == null || offset.distance(pos) < prevDst) {
+                         closest = pos;
+                         prevDst = offset.distance(pos);
+                    }
+                }
+                return closest;
+            }
+            posList.clear();
+        }
+        return null;
     }
 
     public static List<BlockPos> searchAreaFor(World world, BlockPos center, Block blockToSearch, int metaToSearch, int radius) {

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -70,6 +71,7 @@ public class RegistryConstellations {
         registerCapeArmorEffect(aevitas, CapeEffectAevitas.class);
 
         registerCapeArmorEffect(fornax, CapeEffectFornax.class);
+        registerCapeArmorEffect(pelotrio, CapeEffectPelotrio.class);
     }
 
     //private static void registerSpellEffects() {

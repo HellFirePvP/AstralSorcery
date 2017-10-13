@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
@@ -147,29 +148,33 @@ public class RegistryRecipes {
 
         CommonProxy.registryPrimer.register(RecipeChangeWandColor.INSTANCE);
 
-        rLPRAltar = newShapedRecipe("altar_tier_1", BlocksAS.blockAltar)
-                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.UPPER_LEFT,
-                        ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.LOWER_LEFT,
-                        ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_RIGHT)
-                .addPart(OreDictAlias.BLOCK_CRAFTING_TABLE,
-                        ShapedRecipeSlot.CENTER)
-                .buildAndRegisterLightCraftingRecipe();
-        rLPRWand = newShapedRecipe("tool_basicwand", ItemsAS.wand)
-                .addPart(OreDictAlias.ITEM_AQUAMARINE,
-                        ShapedRecipeSlot.UPPER_CENTER,
-                        ShapedRecipeSlot.RIGHT)
-                .addPart(OreDictAlias.ITEM_ENDERPEARL,
-                        ShapedRecipeSlot.UPPER_RIGHT)
-                .addPart(OreDictAlias.BLOCK_MARBLE,
-                        ShapedRecipeSlot.CENTER,
-                        ShapedRecipeSlot.LOWER_LEFT)
-                .buildAndRegisterLightCraftingRecipe();
+        if(Config.lightProximityAltarRecipe) {
+            rLPRAltar = newShapedRecipe("altar_tier_1", BlocksAS.blockAltar)
+                    .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                            ShapedRecipeSlot.UPPER_CENTER)
+                    .addPart(OreDictAlias.BLOCK_MARBLE,
+                            ShapedRecipeSlot.UPPER_LEFT,
+                            ShapedRecipeSlot.LEFT,
+                            ShapedRecipeSlot.LOWER_LEFT,
+                            ShapedRecipeSlot.UPPER_RIGHT,
+                            ShapedRecipeSlot.RIGHT,
+                            ShapedRecipeSlot.LOWER_RIGHT)
+                    .addPart(OreDictAlias.BLOCK_CRAFTING_TABLE,
+                            ShapedRecipeSlot.CENTER)
+                    .buildAndRegisterLightCraftingRecipe();
+        }
+        if(Config.lightProximityResonatingWandRecipe) {
+            rLPRWand = newShapedRecipe("tool_basicwand", ItemsAS.wand)
+                    .addPart(OreDictAlias.ITEM_AQUAMARINE,
+                            ShapedRecipeSlot.UPPER_CENTER,
+                            ShapedRecipeSlot.RIGHT)
+                    .addPart(OreDictAlias.ITEM_ENDERPEARL,
+                            ShapedRecipeSlot.UPPER_RIGHT)
+                    .addPart(OreDictAlias.BLOCK_MARBLE,
+                            ShapedRecipeSlot.CENTER,
+                            ShapedRecipeSlot.LOWER_LEFT)
+                    .buildAndRegisterLightCraftingRecipe();
+        }
 
         rRJournal = newShapedRecipe("journal", ItemsAS.journal)
                 .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),

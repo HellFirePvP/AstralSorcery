@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
@@ -511,7 +512,9 @@ public class RegistryResearch {
 
         ResearchNode resWand = new ResearchNode(new ItemStack(ItemsAS.wand), "WAND", 2, 2);
         resWand.addPage(getTextPage("WAND.1"));
-        resWand.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRWand));
+        if(Config.lightProximityResonatingWandRecipe) {
+            resWand.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRWand));
+        }
         resWand.addPage(getTextPage("WAND.3"));
 
         ResearchNode resOres = new ResearchNode(new ItemStack[] {
@@ -546,7 +549,9 @@ public class RegistryResearch {
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 3);
         resTable.addPage(getTextPage("ALTAR1.1"));
         resTable.addPage(getTextPage("ALTAR1.2"));
-        resTable.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRAltar));
+        if(Config.lightProximityAltarRecipe) {
+            resTable.addPage(new JournalPageLightProximityRecipe(RecipesAS.rLPRAltar));
+        }
         resTable.addPage(getTextPage("ALTAR1.4"));
         resTable.addPage(getTextPage("ALTAR1.5"));
 

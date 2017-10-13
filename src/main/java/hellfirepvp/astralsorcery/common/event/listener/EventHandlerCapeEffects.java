@@ -14,15 +14,21 @@ import hellfirepvp.astralsorcery.common.base.Plants;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
+import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,7 +64,47 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private static boolean chainingAttack = false;
 
     @SubscribeEvent
+    public void breakBlock(BlockEvent.BreakEvent event) {
+        if(event.getWorld().isRemote) return;
+
+        EntityPlayer pl = event.getPlayer();
+        if(pl == null || !(pl instanceof EntityPlayerMP)) return;
+        if(MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
+
+        IBlockState state = event.getState();
+        ItemStack held = pl.getHeldItemMainhand();
+
+
+        if(("pickaxe".equalsIgnoreCase(state.getBlock().getHarvestTool(state)) ||
+                (!state.getMaterial().isToolNotRequired() && Items.DIAMOND_PICKAXE.canHarvestBlock(state))) &&
+                !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("pickaxe")) {
+            CapeEffectPelotrio pel = ItemCape.getCapeEffect(pl, Constellations.pelotrio);
+            if (pel != null && rand.nextFloat() < pel.getChanceSpawnPick()) {
+                BlockPos at = pl.getPosition().up();
+                EntitySpectralTool esp = new EntitySpectralTool(
+                        event.getWorld(), at, new ItemStack(Items.DIAMOND_PICKAXE),
+                        EntitySpectralTool.ToolTask.createPickaxeTask());
+                event.getWorld().spawnEntity(esp);
+                return;
+            }
+        }
+        if((state.getBlock().isWood(event.getWorld(), event.getPos()) ||
+                state.getBlock().isLeaves(state, event.getWorld(), event.getPos())) &&
+                !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("axe")) {
+            CapeEffectPelotrio pel = ItemCape.getCapeEffect(pl, Constellations.pelotrio);
+            if (pel != null && rand.nextFloat() < pel.getChanceSpawnAxe()) {
+                BlockPos at = pl.getPosition().up();
+                EntitySpectralTool esp = new EntitySpectralTool(
+                        event.getWorld(), at, new ItemStack(Items.DIAMOND_AXE),
+                        EntitySpectralTool.ToolTask.createLogTask());
+                event.getWorld().spawnEntity(esp);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
+        if(event.getEntityLiving().world.isRemote) return;
         if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer pl = (EntityPlayer) event.getEntityLiving();
             CapeEffectDiscidia cd = ItemCape.getCapeEffect(pl, Constellations.discidia);
@@ -82,10 +129,14 @@ public class EventHandlerCapeEffects implements ITickHandler {
     @SubscribeEvent
     public void onAttack(LivingAttackEvent event) {
         if(chainingAttack) return;
+        if(event.getEntityLiving().world.isRemote) return;
 
         DamageSource ds = event.getSource();
         if(ds.getTrueSource() != null && ds.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer attacker = (EntityPlayer) ds.getTrueSource();
+            if(!(attacker instanceof EntityPlayerMP)) return;
+            if(MiscUtils.isPlayerFakeMP((EntityPlayerMP) attacker)) return;
+
             CapeEffectDiscidia cd = ItemCape.getCapeEffect(attacker, Constellations.discidia);
             if(cd != null) {
                 double added = cd.getLastAttackDamage();
@@ -94,6 +145,14 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 attacker.attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) added);
                 attacker.attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
                 chainingAttack = false;
+            }
+            CapeEffectPelotrio pel = ItemCape.getCapeEffect(attacker, Constellations.pelotrio);
+            if (pel != null && !attacker.getHeldItemMainhand().isEmpty() && rand.nextFloat() < pel.getChanceSpawnSword()) {
+                BlockPos at = attacker.getPosition().up();
+                EntitySpectralTool esp = new EntitySpectralTool(
+                        attacker.getEntityWorld(), at, new ItemStack(Items.DIAMOND_SWORD),
+                        EntitySpectralTool.ToolTask.createAttackTask());
+                attacker.getEntityWorld().spawnEntity(esp);
             }
         }
     }
@@ -155,6 +214,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 EntityPlayer pl = (EntityPlayer) context[0];
                 Side side = (Side) context[1];
                 if(side == Side.SERVER) {
+                    if(!(pl instanceof EntityPlayerMP)) return;
+                    if(MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
+
                     tickAevitasEffect(pl);
                     tickFornaxMelting(pl);
                 }
