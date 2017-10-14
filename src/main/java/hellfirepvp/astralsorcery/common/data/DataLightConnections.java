@@ -222,7 +222,9 @@ public class DataLightConnections extends AbstractData {
                             to = new LinkedList<>();
                             connectionMap.put(start, to);
                         }
-                        to.add(end);
+                        if(!to.contains(end)) {
+                            to.add(end);
+                        }
                     } else {
                         if(to != null) {
                             to.remove(end);
