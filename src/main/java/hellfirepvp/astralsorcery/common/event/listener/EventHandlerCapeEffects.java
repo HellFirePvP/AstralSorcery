@@ -11,10 +11,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
-import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectAevitas;
-import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectDiscidia;
-import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectFornax;
-import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectPelotrio;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
 import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -27,14 +24,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -60,12 +59,14 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
     private EventHandlerCapeEffects() {}
 
-    //Prevent damage overflow for discidia
-    private static boolean chainingAttack = false;
+    //Prevent event overflow
+    private static boolean discidiaChainingAttack = false;
+    private static boolean evorsioChainingBreak = false;
 
     @SubscribeEvent
     public void breakBlock(BlockEvent.BreakEvent event) {
         if(event.getWorld().isRemote) return;
+        if(evorsioChainingBreak) return;
 
         EntityPlayer pl = event.getPlayer();
         if(pl == null || !(pl instanceof EntityPlayerMP)) return;
@@ -75,29 +76,45 @@ public class EventHandlerCapeEffects implements ITickHandler {
         ItemStack held = pl.getHeldItemMainhand();
 
 
-        if(("pickaxe".equalsIgnoreCase(state.getBlock().getHarvestTool(state)) ||
-                (!state.getMaterial().isToolNotRequired() && Items.DIAMOND_PICKAXE.canHarvestBlock(state))) &&
-                !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("pickaxe")) {
-            CapeEffectPelotrio pel = ItemCape.getCapeEffect(pl, Constellations.pelotrio);
-            if (pel != null && rand.nextFloat() < pel.getChanceSpawnPick()) {
-                BlockPos at = pl.getPosition().up();
-                EntitySpectralTool esp = new EntitySpectralTool(
-                        event.getWorld(), at, new ItemStack(Items.DIAMOND_PICKAXE),
-                        EntitySpectralTool.ToolTask.createPickaxeTask());
-                event.getWorld().spawnEntity(esp);
-                return;
+        CapeEffectPelotrio pel = ItemCape.getCapeEffect(pl, Constellations.pelotrio);
+        if(pel != null) {
+            if(("pickaxe".equalsIgnoreCase(state.getBlock().getHarvestTool(state)) ||
+                    (!state.getMaterial().isToolNotRequired() && Items.DIAMOND_PICKAXE.canHarvestBlock(state))) &&
+                    !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("pickaxe")) {
+                if (rand.nextFloat() < pel.getChanceSpawnPick()) {
+                    BlockPos at = pl.getPosition().up();
+                    EntitySpectralTool esp = new EntitySpectralTool(
+                            event.getWorld(), at, new ItemStack(Items.DIAMOND_PICKAXE),
+                            EntitySpectralTool.ToolTask.createPickaxeTask());
+                    event.getWorld().spawnEntity(esp);
+                    return;
+                }
+            }
+            if((state.getBlock().isWood(event.getWorld(), event.getPos()) ||
+                    state.getBlock().isLeaves(state, event.getWorld(), event.getPos())) &&
+                    !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("axe")) {
+                if (rand.nextFloat() < pel.getChanceSpawnAxe()) {
+                    BlockPos at = pl.getPosition().up();
+                    EntitySpectralTool esp = new EntitySpectralTool(
+                            event.getWorld(), at, new ItemStack(Items.DIAMOND_AXE),
+                            EntitySpectralTool.ToolTask.createLogTask());
+                    event.getWorld().spawnEntity(esp);
+                }
             }
         }
-        if((state.getBlock().isWood(event.getWorld(), event.getPos()) ||
-                state.getBlock().isLeaves(state, event.getWorld(), event.getPos())) &&
-                !pl.getHeldItemMainhand().isEmpty() && pl.getHeldItemMainhand().getItem().getToolClasses(held).contains("axe")) {
-            CapeEffectPelotrio pel = ItemCape.getCapeEffect(pl, Constellations.pelotrio);
-            if (pel != null && rand.nextFloat() < pel.getChanceSpawnAxe()) {
-                BlockPos at = pl.getPosition().up();
-                EntitySpectralTool esp = new EntitySpectralTool(
-                        event.getWorld(), at, new ItemStack(Items.DIAMOND_AXE),
-                        EntitySpectralTool.ToolTask.createLogTask());
-                event.getWorld().spawnEntity(esp);
+        CapeEffectEvorsio ev =  ItemCape.getCapeEffect(pl, Constellations.evorsio);
+        if(ev != null && !pl.getHeldItemMainhand().isEmpty()) {
+            evorsioChainingBreak = true;
+            try {
+                RayTraceResult rtr = MiscUtils.rayTraceLook(pl);
+                if(rtr != null) {
+                    EnumFacing faceHit = rtr.sideHit;
+                    if(faceHit != null) {
+                        ev.breakBlocksPlane((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                    }
+                }
+            } finally {
+                evorsioChainingBreak = false;
             }
         }
     }
@@ -105,6 +122,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
         if(event.getEntityLiving().world.isRemote) return;
+
         if(event.getEntityLiving() != null && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer pl = (EntityPlayer) event.getEntityLiving();
             CapeEffectDiscidia cd = ItemCape.getCapeEffect(pl, Constellations.discidia);
@@ -127,8 +145,25 @@ public class EventHandlerCapeEffects implements ITickHandler {
     }
 
     @SubscribeEvent
+    public void onKill(LivingDeathEvent event) {
+        if(event.getEntity().getEntityWorld().isRemote) return;
+
+        DamageSource ds = event.getSource();
+        if(ds.getTrueSource() != null && ds.getTrueSource() instanceof EntityPlayer) {
+            EntityPlayer pl = (EntityPlayer) ds.getTrueSource();
+            if(!(pl instanceof EntityPlayerMP)) return;
+            if(MiscUtils.isPlayerFakeMP((EntityPlayerMP) pl)) return;
+
+            CapeEffectEvorsio ev = ItemCape.getCapeEffect(pl, Constellations.evorsio);
+            if(ev != null) {
+                ev.deathAreaDamage(ds, event.getEntityLiving());
+            }
+        }
+    }
+
+    @SubscribeEvent
     public void onAttack(LivingAttackEvent event) {
-        if(chainingAttack) return;
+        if(discidiaChainingAttack) return;
         if(event.getEntityLiving().world.isRemote) return;
 
         DamageSource ds = event.getSource();
@@ -141,10 +176,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
             if(cd != null) {
                 double added = cd.getLastAttackDamage();
 
-                chainingAttack = true;
-                attacker.attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) added);
-                attacker.attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
-                chainingAttack = false;
+                discidiaChainingAttack = true;
+                try {
+                    attacker.attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) added);
+                    attacker.attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
+                } finally {
+                    discidiaChainingAttack = false;
+                }
             }
             CapeEffectPelotrio pel = ItemCape.getCapeEffect(attacker, Constellations.pelotrio);
             if (pel != null && !attacker.getHeldItemMainhand().isEmpty() && rand.nextFloat() < pel.getChanceSpawnSword()) {

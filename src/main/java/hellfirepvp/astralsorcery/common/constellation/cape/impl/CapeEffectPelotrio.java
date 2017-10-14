@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,6 +74,7 @@ public class CapeEffectPelotrio extends CapeArmorEffect {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void playActiveParticleTick(EntityPlayer pl) {
         playConstellationCapeSparkles(pl, 0.2F);
     }

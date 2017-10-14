@@ -81,6 +81,8 @@ public class Config {
     @Sync public static float architectWandUseCost = 0.07F;
     @Sync public static float exchangeWandUseCost = 0.08F;
 
+    public static float exchangeWandMaxHardness = -1;
+
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static List<String> modidOreGenBlacklist = Lists.newArrayList();
@@ -137,6 +139,8 @@ public class Config {
         architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the architect wand");
         exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the exchange wand");
         grappleWandUseCost = latestConfig.getFloat("wandCost_grapple", "tools", grappleWandUseCost, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the grapple wand");
+
+        exchangeWandMaxHardness = latestConfig.getFloat("exchange_wand_max_hardness", "tools", -1, -1, 50000, "Sets the max. hardness the exchange wand can swap !from!. If the block you're trying to \"mine\" with the conversion wand is higher than this number, it won't work. (-1 to disable this check)");
 
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
         revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");

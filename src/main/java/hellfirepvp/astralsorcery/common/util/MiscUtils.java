@@ -255,6 +255,15 @@ public class MiscUtils {
     }
 
     @Nullable
+    public static RayTraceResult rayTraceLook(EntityPlayer player) {
+        double reach = 5D;
+        if(player instanceof EntityPlayerMP) {
+            reach = ((EntityPlayerMP) player).interactionManager.getBlockReachDistance();
+        }
+        return rayTraceLook(player, reach);
+    }
+
+    @Nullable
     public static RayTraceResult rayTraceLook(EntityLivingBase entity, double reachDst) {
         Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d lookVec = entity.getLookVec();

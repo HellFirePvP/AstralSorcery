@@ -81,7 +81,7 @@ public class Vector3 {
 
     public static Vector3 atEntityCenter(Entity entity) {
         Vector3 offset = atEntityCorner(entity);
-        return offset.add(entity.width / 2, entity.height / 2, entity.height / 2);
+        return offset.add(entity.width / 2, entity.height / 2, entity.width / 2);
     }
 
     public Vector3 add(Vec3i vec) {

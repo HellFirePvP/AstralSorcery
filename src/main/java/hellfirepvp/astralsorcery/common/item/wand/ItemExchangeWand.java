@@ -181,7 +181,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if(stored.getBlock().equals(atOrigin.getBlock()) && stored.getBlock().getMetaFromState(stored) == atOrigin.getBlock().getMetaFromState(atOrigin)) {
             return;
         }
-        if(atOrigin.getBlockHardness(Minecraft.getMinecraft().world, origin) == -1) {
+        float hardness = atOrigin.getBlockHardness(Minecraft.getMinecraft().world, origin);
+        if(Config.exchangeWandMaxHardness != -1) {
+            if(hardness > Config.exchangeWandMaxHardness) {
+                return;
+            }
+        }
+        if(hardness == -1) {
             return;
         }
         int amt = 0;
@@ -246,7 +252,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             return EnumActionResult.SUCCESS;
         }
         IBlockState atState = world.getBlockState(origin);
-        if(atState.getBlockHardness(world, origin) == -1) {
+        float hardness = atState.getBlockHardness(world, origin);
+        if(Config.exchangeWandMaxHardness != -1) {
+            if(hardness > Config.exchangeWandMaxHardness) {
+                return EnumActionResult.SUCCESS;
+            }
+        }
+        if(hardness == -1) {
             return EnumActionResult.SUCCESS;
         }
 

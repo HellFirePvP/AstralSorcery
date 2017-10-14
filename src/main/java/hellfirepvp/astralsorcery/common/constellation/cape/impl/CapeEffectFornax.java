@@ -19,6 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -43,6 +45,7 @@ public class CapeEffectFornax extends CapeArmorEffect {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void playActiveParticleTick(EntityPlayer pl) {
         float chance = 0.4F;
         if(pl.isBurning()) {
