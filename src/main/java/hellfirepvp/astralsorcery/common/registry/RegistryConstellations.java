@@ -68,6 +68,7 @@ public class RegistryConstellations {
         registerCapeArmorEffect(aevitas, CapeEffectAevitas.class);
         registerCapeArmorEffect(evorsio, CapeEffectEvorsio.class);
         registerCapeArmorEffect(armara, CapeEffectArmara.class);
+        registerCapeArmorEffect(vicio, CapeEffectVicio.class);
 
         registerCapeArmorEffect(fornax, CapeEffectFornax.class);
         registerCapeArmorEffect(pelotrio, CapeEffectPelotrio.class);

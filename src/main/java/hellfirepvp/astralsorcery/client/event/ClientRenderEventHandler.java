@@ -153,7 +153,6 @@ public class ClientRenderEventHandler {
         if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().player != null) {
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
-            playCapeSparkles();
 
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
                 requestPermChargeReveal(20);
@@ -195,15 +194,6 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void playCapeSparkles() {
-        EntityPlayer pl = Minecraft.getMinecraft().player;
-        CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
-        if(cae != null) {
-            cae.playActiveParticleTick(pl);
         }
     }
 

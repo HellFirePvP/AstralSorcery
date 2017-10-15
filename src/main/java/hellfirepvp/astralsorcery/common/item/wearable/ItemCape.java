@@ -14,8 +14,10 @@ import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectFactory;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerCapeEffects;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,6 +66,14 @@ public class ItemCape extends ItemArmor {
         if(cst != null) {
             tooltip.add(cst.getUnlocalizedName());
         }
+    }
+
+    @Override
+    public void setDamage(ItemStack stack, int damage) {
+        if(EventHandlerCapeEffects.inElytraCheck) {
+            return; //It shouldn't damage the vicio cape by flying with it.
+        }
+        super.setDamage(stack, damage);
     }
 
     @Nullable

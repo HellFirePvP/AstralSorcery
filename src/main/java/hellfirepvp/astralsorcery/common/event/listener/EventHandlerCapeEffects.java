@@ -11,16 +11,20 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.base.Plants;
+import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
 import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktElytraCapeState;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -36,9 +40,11 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -62,6 +68,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
     //Prevent event overflow
     private static boolean discidiaChainingAttack = false;
     private static boolean evorsioChainingBreak = false;
+
+    //To propagate elytra states
+    private static boolean updateElytraBuffer = false;
+    public static boolean inElytraCheck = false;
 
     @SubscribeEvent
     public void breakBlock(BlockEvent.BreakEvent event) {
@@ -121,7 +131,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public void onHurt(LivingHurtEvent event) {
         if(event.getEntityLiving().world.isRemote) return;
 
@@ -260,6 +270,48 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    private void tickVicioClientEffect(EntityPlayer player) {
+        if(player instanceof EntityPlayerSP) {
+            EntityPlayerSP spl = (EntityPlayerSP) player;
+            if(spl.movementInput.jump && !spl.onGround && spl.motionY < 0 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
+                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
+                if(!spl.isElytraFlying()) {
+                    PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
+                }
+            } else if(spl.isElytraFlying() && (spl.capabilities.isFlying || spl.onGround || spl.isInWater() || spl.isInLava())) {
+                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
+            }
+        }
+    }
+
+    public static void updateElytraEventPre(EntityLivingBase entity) {
+        if(entity instanceof EntityPlayer) {
+            CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
+            if(vic != null) {
+                updateElytraBuffer = entity.getFlag(7);
+                inElytraCheck = true;
+            }
+        }
+    }
+
+    public static void updateElytraEventPost(EntityLivingBase entity) {
+        inElytraCheck = false;
+        if(entity instanceof EntityPlayer && updateElytraBuffer) {
+            CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
+            if(vic != null) {
+                boolean current = entity.getFlag(7);
+                // So the state from true before has now changed to false.
+                // We need to check if the item not being an elytra is responsible for that.
+                if(!current) {
+                    if(!((EntityPlayer) entity).onGround && !entity.isRiding()) {
+                        entity.setFlag(7, true);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         switch (type) {
@@ -275,6 +327,15 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     tickAevitasEffect(pl);
                     tickFornaxMelting(pl);
                     tickArmaraWornEffect(pl);
+                } else if(side == Side.CLIENT) {
+                    CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
+                    if(cae != null) {
+                        cae.playActiveParticleTick(pl);
+                    }
+                    CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
+                    if(vic != null) {
+                        tickVicioClientEffect(pl);
+                    }
                 }
                 break;
             case CLIENT:

@@ -150,7 +150,7 @@ public class EventHandlerEntity {
         attackStack.remove(event.getEntity().getEntityId());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
         if (living == null || living.getEntityWorld().isRemote) return;
