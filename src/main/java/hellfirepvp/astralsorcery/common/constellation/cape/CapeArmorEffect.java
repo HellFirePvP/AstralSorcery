@@ -41,7 +41,7 @@ public abstract class CapeArmorEffect extends ConfigEntry {
     //MUST BE OVERWRITTEN, WITH NBTTAGCMP AS ONLY PARAM!
     protected CapeArmorEffect(NBTTagCompound cmp, String key) {
         super(Section.CAPE, key);
-        this.data = cmp.copy();
+        this.data = cmp;
     }
 
     public abstract IConstellation getAssociatedConstellation();

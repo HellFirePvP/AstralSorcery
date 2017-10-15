@@ -103,7 +103,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
             }
         }
         CapeEffectEvorsio ev =  ItemCape.getCapeEffect(pl, Constellations.evorsio);
-        if(ev != null && !pl.getHeldItemMainhand().isEmpty()) {
+        if(ev != null &&
+                !pl.getHeldItemMainhand().isEmpty() &&
+                !pl.getHeldItemMainhand().getItem().getToolClasses(pl.getHeldItemMainhand()).isEmpty()) {
             evorsioChainingBreak = true;
             try {
                 RayTraceResult rtr = MiscUtils.rayTraceLook(pl);
@@ -129,6 +131,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
             if(cd != null) {
                 cd.writeLastAttackDamage(event.getAmount());
             }
+            CapeEffectArmara ca = ItemCape.getCapeEffect(pl, Constellations.armara);
+            if(ca != null) {
+                if(ca.shouldPreventDamage(event.getSource(), false)) {
+                    event.setCanceled(true);
+                    return;
+                }
+            }
             if(event.getSource().isFireDamage()) {
                 CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
                 if(cf != null) {
@@ -136,6 +145,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     float mul = cf.getDamageMultiplier();
                     if(mul <= 0) {
                         event.setCanceled(true);
+                        return;
                     } else {
                         event.setAmount(event.getAmount() * mul);
                     }
@@ -243,6 +253,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    private void tickArmaraWornEffect(EntityPlayer pl) {
+        CapeEffectArmara ca = ItemCape.getCapeEffect(pl, Constellations.armara);
+        if(ca != null) {
+            ca.wornTick();
+        }
+    }
+
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         switch (type) {
@@ -257,6 +274,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
                     tickAevitasEffect(pl);
                     tickFornaxMelting(pl);
+                    tickArmaraWornEffect(pl);
                 }
                 break;
             case CLIENT:

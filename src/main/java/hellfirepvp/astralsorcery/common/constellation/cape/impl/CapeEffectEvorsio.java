@@ -168,7 +168,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
             java.util.List<EntityLivingBase> eList = entityLiving.world.getEntitiesWithinAABB(
                     EntityLivingBase.class,
                     new AxisAlignedBB(-r, -r, -r, r, r, r).offset(entityLiving.getPosition()),
-                    e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
+                    e -> e != null && !e.isDead && e.getHealth() > 0 && e.isCreatureType(EnumCreatureType.MONSTER, false));
             for (EntityLivingBase el : eList) {
                 int preTime = el.hurtResistantTime;
                 el.attackEntityFrom(ds, damage);
