@@ -29,6 +29,8 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeRevealer;
@@ -40,6 +42,7 @@ import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -63,6 +66,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -148,6 +152,8 @@ public class ClientRenderEventHandler {
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND));
             playItemEffects(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND));
 
+            tickTimeFreezeEffects();
+
             if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
                 requestPermChargeReveal(20);
             }
@@ -186,6 +192,22 @@ public class ClientRenderEventHandler {
                     } else {
                         instance.visibility = Math.max(0, instance.visibility - instance.visibilityChange);
                     }
+                }
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void tickTimeFreezeEffects() {
+        World w = Minecraft.getMinecraft().world;
+        if(w != null && w.provider != null) {
+            List<TimeStopEffectHelper> effects =
+                    ((DataTimeFreezeEffects) SyncDataHolder.getData(Side.CLIENT, SyncDataHolder.DATA_TIME_FREEZE_EFFECTS))
+                            .client_getTimeStopEffects(w);
+
+            if(effects != null) {
+                for (TimeStopEffectHelper helper : effects) {
+                    helper.playClientTickEffect();
                 }
             }
         }

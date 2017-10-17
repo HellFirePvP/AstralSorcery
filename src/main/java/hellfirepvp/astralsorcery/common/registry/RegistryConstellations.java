@@ -74,6 +74,8 @@ public class RegistryConstellations {
         registerCapeArmorEffect(fornax, CapeEffectFornax.class);
         registerCapeArmorEffect(mineralis, CapeEffectMineralis.class);
         registerCapeArmorEffect(pelotrio, CapeEffectPelotrio.class);
+        registerCapeArmorEffect(octans, CapeEffectOctans.class);
+        registerCapeArmorEffect(horologium, CapeEffectHorologium.class);
     }
 
     //private static void registerSpellEffects() {

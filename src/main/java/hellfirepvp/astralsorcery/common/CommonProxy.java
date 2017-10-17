@@ -50,6 +50,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
@@ -57,18 +58,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -76,7 +72,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 
@@ -210,6 +205,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -239,6 +235,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
+        manager.register(TimeStopController.INSTANCE);
         //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps

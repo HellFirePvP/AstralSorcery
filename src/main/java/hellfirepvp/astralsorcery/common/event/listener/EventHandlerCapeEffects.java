@@ -22,8 +22,10 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +41,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -65,6 +69,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
     public static EventHandlerCapeEffects INSTANCE = new EventHandlerCapeEffects();
 
     private EventHandlerCapeEffects() {}
+
+    //Propagate player in tick for octans anti-knockback effect.
+    public static EntityPlayer currentPlayerInTick = null;
 
     //Prevent event overflow
     private static boolean discidiaChainingAttack = false;
@@ -132,6 +139,15 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    @SubscribeEvent
+    public void playerUpdatePre(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.START) {
+            currentPlayerInTick = event.player;
+        } else {
+            currentPlayerInTick = null;
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onHurt(LivingHurtEvent event) {
         if(event.getEntityLiving().world.isRemote) return;
@@ -160,6 +176,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     } else {
                         event.setAmount(event.getAmount() * mul);
                     }
+                }
+            } else {
+                CapeEffectHorologium horo = ItemCape.getCapeEffect(pl, Constellations.horologium);
+                if(horo != null) {
+                    horo.onHurt(pl);
                 }
             }
         }
@@ -212,6 +233,23 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         attacker.getEntityWorld(), at, new ItemStack(Items.DIAMOND_SWORD),
                         EntitySpectralTool.ToolTask.createAttackTask());
                 attacker.getEntityWorld().spawnEntity(esp);
+            }
+        }
+    }
+
+    /**
+     * {@link EntityPlayer#getDigSpeed(IBlockState, BlockPos)}
+     */
+    @SubscribeEvent
+    public void onWaterBreak(PlayerEvent.BreakSpeed event) {
+        EntityPlayer pl = event.getEntityPlayer();
+        if(pl.isInsideOfMaterial(Material.WATER) && !EnchantmentHelper.getAquaAffinityModifier(pl)) {
+            //Normally the break speed would be divided by 5 here in the actual logic. See link above
+            CapeEffectOctans ceo = ItemCape.getCapeEffect(pl, Constellations.octans);
+            if(ceo != null) {
+                //Revert speed back to what we think is original.
+                // Might stack with others that implement it the same way.
+                event.setNewSpeed(event.getOriginalSpeed() * 5);
             }
         }
     }
@@ -294,6 +332,16 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    private void tickOctansEffect(EntityPlayer pl) {
+        CapeEffectOctans ceo = ItemCape.getCapeEffect(pl, Constellations.octans);
+        if(ceo != null && pl.isInsideOfMaterial(Material.WATER)) {
+            if(pl.getAir() < 300) {
+                pl.setAir(300);
+            }
+            ceo.onWaterHealTick(pl);
+        }
+    }
+
     public static void updateElytraEventPre(EntityLivingBase entity) {
         if(entity instanceof EntityPlayer) {
             CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
@@ -345,6 +393,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     tickAevitasEffect(pl);
                     tickFornaxMelting(pl);
                     tickArmaraWornEffect(pl);
+                    tickOctansEffect(pl);
                 } else if(side == Side.CLIENT) {
                     CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
                     if(cae != null) {

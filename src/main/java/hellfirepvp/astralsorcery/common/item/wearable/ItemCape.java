@@ -8,18 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.item.wearable;
 
+import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectFactory;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerCapeEffects;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -33,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -66,6 +72,37 @@ public class ItemCape extends ItemArmor {
         if(cst != null) {
             tooltip.add(cst.getUnlocalizedName());
         }
+    }
+
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        super.onArmorTick(world, player, itemStack);
+
+        if(!world.isRemote) {
+            CapeEffectOctans ceo = getCapeEffect(player, Constellations.octans);
+            if(ceo != null && player.isInWater()) {
+                NBTTagCompound perm = NBTHelper.getPersistentData(itemStack);
+                perm.setInteger("AS_UpdateAttributes", itemRand.nextInt());
+            }
+        }
+    }
+
+    @Override
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        Multimap<String, AttributeModifier> out = super.getAttributeModifiers(slot, stack);
+        if(slot == EntityEquipmentSlot.CHEST) {
+            IConstellation cst = getAttunedConstellation(stack);
+            if(cst != null && cst == Constellations.octans) {
+                CapeEffectOctans ceo = getCapeEffect(stack);
+                if(ceo != null) {
+                    EntityPlayer potentialCurrent = EventHandlerCapeEffects.currentPlayerInTick;
+                    if(potentialCurrent != null && potentialCurrent.isInWater()) {
+                        out.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(UUID.fromString("845DB25C-C624-495F-8C9F-60210A958B6B").toString(), 500, 0));
+                    }
+                }
+            }
+        }
+        return out;
     }
 
     @Override
