@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktElytraCapeState
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -274,13 +275,21 @@ public class EventHandlerCapeEffects implements ITickHandler {
     private void tickVicioClientEffect(EntityPlayer player) {
         if(player instanceof EntityPlayerSP) {
             EntityPlayerSP spl = (EntityPlayerSP) player;
-            if(spl.movementInput.jump && !spl.onGround && spl.motionY < 0 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
+            if(spl.movementInput.jump && !spl.onGround && spl.motionY < -0.5 && !spl.capabilities.isFlying && !spl.isInWater() && !spl.isInLava()) {
                 PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
                 if(!spl.isElytraFlying()) {
                     PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.setFlying());
                 }
-            } else if(spl.isElytraFlying() && (spl.capabilities.isFlying || spl.onGround || spl.isInWater() || spl.isInLava())) {
-                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
+            } else if(spl.isElytraFlying()) {
+                PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFallDistance());
+                if(spl.capabilities.isFlying || spl.onGround || spl.isInWater() || spl.isInLava()) {
+                    PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
+                } else {
+                    Vector3 mov = new Vector3(((EntityPlayerSP) player).motionX, 0, ((EntityPlayerSP) player).motionZ);
+                    if(mov.length() <= 0.4F && ((EntityPlayerSP) player).motionY > 0.4F) {
+                        PacketChannel.CHANNEL.sendToServer(PktElytraCapeState.resetFlying());
+                    }
+                }
             }
         }
     }
@@ -308,6 +317,15 @@ public class EventHandlerCapeEffects implements ITickHandler {
                         entity.setFlag(7, true);
                     }
                 }
+
+                //TODO find a better solution.
+                //Vector3 mV = new Vector3(entity.motionX, entity.motionY, entity.motionZ).normalize().multiply(0.65F);
+                //entity.motionX += mV.getX() * 0.1D + (mV.getX() * 1.5D - entity.motionX) * 0.5D;
+                //entity.motionY += mV.getY() * 0.1D + (mV.getY() * 1.5D - entity.motionY) * 0.5D;
+                //entity.motionZ += mV.getZ() * 0.1D + (mV.getZ() * 1.5D - entity.motionZ) * 0.5D;
+                entity.motionX *= 1.01F;
+                entity.motionY *= 1.01F;
+                entity.motionZ *= 1.01F;
             }
         }
     }
@@ -335,6 +353,14 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     CapeEffectVicio vic = ItemCape.getCapeEffect(pl, Constellations.vicio);
                     if(vic != null) {
                         tickVicioClientEffect(pl);
+                    }
+                    CapeEffectLucerna luc = ItemCape.getCapeEffect(pl, Constellations.lucerna);
+                    if(luc != null) {
+                        luc.playClientHighlightTick(pl);
+                    }
+                    CapeEffectMineralis min = ItemCape.getCapeEffect(pl, Constellations.mineralis);
+                    if(min != null) {
+                        min.playClientHighlightTick(pl);
                     }
                 }
                 break;

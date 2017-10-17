@@ -70,7 +70,9 @@ public class RegistryConstellations {
         registerCapeArmorEffect(armara, CapeEffectArmara.class);
         registerCapeArmorEffect(vicio, CapeEffectVicio.class);
 
+        registerCapeArmorEffect(lucerna, CapeEffectLucerna.class);
         registerCapeArmorEffect(fornax, CapeEffectFornax.class);
+        registerCapeArmorEffect(mineralis, CapeEffectMineralis.class);
         registerCapeArmorEffect(pelotrio, CapeEffectPelotrio.class);
     }
 

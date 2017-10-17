@@ -45,8 +45,10 @@ public class CapeEffectRegistry {
         Config.addDynamicEntry(new CapeEffectArmara(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectVicio(new NBTTagCompound()));
 
+        Config.addDynamicEntry(new CapeEffectLucerna(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectFornax(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectPelotrio(new NBTTagCompound()));
+        Config.addDynamicEntry(new CapeEffectMineralis(new NBTTagCompound()));
     }
 
 }

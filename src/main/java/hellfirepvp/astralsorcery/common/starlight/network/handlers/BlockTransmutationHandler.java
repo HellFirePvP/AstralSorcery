@@ -70,10 +70,10 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         PktParticleEvent pkt = new PktParticleEvent(PktParticleEvent.ParticleEventType.TRANSMUTATION_CHARGE, pos.getX(), pos.getY(), pos.getZ());
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
 
-        if(node.accCharge >= node.runningTransmutation.cost) {
+        if(node.accCharge >= node.runningTransmutation.getCost()) {
             runningTransmutations.remove(pos);
 
-            world.setBlockState(pos, node.runningTransmutation.output);
+            world.setBlockState(pos, node.runningTransmutation.getOutput());
         }
 
     }
