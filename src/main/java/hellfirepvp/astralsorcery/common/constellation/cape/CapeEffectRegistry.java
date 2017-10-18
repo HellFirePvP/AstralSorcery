@@ -51,6 +51,7 @@ public class CapeEffectRegistry {
         Config.addDynamicEntry(new CapeEffectMineralis(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectOctans(new NBTTagCompound()));
         Config.addDynamicEntry(new CapeEffectHorologium(new NBTTagCompound()));
+        Config.addDynamicEntry(new CapeEffectBootes(new NBTTagCompound()));
     }
 
 }

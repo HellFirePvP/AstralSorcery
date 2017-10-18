@@ -278,7 +278,9 @@ public final class EffectHandler {
         if(cleanRequested) {
             for (IComplexEffect.RenderTarget t : IComplexEffect.RenderTarget.values()) {
                 for (int i = 0; i <= 2; i++) {
-                    complexEffects.get(t).get(i).clear();
+                    List<IComplexEffect> effects = complexEffects.get(t).get(i);
+                    effects.forEach(IComplexEffect::flagAsRemoved);
+                    effects.clear();
                 }
             }
             fastRenderParticles.clear();

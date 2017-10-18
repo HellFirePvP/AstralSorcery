@@ -370,7 +370,7 @@ item.itemcoloredlens.effect.spectral.name=Spectral
 inventory.altar.0=Luminous Crafting Table
 inventory.altar.1=Starlight Crafting Altar
 inventory.altar.2=Celestial Altar
-inventory.altar.3=[NoName-TraitCraft] Altar
+inventory.altar.3=Iridescent Altar
 inventory.altar.4=[NoName-Endgame] Altar
 
 fluid.astralsorcery.liquidStarlight=Liquid Starlight

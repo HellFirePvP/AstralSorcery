@@ -207,9 +207,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             abortCrafting();
             return true;
         }
-        if(!altarRecipe.fulfillesStarlightRequirement(this) &&
-                craftingTask.shouldPersist()) {
-            craftingTask.setState(ActiveCraftingTask.CraftingState.PAUSED);
+        if(!altarRecipe.fulfillesStarlightRequirement(this)) {
+            if(craftingTask.shouldPersist()) {
+                craftingTask.setState(ActiveCraftingTask.CraftingState.PAUSED);
+                return true;
+            }
+            abortCrafting();
             return true;
         }
         if((ticksExisted % 5) == 0) {

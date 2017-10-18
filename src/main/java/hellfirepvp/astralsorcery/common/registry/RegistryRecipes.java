@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.TraitUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -81,6 +82,7 @@ public class RegistryRecipes {
     public static DrawingTableRecipe rDrawingTable;
     public static ConstellationRecipe rInfusedGlass;
     public static AttunementRecipe rKnowledgeShare;
+    public static TraitRecipe rCapeBase;
 
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
@@ -88,6 +90,7 @@ public class RegistryRecipes {
 
     public static AttunementUpgradeRecipe rAltarUpgradeAttenuation;
     public static ConstellationUpgradeRecipe rAltarUpgradeConstellation;
+    public static TraitUpgradeRecipe rAltarUpgradeTrait;
 
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
@@ -282,6 +285,7 @@ public class RegistryRecipes {
 
         rAltarUpgradeAttenuation = registerAltarRecipe(new AttunementUpgradeRecipe());
         rAltarUpgradeConstellation = registerAltarRecipe(new ConstellationUpgradeRecipe());
+        rAltarUpgradeTrait = registerAltarRecipe(new TraitUpgradeRecipe());
 
         DiscoveryRecipe dr = registerDiscoveryRecipe(rCCParchment);
         dr.setPassiveStarlightRequirement(50);
@@ -313,6 +317,33 @@ public class RegistryRecipes {
                 RecipesAS.paperCraftingRecipes.put(c, recipe);
             }
         }
+
+        rCapeBase = registerTraitRecipe(newShapedRecipe("internal/altar/capebase", ItemsAS.armorImbuedCape)
+                .addPart(Items.LEATHER_CHESTPLATE,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+        .unregisteredAccessibleShapedRecipe());
+        rCapeBase.setInnerTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rCapeBase.setCstItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
+        rCapeBase.setCstItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
+        rCapeBase.setAttItem(ItemCraftingComponent.MetaType.STARDUST.asStack(),
+                AttunementRecipe.AttunementAltarSlot.LOWER_LEFT,
+                AttunementRecipe.AttunementAltarSlot.LOWER_RIGHT);
+        rCapeBase.addOuterTraitItem(Items.FEATHER).addOuterTraitItem(Items.ENDER_PEARL)
+                .addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack())
+                .addOuterTraitItem(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack());
 
         rKnowledgeShare = registerAttenuationRecipe(newShapedRecipe("internal/altar/knowledgeshare", ItemsAS.knowledgeShare)
                 .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),

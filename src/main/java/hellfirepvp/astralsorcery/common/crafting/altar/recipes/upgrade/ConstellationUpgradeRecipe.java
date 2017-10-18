@@ -129,7 +129,7 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
             }
 
             ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-            if(rand.nextInt(12) == 0) {
+            if(rand.nextInt(18) == 0) {
                 pm.addBlockDestroyEffects(altar.getPos(), BlocksAS.blockMarble.getDefaultState());
             }
             if(tick % 48 == 0 && rand.nextInt(2) == 0) {
