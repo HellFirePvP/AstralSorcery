@@ -3,15 +3,13 @@
 	"ambientocclusion": true,
 	"parent": "block/block",
 	"textures": {
-		"particle": "astralsorcery:blocks/models/chalice/base",
-		"texture": "astralsorcery:blocks/models/chalice/base",
-		"texture1": "astralsorcery:blocks/models/chalice/detail",
-		"texture2": "astralsorcery:blocks/models/chalice/glass_side",
-		"texture3": "astralsorcery:blocks/models/chalice/glass_top",
-		"texture4": "astralsorcery:blocks/models/chalice/bowl_bottom",
-		"texture5": "astralsorcery:blocks/models/chalice/bowl_top"
+		"particle": "astralsorcery:models/chalice/base",
+		"texture": "astralsorcery:models/chalice/base",
+		"texture1": "astralsorcery:models/chalice/detail",
+		"texture4": "astralsorcery:models/chalice/cup_bottom",
+		"texture5": "astralsorcery:models/chalice/cup_top"
 	},
-	"elements": [ 	 
+	"elements": [
 		{
 			"__comment": "base",
 			"from": [ 2, 0, 2 ],
@@ -36,6 +34,19 @@
 				"south": { "uv": [ 0, 10, 4, 16 ], "texture": "#texture1" },
 				"west": { "uv": [ 0, 10, 4, 16 ], "texture": "#texture1" },
 				"east": { "uv": [ 0, 10, 4, 16 ], "texture": "#texture1" }
+			}
+		},
+		{
+			"__comment": "bowl_b",
+			"from": [ 4, 8, 4 ],
+			"to": [ 12, 10, 12 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 8, 8 ], "texture": "#texture1" },
+				"up": { "uv": [ 0, 0, 8, 8 ], "texture": "#texture1" },
+				"north": { "uv": [ 0, 8, 8, 10 ], "texture": "#texture1" },
+				"south": { "uv": [ 0, 8, 8, 10 ], "texture": "#texture1" },
+				"west": { "uv": [ 0, 8, 8, 10 ], "texture": "#texture1" },
+				"east": { "uv": [ 0, 8, 8, 10 ], "texture": "#texture1" }
 			}
 		},
 		{

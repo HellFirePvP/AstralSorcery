@@ -28,7 +28,7 @@
         {
             "when": {"AND": [{"render": true}, {"altartype": "altar_4"}]},
             "apply": [
-                { "model": "astralsorcery:blockmodel_nothing" }
+                { "model": "astralsorcery:blockaltar4" }
             ]
         },
         {

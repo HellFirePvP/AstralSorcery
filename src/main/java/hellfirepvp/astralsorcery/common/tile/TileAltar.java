@@ -177,7 +177,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        AxisAlignedBB box = super.getRenderBoundingBox().expand(0, 3, 0);
+        AxisAlignedBB box = super.getRenderBoundingBox().expand(0, 5, 0);
         if(level != null && level.ordinal() >= AltarLevel.TRAIT_CRAFT.ordinal()) {
             box = box.grow(3, 0, 3);
         }

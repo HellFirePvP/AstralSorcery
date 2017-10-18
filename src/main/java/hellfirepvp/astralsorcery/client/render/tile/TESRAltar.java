@@ -65,10 +65,10 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
 
         switch (te.getAltarLevel()) {
             case ATTUNEMENT:
-                renderT2Additions(te, x, y, z, jBase);
+                //renderT2Additions(te, x, y, z, jBase);
                 break;
             case CONSTELLATION_CRAFT:
-                renderT3Additions(te, x, y, z, jBase);
+                //renderT3Additions(te, x, y, z, jBase);
                 if(te.getMultiblockState()) {
                     GL11.glPushMatrix();
                     renderCrystalEffects(te, x, y, z, partialTicks, sBase);

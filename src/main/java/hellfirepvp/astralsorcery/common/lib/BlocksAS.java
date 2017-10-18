@@ -52,6 +52,7 @@ public class BlocksAS {
     public static BlockMapDrawingTable drawingTable;
     public static BlockCelestialGateway celestialGateway;
     public static BlockVanishing blockVanishing;
+    public static BlockChalice blockChalice;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

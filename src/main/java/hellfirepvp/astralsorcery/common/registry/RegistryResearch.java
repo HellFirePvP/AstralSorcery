@@ -13,10 +13,7 @@ import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
-import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
-import hellfirepvp.astralsorcery.common.block.BlockMachine;
-import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
@@ -563,6 +560,12 @@ public class RegistryResearch {
         ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
         resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRaw));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleBricks));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarblePillar));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleChiseled));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleArch));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRuned));
+        resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleEngraved));
 
         ResearchNode resTable = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), "ALTAR1", 4, 3);
         resTable.addPage(getTextPage("ALTAR1.1"));
@@ -574,7 +577,13 @@ public class RegistryResearch {
         resTable.addPage(getTextPage("ALTAR1.5"));
 
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_1.ordinal()), resTable,       1, ResearchProgression.DISCOVERY);
-        registerItemLookup(new ItemStack(BlocksAS.blockBlackMarble, 1, OreDictionary.WILDCARD_VALUE),     resSootyMarble, 0, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),                                   resSootyMarble, 1, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.BRICKS.asStack(),                                resSootyMarble, 2, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.PILLAR.asStack(),                                resSootyMarble, 3, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.CHISELED.asStack(),                              resSootyMarble, 4, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.ARCH.asStack(),                                  resSootyMarble, 5, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.RUNED.asStack(),                                 resSootyMarble, 6, ResearchProgression.DISCOVERY);
+        registerItemLookup(BlockBlackMarble.BlackMarbleBlockType.ENGRAVED.asStack(),                              resSootyMarble, 7, ResearchProgression.DISCOVERY);
         registerItemLookup(BlockMarble.MarbleBlockType.BRICKS.asStack(),                                          resMarbleTypes, 1, ResearchProgression.DISCOVERY);
         registerItemLookup(BlockMarble.MarbleBlockType.PILLAR.asStack(),                                          resMarbleTypes, 2, ResearchProgression.DISCOVERY);
         registerItemLookup(BlockMarble.MarbleBlockType.CHISELED.asStack(),                                        resMarbleTypes, 3, ResearchProgression.DISCOVERY);

@@ -75,6 +75,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     private List<String> locTextMain = new LinkedList<>();
     private List<String> locTextEnchRitual = new LinkedList<>();
+    private List<String> locTextCapeEffect = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
         super(-1);
@@ -99,6 +100,28 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         testActivePhases();
         buildMainText();
         buildEnchRitualText();
+        buildCapeText();
+    }
+    //TODO add cape description pages
+
+    private void buildCapeText() {
+        if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchManager.clientProgress.getTierReached())) {
+            String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";
+            String textEnch = I18n.format(unlocEnch);
+            if(!unlocEnch.equals(textEnch)) {
+                String head = I18n.format("gui.journal.cst.capeeffect");
+                locTextCapeEffect.add(head);
+                locTextCapeEffect.add("");
+
+                List<String> lines = new LinkedList<>();
+                for (String segment : textEnch.split("<NL>")) {
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.add("");
+                }
+                locTextCapeEffect.addAll(lines);
+                locTextCapeEffect.add("");
+            }
+        }
     }
 
     private void buildEnchRitualText() {

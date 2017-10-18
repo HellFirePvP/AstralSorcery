@@ -9,20 +9,26 @@
 package hellfirepvp.astralsorcery.common.item.wearable;
 
 import com.google.common.collect.Multimap;
+import hellfirepvp.astralsorcery.client.models.base.ASCape;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectFactory;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerCapeEffects;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +54,9 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 09.10.2017 / 23:08
  */
-public class ItemCape extends ItemArmor {
+public class ItemCape extends ItemArmor implements ItemDynamicColor {
+
+    private Object objASCape = null;
 
     public ItemCape() {
         super(RegistryItems.imbuedLeatherMaterial, -1, EntityEquipmentSlot.CHEST);
@@ -59,6 +68,8 @@ public class ItemCape extends ItemArmor {
         if(this.isInCreativeTab(tab)) {
             ItemStack stack;
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                if(c instanceof IMinorConstellation) continue;
+
                 stack = new ItemStack(this);
                 setAttunedConstellation(stack, c);
                 items.add(stack);
@@ -111,6 +122,34 @@ public class ItemCape extends ItemArmor {
             return; //It shouldn't damage the vicio cape by flying with it.
         }
         super.setDamage(stack, damage);
+    }
+
+    @Nullable
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+        if(objASCape == null) {
+            objASCape = new ASCape();
+        }
+        return (ModelBiped) objASCape;
+    }
+
+    @Nullable
+    @Override
+    @SideOnly(Side.CLIENT)
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        return "astralsorcery:textures/models/as_cape.png";
+    }
+
+    @Override
+    public int getColorForItemStack(ItemStack stack, int tintIndex) {
+        if(tintIndex != 1) return 0xFFFFFF;
+        IConstellation cst = getAttunedConstellation(stack);
+        if(cst != null) {
+            Color c = cst.getConstellationColor();
+            return 0xFF000000 | c.getRGB();
+        }
+        return 0xFF000000;
     }
 
     @Nullable

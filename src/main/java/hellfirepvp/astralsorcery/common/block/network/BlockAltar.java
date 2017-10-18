@@ -100,10 +100,10 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         return true;
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.withProperty(RENDER_FULLY, false);
-    }
+    //@Override
+    //public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    //    return state.withProperty(RENDER_FULLY, false);
+    //}
 
     /*@Override
     @SideOnly(Side.CLIENT)
@@ -128,7 +128,7 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
-            if(type == AltarType.ALTAR_4 || type == AltarType.ALTAR_5) continue;
+            if(type == AltarType.ALTAR_5) continue;
             list.add(new ItemStack(this, 1, type.ordinal()));
         }
     }

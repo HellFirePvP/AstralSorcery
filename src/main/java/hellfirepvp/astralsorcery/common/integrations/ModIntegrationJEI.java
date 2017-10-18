@@ -135,7 +135,6 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 3));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemsAS.armorImbuedCape));
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {

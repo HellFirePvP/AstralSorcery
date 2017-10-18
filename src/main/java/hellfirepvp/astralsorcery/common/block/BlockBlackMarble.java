@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -19,8 +20,12 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -49,8 +54,36 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (BlackMarbleBlockType t : BlackMarbleBlockType.values()) {
+            if(!t.obtainableInCreative()) continue;
             list.add(new ItemStack(this, 1, t.ordinal()));
         }
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        //return super.getActualState(state, worldIn, pos);
+        if(state.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+            IBlockState st = worldIn.getBlockState(pos.up());
+            boolean top = false;
+            if(st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+                top = true;
+            }
+            st = worldIn.getBlockState(pos.down());
+            boolean down = false;
+            if(st.getBlock() instanceof BlockBlackMarble && st.getValue(BLACK_MARBLE_TYPE).isPillar()) {
+                down = true;
+            }
+            if(top && down) {
+                return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR);
+            } else if(top) {
+                return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR_BOTTOM);
+            } else if(down) {
+                return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR_TOP);
+            } else {
+                return state.withProperty(BLACK_MARBLE_TYPE, BlackMarbleBlockType.PILLAR);
+            }
+        }
+        return super.getActualState(state, worldIn, pos);
     }
 
     @Override
@@ -59,17 +92,54 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
     }
 
     @Override
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
+        if(marbleType == BlackMarbleBlockType.PILLAR_TOP || marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
+            return 0;
+        }
+        return super.getLightOpacity(state, world, pos);
+    }
+
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
-        return true;
+        BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullCube(IBlockState state) {
-        return true;
+        BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
     }
 
     @Override
     public boolean isFullBlock(IBlockState state) {
+        BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
+        return marbleType != BlackMarbleBlockType.PILLAR && marbleType != BlackMarbleBlockType.PILLAR_BOTTOM && marbleType != BlackMarbleBlockType.PILLAR_TOP;
+    }
+
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+        BlackMarbleBlockType marbleType = state.getValue(BLACK_MARBLE_TYPE);
+        IBlockState other = world.getBlockState(pos.offset(face));
+        if((other.getBlock() instanceof BlockLiquid || other.getBlock() instanceof BlockFluidBase) &&
+                (marbleType == BlackMarbleBlockType.PILLAR || marbleType == BlackMarbleBlockType.PILLAR_BOTTOM || marbleType == BlackMarbleBlockType.PILLAR_TOP)) {
+            return true;
+        }
+        if(marbleType == BlackMarbleBlockType.PILLAR) {
+            return false;
+        }
+        if(marbleType == BlackMarbleBlockType.PILLAR_TOP) {
+            return face == EnumFacing.UP;
+        }
+        if(marbleType == BlackMarbleBlockType.PILLAR_BOTTOM) {
+            return face == EnumFacing.DOWN;
+        }
+        return state.isOpaqueCube();
+    }
+
+    @Override
+    public boolean isTopSolid(IBlockState state) {
         return true;
     }
 
@@ -111,7 +181,16 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
     public static enum BlackMarbleBlockType implements IStringSerializable {
 
-        RAW(0);
+        RAW(0),
+        BRICKS(1),
+        PILLAR(2),
+        ARCH(3),
+        CHISELED(4),
+        ENGRAVED(5),
+        RUNED(6),
+
+        PILLAR_TOP(2),
+        PILLAR_BOTTOM(2);
 
         private final int meta;
 
@@ -125,6 +204,14 @@ public class BlockBlackMarble extends Block implements BlockCustomName, BlockVar
 
         public IBlockState asBlock() {
             return BlocksAS.blockBlackMarble.getStateFromMeta(meta);
+        }
+
+        public boolean isPillar() {
+            return this == PILLAR_BOTTOM || this == PILLAR || this == PILLAR_TOP;
+        }
+
+        public boolean obtainableInCreative() {
+            return this != PILLAR_TOP && this != PILLAR_BOTTOM;
         }
 
         public int getMeta() {

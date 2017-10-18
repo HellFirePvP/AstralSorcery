@@ -159,8 +159,11 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         if (!canFillFluidType(resource)) return 0;
         int maxAdded = resource.amount;
         int addable = getMaxAddable(maxAdded);
+        if(addable > 0 && this.fluid == null && doFill) {
+            setFluid(resource.getFluid());
+        }
         if(doFill) {
-            addable = maxAdded - addAmount(addable);
+            addable -= addAmount(addable);
         }
         return addable;
     }

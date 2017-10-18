@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -73,6 +74,53 @@ public class RenderingUtils {
                 }
             }
         }
+    }
+
+    public static void spawnBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
+        Particle digging = diggingFactory.createParticle(0, Minecraft.getMinecraft().world,
+                pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
+        Minecraft.getMinecraft().effectRenderer.addEffect(digging);
+        digging.setParticleTexture(tas);
+    }
+
+    public static void renderTexturedCubeCentral(Vector3 offset, double size, double u, double v, double uLength, double vLength) {
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        double half = size / 2D;
+
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() - half).tex(u, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() - half).tex(u + uLength, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() + half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() + half).tex(u,           v + vLength).endVertex();
+
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() + half).tex(u, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() + half).tex(u + uLength, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() - half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() - half).tex(u,           v + vLength).endVertex();
+
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() + half).tex(u + uLength, v).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() + half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() - half).tex(u , v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() - half).tex(u,           v).endVertex();
+
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() - half).tex(u + uLength, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() - half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() + half).tex(u , v + vLength).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() + half).tex(u,           v).endVertex();
+
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() - half).tex(u, v).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() - half).tex(u, v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() - half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() - half).tex(u + uLength,           v).endVertex();
+
+        vb.pos(offset.getX() - half, offset.getY() - half, offset.getZ() + half).tex(u, v).endVertex();
+        vb.pos(offset.getX() - half, offset.getY() + half, offset.getZ() + half).tex(u, v + vLength).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() + half, offset.getZ() + half).tex(u + uLength, v + vLength).endVertex();
+        vb.pos(offset.getX() + half, offset.getY() - half, offset.getZ() + half).tex(u + uLength,           v).endVertex();
+
+        tes.draw();
     }
 
     //You might not want to call this too often.

@@ -160,8 +160,11 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
         if (!canFillFluidType(resource)) return 0;
         int maxAdded = resource.amount;
         int addable = MathHelper.floor(getMaxAddable(maxAdded));
+        if(addable > 0 && this.fluid == null && doFill) {
+            setFluid(resource.getFluid());
+        }
         if(doFill) {
-            addable = MathHelper.floor(maxAdded - addAmount(addable));
+            addable -= addAmount(addable);
         }
         return addable;
     }

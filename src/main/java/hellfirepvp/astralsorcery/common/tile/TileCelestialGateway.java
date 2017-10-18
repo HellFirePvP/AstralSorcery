@@ -51,7 +51,7 @@ public class TileCelestialGateway extends TileEntityTick {
             playEffects();
         } else {
             if((ticksExisted & 15) == 0) {
-                updateSkyState(world.canSeeSky(getPos().up()));
+                updateSkyState(world.provider.isNether() || world.canSeeSky(getPos().up()));
             }
 
             if((ticksExisted & 15) == 0) {

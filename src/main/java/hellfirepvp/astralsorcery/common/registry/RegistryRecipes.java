@@ -203,6 +203,43 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.values())
                 .addPart(Items.COAL, ShapedRecipeSlot.CENTER)
                 .buildAndRegisterShapedRecipe();
+        rBlackMarbleArch = newShapedRecipe("black_marble_arch", new ItemStack(BlocksAS.blockBlackMarble, 3, BlockBlackMarble.BlackMarbleBlockType.ARCH.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .buildAndRegisterShapedRecipe();
+        rBlackMarbleBricks = newShapedRecipe("black_marble_bricks", new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.BRICKS.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER)
+                .buildAndRegisterShapedRecipe();
+        rBlackMarbleChiseled = newShapedRecipe("black_marble_chiseled", new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.CHISELED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rBlackMarbleEngraved = newShapedRecipe("black_marble_engraved", new ItemStack(BlocksAS.blockBlackMarble, 5, BlockBlackMarble.BlackMarbleBlockType.ENGRAVED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .buildAndRegisterShapedRecipe();
+        rBlackMarbleRuned = newShapedRecipe("black_marble_runed", new ItemStack(BlocksAS.blockBlackMarble, 3, BlockBlackMarble.BlackMarbleBlockType.RUNED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rBlackMarblePillar = newShapedRecipe("black_marble_pillar", new ItemStack(BlocksAS.blockBlackMarble, 2, BlockBlackMarble.BlackMarbleBlockType.PILLAR.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT)
+                .buildAndRegisterShapedRecipe();
         rMarbleArch = newShapedRecipe("marble_arch", new ItemStack(BlocksAS.blockMarble, 3, BlockMarble.MarbleBlockType.ARCH.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT,
@@ -829,6 +866,44 @@ public class RegistryRecipes {
                 .addPart(OreDictAlias.BLOCK_MARBLE,
                         ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
                         ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_arch", new ItemStack(BlocksAS.blockBlackMarble, 3, BlockBlackMarble.BlackMarbleBlockType.ARCH.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_bricks", new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.BRICKS.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT, ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_chiseled", new ItemStack(BlocksAS.blockBlackMarble, 4, BlockBlackMarble.BlackMarbleBlockType.CHISELED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_engraved", new ItemStack(BlocksAS.blockBlackMarble, 5, BlockBlackMarble.BlackMarbleBlockType.ENGRAVED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT, ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_runed", new ItemStack(BlocksAS.blockBlackMarble, 3, BlockBlackMarble.BlackMarbleBlockType.RUNED.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.CHISELED.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/black_marble_pillar", new ItemStack(BlocksAS.blockBlackMarble, 2, BlockBlackMarble.BlackMarbleBlockType.PILLAR.ordinal()))
+                .addPart(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT)
                 .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
 
         rCCGlassLens = registerDiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/glasslens", ItemCraftingComponent.MetaType.GLASS_LENS.asStack())

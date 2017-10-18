@@ -32,8 +32,10 @@ public class RecipesAS {
     public static SmeltingRecipe rSmeltAquamarineOre;
 
     //CraftingTable recipes
-    public static AccessibleRecipeAdapater rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch, rMarblePillar, rMarbleBricks, rMarbleStairs, rMarbleSlab;
-    public static AccessibleRecipeAdapater rBlackMarbleRaw;
+    public static AccessibleRecipeAdapater rMarbleRuned, rMarbleEngraved, rMarbleChiseled, rMarbleArch,
+            rMarblePillar, rMarbleBricks, rMarbleStairs, rMarbleSlab;
+    public static AccessibleRecipeAdapater rBlackMarbleRaw, rBlackMarbleRuned, rBlackMarbleEngraved,
+            rBlackMarbleChiseled, rBlackMarbleArch, rBlackMarblePillar, rBlackMarbleBricks;
     public static AccessibleRecipeAdapater rRJournal;
     public static AccessibleRecipeAdapater rCCParchment;
 

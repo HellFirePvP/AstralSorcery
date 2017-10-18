@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -328,6 +329,15 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
                                 p.gravity(0.004).scale(0.1F + rand.nextFloat() * 0.1F);
                                 p.setColor(Color.WHITE);
                             }
+                        }
+                        if(rand.nextInt(5) == 0) {
+                            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                                    altar.getPos().getX() - 3 + rand.nextFloat() * 7,
+                                    altar.getPos().getY() + 0.02,
+                                    altar.getPos().getZ() - 3 + rand.nextFloat() * 7
+                            );
+                            p.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(rand.nextFloat() * 0.2F + 0.15F);
+                            p.setColor(c);
                         }
                     } else {
                         NonNullList<ItemStack> stacksApplicable = required.getApplicableItemsForRender();
