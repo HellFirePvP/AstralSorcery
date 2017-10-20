@@ -61,28 +61,37 @@ public class RegistryResearch {
     private static void initRadiance() {
         ResearchProgression.Registry regRadiance = ResearchProgression.RADIANCE.getRegistry();
 
+        ResearchNode resHintRecipes = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "CRAFTING_FOCUS_HINT", 5, 5);
+        resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.1"));
+        resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.2"));
+
         ResearchNode resAttWands = new ResearchNode(new ItemStack(ItemsAS.wand), "ATT_WANDS", 3, 4);
         resAttWands.addPage(getTextPage("ATT_WANDS.1"));
         resAttWands.addPage(getTextPage("ATT_WANDS.2"));
 
         ResearchNode resAttWandArmara = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_armara"), "ATT_WAND_ARMARA", 1, 5);
         resAttWandArmara.addPage(getTextPage("ATT_WAND_ARMARA.1"));
+        resAttWandArmara.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentArmara));
         resAttWandArmara.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandDiscidia = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_discidia"), "ATT_WAND_DISCIDIA", 1, 3);
         resAttWandDiscidia.addPage(getTextPage("ATT_WAND_DISCIDIA.1"));
+        resAttWandDiscidia.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentDiscidia));
         resAttWandDiscidia.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandAevitas = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_aevitas"), "ATT_WAND_AEVITAS", 4, 2);
         resAttWandAevitas.addPage(getTextPage("ATT_WAND_AEVITAS.1"));
+        resAttWandAevitas.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentAevitas));
         resAttWandAevitas.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandVicio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_vicio"), "ATT_WAND_VICIO", 5, 3);
         resAttWandVicio.addPage(getTextPage("ATT_WAND_VICIO.1"));
+        resAttWandVicio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentVicio));
         resAttWandVicio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandEvorsio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_evorsio"), "ATT_WAND_EVORSIO", 2, 2);
         resAttWandEvorsio.addPage(getTextPage("ATT_WAND_EVORSIO.1"));
+        resAttWandEvorsio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentEvorsio));
         resAttWandEvorsio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resCape = new ResearchNode(new ItemStack(ItemsAS.armorImbuedCape), "ATT_CAPE", 4, 6);
@@ -98,6 +107,8 @@ public class RegistryResearch {
         resAttWandAevitas.addSourceConnectionFrom(resAttWands);
         resAttWandVicio.addSourceConnectionFrom(resAttWands);
         resAttWandEvorsio.addSourceConnectionFrom(resAttWands);
+        resAttWands.addSourceConnectionFrom(resHintRecipes);
+        resCape.addSourceConnectionFrom(resHintRecipes);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -106,6 +117,7 @@ public class RegistryResearch {
         regRadiance.register(resAttWandVicio);
         regRadiance.register(resAttWandEvorsio);
         regRadiance.register(resCape);
+        regRadiance.register(resHintRecipes);
     }
 
     private static void initConstellation() {

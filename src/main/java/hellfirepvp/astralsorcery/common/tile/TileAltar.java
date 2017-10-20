@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.tile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.PositionedLoopSound;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
@@ -62,6 +64,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -128,6 +131,23 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 doCraftEffects();
                 doCraftSound();
             }
+            if(getAltarLevel() != null && getAltarLevel().ordinal() >= AltarLevel.TRAIT_CRAFT.ordinal()) {
+                playAltarEffects();
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playAltarEffects() {
+        if(Minecraft.isFancyGraphicsEnabled() && rand.nextBoolean()) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    getPos().getX() + 0.5,
+                    getPos().getY() + 4.4,
+                    getPos().getZ() + 0.5);
+            p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                    (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
+                    (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
+            p.scale(0.15F).setColor(Color.WHITE).setMaxAge(25);
         }
     }
 
@@ -147,8 +167,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     @Nullable
     public IConstellation getFocusedConstellation() {
-        WorldSkyHandler wh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-        if (!focusItem.isEmpty() && focusItem.getItem() instanceof ItemConstellationFocus && wh != null) {
+        if (!focusItem.isEmpty() && focusItem.getItem() instanceof ItemConstellationFocus) {
             return ((ItemConstellationFocus) focusItem.getItem()).getFocusConstellation(focusItem);
         }
         return null;
@@ -208,7 +227,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             return true;
         }
         if(!altarRecipe.fulfillesStarlightRequirement(this)) {
-            if(craftingTask.shouldPersist()) {
+            if(craftingTask.shouldPersist(this)) {
                 craftingTask.setState(ActiveCraftingTask.CraftingState.PAUSED);
                 return true;
             }

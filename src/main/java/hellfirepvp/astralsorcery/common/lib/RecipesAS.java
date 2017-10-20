@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.lib;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CapeAttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
 import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class RecipesAS {
 
     public static Map<IConstellation, ConstellationPaperRecipe> paperCraftingRecipes = new HashMap<>();
+    public static Map<IConstellation, CapeAttunementRecipe> capeCraftingRecipes = new HashMap<>();
 
     //Smelting
     public static SmeltingRecipe rSmeltStarmetalOre;

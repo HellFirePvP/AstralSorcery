@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.util;
 
+import hellfirepvp.astralsorcery.client.effect.fx.ParticleFloatDigging;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -79,6 +80,16 @@ public class RenderingUtils {
     public static void spawnBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
         Particle digging = diggingFactory.createParticle(0, Minecraft.getMinecraft().world,
                 pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0);
+        Minecraft.getMinecraft().effectRenderer.addEffect(digging);
+        digging.setParticleTexture(tas);
+    }
+
+    public static void spawnFloatingBlockBreakParticle(Vector3 pos, TextureAtlasSprite tas) {
+        Particle digging = ParticleFloatDigging.FACTORY.createParticle(0, Minecraft.getMinecraft().world,
+                pos.getX(), pos.getY(), pos.getZ(),
+                (rand.nextFloat() - rand.nextFloat()) * 0.05,
+                (rand.nextFloat() - rand.nextFloat()) * 0.05,
+                (rand.nextFloat() - rand.nextFloat()) * 0.05, 0);
         Minecraft.getMinecraft().effectRenderer.addEffect(digging);
         digging.setParticleTexture(tas);
     }

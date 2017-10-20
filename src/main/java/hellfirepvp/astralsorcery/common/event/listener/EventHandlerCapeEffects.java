@@ -165,6 +165,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     return;
                 }
             }
+            CapeEffectBootes bo = ItemCape.getCapeEffect(pl, Constellations.bootes);
+            if(bo != null && event.getSource().getTrueSource() != null) {
+                Entity source = event.getSource().getTrueSource();
+                if(source instanceof EntityLivingBase) {
+                    bo.onPlayerDamagedByEntity(pl, (EntityLivingBase) source);
+                }
+            }
             if(event.getSource().isFireDamage()) {
                 CapeEffectFornax cf = ItemCape.getCapeEffect(pl, Constellations.fornax);
                 if(cf != null) {
@@ -342,6 +349,13 @@ public class EventHandlerCapeEffects implements ITickHandler {
         }
     }
 
+    private void tickBootesEffect(EntityPlayer pl) {
+        CapeEffectBootes ceo = ItemCape.getCapeEffect(pl, Constellations.bootes);
+        if(ceo != null) {
+            ceo.onPlayerTick(pl);
+        }
+    }
+
     public static void updateElytraEventPre(EntityLivingBase entity) {
         if(entity instanceof EntityPlayer) {
             CapeEffectVicio vic = ItemCape.getCapeEffect((EntityPlayer) entity, Constellations.vicio);
@@ -371,9 +385,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 //entity.motionX += mV.getX() * 0.1D + (mV.getX() * 1.5D - entity.motionX) * 0.5D;
                 //entity.motionY += mV.getY() * 0.1D + (mV.getY() * 1.5D - entity.motionY) * 0.5D;
                 //entity.motionZ += mV.getZ() * 0.1D + (mV.getZ() * 1.5D - entity.motionZ) * 0.5D;
-                entity.motionX *= 1.01F;
-                entity.motionY *= 1.01F;
-                entity.motionZ *= 1.01F;
+                entity.motionX *= 1.013F;
+                entity.motionY *= 1.013F;
+                entity.motionZ *= 1.013F;
             }
         }
     }
@@ -394,6 +408,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                     tickFornaxMelting(pl);
                     tickArmaraWornEffect(pl);
                     tickOctansEffect(pl);
+                    tickBootesEffect(pl);
                 } else if(side == Side.CLIENT) {
                     CapeArmorEffect cae = ItemCape.getCapeEffect(pl);
                     if(cae != null) {

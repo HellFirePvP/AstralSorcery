@@ -95,7 +95,7 @@ public class RegistryItems {
         materialTransparentReplaceable = new MaterialAirish();
 
         imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
-                "as.imbuedleather", 26, new int[] { 0, 0, 4, 0}, 30, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0);
+                "as.imbuedleather", 26, new int[] { 0, 0, 7, 0}, 30, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 2);
         imbuedLeatherMaterial.setRepairItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
     }
 

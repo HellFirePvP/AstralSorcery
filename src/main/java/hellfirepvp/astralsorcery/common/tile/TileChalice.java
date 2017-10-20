@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
@@ -28,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +48,7 @@ public class TileChalice extends TileEntityTick {
     public Vector3 rotationDegreeAxis = new Vector3();
     public Vector3 prevRotationDegreeAxis = new Vector3();
 
-    private Vector3 rotationVecAxis = null;
+    private Vector3 rotationVecAxis1 = null, rotationVecAxis2 = null;
 
     private Vector3 rotationVec = null;
 
@@ -57,8 +61,11 @@ public class TileChalice extends TileEntityTick {
         super.update();
 
         if(world.isRemote) {
-            if(rotationVecAxis == null) {
-                rotationVecAxis = Vector3.positiveYRandom().multiply(360);
+            if(rotationVecAxis1 == null) {
+                rotationVecAxis1 = Vector3.positiveYRandom().multiply(360);
+            }
+            if(rotationVecAxis2 == null) {
+                rotationVecAxis2 = Vector3.positiveYRandom().multiply(360);
             }
             if(rotationVec == null) {
                 rotationVec = Vector3.random().normalize().multiply(1.5F);
@@ -76,12 +83,33 @@ public class TileChalice extends TileEntityTick {
         FluidStack fs = getTank().getFluid();
         if(fs == null || fs.getFluid() == null) return;
 
-        //Vector3 perp = rotationVecAxis.clone().perpendicular().normalize();
-        //perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 100D) / 100D)), rotationVecAxis);
-        //perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
-        //ResourceLocation res = fs.getFluid().getFlowing(fs);
-        //TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
-        //RenderingUtils.spawnBlockBreakParticle(perp, tas);
+        Vector3 perp = rotationVecAxis1.clone().perpendicular().normalize();
+        perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 100D) / 100D)), rotationVecAxis1);
+        perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
+        ResourceLocation res = fs.getFluid().getFlowing(fs);
+        TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
+        RenderingUtils.spawnFloatingBlockBreakParticle(perp, tas);
+
+        if(rand.nextInt(5) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(perp);
+            p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.1F).setMaxAge(20 + rand.nextInt(20));
+            p.motion(rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
+        }
+
+        perp = rotationVecAxis2.clone().perpendicular().normalize();
+        perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 100D) / 100D)), rotationVecAxis2);
+        perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
+        RenderingUtils.spawnFloatingBlockBreakParticle(perp, tas);
+
+        if(rand.nextInt(5) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(perp);
+            p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.1F).setMaxAge(20 + rand.nextInt(20));
+            p.motion(rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
+        }
     }
 
     public SimpleSingleFluidCapabilityTank getTank() {

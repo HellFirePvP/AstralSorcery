@@ -13,10 +13,8 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
-import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
@@ -93,11 +91,11 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
-            //for (WandAugment wa : WandAugment.values()) {
-            //    ItemStack wand = new ItemStack(this);
-            //    setAugment(wand, wa);
-            //    items.add(wand);
-            //}
+            for (WandAugment wa : WandAugment.values()) {
+                ItemStack wand = new ItemStack(this);
+                setAugment(wand, wa);
+                items.add(wand);
+            }
         }
     }
 
@@ -106,7 +104,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         WandAugment wa = getAugment(stack);
         if(wa != null) {
-            tooltip.add(TextFormatting.GRAY + I18n.format("misc.wand.attuned", TextFormatting.BLUE + I18n.format(wa.getAssociatedConstellation().getUnlocalizedName())));
+            tooltip.add(TextFormatting.BLUE + I18n.format(wa.getAssociatedConstellation().getUnlocalizedName()));
         }
     }
 
@@ -209,7 +207,7 @@ public class ItemWand extends Item implements ISpecialInteractItem {
 
         for (int i = 0; i < 4; i++) {
             if(rand.nextFloat() < mul) {
-                Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat())).add(origin);
+                Vector3 at = look.clone().multiply(0.2 + rand.nextFloat() * 2.5).add(perp.clone().rotate(rand.nextFloat() * 360, look).multiply(rand.nextFloat() * 0.5)).add(origin);
 
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(at.getX(), at.getY(), at.getZ());
                 p.scale(0.35F + rand.nextFloat() * 0.2F).setMaxAge(10 + rand.nextInt(10));

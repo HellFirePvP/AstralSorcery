@@ -121,7 +121,9 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                         RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
                         RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
                     }
-                    TESRCollectorCrystal.renderCrystal(false, true);
+                    GL11.glTranslated(0, 0.15, 0);
+                    GL11.glScaled(0.7, 0.7, 0.7);
+                    TESRCollectorCrystal.renderCrystal(true, true);
                     GL11.glPopMatrix();
                     TextureHelper.refreshTextureBindState();
                     GL11.glPopAttrib();

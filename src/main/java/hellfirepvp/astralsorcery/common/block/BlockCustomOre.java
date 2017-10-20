@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
@@ -179,7 +180,13 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    protected boolean canSilkHarvest() {
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        OreType ot = state.getValue(ORE_TYPE);
+        if(ot == OreType.ROCK_CRYSTAL) {
+            if(Config.rockCrystalOreSilkTouchHarvestable) {
+                return true;
+            }
+        }
         return false;
     }
 

@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -20,10 +21,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.TraitUpgradeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
-import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.*;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -31,6 +29,7 @@ import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -84,6 +83,9 @@ public class RegistryRecipes {
     public static AttunementRecipe rKnowledgeShare;
     public static TraitRecipe rCapeBase;
 
+    public static WandAttunementRecipe rWandAugmentDiscidia, rWandAugmentAevitas, rWandAugmentVicio,
+            rWandAugmentEvorsio, rWandAugmentArmara;
+
     public static LensRecipe rLens;
     public static PrismLensRecipe rPrism;
     public static CollectorCrystalRecipe rCollectRock, rCollectCel;
@@ -112,6 +114,8 @@ public class RegistryRecipes {
         initAltarRecipes();
 
         initInfusionRecipes();
+
+        initCapeAttunementRecipes();
 
         InfusionRecipeRegistry.cacheLocalRecipes();
         AltarRecipeRegistry.cacheLocalRecipes();
@@ -354,6 +358,111 @@ public class RegistryRecipes {
                 RecipesAS.paperCraftingRecipes.put(c, recipe);
             }
         }
+
+        rWandAugmentAevitas = registerAltarRecipe(new WandAttunementRecipe(Constellations.aevitas, newShapedRecipe("internal/altar/wand/aevitas", ItemsAS.wand)
+                .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
+                .addPart(ItemUsableDust.DustType.ILLUMINATION.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe()));
+        rWandAugmentAevitas.setCstItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        rWandAugmentAevitas.setInnerTraitItem(OreDictAlias.BLOCK_SAPLING,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rWandAugmentAevitas.setInnerTraitItem(Items.PRISMARINE_CRYSTALS,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        ItemHandle first = Iterables.getFirst(Constellations.aevitas.getConstellationSignatureItems(), null);
+        rWandAugmentAevitas.addOuterTraitItem(first).addOuterTraitItem(first)
+                .addOuterTraitItem(first).addOuterTraitItem(first);
+
+        rWandAugmentArmara = registerAltarRecipe(new WandAttunementRecipe(Constellations.armara, newShapedRecipe("internal/altar/wand/armara", ItemsAS.wand)
+                .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe()));
+        rWandAugmentAevitas.setCstItem(OreDictAlias.ITEM_SUGAR_CANE,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        rWandAugmentArmara.setInnerTraitItem(Items.LEATHER,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rWandAugmentArmara.setInnerTraitItem(Items.NETHERBRICK,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        first = Iterables.getFirst(Constellations.armara.getConstellationSignatureItems(), null);
+        rWandAugmentArmara.addOuterTraitItem(first).addOuterTraitItem(first)
+                .addOuterTraitItem(first).addOuterTraitItem(first);
+
+        rWandAugmentDiscidia = registerAltarRecipe(new WandAttunementRecipe(Constellations.discidia, newShapedRecipe("internal/altar/wand/discidia", ItemsAS.wand)
+                .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe()));
+        rWandAugmentDiscidia.setCstItem(ItemUsableDust.DustType.ILLUMINATION.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        rWandAugmentDiscidia.setInnerTraitItem(OreDictAlias.ITEM_GLOWSTONE_DUST,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rWandAugmentDiscidia.setInnerTraitItem(Items.BLAZE_ROD,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        first = Iterables.getFirst(Constellations.discidia.getConstellationSignatureItems(), null);
+        rWandAugmentDiscidia.addOuterTraitItem(first).addOuterTraitItem(first)
+                .addOuterTraitItem(first).addOuterTraitItem(first);
+
+        rWandAugmentEvorsio = registerAltarRecipe(new WandAttunementRecipe(Constellations.evorsio, newShapedRecipe("internal/altar/wand/evorsio", ItemsAS.wand)
+                .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_NETHER_QUARTZ,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe()));
+        rWandAugmentEvorsio.setCstItem(OreDictAlias.ITEM_GUNPOWDER,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        rWandAugmentEvorsio.setInnerTraitItem(Items.FLINT,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rWandAugmentEvorsio.setInnerTraitItem(Items.BLAZE_POWDER,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        first = Iterables.getFirst(Constellations.evorsio.getConstellationSignatureItems(), null);
+        rWandAugmentEvorsio.addOuterTraitItem(first).addOuterTraitItem(first)
+                .addOuterTraitItem(first).addOuterTraitItem(first);
+
+        rWandAugmentVicio = registerAltarRecipe(new WandAttunementRecipe(Constellations.vicio, newShapedRecipe("internal/altar/wand/vicio", ItemsAS.wand)
+                .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_SUGARCANE,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe()));
+        rWandAugmentVicio.setCstItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        rWandAugmentVicio.setInnerTraitItem(Items.FEATHER,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rWandAugmentVicio.setInnerTraitItem(Items.ARROW,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        first = Iterables.getFirst(Constellations.vicio.getConstellationSignatureItems(), null);
+        rWandAugmentVicio.addOuterTraitItem(first).addOuterTraitItem(first)
+                .addOuterTraitItem(first).addOuterTraitItem(first);
 
         rCapeBase = registerTraitRecipe(newShapedRecipe("internal/altar/capebase", ItemsAS.armorImbuedCape)
                 .addPart(Items.LEATHER_CHESTPLATE,
@@ -969,6 +1078,32 @@ public class RegistryRecipes {
                 ShapedRecipeSlot.UPPER_LEFT,
                 ShapedRecipeSlot.UPPER_CENTER,
                 ShapedRecipeSlot.LEFT));
+    }
+
+    private static void initCapeAttunementRecipes() {
+        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+            if(c instanceof IMinorConstellation) continue;
+
+            List<ItemHandle> signature = c.getConstellationSignatureItems();
+            if(!signature.isEmpty()) {
+                ItemHandle first = Iterables.getFirst(signature, null); //Never null.
+                AccessibleRecipeAdapater ar = newShapedRecipe("internal/cape/att/aevitas", ItemsAS.armorImbuedCape)
+                        .addPart(ItemsAS.armorImbuedCape, ShapedRecipeSlot.CENTER)
+                        .addPart(first,
+                                ShapedRecipeSlot.UPPER_CENTER,
+                                ShapedRecipeSlot.LEFT,
+                                ShapedRecipeSlot.RIGHT,
+                                ShapedRecipeSlot.LOWER_CENTER)
+                        .unregisteredAccessibleShapedRecipe();
+                CapeAttunementRecipe recipe = new CapeAttunementRecipe(c, ar);
+                for (ItemHandle s : signature) {
+                    recipe.addOuterTraitItem(s);
+                }
+                recipe.setInnerTraitItem(OreDictAlias.ITEM_STARMETAL_DUST, TraitRecipe.TraitRecipeSlot.values());
+                registerAltarRecipe(recipe);
+                RecipesAS.capeCraftingRecipes.put(c, recipe);
+            }
+        }
     }
 
 }

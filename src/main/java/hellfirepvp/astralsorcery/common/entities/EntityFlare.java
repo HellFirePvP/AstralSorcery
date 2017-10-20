@@ -15,8 +15,11 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectBootes;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -24,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -53,6 +57,8 @@ public class EntityFlare extends EntityFlying {
     private boolean isAmbient = false;
     private int entityAge = 0;
 
+    private int followingEntityId = -1;
+
     public EntityFlare(World worldIn) {
         super(worldIn);
         setSize(0.7F, 0.7F);
@@ -66,6 +72,11 @@ public class EntityFlare extends EntityFlying {
 
     public EntityFlare setAmbient(boolean ambient) {
         this.isAmbient = ambient;
+        return this;
+    }
+
+    public EntityFlare setFollowingTarget(EntityPlayer player) {
+        this.followingEntityId = player.getEntityId();
         return this;
     }
 
@@ -106,7 +117,11 @@ public class EntityFlare extends EntityFlying {
             }
             clientUpdate();
         } else {
-            if(entityAge > 300 && rand.nextInt(700) == 0) {
+            if(followingEntityId != -1) {
+                if(getFollowingEntity() == null) {
+                    damageEntity(DamageSource.MAGIC, 20F);
+                }
+            } else if(entityAge > 300 && rand.nextInt(700) == 0) {
                 damageEntity(DamageSource.MAGIC, 20F);
             }
 
@@ -123,12 +138,27 @@ public class EntityFlare extends EntityFlying {
                 }
 
                 if(isAmbient) {
-                    if((moveTarget == null || getDistanceSq(moveTarget) < 5D) && rand.nextInt(260) == 0) {
+                    if ((moveTarget == null || getDistanceSq(moveTarget) < 5D) && rand.nextInt(260) == 0) {
                         moveTarget = getPosition().add(-strollRange / 2, -strollRange / 2, -strollRange / 2).add(rand.nextInt(strollRange), rand.nextInt(strollRange), rand.nextInt(strollRange));
                     }
 
-                    if(moveTarget != null && (moveTarget.getY() <= 1 || !world.isAirBlock(moveTarget) || getDistanceSq(moveTarget) < 5D)) {
+                    if (moveTarget != null && (moveTarget.getY() <= 1 || !world.isAirBlock(moveTarget) || getDistanceSq(moveTarget) < 5D)) {
                         moveTarget = null;
+                    }
+                } else if(followingEntityId != -1) {
+                    if(getFollowingEntity() != null) {
+                        EntityPlayer e = getFollowingEntity();
+                        CapeEffectBootes cb = ItemCape.getCapeEffect(e, Constellations.bootes);
+                        if(cb == null) {
+                            followingEntityId = -1;
+                            return;
+                        }
+                        if(getAttackTarget() != null && getAttackTarget().isDead) {
+                            setAttackTarget(null);
+                        }
+                        if(getAttackTarget() == null) {
+                            moveTarget = Vector3.atEntityCenter(getFollowingEntity()).addY(-1 + rand.nextFloat() * 2.5).toBlockPos();
+                        }
                     }
                 } else if(getAttackTarget() != null) {
                     if(getAttackTarget().isDead) {
@@ -159,6 +189,15 @@ public class EntityFlare extends EntityFlying {
                 }
             }
         }
+    }
+
+    @Nullable
+    public EntityPlayer getFollowingEntity() {
+        Entity e = world.getEntityByID(this.followingEntityId);
+        if(e == null || e.isDead || !(e instanceof EntityPlayer)) {
+            return null;
+        }
+        return (EntityPlayer) e;
     }
 
     @Override

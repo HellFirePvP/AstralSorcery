@@ -8,14 +8,18 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
-import com.google.common.collect.Iterables;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import net.minecraft.item.ItemStack;
 
-import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,20 +32,45 @@ public class WandAttunementRecipe extends TraitRecipe {
 
     private final IMajorConstellation cst;
 
-    public WandAttunementRecipe(IMajorConstellation cst) {
-        super(ShapedRecipe.Builder.newShapedRecipe("internal/altar/wand_att", ItemsAS.wand)
-                .addPart(ItemsAS.wand,
-                        ShapedRecipeSlot.CENTER)
-        .unregisteredAccessibleShapedRecipe());
-        List<ItemHandle> signature = cst.getConstellationSignatureItems();
-        if(!signature.isEmpty()) {
-            ItemHandle first = Iterables.getFirst(signature, null); //Never null.
-            setInnerTraitItem(first, TraitRecipe.TraitRecipeSlot.values());
-            for (ItemHandle s : signature) {
-                addOuterTraitItem(s);
-            }
-        }
+    public WandAttunementRecipe(IMajorConstellation cst, AccessibleRecipeAdapater ara) {
+        super(ara);
         this.cst = cst;
+    }
+
+    @Override
+    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
+        ItemStack center = invHandler.getStackInSlot(ShapedRecipeSlot.CENTER.getSlotID());
+        if(center.isEmpty() ||
+                !(center.getItem() instanceof ItemWand) ||
+                ItemWand.getAugment(center) != null) {
+            return false;
+        }
+
+        return super.matches(altar, invHandler, ignoreStarlightRequirement);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getOutputForRender() {
+        ItemStack cPaper = new ItemStack(ItemsAS.wand);
+        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
+        return cPaper;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getOutputForMatching() {
+        ItemStack cPaper = new ItemStack(ItemsAS.wand);
+        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
+        return cPaper;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
+        ItemStack cPaper = new ItemStack(ItemsAS.wand);
+        ItemWand.setAugment(cPaper, WandAugment.getByConstellation(cst));
+        return cPaper;
     }
 
 }

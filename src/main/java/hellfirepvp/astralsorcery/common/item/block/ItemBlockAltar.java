@@ -41,6 +41,8 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                 break;
             case ALTAR_2:
             case ALTAR_3:
+            case ALTAR_4:
+            case ALTAR_5:
                 BlockPos.PooledMutableBlockPos mut = BlockPos.PooledMutableBlockPos.retain();
                 for (int xx = -1; xx <= 1; xx++) {
                     for (int zz = -1; zz <= 1; zz++) {
@@ -52,10 +54,6 @@ public class ItemBlockAltar extends ItemBlockCustomName {
                     }
                 }
                 mut.release();
-                break;
-            case ALTAR_4:
-                break;
-            case ALTAR_5:
                 break;
         }
 

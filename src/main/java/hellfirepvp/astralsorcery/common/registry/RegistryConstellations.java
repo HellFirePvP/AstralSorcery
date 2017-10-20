@@ -228,7 +228,7 @@ public class RegistryConstellations {
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_IRON_INGOT));
         fornax.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_GUNPOWDER));
 
-        pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_WHEAT));
+        pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.BLAZE_POWDER)));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.APPLE)));
         pelotrio.addSignatureItem(new ItemHandle(OreDictAlias.ITEM_EGG));
         pelotrio.addSignatureItem(new ItemHandle(new ItemStack(Items.ROTTEN_FLESH)));

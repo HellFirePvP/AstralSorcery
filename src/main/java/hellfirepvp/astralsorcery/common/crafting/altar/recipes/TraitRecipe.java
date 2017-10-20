@@ -48,6 +48,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -83,7 +84,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
 
     public TraitRecipe(AccessibleRecipe recipe) {
         super(TileAltar.AltarLevel.TRAIT_CRAFT, recipe);
-        setPassiveStarlightRequirement(6500);
+        setPassiveStarlightRequirement(7500);
     }
 
     public TraitRecipe setInnerTraitItem(Item i, TraitRecipeSlot... slots) {
@@ -193,7 +194,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
 
     @Override
     public int craftingTickTime() {
-        return 1000;
+        return 2000;
     }
 
     @Override
@@ -269,13 +270,16 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
                 //It should match since we literally check in the same tick as we finish the recipe if it's valid...
                 ItemStack found = tar.getInventoryHandler().getStackInSlot(0);
                 if(required.getFluidTypeAndAmount() != null) {
-                    if(!found.isEmpty()) {
+                    if (!found.isEmpty()) {
                         FluidActionResult fas = ItemUtils.drainFluidFromItem(found, required.getFluidTypeAndAmount(), true);
-                        if(fas.isSuccess()) {
+                        if (fas.isSuccess()) {
                             tar.getInventoryHandler().setStackInSlot(0, fas.getResult());
                             tar.markForUpdate();
                         }
                     }
+                } else if(!ForgeHooks.getContainerItem(found).isEmpty()) {
+                    tar.getInventoryHandler().setStackInSlot(0, ForgeHooks.getContainerItem(found));
+                    tar.markForUpdate();
                 } else {
                     ItemUtils.decrStackInInventory(tar.getInventoryHandler(), 0);
                     tar.markForUpdate();
@@ -294,6 +298,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
     @SideOnly(Side.CLIENT)
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
         super.onCraftClientTick(altar, state, tick, rand);
+        Vector3 thisAltar = new Vector3(altar).add(0.5, 0.5, 0.5);
 
         ActiveCraftingTask act = altar.getActiveCraftingTask();
         if(act != null) {
@@ -372,6 +377,43 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
                         }
                     }
                 }
+            }
+        }
+
+        if(state == ActiveCraftingTask.CraftingState.ACTIVE) {
+            EntityFXFacingParticle p;
+            if(rand.nextInt(4) == 0) {
+                p = EffectHelper.genericFlareParticle(
+                        altar.getPos().getX() - 3 + rand.nextFloat() * 7,
+                        altar.getPos().getY() + 0.02,
+                        altar.getPos().getZ() - 3 + rand.nextFloat() * 7
+                );
+                p.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(rand.nextFloat() * 0.2F + 0.15F);
+                p.setColor(Color.WHITE);
+            }
+
+            for (int i = 0; i < 1; i++) {
+                Vector3 r = Vector3.random().setY(0).normalize().multiply(1.3 + rand.nextFloat() * 0.5).add(thisAltar.clone().addY(2 +  + rand.nextFloat() * 0.4));
+                p = EffectHelper.genericFlareParticle(r.getX(), r.getY(), r.getZ());
+                p.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(rand.nextFloat() * 0.2F + 0.1F);
+                p.setColor(Color.WHITE);
+            }
+            for (int i = 0; i < 2; i++) {
+                Vector3 r = Vector3.random().setY(0).normalize().multiply(2 + rand.nextFloat() * 0.5).add(thisAltar.clone().addY(1.1 + rand.nextFloat() * 0.4));
+                p = EffectHelper.genericFlareParticle(r.getX(), r.getY(), r.getZ());
+                p.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(rand.nextFloat() * 0.2F + 0.1F);
+                p.setColor(Color.WHITE);
+            }
+
+            if(rand.nextInt(20) == 0) {
+                Vector3 from = new Vector3(
+                        altar.getPos().getX() - 3 + rand.nextFloat() * 7,
+                        altar.getPos().getY() + 0.02,
+                        altar.getPos().getZ() - 3 + rand.nextFloat() * 7);
+                MiscUtils.applyRandomOffset(from, rand, 0.4F);
+                EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(4 + rand.nextInt(2)), from, 1);
+                lightbeam.setMaxAge(64);
+                lightbeam.setColorOverlay(Color.WHITE);
             }
         }
     }
