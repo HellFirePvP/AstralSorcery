@@ -48,13 +48,19 @@ public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
                 double ulength = tas.getMaxU() - tas.getMinU();
                 double vlength = tas.getMaxV() - tas.getMinV();
 
-                double uPart = ulength * size.partTexture;
-                double vPart = vlength * size.partTexture;
+                double uPart = ulength * (size.partTexture / 2);
+                double vPart = vlength * (size.partTexture / 2);
 
                 double uOffset = tas.getMinU() + ulength / 2D - uPart / 2D;
                 double vOffset = tas.getMinV() + vlength / 2D - vPart / 2D;
 
+                if(size == TileChalice.DrawSize.SMALL) {
+                    uOffset = tas.getMinU();
+                    vOffset = tas.getMinV();
+                }
+
                 GlStateManager.pushMatrix();
+                GlStateManager.color(1F, 1F, 1F, 1F);
                 GlStateManager.translate(x + 0.5, y + 1.4, z + 0.5);
                 GlStateManager.rotate((float) rot.getX(), 1, 0, 0);
                 GlStateManager.rotate((float) rot.getY(), 0, 1, 0);

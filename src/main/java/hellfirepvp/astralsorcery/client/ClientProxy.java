@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
-import hellfirepvp.astralsorcery.client.effect.fx.ParticleFloatDigging;
 import hellfirepvp.astralsorcery.client.effect.light.ClientLightbeamHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.client.event.ClientConnectionEventHandler;
@@ -49,7 +48,6 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCrystalPrismLens;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -62,7 +60,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -71,7 +68,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -91,11 +87,6 @@ import java.util.List;
 public class ClientProxy extends CommonProxy {
 
     private final ClientScheduler scheduler = new ClientScheduler();
-
-    //public static EnumParticleTypes floatingDiggingParticle = EnumHelper.addEnum(EnumParticleTypes.class, "DIGGING_FLOAT",
-    //        new Class[] { String.class, int.class, boolean.class, int.class },
-    //        "dig_float", EnumParticleTypes.values().length, false, 1);
-
     @Override
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(this);
@@ -178,9 +169,6 @@ public class ClientProxy extends CommonProxy {
         ClientJournalMapping.init();
         ClientPerkTextureMapping.init();
         OBJModelLibrary.init();
-
-        //ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
-        //pm.registerParticle(floatingDiggingParticle.getParticleID(), new ParticleFloatDigging.Factory());
 
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
     }

@@ -58,6 +58,7 @@ public class BlockChalice extends BlockContainer {
         setSoundType(SoundType.METAL);
         setResistance(15.0F);
         setHarvestLevel("pickaxe", 1);
+        setLightLevel(0.3F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
         setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, true));
     }

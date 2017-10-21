@@ -9,12 +9,13 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFloatingCube;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
-import hellfirepvp.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -26,7 +27,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,7 +42,7 @@ import java.awt.*;
  */
 public class TileChalice extends TileEntityTick {
 
-    private static final int TANK_SIZE = 32000;
+    private static final int TANK_SIZE = 24000;
     private SimpleSingleFluidCapabilityTank tank;
 
     public Vector3 rotationDegreeAxis = new Vector3();
@@ -62,10 +62,10 @@ public class TileChalice extends TileEntityTick {
 
         if(world.isRemote) {
             if(rotationVecAxis1 == null) {
-                rotationVecAxis1 = Vector3.positiveYRandom().multiply(360);
+                rotationVecAxis1 = Vector3.random().multiply(360);
             }
             if(rotationVecAxis2 == null) {
-                rotationVecAxis2 = Vector3.positiveYRandom().multiply(360);
+                rotationVecAxis2 = Vector3.random().multiply(360);
             }
             if(rotationVec == null) {
                 rotationVec = Vector3.random().normalize().multiply(1.5F);
@@ -83,32 +83,71 @@ public class TileChalice extends TileEntityTick {
         FluidStack fs = getTank().getFluid();
         if(fs == null || fs.getFluid() == null) return;
 
-        Vector3 perp = rotationVecAxis1.clone().perpendicular().normalize();
-        perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 100D) / 100D)), rotationVecAxis1);
-        perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
         ResourceLocation res = fs.getFluid().getFlowing(fs);
         TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
-        RenderingUtils.spawnFloatingBlockBreakParticle(perp, tas);
+        if(tas == null) tas = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+
+        EntityFXFloatingCube cube;
+        if(rand.nextInt(2 * (DrawSize.values().length - getDrawSize().ordinal()) * 4) == 0) {
+            Vector3 at = new Vector3(this).add(0.5, 1.4, 0.5);
+            at.add( getDrawSize().ordinal() * rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                    getDrawSize().ordinal() * rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1),
+                    getDrawSize().ordinal() * rand.nextFloat() * 0.1 * (rand.nextBoolean() ? 1 : -1));
+            cube = RenderingUtils.spawnFloatingBlockCubeParticle(at, tas);
+            cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
+            cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+            cube.setScale(0.08F * (getDrawSize().ordinal() + 1)).tumble().setMotion(
+                    rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1));
+        }
+
+        Vector3 perp = rotationVecAxis1.clone().perpendicular().normalize();
+        perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 140D) / 140D)), rotationVecAxis1);
+        perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
+
+        cube = RenderingUtils.spawnFloatingBlockCubeParticle(perp, tas);
+        cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
+        cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+        cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
+                rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
+
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(perp);
+        p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.05F).setMaxAge(15 + rand.nextInt(10));
 
         if(rand.nextInt(5) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(perp);
+            p = EffectHelper.genericFlareParticle(perp);
             p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.1F).setMaxAge(20 + rand.nextInt(20));
             p.motion(rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
         }
 
-        perp = rotationVecAxis2.clone().perpendicular().normalize();
-        perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 100D) / 100D)), rotationVecAxis2);
-        perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
-        RenderingUtils.spawnFloatingBlockBreakParticle(perp, tas);
+        if(getDrawSize().ordinal() > 1) {
+            perp = rotationVecAxis2.clone().perpendicular().normalize();
+            perp.rotate(Math.toRadians(360 * ((ClientScheduler.getClientTick() % 170D) / 170D)), rotationVecAxis2);
+            perp.add(getPos()).add(0.5, 0.5, 0.5).addY(1);
 
-        if(rand.nextInt(5) == 0) {
-            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(perp);
-            p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.1F).setMaxAge(20 + rand.nextInt(20));
-            p.motion(rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
-                    rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
+            cube = RenderingUtils.spawnFloatingBlockCubeParticle(perp, tas);
+            cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
+            cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+            cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
+                    rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
+                    rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
+
+            p = EffectHelper.genericFlareParticle(perp);
+            p.setColor(Color.WHITE).scale(0.05F + rand.nextFloat() * 0.05F).setMaxAge(15 + rand.nextInt(5));
+
+            if(rand.nextInt(5) == 0) {
+                p = EffectHelper.genericFlareParticle(perp);
+                p.setColor(Color.WHITE).scale(0.1F + rand.nextFloat() * 0.1F).setMaxAge(20 + rand.nextInt(20));
+                p.motion(rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                        rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1),
+                        rand.nextFloat() * 0.01 * (rand.nextBoolean() ? 1 : -1));
+            }
         }
     }
 
@@ -144,7 +183,7 @@ public class TileChalice extends TileEntityTick {
 
     public DrawSize getDrawSize() {
         float perc = getPercFilled();
-        if(perc >= 0.99) {
+        if(perc >= 0.75) {
             return DrawSize.FULL;
         }
         if(perc >= 0.5) {

@@ -131,7 +131,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 doCraftEffects();
                 doCraftSound();
             }
-            if(getAltarLevel() != null && getAltarLevel().ordinal() >= AltarLevel.TRAIT_CRAFT.ordinal()) {
+            if(getAltarLevel() != null &&
+                    getAltarLevel().ordinal() >= AltarLevel.TRAIT_CRAFT.ordinal() &&
+                    getMultiblockState()) {
                 playAltarEffects();
             }
         }
