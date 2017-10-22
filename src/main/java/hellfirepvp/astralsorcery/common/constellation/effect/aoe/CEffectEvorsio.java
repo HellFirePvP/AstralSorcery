@@ -48,7 +48,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
 
     public static boolean enabled = true;
     public static float potencyMultiplier = 1F;
-    public static int searchRange = 8;
+    public static int searchRange = 13;
 
     public CEffectEvorsio(@Nullable ILocatable origin) {
         super(origin, Constellations.evorsio, "evorsio", searchRange, 2, (w, pos) -> isAllowedToBreak(origin, w, pos), (pos) -> null);
@@ -57,7 +57,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
     private static boolean isAllowedToBreak(@Nullable ILocatable origin, World world, BlockPos pos) {
         if(!MiscUtils.isChunkLoaded(world, pos)) return false;
         float hardness = world.getBlockState(pos).getBlockHardness(world, pos);
-        if(world.isAirBlock(pos) || hardness < 0 || hardness > 50) {
+        if(world.isAirBlock(pos) || hardness < 0 || hardness > 75) {
             return false;
         }
         if(origin != null && MiscUtils.isChunkLoaded(world, origin.getPos())) {

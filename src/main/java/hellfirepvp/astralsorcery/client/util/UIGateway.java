@@ -67,7 +67,9 @@ public class UIGateway {
         CelestialGatewaySystem system = CelestialGatewaySystem.instance;
         int dimid = world.provider.getDimension();
         List<GatewayCache.GatewayNode> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
-        gatherStars(ui, world.provider.getDimension(), sameDimensionPositions, true, sphereRadius);
+        if(sameDimensionPositions != null) {
+            gatherStars(ui, world.provider.getDimension(), sameDimensionPositions, true, sphereRadius);
+        }
 
         for (Map.Entry<Integer, List<GatewayCache.GatewayNode>> entries : system.getGatewayCache(Side.CLIENT).entrySet()) {
             if(entries.getKey() == dimid) continue;

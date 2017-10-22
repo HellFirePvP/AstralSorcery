@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
+import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectEvorsio;
 import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
@@ -141,6 +142,9 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         CE_BREAK_BLOCK,
         CE_SPAWN_PREPARE_EFFECTS,
 
+        CAPE_EVORSIO_BREAK,
+        CAPE_EVORSIO_AOE,
+
         FLARE_PROC,
         RT_DEBUG;
 
@@ -199,6 +203,10 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CEffectPelotrio::playSpawnPrepareEffects;
                 case DISCIDIA_ATTACK_STACK:
                     return EventHandlerEntity::playDiscidiaStackAttackEffects;
+                case CAPE_EVORSIO_BREAK:
+                    return CapeEffectEvorsio::playBlockBreakParticles;
+                case CAPE_EVORSIO_AOE:
+                    return CapeEffectEvorsio::playAreaDamageParticles;
             }
             return null;
         }

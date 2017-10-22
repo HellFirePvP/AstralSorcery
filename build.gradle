@@ -12,16 +12,16 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12-1.6.1"
+version = "1.12.2-1.7.1"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "1.12-14.21.1.2413"
+    version = "14.23.0.2501"
     runDir = "run"
     useDepAts = true
 
-    mappings = "snapshot_20170626"
+    mappings = "snapshot_20170624"
 }
 
 sourceCompatibility = 1.8
@@ -59,13 +59,14 @@ repositories {
 
 dependencies {
 
-    def mc_version = "1.12"
-    def jei_version = "4.7.0.67"
+    def jei_mc_version = "1.12.1"
+    def jei_version = "4.7.8.91"
 
     ////JEI stuff
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
+    //runtime "mezz.jei:jei_${jei_mc_version}:${jei_version}"
 
+    def mc_version = "1.12"
     def ct_mc_version = "MC1120"
     def ct_version = "4.0.0.7"
 
@@ -75,11 +76,26 @@ dependencies {
 
 }
 
+task signMainJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+    if (project.hasProperty('keyStore')) { // This needs to be a path to the keystore file
+        keyStore = project.keyStore
+        alias = project.alias
+        storePass = project.storePass
+        keyPass = project.keyPass
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+}
+build.dependsOn signMainJar
+
 jar {
     manifest {
-        attributes 'FMLAT': 'astralsorcery_at.cfg',
-                'FMLCorePlugin': 'hellfirepvp.astralsorcery.core.AstralCore',
-                'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'FMLAT': 'astralsorcery_at.cfg'
+        attributes 'FMLCorePlugin': "hellfirepvp.astralsorcery.core.AstralCore"
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
 
@@ -91,14 +107,14 @@ processResources
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+        include "mcmod.info"
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand "version": project.version, "mcversion": "1.12"
     }
         
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "mcmod.info"
     }
 }

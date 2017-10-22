@@ -51,7 +51,7 @@ public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
             offset.addY(te.getPercFilled() * 0.6);
             ResourceLocation still = te.getHeldFluid().getStill(te.getWorld(), te.getPos());
             TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(still.toString());
-            if(tas == null) Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+            if(tas == null) tas = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 
             TextureHelper.setActiveTextureToAtlasSprite();
             RenderingUtils.renderAngleRotatedTexturedRect(offset, Vector3.RotAxis.Y_AXIS.clone(), Math.toRadians(45), 0.54, tas.getMinU(), tas.getMinV(), tas.getMaxU() - tas.getMinU(), tas.getMaxV() - tas.getMinV(), partialTicks);

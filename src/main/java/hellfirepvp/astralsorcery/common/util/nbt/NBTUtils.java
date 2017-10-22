@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.nbt;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -31,6 +32,19 @@ public class NBTUtils {
         int y = compound.getInteger("bposY");
         int z = compound.getInteger("bposZ");
         return new BlockPos(x, y, z);
+    }
+
+    public static void writeVector3(Vector3 v, NBTTagCompound compound) {
+        compound.setDouble("vecPosX", v.getX());
+        compound.setDouble("vecPosY", v.getY());
+        compound.setDouble("vecPosZ", v.getZ());
+    }
+
+    public static Vector3 readVector3(NBTTagCompound compound) {
+        return new Vector3(
+                compound.getDouble("vecPosX"),
+                compound.getDouble("vecPosY"),
+                compound.getDouble("vecPosZ"));
     }
 
     /*public static long packBlockPos(BlockPos pos) {

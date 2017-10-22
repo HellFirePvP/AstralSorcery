@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
 
-    public static double herdChance = 0.05;
+    public static double herdChance = 0.02;
     public static double potencyMultiplier = 1.0;
     public static float herdingLuck = -5F;
     public static float dropChance = 0.01F;

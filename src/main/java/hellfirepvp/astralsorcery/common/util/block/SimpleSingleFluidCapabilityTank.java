@@ -73,14 +73,16 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
     }
 
     //returns amount drained
-    public int drain(int amount) {
-        if (this.fluid == null) return 0;
+    @Nullable
+    public FluidStack drain(int amount) {
+        if (this.fluid == null) return null;
         int drainable = getMaxDrainable(amount);
         this.amount -= drainable;
+        Fluid drainedFluid = this.fluid;
         if (this.amount <= 0) {
             setFluid(null);
         }
-        return drainable;
+        return new FluidStack(drainedFluid, drainable);
     }
 
     @Nullable
@@ -157,8 +159,11 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         if (!canFillFluidType(resource)) return 0;
         int maxAdded = resource.amount;
         int addable = getMaxAddable(maxAdded);
+        if(addable > 0 && this.fluid == null && doFill) {
+            setFluid(resource.getFluid());
+        }
         if(doFill) {
-            addable = maxAdded - addAmount(addable);
+            addable -= addAmount(addable);
         }
         return addable;
     }
@@ -176,7 +181,7 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
         if (!canDrain()) return null;
         int maxDrainable = getMaxDrainable(maxDrain);
         if (doDrain) {
-            maxDrainable = drain(maxDrainable);
+            return drain(maxDrainable);
         }
         return new FluidStack(this.fluid, maxDrainable);
     }

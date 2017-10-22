@@ -219,6 +219,8 @@ public class GuiProgressionClusterRenderer {
         GL11.glPushMatrix();
         GL11.glTranslated(offsetX, offsetY, 0);
 
+        double pxWH = partSizeHandler.getZoomedWHNode() / 16D;
+
         RenderItem ri = Minecraft.getMinecraft().getRenderItem();
         Tessellator t = Tessellator.getInstance();
         BufferBuilder vb = t.getBuffer();
@@ -252,10 +254,10 @@ public class GuiProgressionClusterRenderer {
                 BindableResource tex = node.getTexture().resolve();
                 tex.bind();
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-                vb.pos(0,            zoomedWH - 1, zLevel).tex(0, 1).endVertex();
-                vb.pos(zoomedWH - 1, zoomedWH - 1, zLevel).tex(1, 1).endVertex();
-                vb.pos(zoomedWH - 1, 0,            zLevel).tex(1, 0).endVertex();
-                vb.pos(0,            0,            zLevel).tex(0, 0).endVertex();
+                vb.pos(pxWH,            zoomedWH - pxWH, zLevel).tex(0, 1).endVertex();
+                vb.pos(zoomedWH - pxWH, zoomedWH - pxWH, zLevel).tex(1, 1).endVertex();
+                vb.pos(zoomedWH - pxWH, pxWH,            zLevel).tex(1, 0).endVertex();
+                vb.pos(pxWH,            pxWH,            zLevel).tex(0, 0).endVertex();
                 t.draw();
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 TextureHelper.refreshTextureBindState();
@@ -275,10 +277,10 @@ public class GuiProgressionClusterRenderer {
                 res.getResource().bind();
                 Tuple<Double, Double> uvTexture = res.getUVOffset(ClientScheduler.getClientTick());
                 vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-                vb.pos(0,     zoomedWH, zLevel).tex(uvTexture.key, uvTexture.value + res.getVLength()).endVertex();
-                vb.pos(zoomedWH, zoomedWH, zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value + res.getVLength()).endVertex();
-                vb.pos(zoomedWH, 0,     zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value).endVertex();
-                vb.pos(0,     0,     zLevel).tex(uvTexture.key, uvTexture.value).endVertex();
+                vb.pos(pxWH,            zoomedWH - pxWH, zLevel).tex(uvTexture.key, uvTexture.value + res.getVLength()).endVertex();
+                vb.pos(zoomedWH - pxWH, zoomedWH - pxWH, zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value + res.getVLength()).endVertex();
+                vb.pos(zoomedWH - pxWH, pxWH,            zLevel).tex(uvTexture.key + res.getULength(), uvTexture.value).endVertex();
+                vb.pos(pxWH,            pxWH,            zLevel).tex(uvTexture.key, uvTexture.value).endVertex();
                 t.draw();
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 TextureHelper.refreshTextureBindState();

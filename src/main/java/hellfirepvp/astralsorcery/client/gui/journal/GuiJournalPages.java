@@ -189,6 +189,11 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
         }
+
+        drawBackArrow(partialTicks);
+        drawNavArrows(partialTicks);
+        TextureHelper.refreshTextureBindState();
+
         index = currentPageOffset * 2;
         if(pages.size() > index) {
             GL11.glPushMatrix();
@@ -209,9 +214,6 @@ public class GuiJournalPages extends GuiScreenJournal {
             GL11.glPopMatrix();
             TextureHelper.refreshTextureBindState();
         }
-        drawBackArrow(partialTicks);
-        drawNavArrows(partialTicks);
-        TextureHelper.refreshTextureBindState();
         zLevel -= 100;
 
         GL11.glColor4f(1F, 1F, 1F, 1F);

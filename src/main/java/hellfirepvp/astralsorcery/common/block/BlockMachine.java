@@ -90,6 +90,9 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public String getHarvestTool(IBlockState state) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
+            return super.getHarvestTool(state);
+        }
         MachineType t = state.getValue(MACHINE_TYPE);
         switch (t) {
             case TELESCOPE:
@@ -102,6 +105,9 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
+            return super.getSoundType(state, world, pos, entity);
+        }
         MachineType t = state.getValue(MACHINE_TYPE);
         switch (t) {
             case TELESCOPE:
@@ -114,6 +120,9 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        if(!(state.getBlock() instanceof BlockMachine)) {
+            return super.getBoundingBox(state, source, pos);
+        }
         MachineType t = state.getValue(MACHINE_TYPE);
         switch (t) {
             case TELESCOPE:

@@ -29,7 +29,9 @@ public enum EnumGatedKnowledge {
 
     CONSTELLATION_STELLAR(ProgressionTier.CONSTELLATION_CRAFT),
     CONSTELLATION_RITUAL(ProgressionTier.ATTUNEMENT),
-    CONSTELLATION_PAPER_CRAFT(ProgressionTier.TRAIT_CRAFT);
+    CONSTELLATION_PAPER_CRAFT(ProgressionTier.TRAIT_CRAFT),
+
+    CONSTELLATION_CAPE(ProgressionTier.TRAIT_CRAFT);
 
     private final ProgressionTier capability;
 

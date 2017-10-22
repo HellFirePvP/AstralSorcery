@@ -16,14 +16,13 @@ import hellfirepvp.astralsorcery.common.base.*;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
-import hellfirepvp.astralsorcery.common.constellation.spell.SpellCastingManager;
-import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -51,6 +50,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.*;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
 import hellfirepvp.astralsorcery.common.world.AstralWorldGenerator;
 import hellfirepvp.astralsorcery.common.world.retrogen.ChunkVersionController;
 import hellfirepvp.astralsorcery.common.world.retrogen.RetroGenController;
@@ -58,18 +58,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -77,7 +72,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 
@@ -102,6 +96,7 @@ public class CommonProxy implements IGuiHandler {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
         ConstellationPerks.addDynamicConfigEntries();
+        CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
@@ -141,7 +136,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
+        /*CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
             @Nullable
             @Override
             public NBTBase writeNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side) {
@@ -152,7 +147,7 @@ public class CommonProxy implements IGuiHandler {
             public void readNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
-        }, new SpellPlague.Factory());
+        }, new SpellPlague.Factory());*/
     }
 
     private void registerOreDictEntries() {
@@ -209,6 +204,8 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
+        MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -237,7 +234,9 @@ public class CommonProxy implements IGuiHandler {
         manager.register(new PlayerPerkHandler());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
-        manager.register(SpellCastingManager.INSTANCE);
+        manager.register(EventHandlerCapeEffects.INSTANCE);
+        manager.register(TimeStopController.INSTANCE);
+        //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);

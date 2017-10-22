@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -74,7 +75,7 @@ public abstract class ItemCrystalToolBase extends ItemTool implements IGrindable
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         float str = super.getStrVsBlock(stack, state);
         ToolCrystalProperties properties = getToolProperties(stack);
-        return str * properties.getEfficiencyMultiplier() * 1.4F;
+        return str * properties.getEfficiencyMultiplier() * 1.5F;
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {

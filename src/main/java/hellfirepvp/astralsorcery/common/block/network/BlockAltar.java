@@ -100,10 +100,10 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
         return true;
     }
 
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.withProperty(RENDER_FULLY, false);
-    }
+    //@Override
+    //public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    //    return state.withProperty(RENDER_FULLY, false);
+    //}
 
     /*@Override
     @SideOnly(Side.CLIENT)
@@ -128,12 +128,8 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
         for (AltarType type : AltarType.values()) {
-            if(type == AltarType.ALTAR_4 || type == AltarType.ALTAR_5) continue;
-            ItemStack stack = new ItemStack(this, 1, type.ordinal());
-            NBTTagCompound pers = NBTHelper.getPersistentData(stack);
-            pers.setInteger("exp", 0);
-            pers.setInteger("lvl", type.ordinal());
-            list.add(stack);
+            if(type == AltarType.ALTAR_5) continue;
+            list.add(new ItemStack(this, 1, type.ordinal()));
         }
     }
 
@@ -210,12 +206,10 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        NBTTagCompound pers = NBTHelper.getPersistentData(stack);
-        int exp = pers.getInteger("exp");
-        int lvl = pers.getInteger("lvl");
+        int lvl = stack.getItemDamage();
         TileAltar ta = MiscUtils.getTileAt(worldIn, pos, TileAltar.class, true);
         if(ta != null) {
-            ta.onPlace(exp, TileAltar.AltarLevel.values()[lvl]);
+            ta.onPlace(TileAltar.AltarLevel.values()[lvl]);
         }
     }
 
@@ -225,42 +219,18 @@ public class BlockAltar extends BlockStarlightNetwork implements BlockCustomName
 
         if(!worldIn.isRemote && te != null && te instanceof TileAltar) {
             ItemStack out = new ItemStack(BlocksAS.blockAltar, 1, damageDropped(state));
-            int exp = ((TileAltar) te).getExperience();
-            int levelOrdinal = ((TileAltar) te).getAltarLevel().ordinal();
-            NBTTagCompound tag = NBTHelper.getPersistentData(out);
-            tag.setInteger("exp", exp);
-            tag.setInteger("lvl", levelOrdinal);
             ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, out);
         }
     }
 
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        /*ItemStack stack = new ItemStack(BlocksAS.blockAltar, 1, damageDropped(state));
-        TileAltar ta = MiscUtils.getTileAt(world, pos, TileAltar.class);
-        if(ta != null) {
-            int exp = ta.getExperience();
-            int levelOrdinal = ta.getAltarLevel().ordinal();
-            NBTTagCompound tag = ItemNBTHelper.getPersistentData(stack);
-            tag.setInteger("exp", exp);
-            tag.setInteger("lvl", levelOrdinal);
-        }*/
         return new LinkedList<>();
     }
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        IBlockState actState = world.getBlockState(pos);
-        ItemStack stack = super.getPickBlock(actState, target, world, pos, player); //Waila fix. wtf. why waila. why.
-        TileAltar te = MiscUtils.getTileAt(world, pos, TileAltar.class, true);
-        if(te != null) {
-            int exp = te.getExperience();
-            int levelOrdinal = te.getAltarLevel().ordinal();
-            NBTTagCompound tag = NBTHelper.getPersistentData(stack);
-            tag.setInteger("exp", exp);
-            tag.setInteger("lvl", levelOrdinal);
-        }
-        return stack;
+        return super.getPickBlock(world.getBlockState(pos), target, world, pos, player); //Waila fix. wtf. why waila. why.
     }
 
     @Override

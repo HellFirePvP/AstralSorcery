@@ -13,8 +13,10 @@ import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -44,6 +46,14 @@ public class WellLiquefaction {
         registerLiquefaction(new ItemStack(ItemsAS.celestialCrystal), BlocksAS.fluidLiquidStarlight, 1.2F, 90, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
         registerLiquefaction(new ItemStack(ItemsAS.tunedRockCrystal), BlocksAS.fluidLiquidStarlight, 1.1F, 200, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
         registerLiquefaction(new ItemStack(ItemsAS.rockCrystal), BlocksAS.fluidLiquidStarlight, 1F, 70, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+
+        registerLiquefaction(new ItemStack(Blocks.ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
+        registerLiquefaction(new ItemStack(Blocks.FROSTED_ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
+        registerLiquefaction(new ItemStack(Blocks.PACKED_ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
+        registerLiquefaction(new ItemStack(Blocks.SNOW), FluidRegistry.WATER, 1.5F, 15, new Color(0x5369FF));
+
+        registerLiquefaction(new ItemStack(Blocks.MAGMA), FluidRegistry.LAVA, 0.7F, 20, new Color(0xFF350C));
+        registerLiquefaction(new ItemStack(Blocks.NETHERRACK), FluidRegistry.LAVA, 0.5F, 0.1F, new Color(0xFF350C));
 
         cacheLocalFallback();
     }

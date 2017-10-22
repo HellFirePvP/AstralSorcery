@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
-import hellfirepvp.astralsorcery.common.constellation.spell.controller.EffectControllerDiscidia;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.item.base.IGrindable;
@@ -52,6 +51,19 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
         setMaxDamage(0);
         setHasSubtypes(true);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
+        if(prop == null) {
+            Item i = stack.getItem();
+            if(i instanceof ItemCelestialCrystal || i instanceof ItemTunedCelestialCrystal) {
+                CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomCelestial());
+            } else {
+                CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomRock());
+            }
+        }
     }
 
     @Override

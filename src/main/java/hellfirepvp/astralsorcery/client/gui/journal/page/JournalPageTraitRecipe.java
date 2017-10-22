@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
@@ -113,6 +114,16 @@ public class JournalPageTraitRecipe implements IJournalPage {
         }
 
         @Override
+        public void addTooltip(List<String> out) {
+            super.addTooltip(out);
+
+            if(recipe.getRequiredConstellation() != null) {
+                out.add(I18n.format("astralsorcery.journal.recipe.constellation",
+                        I18n.format(recipe.getRequiredConstellation().getUnlocalizedName())));
+            }
+        }
+
+        @Override
         public void render(float offsetX, float offsetY, float pTicks, float zLevel, float mouseX, float mouseY) {
             super.render(offsetX, offsetY, pTicks, zLevel, mouseX, mouseY);
 
@@ -127,7 +138,7 @@ public class JournalPageTraitRecipe implements IJournalPage {
                         125, 125, 2F, new RenderConstellation.BrightnessFunction() {
                             @Override
                             public float getBrightness() {
-                                return 0.4F;
+                                return 0.3F;
                             }
                         }, true, false);
                 GlStateManager.enableAlpha();

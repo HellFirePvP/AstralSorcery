@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.CPacketRecipePlacement;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.RecipeBook;
 import net.minecraft.stats.StatisticsManager;
 import net.minecraft.util.EnumActionResult;
@@ -27,8 +27,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -127,8 +125,8 @@ public class ExtendedChainingPlayerController extends PlayerControllerMP {
     }
 
     @Override
-    public void handleRecipePlacement(int p_192831_1_, List<CPacketRecipePlacement.ItemMove> p_192831_2_, List<CPacketRecipePlacement.ItemMove> p_192831_3_, EntityPlayer p_192831_4_) {
-        delegate.handleRecipePlacement(p_192831_1_, p_192831_2_, p_192831_3_, p_192831_4_);
+    public void func_194338_a(int p_194338_1_, IRecipe p_194338_2_, boolean p_194338_3_, EntityPlayer p_194338_4_) {
+        delegate.func_194338_a(p_194338_1_, p_194338_2_, p_194338_3_, p_194338_4_);
     }
 
     @Override

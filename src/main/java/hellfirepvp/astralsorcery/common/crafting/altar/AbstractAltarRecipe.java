@@ -25,7 +25,10 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -144,28 +147,44 @@ public abstract class AbstractAltarRecipe {
     //Return false and the item in the slot is not consumed.
     public boolean mayDecrement(TileAltar ta, ShapedRecipeSlot slot) {
         ItemHandle handle = recipe.getExpectedStackHandle(slot);
-        return handle == null || handle.getFluidTypeAndAmount() == null;
+        if(handle == null || handle.getFluidTypeAndAmount() == null) {
+            return true;
+        }
+        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotID());
+        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
     }
 
     public boolean mayDecrement(TileAltar ta, AttunementRecipe.AttunementAltarSlot slot) {
         if(!(this instanceof AttunementRecipe)) return true;
         AttunementRecipe thisRecipe = (AttunementRecipe) this;
         ItemHandle handle = thisRecipe.getAttItemHandle(slot);
-        return handle == null || handle.getFluidTypeAndAmount() == null;
+        if(handle == null || handle.getFluidTypeAndAmount() == null) {
+            return true;
+        }
+        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
+        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
     }
 
     public boolean mayDecrement(TileAltar ta, ConstellationRecipe.ConstellationAtlarSlot slot) {
         if(!(this instanceof ConstellationRecipe)) return true;
         ConstellationRecipe thisRecipe = (ConstellationRecipe) this;
         ItemHandle handle = thisRecipe.getCstItemHandle(slot);
-        return handle == null || handle.getFluidTypeAndAmount() == null;
+        if(handle == null || handle.getFluidTypeAndAmount() == null) {
+            return true;
+        }
+        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
+        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
     }
 
     public boolean mayDecrement(TileAltar ta, TraitRecipe.TraitRecipeSlot slot) {
         if(!(this instanceof TraitRecipe)) return true;
         TraitRecipe thisRecipe = (TraitRecipe) this;
         ItemHandle handle = thisRecipe.getInnerTraitItemHandle(slot);
-        return handle == null || handle.getFluidTypeAndAmount() == null;
+        if(handle == null || handle.getFluidTypeAndAmount() == null) {
+            return true;
+        }
+        ItemStack current = ta.getInventoryHandler().getStackInSlot(slot.getSlotId());
+        return current.isEmpty() || ForgeHooks.getContainerItem(current).isEmpty();
     }
 
     //Called if the respective method above returns 'false' to allow for proper decrement-handling.
@@ -176,9 +195,14 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotID());
         if(!stack.isEmpty()) {
-            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-            if(fas.isSuccess()) {
-                inventory.setStackInSlot(slot.getSlotID(), fas.getResult());
+            FluidStack fs = FluidUtil.getFluidContained(stack);
+            if(fs != null) {
+                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                if(fas.isSuccess()) {
+                    inventory.setStackInSlot(slot.getSlotID(), fas.getResult());
+                }
+            } else {
+                inventory.setStackInSlot(slot.getSlotID(), ForgeHooks.getContainerItem(stack));
             }
         }
     }
@@ -192,9 +216,14 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(!stack.isEmpty()) {
-            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-            if(fas.isSuccess()) {
-                inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+            FluidStack fs = FluidUtil.getFluidContained(stack);
+            if(fs != null) {
+                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                if(fas.isSuccess()) {
+                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+                }
+            } else {
+                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
             }
         }
     }
@@ -208,9 +237,14 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(!stack.isEmpty()) {
-            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-            if(fas.isSuccess()) {
-                inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+            FluidStack fs = FluidUtil.getFluidContained(stack);
+            if(fs != null) {
+                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                if(fas.isSuccess()) {
+                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+                }
+            } else {
+                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
             }
         }
     }
@@ -224,9 +258,14 @@ public abstract class AbstractAltarRecipe {
         TileReceiverBaseInventory.ItemHandlerTile inventory = ta.getInventoryHandler();
         ItemStack stack = inventory.getStackInSlot(slot.getSlotId());
         if(!stack.isEmpty()) {
-            FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
-            if(fas.isSuccess()) {
-                inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+            FluidStack fs = FluidUtil.getFluidContained(stack);
+            if(fs != null) {
+                FluidActionResult fas = ItemUtils.drainFluidFromItem(stack, handle.getFluidTypeAndAmount(), true);
+                if(fas.isSuccess()) {
+                    inventory.setStackInSlot(slot.getSlotId(), fas.getResult());
+                }
+            } else {
+                inventory.setStackInSlot(slot.getSlotId(), ForgeHooks.getContainerItem(stack));
             }
         }
     }

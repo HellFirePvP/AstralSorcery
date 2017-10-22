@@ -30,12 +30,14 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.EnumHelper;
@@ -60,6 +62,7 @@ public class RegistryItems {
     public static Item.ToolMaterial crystalToolMaterial;
     public static EnumRarity rarityCelestial;
     public static Material materialTransparentReplaceable;
+    public static ItemArmor.ArmorMaterial imbuedLeatherMaterial;
 
     public static CreativeTabs creativeTabAstralSorcery,
             creativeTabAstralSorceryPapers,
@@ -90,6 +93,10 @@ public class RegistryItems {
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
         materialTransparentReplaceable = new MaterialAirish();
+
+        imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
+                "as.imbuedleather", 26, new int[] { 0, 0, 7, 0}, 30, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 2);
+        imbuedLeatherMaterial.setRepairItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
     }
 
     public static void init() {
@@ -135,6 +142,8 @@ public class RegistryItems {
         chargedCrystalSword = registerItem(new ItemChargedCrystalSword());
         chargedCrystalPickaxe = registerItem(new ItemChargedCrystalPickaxe());
         chargedCrystalShovel = registerItem(new ItemChargedCrystalShovel());
+
+        armorImbuedCape = registerItem(new ItemCape());
     }
 
     //Items associated to blocks/itemblocks

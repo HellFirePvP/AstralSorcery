@@ -43,11 +43,16 @@ public class Config {
     public static int marbleAmount = 4, marbleVeinSize = 20;
     public static int constellationPaperRarity = 10, constellationPaperQuality = 2;
 
+    public static boolean lightProximityAltarRecipe = true;
+    public static boolean lightProximityResonatingWandRecipe = true;
+
     public static boolean clientPreloadTextures = true;
     public static boolean giveJournalFirst = true;
     public static boolean doesMobSpawnDenyDenyEverything = false;
+    public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
-    @Sync public static float evorsioEffectChance = 0.08F;
+    //Attuned wands configs
+    @Sync public static float evorsioEffectChance = 0.25F;
     @Sync public static int discidiaStackCap = 10;
     @Sync public static float discidiaStackMultiplier = 1F;
 
@@ -76,6 +81,8 @@ public class Config {
     @Sync public static float grappleWandUseCost = 0.7F;
     @Sync public static float architectWandUseCost = 0.07F;
     @Sync public static float exchangeWandUseCost = 0.08F;
+
+    public static float exchangeWandMaxHardness = -1;
 
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
@@ -118,6 +125,7 @@ public class Config {
         giveJournalFirst = latestConfig.getBoolean("giveJournalAtFirstJoin", "general", true, "If set to 'true', the player will receive an AstralSorcery Journal if he joins the server for the first time.");
         doesMobSpawnDenyDenyEverything = latestConfig.getBoolean("doesMobSpawnDenyAllTypes", "general", false, "If set to 'true' anything that prevents mobspawning by this mod, will also prevent EVERY natural mobspawning of any mobtype. When set to 'false' it'll only stop monsters from spawning.");
         swordSharpMultiplier = latestConfig.getFloat("swordSharpenedMultiplier", "general", 0.1F, 0.0F, 10000.0F, "Defines how much the 'sharpened' modifier increases the damage of the sword if applied. Config value is in percent.");
+        rockCrystalOreSilkTouchHarvestable = latestConfig.getBoolean("isRockCrystalOreSilkHarvestable", "general", rockCrystalOreSilkTouchHarvestable, "If this is set to true, Rock-Crystal-Ore may be silk-touch harvested by a player.");
         String[] dimWhitelist = latestConfig.getStringList("skySupportedDimensions", "general", new String[] { "0" }, "Whitelist of dimension ID's that will have special sky rendering");
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
@@ -126,10 +134,15 @@ public class Config {
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
+        lightProximityAltarRecipe = latestConfig.getBoolean("LightProximity-Altar", "recipes", lightProximityAltarRecipe, "If this is set to false, the luminous crafting table recipe that'd require 'light shining at a crafting table' is disabled.");
+        lightProximityResonatingWandRecipe = latestConfig.getBoolean("LightProximity-ResonatingWand", "recipes", lightProximityResonatingWandRecipe, "If this is set to false, the resonating wand recipe that'd require 'light shining at a crafting table' is disabled.");
+
         illuminationWandUseCost = latestConfig.getFloat("wandCost_illumination", "tools", 0.5F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the illumination wand");
         architectWandUseCost = latestConfig.getFloat("wandCost_architect", "tools", 0.03F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the architect wand");
         exchangeWandUseCost = latestConfig.getFloat("wandCost_exchange", "tools", 0.002F, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the exchange wand");
         grappleWandUseCost = latestConfig.getFloat("wandCost_grapple", "tools", grappleWandUseCost, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the grapple wand");
+
+        exchangeWandMaxHardness = latestConfig.getFloat("exchange_wand_max_hardness", "tools", -1, -1, 50000, "Sets the max. hardness the exchange wand can swap !from!. If the block you're trying to \"mine\" with the conversion wand is higher than this number, it won't work. (-1 to disable this check)");
 
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
         revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");

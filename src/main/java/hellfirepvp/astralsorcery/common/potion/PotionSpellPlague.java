@@ -11,10 +11,8 @@ package hellfirepvp.astralsorcery.common.potion;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
-import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,20 +37,20 @@ public class PotionSpellPlague extends PotionCustomTexture {
 
     @Override
     public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
-        if(entityLivingBaseIn.hasCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null)) {
-            SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
-            if(plague != null){
-                plague.onTick(entityLivingBaseIn);
-                PotionEffect pe = entityLivingBaseIn.getActivePotionEffect(this);
-                if(pe != null) {
-                    if(plague.onTick(entityLivingBaseIn)) {
-                        pe.duration = 1;
-                    } else {
-                        pe.duration = 100000;
-                    }
-                }
-            }
-        }
+        //if(entityLivingBaseIn.hasCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null)) {
+        //    SpellPlague plague = entityLivingBaseIn.getCapability(SpellPlague.CAPABILITY_SPELL_PLAGUE, null);
+        //    if(plague != null){
+        //        plague.onTick(entityLivingBaseIn);
+        //        PotionEffect pe = entityLivingBaseIn.getActivePotionEffect(this);
+        //        if(pe != null) {
+        //            if(plague.onTick(entityLivingBaseIn)) {
+        //                pe.duration = 1;
+        //            } else {
+        //                pe.duration = 100000;
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     @Override

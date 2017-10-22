@@ -124,6 +124,10 @@ public class GatewayCache extends CachedWorldData {
             this.display = display;
         }
 
+        @Override
+        public boolean equals(Object pos) {
+            return super.equals(pos);
+        }
     }
 
 }

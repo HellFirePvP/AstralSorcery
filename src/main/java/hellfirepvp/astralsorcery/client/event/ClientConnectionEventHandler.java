@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLeve
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
 import hellfirepvp.astralsorcery.common.data.DataLightConnections;
+import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -47,7 +48,7 @@ public class ClientConnectionEventHandler {
     //Used to cleanup stuff on clientside to make the client functional to switch servers at any time.
     @SubscribeEvent
     public void onDc(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        AstralSorcery.log.info("[AstralSorcery] Disconnected from server. Cleaning client cache.");
+        AstralSorcery.log.info("[AstralSorcery] Cleaning client cache...");
         EffectHandler.cleanUp();
         ClientCameraManager.getInstance().removeAllAndCleanup();
         Config.rebuildClientConfig();
@@ -64,6 +65,8 @@ public class ClientConnectionEventHandler {
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();
+        ((DataTimeFreezeEffects) SyncDataHolder.getDataClient(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).clientClean();
+        AstralSorcery.log.info("[AstralSorcery] Cleared cached client data! Disconnected from server.");
     }
 
     @SubscribeEvent

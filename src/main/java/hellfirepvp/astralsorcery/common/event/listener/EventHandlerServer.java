@@ -12,12 +12,12 @@ import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
-import hellfirepvp.astralsorcery.common.constellation.spell.plague.SpellPlague;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
+import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -36,7 +36,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.*;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
-import hellfirepvp.astralsorcery.common.util.struct.OreDiscoverer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.Item;
@@ -92,9 +92,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EntityLivingBase) {
-            event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
-        }
+        //if(event.getObject() instanceof EntityLivingBase) {
+        //    event.addCapability(SpellPlague.CAPABILITY_NAME, new SpellPlague.Provider());
+        //}
     }
 
     @SubscribeEvent
@@ -143,6 +143,9 @@ public class EventHandlerServer {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDeath(LivingDeathEvent event) {
+        if(event.getSource().canHarmInCreative()) {
+            return;
+        }
         if (phoenixProtect(event.getEntityLiving())) {
             event.setCanceled(true);
         } else {

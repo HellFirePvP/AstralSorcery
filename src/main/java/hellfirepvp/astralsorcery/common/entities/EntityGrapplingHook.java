@@ -70,7 +70,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         float f = -MathHelper.sin(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
         float f1 = -MathHelper.sin((throwerIn.rotationPitch) * 0.017453292F);
         float f2 = MathHelper.cos(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
-        this.setThrowableHeading((double) f, (double) f1, (double) f2, 1.4F, 0F);
+        this.setThrowableHeading((double) f, (double) f1, (double) f2, 1.7F, 0F);
         this.throwingEntity = throwerIn;
         setSize(0.1F, 0.1F);
     }

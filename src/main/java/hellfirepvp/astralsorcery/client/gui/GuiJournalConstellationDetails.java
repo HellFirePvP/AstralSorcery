@@ -23,9 +23,9 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.CapeAttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationPaperRecipe;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
-import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -38,7 +38,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -65,16 +64,20 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private IConstellation constellation;
     private GuiJournalConstellationCluster origin;
     private boolean detailed;
-    private boolean hasMorePages = false, isOnNextPage = false;
+
+    private int doublePageID = 0;
+    private int doublePages = 0;
 
     private IGuiRenderablePage lastFramePage = null;
 
     private Rectangle rectBack, rectNext, rectPrev;
+
     private List<MoonPhase> phases = new LinkedList<>();
     private List<MoonPhase> activePhases = new LinkedList<>();
 
     private List<String> locTextMain = new LinkedList<>();
     private List<String> locTextEnchRitual = new LinkedList<>();
+    private List<String> locTextCapeEffect = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
         super(-1);
@@ -90,15 +93,40 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         this.detailed = has;
         ProgressionTier playerProgress = ResearchManager.clientProgress.getTierReached();
-        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
+        if(has && EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
                 EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(playerProgress)) {
-            this.hasMorePages = true;
+            this.doublePages++;
+
+            if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress) && !(constellation instanceof IMinorConstellation)) {
+                this.doublePages++;
+            }
         }
 
         testPhases();
         testActivePhases();
         buildMainText();
         buildEnchRitualText();
+        buildCapeText();
+    }
+
+    private void buildCapeText() {
+        if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(ResearchManager.clientProgress.getTierReached())) {
+            String unlocEnch = constellation.getUnlocalizedName() + ".capeeffect";
+            String textEnch = I18n.format(unlocEnch);
+            if(!unlocEnch.equals(textEnch)) {
+                String head = I18n.format("gui.journal.cst.capeeffect");
+                locTextCapeEffect.add(head);
+                locTextCapeEffect.add("");
+
+                List<String> lines = new LinkedList<>();
+                for (String segment : textEnch.split("<NL>")) {
+                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                    lines.add("");
+                }
+                locTextCapeEffect.addAll(lines);
+                locTextCapeEffect.add("");
+            }
+        }
     }
 
     private void buildEnchRitualText() {
@@ -180,25 +208,39 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        lastFramePage = null;
+
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
-        if(!isOnNextPage) {
-            drawCstBackground();
-            drawDefault(textureResShellCst);
-        } else {
-            drawDefault(textureResBlank);
+        switch (doublePageID) {
+            case 0:
+                drawCstBackground();
+                drawDefault(textureResShellCst);
+                break;
+            case 1:
+                drawDefault(textureResBlank);
+                break;
+            case 2:
+                drawDefault(textureResBlank);
+                break;
         }
         TextureHelper.refreshTextureBindState();
 
         zLevel += 150;
         drawArrows(partialTicks);
         drawNavArrows(partialTicks);
-        if(!isOnNextPage) {
-            drawConstellation(partialTicks);
-            drawPhaseInformation();
-            drawExtendedInformation();
-        } else {
-            drawInformationPages(partialTicks, mouseX, mouseY);
+        switch (doublePageID) {
+            case 0:
+                drawConstellation(partialTicks);
+                drawPhaseInformation();
+                drawExtendedInformation();
+                break;
+            case 1:
+                drawERPInformationPages(partialTicks, mouseX, mouseY);
+                break;
+            case 2:
+                drawCapeInformationPages(partialTicks, mouseX, mouseY);
+                break;
         }
         zLevel -= 150;
 
@@ -206,9 +248,33 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         GlStateManager.popMatrix();
     }
 
-    private void drawInformationPages(float partialTicks, int mouseX, int mouseY) {
-        lastFramePage = null;
+    private void drawCapeInformationPages(float partialTicks, int mouseX, int mouseY) {
+        GlStateManager.color(0.86F, 0.86F, 0.86F, 0.8F);
+        GlStateManager.disableDepth();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(guiLeft + 30, guiTop + 30, 0);
+        for (int i = 0; i < locTextCapeEffect.size(); i++) {
+            String line = locTextCapeEffect.get(i);
+            fontRenderer.drawString(line, 0, (i * 10), 0x00DDDDDD, true);
+        }
+        GlStateManager.popMatrix();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
+        CapeAttunementRecipe recipe = RecipesAS.capeCraftingRecipes.get(this.constellation);
+        if(recipe != null) {
+            lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
+
+            GlStateManager.pushMatrix();
+            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+            lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+            GL11.glPopAttrib();
+            GlStateManager.popMatrix();
+        }
+    }
+
+    private void drawERPInformationPages(float partialTicks, int mouseX, int mouseY) {
         boolean usedLeftSide = false;
         ProgressionTier prog = ResearchManager.clientProgress.getTierReached();
         if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(prog) ||
@@ -247,7 +313,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         Point mouse = getCurrentMousePoint();
         rectNext = null;
         rectPrev = null;
-        if(hasMorePages && isOnNextPage) {
+        if(doublePageID - 1 >= 0) {
             int width = 30;
             int height = 15;
             rectPrev = new Rectangle(guiLeft + 25, guiTop + 220, width, height);
@@ -268,7 +334,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             drawTexturedRectAtCurrentPos(width, height, uFrom, vFrom, 0.5F, 0.5F);
             GlStateManager.popMatrix();
         }
-        if(hasMorePages && !isOnNextPage) {
+        if(doublePageID + 1 <= doublePages) {
             int width = 30;
             int height = 15;
             rectNext = new Rectangle(guiLeft + 367, guiTop + 220, width, height);
@@ -542,16 +608,20 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             return;
         }
         if(rectPrev != null && rectPrev.contains(p)) {
-            this.isOnNextPage = false;
+            if(doublePageID >= 1) {
+                this.doublePageID--;
+            }
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
         if(rectNext != null && rectNext.contains(p)) {
-            this.isOnNextPage = true;
+            if(doublePageID <= doublePages - 1) {
+                this.doublePageID++;
+            }
             SoundHelper.playSoundClient(Sounds.bookFlip, 1F, 1F);
             return;
         }
-        if(isOnNextPage && lastFramePage != null) {
+        if(doublePageID != 0 && lastFramePage != null) {
             lastFramePage.propagateMouseClick(mouseX, mouseY);
         }
     }
