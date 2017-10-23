@@ -297,36 +297,36 @@ astralsorcery.journal.ALTAR4.1.text=虽然天辉祭坛有着明确的使用目�
 astralsorcery.journal.ALTAR4.4.text=不仅新设计需要更细微的结构，合成时也需要额外添加其他材料。要做到这一点，光波增幅器必须放置在祭坛结构中的熏黑大理石上。<NL>在合成时，聚焦水晶将发射一束有色光线到附近空的光波增幅器上，其上将显示合成的物品以便于继续进行合成。
 
 research.CRAFTING_FOCUS_HINT.name=聚焦合成
-astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=Additionally, crafting that's being interrupted due to the starlight intensity decreasing during the day will no longer completely stop the crafting, but rather halt it until enough starlight is provided again.<NL>Another magnificent aspect of the new altar layout is its ability, granted by the celestial crystal floating above the altar, to interact and focus starlight from very specific constellations onto the table while crafting.
-astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=The result is infused with a concentrated essence of the light pattern that even the attunement altar isn't able to achieve. Doing so however requires a focus for that constellation. Placing an attuned crystal into a special slot on the altar, it should be able to filter and direct the starlight for the crafting process.<NL>Doing this allows for more complex and powerful crafting methods where the essence of one particular constellation might be the key to unlocking greater strength in some items.
+astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=另外，由于白天的星能减少而中断的合成将在有足够星能后继续进行合成。<NL>新祭坛在设计上有个独特而强大的能力，在祭坛上方的天体水晶所赋予它的能力，在制作过程中抽取特定星座的星辉并用于合成。
+astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=即使是共鸣祭坛也无法将星光图案的能量尽数集中与一块进行注入。要这么做必须先与一个星座进行共鸣。在祭坛的特殊槽内放入一个共振水晶，它能过滤并引导星能用于合成。<NL>这样可以实现更复杂与强劲的合成方式，某些特定星座的的本质是解锁一些强力物品的关键。
 
 research.ATT_CAPE.name=星斗披风
-astralsorcery.journal.ATT_CAPE.1.text=Mundane armor like leather and iron certainly serve their purpose, however they are neither particularly beautiful nor very functional. Infusing a normal leather chest with the energetic properties of the resonating gem and the transmissive aspect of stardust allow for a more suitable piece of armor.
-astralsorcery.journal.ATT_CAPE.3.text=Besides showing greater affinity to enchantments, the mantle feels like its being tossed around by the energies surrounding an active attunement altar. As if a strong current flows through it but can't find purchase.<NL>A stronger attunement process might be needed to unleash the mantle's powers appropiately.
-astralsorcery.journal.ATT_CAPE.4.text=The new options for more focused crafting might just be enough to achieve this. However, the mantle might only be aligned with one constellation at a time. Using it in a different focusing-recipe will nullify the old alignment so the mantle switches to the new effect.<NL>To get a better idea of the effects, additional pages on the details of each constellation are added for each constellation.
+astralsorcery.journal.ATT_CAPE.1.text=像皮革和铁这样的普通装甲的确能达到保护的目的，但它们既不美观也不实用。将共振宝石的能量属性与星尘的穿透能力注入皮革外套，就能获得一个更合适的护甲。
+astralsorcery.journal.ATT_CAPE.3.text=除了显现出的对魔咒的强大亲和力外，披风就像共鸣祭坛一样被强大的星能环绕着。如同有强大的能量传过一样，但找不到来源。<NL>可能需要一个更强力的共振方式来适当的释放披风内所蕴含的强大力量。
+astralsorcery.journal.ATT_CAPE.4.text=更有针对性的选择合成应该足以实现这一点。然而，披风一次只能用一个星座进行共鸣。在进行与原先不同的聚焦合成时旧的共鸣能力将会失效，并转变为新的共鸣能力。<NL>为了更好的了解那些能力，每个星座都附加了更详细的细节页面。
 
 research.ATT_WANDS.name=调谐共鸣之杖
-astralsorcery.journal.ATT_WANDS.1.text=In the light of the new discoveries for crafting, maybe the small divining rod that allows for finding rock crystals can be slightly altered to serve a better purpose than just that.<NL>Infusing a wand with various materials under focused light might bring forth some more powerful effects.
-astralsorcery.journal.ATT_WANDS.2.text=As this is a delicate process and the results are not clearly defined, the result might not the reversible or overwritten with a different infusing attempt.
+astralsorcery.journal.ATT_WANDS.1.text=在星辉合成方面有了新的发现，也许可以稍微改变下这个只能用来找水晶石的小法杖，让它有更多的功能。<NL>在聚焦之光下向法杖注入各种材料能获得更加强大的力量。
+astralsorcery.journal.ATT_WANDS.2.text=这是一个十分微妙的过程，并没有一个明确的结果，结果可能是不可逆的也无法被别的注入所覆盖。
 
 research.ATT_WAND_ARMARA.name=Armara共鸣之杖
-astralsorcery.journal.ATT_WAND_ARMARA.1.text=Resilient and protective, this combination of materials imbues the wand with shielding properties. While holding it, it can be used as a shield. When being hit while shielding, the wearer is granted additional protection.
+astralsorcery.journal.ATT_WAND_ARMARA.1.text=弹性与保护性，这种材料组合的法杖有保护能力。手持法杖时可以当做盾牌。当屏障被攻击时，使用者将获得额外的防护能力。
 
 research.ATT_WAND_DISCIDIA.name=Discidia共鸣之杖
-astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=As the dangers of the night grow fiercer, they also become more resilient to strong attacks themselves. While holding the wand that's mimicking the effects of discidia, consecutive attacks against the same target will deal significantly more damage.
+astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=随着时间的推移，夜晚的危险越来越大，它们对于严重伤害的恢复能力也逐渐增强。在手持仿造 discidia 效果的法杖时，对同一目标的多次攻击将造成更大的伤害。
 
 research.ATT_WAND_AEVITAS.name=Aevitas共鸣之杖
-astralsorcery.journal.ATT_WAND_AEVITAS.1.text=A wand immersed with the aspects of growth and creation grants the wielder the convenience of walking through air as a solid starfield will manifest itself below the wielder's feet, stopping him from falling into a deep cavern by accident.
+astralsorcery.journal.ATT_WAND_AEVITAS.1.text=一把沉浸于生长于创造能力的法杖，给予了持有者在空中行走的方便，在他脚下会生成一片坚实的星空，用以防止因意外而摔落深渊。
 
 research.ATT_WAND_EVORSIO.name=Evorsio共鸣之杖
-astralsorcery.journal.ATT_WAND_EVORSIO.1.text=While evorsio is thankfully not strong enough to evaporate the world entirely by itself, the wand aligned with it brings forth parts of this power. When the wielder breaks a block while holding it, blocks around it with the same type as the one broken might evaporate into their drops but an instant afterwards.
+astralsorcery.journal.ATT_WAND_EVORSIO.1.text=虽然 evorsio 并不足以强大到毁灭整个世界，但与其进行共鸣的法杖带来了它的一部分力量。但使用者手持法杖破坏一个方块时，那个方块附近的同类方块也将在一瞬间摧毁成掉落物。
 
 research.ATT_WAND_VICIO.name=Vicio共鸣之杖
-astralsorcery.journal.ATT_WAND_VICIO.1.text=While freely flying through the air and reaching for the stars might not be achievable with this, the wand being exposed to the effects of vicio certainly helps with that a bit. While holding right-click it can be charged up like a bow, but upon releasing it doesn't shoot an arrow, but the wielder itself through the air.
+astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然在大气中自由飞翔或伸手摘星是完全不可能实现的，但与 vicio 进行共鸣的法杖肯定有助于这一点。手持时按住右键，它可以像弓一样蓄力，但在释放后并不会射出一个箭头，但能让使用者自身穿过空气。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
-astralsorcery.journal.recipe.constellation=需要聚集于 %s 星座
+astralsorcery.journal.recipe.constellation=需要与 %s 星座进行聚焦
 astralsorcery.journal.recipe.upgrade=升级到下一级
 astralsorcery.journal.recipe.attunement=调用水晶：%s
 astralsorcery.journal.recipe.amt.desc=需要星能：
@@ -353,7 +353,7 @@ entity.EntityFlare.name=耀斑
 entity.EntityStarburst.name=星爆
 entity.EntityIlluminationSpark.name=荧光火花
 entity.EntityCrystalTool.name=水晶工具
-entity.EntitySpectralTool.name=光谱工具
+entity.EntitySpectralTool.name=光谱调整器
 
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭
@@ -464,7 +464,7 @@ tile.blockgeolosyssamplecluster.name=水晶石样品
 
 gui.journal.cst.enchantments=映射台：
 gui.journal.cst.ritual=仪式效应：
-gui.journal.cst.capeeffect=Mantle Effect:
+gui.journal.cst.capeeffect=披风效果：
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive
