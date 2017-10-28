@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFloatingCube;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -32,15 +33,20 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Random;
@@ -75,6 +81,33 @@ public class RenderingUtils {
                     pm.addEffect(digging);
                 }
             }
+        }
+    }
+
+    @Nonnull
+    public static TextureAtlasSprite tryGetFlowingTextureOfFluidStack(FluidStack stack) {
+        ResourceLocation res = stack.getFluid().getFlowing(stack);
+        TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
+        if(tas == null) tas = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+        return tas;
+    }
+
+    @Nullable
+    public static TextureAtlasSprite tryGetMainTextureOfItemStack(ItemStack stack) {
+        if(stack.isEmpty()) return null;
+        ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+        IBakedModel model = imm.getItemModel(stack);
+        if(model == imm.getModelManager().getMissingModel()) {
+            return null;
+        }
+        if(stack.getItem() instanceof ItemBlock) {
+            IBlockState state = ItemUtils.createBlockState(stack);
+            if(state == null) return null;
+            TextureAtlasSprite tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+            if(tas == Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) return null;
+            return tas;
+        } else {
+            return imm.getItemModel(stack).getParticleTexture();
         }
     }
 

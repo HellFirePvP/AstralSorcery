@@ -82,6 +82,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rInfusedGlass;
     public static AttunementRecipe rKnowledgeShare;
     public static TraitRecipe rCapeBase;
+    public static TraitRecipe rChalice;
 
     public static WandAttunementRecipe rWandAugmentDiscidia, rWandAugmentAevitas, rWandAugmentVicio,
             rWandAugmentEvorsio, rWandAugmentArmara;
@@ -333,6 +334,26 @@ public class RegistryRecipes {
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
         rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
+
+        rChalice = registerTraitRecipe(newShapedRecipe("internal/altar/chalice", BlocksAS.blockChalice)
+                .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe());
+        rChalice.setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT);
+        rChalice.setInnerTraitItem(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        rChalice.setInnerTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rChalice.setInnerTraitItem(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER);
+        for (int i = 0; i < 5; i++) {
+            rChalice.addOuterTraitItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
+        }
 
         AccessibleRecipeAdapater shapedPaper = newShapedRecipe("internal/altar/constellationpaper", ItemsAS.constellationPaper)
                 .addPart(ItemCraftingComponent.MetaType.PARCHMENT.asStack(),

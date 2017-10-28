@@ -51,7 +51,8 @@ public class PerkDestructionDamageArc extends ConstellationPerk {
                     EntityLivingBase closest = EntityUtils.selectClosest(entities, (e) -> (double) e.getDistanceToEntity(attacked));
                     if(closest != null && !closest.isDead) {
                         AstralSorcery.proxy.fireLightning(attacked.getEntityWorld(), Vector3.atEntityCorner(attacked), Vector3.atEntityCorner(closest), Color.WHITE);
-                        closest.attackEntityFrom(CommonProxy.dmgSourceStellar, arcPercent * dmgIn);
+                        attacked.attackEntityFrom(CommonProxy.dmgSourceStellar.setSource(attacker), arcPercent * dmgIn);
+                        closest.attackEntityFrom(CommonProxy.dmgSourceStellar.setSource(attacker), arcPercent * dmgIn);
                     }
                 }
             }

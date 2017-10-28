@@ -99,7 +99,7 @@ public class BlockBreakAssist {
 
             IBlockState nowAt = world.getBlockState(pos);
             if(nowAt.getBlock().equals(expected.getBlock()) && nowAt.getBlock().getMetaFromState(nowAt) == expected.getBlock().getMetaFromState(expected)) {
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos);
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, world.getBlockState(pos), true, true);
             }
         }
 

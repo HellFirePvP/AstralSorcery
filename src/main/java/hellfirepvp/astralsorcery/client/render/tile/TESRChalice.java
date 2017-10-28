@@ -40,9 +40,7 @@ public class TESRChalice extends TileEntitySpecialRenderer<TileChalice> {
             TileChalice.DrawSize size = te.getDrawSize();
             FluidStack fs = te.getTank().getFluid();
             if(fs != null) {
-                ResourceLocation res = filled.getFlowing(fs);
-                TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
-                if(tas == null) tas = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+                TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(fs);
                 Vector3 rot = getInterpolatedRotation(te, partialTicks);
 
                 double ulength = tas.getMaxU() - tas.getMinU();

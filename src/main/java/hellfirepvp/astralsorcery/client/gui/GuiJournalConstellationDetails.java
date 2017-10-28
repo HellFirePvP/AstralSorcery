@@ -93,8 +93,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         this.detailed = has;
         ProgressionTier playerProgress = ResearchManager.clientProgress.getTierReached();
-        if(has && EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
-                EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(playerProgress)) {
+        if(has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
+                EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(playerProgress))) {
             this.doublePages++;
 
             if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress) && !(constellation instanceof IMinorConstellation)) {

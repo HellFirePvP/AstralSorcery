@@ -34,7 +34,7 @@ misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 
-misc.sword.sharpened=Sharpened
+misc.sword.sharpened=Sharpened (%s increased Damage)
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
@@ -323,6 +323,11 @@ astralsorcery.journal.ATT_WAND_EVORSIO.1.text=While evorsio is thankfully not st
 
 research.ATT_WAND_VICIO.name=Wand Attunement: Vicio
 astralsorcery.journal.ATT_WAND_VICIO.1.text=While freely flying through the air and reaching for the stars might not be achievable with this, the wand being exposed to the effects of vicio certainly helps with that a bit. While holding right-click it can be charged up like a bow, but upon releasing it doesn't shoot an arrow, but the wielder itself through the air.
+
+research.C_CHALICE.name=Containment Chalice
+astralsorcery.journal.C_CHALICE.1.text=
+astralsorcery.journal.C_CHALICE.3.text=
+astralsorcery.journal.C_CHALICE.4.text=
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime

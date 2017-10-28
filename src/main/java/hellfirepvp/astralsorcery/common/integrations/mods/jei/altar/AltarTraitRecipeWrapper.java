@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
@@ -18,10 +19,12 @@ import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -76,7 +79,20 @@ public class AltarTraitRecipeWrapper extends JEIBaseWrapper {
     }
 
     @Override
-    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {}
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        if(recipe.getRequiredConstellation() != null) {
+            GlStateManager.disableAlpha();
+            RenderConstellation.renderConstellationIntoGUI(recipe.getRequiredConstellation().getConstellationColor(), recipe.getRequiredConstellation(),
+                    0, 40, 0,
+                    recipeWidth, recipeHeight - 40, 2F, new RenderConstellation.BrightnessFunction() {
+                        @Override
+                        public float getBrightness() {
+                            return 0.5F;
+                        }
+                    }, true, false);
+            GlStateManager.enableAlpha();
+        }
+    }
 
     @Nullable
     @Override

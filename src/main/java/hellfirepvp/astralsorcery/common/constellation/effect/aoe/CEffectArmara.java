@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesRitualArmara;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.entities.EntityGrapplingHook;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -74,7 +75,7 @@ public class CEffectArmara extends ConstellationEffect {
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
                 if(!e.isDead) {
-                    if(e instanceof IProjectile) {
+                    if(e instanceof IProjectile && !(e instanceof EntityGrapplingHook)) {
                         double xRatio = (pos.getX() + 0.5) - e.posX;
                         double zRatio = (pos.getZ() + 0.5) - e.posZ;
                         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);

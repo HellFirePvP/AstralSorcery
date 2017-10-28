@@ -113,7 +113,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
 
     @Nullable
     private Color getDominantColorFromStack(ItemStack stack) {
-        TextureAtlasSprite tas = getTexture(stack);
+        TextureAtlasSprite tas = RenderingUtils.tryGetMainTextureOfItemStack(stack);
         if(tas == null) return null;
         int overlay = getOverlayColor(stack);
         try {
@@ -156,25 +156,6 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, 0);
         } else {
             return Minecraft.getMinecraft().getItemColors().getColorFromItemstack(stack, 0);
-        }
-    }
-
-    @Nullable
-    private TextureAtlasSprite getTexture(ItemStack stack) {
-        if(stack.isEmpty()) return null;
-        ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        IBakedModel model = imm.getItemModel(stack);
-        if(model == imm.getModelManager().getMissingModel()) {
-            return null;
-        }
-        if(stack.getItem() instanceof ItemBlock) {
-            IBlockState state = ItemUtils.createBlockState(stack);
-            if(state == null) return null;
-            TextureAtlasSprite tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
-            if(tas == Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) return null;
-            return tas;
-        } else {
-            return imm.getItemModel(stack).getParticleTexture();
         }
     }
 

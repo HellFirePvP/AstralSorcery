@@ -143,7 +143,6 @@ public class ModIntegrationJEI implements IModPlugin {
 
     private void hideItems(IIngredientBlacklist blacklist) {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockFakeTree));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockChalice));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));

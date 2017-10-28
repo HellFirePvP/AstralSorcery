@@ -40,6 +40,7 @@ public class RegistryEntities {
         registerEntity(EntityCrystalTool.class, "EntityCrystalTool", modEid++, 64, 20, true);
         registerEntity(EntityGrapplingHook.class, "EntityGrapplingHook", modEid++, 128, 1, true);
         registerEntity(EntitySpectralTool.class, "EntitySpectralTool", modEid++, 128, 1, true);
+        registerEntity(EntityLiquidSpark.class, "EntityLiquidSpark", modEid++, 64, 1, true);
         //registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
     }
 

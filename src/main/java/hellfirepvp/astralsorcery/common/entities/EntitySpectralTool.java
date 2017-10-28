@@ -97,7 +97,7 @@ public class EntitySpectralTool extends EntityFlying {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
 
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.35);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5);
     }
 
     @Override

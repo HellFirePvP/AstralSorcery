@@ -100,7 +100,14 @@ public class RegistryResearch {
         resCape.addPage(getTextPage("ATT_CAPE.3"));
         resCape.addPage(getTextPage("ATT_CAPE.4"));
 
-        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape), resCape, 1, ResearchProgression.RADIANCE);
+        ResearchNode resChalice = new ResearchNode(new ItemStack(BlocksAS.blockChalice), "C_CHALICE", 7, 4);
+        resChalice.addPage(getTextPage("C_CHALICE.1"));
+        resChalice.addPage(new JournalPageTraitRecipe(RegistryRecipes.rChalice));
+        resChalice.addPage(getTextPage("C_CHALICE.3"));
+        resChalice.addPage(getTextPage("C_CHALICE.4"));
+
+        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape), resCape,    1, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockChalice),   resChalice, 1, ResearchProgression.RADIANCE);
 
         resAttWandArmara.addSourceConnectionFrom(resAttWands);
         resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
@@ -109,6 +116,7 @@ public class RegistryResearch {
         resAttWandEvorsio.addSourceConnectionFrom(resAttWands);
         resAttWands.addSourceConnectionFrom(resHintRecipes);
         resCape.addSourceConnectionFrom(resHintRecipes);
+        resChalice.addSourceConnectionFrom(resHintRecipes);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -118,6 +126,7 @@ public class RegistryResearch {
         regRadiance.register(resAttWandEvorsio);
         regRadiance.register(resCape);
         regRadiance.register(resHintRecipes);
+        regRadiance.register(resChalice);
     }
 
     private static void initConstellation() {

@@ -64,9 +64,6 @@ public class BlockChalice extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {}
-
-    @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = world.getBlockState(pos);

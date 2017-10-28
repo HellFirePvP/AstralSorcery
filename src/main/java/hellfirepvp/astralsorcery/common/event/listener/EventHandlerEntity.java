@@ -22,6 +22,7 @@ import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -178,6 +179,13 @@ public class EventHandlerEntity {
             } else {
                 break lblIn;
             }
+            ItemStack held = p.getHeldItemMainhand();
+            if(SwordSharpenHelper.isSwordSharpened(held)) {
+                //YEEEAAAA i know this flat multiplies all damage.. but w/e..
+                //There's no great way to test for item here.
+                event.setAmount(event.getAmount() * ((float) Config.swordSharpMultiplier));
+            }
+
             PlayerProgress prog = ResearchManager.getProgress(p);
             if (prog != null) {
                 float dmg = event.getAmount();

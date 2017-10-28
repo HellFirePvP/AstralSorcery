@@ -278,7 +278,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
             if(rand.nextFloat() < potency) {
                 World w = pl.getEntityWorld();
                 AxisAlignedBB bb = new AxisAlignedBB(-range, -range, -range, range, range, range);
-                bb.offset(pl.posX, pl.posY, pl.posZ);
+                bb = bb.offset(pl.posX, pl.posY, pl.posZ);
                 Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
                 List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {

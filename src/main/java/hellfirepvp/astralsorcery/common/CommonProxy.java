@@ -85,7 +85,7 @@ import java.util.UUID;
 public class CommonProxy implements IGuiHandler {
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
-    public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSourceEntity dmgSourceStellar = (DamageSourceEntity) new DamageSourceEntity("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static InternalRegistryPrimer registryPrimer;
     private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
@@ -99,6 +99,7 @@ public class CommonProxy implements IGuiHandler {
         CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
+        Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
     }
 
