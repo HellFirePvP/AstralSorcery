@@ -8,6 +8,7 @@ jei.category.transmutation=星辉转化
 jei.category.altar.discovery=星辉合成台
 jei.category.altar.attunement=星辉祭坛
 jei.category.altar.constellation=天辉祭坛
+jei.category.altar.trait=五彩祭坛
 
 potion.potency.1=II
 potion.potency.2=III
@@ -34,11 +35,9 @@ misc.link.link.block=此方块
 misc.link.unlink=已将%s到%s的连接断开!
 
 misc.sword.sharpened=锋利
-misc.wand.attuned=与 %s 进行共鸣
 
 effect.as.cheatdeath=凤凰之火
 effect.as.bleed=撕裂
-effect.as.spellplague=知识传染
 
 gui.journal.bm.knowledge.name=研究
 gui.journal.bm.constellations.name=星座
@@ -293,9 +292,42 @@ astralsorcery.journal.DRAWING_TABLE.6.text=将羊皮纸和注能玻璃放在桌�
 astralsorcery.journal.DRAWING_TABLE.7.text=将星座的图形蚀刻在某些物品上会产生魔咒的力量，最适合星座所给予的魔咒力的还是书以及护甲和武器。
 astralsorcery.journal.DRAWING_TABLE.8.text=当然，你也可以把这些力量装在瓶子里。只要在台子上放置一个水瓶，平凡的，浓稠的，粗制的药水，星辉将会凝结出最纯净的星露。<NL>用这种方式来制作药水和书有可能导致玻璃毁坏，直接附魔的话必定会毁坏。
 
+research.ALTAR4.name=五彩祭坛
+astralsorcery.journal.ALTAR4.1.text=虽然天辉祭坛有着明确的使用目的，但它也有着非常明显的缺点。于是，诞生了一个新想法，即聚焦特定星座的星光于祭坛可能比吸收所有种类的星光更加强大。<NL>以当前的祭坛结构是无法做到这一点的，也许可以利用熏黑大理石以及新发现的天体水晶这些强力材料做一个更合适的结构。
+astralsorcery.journal.ALTAR4.4.text=不仅新设计需要更细微的结构，合成时也需要额外添加其他材料。要做到这一点，光波增幅器必须放置在祭坛结构中的熏黑大理石上。<NL>在合成时，聚焦水晶将发射一束有色光线到附近空的光波增幅器上，其上将显示合成的物品以便于继续进行合成。
+
+research.CRAFTING_FOCUS_HINT.name=聚焦合成
+astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=另外，由于白天的星能减少而中断的合成将在有足够星能后继续进行合成。<NL>新祭坛在设计上有个独特而强大的能力，在祭坛上方的天体水晶所赋予它的能力，在制作过程中抽取特定星座的星辉并用于合成。
+astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=即使是共鸣祭坛也无法将星光图案的能量尽数集中与一块进行注入。要这么做必须先与一个星座进行共鸣。在祭坛的特殊槽内放入一个共振水晶，它能过滤并引导星能用于合成。<NL>这样可以实现更复杂与强劲的合成方式，某些特定星座的的本质是解锁一些强力物品的关键。
+
+research.ATT_CAPE.name=星斗披风
+astralsorcery.journal.ATT_CAPE.1.text=像皮革和铁这样的普通装甲的确能达到保护的目的，但它们既不美观也不实用。将共振宝石的能量属性与星尘的穿透能力注入皮革外套，就能获得一个更合适的护甲。
+astralsorcery.journal.ATT_CAPE.3.text=除了显现出的对魔咒的强大亲和力外，披风就像共鸣祭坛一样被强大的星能环绕着。如同有强大的能量传过一样，但找不到来源。<NL>可能需要一个更强力的共振方式来适当的释放披风内所蕴含的强大力量。
+astralsorcery.journal.ATT_CAPE.4.text=更有针对性的选择合成应该足以实现这一点。然而，披风一次只能用一个星座进行共鸣。在进行与原先不同的聚焦合成时旧的共鸣能力将会失效，并转变为新的共鸣能力。<NL>为了更好的了解那些能力，每个星座都附加了更详细的细节页面。
+
+research.ATT_WANDS.name=调谐共鸣之杖
+astralsorcery.journal.ATT_WANDS.1.text=在星辉合成方面有了新的发现，也许可以稍微改变下这个只能用来找水晶石的小法杖，让它有更多的功能。<NL>在聚焦之光下向法杖注入各种材料能获得更加强大的力量。
+astralsorcery.journal.ATT_WANDS.2.text=这是一个十分微妙的过程，并没有一个明确的结果，结果可能是不可逆的也无法被别的注入所覆盖。
+
+research.ATT_WAND_ARMARA.name=Armara共鸣之杖
+astralsorcery.journal.ATT_WAND_ARMARA.1.text=弹性与保护性，这种材料组合的法杖有保护能力。手持法杖时可以当做盾牌。当屏障被攻击时，使用者将获得额外的防护能力。
+
+research.ATT_WAND_DISCIDIA.name=Discidia共鸣之杖
+astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=随着时间的推移，夜晚的危险越来越大，它们对于严重伤害的恢复能力也逐渐增强。在手持仿造 discidia 效果的法杖时，对同一目标的多次攻击将造成更大的伤害。
+
+research.ATT_WAND_AEVITAS.name=Aevitas共鸣之杖
+astralsorcery.journal.ATT_WAND_AEVITAS.1.text=一把沉浸于生长于创造能力的法杖，给予了持有者在空中行走的方便，在他脚下会生成一片坚实的星空，用以防止因意外而摔落深渊。
+
+research.ATT_WAND_EVORSIO.name=Evorsio共鸣之杖
+astralsorcery.journal.ATT_WAND_EVORSIO.1.text=虽然 evorsio 并不足以强大到毁灭整个世界，但与其进行共鸣的法杖带来了它的一部分力量。但使用者手持法杖破坏一个方块时，那个方块附近的同类方块也将在一瞬间摧毁成掉落物。
+
+research.ATT_WAND_VICIO.name=Vicio共鸣之杖
+astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然在大气中自由飞翔或伸手摘星是完全不可能实现的，但与 vicio 进行共鸣的法杖肯定有助于这一点。手持时按住右键，它可以像弓一样蓄力，但在释放后并不会射出一个箭头，但能让使用者自身穿过空气。
+
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
-astralsorcery.journal.recipe.upgrade=升级祭坛到下一级
+astralsorcery.journal.recipe.constellation=需要与 %s 星座进行聚焦
+astralsorcery.journal.recipe.upgrade=升级到下一级
 astralsorcery.journal.recipe.attunement=调用水晶：%s
 astralsorcery.journal.recipe.amt.desc=需要星能：
 
@@ -321,6 +353,7 @@ entity.EntityFlare.name=耀斑
 entity.EntityStarburst.name=星爆
 entity.EntityIlluminationSpark.name=荧光火花
 entity.EntityCrystalTool.name=水晶工具
+entity.EntitySpectralTool.name=光谱调整器
 
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭
@@ -358,6 +391,7 @@ item.iteminfusedglass.active.name=蚀刻玻璃
 item.itemknowledgeshare.name=知识共享卷轴
 item.itemusabledust.illumination.name=辉光粉
 item.itemusabledust.nocturnal.name=暗夜粉
+item.itemcape.name=星斗披风
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
@@ -370,7 +404,7 @@ item.itemcoloredlens.effect.spectral.name=汇聚
 inventory.altar.0=星辉合成台
 inventory.altar.1=星辉祭坛
 inventory.altar.2=天辉祭坛
-inventory.altar.3=[NoName-TraitCraft]Altar
+inventory.altar.3=五彩祭坛
 inventory.altar.4=[NoName-Endgame]Altar
 
 fluid.astralsorcery.liquidStarlight=星能液
@@ -385,7 +419,7 @@ tile.blockcollectorcrystal.obf.name=浮动水晶
 tile.blockaltar.altar_1.name=星辉合成台
 tile.blockaltar.altar_2.name=星辉祭坛
 tile.blockaltar.altar_3.name=天辉祭坛
-tile.blockaltar.altar_4.name=[NoName-TraitCraft]Altar
+tile.blockaltar.altar_4.name=五彩祭坛
 tile.blockaltar.altar_5.name=[NoName-Endgame]Altar
 tile.blockaltar.general.name=祭坛
 tile.blockattunementaltar.name=共鸣祭坛
@@ -395,6 +429,12 @@ tile.blockritualpedestal.name=信标基座
 tile.blockflarelight.name=不稳定耀斑
 tile.blockworldilluminator.name=洞穴照明器
 tile.blockblackmarble.raw.name=熏黑大理石
+tile.blockblackmarble.bricks.name=熏黑大理石砖
+tile.blockblackmarble.pillar.name=熏黑大理石柱
+tile.blockblackmarble.chiseled.name=雕纹熏黑大理石
+tile.blockblackmarble.arch.name=熏黑大理石横梁
+tile.blockblackmarble.runed.name=精致熏黑大理石
+tile.blockblackmarble.engraved.name=凹面熏黑大理石
 tile.blockmarble.raw.name=大理石
 tile.blockmarble.bricks.name=大理石砖
 tile.blockmarble.pillar.name=大理石柱
@@ -418,71 +458,87 @@ tile.blockrituallink.name=水晶信标
 tile.blocktranslucentblock.name=半透明方块
 tile.blockmapdrawingtable.name=恒星映射台
 tile.blockcelestialgateway.name=天体调谐器
+tile.blockchalice.name=遏制圣杯
+
+tile.blockgeolosyssamplecluster.name=水晶石样品
 
 gui.journal.cst.enchantments=映射台：
 gui.journal.cst.ritual=仪式效应：
+gui.journal.cst.capeeffect=披风效果：
 
 astralsorcery.constellation.discidia=Discidia
 astralsorcery.constellation.discidia.info=Offensive
 astralsorcery.constellation.discidia.effect=这个星座的光似乎是不可阻挡的；任何挡在它面前的生物或材料都会被穿透。
-astralsorcery.constellation.discidia.enchantments=
-astralsorcery.constellation.discidia.ritual=
+astralsorcery.constellation.discidia.enchantments=这个星座的暴力本质将赋予玩家充足的力量药水效果，所有工具将更锋利，弓也不例外。
+astralsorcery.constellation.discidia.ritual=将强光中的一部分聚集在这个区域内，形成一个伤害领域，攻击附近的所有敌人。
+astralsorcery.constellation.discidia.capeeffect=一旦注入这个星座的星能，披风就能吸收敌人对你的攻击，并赋予你的更强大的反击能力来对抗敌人。一旦被击中，穿戴者就能将自己所受到的伤害转变为对怪物的额外伤害。
 astralsorcery.constellation.armara=Armara
 astralsorcery.constellation.armara.info=Defence
 astralsorcery.constellation.armara.effect=有一种推力使你远离这个星光，就像个盾牌或者防护罩。
-astralsorcery.constellation.armara.enchantments=
-astralsorcery.constellation.armara.ritual=
+astralsorcery.constellation.armara.enchantments=这个星座的守护性质赋予玩家的力量能够抵消伤害，或者给装备提供额外的防护。
+astralsorcery.constellation.armara.ritual=将此光线中所蕴含的排斥力引导到附近的区域内以形成一个小型力场，能够反弹所有弹射物并将怪物推到范围外。
+astralsorcery.constellation.armara.capeeffect=被注入此星座星能的披风将随时间的推移缓慢的吸收同种能量，并用其形成一个能完全保护你免收单一攻击的屏障。
 astralsorcery.constellation.vicio=Vicio
 astralsorcery.constellation.vicio.info=Travel
 astralsorcery.constellation.vicio.effect=这个星座的微弱的光芒使周围的一切都变慢了，与此同时你可以更快的完成你的工作。
-astralsorcery.constellation.vicio.enchantments=
-astralsorcery.constellation.vicio.ritual=
+astralsorcery.constellation.vicio.enchantments=据专家所诉，饮用受 Vicio 所辐射的药水能提高速度，若是靴子受过辐射则可以使穿戴者减少坠落伤害。
+astralsorcery.constellation.vicio.ritual=赋予附近的实体敏捷强化，为他们提供了更快的速度与更高的跳跃能力。
+astralsorcery.constellation.vicio.capeeffect=这种共振通过减轻你的体重来减小驾驭风飞行进行旅行的负担，就如同鞘翅一样。
 astralsorcery.constellation.aevitas=Aevitas
 astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=在这个星座的光芒的照耀下，附近的花和植物都欣欣向荣。
-astralsorcery.constellation.aevitas.enchantments=
-astralsorcery.constellation.aevitas.ritual=
+astralsorcery.constellation.aevitas.enchantments=当药水经受星座的活力辐射后，将拥有再生之力，而工具在受到 Aevitas 的附属后能够进行自我修复。
+astralsorcery.constellation.aevitas.ritual=仪式所在的区域内弥漫着强烈的生命力，附近所有的生命都会获得再生能力，而作物的生长速度加快，欣欣向荣。
+astralsorcery.constellation.aevitas.capeeffect=沐浴在创生之力中，你的饥饿感消退了，同时拥有治愈之环的力量。此外，你附近的植物或许会因为你荒诞不经的想法而突变为别的种类。
 astralsorcery.constellation.evorsio=Evorsio
 astralsorcery.constellation.evorsio.info=Destruction
-astralsorcery.constellation.evorsio.effect=
-astralsorcery.constellation.evorsio.enchantments=
-astralsorcery.constellation.evorsio.ritual=
+astralsorcery.constellation.evorsio.effect=无与伦比的破坏性；此星座的光线异常尖锐，大部分固体材料都会被它穿透。
+astralsorcery.constellation.evorsio.enchantments=遭受此光线辐射的工具将拥有比其他同类更高的效率，喝下此种药水会让饮用者以破坏性的急速来完成他们的任务。
+astralsorcery.constellation.evorsio.ritual=通过仪式将此星座的星光从聚焦核心分散开，将导致附近任何受到直射的固体方块破坏与分解。
+astralsorcery.constellation.evorsio.capeeffect=注入此种星能的披风能增强你的潜在破坏力，在千军中取其首级，如探囊取物。
 
 astralsorcery.constellation.mineralis=Mineralis
 astralsorcery.constellation.mineralis.info=Mineral
 astralsorcery.constellation.mineralis.effect=在这个星座的光芒照耀下，世界上的石头在发出奇怪的光，稍微过段时间，它就改变了外形。
-astralsorcery.constellation.mineralis.enchantments=
-astralsorcery.constellation.mineralis.ritual=
+astralsorcery.constellation.mineralis.enchantments=被称作煤矿工的救赎，凡是喝过受 Mineralis 辐射的药水的矿工都说这能提高他们工作时的运气；同样受到辐射的工具也拥有类似的效果。
+astralsorcery.constellation.mineralis.ritual=仪式利用星光来加速富集矿物在石头内的沉积过程，最终于虚空之中生万物。
+astralsorcery.constellation.mineralis.capeeffect=当披风被注入此种星能后，它将轻易吸引附近的珍贵物品，允许穿戴者发觉附近与手持方块相同的方块所在的位置。
 astralsorcery.constellation.lucerna=Lucerna
 astralsorcery.constellation.lucerna.info=Light
 astralsorcery.constellation.lucerna.effect=尽管这个星座离你很遥远，但它的光线非常明亮。甚至亮到在其区域内无法生成其他敌对生物。
-astralsorcery.constellation.lucerna.enchantments=
-astralsorcery.constellation.lucerna.ritual=
+astralsorcery.constellation.lucerna.enchantments=喝下此受星座辐射的药水将赋予你强大的视觉能力以适应黑暗的环境，同样的经受 Lucerna 辐射的头盔也具有相同的能力。
+astralsorcery.constellation.lucerna.ritual=此仪式能操纵星光来放逐特定区域内的敌对性生物，并阻止它们生成。
+astralsorcery.constellation.lucerna.capeeffect=穿上与此星座共鸣的披风，将揭示出你附近的敌对生物位置，并干扰它们的判断。对于那些从无尽生物的笼子中出来的怪物所在的位置的反应尤为激烈。
 astralsorcery.constellation.horologium=Horologium
 astralsorcery.constellation.horologium.info=Time
 astralsorcery.constellation.horologium.effect=这个星座在不断的随时间移动。不仅很难发现，它的光线似乎能扭曲时间，在它的光芒下时间会流的更快。
-astralsorcery.constellation.horologium.enchantments=
-astralsorcery.constellation.horologium.ritual=
+astralsorcery.constellation.horologium.enchantments=扭曲与混乱的时间，即使是用刚刚被这个星座辐射过的工具进行收获，所得也远比平常要多。另一方面，同样的药水也能给使用者提高奔跑于采掘矿物的速度。
+astralsorcery.constellation.horologium.ritual=这个仪式大大增强了那些嗡嗡作响的机器与星座的亲和力，加快了附近机器的工作速度。
+astralsorcery.constellation.horologium.capeeffect=穿上拥有时间力量的披风后能在被攻击或处于危险状态时暂停附近的时间。这种力量并不能一直使用，所以一旦发生这种状况，短时间内将无法再次使用。由于其与 fornax 有相近的性质，因此此能力无法被任何火焰类的伤害触发。
 astralsorcery.constellation.octans=Octans
 astralsorcery.constellation.octans.info=Fishing
 astralsorcery.constellation.octans.effect=将这个星座的光反射到水上会产生奇怪的气泡，水看起来比平常更活跃。
-astralsorcery.constellation.octans.enchantments=
-astralsorcery.constellation.octans.ritual=
+astralsorcery.constellation.octans.enchantments=与 Octans 进行共鸣的头盔被发现能提供额外的氧气进行水下呼吸，同理，喝下这种药水会让饮用者长出一个临时用于水下呼吸的鳃。
+astralsorcery.constellation.octans.ritual=受星光影响，这个仪式吸引了附近水方块内的鱼，并将其捕捉。
+astralsorcery.constellation.octans.capeeffect=这个星座与水的亲和力意味着穿上此种披风能使你如鱼得水，你将拥有无限的水下呼吸，并且像往常一样在水下使用你的工具。
 astralsorcery.constellation.bootes=Bootes
 astralsorcery.constellation.bootes.info=Herding
-astralsorcery.constellation.bootes.effect=在星辉照射下，附近的动物似乎更悠闲了，也不在担忧温饱问题了。
-astralsorcery.constellation.bootes.enchantments=
-astralsorcery.constellation.bootes.ritual=
+astralsorcery.constellation.bootes.effect=看起来这些微弱的光线使所有的动物都对什么感兴趣，保持它们的平静与强健。
+astralsorcery.constellation.bootes.enchantments=在此光之下，任何人的愤怒都将消逝，如同被切割成小份的方块一样，饮用此药水后杀死动物的一段时间内无需进食。
+astralsorcery.constellation.bootes.ritual=在星辉照射下，附近的动物似乎更悠闲了，也不在担忧温饱问题了。
+astralsorcery.constellation.bootes.capeeffect=穿上此种披风，附近的耀斑将追随你，帮助你杀敌。
 astralsorcery.constellation.fornax=Fornax
 astralsorcery.constellation.fornax.info=Heat
 astralsorcery.constellation.fornax.effect=这束星辉上带有强大的力量和剧烈的热量，仅仅是注视着就感到口干舌燥。
-astralsorcery.constellation.fornax.enchantments=
-astralsorcery.constellation.fornax.ritual=
+astralsorcery.constellation.fornax.enchantments=直接使用此种共鸣工具并不舒服，就如同你千辛万苦所获得的东西结果却在你面前烧毁一样，但喝下此药水能防止受到火灾的威胁。
+astralsorcery.constellation.fornax.ritual=用仪式的力量热量分散到更大的地方能防止因雷击而引起的火灾，缺点就是附近的方块可能会被烧焦或熔化。
+astralsorcery.constellation.fornax.capeeffect=穿着与星座相似的披风，你将拥有浴火重生的力量，火焰不再是你的敌人。此外，多余的火焰将被导入脚下的大地，或许会使其完全熔化或烧焦。
 astralsorcery.constellation.pelotrio=Pelotrio
 astralsorcery.constellation.pelotrio.info=Convocation
-astralsorcery.constellation.pelotrio.effect=
-astralsorcery.constellation.pelotrio.enchantments=
-astralsorcery.constellation.pelotrio.ritual=
+astralsorcery.constellation.pelotrio.effect=这个星座的非自然力量不可抗拒，仅仅在最黑暗或最明亮的夜晚才能被发觉。
+astralsorcery.constellation.pelotrio.enchantments=将这些腐败的能量注入普通的工具内，似乎能将碎裂的工具进行些微的修复或拥有无限的弹药。同样的效果适用于喝过相应的辐射药水之人。
+astralsorcery.constellation.pelotrio.ritual=被此星座的散射光所浸没的区域将带来各种各样的生命。
+astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将星辉转变为工具形态，它将模仿穿戴者的行为，用镐挖掘方块，用斧砍倒树，甚至能用武器攻击敌人。
 
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=-
