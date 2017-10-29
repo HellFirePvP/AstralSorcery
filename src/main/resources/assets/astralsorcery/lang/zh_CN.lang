@@ -34,7 +34,7 @@ misc.link.link=在%s和%s建立连接!
 misc.link.link.block=此方块
 misc.link.unlink=已将%s到%s的连接断开!
 
-misc.sword.sharpened=锋利
+misc.sword.sharpened=锋利 (增加 %s 的伤害)
 
 effect.as.cheatdeath=凤凰之火
 effect.as.bleed=撕裂
@@ -324,6 +324,11 @@ astralsorcery.journal.ATT_WAND_EVORSIO.1.text=虽然 evorsio 并不足以强大�
 research.ATT_WAND_VICIO.name=Vicio共鸣之杖
 astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然在大气中自由飞翔或伸手摘星是完全不可能实现的，但与 vicio 进行共鸣的法杖肯定有助于这一点。手持时按住右键，它可以像弓一样蓄力，但在释放后并不会射出一个箭头，但能让使用者自身穿过空气。
 
+research.C_CHALICE.name=遏制圣杯
+astralsorcery.journal.C_CHALICE.1.text=聚光井功能齐全，唯一的缺点就是储量太小了。这些液态使用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方便控制大小的酒杯。
+astralsorcery.journal.C_CHALICE.3.text=设计一个足够大的能储存液体并保持液体平衡而不会挥发或流水的圣杯是极为困难的。最终的设计已经能够保证流体的稳定了，建议用来储存多余的液体，这是安全的做法。<NL>当里面存有液体时会略显奇怪。就如同被某种能量所限制一样固定在一块，不过偶尔爆发的液体会超出掌控。
+astralsorcery.journal.C_CHALICE.4.text=这些非常规行为似乎并非杂乱无章的。如果有类似的设备在附近，且两边的液体形成块状或通过其他方式使其发生相互作用将液体包含在内，此时它们之间产生的小火花将相互排斥同时也会相互吸引，其结果与常理一样。<NL>在这种冲动下，或许能将其作为额外的液体来源。<NL>底部看起来足够坚固，可以使用机械手段传输液体。
+
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
 astralsorcery.journal.recipe.constellation=需要与 %s 星座进行聚焦
@@ -354,6 +359,7 @@ entity.EntityStarburst.name=星爆
 entity.EntityIlluminationSpark.name=荧光火花
 entity.EntityCrystalTool.name=水晶工具
 entity.EntitySpectralTool.name=光谱调整器
+entity.EntityLiquidSpark.name=液态火花
 
 item.itemcraftingcomponent.aquamarine.name=海蓝宝石
 item.itemcraftingcomponent.starmetal_ingot.name=星辉锭
