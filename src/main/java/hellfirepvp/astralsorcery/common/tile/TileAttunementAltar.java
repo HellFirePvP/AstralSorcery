@@ -795,7 +795,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
                         Entity ent = world.getEntityByID(entityIdActive);
                         if(ent == null || ent.isDead) return v;
-                        return Vector3.atEntityCorner(ent);
+                        return Vector3.atEntityCorner(ent).addY(ent.height * 2);
                     });
                 }
             }

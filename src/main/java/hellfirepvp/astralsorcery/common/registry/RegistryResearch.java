@@ -578,7 +578,13 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleSlab));
 
-        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
+        stacks = new ItemStack[BlockBlackMarble.BlackMarbleBlockType.values().length + 1];
+        BlockBlackMarble.BlackMarbleBlockType[] sValues = BlockBlackMarble.BlackMarbleBlockType.values();
+        for (int i = 0; i < sValues.length; i++) {
+            BlockBlackMarble.BlackMarbleBlockType mbt = sValues[i];
+            stacks[i] = new ItemStack(BlocksAS.blockBlackMarble, 1, mbt.getMeta());
+        }
+        ResearchNode resSootyMarble = new ResearchNode(stacks, "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
         resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRaw));
         resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleBricks));

@@ -118,9 +118,9 @@ public class BlockChalice extends BlockContainer {
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if(state.getValue(ACTIVE)) {
-            return super.getBoundingBox(state, source, pos).expand(0, 1, 0);
+            return new AxisAlignedBB(2D / 16D, 0, 2D / 16D, 14D / 16D, 2, 14D / 16D);
         } else {
-            return super.getBoundingBox(state, source, pos).expand(0, -1, 0);
+            return new AxisAlignedBB(2D / 16D, -1, 2D / 16D, 14D / 16D, 1, 14D / 16D);
         }
     }
 

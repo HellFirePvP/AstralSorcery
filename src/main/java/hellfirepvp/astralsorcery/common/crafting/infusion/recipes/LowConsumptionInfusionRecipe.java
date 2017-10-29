@@ -22,17 +22,17 @@ public class LowConsumptionInfusionRecipe extends BasicInfusionRecipe {
 
     public LowConsumptionInfusionRecipe(ItemStack output, String oreDictInput) {
         super(output, oreDictInput);
-        setLiquidStarlightConsumptionChance(0.01F);
+        setLiquidStarlightConsumptionChance(0.05F);
     }
 
     public LowConsumptionInfusionRecipe(ItemStack output, ItemStack input) {
         super(output, input);
-        setLiquidStarlightConsumptionChance(0.01F);
+        setLiquidStarlightConsumptionChance(0.05F);
     }
 
     public LowConsumptionInfusionRecipe(ItemStack output, ItemHandle input) {
         super(output, input);
-        setLiquidStarlightConsumptionChance(0.01F);
+        setLiquidStarlightConsumptionChance(0.05F);
     }
 
 }
