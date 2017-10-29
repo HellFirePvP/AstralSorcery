@@ -578,7 +578,7 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleSlab));
 
-        stacks = new ItemStack[BlockBlackMarble.BlackMarbleBlockType.values().length + 1];
+        stacks = new ItemStack[BlockBlackMarble.BlackMarbleBlockType.values().length];
         BlockBlackMarble.BlackMarbleBlockType[] sValues = BlockBlackMarble.BlackMarbleBlockType.values();
         for (int i = 0; i < sValues.length; i++) {
             BlockBlackMarble.BlackMarbleBlockType mbt = sValues[i];

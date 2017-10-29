@@ -183,7 +183,7 @@ public class EventHandlerEntity {
             if(SwordSharpenHelper.isSwordSharpened(held)) {
                 //YEEEAAAA i know this flat multiplies all damage.. but w/e..
                 //There's no great way to test for item here.
-                event.setAmount(event.getAmount() * ((float) Config.swordSharpMultiplier));
+                event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
             }
 
             PlayerProgress prog = ResearchManager.getProgress(p);

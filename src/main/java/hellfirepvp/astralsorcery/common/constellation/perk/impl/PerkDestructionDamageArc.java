@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
 
 import java.awt.*;
@@ -36,23 +37,30 @@ public class PerkDestructionDamageArc extends ConstellationPerk {
     private static float arcPercent = 1.75F;
     private static float distanceSearch = 4F;
 
+    private static boolean chaining = false;
+
     public PerkDestructionDamageArc() {
         super("DTR_DAMAGEARC", Target.ENTITY_ATTACK);
     }
 
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
-        if(!attacked.getEntityWorld().isRemote) {
+        if(!attacked.getEntityWorld().isRemote && attacked.getEntityWorld() instanceof WorldServer && !chaining) {
             if(rand.nextFloat() < arcChance) {
                 List<EntityLivingBase> entities = attacked.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, searchBox.offset(attacked.getPositionVector()), EntityUtils.selectEntities(EntityLivingBase.class));
                 entities.remove(attacked);
                 entities.remove(attacker);
+                if(!attacker.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+                    entities.removeIf(e -> e instanceof EntityPlayer);
+                }
                 if(!entities.isEmpty()) {
                     EntityLivingBase closest = EntityUtils.selectClosest(entities, (e) -> (double) e.getDistanceToEntity(attacked));
                     if(closest != null && !closest.isDead) {
+                        chaining = true;
                         AstralSorcery.proxy.fireLightning(attacked.getEntityWorld(), Vector3.atEntityCorner(attacked), Vector3.atEntityCorner(closest), Color.WHITE);
                         attacked.attackEntityFrom(CommonProxy.dmgSourceStellar.setSource(attacker), arcPercent * dmgIn);
                         closest.attackEntityFrom(CommonProxy.dmgSourceStellar.setSource(attacker), arcPercent * dmgIn);
+                        chaining = false;
                     }
                 }
             }
