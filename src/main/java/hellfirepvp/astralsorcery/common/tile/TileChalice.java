@@ -59,7 +59,7 @@ public class TileChalice extends TileEntityTick {
     private int nextTest = -1;
 
     public TileChalice() {
-        tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, EnumFacing.DOWN, EnumFacing.UP);
+        tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, EnumFacing.DOWN);
     }
 
     @Override
