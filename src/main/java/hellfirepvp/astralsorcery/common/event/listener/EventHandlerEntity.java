@@ -11,13 +11,16 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationDraconicEvolution;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
@@ -36,6 +39,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -164,6 +168,17 @@ public class EventHandlerEntity {
         }
 
         DamageSource source = event.getSource();
+        if(Mods.DRACONICEVOLUTION.isPresent()) {
+            ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+            if(!chest.isEmpty() && chest.getItem() instanceof ItemCape && ModIntegrationDraconicEvolution.isChaosDamage(source)) {
+                event.setAmount(event.getAmount() * (1F - Config.capeChaosResistance));
+                if(event.getAmount() <= 1E-4) {
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+        }
+
         lblIn:
         if (source.getTrueSource() != null) {
             EntityPlayer p;

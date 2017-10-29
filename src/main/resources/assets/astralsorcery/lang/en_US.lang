@@ -35,6 +35,8 @@ misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
 
 misc.sword.sharpened=Sharpened (%s increased Damage)
+misc.chaos.resistance=+%s Chaos Resistance
+misc.chaos.resistance.max=Chaos Immunity
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
