@@ -12,8 +12,11 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -36,7 +39,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 09.10.2016 / 11:40
  */
-public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
+public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
 
     public AttunementUpgradeRecipe() {
         super(shapedRecipe("upgrade_tier2", new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()))
@@ -66,11 +69,6 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
         return new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal());
     }
 
-    @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
-    }
-
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
@@ -83,10 +81,8 @@ public class AttunementUpgradeRecipe extends DiscoveryRecipe implements IAltarUp
     }
 
     @Override
-    public void onCraftServerFinish(TileAltar altar, Random rand) {
-        super.onCraftServerFinish(altar, rand);
-
-        altar.tryForceLevelUp(getLevelUpgradingTo(), true);
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new AttunementUpgradeRecipe();
     }
 
     @Override

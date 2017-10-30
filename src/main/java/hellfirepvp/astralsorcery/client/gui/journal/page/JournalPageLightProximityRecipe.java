@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class JournalPageLightProximityRecipe implements IJournalPage {
 
-    private final AccessibleRecipeAdapater shapedLightProxRecipe;
+    public AccessibleRecipeAdapater shapedLightProxRecipe;
 
     public JournalPageLightProximityRecipe(AccessibleRecipeAdapater shapedLightProxRecipe) {
         this.shapedLightProxRecipe = shapedLightProxRecipe;

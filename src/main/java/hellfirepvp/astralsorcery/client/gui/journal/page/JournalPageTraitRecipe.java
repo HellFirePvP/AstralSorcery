@@ -37,7 +37,7 @@ import java.util.List;
  */
 public class JournalPageTraitRecipe implements IJournalPage {
 
-    private final TraitRecipe recipe;
+    public TraitRecipe recipe;
 
     public JournalPageTraitRecipe(TraitRecipe recipe) {
         this.recipe = recipe;

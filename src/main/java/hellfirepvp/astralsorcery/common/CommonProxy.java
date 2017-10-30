@@ -248,6 +248,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         ModIntegrationBloodMagic.sendIMC();
+        AltarRecipeEffectRecovery.attemptRecipeRecovery();
 
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 

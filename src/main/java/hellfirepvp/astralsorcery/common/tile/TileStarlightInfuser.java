@@ -243,6 +243,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                     TileChalice tc = craftingTask.getSupportingChalices().get(rand.nextInt(craftingTask.getSupportingChalices().size()));
                     if(tc != null) {
                         tc.getTank().drain(new FluidStack(BlocksAS.fluidLiquidStarlight, 400), true);
+                        tc.markForUpdate();
                     }
                 } else {
                     world.setBlockToAir(getPos().add(offset));

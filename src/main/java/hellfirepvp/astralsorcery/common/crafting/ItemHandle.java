@@ -104,6 +104,10 @@ public final class ItemHandle {
         this.handleType = Type.STACK;
     }
 
+    public static ItemHandle of(Ingredient ingredient) {
+        return new ItemHandle(ingredient.getMatchingStacks());
+    }
+
     public static ItemHandle getCrystalVariant(boolean hasToBeTuned, boolean hasToBeCelestial) {
         if(hasToBeTuned) {
             if(hasToBeCelestial) {

@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -35,7 +37,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 24.04.2017 / 08:30
  */
-public class DrawingTableRecipe extends ConstellationRecipe {
+public class DrawingTableRecipe extends ConstellationRecipe implements ISpecialCraftingEffects {
 
     public DrawingTableRecipe() {
         super(shapedRecipe("drawingtable", BlocksAS.drawingTable)
@@ -61,6 +63,11 @@ public class DrawingTableRecipe extends ConstellationRecipe {
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT,
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
+    }
+
+    @Override
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new DrawingTableRecipe();
     }
 
     @Override

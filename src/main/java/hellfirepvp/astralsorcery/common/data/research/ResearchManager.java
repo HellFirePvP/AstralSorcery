@@ -535,7 +535,7 @@ public class ResearchManager {
             return;
         }
 
-        ItemStack out = recipeToCraft.getRecipeToCraft().getOutputForRender();
+        ItemStack out = recipeToCraft.getRecipeToCraft().getOutputForMatching();
         Item iOut = out.getItem();
 
         informCraft(crafter, out, iOut, Block.getBlockFromItem(iOut));

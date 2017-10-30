@@ -118,6 +118,9 @@ public class TileChalice extends TileEntityTick {
 
                                         this.world.spawnEntity(els1);
                                         this.world.spawnEntity(els2);
+
+                                        this.markForUpdate();
+                                        other.markForUpdate();
                                         break;
                                     }
                                 }

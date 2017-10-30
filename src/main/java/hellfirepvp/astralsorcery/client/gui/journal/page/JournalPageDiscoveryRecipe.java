@@ -51,7 +51,7 @@ import java.util.Map;
  */
 public class JournalPageDiscoveryRecipe implements IJournalPage {
 
-    private final DiscoveryRecipe recipeToRender;
+    public DiscoveryRecipe recipeToRender;
 
     public JournalPageDiscoveryRecipe(DiscoveryRecipe recipeToRender) {
         this.recipeToRender = recipeToRender;

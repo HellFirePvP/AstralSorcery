@@ -43,16 +43,6 @@ public class TelescopeRecipe extends AttunementRecipe {
     }
 
     @Override
-    public void onCraftServerFinish(TileAltar altar, Random rand) {
-        EntityPlayer crafter = altar.getActiveCraftingTask().tryGetCraftingPlayerServer();
-        if(crafter != null) {
-            //FIXME RE-ADD AFTER ADVANCEMENTS
-            //crafter.addStat(RegistryAchievements.achvBuildActTelescope);
-        }
-        super.onCraftServerFinish(altar, rand);
-    }
-
-    @Override
     public boolean allowsForChaining() {
         return false;
     }

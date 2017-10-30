@@ -336,6 +336,7 @@ astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.constellation=Requires focus to constellation %s
 astralsorcery.journal.recipe.upgrade=Upgrades the altar to the next tier
 astralsorcery.journal.recipe.attunement=Attunes the crystal to: %s
+astralsorcery.journal.recipe.removalinfo=§cThis recipe was removed in the current modpack! Check other sources of information to see how it is made!
 astralsorcery.journal.recipe.amt.desc=Starlight required:
 
 astralsorcery.journal.recipe.amt.lowest=Almost nothing

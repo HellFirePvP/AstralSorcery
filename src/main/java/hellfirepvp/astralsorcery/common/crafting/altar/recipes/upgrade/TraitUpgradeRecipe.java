@@ -20,12 +20,15 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
+import hellfirepvp.astralsorcery.common.item.block.ItemBlockAltar;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
@@ -46,7 +49,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 18.10.2017 / 01:23
  */
-public class TraitUpgradeRecipe extends ConstellationRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
+public class TraitUpgradeRecipe extends ConstellationRecipe implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
 
     private static Vector3[] offsetPillars = new Vector3[] {
             new Vector3( 4, 4,  4),
@@ -94,11 +97,6 @@ public class TraitUpgradeRecipe extends ConstellationRecipe implements IAltarUpg
         return new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal());
     }
 
-    @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
-    }
-
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
@@ -106,10 +104,8 @@ public class TraitUpgradeRecipe extends ConstellationRecipe implements IAltarUpg
     }
 
     @Override
-    public void onCraftServerFinish(TileAltar altar, Random rand) {
-        super.onCraftServerFinish(altar, rand);
-
-        altar.tryForceLevelUp(getLevelUpgradingTo(), true);
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new TraitUpgradeRecipe();
     }
 
     @Override
@@ -186,7 +182,9 @@ public class TraitUpgradeRecipe extends ConstellationRecipe implements IAltarUpg
                             altar.getWorld().getTileEntity(altar.getPos()).equals(altar) &&
                             altar.getActiveCraftingTask() != null &&
                             altar.getActiveCraftingTask().getState() == ActiveCraftingTask.CraftingState.ACTIVE &&
-                            altar.getActiveCraftingTask().getRecipeToCraft() instanceof TraitUpgradeRecipe;
+                            !altar.getActiveCraftingTask().getRecipeToCraft().getOutputForMatching().isEmpty() &&
+                            altar.getActiveCraftingTask().getRecipeToCraft().getOutputForMatching().getItem() instanceof ItemBlockAltar &&
+                            altar.getActiveCraftingTask().getRecipeToCraft().getOutputForMatching().getItemDamage() == 3;
                 });
                 sprite = pl;
             }

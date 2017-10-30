@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -30,10 +31,10 @@ import javax.annotation.Nullable;
  */
 public class AccessibleRecipeAdapater extends AccessibleRecipe {
 
-    private final BasePlainRecipe parent;
+    private final IRecipe parent;
     private final AbstractRecipeAccessor abstractRecipe;
 
-    public AccessibleRecipeAdapater(BasePlainRecipe parent, AbstractRecipeAccessor abstractRecipe) {
+    public AccessibleRecipeAdapater(IRecipe parent, AbstractRecipeAccessor abstractRecipe) {
         super(parent.getRegistryName());
         this.parent = parent;
         this.abstractRecipe = abstractRecipe;
@@ -120,4 +121,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
         return parent.getRemainingItems(inv);
     }
 
+    public IRecipe getParentRecipe() {
+        return parent;
+    }
 }
