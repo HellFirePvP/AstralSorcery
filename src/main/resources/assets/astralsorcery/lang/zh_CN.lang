@@ -35,6 +35,8 @@ misc.link.link.block=此方块
 misc.link.unlink=已将%s到%s的连接断开!
 
 misc.sword.sharpened=锋利 (增加 %s 的伤害)
+misc.chaos.resistance=+%s 混沌抗性
+misc.chaos.resistance.max=混沌免疫
 
 effect.as.cheatdeath=凤凰之火
 effect.as.bleed=撕裂
