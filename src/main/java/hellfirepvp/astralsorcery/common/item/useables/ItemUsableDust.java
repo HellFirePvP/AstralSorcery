@@ -190,6 +190,9 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
                     noc.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     noc.setSpawning();
                     worldIn.spawnEntity(noc);
+                    if(!playerIn.isCreative()) {
+                        dustStack.shrink(1);
+                    }
                     break;
             }
         }

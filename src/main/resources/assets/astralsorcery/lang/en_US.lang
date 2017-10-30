@@ -468,6 +468,7 @@ tile.blocktranslucentblock.name=Translucent Block
 tile.blockmapdrawingtable.name=Stellar Refraction Table
 tile.blockcelestialgateway.name=Celestial Gateway
 tile.blockchalice.name=Containment Chalice
+tile.blockfountain.name=Evershifting Fountain
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 

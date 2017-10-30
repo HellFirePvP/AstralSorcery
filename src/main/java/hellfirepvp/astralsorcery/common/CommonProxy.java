@@ -219,6 +219,7 @@ public class CommonProxy implements IGuiHandler {
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
         OreTypes.init();
+        FluidRarityRegistry.init();
         LightOreTransmutations.init();
         HerdableAnimal.init();
         WellLiquefaction.init();
