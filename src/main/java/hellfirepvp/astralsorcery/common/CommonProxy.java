@@ -58,13 +58,18 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -72,6 +77,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 
@@ -137,18 +143,18 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
-        /*CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
+        CapabilityManager.INSTANCE.register(FluidRarityRegistry.ChunkFluidEntry.class, new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side) {
+            public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
                 return instance.serializeNBT();
             }
 
             @Override
-            public void readNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side, NBTBase nbt) {
+            public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
-        }, new SpellPlague.Factory());*/
+        }, new FluidRarityRegistry.ChunkFluidEntryFactory());
     }
 
     private void registerOreDictEntries() {
@@ -207,6 +213,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.EVENT_INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
