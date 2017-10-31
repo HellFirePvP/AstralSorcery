@@ -50,7 +50,7 @@ import java.util.function.Predicate;
  * Created by HellFirePvP
  * Date: 11.10.2017 / 20:56
  */
-public class EntitySpectralTool extends EntityFlying {
+public class EntitySpectralTool extends EntityFlying implements EntityTechnicalAmbient {
 
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
     private AIToolTask aiTask;

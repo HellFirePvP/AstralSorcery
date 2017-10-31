@@ -46,7 +46,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 03.07.2017 / 13:32
  */
-public class EntityNocturnalSpark extends EntityThrowable {
+public class EntityNocturnalSpark extends EntityThrowable implements EntityTechnicalAmbient {
 
     private static final AxisAlignedBB NO_DUPE_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(15);
 
