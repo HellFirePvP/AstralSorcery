@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.base;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.WeightedRandom;
+import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -28,6 +30,10 @@ import java.util.Random;
  * Date: 30.10.2017 / 14:03
  */
 public class FluidRarityRegistry {
+
+    public static FluidRarityRegistry EVENT_INSTANCE = new FluidRarityRegistry();
+
+    private FluidRarityRegistry() {}
 
     private static List<FluidEntry> rarityList = new LinkedList<>();
 
@@ -85,6 +91,11 @@ public class FluidRarityRegistry {
             return null;
         }
         return entry;
+    }
+
+    @SubscribeEvent
+    public static void onChLoad(ChunkDataEvent.Load event) {
+
     }
 
     public static class FluidEntry extends WeightedRandom.Item {

@@ -150,8 +150,6 @@ public class ASstarmapper extends ModelBase {
             this.parchment.render(f5);
             this.black_mirror.render(f5);
         }
-
-        this.treated_glass.render(f5);
     }
 
     /**
