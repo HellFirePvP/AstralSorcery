@@ -44,7 +44,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 23.06.2017 / 13:12
  */
-public class EntityGrapplingHook extends EntityThrowable implements IEntityAdditionalSpawnData {
+public class EntityGrapplingHook extends EntityThrowable implements IEntityAdditionalSpawnData, EntityTechnicalAmbient {
 
     private static DataParameter<Integer> PULLING_ENTITY = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.VARINT);
     private static DataParameter<Boolean> PULLING = EntityDataManager.createKey(EntityGrapplingHook.class, DataSerializers.BOOLEAN);

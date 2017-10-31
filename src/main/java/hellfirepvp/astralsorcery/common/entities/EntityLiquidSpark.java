@@ -28,7 +28,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,7 +49,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 28.10.2017 / 14:39
  */
-public class EntityLiquidSpark extends EntityFlying {
+public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAmbient {
 
     private static final DataParameter<Integer> ENTITY_TARGET = EntityDataManager.createKey(EntityLiquidSpark.class, DataSerializers.VARINT);
     private static final DataParameter<FluidStack> FLUID_REPRESENTED = EntityDataManager.createKey(EntityLiquidSpark.class, ASDataSerializers.FLUID);
@@ -166,6 +168,34 @@ public class EntityLiquidSpark extends EntityFlying {
 
             playAmbientParticles();
         }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+
+    @Override
+    protected SoundEvent getFallSound(int heightIn) {
+        return null;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0;
     }
 
     @SideOnly(Side.CLIENT)

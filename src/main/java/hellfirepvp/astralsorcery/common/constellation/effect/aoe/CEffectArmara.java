@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesRitua
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.entities.EntityGrapplingHook;
+import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -74,8 +75,8 @@ public class CEffectArmara extends ConstellationEffect {
         List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
-                if(!e.isDead) {
-                    if(e instanceof IProjectile && !(e instanceof EntityGrapplingHook)) {
+                if(!e.isDead && !(e instanceof EntityTechnicalAmbient)) {
+                    if(e instanceof IProjectile) {
                         double xRatio = (pos.getX() + 0.5) - e.posX;
                         double zRatio = (pos.getZ() + 0.5) - e.posZ;
                         float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
@@ -116,7 +117,7 @@ public class CEffectArmara extends ConstellationEffect {
         List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
-                if(!e.isDead) {
+                if(!e.isDead && !(e instanceof EntityTechnicalAmbient)) {
                     if(e instanceof IProjectile) {
                         double xRatio = (pos.getX() + 0.5) - e.posX;
                         double zRatio = (pos.getZ() + 0.5) - e.posZ;
