@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "astralsorcery:items/illumdust"
+        "layer0": "astralsorcery:items/dust_light"
     }
 }

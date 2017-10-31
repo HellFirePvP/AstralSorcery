@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "astralsorcery:items/as_cape",
-        "layer1": "astralsorcery:items/as_cape_overlay"
+        "layer0": "astralsorcery:items/mantle",
+        "layer1": "astralsorcery:items/mantle_overlay"
     }
 }

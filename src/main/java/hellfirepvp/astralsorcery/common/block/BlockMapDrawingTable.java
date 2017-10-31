@@ -52,7 +52,7 @@ import java.util.Random;
  */
 public class BlockMapDrawingTable extends BlockContainer {
 
-    private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(-1.0 / 2.0, 0, -1.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0);
+    private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(-6.0 / 16.0, 0, -4.0 / 16.0, 22.0 / 16.0, 24.0 / 16.0, 20.0 / 16.0);
 
     public BlockMapDrawingTable() {
         super(Material.ROCK);
@@ -98,6 +98,24 @@ public class BlockMapDrawingTable extends BlockContainer {
                     break;
                 case 5:
                     p.setColor(new Color(0xFF00FE));
+                    break;
+                case 6:
+                    p.setColor(new Color(0xF07800));
+                    break;
+                case 7:
+                    p.setColor(new Color(0xB4F000));
+                    break;
+                case 8:
+                    p.setColor(new Color(0x01F000));
+                    break;
+                case 9:
+                    p.setColor(new Color(0x007AF0));
+                    break;
+                case 10:
+                    p.setColor(new Color(0x3900F0));
+                    break;
+                case 11:
+                    p.setColor(new Color(0xf0007B));
                     break;
             }
         }

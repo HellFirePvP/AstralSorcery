@@ -52,13 +52,13 @@ death.attack.as.bleed=%1$s bled to death
 enchantment.as.nightvision=Night Vision
 enchantment.as.smelting=Scorching Heat
 
-achievementpage.astralsorcery.name=AstralSorcery
+achievementpage.astralsorcery.name=Astral Sorcery
 achievement.astralsorcery.minerockcrystal=Such pure crystals
 achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
 achievement.astralsorcery.celestialcrystal=Celestial purity
 achievement.astralsorcery.celestialcrystal.desc=Acquire celestial crystals
 achievement.astralsorcery.buildtelescope.1=A clear view of the sky
-achievement.astralsorcery.buildtelescope.1.desc=Make a hand telescope
+achievement.astralsorcery.buildtelescope.1.desc=Make a looking glass
 achievement.astralsorcery.seeconstellation=What a beautiful pattern
 achievement.astralsorcery.seeconstellation.desc=Discover a constellation
 achievement.astralsorcery.buildtelescope.2=Looking further
@@ -73,7 +73,7 @@ progress.gain.progress.chat=Your vision expands.
 progress.gain.research.chat=You learned more about '%s'.
 progress.discover.constellation.chat=Discovered constellation %s!
 progress.seen.constellation.chat=You memorize a drawing of %s!
-progress.seen.constellation.first.chat=You add a tab to the journal to keep track of it.
+progress.seen.constellation.first.chat=You add a tab to the Astral Tome to keep track of it.
 progress.remove.attunement=Your power fades...
 
 astralsorcery.journal.cluster.discovery.name=Discovery
@@ -96,7 +96,7 @@ astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped 
 research.CPAPER.name=Constellation Paper
 astralsorcery.journal.CPAPER.1.text=Inside chests found in the scattered shrines across the land, explorers occasionally come across some blank scrolls. Removing one of these scrolls from the chest will cause a name to appear on the top along with a strange drawing that resembles some of the stars seen in the night sky.<NL>After collecting a number of them, it appears that each scroll shows a different set of stars to start with, but eventually they start showing up blank.
 
-astralsorcery.journal.CPAPER.3.text=On further inspection, it seems as though they are written and enchanted in such a way as to not show charts that are already mapped or in the reader's inventory. As such, it would be prudent to leave the blank papers for other passing scholars as there isn’t any other determinable use for them. <NL>Papers can be filed between the last few pages of the journal for easy access and organization. The filed papers can be accessed by holding shift while opening the journal.
+astralsorcery.journal.CPAPER.3.text=On further inspection, it seems as though they are written and enchanted in such a way as to not show charts that are already mapped or in the reader's inventory. As such, it would be prudent to leave the blank papers for other passing scholars as there isn’t any other determinable use for them. <NL>Papers can be filed between the last few pages of the Astral Tome for easy access and organization. The filed papers can be accessed by holding shift while opening the Astral Tome.
 
 research.WAND.name=Resonating Wand
 astralsorcery.journal.WAND.1.text=When using a crafting table near one of the strange crystals in the ancient ruins, the crystal instinctively focuses a single ray of light onto the table. The light is dim yet it seems to have an effect on the malleability and density of certain materials on the crafting table.<NL>This unlocks various crafting recipes that are not normally possible, the simplest object of which that can be crafted is a basic wand that can be used to interact with various types of starlight sensitive devices.
@@ -115,10 +115,10 @@ astralsorcery.journal.ALTAR1.2.text=The Luminous Crafting table solves both issu
 astralsorcery.journal.ALTAR1.4.text=The Luminous crafting table is not without its drawbacks though. Firstly, it needs to be placed somewhere above the ground with an unobstructed view of the sky in order to collect starlight. Its collection process also seems to be inefficient, even on the clearest of days.<NL>Placing the table higher in the sky allows it to collect more starlight, with atmospheric interference of starlight seeming to disappear entirely at around twice the height of sea level. Additionally, it collects considerably more starlight during the nighttime. The table's starlight reservoir is visible beneath its crafting grid.
 astralsorcery.journal.ALTAR1.5.text=In order to craft with the Luminous crafting table, the table must be right clicked with a resonating wand after the items used in the recipe are placed on it. When the item is done crafting, the item will be dropped onto the altar.<NL>The  amount of starlight collected by the table varies heavily from position to position, ranging from almost no starlight at all to filling or exceeding the reservoir.
 
-research.HAND_TELESCOPE.name=Hand Telescope
+research.HAND_TELESCOPE.name=Looking Glass
 astralsorcery.journal.HAND_TELESCOPE.1.text=Despite the night sky constantly shifting all the time, certain recurring patterns and shapes show up on a regular basis. Many of these shapes bear a close resemblance to the patterns on the constellation papers  found in shrine ruins.<NL> While no one is sure of their importance yet, the shapes of such constellations were important enough for observers of old to mark it in great detail, it might be prudent for a scholar to mark and familiarize themselves with these patterns in the sky.
 
-astralsorcery.journal.HAND_TELESCOPE.4.text=The hand telescope, despite being a rather rudimentary device, goes a long way towards the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary and one must at least have discovered the constellation before on paper. <NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
+astralsorcery.journal.HAND_TELESCOPE.4.text=The looking glass, despite being a rather rudimentary device, goes a long way towards the process of investigating the night sky.<NL>In order to locate and trace constellations, a clear view of the night sky is absolutely necessary and one must at least have discovered the constellation before on paper. <NL>Once a possible pattern is found, the view angle of the telescope can be fixed by sneaking. The pattern of stars can then be traced by using left click to draw lines between them.
 
 research.GRINDSTONE.name=Grindstone
 astralsorcery.journal.GRINDSTONE.1.text=A crafting table is useful and all, but to properly manipulate certain materials, a more specialized tool is required. A grindstone with a marble grinding wheel does exactly that. It allows for fine adjustments to the cut of different types of crystals, as well as giving the ability to grind certain types of materials into dust.<NL>A material or object can be placed onto it and then ground by right-clicking. Right-clicking while sneaking will remove the item.
@@ -185,7 +185,7 @@ astralsorcery.journal.ATT_PLAYER.6.text=Once everything is arranged, the central
 
 research.ATT_PERKS.name=Alignment Perks
 astralsorcery.journal.ATT_PERKS.1.text=By nature of attunement, after exclusively connecting with a constellation, the other constellations seems to dim for the attuned. This is a natural effect as attunement of a constellation crowds out the other forms of starlight a receptacle can receive, re-attunement with another constellation would require resetting the relationship. Nevertheless subjects report experiencing various benefits such as increased strength, endurance, or even a greener thumb as they go about their daily activities.
-astralsorcery.journal.ATT_PERKS.2.text=It has also been reported seeing different stars at night that loosely relate to the attuned constellation. It is suspected that these new constellations help track progress within alignment, and users with stronger alignments experienced magnified benefits. To help keep track of alignment progress, a new section in the journal is dedicated to this strange pattern. It should be possible to look back at it from time to time after using some of the newly gained powers.
+astralsorcery.journal.ATT_PERKS.2.text=It has also been reported seeing different stars at night that loosely relate to the attuned constellation. It is suspected that these new constellations help track progress within alignment, and users with stronger alignments experienced magnified benefits. To help keep track of alignment progress, a new section in the Astral Tome is dedicated to this strange pattern. It should be possible to look back at it from time to time after using some of the newly gained powers.
 
 research.ATT_CRYSTAL.name=Crystal Attunement
 astralsorcery.journal.ATT_CRYSTAL.1.text=Just as one can attune themselves to a constellation and become more sensitive to a constellations starlight, rock crystals can also be attuned as well. It will react stronger to that constellation and channel its effects.<NL>The application may not be immediately self evident, but a construct that amplifies the channeling effect to be strong enough to have physical effects on the world around it could work. Its focusing properties maye even have uses for some other things aswell...
@@ -214,8 +214,8 @@ research.RIT_PEDESTAL.name=Ritual Pedestal
 astralsorcery.journal.RIT_PEDESTAL.1.text=Just as suspected, the attuned crystal already seems almost strong enough to make its effects manifest in the world. To be actually useful a pedestal for it with another rock crystal to help focus enough starlight will need to be constructructed.<NL>After giving it a first try, the rock crystal seems to get cracks like it did in the lightwell. To avoid that, adding some liquid starlight aswell should work by filling the cracks as they appear.
 
 research.TELESCOPE.name=Telescope
-astralsorcery.journal.TELESCOPE.1.text=The hand telescope was all good and fine, but holding still all the time is exhausting and doesn't give a good view. Additionally, it’s difficult to make out more than one constellation at a time at one night, so discovering everything those constellation papers show would take forever.<NL>The telescope is going to need a fixture for this. That way, it should be possible to look deeper into the sky, finding stars and constellations that are even further away.
-astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the same as with the hand telescope. A clear view to the night sky when looking through it is required.<NL>It’s only possible to look at one section of the sky at a time with it but rotating the telescope's direction with the arrows on the left and right moves the field of view. Drawing outside the telescope frame or rotating the telescope erases all drawn lines.
+astralsorcery.journal.TELESCOPE.1.text=The looking glass was all good and fine, but holding still all the time is exhausting and doesn't give a good view. Additionally, it’s difficult to make out more than one constellation at a time at one night, so discovering everything those constellation papers show would take forever.<NL>The telescope is going to need a fixture for this. That way, it should be possible to look deeper into the sky, finding stars and constellations that are even further away.
+astralsorcery.journal.TELESCOPE.3.text=Discovering constellations is nearly the same as with the looking glass. A clear view to the night sky when looking through it is required.<NL>It’s only possible to look at one section of the sky at a time with it but rotating the telescope's direction with the arrows on the left and right moves the field of view. Drawing outside the telescope frame or rotating the telescope erases all drawn lines.
 astralsorcery.journal.TELESCOPE.4.text=These new kinds of constellations seen now appear to be significantly further away than the brighter, major constellations. Attuning to them might be not possible, but it should still be enough to create crystals that focus their light.
 
 research.ALTAR3.name=Celestial Altar
@@ -377,7 +377,7 @@ item.itemtunedrockcrystal.name=Attuned Rock Crystal
 item.itemtunedcelestialcrystal.name=Attuned Celestial Crystal
 item.itemcelestialcrystal.name=Celestial Crystal
 item.itemlinkingtool.name=Linking Tool
-item.itemjournal.name=Journal
+item.itemjournal.name=Astral Tome
 item.itemwand.name=Resonating Wand
 item.itemcrystalpickaxe.name=Crystal Pickaxe
 item.itemcrystalshovel.name=Crystal Shovel
@@ -388,8 +388,8 @@ item.itemchargedcrystalshovel.name=Infused Crystal Shovel
 item.itemchargedcrystalaxe.name=Infused Crystal Axe
 item.itemchargedcrystalsword.name=Infused Crystal Sword
 item.itemcoloredlens.name=Colored Lens
-item.itemhandtelescope.name=Hand Telescope
-item.itemskyresonator.name=Sky Wave Resonator
+item.itemhandtelescope.name=Looking Glass
+item.itemskyresonator.name=Starlight Resonator
 item.itemilluminationwand.name=Illumination Wand
 item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand

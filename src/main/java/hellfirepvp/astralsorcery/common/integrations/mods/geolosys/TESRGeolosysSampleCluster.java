@@ -16,7 +16,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
 import hellfirepvp.astralsorcery.common.integrations.mods.geolosys.TileGeolosysSampleCluster;
-import net.darkhax.orestages.api.OreTiersAPI;
+import net.darkhax.orestages.api
+        .OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
