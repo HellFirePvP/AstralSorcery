@@ -67,15 +67,12 @@ public class BlockMapDrawingTable extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < rand.nextInt(2) + 1; i++) {
-            Vector3 offset = new Vector3(-6.0 / 16.0, 1.505, -6.0 / 16.0);
-            if(rand.nextBoolean()) {
-                offset.addX(26.0 / 16.0);
+            Vector3 offset = new Vector3(-5.0 / 16.0, 1.505, -3.0 / 16.0);
+            int random = rand.nextInt(12);
+            if(random > 5) {
+                offset.addX(24.0 / 16.0);
             }
-            int random = rand.nextInt(6);
-            offset.addZ(random * (5.0 / 16.0));
-            if(random > 2) {
-                offset.addZ(1.0 / 16.0D); //Gap in the middle..
-            }
+            offset.addZ((random % 6) * (4.0 / 16.0));
             offset.add(rand.nextFloat() * 0.1, 0, rand.nextFloat() * 0.1).add(pos);
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
             p.scale(rand.nextFloat() * 0.1F + 0.15F).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
