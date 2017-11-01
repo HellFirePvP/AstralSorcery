@@ -36,6 +36,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
@@ -278,14 +279,32 @@ public class ClientProxy extends CommonProxy {
                     ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata, mrl);
                 }
             } else {
-                ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata,
-                        new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+                Item item = modelEntry.item;
+                ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+                if(item instanceof INBTModel) {
+                    List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
+                    ResourceLocation[] arr = new ResourceLocation[out.size()];
+                    arr = out.toArray(arr);
+                    ModelBakery.registerItemVariants(item, arr);
+                    ModelLoader.setCustomMeshDefinition(item, stack -> ((INBTModel) item).getModelLocation(stack, def));
+                } else {
+                    ModelLoader.setCustomModelResourceLocation(item, modelEntry.metadata, def);
+                }
             }
         }
 
         for (RenderInfoBlock modelEntry : blockRegister) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(modelEntry.block), modelEntry.metadata,
-                    new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+            Item item = Item.getItemFromBlock(modelEntry.block);
+            ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+            if(item instanceof INBTModel) {
+                List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
+                ResourceLocation[] arr = new ResourceLocation[out.size()];
+                arr = out.toArray(arr);
+                ModelBakery.registerItemVariants(item, arr);
+                ModelLoader.setCustomMeshDefinition(item, (stack -> ((INBTModel) item).getModelLocation(stack, def)));
+            } else {
+                ModelLoader.setCustomModelResourceLocation(item, modelEntry.metadata, def);
+            }
         }
     }
 

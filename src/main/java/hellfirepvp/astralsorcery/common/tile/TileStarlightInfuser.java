@@ -37,6 +37,7 @@ import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -68,7 +69,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 11.12.2016 / 17:11
  */
-public class TileStarlightInfuser extends TileReceiverBase implements IWandInteract {
+public class TileStarlightInfuser extends TileReceiverBase implements IWandInteract, IMultiblockDependantTile {
 
     public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-2, -1, -1),
@@ -275,6 +276,12 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         if(update) {
             markForUpdate();
         }
+    }
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternStarlightInfuser;
     }
 
     @Nonnull

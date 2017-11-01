@@ -389,7 +389,6 @@ item.itemchargedcrystalaxe.name=Infused Crystal Axe
 item.itemchargedcrystalsword.name=Infused Crystal Sword
 item.itemcoloredlens.name=Colored Lens
 item.itemhandtelescope.name=Looking Glass
-item.itemskyresonator.name=Starlight Resonator
 item.itemilluminationwand.name=Illumination Wand
 item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
@@ -401,6 +400,14 @@ item.itemknowledgeshare.name=Scroll of written Expertise
 item.itemusabledust.illumination.name=Illumination Powder
 item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
+item.itemskyresonator.name=Starlight Resonator
+
+item.itemskyresonator.starlight.name=Starlight Resonator
+item.itemskyresonator.liquid.name=[Liquid] Resonator
+item.itemskyresonator.structure.name=[Multiblock-Check] Resonator
+item.itemskyresonator.upgrade.starlight.name=Starlight
+item.itemskyresonator.upgrade.liquid.name=[Liquid]
+item.itemskyresonator.upgrade.structure.name=[Multiblock-Check]
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break

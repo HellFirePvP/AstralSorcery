@@ -76,7 +76,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 11.05.2016 / 18:18
  */
-public class TileAltar extends TileReceiverBaseInventory implements IWandInteract {
+public class TileAltar extends TileReceiverBaseInventory implements IWandInteract, IMultiblockDependantTile {
 
     private static final Random rand = new Random();
 
@@ -422,6 +422,12 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         return mbState;
     }
 
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        AltarLevel al = getAltarLevel();
+        return al.getMatcher() instanceof PatternAltarMatcher ? ((PatternAltarMatcher) al.getMatcher()).getPattern().getPattern() : null;
+    }
+
     public float getAmbientStarlightPercent() {
         return ((float) starlightStored) / ((float) getMaxStarlightStorage());
     }
@@ -650,6 +656,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         public PatternAltarMatcher(PatternQuery pba) {
             this.pba = pba;
+        }
+
+        public PatternQuery getPattern() {
+            return pba;
         }
 
         @Override

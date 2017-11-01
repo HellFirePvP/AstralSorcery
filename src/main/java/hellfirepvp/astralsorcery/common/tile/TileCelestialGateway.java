@@ -19,11 +19,13 @@ import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 
 /**
@@ -33,7 +35,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 16.04.2017 / 17:59
  */
-public class TileCelestialGateway extends TileEntityTick {
+public class TileCelestialGateway extends TileEntityTick implements IMultiblockDependantTile {
 
     private boolean hasMultiblock = false;
     private boolean doesSeeSky = false;
@@ -76,6 +78,12 @@ public class TileCelestialGateway extends TileEntityTick {
 
     @Override
     protected void onFirstTick() {}
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternCelestialGateway;
+    }
 
     public void setGatewayName(String displayName) {
         this.display = displayName;

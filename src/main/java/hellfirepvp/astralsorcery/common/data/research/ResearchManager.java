@@ -60,7 +60,18 @@ public class ResearchManager {
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
+    //Used to see if a player actually has progress and then getting safe testing-access
+    @Nonnull
+    public static PlayerProgress getProgressTestAccess(EntityPlayer player) {
+        PlayerProgress progress = getProgress(player, player.getEntityWorld().isRemote ? Side.CLIENT : Side.SERVER);
+        if(progress == null) {
+            return new PlayerProgressTestAccess();
+        }
+        return progress;
+    }
+
     @Nullable
+    //TODO lookup and refactor accesses to PlayerProgress and replace with testaccess!~
     //Nonnull for server.
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {

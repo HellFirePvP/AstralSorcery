@@ -12,10 +12,12 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +39,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 05.01.2017 / 16:53
  */
-public class TileRitualLink extends TileEntityTick implements ILinkableTile {
+public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMultiblockDependantTile {
 
     private BlockPos linkedTo = null;
 
@@ -95,6 +97,12 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile {
 
     @Override
     protected void onFirstTick() {}
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternRitualPedestalWithLink;
+    }
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {

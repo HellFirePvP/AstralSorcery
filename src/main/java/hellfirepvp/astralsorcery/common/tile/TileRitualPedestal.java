@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -64,7 +65,7 @@ import java.util.stream.Collectors;
  * Created by HellFirePvP
  * Date: 28.09.2016 / 13:47
  */
-public class TileRitualPedestal extends TileReceiverBaseInventory {
+public class TileRitualPedestal extends TileReceiverBaseInventory implements IMultiblockDependantTile {
 
     public static final int MAX_EFFECT_TICK = 63;
 
@@ -249,6 +250,12 @@ public class TileRitualPedestal extends TileReceiverBaseInventory {
 
     public boolean hasMultiblock() {
         return hasMultiblock;
+    }
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternRitualPedestal;
     }
 
     private void updateMultiblockState() {
