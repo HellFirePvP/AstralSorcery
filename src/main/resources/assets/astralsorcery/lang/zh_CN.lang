@@ -402,12 +402,12 @@ item.itemusabledust.nocturnal.name=暗夜粉
 item.itemcape.name=星斗披风
 item.itemskyresonator.name=星辉共振器
 
-item.itemskyresonator.starlight.name=Starlight Resonator
-item.itemskyresonator.liquid.name=[Liquid] Resonator
-item.itemskyresonator.structure.name=[Multiblock-Check] Resonator
-item.itemskyresonator.upgrade.starlight.name=Starlight
-item.itemskyresonator.upgrade.liquid.name=[Liquid]
-item.itemskyresonator.upgrade.structure.name=[Multiblock-Check]
+item.itemskyresonator.starlight.name=星辉共振器
+item.itemskyresonator.liquid.name=[液体] 共振器
+item.itemskyresonator.structure.name=[多方块检测] 共振器
+item.itemskyresonator.upgrade.starlight.name=星辉
+item.itemskyresonator.upgrade.liquid.name=[液体]
+item.itemskyresonator.upgrade.structure.name=[多方块检测]
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
