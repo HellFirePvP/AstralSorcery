@@ -22,14 +22,12 @@ import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.render.tile.TESRMapDrawingTable;
 import hellfirepvp.astralsorcery.client.render.tile.TESRPrismLens;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.UIGateway;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
@@ -38,6 +36,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -71,6 +70,8 @@ public final class EffectHandler {
     private int gatewayUITicks = 0;
     public boolean renderGateway = true;
 
+    private StructureMatchPreview structurePreview = null;
+
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
@@ -88,6 +89,14 @@ public final class EffectHandler {
             uiGateway = UIGateway.initialize(world, pos, sphereRadius);
         }
         gatewayUITicks = 20;
+    }
+
+    public void requestStructurePreviewFor(IMultiblockDependantTile tile) {
+        if(!(tile instanceof TileEntity)) return;
+        if(structurePreview == null || !structurePreview.isOriginatingFrom(tile)) {
+            structurePreview = new StructureMatchPreview(tile);
+        }
+        structurePreview.resetTimeout();
     }
 
     @Nullable
@@ -154,6 +163,9 @@ public final class EffectHandler {
             if(ClientGatewayHandler.focusingEntry != null) {
                 uiGateway.renderGatewayTarget(pTicks);
             }
+        }
+        if(structurePreview != null) {
+            structurePreview.appendPreviewBlocks();
         }
         GlStateManager.disableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
@@ -288,11 +300,19 @@ public final class EffectHandler {
             objects.clear();
             toAddBuffer.clear();
             uiGateway = null;
+            structurePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
         }
         if(Minecraft.getMinecraft().player == null) {
             return;
+        }
+
+        if(structurePreview != null) {
+            structurePreview.tick();
+            if(structurePreview.shouldBeRemoved()) {
+                structurePreview = null;
+            }
         }
 
         if(gatewayUITicks > 0) {

@@ -76,7 +76,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
         if(remainingGuaranteed > 0) {
             if(world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, false);
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true);
                 BlockCustomOre.allowCrystalHarvest = false;
             }
             generatingOre = true;

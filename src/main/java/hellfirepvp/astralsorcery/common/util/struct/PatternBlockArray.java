@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -42,12 +43,30 @@ public class PatternBlockArray extends BlockArray {
             if(matcherMap.containsKey(entry.getKey())) {
                 TileEntity te = world.getTileEntity(at);
                 TileEntityMatcher matcher = matcherMap.get(entry.getKey());
-                if(matcher.isApplicable(te) && !matcher.matches(world, entry.getKey(), te)) {
+                if(!matcher.isApplicable(te) || !matcher.matches(world, at, te)) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    public Optional<Boolean> matchSingleBlock(World world, BlockPos center, BlockPos offset) {
+        if(!pattern.containsKey(offset)) return Optional.empty();
+        BlockInformation info = pattern.get(offset);
+        BlockPos at = center.add(offset);
+        IBlockState state = world.getBlockState(at);
+        if(!info.matcher.isStateValid(world, at, state)) {
+            return Optional.of(false);
+        }
+        if(matcherMap.containsKey(offset)) {
+            TileEntity te = world.getTileEntity(at);
+            TileEntityMatcher matcher = matcherMap.get(offset);
+            if(!matcher.isApplicable(te) || !matcher.matches(world, at, te)) {
+                return Optional.of(false);
+            }
+        }
+        return Optional.of(true);
     }
 
     public static interface TileEntityMatcher {

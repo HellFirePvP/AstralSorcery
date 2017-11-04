@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.util;
+package hellfirepvp.astralsorcery.common.auxiliary;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.tile.TileChalice;

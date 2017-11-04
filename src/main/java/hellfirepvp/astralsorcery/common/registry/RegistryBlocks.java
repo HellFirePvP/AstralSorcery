@@ -99,6 +99,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(blockVanishing);
         blockChalice = registerBlock(new BlockChalice());
         queueDefaultItemBlock(blockChalice);
+        blockBore = registerBlock(new BlockBore());
+        queueDefaultItemBlock(blockBore);
 
         //Mechanics
         blockAltar = registerBlock(new BlockAltar());
@@ -183,6 +185,7 @@ public class RegistryBlocks {
         registerTile(TileOreGenerator.class);
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
+        registerTile(TileBore.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

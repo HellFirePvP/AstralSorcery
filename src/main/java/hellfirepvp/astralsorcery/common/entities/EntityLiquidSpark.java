@@ -16,8 +16,12 @@ import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLiquidInteractionBurst;
+import hellfirepvp.astralsorcery.common.tile.ILiquidStarlightPowered;
 import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -28,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -55,10 +60,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
     private static final DataParameter<FluidStack> FLUID_REPRESENTED = EntityDataManager.createKey(EntityLiquidSpark.class, ASDataSerializers.FLUID);
 
     private LiquidInteraction purpose;
-
-    public Vector3 rotationDegreeAxis = new Vector3();
-    public Vector3 prevRotationDegreeAxis = new Vector3();
-    private Vector3 rotationVec = null;
+    private ILiquidStarlightPowered tileTarget;
 
     public EntityLiquidSpark(World worldIn) {
         super(worldIn);
@@ -75,6 +77,15 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         this.noClip = true;
         this.moveHelper = new EntityFlyHelper(this);
         this.purpose = purposeOfLiving;
+    }
+
+    public EntityLiquidSpark(World world, BlockPos spawnPos, ILiquidStarlightPowered target) {
+        super(world);
+        setSize(0.4F, 0.4F);
+        setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
+        this.noClip = true;
+        this.moveHelper = new EntityFlyHelper(this);
+        this.tileTarget = target;
     }
 
     public void setTarget(EntityLiquidSpark other) {
@@ -126,46 +137,58 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         this.noClip = getEntityWorld().getBlockState(this.getPosition()).getBlock().equals(BlocksAS.blockChalice);
 
         if(!world.isRemote) {
-            if(purpose == null) {
-                setDead();
-                return;
-            }
+            if(purpose != null) {
+                int target = this.dataManager.get(ENTITY_TARGET);
+                if(target == -1) {
+                    setDead();
+                    return;
+                }
+                Entity e = world.getEntityByID(target);
+                if(e == null || e.isDead || !(e instanceof EntityLiquidSpark)) {
+                    setDead();
+                    return;
+                }
 
-            int target = this.dataManager.get(ENTITY_TARGET);
-            if(target == -1) {
-                setDead();
-                return;
-            }
-            Entity e = world.getEntityByID(target);
-            if(e == null || e.isDead || !(e instanceof EntityLiquidSpark)) {
-                setDead();
-                return;
-            }
+                if(getDistanceToEntity(e) < 0.7F) {
+                    setDead();
+                    e.setDead();
+                    Vector3 at = Vector3.atEntityCenter(e)
+                            .subtract(Vector3.atEntityCenter(this))
+                            .divide(2)
+                            .add(Vector3.atEntityCenter(this));
+                    purpose.triggerInteraction(this.world, at);
+                    PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
+                            this.purpose.getComponent1(),
+                            this.purpose.getComponent2(),
+                            at);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
+                } else {
+                    this.moveHelper.setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
+                }
+            } else if(tileTarget != null && tileTarget instanceof TileEntity) {
+                if(((TileEntity) tileTarget).isInvalid()) {
+                    setDead();
+                    return;
+                }
+                Vector3 target = new Vector3(((TileEntity) tileTarget).getPos()).add(0.5, 0.5, 0.5);
 
-            if(getDistanceToEntity(e) < 0.7F) {
-                setDead();
-                e.setDead();
-                Vector3 at = Vector3.atEntityCenter(e)
-                                .subtract(Vector3.atEntityCenter(this))
-                                .divide(2)
-                                .add(Vector3.atEntityCenter(this));
-                purpose.triggerInteraction(this.world, at);
-                PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
-                        this.purpose.getComponent1(),
-                        this.purpose.getComponent2(),
-                        at);
-                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
+                if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.7F) {
+                    setDead();
+                    tileTarget.acceptStarlight(getRepresentitiveFluid().amount);
+                    Vector3 at = Vector3.atEntityCenter(this);
+
+                    PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
+                            getRepresentitiveFluid(),
+                            getRepresentitiveFluid(),
+                            at);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(this.world, at.toBlockPos(), 32));
+                } else {
+                    this.moveHelper.setMoveTo(target.getX(), target.getY(), target.getZ(), 2.4F);
+                }
             } else {
-                this.moveHelper.setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
+                setDead();
             }
         } else {
-            if(rotationVec == null) {
-                rotationVec = Vector3.random().normalize().multiply(1.5F);
-            }
-
-            this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
-            this.rotationDegreeAxis.add(this.rotationVec);
-
             playAmbientParticles();
         }
     }
@@ -196,6 +219,30 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
     @Override
     protected float getSoundVolume() {
         return 0;
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+
+        if(compound.hasKey("tileTarget")) {
+            BlockPos pos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
+            ILiquidStarlightPowered powered = MiscUtils.getTileAt(world, pos, ILiquidStarlightPowered.class, true);
+            if(powered != null) {
+                this.tileTarget = powered;
+            }
+        }
+    }
+
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+
+        if(this.tileTarget != null) {
+            NBTTagCompound cmp = new NBTTagCompound();
+            NBTUtils.writeBlockPosToNBT(((TileEntity) this.tileTarget).getPos(), cmp);
+            compound.setTag("tileTarget", cmp);
+        }
     }
 
     @SideOnly(Side.CLIENT)

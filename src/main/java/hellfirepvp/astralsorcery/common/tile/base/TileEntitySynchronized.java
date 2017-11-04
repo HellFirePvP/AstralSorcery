@@ -30,21 +30,33 @@ public abstract class TileEntitySynchronized extends TileEntity {
     public final void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         readCustomNBT(compound);
+        readSaveNBT(compound);
     }
 
+    //Both Network & Chunk-saving
     public void readCustomNBT(NBTTagCompound compound) {}
 
+    //Only Network-read
     public void readNetNBT(NBTTagCompound compound) {}
+
+    //Only Chunk-read
+    public void readSaveNBT(NBTTagCompound compound) {}
 
     public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
         writeCustomNBT(compound);
+        writeSaveNBT(compound);
         return compound;
     }
 
+    //Both Network & Chunk-saving
     public void writeCustomNBT(NBTTagCompound compound) {}
 
+    //Only Network-write
     public void writeNetNBT(NBTTagCompound compound) {}
+
+    //Only Chunk-write
+    public void writeSaveNBT(NBTTagCompound compound) {}
 
     @Override
     public final SPacketUpdateTileEntity getUpdatePacket() {

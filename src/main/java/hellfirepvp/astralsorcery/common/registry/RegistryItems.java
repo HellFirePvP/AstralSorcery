@@ -133,6 +133,7 @@ public class RegistryItems {
         grapplingWand = registerItem(new ItemGrappleWand());
         useableDust = registerItem(new ItemUsableDust());
         knowledgeShare = registerItem(new ItemKnowledgeShare());
+        boreUpgrade = registerItem(new ItemBoreUpgrade());
 
         crystalPickaxe = registerItem(new ItemCrystalPickaxe());
         crystalShovel = registerItem(new ItemCrystalShovel());

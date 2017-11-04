@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesInfuser;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
@@ -33,6 +34,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -158,38 +160,6 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
     }
 
-    private List<TileChalice> findNearbyChalices(int amountExpected) {
-        List<TileChalice> out = new LinkedList<>();
-        FluidStack expected = new FluidStack(BlocksAS.fluidLiquidStarlight, amountExpected);
-        Vector3 thisV = new Vector3(this);
-
-        int chX = this.getPos().getX() >> 4;
-        int chZ = this.getPos().getZ() >> 4;
-        for (int xx = -1; xx <= 1; xx++) {
-            for (int zz = -1; zz <= 1; zz++) {
-                int cX = chX + xx;
-                int cZ = chZ + zz;
-                if(world.isBlockLoaded(new BlockPos(cX * 16, 1, cZ * 16))) {
-                    Chunk ch = world.getChunkFromChunkCoords(cX, cZ);
-                    Map<BlockPos, TileEntity> tiles = ch.getTileEntityMap();
-                    for (TileEntity te : tiles.values()) {
-                        if(!te.isInvalid() && te instanceof TileChalice &&
-                                new Vector3(te.getPos()).distance(thisV) <= 16) {
-                            TileChalice tc = (TileChalice) te;
-                            if(tc.getTank() != null &&
-                                    tc.getTank().getFluid() != null &&
-                                    tc.getTank().getFluid().containsFluid(expected)) {
-                                out.add(tc);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return out;
-    }
-
     private boolean doTryCraft() {
         if(craftingTask == null) return false;
 
@@ -310,7 +280,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
         if(recipe != null) {
             this.craftingTask = new ActiveInfusionTask(recipe, crafter.getUniqueID());
-            this.craftingTask.addChalices(findNearbyChalices(this.craftingTask.getChaliceRequiredAmount()));
+            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalices(this, this.craftingTask.getChaliceRequiredAmount()));
             markForUpdate();
         }
     }

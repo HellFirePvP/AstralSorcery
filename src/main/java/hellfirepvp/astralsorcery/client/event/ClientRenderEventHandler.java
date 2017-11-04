@@ -246,7 +246,8 @@ public class ClientRenderEventHandler {
                 }
             }
             if(i instanceof ItemSkyResonator) {
-                spawnSurfaceParticles();
+                ItemSkyResonator.ResonatorUpgrade upgrade = ItemSkyResonator.getCurrentUpgrade(Minecraft.getMinecraft().player, inHand);
+                upgrade.playResonatorEffects();
             }
             if(i instanceof ItemHudRender) {
                 ItemStackHudRenderInstance instance = ongoingItemRenders.get(i);
@@ -256,50 +257,6 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void spawnSurfaceParticles() {
-        if(!ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world).isPresent()) return;
-
-        float nightPerc = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
-        if(nightPerc >= 0.05) {
-            Color c = new Color(0, 6, 58);
-            BlockPos center = Minecraft.getMinecraft().player.getPosition();
-            int offsetX = center.getX();
-            int offsetZ = center.getZ();
-            BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain(center);
-
-            for (int xx = -30; xx <= 30; xx++) {
-                for (int zz = -30; zz <= 30; zz++) {
-
-                    BlockPos top = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(pos.setPos(offsetX + xx, 0, offsetZ + zz));
-                    //Can be force unwrapped since statement 2nd Line prevents non-present values.
-                    Float opF = SkyCollectionHelper.getSkyNoiseDistributionClient(Minecraft.getMinecraft().world, top).get();
-
-                    float fPerc = (float) Math.pow((opF - 0.4F) * 1.65F, 2);
-                    if(opF >= 0.4F && rand.nextFloat() <= fPerc) {
-                        if(rand.nextFloat() <= fPerc && rand.nextInt(6) == 0) {
-                            EffectHelper.genericFlareParticle(top.getX() + rand.nextFloat(), top.getY() + 0.15, top.getZ() + rand.nextFloat())
-                                    .scale(4F)
-                                    .setColor(c)
-                                    .enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID)
-                                    .gravity(0.004)
-                                    .setAlphaMultiplier(nightPerc * fPerc);
-                            if(opF >= 0.8F && rand.nextInt(3) == 0) {
-                                EffectHelper.genericFlareParticle(top.getX() + rand.nextFloat(), top.getY() + 0.15, top.getZ() + rand.nextFloat())
-                                        .scale(0.3F)
-                                        .setColor(Color.WHITE)
-                                        .gravity(0.01)
-                                        .setAlphaMultiplier(nightPerc);
-                            }
-                        }
-                    }
-                }
-            }
-
-            pos.release();
         }
     }
 

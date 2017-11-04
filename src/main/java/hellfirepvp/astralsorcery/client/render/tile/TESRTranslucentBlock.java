@@ -112,7 +112,11 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     public void render(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
-        TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(renderState, te.getPos()));
+        addForRender(renderState, te.getPos());
+    }
+
+    public static void addForRender(IBlockState state, BlockPos pos) {
+        TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(state, pos));
     }
 
     public static class TranslucentBlockState {

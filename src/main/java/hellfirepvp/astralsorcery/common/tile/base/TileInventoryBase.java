@@ -109,13 +109,6 @@ public class TileInventoryBase extends TileEntityTick {
             super(inv);
         }
 
-        @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            if(canInsertItem(slot, stack, getStackInSlot(slot))) {
-                super.setStackInSlot(slot, stack);
-            }
-        }
-
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {

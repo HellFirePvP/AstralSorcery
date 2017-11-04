@@ -16,10 +16,11 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.entities.EntityLiquidSpark;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.util.WorldChaliceCache;
+import hellfirepvp.astralsorcery.common.auxiliary.WorldChaliceCache;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -46,7 +47,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 18.10.2017 / 21:58
  */
-public class TileChalice extends TileEntityTick {
+public class TileChalice extends TileEntityTick implements ILiquidStarlightPowered {
 
     private static final int TANK_SIZE = 24000;
     private SimpleSingleFluidCapabilityTank tank;
@@ -205,6 +206,21 @@ public class TileChalice extends TileEntityTick {
 
     public SimpleSingleFluidCapabilityTank getTank() {
         return tank;
+    }
+
+    @Override
+    public boolean canAcceptStarlight(int mbLiquidStarlight) {
+        return getHeldFluid() == null ||
+                getFluidAmount() <= 0 ||
+                (getHeldFluid() == BlocksAS.fluidLiquidStarlight &&
+                getFluidAmount() + mbLiquidStarlight <= TANK_SIZE);
+    }
+
+    @Override
+    public void acceptStarlight(int mbLiquidStarlight) {
+        if(canAcceptStarlight(mbLiquidStarlight)) {
+            getTank().addAmount(mbLiquidStarlight);
+        }
     }
 
     @Override
