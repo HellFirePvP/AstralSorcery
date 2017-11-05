@@ -95,7 +95,7 @@ public class ActiveCraftingTask {
         int recipeId = compound.getInteger("recipeId");
         AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipe(recipeId);
         if(recipe == null) {
-            AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId);
+            AstralSorcery.log.info("[AstralSorcery] Recipe with unknown/invalid ID found: " + recipeId);
             return null;
         } else {
             UUID uuidCraft = compound.getUniqueId("crafterUUID");

@@ -39,16 +39,16 @@ public class ModIntegrationCrafttweaker {
     }
 
     public void pushChanges() {
-        AstralSorcery.log.info("Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
+        AstralSorcery.log.info("[AstralSorcery] Got " + recipeModifications.size() + " recipe modifications from CraftTweaker. - Applying...");
         for (SerializeableRecipe recipe : recipeModifications) {
             try {
                 recipe.applyRecipe();
             } catch (Exception exc) {
-                AstralSorcery.log.error("Couldn't apply RecipeModification for type " + recipe.getType().name().toLowerCase());
+                AstralSorcery.log.error("[AstralSorcery] Couldn't apply RecipeModification for type " + recipe.getType().name().toLowerCase());
                 exc.printStackTrace();
             }
         }
-        AstralSorcery.log.info("Recipe changes applied.");
+        AstralSorcery.log.info("[AstralSorcery] Recipe changes applied.");
     }
 
 }

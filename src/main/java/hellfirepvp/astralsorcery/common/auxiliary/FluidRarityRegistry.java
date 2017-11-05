@@ -96,7 +96,7 @@ public class FluidRarityRegistry {
         if(f != null) {
             rarityList.add(new FluidRarityEntry(f, rarity, guaraneedAmt, additionalAmt));
         } else {
-            AstralSorcery.log.info("Ignoring fluid " + name + " for rarity registry - it doesn't exist in the current environment");
+            AstralSorcery.log.info("[AstralSorcery] Ignoring fluid " + name + " for rarity registry - it doesn't exist in the current environment");
         }
     }
 

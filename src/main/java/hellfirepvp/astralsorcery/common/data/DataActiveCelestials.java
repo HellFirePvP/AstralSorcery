@@ -90,7 +90,7 @@ public class DataActiveCelestials extends AbstractData {
                     String str = list.getStringTagAt(i);
                     IConstellation c = ConstellationRegistry.getConstellationByName(str);
                     if (c == null) {
-                        AstralSorcery.log.warn("Received unknown constellation from server: " + str);
+                        AstralSorcery.log.warn("[AstralSorcery] Received unknown constellation from server: " + str);
                     } else {
                         toUpdate.add(c);
                     }

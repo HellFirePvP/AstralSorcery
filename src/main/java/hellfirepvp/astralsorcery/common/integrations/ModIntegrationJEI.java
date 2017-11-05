@@ -224,7 +224,7 @@ public class ModIntegrationJEI implements IModPlugin {
             }
         }
         if(unresolvedRecipes.size() > 0) {
-            AstralSorcery.log.warn("JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
+            AstralSorcery.log.warn("[AstralSorcery] JEI Initialization Ended up with " + unresolvedRecipes.size() + " unresolvable crafttweaker recipes!");
         }
     }
 

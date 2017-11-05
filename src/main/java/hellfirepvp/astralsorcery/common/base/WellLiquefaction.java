@@ -71,7 +71,7 @@ public class WellLiquefaction {
     public static void registerLiquefaction(ItemStack catalystIn, Fluid producedIn, float productionMultiplier, float shatterMultiplier, Color color) {
         for (ItemStack i : registeredLiquefactions.keySet()) {
             if(i.isItemEqual(catalystIn)) {
-                AstralSorcery.log.warn("Tried to register Lightwell Liquefaction that has the same input as an already existing one.");
+                AstralSorcery.log.warn("[AstralSorcery] Tried to register Lightwell Liquefaction that has the same input as an already existing one.");
                 return;
             }
         }

@@ -118,8 +118,8 @@ public class ResearchManager {
             loadPlayerKnowledge(uuid);
         }
         if (playerProgressServer.get(uuid) == null) {
-            AstralSorcery.log.warn("Failed to load AstralSocery Progress data for " + p.getName());
-            AstralSorcery.log.warn("Erroneous file: " + uuid.toString() + ".astral");
+            AstralSorcery.log.warn("[AstralSorcery] Failed to load AstralSocery Progress data for " + p.getName());
+            AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + uuid.toString() + ".astral");
             return;
         }
         pushProgressToClientUnsafe(p);
@@ -384,7 +384,7 @@ public class ResearchManager {
         try {
             Files.copy(playerFile, getPlayerBackupFile(pUUID));
         } catch (IOException exc) {
-            AstralSorcery.log.warn("Failed copying progress file contents to backup file!");
+            AstralSorcery.log.warn("[AstralSorcery] Failed copying progress file contents to backup file!");
             exc.printStackTrace();
         }
         try {
@@ -403,8 +403,8 @@ public class ResearchManager {
         try {
             load_unsafe(pUUID, playerFile);
         } catch (Exception e) {
-            AstralSorcery.log.warn("Unable to load progress from default progress file. Attempting loading backup.");
-            AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
+            AstralSorcery.log.warn("[AstralSorcery] Unable to load progress from default progress file. Attempting loading backup.");
+            AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + playerFile.getName());
             e.printStackTrace();
 
             playerFile = getPlayerBackupFile(pUUID);
@@ -412,8 +412,8 @@ public class ResearchManager {
                 load_unsafe(pUUID, playerFile);
                 Files.copy(playerFile, getPlayerFile(pUUID)); //Copying back.
             } catch (Exception e1) {
-                AstralSorcery.log.warn("Unable to load progress from backup progress file. Copying relevant files to error files.");
-                AstralSorcery.log.warn("Erroneous file: " + playerFile.getName());
+                AstralSorcery.log.warn("[AstralSorcery] Unable to load progress from backup progress file. Copying relevant files to error files.");
+                AstralSorcery.log.warn("[AstralSorcery] Erroneous file: " + playerFile.getName());
                 e1.printStackTrace();
 
                 File plOriginal = getPlayerFile(pUUID);
@@ -421,11 +421,11 @@ public class ResearchManager {
                 try {
                     Files.copy(plOriginal, new File(plOriginal.getParent(), plOriginal.getName() + ".lerror"));
                     Files.copy(plBackup,   new File(plBackup.getParent(),     plBackup.getName() + ".lerror"));
-                    AstralSorcery.log.warn("Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
-                    AstralSorcery.log.warn("send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
+                    AstralSorcery.log.warn("[AstralSorcery] Copied progression files to error files. In case you would like to try me (HellFirePvP) to maybe see what i can do about maybe recovering the files,");
+                    AstralSorcery.log.warn("[AstralSorcery] send them over to me at the issue tracker https://github.com/HellFirePvP/AstralSorcery/issues - 90% that i won't be able to do anything, but reporting it would still be great.");
                 } catch (IOException e2) {
-                    AstralSorcery.log.warn("Unable to copy files to error-files.");
-                    AstralSorcery.log.warn("I've had enough. I can't even access or open the files apparently. I'm giving up.");
+                    AstralSorcery.log.warn("[AstralSorcery] Unable to copy files to error-files.");
+                    AstralSorcery.log.warn("[AstralSorcery] I've had enough. I can't even access or open the files apparently. I'm giving up.");
                     e2.printStackTrace();
                 }
                 plOriginal.delete();
@@ -527,8 +527,8 @@ public class ResearchManager {
     public static void informCraftingInfusionCompletion(TileStarlightInfuser infuser, ActiveInfusionTask recipe) {
         EntityPlayer crafter = recipe.tryGetCraftingPlayerServer();
         if(crafter == null) {
-            AstralSorcery.log.warn("Infusion finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
+            AstralSorcery.log.warn("[AstralSorcery] Infusion finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("[AstralSorcery] Affected tile: " + infuser.getPos() + " in dim " + infuser.getWorld().provider.getDimension());
             return;
         }
 
@@ -541,8 +541,8 @@ public class ResearchManager {
     public static void informCraftingAltarCompletion(TileAltar altar, ActiveCraftingTask recipeToCraft) {
         EntityPlayer crafter = recipeToCraft.tryGetCraftingPlayerServer();
         if(crafter == null) {
-            AstralSorcery.log.warn("Crafting finished, player that initialized crafting could not be found!");
-            AstralSorcery.log.warn("Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
+            AstralSorcery.log.warn("[AstralSorcery] Crafting finished, player that initialized crafting could not be found!");
+            AstralSorcery.log.warn("[AstralSorcery] Affected tile: " + altar.getPos() + " in dim " + altar.getWorld().provider.getDimension());
             return;
         }
 

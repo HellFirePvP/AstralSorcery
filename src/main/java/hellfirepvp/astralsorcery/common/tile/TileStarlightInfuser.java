@@ -324,7 +324,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             int recipeId = compound.getInteger("recipeId");
             AbstractInfusionRecipe recipe = InfusionRecipeRegistry.getRecipe(recipeId);
             if(recipe == null) {
-                AstralSorcery.log.info("Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
+                AstralSorcery.log.info("[AstralSorcery] Recipe with unknown/invalid ID found: " + recipeId + " for Starlight Infuser at " + getPos());
             } else {
                 UUID uuidCraft = compound.getUniqueId("crafterUUID");
                 int tick = compound.getInteger("recipeTick");

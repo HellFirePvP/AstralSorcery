@@ -40,8 +40,8 @@ public class ConstellationRegistry {
         } else if(constellation instanceof IMinorConstellation) {
             minorConstellations.add((IMinorConstellation) constellation);
         } else {
-            AstralSorcery.log.warn("Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
-            AstralSorcery.log.warn("Skipping specific constellation registration...");
+            AstralSorcery.log.warn("[AstralSorcery] Tried to register constellation that's neither minor nor major or weak: " + constellation.toString());
+            AstralSorcery.log.warn("[AstralSorcery] Skipping specific constellation registration...");
             throw new IllegalStateException("Tried to register non-minor, non-weak and non-major constellation.");
         }
         if(constellation instanceof IConstellationSpecialShowup) {

@@ -35,7 +35,7 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
+        AstralSorcery.log.info("[AstralSorcery] Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
 

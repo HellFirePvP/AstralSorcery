@@ -137,10 +137,10 @@ public class CommonProxy implements IGuiHandler {
         registerCapabilities();
 
         if (Mods.CRAFTTWEAKER.isPresent()) {
-            AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
+            AstralSorcery.log.info("[AstralSorcery] Crafttweaker found! Adding recipe handlers...");
             ModIntegrationCrafttweaker.instance.load();
         } else {
-            AstralSorcery.log.info("Crafttweaker not found!");
+            AstralSorcery.log.info("[AstralSorcery] Crafttweaker not found!");
         }
     }
 

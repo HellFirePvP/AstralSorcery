@@ -118,7 +118,7 @@ public class Config {
             }
             savedSyncTuples.clear();
         } catch (Throwable exc) {
-            AstralSorcery.log.error("Failed to reapply saved client config!");
+            AstralSorcery.log.error("[AstralSorcery] Failed to reapply saved client config!");
             throw new RuntimeException(exc);
         }
     }

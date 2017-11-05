@@ -85,7 +85,7 @@ public class PktDualParticleEvent implements IMessage, IMessageHandler<PktDualPa
                 trigger.trigger(message);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing DualParticleEventType " + message.typeOrdinal + " from " + getOriginVec() + " to " + getTargetVec());
+            AstralSorcery.log.warn("[AstralSorcery] Error executing DualParticleEventType " + message.typeOrdinal + " from " + getOriginVec() + " to " + getTargetVec());
         }
         return null;
     }
