@@ -50,7 +50,7 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
                         rand.nextInt(enrichmentRadius * 2) - enrichmentRadius,
                         rand.nextInt(enrichmentRadius * 2) - enrichmentRadius);
                 if(stoneCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
-                    ItemStack blockStack = OreTypes.getRandomOre(rand);
+                    ItemStack blockStack = OreTypes.AEVITAS_ORE_PERK.getRandomOre(rand);
                     if(!blockStack.isEmpty()) {
                         IBlockState state = ItemUtils.createBlockState(blockStack);
                         if(state != null) {

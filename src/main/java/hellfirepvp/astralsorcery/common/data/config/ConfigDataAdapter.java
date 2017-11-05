@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.data.config;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -23,11 +26,24 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
 
     public String getDataFileName();
 
+    public String getDescription();
+
     @Nullable
-    public T deserialize(String str);
+    public T appendDataSet(String str);
+
+    @Nonnull
+    default public String[] serializeDataSet() {
+        List<String> defaultValueStrings = new LinkedList<>();
+        for (T data : getDefaultDataSets()) {
+            defaultValueStrings.add(data.serialize());
+        }
+        String[] out = new String[defaultValueStrings.size()];
+        return defaultValueStrings.toArray(out);
+    }
 
     public static interface DataSet {
 
+        @Nonnull
         public String serialize();
 
     }

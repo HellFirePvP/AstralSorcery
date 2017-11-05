@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.base;
 
+import hellfirepvp.astralsorcery.common.base.sets.OreEntry;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -17,9 +19,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,105 +29,68 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 03.11.2016 / 01:16
  */
-public class OreTypes {
+public class OreTypes implements ConfigDataAdapter<OreEntry> {
 
-    private static Map<String, OreEntry> oreDictWeights = new HashMap<>();
-    private static double totalWeight = 0D;
-    private static double totalVanillaWeight = 0D;
+    public static final OreTypes RITUAL_MINERALIS = new OreTypes("mineralis_ritual");
+    public static final OreTypes AEVITAS_ORE_PERK = new OreTypes("aevitas_ore_perk");
+    public static final OreTypes TREASURE_SHRINE_GEN = new OreTypes("treasure_shrine");
 
-    private static Map<String, OreEntry> localFallback = new HashMap<>();
-    private static double fallbackWeight = 0D;
-    private static double fallbackVanillaWeight = 0D;
+    private List<OreEntry> oreDictWeights = new LinkedList<>();
+    private double totalWeight = 0D;
+    private final String name;
 
-    public static void init() {
-        //Vanilla
-        registerOreEntry("oreCoal",        5200D, true);
-        registerOreEntry("oreIron",        2500D, true);
-        registerOreEntry("oreGold",         550D, true);
-        registerOreEntry("oreLapis",        140D, true);
-        registerOreEntry("oreRedstone",     700D, true);
-        registerOreEntry("oreDiamond",      180D, true);
-        registerOreEntry("oreEmerald",      100D, true);
-        //Modded
-        registerOreEntry("oreAluminum",     600D);
-        registerOreEntry("oreCopper",      1100D);
-        registerOreEntry("oreTin",         1500D);
-        registerOreEntry("oreLead",        1000D);
-        registerOreEntry("oreCertusQuartz", 500D);
-        registerOreEntry("oreNickel",       270D);
-        registerOreEntry("orePlatinum",      90D);
-        registerOreEntry("oreSilver",       180D);
-        registerOreEntry("oreMithril",        1D);
-        registerOreEntry("oreRuby",         400D);
-        registerOreEntry("oreSapphire",     400D);
-        registerOreEntry("oreUranium",      550D);
-        registerOreEntry("oreYellorite",    560D);
-        registerOreEntry("oreZinc",         300D);
-        registerOreEntry("oreSulfur",       600D);
-        registerOreEntry("oreOsmium",       950D);
-
-        cacheLocalFallback();
+    private OreTypes(String name) {
+        this.name = name;
     }
 
-    private static void cacheLocalFallback() {
-        if(localFallback.isEmpty()) {
-            localFallback.putAll(oreDictWeights);
-            fallbackWeight = totalWeight;
-            fallbackVanillaWeight = totalVanillaWeight;
-        }
+    public Iterable<OreEntry> getDefaultDataSets() {
+        List<OreEntry> entries = new LinkedList<>();
+
+        entries.add(new OreEntry("oreCoal",        5200));
+        entries.add(new OreEntry("oreIron",        2500));
+        entries.add(new OreEntry("oreGold",         550));
+        entries.add(new OreEntry("oreLapis",        140));
+        entries.add(new OreEntry("oreRedstone",     700));
+        entries.add(new OreEntry("oreDiamond",      180));
+        entries.add(new OreEntry("oreEmerald",      100));
+
+        entries.add(new OreEntry("oreAluminum",     600));
+        entries.add(new OreEntry("oreCopper",      1100));
+        entries.add(new OreEntry("oreTin",         1500));
+        entries.add(new OreEntry("oreLead",        1000));
+        entries.add(new OreEntry("oreCertusQuartz", 500));
+        entries.add(new OreEntry("oreNickel",       270));
+        entries.add(new OreEntry("orePlatinum",      90));
+        entries.add(new OreEntry("oreSilver",       180));
+        entries.add(new OreEntry("oreMithril",        1));
+        entries.add(new OreEntry("oreRuby",         400));
+        entries.add(new OreEntry("oreSapphire",     400));
+        entries.add(new OreEntry("oreUranium",      550));
+        entries.add(new OreEntry("oreYellorite",    560));
+        entries.add(new OreEntry("oreZinc",         300));
+        entries.add(new OreEntry("oreSulfur",       600));
+        entries.add(new OreEntry("oreOsmium",       950));
+
+        return entries;
     }
 
-    public static void loadFromFallback() {
-        oreDictWeights.clear();
-        totalWeight = fallbackWeight;
-        totalVanillaWeight = fallbackVanillaWeight;
-        oreDictWeights.putAll(localFallback);
-    }
-
-    public static void removeOreEntry(String oreDictName) {
-        if(oreDictWeights.containsKey(oreDictName)) {
-            double weight = oreDictWeights.get(oreDictName).weight;
-            boolean val = oreDictWeights.get(oreDictName).isVanilla;
-            oreDictWeights.remove(oreDictName);
-            totalWeight -= weight;
-            if(val) {
-                totalVanillaWeight -= weight;
-            }
-        }
-    }
-
-    public static void registerOreEntry(String oreDictName, Double weight) {
-        registerOreEntry(oreDictName, weight, false);
-    }
-
-    public static void registerOreEntry(String oreDictName, Double weight, boolean vanilla) {
-        oreDictWeights.put(oreDictName, new OreEntry(weight, vanilla));
-        totalWeight += weight;
-        if(vanilla) {
-            totalVanillaWeight += weight;
-        }
+    private void appendOreEntry(OreEntry entry) {
+        oreDictWeights.add(entry);
+        totalWeight += entry.weight;
     }
 
     @Nonnull
-    public static ItemStack getRandomOre(Random random) {
-        return getRandomOre(random, false);
-    }
-
-    @Nonnull
-    public static ItemStack getRandomOre(Random random, boolean onlyVanilla) {
+    public ItemStack getRandomOre(Random random) {
         ItemStack result = ItemStack.EMPTY;
         int runs = 0;
         while (result.isEmpty() && runs < 150) {
 
             String key = null;
-            double randWeight = random.nextFloat() * (onlyVanilla ? totalVanillaWeight : totalWeight);
-            for (Map.Entry<String, OreEntry> entry : oreDictWeights.entrySet()) {
-                if(onlyVanilla && !entry.getValue().isVanilla) {
-                    continue;
-                }
-                randWeight -= entry.getValue().weight;
+            double randWeight = random.nextFloat() * totalWeight;
+            for (OreEntry entry : oreDictWeights) {
+                randWeight -= entry.weight;
                 if(randWeight <= 0) {
-                    key = entry.getKey();
+                    key = entry.oreName;
                     break;
                 }
             }
@@ -154,16 +118,25 @@ public class OreTypes {
         return result;
     }
 
-    private static class OreEntry {
+    @Override
+    public String getDataFileName() {
+        return name;
+    }
 
-        private final double weight;
-        private final boolean isVanilla;
+    @Override
+    public String getDescription() {
+        return "Defines random ore-selection data. Items with higher weight are more likely to be selected overall. Format: <oreDictionaryName>;<integerWeight>";
+    }
 
-        OreEntry(double weight, boolean isVanilla) {
-            this.weight = weight;
-            this.isVanilla = isVanilla;
+    @Nullable
+    @Override
+    public OreEntry appendDataSet(String str) {
+        OreEntry entry = OreEntry.deserialize(str);
+        if(entry == null) {
+            return null;
         }
-
+        appendOreEntry(entry);
+        return entry;
     }
 
 }

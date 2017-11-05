@@ -93,6 +93,7 @@ public class Config {
     public static boolean performNetworkIntegrityCheck = false;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
+    private static List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
 
     private Config() {}
 
@@ -110,6 +111,15 @@ public class Config {
         dynamicConfigEntries.add(entry);
     }
 
+    public static void addDataRegistry(ConfigDataAdapter<?> dataAdapter) {
+        for (ConfigDataAdapter<?> cfg : dataAdapters) {
+            if(cfg.getDataFileName().equalsIgnoreCase(dataAdapter.getDataFileName())) {
+                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " - " + dataAdapter.getDataFileName());
+            }
+        }
+        dataAdapters.add(dataAdapter);
+    }
+
     public static void rebuildClientConfig() {
         try {
             for (PktSyncConfig.SyncTuple tuple : savedSyncTuples) {
@@ -121,6 +131,31 @@ public class Config {
             AstralSorcery.log.error("[AstralSorcery] Failed to reapply saved client config!");
             throw new RuntimeException(exc);
         }
+    }
+
+    public static void loadDataRegistries(File cfgDirectory) {
+        File dirAS = new File(cfgDirectory, AstralSorcery.MODID);
+        if(!dirAS.exists()) {
+            dirAS.mkdirs();
+        }
+        for (ConfigDataAdapter<?> cfg : dataAdapters) {
+            attemptLoad(cfg, new File(dirAS, cfg.getDataFileName() + ".cfg"));
+        }
+    }
+
+    private static void attemptLoad(ConfigDataAdapter<?> cfg, File file) {
+        String[] out = cfg.serializeDataSet();
+
+        Configuration config = new Configuration(file);
+        config.load();
+        config.addCustomCategoryComment("data", cfg.getDescription());
+        out = config.getStringList("data", "data", out, "");
+        for (String str : out) {
+            if(cfg.appendDataSet(str) == null) {
+                AstralSorcery.log.warn("[AstralSorcery] Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
+            }
+        }
+        config.save();
     }
 
     private static void loadData() {

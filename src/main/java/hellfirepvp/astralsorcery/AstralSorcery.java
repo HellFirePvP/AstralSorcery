@@ -61,8 +61,10 @@ public class AstralSorcery {
         devEnvChache = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
         proxy.preLoadConfigEntries();
-
         Config.load(event.getSuggestedConfigurationFile());
+
+        proxy.registerConfigDataRegistries();
+        Config.loadDataRegistries(event.getModConfigurationDirectory());
 
         proxy.preInit();
     }

@@ -32,7 +32,6 @@ public class ModIntegrationCrafttweaker {
 
     public void load() {
         CraftTweakerAPI.registerClass(InfusionRecipe.class);
-        CraftTweakerAPI.registerClass(RitualMineralis.class);
         CraftTweakerAPI.registerClass(LightTransmutations.class);
         CraftTweakerAPI.registerClass(AltarRecipe.class);
         CraftTweakerAPI.registerClass(WellRecipe.class);

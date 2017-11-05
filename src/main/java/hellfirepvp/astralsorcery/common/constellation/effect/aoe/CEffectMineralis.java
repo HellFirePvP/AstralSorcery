@@ -86,7 +86,7 @@ public class CEffectMineralis extends CEffectPositionList {
             BlockPos sel = entry.getPos();
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
                 if(verifier.isValid(world, sel)) {
-                    ItemStack blockStack = OreTypes.getRandomOre(rand);
+                    ItemStack blockStack = OreTypes.RITUAL_MINERALIS.getRandomOre(rand);
                     if(rand.nextInt(200_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
                     if(!blockStack.isEmpty()) {
                         IBlockState state = ItemUtils.createBlockState(blockStack);

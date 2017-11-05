@@ -111,6 +111,12 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
     }
 
+    public void registerConfigDataRegistries() {
+        Config.addDataRegistry(OreTypes.RITUAL_MINERALIS);
+        Config.addDataRegistry(OreTypes.AEVITAS_ORE_PERK);
+        Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
+    }
+
     public void preInit() {
         registryPrimer = new InternalRegistryPrimer();
         MinecraftForge.EVENT_BUS.register(new PrimerEventHandler(registryPrimer));
@@ -227,7 +233,6 @@ public class CommonProxy implements IGuiHandler {
 
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
-        OreTypes.init();
         FluidRarityRegistry.init();
         LightOreTransmutations.init();
         HerdableAnimal.init();
