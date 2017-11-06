@@ -127,7 +127,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
             if(be != null) {
                 removeElement(be);
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true);
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
             }

@@ -322,7 +322,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockPick() && this.parentEntity.world instanceof WorldServer) {
                                 MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true);
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
                                 resetTimer = true;
                             }
                         }
@@ -346,7 +346,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe() && this.parentEntity.world instanceof WorldServer) {
                                 MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true);
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
                                 resetTimer = true;
                             }
                         }

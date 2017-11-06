@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -35,7 +37,48 @@ import java.util.Map;
  */
 public class LiquidStarlightChaliceHandler {
 
-    public static boolean requestLiquidStarlightFrom(ILiquidStarlightPowered target, int tileTicksExisted, int mbRequested) {
+    public static boolean doFluidTransfer(@Nonnull TileEntity source, @Nonnull TileEntity target, @Nonnull FluidStack toTransfer) {
+        if(target.isInvalid() || source.isInvalid()) {
+            return false;
+        }
+
+        IFluidHandler targetHandler = null;
+        if(target.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+            targetHandler = target.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+        }
+        if(targetHandler == null) {
+            return false;
+        }
+        World world = source.getWorld();
+        EntityLiquidSpark spark = new EntityLiquidSpark(world, source.getPos().up(), target);
+        spark.setFluidRepresented(toTransfer);
+        world.spawnEntity(spark);
+        return true;
+    }
+
+    public static boolean requestLiquidStarlightAndTransferTo(ILiquidStarlightPowered target, TileChalice source, int tileTicksExisted, int mbRequested) {
+        if(!(target instanceof TileEntity) || (tileTicksExisted % 100) != 0) {
+            return false;
+        }
+
+        FluidStack expected = new FluidStack(BlocksAS.fluidLiquidStarlight, mbRequested);
+        World world = ((TileEntity) target).getWorld();
+        if(source.getTank() != null &&
+                source.getTank().getFluid() != null &&
+                source.getTank().getFluid().containsFluid(expected)) {
+            FluidStack drained = source.getTank().drain(expected, true);
+            if(drained != null) {
+                source.markForUpdate();
+                EntityLiquidSpark spark = new EntityLiquidSpark(world, source.getPos().up(), (TileEntity) target);
+                spark.setFluidRepresented(new FluidStack(BlocksAS.fluidLiquidStarlight, drained.amount));
+                world.spawnEntity(spark);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean requestLiquidStarlightAndTransferTo(ILiquidStarlightPowered target, int tileTicksExisted, int mbRequested) {
         if(!(target instanceof TileEntity) || (tileTicksExisted % 100) != 0) {
             return false;
         }
@@ -57,13 +100,17 @@ public class LiquidStarlightChaliceHandler {
                         if(!te.isInvalid() && te instanceof TileChalice &&
                                 new Vector3(te.getPos()).distance(thisV) <= 16) {
                             TileChalice tc = (TileChalice) te;
+                            RaytraceAssist rta = new RaytraceAssist(thisV, new Vector3(tc.getPos()).add(0.5, 0.5, 0.5));
+                            if(!rta.isClear(world)) {
+                                continue;
+                            }
                             if(tc.getTank() != null &&
                                     tc.getTank().getFluid() != null &&
                                     tc.getTank().getFluid().containsFluid(expected)) {
                                 FluidStack drained = tc.getTank().drain(expected, true);
                                 if(drained != null) {
                                     tc.markForUpdate();
-                                    EntityLiquidSpark spark = new EntityLiquidSpark(world, tc.getPos().up(), target);
+                                    EntityLiquidSpark spark = new EntityLiquidSpark(world, tc.getPos().up(), (TileEntity) target);
                                     spark.setFluidRepresented(new FluidStack(BlocksAS.fluidLiquidStarlight, drained.amount));
                                     world.spawnEntity(spark);
                                     return true;
@@ -78,9 +125,9 @@ public class LiquidStarlightChaliceHandler {
     }
 
     @Nonnull
-    public static List<TileChalice> findNearbyChalices(TileEntity origin, int amountExpected) {
+    public static List<TileChalice> findNearbyChalices(TileEntity origin, FluidStack stackExpectedToFit) {
         List<TileChalice> out = new LinkedList<>();
-        FluidStack expected = new FluidStack(BlocksAS.fluidLiquidStarlight, amountExpected);
+        FluidStack expected = stackExpectedToFit.copy();
         Vector3 thisV = new Vector3(origin).add(0.5, 0.5, 0.5);
         World world = origin.getWorld();
 

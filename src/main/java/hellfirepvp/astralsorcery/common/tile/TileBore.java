@@ -9,14 +9,19 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
+import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.block.BlockBore;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemBoreUpgrade;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -31,11 +36,15 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +64,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     private boolean hasMultiblock = false;
     private int operationTicks = 0;
     private int mbStarlight = 0;
+
+    private int productionTimeout = 0;
 
     private VerticalConeBlockDiscoverer coneBlockDiscoverer;
     private boolean diggingSuccessful = false;
@@ -98,9 +109,16 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             }
 
             if(mbStarlight <= 12000 && getCurrentBoreType() != BoreType.NONE) {
-                LiquidStarlightChaliceHandler.requestLiquidStarlightFrom(this, ticksExisted, 400);
+                TileChalice tc = MiscUtils.getTileAt(world, getPos().up(), TileChalice.class, false);
+                if(tc != null) {
+                    LiquidStarlightChaliceHandler.requestLiquidStarlightAndTransferTo(this, tc, ticksExisted, 400);
+                }
             }
             if(!consumeLiquid()) {
+                if(this.operationTicks > 0) {
+                    operationTicks--;
+                    markForUpdate();
+                }
                 return;
             }
             if(getCurrentBoreType() == BoreType.NONE) {
@@ -116,18 +134,49 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 if(!diggingSuccessful) {
                     if((ticksExisted % 8) == 0) {
                         attemptDig();
-                        markForUpdate();
                     }
                 } else {
                     if((ticksExisted % 32) == 0) {
                         checkDigState();
-                        markForUpdate();
                     }
                     if(this.diggingSuccessful) {
-                        BoreType type = getCurrentBoreType();
-                        switch (type) {
-                            case LIQUID:
-                                break;
+                        if(productionTimeout > 0) {
+                            productionTimeout--;
+                        }
+                        if(productionTimeout <= 0) {
+                            productionTimeout = rand.nextInt(20) + 40;
+                            BoreType type = getCurrentBoreType();
+                            switch (type) {
+                                case LIQUID:
+                                    Chunk ch = world.getChunkFromBlockCoords(getPos());
+                                    FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
+                                    if(entry != null) {
+                                        int mbDrain = rand.nextInt(100) + 100;
+                                        int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
+                                        FluidStack drained;
+                                        if(entry.isValid() && actMbDrain > 0) {
+                                            drained = entry.tryDrain(actMbDrain, false);
+                                            if(drained == null || drained.getFluid() == null) {
+                                                drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                                            }
+                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalices(this, drained);
+                                            if(!out.isEmpty()) {
+                                                TileChalice target = out.get(rand.nextInt(out.size()));
+                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                                                entry.tryDrain(actMbDrain, true);
+                                            }
+                                        } else {
+                                            drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalices(this, drained);
+                                            if(!out.isEmpty()) {
+                                                TileChalice target = out.get(rand.nextInt(out.size()));
+                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                                            }
+                                        }
+
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
@@ -135,6 +184,23 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         } else {
             if(hasMultiblock && this.operationTicks > 0) {
                 updateBoreSprite();
+
+                if(getCurrentWorkingSegment().ordinal() >= OperationSegment.DIG.ordinal() && ticksExisted % 25 == 0) {
+                    float yTarget = this.getPos().getY() * (1 - this.digPercentage);
+                    Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
+                    Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
+                    EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 9).setAlphaMultiplier(1);
+                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5);
+
+                    yTarget = this.getPos().getY() * (0.75F - (this.digPercentage / 4F));
+                    target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
+                    origin = origin.clone().add(
+                            rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                            0,
+                            rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1));
+                    beam = EffectHandler.getInstance().lightbeam(target, origin, 2).setAlphaMultiplier(1);
+                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0xFF000089));
+                }
             }
         }
     }
@@ -172,18 +238,22 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
                 world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
         if(!out.isEmpty() && world instanceof WorldServer) {
-            boolean tileDrops = world.getGameRules().getBoolean("doTileDrops");
+            BlockDropCaptureAssist.startCapturing(false);
             try {
-                world.getGameRules().setOrCreateGameRule("doTileDrops", String.valueOf(false));
                 for (BlockPos p : out) {
                     IBlockState state = world.getBlockState(p);
                     if(!state.getMaterial().isLiquid()) {
                         MiscUtils.breakBlockWithoutPlayer(
-                                ((WorldServer) world), p, state, true, true);
+                                ((WorldServer) world), p, state, true, true, false);
                     }
                 }
             } finally {
-                world.getGameRules().setOrCreateGameRule("doTileDrops", String.valueOf(tileDrops));
+                double x = getPos().getX() + 0.5;
+                double y = getPos().getY() + 1.5;
+                double z = getPos().getZ() + 0.5;
+                for (ItemStack stack : BlockDropCaptureAssist.getCapturedStacksAndStop()) {
+                    ItemUtils.dropItem(world, x, y, z, stack);
+                }
             }
         }
         this.digPercentage = downPerc;
@@ -309,6 +379,13 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     @Override
+    public void writeSaveNBT(NBTTagCompound compound) {
+        super.writeSaveNBT(compound);
+
+        compound.setInteger("productionTick", this.productionTimeout);
+    }
+
+    @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.tank = SimpleSingleFluidCapabilityTank.deserialize(compound.getCompoundTag("tank"));
@@ -320,6 +397,13 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         this.diggingSuccessful = compound.getBoolean("digState");
         this.digPercentage = compound.getFloat("digPerc");
         this.mbStarlight = compound.getInteger("mbStarlight");
+    }
+
+    @Override
+    public void readSaveNBT(NBTTagCompound compound) {
+        super.readSaveNBT(compound);
+
+        this.productionTimeout = compound.getInteger("productionTick");
     }
 
     public static enum OperationSegment {

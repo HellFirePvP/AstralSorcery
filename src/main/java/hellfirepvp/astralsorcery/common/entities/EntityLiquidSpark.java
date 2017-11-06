@@ -41,6 +41,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -60,7 +62,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
     private static final DataParameter<FluidStack> FLUID_REPRESENTED = EntityDataManager.createKey(EntityLiquidSpark.class, ASDataSerializers.FLUID);
 
     private LiquidInteraction purpose;
-    private ILiquidStarlightPowered tileTarget;
+    private TileEntity tileTarget;
 
     public EntityLiquidSpark(World worldIn) {
         super(worldIn);
@@ -79,7 +81,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         this.purpose = purposeOfLiving;
     }
 
-    public EntityLiquidSpark(World world, BlockPos spawnPos, ILiquidStarlightPowered target) {
+    public EntityLiquidSpark(World world, BlockPos spawnPos, TileEntity target) {
         super(world);
         setSize(0.4F, 0.4F);
         setPosition(spawnPos.getX() + 0.5, spawnPos.getY() + 0.5, spawnPos.getZ() + 0.5);
@@ -165,16 +167,23 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                 } else {
                     this.moveHelper.setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
                 }
-            } else if(tileTarget != null && tileTarget instanceof TileEntity) {
-                if(((TileEntity) tileTarget).isInvalid()) {
+            } else if(tileTarget != null) {
+                if(tileTarget.isInvalid()) {
                     setDead();
                     return;
                 }
-                Vector3 target = new Vector3(((TileEntity) tileTarget).getPos()).add(0.5, 0.5, 0.5);
+                Vector3 target = new Vector3(tileTarget.getPos()).add(0.5, 0.5, 0.5);
 
                 if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.7F) {
                     setDead();
-                    tileTarget.acceptStarlight(getRepresentitiveFluid().amount);
+                    if(getRepresentitiveFluid().getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
+                        ((ILiquidStarlightPowered) tileTarget).acceptStarlight(getRepresentitiveFluid().amount);
+                    } else if(tileTarget.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                        IFluidHandler handler = tileTarget.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                        if(handler != null) {
+                            handler.fill(getRepresentitiveFluid(), true);
+                        }
+                    }
                     Vector3 at = Vector3.atEntityCenter(this);
 
                     PktLiquidInteractionBurst ev = new PktLiquidInteractionBurst(
@@ -227,7 +236,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         if(compound.hasKey("tileTarget")) {
             BlockPos pos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
-            ILiquidStarlightPowered powered = MiscUtils.getTileAt(world, pos, ILiquidStarlightPowered.class, true);
+            TileEntity powered = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
             if(powered != null) {
                 this.tileTarget = powered;
             }
@@ -240,7 +249,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         if(this.tileTarget != null) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(((TileEntity) this.tileTarget).getPos(), cmp);
+            NBTUtils.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
             compound.setTag("tileTarget", cmp);
         }
     }

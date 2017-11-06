@@ -132,7 +132,7 @@ public enum WorldMeltables implements MeltInteraction {
         @Nonnull
         @Override
         public ItemStack getMeltResultStack() {
-            return out;
+            return out.copy();
         }
 
     }

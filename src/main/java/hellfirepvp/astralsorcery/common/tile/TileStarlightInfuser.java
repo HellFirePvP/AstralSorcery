@@ -280,7 +280,8 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
         if(recipe != null) {
             this.craftingTask = new ActiveInfusionTask(recipe, crafter.getUniqueID());
-            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalices(this, this.craftingTask.getChaliceRequiredAmount()));
+            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalices(this,
+                    new FluidStack(BlocksAS.fluidLiquidStarlight, this.craftingTask.getChaliceRequiredAmount())));
             markForUpdate();
         }
     }

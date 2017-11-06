@@ -191,6 +191,13 @@ public class FluidRarityRegistry {
             setEmpty();
         }
 
+        public int getMbRemaining() {
+            if(!isValid()) {
+                return 0;
+            }
+            return mbRemaining;
+        }
+
         @Nullable
         public FluidStack tryDrain(int mbRequested, boolean consume) {
             if(!isValid()) {

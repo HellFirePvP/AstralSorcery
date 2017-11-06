@@ -16,6 +16,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -97,6 +98,11 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
             }
         }
         return super.getActualState(state, worldIn, pos);
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+        return p_193383_2_.getValue(MARBLE_TYPE).isPillar() ? BlockFaceShape.UNDEFINED : BlockFaceShape.SOLID;
     }
 
     @Override
