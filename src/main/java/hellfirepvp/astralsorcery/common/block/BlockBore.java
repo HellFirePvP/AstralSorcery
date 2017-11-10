@@ -8,27 +8,24 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import hellfirepvp.astralsorcery.common.item.ItemBoreUpgrade;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileBore;
-import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -43,27 +40,26 @@ import javax.annotation.Nullable;
  */
 public class BlockBore extends BlockContainer {
 
-    public static final PropertyEnum<TileBore.BoreType> BORE_TYPE = PropertyEnum.create("type", TileBore.BoreType.class);
-
     public BlockBore() {
         super(Material.WOOD, MapColor.GOLD);
-        setDefaultState(this.blockState.getBaseState().withProperty(BORE_TYPE, TileBore.BoreType.NONE));
+        setHarvestLevel("axe", 2);
+        setHardness(3.0F);
+        setSoundType(SoundType.WOOD);
+        setResistance(25.0F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
-            ItemStack held = playerIn.getHeldItem(hand);
-            if(tb != null && (held.isEmpty() || held.getItem() instanceof ItemBoreUpgrade)) {
-                TileBore.BoreType prev = tb.trySetBoreUpgrade(held);
-                if(!held.isEmpty() && !playerIn.isCreative()) {
-                    held.shrink(1);
-                }
-                if(prev != null && prev != TileBore.BoreType.NONE) {
-                    ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5,
-                            new ItemStack(ItemsAS.boreUpgrade, 1, prev.ordinal()));
+            if(worldIn.getBlockState(pos.down()).getBlock().isReplaceable(worldIn, pos.down())) {
+                TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
+                ItemStack held = playerIn.getHeldItem(hand);
+                if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
+                    worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()));
+                    if(!playerIn.isCreative()) {
+                        held.shrink(1);
+                    }
                 }
             }
         }
@@ -96,19 +92,8 @@ public class BlockBore extends BlockContainer {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BORE_TYPE,
-                TileBore.BoreType.values()[MathHelper.clamp(meta, 0, TileBore.BoreType.values().length - 1)]);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(BORE_TYPE).ordinal();
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, BORE_TYPE);
+    public boolean hasTileEntity() {
+        return true;
     }
 
     @Override

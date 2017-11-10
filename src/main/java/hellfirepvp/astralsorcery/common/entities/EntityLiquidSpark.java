@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLiquidInteractionBurst;
 import hellfirepvp.astralsorcery.common.tile.ILiquidStarlightPowered;
+import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -182,6 +183,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                         IFluidHandler handler = tileTarget.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                         if(handler != null) {
                             handler.fill(getRepresentitiveFluid(), true);
+                            if(tileTarget instanceof TileEntitySynchronized) {
+                                ((TileEntitySynchronized) tileTarget).markForUpdate();
+                            } else {
+                                tileTarget.markDirty();
+                            }
                         }
                     }
                     Vector3 at = Vector3.atEntityCenter(this);

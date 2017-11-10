@@ -94,7 +94,9 @@ public class BlockChalice extends BlockContainer {
                         FluidActionResult far = FluidUtil.tryEmptyContainer(interact, tc.getTank(), 1000, playerIn, true);
                         if(far.isSuccess()) {
                             if(!playerIn.isCreative()) {
-                                playerIn.setHeldItem(hand, far.getResult());
+                                interact.shrink(1);
+                                playerIn.setHeldItem(hand, interact);
+                                playerIn.inventory.placeItemBackInInventory(worldIn, far.getResult());
                             }
                         }
                         tc.markForUpdate();
@@ -104,7 +106,9 @@ public class BlockChalice extends BlockContainer {
                         FluidActionResult far = FluidUtil.tryFillContainer(interact, tc.getTank(), 1000, playerIn, true);
                         if(far.isSuccess()) {
                             if(!playerIn.isCreative()) {
-                                playerIn.setHeldItem(hand, far.getResult());
+                                interact.shrink(1);
+                                playerIn.setHeldItem(hand, interact);
+                                playerIn.inventory.placeItemBackInInventory(worldIn, far.getResult());
                             }
                         }
                         tc.markForUpdate();
@@ -212,7 +216,7 @@ public class BlockChalice extends BlockContainer {
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return true;
+        return state.getValue(ACTIVE);
     }
 
     @Override
@@ -223,12 +227,18 @@ public class BlockChalice extends BlockContainer {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileChalice();
+        if(meta == 1) {
+            return new TileChalice();
+        }
+        return null;
     }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileChalice();
+        if(state.getValue(ACTIVE)) {
+            return new TileChalice();
+        }
+        return null;
     }
 }

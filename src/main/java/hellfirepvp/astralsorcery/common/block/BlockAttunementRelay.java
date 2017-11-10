@@ -157,7 +157,7 @@ public class BlockAttunementRelay extends BlockContainer {
                     TileInventoryBase.ItemHandlerTile mod = tar.getInventoryHandler();
                     if (!mod.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = mod.getStackInSlot(0);
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, stack).setNoPickupDelay();
+                        playerIn.inventory.placeItemBackInInventory(worldIn, stack);
                         mod.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
                     }
@@ -179,7 +179,7 @@ public class BlockAttunementRelay extends BlockContainer {
                     TileInventoryBase.ItemHandlerTile mod = tar.getInventoryHandler();
                     if (!mod.getStackInSlot(0).isEmpty()) {
                         ItemStack stack = mod.getStackInSlot(0);
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, stack).setNoPickupDelay();
+                        playerIn.inventory.placeItemBackInInventory(worldIn, stack);
                         mod.setStackInSlot(0, ItemStack.EMPTY);
                         tar.markForUpdate();
                     }

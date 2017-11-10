@@ -49,6 +49,9 @@ public class LiquidStarlightChaliceHandler {
         if(targetHandler == null) {
             return false;
         }
+        if(targetHandler.fill(toTransfer, false) < toTransfer.amount) {
+            return false;
+        }
         World world = source.getWorld();
         EntityLiquidSpark spark = new EntityLiquidSpark(world, source.getPos().up(), target);
         spark.setFluidRepresented(toTransfer);
@@ -125,9 +128,52 @@ public class LiquidStarlightChaliceHandler {
     }
 
     @Nonnull
-    public static List<TileChalice> findNearbyChalices(TileEntity origin, FluidStack stackExpectedToFit) {
+    public static List<TileChalice> findNearbyChalicesWithSpaceFor(TileEntity origin, FluidStack stackExpectedToFit) {
         List<TileChalice> out = new LinkedList<>();
         FluidStack expected = stackExpectedToFit.copy();
+        Vector3 thisV = new Vector3(origin).add(0.5, 0.5, 0.5);
+        World world = origin.getWorld();
+
+        int chX = origin.getPos().getX() >> 4;
+        int chZ = origin.getPos().getZ() >> 4;
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int zz = -1; zz <= 1; zz++) {
+                int cX = chX + xx;
+                int cZ = chZ + zz;
+                if(world.isBlockLoaded(new BlockPos(cX * 16, 1, cZ * 16))) {
+                    Chunk ch = world.getChunkFromChunkCoords(cX, cZ);
+                    Map<BlockPos, TileEntity> tiles = ch.getTileEntityMap();
+                    for (TileEntity te : tiles.values()) {
+                        if(!te.isInvalid() && te instanceof TileChalice &&
+                                new Vector3(te.getPos()).distance(thisV) <= 16) {
+                            TileChalice tc = (TileChalice) te;
+                            if(tc.getTank() != null &&
+                                    tc.getTank().canFillFluidType(expected) &&
+                                    tc.getTank().fill(expected, false) >= expected.amount) {
+                                out.add(tc);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Iterator<TileChalice> iterator = out.iterator();
+        while (iterator.hasNext()) {
+            TileChalice tc = iterator.next();
+            RaytraceAssist rta = new RaytraceAssist(thisV, new Vector3(tc.getPos()).add(0.5, 0.5, 0.5));
+            if(!rta.isClear(world)) {
+                iterator.remove();
+            }
+        }
+
+        return out;
+    }
+
+    @Nonnull
+    public static List<TileChalice> findNearbyChalicesThatContain(TileEntity origin, FluidStack expected) {
+        List<TileChalice> out = new LinkedList<>();
+        expected = expected.copy();
         Vector3 thisV = new Vector3(origin).add(0.5, 0.5, 0.5);
         World world = origin.getWorld();
 

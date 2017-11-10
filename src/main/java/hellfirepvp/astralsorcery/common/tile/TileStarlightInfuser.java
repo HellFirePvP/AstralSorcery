@@ -34,7 +34,6 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -45,14 +44,11 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -280,7 +276,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         }
         if(recipe != null) {
             this.craftingTask = new ActiveInfusionTask(recipe, crafter.getUniqueID());
-            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalices(this,
+            this.craftingTask.addChalices(LiquidStarlightChaliceHandler.findNearbyChalicesThatContain(this,
                     new FluidStack(BlocksAS.fluidLiquidStarlight, this.craftingTask.getChaliceRequiredAmount())));
             markForUpdate();
         }
@@ -386,11 +382,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
         if(!playerIn.getEntityWorld().isRemote) {
             if(playerIn.isSneaking()) {
                 if(!stack.isEmpty()) {
-                    ItemUtils.dropItemNaturally(playerIn.getEntityWorld(),
-                            getPos().getX() + 0.5,
-                            getPos().getY() + 1,
-                            getPos().getZ() + 0.5,
-                            stack);
+                    playerIn.inventory.placeItemBackInInventory(world, stack);
                     stack = ItemStack.EMPTY;
                     world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.2F + 0.8F);
                     markForUpdate();

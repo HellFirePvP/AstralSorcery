@@ -119,7 +119,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             }
         }
         if(!in.isEmpty() && playerIn.isSneaking()) {
-            ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, in);
+            playerIn.inventory.placeItemBackInInventory(worldIn, in);
             handle.setStackInSlot(0, ItemStack.EMPTY);
         }
         return true;

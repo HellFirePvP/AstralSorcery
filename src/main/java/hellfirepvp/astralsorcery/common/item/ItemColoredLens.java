@@ -110,7 +110,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     }
                     SoundHelper.playSoundAround(Sounds.clipSwitch, worldIn, pos, 0.8F, 1.5F);
                     if(oldType != null) {
-                        ItemUtils.dropItem(worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, oldType.asStack());
+                        playerIn.inventory.placeItemBackInInventory(worldIn, oldType.asStack());
                     }
                 }
             }

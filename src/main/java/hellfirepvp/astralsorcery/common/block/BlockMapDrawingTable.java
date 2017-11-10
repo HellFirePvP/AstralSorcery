@@ -132,12 +132,12 @@ public class BlockMapDrawingTable extends BlockContainer {
             if (tm != null) {
                 if(playerIn.isSneaking()) {
                     if(!tm.getSlotIn().isEmpty()) {
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, tm.getSlotIn());
+                        playerIn.inventory.placeItemBackInInventory(worldIn, tm.getSlotIn());
                         tm.putSlotIn(ItemStack.EMPTY);
                         return true;
                     }
                     if(!tm.getSlotGlassLens().isEmpty()) {
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, tm.getSlotGlassLens());
+                        playerIn.inventory.placeItemBackInInventory(worldIn, tm.getSlotGlassLens());
                         tm.putGlassLens(ItemStack.EMPTY);
                         return true;
                     }

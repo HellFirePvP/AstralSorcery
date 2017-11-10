@@ -182,7 +182,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                         ItemStack grind = tgr.getGrindingItem();
                         if(!grind.isEmpty()) {
                             if(player.isSneaking()) {
-                                ItemUtils.dropItem(world, posX + 0.5F, posY + 1F, posZ + 0.5F, grind);
+                                player.inventory.placeItemBackInInventory(world, grind);
 
                                 tgr.setGrindingItem(ItemStack.EMPTY);
                             } else {

@@ -14,10 +14,8 @@ import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
-import hellfirepvp.astralsorcery.common.block.BlockBore;
+import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.item.ItemBoreUpgrade;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
@@ -108,7 +106,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 coneBlockDiscoverer = new VerticalConeBlockDiscoverer(this.getPos().down(3));
             }
 
-            if(mbStarlight <= 12000 && getCurrentBoreType() != BoreType.NONE) {
+            if(mbStarlight <= 12000 && getCurrentBoreType() != null) {
                 TileChalice tc = MiscUtils.getTileAt(world, getPos().up(), TileChalice.class, false);
                 if(tc != null) {
                     LiquidStarlightChaliceHandler.requestLiquidStarlightAndTransferTo(this, tc, ticksExisted, 400);
@@ -121,7 +119,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 }
                 return;
             }
-            if(getCurrentBoreType() == BoreType.NONE) {
+            if(getCurrentBoreType() == null) {
                 if(operationTicks > 0) {
                     markForUpdate();
                 }
@@ -146,36 +144,38 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                         if(productionTimeout <= 0) {
                             productionTimeout = rand.nextInt(20) + 40;
                             BoreType type = getCurrentBoreType();
-                            switch (type) {
-                                case LIQUID:
-                                    Chunk ch = world.getChunkFromBlockCoords(getPos());
-                                    FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
-                                    if(entry != null) {
-                                        int mbDrain = rand.nextInt(100) + 100;
-                                        int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
-                                        FluidStack drained;
-                                        if(entry.isValid() && actMbDrain > 0) {
-                                            drained = entry.tryDrain(actMbDrain, false);
-                                            if(drained == null || drained.getFluid() == null) {
+                            if(type != null) {
+                                switch (type) {
+                                    case LIQUID:
+                                        Chunk ch = world.getChunkFromBlockCoords(getPos());
+                                        FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
+                                        if(entry != null) {
+                                            int mbDrain = rand.nextInt(300) + 300;
+                                            int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
+                                            FluidStack drained;
+                                            if(entry.isValid() && actMbDrain > 0) {
+                                                drained = entry.tryDrain(actMbDrain, false);
+                                                if(drained == null || drained.getFluid() == null) {
+                                                    drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                                                }
+                                                List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                                                if(!out.isEmpty()) {
+                                                    TileChalice target = out.get(rand.nextInt(out.size()));
+                                                    LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                                                    entry.tryDrain(actMbDrain, true);
+                                                }
+                                            } else {
                                                 drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                                                List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                                                if(!out.isEmpty()) {
+                                                    TileChalice target = out.get(rand.nextInt(out.size()));
+                                                    LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                                                }
                                             }
-                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalices(this, drained);
-                                            if(!out.isEmpty()) {
-                                                TileChalice target = out.get(rand.nextInt(out.size()));
-                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
-                                                entry.tryDrain(actMbDrain, true);
-                                            }
-                                        } else {
-                                            drained = new FluidStack(FluidRegistry.WATER, mbDrain);
-                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalices(this, drained);
-                                            if(!out.isEmpty()) {
-                                                TileChalice target = out.get(rand.nextInt(out.size()));
-                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
-                                            }
-                                        }
 
-                                    }
-                                    break;
+                                        }
+                                        break;
+                                }
                             }
                         }
                     }
@@ -264,7 +264,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private void handleSetupProgressTick() {
-        if(!hasMultiblock || getCurrentBoreType() == BoreType.NONE) {
+        if(!hasMultiblock || getCurrentBoreType() == null) {
             this.operationTicks = 0;
             return;
         }
@@ -317,7 +317,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             spr.setPosition(new Vector3(this).add(0.5, 0.5, 0.5));
             spr.setNoRotation(45).setAlphaMultiplier(1F);
             spr.setRefreshFunc(() -> {
-                if(isInvalid() || getCurrentBoreType() == BoreType.NONE || this.operationTicks <= 0) {
+                if(isInvalid() || getCurrentBoreType() == null || this.operationTicks <= 0) {
                     return false;
                 }
                 if(this.getWorld().provider == null || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider == null) {
@@ -332,30 +332,13 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         return spr;
     }
 
-    @Nonnull
-    public BoreType getCurrentBoreType() {
-        IBlockState parent = world.getBlockState(pos);
-        if(parent.getBlock() instanceof BlockBore) {
-            return parent.getValue(BlockBore.BORE_TYPE);
-        }
-        return BoreType.NONE; //Critical state monkaS, world and tile are desynced; shouldn't happen tho FeelsGoodMan
-    }
-
-    //Returns previous boreType. null if nothing changed.
     @Nullable
-    public BoreType trySetBoreUpgrade(ItemStack stack) {
-        if(stack.isEmpty()) {
-            if(getCurrentBoreType() == BoreType.NONE) return null;
-            BoreType prev = getCurrentBoreType();
-            this.world.setBlockState(pos, BlocksAS.blockBore.getDefaultState().withProperty(BlockBore.BORE_TYPE, BoreType.NONE));
-            return prev;
-        } else {
-            if(getCurrentBoreType() != BoreType.NONE) return null;
-            BoreType next = ItemBoreUpgrade.getBoreType(stack);
-            if(next == BoreType.NONE) return null;
-            this.world.setBlockState(pos, BlocksAS.blockBore.getDefaultState().withProperty(BlockBore.BORE_TYPE, next));
-            return BoreType.NONE;
+    public BoreType getCurrentBoreType() {
+        IBlockState parent = world.getBlockState(pos.down());
+        if(parent.getBlock() instanceof BlockBoreHead) {
+            return parent.getValue(BlockBoreHead.BORE_TYPE);
         }
+        return null;
     }
 
     @Nullable
@@ -418,7 +401,6 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     public static enum BoreType implements IStringSerializable {
 
-        NONE,
         LIQUID;
 
         @Override

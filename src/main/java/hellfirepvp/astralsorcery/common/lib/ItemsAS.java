@@ -48,7 +48,6 @@ public class ItemsAS {
     public static ItemGrappleWand grapplingWand;
     public static ItemInfusedGlass infusedGlass;
     public static ItemKnowledgeShare knowledgeShare;
-    public static ItemBoreUpgrade boreUpgrade;
 
     public static ItemUsableDust useableDust;
 

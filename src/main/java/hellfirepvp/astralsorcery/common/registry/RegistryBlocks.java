@@ -101,6 +101,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(blockChalice);
         blockBore = registerBlock(new BlockBore());
         queueDefaultItemBlock(blockBore);
+        blockBoreHead = registerBlock(new BlockBoreHead());
+        queueCustomNameItemBlock(blockBoreHead);
 
         //Mechanics
         blockAltar = registerBlock(new BlockAltar());
@@ -154,6 +156,7 @@ public class RegistryBlocks {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
         registerBlockRender(blockAltar);
+        registerBlockRender(blockBoreHead);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
         registerBlockRender(customFlower);

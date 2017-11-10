@@ -179,11 +179,7 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
 
     @Override
     public List<IBlockState> getValidStates() {
-        List<IBlockState> ret = new LinkedList<>();
-        for (OreType type : OreType.values()) {
-            ret.add(getDefaultState().withProperty(ORE_TYPE, type));
-        }
-        return ret;
+        return singleEnumPropertyStates(getDefaultState(), ORE_TYPE, OreType.values());
     }
 
     @Override
