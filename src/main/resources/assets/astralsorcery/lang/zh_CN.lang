@@ -207,7 +207,7 @@ research.TOOL_WANDS.name=接引之力
 astralsorcery.journal.TOOL_WANDS.1.text=在直接用手传输星能的过程中失败了，除了一小撮光移动外什么都没有改变。<NL>利用这些新发现的星尘特性制作的法杖可以让这种能量趋向于熵减状态。将方块以直线或其他方式放置会更便于法杖使用。
 astralsorcery.journal.TOOL_WANDS.3.text=潜行右键选择想要放置或替换的方块。将直接使用持有者背包内的相应物品。<NL>在使用了一些星能后，使用者将感觉有些虚弱。在使用这类小工具时应注意下自身所存的星能，以防止星能不足。
 
-research.GRAPPLE_WAND.name=涡漩星杖
+research.GRAPPLE_WAND.name=冲击星杖
 astralsorcery.journal.GRAPPLE_WAND.1.text=如果末影珍珠不那么难获得且不会在使用中损坏的话将是一个极好的道具。<NL>在对这些新奇的星能进行研究后发现可以制作一种利用末影珍珠来进行更安全的方式传输星能的法杖。<NL>与珍珠的不同之处在于它的范围有限，且不是直接传送到目标而是将用户拉过去。
 
 research.RIT_PEDESTAL.name=信标基座
@@ -392,7 +392,7 @@ item.itemhandtelescope.name=望远镜
 item.itemilluminationwand.name=照明之杖
 item.itemarchitectwand.name=秩序之杖
 item.itemexchangewand.name=转位之杖
-item.itemgrapplewand.name=涡漩星杖
+item.itemgrapplewand.name=冲击星杖
 item.itemshiftingstar.name=更替之星
 item.iteminfusedglass.name=聚能玻璃
 item.iteminfusedglass.active.name=蚀刻玻璃
@@ -476,6 +476,9 @@ tile.blockmapdrawingtable.name=恒星映射台
 tile.blockcelestialgateway.name=天体调谐器
 tile.blockchalice.name=遏制圣杯
 tile.blockfountain.name=Evershifting Fountain
+tile.blockbore.name=Evershifting Fountain
+tile.blockborehead.liquid.name=Neromantic Prime 
+tile.blockborehead.ore.name=Petromantic Prime
 
 tile.blockgeolosyssamplecluster.name=水晶石样品
 
