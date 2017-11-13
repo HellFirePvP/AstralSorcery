@@ -207,7 +207,7 @@ research.TOOL_WANDS.name=Active Channeling
 astralsorcery.journal.TOOL_WANDS.1.text=The attempt to channel the starlight's energies with bare hands failed and brought forth nothing but maybe a small flash of light.<NL>With the properties of the newfound stardust, constructing wands that can channel this energy to produce more orderly results. Placing blocks into a straight line or replacing some with others should be easy enough for the proper wands.
 astralsorcery.journal.TOOL_WANDS.3.text=Pick the block to be place or replace with by right-clicking a block of that type while sneaking. Items needed will be drawn from the wielder’s inventory.<NL>Upon channeling some of this spectral energy into the wand it leaves the wielding a bit drained afterwards. Utilizing the alignment gauge when using those kinds of gadgets may be helpful, to avoid an overload of some sort...
 
-research.GRAPPLE_WAND.name=Vortex Wand
+research.GRAPPLE_WAND.name=Impulsion Wand
 astralsorcery.journal.GRAPPLE_WAND.1.text=Enderpearls would be very useful if they weren't so hard to obtain, easily used up and damaging upon usage.<NL>Thanks to the the newfound knowledge about these strange patterns of starlight energy, a wand can be created that channels these energies through enderpearls to provide safer means of transportation.<NL>In contrast to the pearls though, the wand has only limited range and pulls its user towards whatever it finds rather than providing instant teleportation.
 
 research.RIT_PEDESTAL.name=Ritual Pedestal
@@ -392,7 +392,7 @@ item.itemhandtelescope.name=Looking Glass
 item.itemilluminationwand.name=Illumination Wand
 item.itemarchitectwand.name=Formation Wand
 item.itemexchangewand.name=Conversion Wand
-item.itemgrapplewand.name=Vortex Wand
+item.itemgrapplewand.name=Impulsion Wand
 item.itemshiftingstar.name=Shifting Star
 item.iteminfusedglass.name=Infused Glass
 item.iteminfusedglass.active.name=Engraved Glass
@@ -476,6 +476,9 @@ tile.blockmapdrawingtable.name=Stellar Refraction Table
 tile.blockcelestialgateway.name=Celestial Gateway
 tile.blockchalice.name=Containment Chalice
 tile.blockfountain.name=Evershifting Fountain
+tile.blockbore.name=Evershifting Fountain
+tile.blockborehead.liquid.name=Neromantic Prime
+tile.blockborehead.ore.name=Petromantic Prime
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 
