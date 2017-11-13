@@ -184,7 +184,7 @@ public class TileFakeTree extends TileEntityTick {
                 }
                 EnchantmentHelper.setEnchantments(levels, this.usedTool);
             } else {
-                this.usedTool = null;
+                this.usedTool = ItemStack.EMPTY;
             }
         }
 

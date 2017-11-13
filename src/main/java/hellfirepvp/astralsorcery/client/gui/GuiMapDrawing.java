@@ -235,10 +235,8 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
             ItemStack in = tile.getSlotIn();
             GlStateManager.pushMatrix();
             GlStateManager.color(1F, 1F, 1F, 1F);
-            GlStateManager.translate(guiLeft + 63, guiTop + 42, 0); //-> +130, +130
-            GlStateManager.scale(8, 8, 0);
-            GlStateManager.enableBlend();
-            Blending.DEFAULT.applyStateManager();
+            GlStateManager.translate(guiLeft + 63 + 16.25, guiTop + 42 + 16.25, 0); //-> +130, +130
+            GlStateManager.scale(6, 6, 0);
             GlStateManager.enableDepth();
 
             itemRender.renderItemAndEffectIntoGUI(this.mc.player, in, 0, 0);

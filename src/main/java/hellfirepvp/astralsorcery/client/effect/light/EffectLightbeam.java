@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -42,6 +43,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     private EntityComplexFX.AlphaFunction alphaFunction = EntityComplexFX.AlphaFunction.PYRAMID;
     private float alphaMultiplier = 1F;
     private float cR = 1F, cG = 1F, cB = 1F, cA = 1F;
+    private double distanceCapSq = Config.maxEffectRenderDistanceSq;
 
     private boolean flagRemoved = true;
 
@@ -64,6 +66,11 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
 
     public void setDead() {
         age = maxAge;
+    }
+
+    public EffectLightbeam setDistanceCapSq(double distanceCapSq) {
+        this.distanceCapSq = distanceCapSq;
+        return this;
     }
 
     public EffectLightbeam setColorOverlay(float red, float green, float blue, float alpha) {
@@ -134,7 +141,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         if(rView == null) rView = Minecraft.getMinecraft().player;
 
         for (EffectLightbeam beam : beams) {
-            if(rView.getDistanceSq(beam.from.getX(), beam.from.getY(), beam.from.getZ()) > Config.maxEffectRenderDistanceSq) return;
+            if(rView.getDistanceSq(beam.from.getX(), beam.from.getY(), beam.from.getZ()) > beam.distanceCapSq) return;
             beam.renderFast(vb);
         }
 
@@ -160,7 +167,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
         if(rView == null) rView = Minecraft.getMinecraft().player;
-        if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > Config.maxEffectRenderDistanceSq) return;
+        if(rView.getDistanceSq(from.getX(), from.getY(), from.getZ()) > distanceCapSq) return;
 
         float tr = alphaFunction.getAlpha(age, maxAge);
         tr *= 0.6;
@@ -172,7 +179,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
         Blending.PREALPHA.apply();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if(lighting) {
@@ -189,7 +196,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         }
         Blending.DEFAULT.apply();
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_CULL_FACE);

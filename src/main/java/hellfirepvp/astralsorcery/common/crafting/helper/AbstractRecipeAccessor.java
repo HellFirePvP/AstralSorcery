@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,5 +33,29 @@ public abstract class AbstractRecipeAccessor extends AbstractRecipeData {
 
     @Nullable
     abstract ItemHandle getExpectedStack(ShapedRecipeSlot slot);
+
+    public static AbstractRecipeAccessor buildAccessorFor(IRecipe nativeRecipe) {
+        return new AbstractRecipeAccessor(nativeRecipe.getRecipeOutput()) {
+            @Nullable
+            @Override
+            ItemHandle getExpectedStack(int row, int column) {
+                int index = row * 3 + column;
+                if(index >= nativeRecipe.getIngredients().size()) {
+                    return null;
+                }
+                return ItemHandle.of(nativeRecipe.getIngredients().get(index));
+            }
+
+            @Nullable
+            @Override
+            ItemHandle getExpectedStack(ShapedRecipeSlot slot) {
+                int index = slot.getSlotID();
+                if(index >= nativeRecipe.getIngredients().size()) {
+                    return null;
+                }
+                return ItemHandle.of(nativeRecipe.getIngredients().get(index));
+            }
+        };
+    }
 
 }

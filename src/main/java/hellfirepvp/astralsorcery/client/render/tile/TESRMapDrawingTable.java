@@ -91,9 +91,8 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
             ItemStack in = te.getSlotIn();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x + 0.5, y + 1.02, z + 0.75);
-            GlStateManager.rotate(270, 1, 0, 0);
-            GlStateManager.scale(2F, 2F, 2F);
+            GlStateManager.translate(x + 0.5, y + 0.85, z + 0.5);
+            GlStateManager.scale(0.625F, 0.625F, 0.625F);
 
             Minecraft.getMinecraft().getRenderItem().renderItem(in, ItemCameraTransforms.TransformType.GROUND);
             GlStateManager.popMatrix();

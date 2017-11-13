@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.models.obj.OBJModelLibrary;
 import hellfirepvp.astralsorcery.client.render.entity.*;
 import hellfirepvp.astralsorcery.client.render.tile.*;
 import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.JournalRecipeDisplayRecovery;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.client.util.item.AstralTEISR;
 import hellfirepvp.astralsorcery.client.util.item.DummyModelLoader;
@@ -35,6 +36,7 @@ import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
@@ -93,7 +95,7 @@ public class ClientProxy extends CommonProxy {
         try {
             ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(AssetLibrary.resReloadInstance);
         } catch (Exception exc) {
-            AstralSorcery.log.warn("AstralSorcery: Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
+            AstralSorcery.log.warn("[AstralSorcery] Could not add AssetLibrary to resource manager! Texture reloading will have no effect on AstralSorcery textures.");
             AssetLibrary.resReloadInstance.onResourceManagerReload(null);
         }
         ModelLoaderRegistry.registerLoader(new DummyModelLoader()); //IItemRenderer Hook ModelLoader
@@ -171,6 +173,8 @@ public class ClientProxy extends CommonProxy {
         OBJModelLibrary.init();
 
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
+
+        JournalRecipeDisplayRecovery.attemptRecipeRecovery();
     }
 
     @Override
@@ -250,6 +254,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityIlluminationSpark.class, new RenderEntityNoOp.Factory<>());
         RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new RenderEntityHook.Factory());
         RenderingRegistry.registerEntityRenderingHandler(EntitySpectralTool.class, new RenderSpectralTool.Factory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityLiquidSpark.class, new RenderLiquidSpark.Factory());
         //RenderingRegistry.registerEntityRenderingHandler(SpellProjectile.class, new RenderEntitySpellProjectile.Factory());
     }
 
@@ -274,14 +279,32 @@ public class ClientProxy extends CommonProxy {
                     ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata, mrl);
                 }
             } else {
-                ModelLoader.setCustomModelResourceLocation(modelEntry.item, modelEntry.metadata,
-                        new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+                Item item = modelEntry.item;
+                ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+                if(item instanceof INBTModel) {
+                    List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
+                    ResourceLocation[] arr = new ResourceLocation[out.size()];
+                    arr = out.toArray(arr);
+                    ModelBakery.registerItemVariants(item, arr);
+                    ModelLoader.setCustomMeshDefinition(item, stack -> ((INBTModel) item).getModelLocation(stack, def));
+                } else {
+                    ModelLoader.setCustomModelResourceLocation(item, modelEntry.metadata, def);
+                }
             }
         }
 
         for (RenderInfoBlock modelEntry : blockRegister) {
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(modelEntry.block), modelEntry.metadata,
-                    new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory"));
+            Item item = Item.getItemFromBlock(modelEntry.block);
+            ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
+            if(item instanceof INBTModel) {
+                List<ResourceLocation> out = ((INBTModel) item).getAllPossibleLocations(def);
+                ResourceLocation[] arr = new ResourceLocation[out.size()];
+                arr = out.toArray(arr);
+                ModelBakery.registerItemVariants(item, arr);
+                ModelLoader.setCustomMeshDefinition(item, (stack -> ((INBTModel) item).getModelLocation(stack, def)));
+            } else {
+                ModelLoader.setCustomModelResourceLocation(item, modelEntry.metadata, def);
+            }
         }
     }
 

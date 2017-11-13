@@ -85,7 +85,7 @@ public class TileCollectorCrystal extends TileSourceBase {
                 checkAdjacentBlocks();
             }
             if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && getTicksExisted() % 40 == 0) {
-                boolean match = usedCrystalProperties != null && usedCrystalProperties.getSize() > 400 &&
+                boolean match = usedCrystalProperties != null &&
                         MultiBlockArrays.patternCollectorEnhancement.matches(world, pos);
                 if (match != enhanced) {
                     setEnhanced(match);

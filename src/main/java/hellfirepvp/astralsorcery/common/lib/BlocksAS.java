@@ -53,6 +53,8 @@ public class BlocksAS {
     public static BlockCelestialGateway celestialGateway;
     public static BlockVanishing blockVanishing;
     public static BlockChalice blockChalice;
+    public static BlockBore blockBore;
+    public static BlockBoreHead blockBoreHead;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

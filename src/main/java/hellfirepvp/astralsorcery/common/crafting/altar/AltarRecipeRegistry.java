@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
@@ -30,6 +31,8 @@ import java.util.*;
  * Date: 22.09.2016 / 13:13
  */
 public class AltarRecipeRegistry {
+
+    private static Map<ItemStack, ISpecialCraftingEffects> effectRecoveryMap = new HashMap<>();
 
     public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> mtRecipes = new HashMap<>();
     public static Map<TileAltar.AltarLevel, List<AbstractAltarRecipe>> recipes = new HashMap<>();
@@ -91,6 +94,23 @@ public class AltarRecipeRegistry {
         return compiledRecipeArray[id];
     }
 
+    public static List<AbstractAltarRecipe> getAltarRecipesByOutput(ItemStack output, TileAltar.AltarLevel altarLevel) {
+        List<AbstractAltarRecipe> list = new LinkedList<>();
+        for (AbstractAltarRecipe recipe : recipes.get(altarLevel)) {
+            ItemStack out = recipe.getOutputForMatching();
+            if(!out.isEmpty() && ItemUtils.matchStacksStrict(out, output)) {
+                list.add(recipe);
+            }
+        }
+        for (AbstractAltarRecipe recipe : mtRecipes.get(altarLevel)) {
+            ItemStack out = recipe.getOutputForMatching();
+            if(!out.isEmpty() && ItemUtils.matchStacksStrict(out, output)) {
+                list.add(recipe);
+            }
+        }
+        return list;
+    }
+
     /*
      * Returns the Recipe that was removed if successful.
      */
@@ -135,10 +155,42 @@ public class AltarRecipeRegistry {
     public static <T extends AbstractAltarRecipe> T registerAltarRecipe(T recipe) {
         TileAltar.AltarLevel level = recipe.getNeededLevel();
         recipes.get(level).add(recipe);
+        if(recipe instanceof ISpecialCraftingEffects) {
+            registerSpecialEffects(recipe);
+        }
         if(CraftingAccessManager.hasCompletedSetup()) {
             CraftingAccessManager.compile();
         }
         return recipe;
+    }
+
+    private static void registerSpecialEffects(AbstractAltarRecipe ar) {
+        ItemStack out = ar.getOutputForMatching();
+        if(out.isEmpty()) return; //Well....
+
+        boolean has = false;
+        for (ItemStack i : effectRecoveryMap.keySet()) {
+            if(ItemUtils.matchStackLoosely(out, i)) {
+                has = true;
+            }
+        }
+        if(!has) {
+            effectRecoveryMap.put(out, (ISpecialCraftingEffects) ar);
+        }
+    }
+
+    //null === false
+    @Nullable
+    public static ISpecialCraftingEffects shouldHaveSpecialEffects(AbstractAltarRecipe ar) {
+        if(ar == null || ar instanceof ISpecialCraftingEffects) return null;
+        ItemStack match = ar.getOutputForMatching();
+        if(match.isEmpty()) return null;
+        for (ItemStack i : effectRecoveryMap.keySet()) {
+            if(ItemUtils.matchStackLoosely(match, i)) {
+                return effectRecoveryMap.get(i);
+            }
+        }
+        return null;
     }
 
     public static Collection<AbstractAltarRecipe> getRecipesForLevel(TileAltar.AltarLevel al) {
@@ -163,7 +215,7 @@ public class AltarRecipeRegistry {
             List<AbstractAltarRecipe> validRecipes = recipes.get(lvl);
             if(validRecipes != null) {
                 for (AbstractAltarRecipe rec : validRecipes) {
-                    if(rec.matches(ta, ta.getInventoryHandler(), ignoreStarlightRequirement)) {
+                    if(ta.doesRecipeMatch(rec, ignoreStarlightRequirement)) {
                         return rec;
                     }
                 }
@@ -171,7 +223,7 @@ public class AltarRecipeRegistry {
             validRecipes = mtRecipes.get(lvl);
             if(validRecipes != null) {
                 for (AbstractAltarRecipe rec : validRecipes) {
-                    if(rec.matches(ta, ta.getInventoryHandler(), ignoreStarlightRequirement)) {
+                    if(ta.doesRecipeMatch(rec, ignoreStarlightRequirement)) {
                         return rec;
                     }
                 }

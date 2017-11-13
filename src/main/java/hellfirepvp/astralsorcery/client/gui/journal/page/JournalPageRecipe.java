@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class JournalPageRecipe implements IJournalPage {
 
-    private final AccessibleRecipeAdapater recipe;
+    public AccessibleRecipeAdapater recipe;
 
     public JournalPageRecipe(AccessibleRecipeAdapater recipe) {
         this.recipe = recipe;

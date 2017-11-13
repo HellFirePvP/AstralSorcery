@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.effect.compound;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -57,7 +58,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
                     GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                     GL11.glEnable(GL11.GL_BLEND);
                     Blending.DEFAULT.apply();
-                    GL11.glDisable(GL11.GL_ALPHA_TEST);
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
                     GL11.glDisable(GL11.GL_CULL_FACE);
 
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -68,6 +69,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         public void revertGLContext() {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
                     GL11.glPopAttrib();
                     break;
             }

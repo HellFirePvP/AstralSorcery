@@ -16,7 +16,9 @@ import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.IAltarUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
@@ -44,7 +46,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.10.2016 / 13:03
  */
-public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAltarUpgradeRecipe, INighttimeRecipe {
+public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAltarUpgradeRecipe, INighttimeRecipe, ISpecialCraftingEffects {
 
     private static Vector3[] offsetPillars = new Vector3[] {
             new Vector3( 3, 2,  3),
@@ -88,11 +90,6 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
         return new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal());
     }
 
-    @Override
-    public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
-        return altar.getAltarLevel().ordinal() < getLevelUpgradingTo().ordinal() && super.matches(altar, invHandler, ignoreStarlightRequirement);
-    }
-
     @Nonnull
     @Override
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar tileAltar) {
@@ -105,12 +102,9 @@ public class ConstellationUpgradeRecipe extends AttunementRecipe implements IAlt
     }
 
     @Override
-    public void onCraftServerFinish(TileAltar altar, Random rand) {
-        super.onCraftServerFinish(altar, rand);
-
-        altar.tryForceLevelUp(getLevelUpgradingTo(), true);
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new ConstellationUpgradeRecipe();
     }
-
 
     @Override
     @SideOnly(Side.CLIENT)

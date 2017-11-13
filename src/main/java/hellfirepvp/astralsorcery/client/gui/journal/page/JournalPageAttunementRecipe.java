@@ -30,7 +30,7 @@ import java.awt.*;
  */
 public class JournalPageAttunementRecipe implements IJournalPage {
 
-    private final AttunementRecipe recipe;
+    public AttunementRecipe recipe;
 
     public JournalPageAttunementRecipe(AttunementRecipe recipe) {
         this.recipe = recipe;

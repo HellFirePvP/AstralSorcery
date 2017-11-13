@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class JournalPageConstellationRecipe implements IJournalPage {
 
-    private final ConstellationRecipe recipe;
+    public ConstellationRecipe recipe;
 
     public JournalPageConstellationRecipe(ConstellationRecipe recipe) {
         this.recipe = recipe;

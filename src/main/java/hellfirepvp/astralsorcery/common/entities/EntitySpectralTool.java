@@ -50,7 +50,7 @@ import java.util.function.Predicate;
  * Created by HellFirePvP
  * Date: 11.10.2017 / 20:56
  */
-public class EntitySpectralTool extends EntityFlying {
+public class EntitySpectralTool extends EntityFlying implements EntityTechnicalAmbient {
 
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntitySpectralTool.class, DataSerializers.ITEM_STACK);
     private AIToolTask aiTask;
@@ -97,7 +97,7 @@ public class EntitySpectralTool extends EntityFlying {
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
 
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.35);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.5);
     }
 
     @Override
@@ -322,7 +322,7 @@ public class EntitySpectralTool extends EntityFlying {
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockPick() && this.parentEntity.world instanceof WorldServer) {
                                 MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true);
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
                                 resetTimer = true;
                             }
                         }
@@ -346,7 +346,7 @@ public class EntitySpectralTool extends EntityFlying {
                             this.actionTicks++;
                             if(this.actionTicks > CapeEffectPelotrio.getTicksBreakBlockAxe() && this.parentEntity.world instanceof WorldServer) {
                                 MiscUtils.breakBlockWithoutPlayer((WorldServer) this.parentEntity.world, this.designatedBreakTarget,
-                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true);
+                                        this.parentEntity.world.getBlockState(this.designatedBreakTarget), true, true, true);
                                 resetTimer = true;
                             }
                         }

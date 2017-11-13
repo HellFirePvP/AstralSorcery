@@ -91,20 +91,20 @@ public class LightOreTransmutations {
     public static Transmutation registerTransmutation(Transmutation tr) {
         for (Transmutation t : registeredTransmutations) {
             if(t.matchesInput(tr)) {
-                AstralSorcery.log.warn("Tried to register Transmutation that has the same input as an already existing one.");
+                AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation that has the same input as an already existing one.");
                 return null;
             }
         }
         if(!tr.hasValidInput()) {
-            AstralSorcery.log.warn("Tried to register Transmutation with null input - Skipping!");
+            AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation with null input - Skipping!");
             return null;
         }
         if(tr.getInputAsBlock().equals(Blocks.CRAFTING_TABLE)) {
-            AstralSorcery.log.warn("Cannot register Transmutation of workbench -> something. By default occupied by general crafting which is handled differently.");
+            AstralSorcery.log.warn("[AstralSorcery] Cannot register Transmutation of workbench -> something. By default occupied by general crafting which is handled differently.");
             return null;
         }
         if(tr.output == null) {
-            AstralSorcery.log.warn("Tried to register Transmutation with null output - Skipping!");
+            AstralSorcery.log.warn("[AstralSorcery] Tried to register Transmutation with null output - Skipping!");
             return null;
         }
         registeredTransmutations.add(tr);

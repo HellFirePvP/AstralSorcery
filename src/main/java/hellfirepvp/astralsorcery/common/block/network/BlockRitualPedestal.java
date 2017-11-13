@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,6 +79,11 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         return new TileRitualPedestal();
     }
 
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+        return BlockFaceShape.UNDEFINED;
+    }
+
     /*@Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
@@ -113,7 +119,7 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
             }
         }
         if(!in.isEmpty() && playerIn.isSneaking()) {
-            ItemUtils.dropItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, in);
+            playerIn.inventory.placeItemBackInInventory(worldIn, in);
             handle.setStackInSlot(0, ItemStack.EMPTY);
         }
         return true;

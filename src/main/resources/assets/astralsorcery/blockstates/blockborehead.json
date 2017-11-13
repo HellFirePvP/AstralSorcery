@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "type=liquid": { "model":"astralsorcery:blockborehead_liquid" }
+    }
+}

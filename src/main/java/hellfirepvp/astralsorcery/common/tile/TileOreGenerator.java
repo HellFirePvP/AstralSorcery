@@ -76,7 +76,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
         if(remainingGuaranteed > 0) {
             if(world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, false);
+                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true, true);
                 BlockCustomOre.allowCrystalHarvest = false;
             }
             generatingOre = true;
@@ -87,7 +87,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
                 if(rand.nextInt(200) == 0) {
                     state = BlocksAS.customOre.getDefaultState().withProperty(BlockCustomOre.ORE_TYPE, BlockCustomOre.OreType.ROCK_CRYSTAL);
                 } else {
-                    ItemStack stack = OreTypes.getRandomOre(rand, !ConfigEntryMultiOre.allowModdedOres);
+                    ItemStack stack = OreTypes.TREASURE_SHRINE_GEN.getRandomOre(rand);
                     state = ItemUtils.createBlockState(stack);
                     if(state == null) {
                         state = Blocks.STONE.getDefaultState();
@@ -147,7 +147,6 @@ public class TileOreGenerator extends TileEntitySynchronized {
 
         public static final ConfigEntryMultiOre instance = new ConfigEntryMultiOre();
 
-        private static boolean allowModdedOres = true;
         private static int guaranteedOres = 550;
         private static int chanceDespawn = 100;
         private static int oreChance = 2;
@@ -163,7 +162,6 @@ public class TileOreGenerator extends TileEntitySynchronized {
 
         @Override
         public void loadFromConfig(Configuration cfg) {
-            allowModdedOres = cfg.getBoolean("allowModdedOres", getConfigurationSection(), allowModdedOres, "Set this to true to also allow several modded ores to spawn");
             guaranteedOres = cfg.getInt("guaranteedBlocks", getConfigurationSection(), guaranteedOres, 0, Integer.MAX_VALUE, "This value defines how often the block can be broken and will 100% respawn again.");
             chanceDespawn = cfg.getInt("chanceDespawn", getConfigurationSection(), chanceDespawn, 1, Integer.MAX_VALUE, "This value defines how high the chance is after 'guaranteedBlocks' has been reached that the block-respawner despawns. The higher this number, the more unlikely it is to despawn.");
             oreChance = cfg.getInt("oreChance", getConfigurationSection(), oreChance, 0, Integer.MAX_VALUE, "This defines how often an ore will be generated instead of a stone. The higher the number the more rare. Set to 0 to have it never generate ore, only stone.");

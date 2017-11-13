@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.wearable;
 
 import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.client.models.base.ASCape;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
@@ -18,6 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectFactory;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.CapeEffectOctans;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerCapeEffects;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -38,6 +40,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -82,6 +85,17 @@ public class ItemCape extends ItemArmor implements ItemDynamicColor {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if(Mods.DRACONICEVOLUTION.isPresent()) {
+            float perc = Config.capeChaosResistance;
+            if(perc > 0) {
+                int displayPerc = MathHelper.floor(perc * 100);
+                String out = I18n.format("misc.chaos.resistance", displayPerc + "%");
+                if(perc >= 1) {
+                    out = I18n.format("misc.chaos.resistance.max");
+                }
+                tooltip.add(TextFormatting.DARK_PURPLE + out);
+            }
+        }
         IConstellation cst = getAttunedConstellation(stack);
         if(cst != null) {
             String n = cst.getUnlocalizedName();

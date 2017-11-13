@@ -99,15 +99,17 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
             }
             for (IWeakConstellation cst : weakConstellations) {
                 Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
+                int counter = 600;
                 do {
-                    foundPoint = findEmptyPlace(r);
+                    counter--;
+                    foundPoint = findEmptyPlace(r, counter <= 0);
                 } while (foundPoint == null);
                 currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
             }
         }
     }
 
-    private Tuple<Point, TileTelescope.TelescopeRotation> findEmptyPlace(Random rand) {
+    private Tuple<Point, TileTelescope.TelescopeRotation> findEmptyPlace(Random rand, boolean ignoreCollision) {
         TileTelescope.TelescopeRotation rot = TileTelescope.TelescopeRotation.values()[rand.nextInt(TileTelescope.TelescopeRotation.values().length)];
         RotationConstellationInformation info = currentInformation.informationMap.get(rot);
         int wh = ((int) SkyConstellationDistribution.constellationWH);
@@ -116,10 +118,12 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
         int rX = 6 + rand.nextInt(wdh);
         int rY = 6 + rand.nextInt(hgt);
         Rectangle constellationRect = new Rectangle(rX, rY, wh, wh);
-        for (Point p : info.constellations.keySet()) {
-            Rectangle otherRect = new Rectangle(p.x, p.y, wh, wh);
-            if(otherRect.intersects(constellationRect)) {
-                return null;
+        if(!ignoreCollision) {
+            for (Point p : info.constellations.keySet()) {
+                Rectangle otherRect = new Rectangle(p.x, p.y, wh, wh);
+                if (otherRect.intersects(constellationRect)) {
+                    return null;
+                }
             }
         }
         return new Tuple<>(new Point(rX, rY), rot);
@@ -646,12 +650,12 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
             for (StarConnection connection : sc) {
                 Rectangle fromRect = stars.get(connection.from);
                 if (fromRect == null) {
-                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 Rectangle toRect = stars.get(connection.to);
                 if (toRect == null) {
-                    AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
                     continue lblInfos;
                 }
                 if (!containsMatch(drawnLines, fromRect, toRect)) {

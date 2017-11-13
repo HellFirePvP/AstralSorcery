@@ -11,7 +11,9 @@ package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
@@ -32,7 +34,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 22.04.2017 / 11:03
  */
-public class CelestialGatewayRecipe extends AttunementRecipe {
+public class CelestialGatewayRecipe extends AttunementRecipe implements ISpecialCraftingEffects {
 
     public CelestialGatewayRecipe() {
         super(shapedRecipe("gateway", BlocksAS.celestialGateway)
@@ -51,6 +53,11 @@ public class CelestialGatewayRecipe extends AttunementRecipe {
                         ShapedRecipeSlot.CENTER)
         .unregisteredAccessibleShapedRecipe());
         setAttItem(OreDictAlias.ITEM_STARMETAL_DUST, AttunementAltarSlot.values());
+    }
+
+    @Override
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new CelestialGatewayRecipe();
     }
 
     @Override

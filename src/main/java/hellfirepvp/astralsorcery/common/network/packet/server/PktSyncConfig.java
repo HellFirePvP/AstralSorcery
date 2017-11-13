@@ -59,7 +59,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
             if (tuple == null) {
                 fields = null;
                 if (key != null) {
-                    AstralSorcery.log.info("Could not read config from server with key: " + key);
+                    AstralSorcery.log.info("[AstralSorcery] Could not read config from server with key: " + key);
                 }
                 break;
             }
@@ -103,7 +103,7 @@ public class PktSyncConfig implements IMessage, IMessageHandler<PktSyncConfig, I
                 field.set(null, tuple.value);
             }
         } catch (Throwable exc) {
-            AstralSorcery.log.error("Could not applyServer config received from server!");
+            AstralSorcery.log.error("[AstralSorcery] Could not applyServer config received from server!");
             throw new RuntimeException(exc);
         }
         return null;

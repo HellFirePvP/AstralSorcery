@@ -75,7 +75,7 @@ public class PktParticleDataEvent implements IMessage, IMessageHandler<PktPartic
                 triggerClientside(trigger, message);
             }
         } catch (Exception exc) {
-            AstralSorcery.log.warn("Error executing ParticleEventType " + message.effectType.name() + " at " + xCoord + ", " + yCoord + ", " + zCoord);
+            AstralSorcery.log.warn("[AstralSorcery] Error executing ParticleEventType " + message.effectType.name() + " at " + xCoord + ", " + yCoord + ", " + zCoord);
         }
         return null;
     }

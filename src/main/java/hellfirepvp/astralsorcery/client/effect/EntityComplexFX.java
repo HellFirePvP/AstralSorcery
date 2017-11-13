@@ -82,6 +82,12 @@ public abstract class EntityComplexFX implements IComplexEffect {
         flagRemoved = false;
     }
 
+    public static interface RenderAlphaFunction<T extends IComplexEffect> {
+
+        public float getRenderAlpha(T fx, float currentAlpha);
+
+    }
+
     public static enum AlphaFunction {
 
         CONSTANT,

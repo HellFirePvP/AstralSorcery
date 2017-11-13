@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
-import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;

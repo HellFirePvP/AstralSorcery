@@ -44,6 +44,8 @@ import java.util.Random;
  */
 public abstract class AbstractAltarRecipe {
 
+    private AbstractAltarRecipe specialEffectRecovery = null;
+
     private int experiencePerCraft = 5, passiveStarlightRequirement;
     private final TileAltar.AltarLevel neededLevel;
     private final AccessibleRecipe recipe;
@@ -65,6 +67,11 @@ public abstract class AbstractAltarRecipe {
         return uniqueRecipeId;
     }
 
+    public final void setSpecialEffectRecovery(AbstractAltarRecipe specialEffectRecovery) {
+        this.specialEffectRecovery = specialEffectRecovery;
+    }
+
+    //Output used for rendering purposes. (Shouldn't be empty)
     @Nonnull
     public ItemStack getOutputForRender() {
         return ItemUtils.copyStackWithSize(out, out.getCount());
@@ -74,16 +81,20 @@ public abstract class AbstractAltarRecipe {
         return recipe;
     }
 
+    //Output that's dropped into the world (may be empty)
     @Nonnull
     public ItemStack getOutput(ShapeMap centralGridMap, TileAltar altar) {
         return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
+    //Output that's used to search for the recipe and match/recognize special outputs.
+    //PLEASE never return an empty stack as the recipe becomes unrecognisable by the mod!
     @Nonnull
     public ItemStack getOutputForMatching() {
         return ItemUtils.copyStackWithSize(out, out.getCount());
     }
 
+    //Instead of calling this directly, call it via TileAltar.doesRecipeMatch() since that is more sensitive for the altar.
     public boolean matches(TileAltar altar, TileReceiverBaseInventory.ItemHandlerTile invHandler, boolean ignoreStarlightRequirement) {
         if(!ignoreStarlightRequirement && !fulfillesStarlightRequirement(altar)) return false;
 
@@ -290,9 +301,21 @@ public abstract class AbstractAltarRecipe {
     public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, Random rand) {}
 
     @SideOnly(Side.CLIENT)
-    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {}
+    public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {
+        if(specialEffectRecovery != null) {
+            try {
+                specialEffectRecovery.onCraftClientTick(altar, state, tick, rand);
+            } catch (Exception ignored) {}
+        }
+    }
 
     @SideOnly(Side.CLIENT)
-    public void onCraftTESRRender(TileAltar te, double x, double y, double z, float partialTicks) {}
+    public void onCraftTESRRender(TileAltar te, double x, double y, double z, float partialTicks) {
+        if(specialEffectRecovery != null) {
+            try {
+                specialEffectRecovery.onCraftTESRRender(te, x, y, z, partialTicks);
+            } catch (Exception ignored) {}
+        }
+    }
 
 }

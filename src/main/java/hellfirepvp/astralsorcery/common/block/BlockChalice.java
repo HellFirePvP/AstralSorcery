@@ -19,6 +19,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleManager;
@@ -64,9 +65,6 @@ public class BlockChalice extends BlockContainer {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {}
-
-    @Override
     @SideOnly(Side.CLIENT)
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = world.getBlockState(pos);
@@ -96,7 +94,9 @@ public class BlockChalice extends BlockContainer {
                         FluidActionResult far = FluidUtil.tryEmptyContainer(interact, tc.getTank(), 1000, playerIn, true);
                         if(far.isSuccess()) {
                             if(!playerIn.isCreative()) {
-                                playerIn.setHeldItem(hand, far.getResult());
+                                interact.shrink(1);
+                                playerIn.setHeldItem(hand, interact);
+                                playerIn.inventory.placeItemBackInInventory(worldIn, far.getResult());
                             }
                         }
                         tc.markForUpdate();
@@ -106,7 +106,9 @@ public class BlockChalice extends BlockContainer {
                         FluidActionResult far = FluidUtil.tryFillContainer(interact, tc.getTank(), 1000, playerIn, true);
                         if(far.isSuccess()) {
                             if(!playerIn.isCreative()) {
-                                playerIn.setHeldItem(hand, far.getResult());
+                                interact.shrink(1);
+                                playerIn.setHeldItem(hand, interact);
+                                playerIn.inventory.placeItemBackInInventory(worldIn, far.getResult());
                             }
                         }
                         tc.markForUpdate();
@@ -121,10 +123,15 @@ public class BlockChalice extends BlockContainer {
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if(state.getValue(ACTIVE)) {
-            return super.getBoundingBox(state, source, pos).expand(0, 1, 0);
+            return new AxisAlignedBB(2D / 16D, 0, 2D / 16D, 14D / 16D, 2, 14D / 16D);
         } else {
-            return super.getBoundingBox(state, source, pos).expand(0, -1, 0);
+            return new AxisAlignedBB(2D / 16D, -1, 2D / 16D, 14D / 16D, 1, 14D / 16D);
         }
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @Override
@@ -209,7 +216,7 @@ public class BlockChalice extends BlockContainer {
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return true;
+        return state.getValue(ACTIVE);
     }
 
     @Override
@@ -220,12 +227,18 @@ public class BlockChalice extends BlockContainer {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileChalice();
+        if(meta == 1) {
+            return new TileChalice();
+        }
+        return null;
     }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileChalice();
+        if(state.getValue(ACTIVE)) {
+            return new TileChalice();
+        }
+        return null;
     }
 }

@@ -99,6 +99,10 @@ public class RegistryBlocks {
         queueDefaultItemBlock(blockVanishing);
         blockChalice = registerBlock(new BlockChalice());
         queueDefaultItemBlock(blockChalice);
+        blockBore = registerBlock(new BlockBore());
+        queueDefaultItemBlock(blockBore);
+        blockBoreHead = registerBlock(new BlockBoreHead());
+        queueCustomNameItemBlock(blockBoreHead);
 
         //Mechanics
         blockAltar = registerBlock(new BlockAltar());
@@ -152,6 +156,7 @@ public class RegistryBlocks {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
         registerBlockRender(blockAltar);
+        registerBlockRender(blockBoreHead);
         registerBlockRender(customOre);
         registerBlockRender(customSandOre);
         registerBlockRender(customFlower);
@@ -183,6 +188,7 @@ public class RegistryBlocks {
         registerTile(TileOreGenerator.class);
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
+        registerTile(TileBore.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

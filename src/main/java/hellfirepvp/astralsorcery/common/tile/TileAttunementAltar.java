@@ -47,6 +47,7 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -64,6 +65,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -76,7 +78,7 @@ import java.util.function.Function;
  * Created by HellFirePvP
  * Date: 28.11.2016 / 10:26
  */
-public class TileAttunementAltar extends TileEntityTick {
+public class TileAttunementAltar extends TileEntityTick implements IMultiblockDependantTile {
 
     private static final Random rand = new Random();
     private static final Function<ItemStack, Boolean> crystalAcceptor = stack -> {
@@ -223,6 +225,12 @@ public class TileAttunementAltar extends TileEntityTick {
                 }
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        return MultiBlockArrays.patternAttunementFrame;
     }
 
     public int getMode() {
@@ -795,7 +803,7 @@ public class TileAttunementAltar extends TileEntityTick {
                         if(isInvalid() || mode != 2 || entityIdActive == -1) return v;
                         Entity ent = world.getEntityByID(entityIdActive);
                         if(ent == null || ent.isDead) return v;
-                        return Vector3.atEntityCorner(ent);
+                        return Vector3.atEntityCorner(ent).addY(ent.height * 2);
                     });
                 }
             }

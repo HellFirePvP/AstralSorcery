@@ -9,12 +9,13 @@
 package hellfirepvp.astralsorcery;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
+import hellfirepvp.astralsorcery.common.auxiliary.WorldChaliceCache;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -33,14 +34,14 @@ import org.apache.logging.log4j.Logger;
  * Date: 07.05.2016 / 00:20
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
-        dependencies = "required-after:forge@[14.22.1.2484,)",
+        dependencies = "required-after:forge@[14.22.1.2484,);after:crafttweaker",
         certificateFingerprint = "cetificate-placeholder :^)",
         acceptedMinecraftVersions = "[1.12.1,1.12.2]")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.7.1";
+    public static final String VERSION = "1.7.2";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
@@ -60,8 +61,10 @@ public class AstralSorcery {
         devEnvChache = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
         proxy.preLoadConfigEntries();
-
         Config.load(event.getSuggestedConfigurationFile());
+
+        proxy.registerConfigDataRegistries();
+        Config.loadDataRegistries(event.getModConfigurationDirectory());
 
         proxy.preInit();
     }
@@ -101,6 +104,7 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
+        WorldChaliceCache.wipeCache();
         //SpellCastingManager.INSTANCE.clearEffects();
     }
 

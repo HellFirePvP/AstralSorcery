@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBook;
@@ -52,7 +53,7 @@ import java.util.Random;
  */
 public class BlockMapDrawingTable extends BlockContainer {
 
-    private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(-1.0 / 2.0, 0, -1.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0, 3.0 / 2.0);
+    private static final AxisAlignedBB drawingTableBox = new AxisAlignedBB(-6.0 / 16.0, 0, -4.0 / 16.0, 22.0 / 16.0, 24.0 / 16.0, 20.0 / 16.0);
 
     public BlockMapDrawingTable() {
         super(Material.ROCK);
@@ -67,15 +68,12 @@ public class BlockMapDrawingTable extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < rand.nextInt(2) + 1; i++) {
-            Vector3 offset = new Vector3(-6.0 / 16.0, 1.505, -6.0 / 16.0);
-            if(rand.nextBoolean()) {
-                offset.addX(26.0 / 16.0);
+            Vector3 offset = new Vector3(-5.0 / 16.0, 1.505, -3.0 / 16.0);
+            int random = rand.nextInt(12);
+            if(random > 5) {
+                offset.addX(24.0 / 16.0);
             }
-            int random = rand.nextInt(6);
-            offset.addZ(random * (5.0 / 16.0));
-            if(random > 2) {
-                offset.addZ(1.0 / 16.0D); //Gap in the middle..
-            }
+            offset.addZ((random % 6) * (4.0 / 16.0));
             offset.add(rand.nextFloat() * 0.1, 0, rand.nextFloat() * 0.1).add(pos);
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(offset.getX(), offset.getY(), offset.getZ());
             p.scale(rand.nextFloat() * 0.1F + 0.15F).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
@@ -99,8 +97,31 @@ public class BlockMapDrawingTable extends BlockContainer {
                 case 5:
                     p.setColor(new Color(0xFF00FE));
                     break;
+                case 6:
+                    p.setColor(new Color(0xF07800));
+                    break;
+                case 7:
+                    p.setColor(new Color(0xB4F000));
+                    break;
+                case 8:
+                    p.setColor(new Color(0x01F000));
+                    break;
+                case 9:
+                    p.setColor(new Color(0x007AF0));
+                    break;
+                case 10:
+                    p.setColor(new Color(0x3900F0));
+                    break;
+                case 11:
+                    p.setColor(new Color(0xf0007B));
+                    break;
             }
         }
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @Override
@@ -111,12 +132,12 @@ public class BlockMapDrawingTable extends BlockContainer {
             if (tm != null) {
                 if(playerIn.isSneaking()) {
                     if(!tm.getSlotIn().isEmpty()) {
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, tm.getSlotIn());
+                        playerIn.inventory.placeItemBackInInventory(worldIn, tm.getSlotIn());
                         tm.putSlotIn(ItemStack.EMPTY);
                         return true;
                     }
                     if(!tm.getSlotGlassLens().isEmpty()) {
-                        ItemUtils.dropItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, tm.getSlotGlassLens());
+                        playerIn.inventory.placeItemBackInInventory(worldIn, tm.getSlotGlassLens());
                         tm.putGlassLens(ItemStack.EMPTY);
                         return true;
                     }

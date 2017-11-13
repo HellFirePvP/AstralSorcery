@@ -100,7 +100,14 @@ public class RegistryResearch {
         resCape.addPage(getTextPage("ATT_CAPE.3"));
         resCape.addPage(getTextPage("ATT_CAPE.4"));
 
-        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape), resCape, 1, ResearchProgression.RADIANCE);
+        ResearchNode resChalice = new ResearchNode(new ItemStack(BlocksAS.blockChalice), "C_CHALICE", 7, 4);
+        resChalice.addPage(getTextPage("C_CHALICE.1"));
+        resChalice.addPage(new JournalPageTraitRecipe(RegistryRecipes.rChalice));
+        resChalice.addPage(getTextPage("C_CHALICE.3"));
+        resChalice.addPage(getTextPage("C_CHALICE.4"));
+
+        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape), resCape,    1, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockChalice),   resChalice, 1, ResearchProgression.RADIANCE);
 
         resAttWandArmara.addSourceConnectionFrom(resAttWands);
         resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
@@ -109,6 +116,7 @@ public class RegistryResearch {
         resAttWandEvorsio.addSourceConnectionFrom(resAttWands);
         resAttWands.addSourceConnectionFrom(resHintRecipes);
         resCape.addSourceConnectionFrom(resHintRecipes);
+        resChalice.addSourceConnectionFrom(resHintRecipes);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -118,6 +126,7 @@ public class RegistryResearch {
         regRadiance.register(resAttWandEvorsio);
         regRadiance.register(resCape);
         regRadiance.register(resHintRecipes);
+        regRadiance.register(resChalice);
     }
 
     private static void initConstellation() {
@@ -569,7 +578,13 @@ public class RegistryResearch {
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleStairs));
         resMarbleTypes.addPage(new JournalPageRecipe(RecipesAS.rMarbleSlab));
 
-        ResearchNode resSootyMarble = new ResearchNode(new ItemStack(BlocksAS.blockBlackMarble), "SOOTYMARBLE", 5, 2);
+        stacks = new ItemStack[BlockBlackMarble.BlackMarbleBlockType.values().length];
+        BlockBlackMarble.BlackMarbleBlockType[] sValues = BlockBlackMarble.BlackMarbleBlockType.values();
+        for (int i = 0; i < sValues.length; i++) {
+            BlockBlackMarble.BlackMarbleBlockType mbt = sValues[i];
+            stacks[i] = new ItemStack(BlocksAS.blockBlackMarble, 1, mbt.getMeta());
+        }
+        ResearchNode resSootyMarble = new ResearchNode(stacks, "SOOTYMARBLE", 5, 2);
         resSootyMarble.addPage(getTextPage("SOOTYMARBLE.1"));
         resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleRaw));
         resSootyMarble.addPage(new JournalPageRecipe(RecipesAS.rBlackMarbleBricks));

@@ -8,7 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
-import hellfirepvp.astralsorcery.common.util.SwordSharpenHelper;
+import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -34,15 +35,16 @@ public class EventHandlerMisc {
         List<String> toolTip = event.getToolTip();
         ItemStack stack = event.getItemStack();
         if(SwordSharpenHelper.isSwordSharpened(stack)) {
-            LinkedList<String> mod = new LinkedList<>();
-            mod.addAll(toolTip);
-            if(mod.size() >= 2) {
-                mod.add(1, I18n.format("misc.sword.sharpened"));
+            List<String> newTooltip = new LinkedList<>();
+            if(toolTip.size() > 1) {
+                newTooltip.addAll(toolTip);
+                newTooltip.add(1, I18n.format("misc.sword.sharpened", String.valueOf(Math.round(Config.swordSharpMultiplier * 100)) + "%"));
             } else {
-                mod.add(I18n.format("misc.sword.sharpened"));
+                newTooltip.add(I18n.format("misc.sword.sharpened", String.valueOf(Math.round(Config.swordSharpMultiplier * 100)) + "%"));
+                newTooltip.addAll(toolTip);
             }
             toolTip.clear();
-            toolTip.addAll(mod);
+            toolTip.addAll(newTooltip);
         }
     }
 

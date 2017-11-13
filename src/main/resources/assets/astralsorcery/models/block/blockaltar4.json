@@ -10,6 +10,16 @@
 		"hovering": "astralsorcery:models/altar/altar_hovering",
 		"base": "astralsorcery:models/altar/altar_4_bottom"
 	},
+	"display": {
+		"gui": {
+			"rotation":  [ 30, 225, 0 ],
+			"translation":  [ 0, -1, 0 ],
+			"scale":  [ 0.375, 0.375, 0.375 ]
+		},
+		"fixed": {
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		}
+	},
 	"elements": [ 	 
 		{
 			"__comment": "base",

@@ -62,8 +62,8 @@ public class CelestialStrike {
             }
         }
         float dmg = 10;
-        dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 20F;
-        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 40F;
+        dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 40F;
+        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 20F;
         for (EntityLivingBase living : livingEntities) {
             if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
                 float dstPerc = (float) (Vector3.atEntityCenter(living).distance(position) / radius);

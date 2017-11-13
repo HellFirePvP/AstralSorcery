@@ -33,8 +33,6 @@ public interface SerializeableRecipe {
 
         INFUSION_ADD    ((v) -> new InfusionRecipeAdd()),
         INFUSION_REMOVE ((v) -> new InfusionRecipeRemove()),
-        ORETPYE_ADD     ((v) -> new OreTypeAdd()),
-        ORETYPE_REMOVE  ((v) -> new OreTypeRemove()),
         TRANSMUTE_ADD   ((v) -> new LightTransmutationAdd()),
         TRANSMUTE_REMOVE((v) -> new LightTransmutationRemove()),
         WELL_ADD        ((v) -> new WellRecipeAdd()),

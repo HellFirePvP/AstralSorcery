@@ -33,6 +33,7 @@ public abstract class AbstractInfusionRecipe {
     private int uniqueRecipeId = -1;
     private float consumptionChance = 0.1F;
     private boolean consumeMultiple = false;
+    private boolean acceptsChalices = true;
 
     @Nonnull
     protected ItemStack output = ItemStack.EMPTY;
@@ -51,6 +52,14 @@ public abstract class AbstractInfusionRecipe {
 
     public float getLiquidStarlightConsumptionChance() {
         return consumptionChance;
+    }
+
+    public void setCanBeSupportedByChalices(boolean acceptsChalices) {
+        this.acceptsChalices = acceptsChalices;
+    }
+
+    public boolean canBeSupportedByChalice() {
+        return this.acceptsChalices;
     }
 
     public void setConsumeMultiple() {

@@ -86,8 +86,8 @@ public class CEffectHorologium extends CEffectPositionList {
                     } catch (Exception exc) {
                         TileAccelerationBlacklist.errored(te.getClass());
                         removeElement(entry);
-                        AstralSorcery.log.warn("Couldn't accelerate TileEntity " + te.getClass().getName() + " properly.");
-                        AstralSorcery.log.warn("Temporarily blacklisting that class. Consider adding that to the blacklist if it persists?");
+                        AstralSorcery.log.warn("[AstralSorcery] Couldn't accelerate TileEntity " + te.getClass().getName() + " properly.");
+                        AstralSorcery.log.warn("[AstralSorcery] Temporarily blacklisting that class. Consider adding that to the blacklist if it persists?");
                         exc.printStackTrace();
                     }
                 } else {

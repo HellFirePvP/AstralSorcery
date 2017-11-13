@@ -48,7 +48,6 @@ public class WellLiquefaction {
         registerLiquefaction(new ItemStack(ItemsAS.rockCrystal), BlocksAS.fluidLiquidStarlight, 1F, 70, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
 
         registerLiquefaction(new ItemStack(Blocks.ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
-        registerLiquefaction(new ItemStack(Blocks.FROSTED_ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
         registerLiquefaction(new ItemStack(Blocks.PACKED_ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
         registerLiquefaction(new ItemStack(Blocks.SNOW), FluidRegistry.WATER, 1.5F, 15, new Color(0x5369FF));
 
@@ -72,7 +71,7 @@ public class WellLiquefaction {
     public static void registerLiquefaction(ItemStack catalystIn, Fluid producedIn, float productionMultiplier, float shatterMultiplier, Color color) {
         for (ItemStack i : registeredLiquefactions.keySet()) {
             if(i.isItemEqual(catalystIn)) {
-                AstralSorcery.log.warn("Tried to register Lightwell Liquefaction that has the same input as an already existing one.");
+                AstralSorcery.log.warn("[AstralSorcery] Tried to register Lightwell Liquefaction that has the same input as an already existing one.");
                 return;
             }
         }

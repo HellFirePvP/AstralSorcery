@@ -113,7 +113,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
 
     @Nullable
     private Color getDominantColorFromStack(ItemStack stack) {
-        TextureAtlasSprite tas = getTexture(stack);
+        TextureAtlasSprite tas = RenderingUtils.tryGetMainTextureOfItemStack(stack);
         if(tas == null) return null;
         int overlay = getOverlayColor(stack);
         try {
@@ -127,7 +127,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             b = MathHelper.clamp(b, 0, 255);
             return new Color(r, g, b).brighter();
         } catch (Exception exc) {
-            AstralSorcery.log.error("Item Colorization Helper: Ignoring non-resolvable image " + tas.getIconName());
+            AstralSorcery.log.error("[AstralSorcery] Item Colorization Helper: Ignoring non-resolvable image " + tas.getIconName());
             exc.printStackTrace();
         }
         return null;
@@ -159,35 +159,16 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
         }
     }
 
-    @Nullable
-    private TextureAtlasSprite getTexture(ItemStack stack) {
-        if(stack.isEmpty()) return null;
-        ItemModelMesher imm = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-        IBakedModel model = imm.getItemModel(stack);
-        if(model == imm.getModelManager().getMissingModel()) {
-            return null;
-        }
-        if(stack.getItem() instanceof ItemBlock) {
-            IBlockState state = ItemUtils.createBlockState(stack);
-            if(state == null) return null;
-            TextureAtlasSprite tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
-            if(tas == Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) return null;
-            return tas;
-        } else {
-            return imm.getItemModel(stack).getParticleTexture();
-        }
-    }
-
     private void nukeRegistry() {
         colorizationMap.clear();
     }
 
     public void reloadRegistry() {
-        AstralSorcery.log.info("Item Colorization Helper: Rebuilding colorization cache! This might take longer for higher-res texture packs...");
+        AstralSorcery.log.info("[AstralSorcery] Item Colorization Helper: Rebuilding colorization cache! This might take longer for higher-res texture packs...");
         long startMs = System.currentTimeMillis();
         nukeRegistry();
         setupRegistry();
-        AstralSorcery.log.info("Item Colorization Helper: Cache rebuilt! Time required: " + (System.currentTimeMillis() - startMs) + "ms - Entries cached: " + colorizationMap.size());
+        AstralSorcery.log.info("[AstralSorcery] Item Colorization Helper: Cache rebuilt! Time required: " + (System.currentTimeMillis() - startMs) + "ms - Entries cached: " + colorizationMap.size());
     }
 
     @Override

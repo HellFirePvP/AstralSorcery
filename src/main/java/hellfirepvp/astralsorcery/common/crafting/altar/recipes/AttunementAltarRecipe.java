@@ -14,7 +14,9 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.INighttimeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -34,7 +36,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 07.12.2016 / 13:47
  */
-public class AttunementAltarRecipe extends AttunementRecipe implements INighttimeRecipe {
+public class AttunementAltarRecipe extends AttunementRecipe implements INighttimeRecipe, ISpecialCraftingEffects {
 
     private static Vector3[] offsetPillarsT2 = new Vector3[] {
         new Vector3( 3, 2,  3),
@@ -68,6 +70,11 @@ public class AttunementAltarRecipe extends AttunementRecipe implements INighttim
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);
+    }
+
+    @Override
+    public AbstractAltarRecipe copyNewEffectInstance() {
+        return new AttunementAltarRecipe();
     }
 
     @Override

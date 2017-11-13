@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common;
 
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
+import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
@@ -58,13 +60,18 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -72,6 +79,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.UUID;
 
@@ -85,7 +93,7 @@ import java.util.UUID;
 public class CommonProxy implements IGuiHandler {
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
-    public static DamageSource dmgSourceStellar = new DamageSource("as.stellar").setDamageBypassesArmor().setMagicDamage();
+    public static DamageSourceEntity dmgSourceStellar = (DamageSourceEntity) new DamageSourceEntity("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static InternalRegistryPrimer registryPrimer;
     private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
 
@@ -99,7 +107,14 @@ public class CommonProxy implements IGuiHandler {
         CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
+        Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
+    }
+
+    public void registerConfigDataRegistries() {
+        Config.addDataRegistry(OreTypes.RITUAL_MINERALIS);
+        Config.addDataRegistry(OreTypes.AEVITAS_ORE_PERK);
+        Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
     }
 
     public void preInit() {
@@ -128,26 +143,26 @@ public class CommonProxy implements IGuiHandler {
         registerCapabilities();
 
         if (Mods.CRAFTTWEAKER.isPresent()) {
-            AstralSorcery.log.info("Crafttweaker found! Adding recipe handlers...");
+            AstralSorcery.log.info("[AstralSorcery] Crafttweaker found! Adding recipe handlers...");
             ModIntegrationCrafttweaker.instance.load();
         } else {
-            AstralSorcery.log.info("Crafttweaker not found!");
+            AstralSorcery.log.info("[AstralSorcery] Crafttweaker not found!");
         }
     }
 
     private void registerCapabilities() {
-        /*CapabilityManager.INSTANCE.register(SpellPlague.class, new Capability.IStorage<SpellPlague>() {
+        CapabilityManager.INSTANCE.register(FluidRarityRegistry.ChunkFluidEntry.class, new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side) {
+            public NBTBase writeNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side) {
                 return instance.serializeNBT();
             }
 
             @Override
-            public void readNBT(Capability<SpellPlague> capability, SpellPlague instance, EnumFacing side, NBTBase nbt) {
+            public void readNBT(Capability<FluidRarityRegistry.ChunkFluidEntry> capability, FluidRarityRegistry.ChunkFluidEntry instance, EnumFacing side, NBTBase nbt) {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
-        }, new SpellPlague.Factory());*/
+        }, new FluidRarityRegistry.ChunkFluidEntryFactory());
     }
 
     private void registerOreDictEntries() {
@@ -206,6 +221,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.EVENT_INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -217,7 +233,7 @@ public class CommonProxy implements IGuiHandler {
 
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
-        OreTypes.init();
+        FluidRarityRegistry.init();
         LightOreTransmutations.init();
         HerdableAnimal.init();
         WellLiquefaction.init();
@@ -247,6 +263,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         ModIntegrationBloodMagic.sendIMC();
+        AltarRecipeEffectRecovery.attemptRecipeRecovery();
 
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 

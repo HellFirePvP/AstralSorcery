@@ -54,7 +54,7 @@ public class ClientGuiHandler {
             case CONSTELLATION_PAPER:
                 IConstellation c = ConstellationRegistry.getConstellationById(x); //Suggested Constellation id;
                 if(c == null) {
-                    AstralSorcery.log.info("Tried opening ConstellationPaper GUI with out-of-range constellation id!");
+                    AstralSorcery.log.info("[AstralSorcery] Tried opening ConstellationPaper GUI with out-of-range constellation id!");
                     return null;
                 } else {
                     return new GuiConstellationPaper(c);

@@ -677,12 +677,12 @@ public class GuiHandTelescope extends GuiWHScreen {
         for (StarConnection connection : sc) {
             Rectangle fromRect = drawnStars.get(connection.from);
             if (fromRect == null) {
-                AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
                 return;
             }
             Rectangle toRect = drawnStars.get(connection.to);
             if (toRect == null) {
-                AstralSorcery.log.info("Could not check constellation of telescope drawing - starLocation is missing?");
+                AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
                 return;
             }
             if (!containsMatch(drawnLines, fromRect, toRect)) {

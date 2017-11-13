@@ -27,7 +27,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 08.04.2017 / 00:24
  */
-public class EntityIlluminationSpark extends EntityThrowable {
+public class EntityIlluminationSpark extends EntityThrowable implements EntityTechnicalAmbient {
 
     public EntityIlluminationSpark(World worldIn) {
         super(worldIn);

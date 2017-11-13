@@ -87,7 +87,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-            int runs = MathHelper.ceil(starlightCharge * 2.6D);
+            int runs = MathHelper.ceil(starlightCharge * 3.4D);
             starlightCharge = 0D;
             for (int i = 0; i < Math.max(8, runs); i++) {
                 BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
@@ -296,9 +296,9 @@ public class TileTreeBeacon extends TileReceiverBase {
     }
 
     private void receiveStarlight(IWeakConstellation type, double amount) {
-        this.starlightCharge += amount;
+        this.starlightCharge += amount * 3;
         if(type == Constellations.aevitas) {
-            this.starlightCharge += amount * 2;
+            this.starlightCharge += amount * 3;
         }
     }
 

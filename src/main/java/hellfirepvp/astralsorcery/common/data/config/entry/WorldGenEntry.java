@@ -58,7 +58,7 @@ public class WorldGenEntry extends ConfigEntry {
             try {
                 resolvedTypes.add(BiomeDictionary.Type.getType(s));
             } catch (Exception e) {
-                AstralSorcery.log.error("Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
+                AstralSorcery.log.error("[AstralSorcery] Could not find BiomeType by name '" + s + "' - Ignoring BiomeType specification for structure " + getKey());
             }
         }
         biomeTypes = Lists.newArrayList(resolvedTypes);

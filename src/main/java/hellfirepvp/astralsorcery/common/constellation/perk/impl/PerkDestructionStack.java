@@ -53,11 +53,11 @@ public class PerkDestructionStack extends ConstellationPerk {
     }
 
     private int getMultiplier(EntityPlayer player) {
-        return MathHelper.ceil(((float) getActiveCooldownForPlayer(player)) / 10F);
+        return MathHelper.ceil(((float) getActiveCooldownForPlayer(player)) / 30F);
     }
 
     private void setMultiplier(EntityPlayer player, int multiplier) {
-        forceSetCooldownForPlayer(player, multiplier * 10);
+        forceSetCooldownForPlayer(player, multiplier * 30);
     }
 
     @Override

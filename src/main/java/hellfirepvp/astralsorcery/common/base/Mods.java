@@ -35,7 +35,8 @@ public enum Mods {
     CHISEL("chisel"),
     GALACTICRAFT_CORE("galacticraftcore"),
     GEOLOSYS("geolosys"),
-    ORESTAGES("orestages");
+    ORESTAGES("orestages"),
+    DRACONICEVOLUTION("draconicevolution");
 
     public final String modid;
 

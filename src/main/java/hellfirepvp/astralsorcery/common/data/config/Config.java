@@ -51,6 +51,8 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
     public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
+    @Sync public static float capeChaosResistance = 0.8F;
+
     //Attuned wands configs
     @Sync public static float evorsioEffectChance = 0.25F;
     @Sync public static int discidiaStackCap = 10;
@@ -91,6 +93,7 @@ public class Config {
     public static boolean performNetworkIntegrityCheck = false;
 
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
+    private static List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
 
     private Config() {}
 
@@ -108,6 +111,15 @@ public class Config {
         dynamicConfigEntries.add(entry);
     }
 
+    public static void addDataRegistry(ConfigDataAdapter<?> dataAdapter) {
+        for (ConfigDataAdapter<?> cfg : dataAdapters) {
+            if(cfg.getDataFileName().equalsIgnoreCase(dataAdapter.getDataFileName())) {
+                throw new IllegalArgumentException("Duplicate DataRegistry names! " + cfg.getDataFileName() + " - " + dataAdapter.getDataFileName());
+            }
+        }
+        dataAdapters.add(dataAdapter);
+    }
+
     public static void rebuildClientConfig() {
         try {
             for (PktSyncConfig.SyncTuple tuple : savedSyncTuples) {
@@ -116,9 +128,34 @@ public class Config {
             }
             savedSyncTuples.clear();
         } catch (Throwable exc) {
-            AstralSorcery.log.error("Failed to reapply saved client config!");
+            AstralSorcery.log.error("[AstralSorcery] Failed to reapply saved client config!");
             throw new RuntimeException(exc);
         }
+    }
+
+    public static void loadDataRegistries(File cfgDirectory) {
+        File dirAS = new File(cfgDirectory, AstralSorcery.MODID);
+        if(!dirAS.exists()) {
+            dirAS.mkdirs();
+        }
+        for (ConfigDataAdapter<?> cfg : dataAdapters) {
+            attemptLoad(cfg, new File(dirAS, cfg.getDataFileName() + ".cfg"));
+        }
+    }
+
+    private static void attemptLoad(ConfigDataAdapter<?> cfg, File file) {
+        String[] out = cfg.serializeDataSet();
+
+        Configuration config = new Configuration(file);
+        config.load();
+        config.addCustomCategoryComment("data", cfg.getDescription());
+        out = config.getStringList("data", "data", out, "");
+        for (String str : out) {
+            if(cfg.appendDataSet(str) == null) {
+                AstralSorcery.log.warn("[AstralSorcery] Skipped Entry '" + str + "' for registry " + cfg.getDataFileName() + "! Invalid format!");
+            }
+        }
+        config.save();
     }
 
     private static void loadData() {
@@ -143,6 +180,8 @@ public class Config {
         grappleWandUseCost = latestConfig.getFloat("wandCost_grapple", "tools", grappleWandUseCost, 0.0F, 1.0F, "Sets the quick-charge cost for one usage of the grapple wand");
 
         exchangeWandMaxHardness = latestConfig.getFloat("exchange_wand_max_hardness", "tools", -1, -1, 50000, "Sets the max. hardness the exchange wand can swap !from!. If the block you're trying to \"mine\" with the conversion wand is higher than this number, it won't work. (-1 to disable this check)");
+
+        capeChaosResistance = latestConfig.getFloat("cape_chaosresistance", "tools", capeChaosResistance, 0.0F, 1.0F, "Sets the amount of damage reduction a player gets when being hit by a DE chaos-damage-related damagetype.");
 
         shouldChargedToolsRevert = latestConfig.getBoolean("chargedCrystalToolsRevert", "tools", shouldChargedToolsRevert, "If this is set to true, charged crystals tools can revert back to their inert state.");
         revertStart = latestConfig.getInt("chargedCrystalToolsRevertStart", "tools", revertStart, 0, Integer.MAX_VALUE - 1, "Defines the minimum uses a user at least gets before it's trying to revert to an inert crystal tool.");

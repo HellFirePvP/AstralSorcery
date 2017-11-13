@@ -53,6 +53,8 @@ public class MultiBlockArrays {
 
     public static PatternBlockArray patternCelestialGateway;
 
+    public static PatternBlockArray patternFountain;
+
     @PasteBlacklist
     public static PatternBlockArray patternCollectorEnhancement;
 

@@ -10,20 +10,25 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFloatingCube;
-import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
+import hellfirepvp.astralsorcery.common.entities.EntityLiquidSpark;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
+import hellfirepvp.astralsorcery.common.auxiliary.WorldChaliceCache;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -32,6 +37,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,17 +47,17 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 18.10.2017 / 21:58
  */
-public class TileChalice extends TileEntityTick {
+public class TileChalice extends TileEntityTick implements ILiquidStarlightPowered {
 
     private static final int TANK_SIZE = 24000;
     private SimpleSingleFluidCapabilityTank tank;
 
     public Vector3 rotationDegreeAxis = new Vector3();
     public Vector3 prevRotationDegreeAxis = new Vector3();
-
     private Vector3 rotationVecAxis1 = null, rotationVecAxis2 = null;
-
     private Vector3 rotationVec = null;
+
+    private int nextTest = -1;
 
     public TileChalice() {
         tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, EnumFacing.DOWN);
@@ -75,6 +82,54 @@ public class TileChalice extends TileEntityTick {
             this.rotationDegreeAxis.add(this.rotationVec);
 
             playFluidEffect();
+        } else {
+            if(nextTest == -1) {
+                nextTest = ticksExisted + 40 + rand.nextInt(90);
+            }
+            if(ticksExisted >= nextTest) {
+                nextTest = ticksExisted + 40 + rand.nextInt(90);
+                if(this.getTank().getFluid() == null || this.getTank().getFluid().amount <= 0) {
+                    return;
+                }
+                List<LiquidInteraction> interactions = LiquidInteraction.getPossibleInteractions(this.tank.getFluid());
+                if(!interactions.isEmpty()) {
+                    List<TileChalice> tch = WorldChaliceCache.getChalices(this.world);
+                    Collections.shuffle(tch);
+                    for (TileChalice ch : tch) {
+                        if(ch.getPos().equals(getPos())) continue;
+                        TileChalice other = MiscUtils.getTileAt(world, ch.pos, TileChalice.class, true);
+                        if(other == null) {
+                            WorldChaliceCache.remove(ch);
+                        } else {
+                            if(new Vector3(this).distance(ch.getPos()) <= ConfigEntryChalice.chaliceRange) {
+                                RaytraceAssist rta = new RaytraceAssist(getPos(), ch.getPos());
+                                if(rta.isClear(this.world)) {
+                                    FluidStack otherC = other.getTank().getFluid();
+                                    LiquidInteraction exec = LiquidInteraction.getMatchingInteraction(interactions, otherC);
+                                    if(exec != null) {
+                                        exec.drainComponents(this, other);
+                                        EntityLiquidSpark els1 = new EntityLiquidSpark(this.world, this.pos, exec);
+                                        EntityLiquidSpark els2 = new EntityLiquidSpark(this.world, ch.getPos(), exec);
+
+                                        els1.setTarget(els2);
+                                        els1.setFluidRepresented(exec.getComponent1());
+
+                                        els2.setTarget(els1);
+                                        els2.setFluidRepresented(exec.getComponent2());
+
+                                        this.world.spawnEntity(els1);
+                                        this.world.spawnEntity(els2);
+
+                                        this.markForUpdate();
+                                        other.markForUpdate();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -83,9 +138,7 @@ public class TileChalice extends TileEntityTick {
         FluidStack fs = getTank().getFluid();
         if(fs == null || fs.getFluid() == null) return;
 
-        ResourceLocation res = fs.getFluid().getFlowing(fs);
-        TextureAtlasSprite tas = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
-        if(tas == null) tas = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+        TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(fs);
 
         EntityFXFloatingCube cube;
         if(rand.nextInt(2 * (DrawSize.values().length - getDrawSize().ordinal()) * 4) == 0) {
@@ -156,16 +209,41 @@ public class TileChalice extends TileEntityTick {
     }
 
     @Override
+    public boolean canAcceptStarlight(int mbLiquidStarlight) {
+        return getHeldFluid() == null ||
+                getFluidAmount() <= 0 ||
+                (getHeldFluid() == BlocksAS.fluidLiquidStarlight &&
+                getFluidAmount() + mbLiquidStarlight <= TANK_SIZE);
+    }
+
+    @Override
+    public void acceptStarlight(int mbLiquidStarlight) {
+        if(canAcceptStarlight(mbLiquidStarlight)) {
+            getTank().addAmount(mbLiquidStarlight);
+        }
+    }
+
+    @Override
     protected void onFirstTick() {}
+
+    @Override
+    public void onLoad() {
+        if(this.world.isRemote) return;
+        WorldChaliceCache.register(this);
+    }
 
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
+        if(this.world.isRemote) return;
+        WorldChaliceCache.remove(this);
     }
 
     @Override
     public void invalidate() {
         super.invalidate();
+        if(this.world.isRemote) return;
+        WorldChaliceCache.remove(this);
     }
 
     public int getFluidAmount() {
@@ -235,6 +313,28 @@ public class TileChalice extends TileEntityTick {
             this.partTexture = ((float) mulSize) / 16F;
             this.mulSize = mulSize;
         }
+    }
+
+    public static class ConfigEntryChalice extends ConfigEntry {
+
+        public static final ConfigEntryChalice instance = new ConfigEntryChalice();
+
+        public static float chaliceRange = 16F;
+
+        @Override
+        public String getConfigurationSection() {
+            return super.getConfigurationSection() + getKey();
+        }
+
+        private ConfigEntryChalice() {
+            super(Section.MACHINERY, "chalice");
+        }
+
+        @Override
+        public void loadFromConfig(Configuration cfg) {
+            chaliceRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), chaliceRange, 4F, 64F, "Defines the Range where the Chalice look for other chalices to interact with.");
+        }
+
     }
 
 }

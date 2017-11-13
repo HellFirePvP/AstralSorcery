@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -79,6 +80,19 @@ public class ByteBufUtils {
         int y = buf.readInt();
         int z = buf.readInt();
         return new BlockPos(x, y, z);
+    }
+
+    public static void writeVector(ByteBuf buf, Vector3 vec) {
+        buf.writeDouble(vec.getX());
+        buf.writeDouble(vec.getY());
+        buf.writeDouble(vec.getZ());
+    }
+
+    public static Vector3 readVector(ByteBuf buf) {
+        double x = buf.readDouble();
+        double y = buf.readDouble();
+        double z = buf.readDouble();
+        return new Vector3(x, y, z);
     }
 
     public static void writeItemStack(ByteBuf byteBuf, @Nonnull ItemStack stack) {

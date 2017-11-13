@@ -165,10 +165,10 @@ public class MiscUtils {
     //Duplicate break functionality without a active player.
     //Emulates a FakePlayer - attempts without a player as harvester in case a fakeplayer leads to issues.
     public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos) {
-        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), true, false);
+        return breakBlockWithoutPlayer(world, pos, world.getBlockState(pos), true, false, true);
     }
 
-    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState suggestedBrokenState, boolean breakBlock, boolean ignoreHarvestRestrictions) {
+    public static boolean breakBlockWithoutPlayer(WorldServer world, BlockPos pos, IBlockState suggestedBrokenState, boolean breakBlock, boolean ignoreHarvestRestrictions, boolean playEffects) {
         FakePlayer fp = AstralSorcery.proxy.getASFakePlayerServer(world);
         int exp;
         try {
@@ -182,7 +182,9 @@ public class MiscUtils {
         }
         TileEntity tileentity = world.getTileEntity(pos);
         Block block = suggestedBrokenState.getBlock();
-        world.playEvent(null, 2001, pos, Block.getStateId(suggestedBrokenState));
+        if(playEffects) {
+            world.playEvent(null, 2001, pos, Block.getStateId(suggestedBrokenState));
+        }
 
         boolean harvestable = true;
         try {

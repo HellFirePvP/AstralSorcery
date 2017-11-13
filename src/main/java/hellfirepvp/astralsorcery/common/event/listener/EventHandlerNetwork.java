@@ -9,8 +9,7 @@
 package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.base.CelestialGatewaySystem;
-import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -36,7 +35,7 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("Synchronizing configuration to " + p.getName());
+        AstralSorcery.log.info("[AstralSorcery] Synchronizing configuration to " + p.getName());
         PacketChannel.CHANNEL.sendTo(new PktSyncConfig(), p);
         PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
 
