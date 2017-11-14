@@ -26,6 +26,8 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
+import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.*;
 import hellfirepvp.astralsorcery.common.tile.TileBore;
@@ -70,27 +72,27 @@ public class RegistryResearch {
         resAttWands.addPage(getTextPage("ATT_WANDS.1"));
         resAttWands.addPage(getTextPage("ATT_WANDS.2"));
 
-        ResearchNode resAttWandArmara = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_armara"), "ATT_WAND_ARMARA", 1, 5);
+        ResearchNode resAttWandArmara = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.ARMARA), "ATT_WAND_ARMARA", 1, 5);
         resAttWandArmara.addPage(getTextPage("ATT_WAND_ARMARA.1"));
         resAttWandArmara.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentArmara));
         resAttWandArmara.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        ResearchNode resAttWandDiscidia = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_discidia"), "ATT_WAND_DISCIDIA", 1, 3);
+        ResearchNode resAttWandDiscidia = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.DISCIDIA), "ATT_WAND_DISCIDIA", 1, 3);
         resAttWandDiscidia.addPage(getTextPage("ATT_WAND_DISCIDIA.1"));
         resAttWandDiscidia.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentDiscidia));
         resAttWandDiscidia.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        ResearchNode resAttWandAevitas = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_aevitas"), "ATT_WAND_AEVITAS", 4, 2);
+        ResearchNode resAttWandAevitas = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.AEVITAS), "ATT_WAND_AEVITAS", 4, 2);
         resAttWandAevitas.addPage(getTextPage("ATT_WAND_AEVITAS.1"));
         resAttWandAevitas.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentAevitas));
         resAttWandAevitas.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        ResearchNode resAttWandVicio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_vicio"), "ATT_WAND_VICIO", 5, 3);
+        ResearchNode resAttWandVicio = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.VICIO), "ATT_WAND_VICIO", 5, 3);
         resAttWandVicio.addPage(getTextPage("ATT_WAND_VICIO.1"));
         resAttWandVicio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentVicio));
         resAttWandVicio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        ResearchNode resAttWandEvorsio = new ResearchNode(new TextureQuery(AssetLoader.TextureLocation.GUI, "overlay_evorsio"), "ATT_WAND_EVORSIO", 2, 2);
+        ResearchNode resAttWandEvorsio = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.EVORSIO), "ATT_WAND_EVORSIO", 2, 2);
         resAttWandEvorsio.addPage(getTextPage("ATT_WAND_EVORSIO.1"));
         resAttWandEvorsio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentEvorsio));
         resAttWandEvorsio.setTextureColorHintWithAlpha(new Color(0x5613B6));

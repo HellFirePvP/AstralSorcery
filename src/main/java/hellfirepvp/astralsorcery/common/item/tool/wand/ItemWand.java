@@ -21,6 +21,7 @@ import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.base.IWandInteract;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -32,6 +33,7 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -59,6 +61,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -69,7 +72,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 23.09.2016 / 12:57
  */
-public class ItemWand extends Item implements ISpecialInteractItem {
+public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     public static final Color wandBlue = new Color(0x0C1576);
 
@@ -108,6 +111,27 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         }
     }
 
+    @Override
+    public List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation) {
+        LinkedList<ResourceLocation> out = new LinkedList<>();
+        out.add(defaultLocation);
+        for (WandAugment wa : WandAugment.values()) {
+            out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_" + wa.name().toLowerCase()));
+        }
+        return out;
+    }
+
+    @Override
+    public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
+        WandAugment wa = getAugment(stack);
+        if(wa != null) {
+            return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
+                    suggestedDefaultLocation.getResourcePath() + "_" + wa.name().toLowerCase()),
+                    suggestedDefaultLocation.getVariant());
+        }
+        return suggestedDefaultLocation;
+    }
+
     @Nullable
     public static WandAugment getAugment(@Nonnull ItemStack stack) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
@@ -121,9 +145,10 @@ public class ItemWand extends Item implements ISpecialInteractItem {
         return WandAugment.getByConstellation(cst);
     }
 
-    public static void setAugment(@Nonnull ItemStack stack, @Nonnull WandAugment augment) {
+    public static ItemStack setAugment(@Nonnull ItemStack stack, @Nonnull WandAugment augment) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         cmp.setString("AugmentName", augment.getAssociatedConstellation().getUnlocalizedName());
+        return stack;
     }
 
     @Override
