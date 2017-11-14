@@ -19,14 +19,17 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
+import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -89,11 +92,6 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return oldState.getBlock() != newSate.getBlock();
-    }
-
-    @Override
     public void update() {
         super.update();
 
@@ -142,7 +140,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                             productionTimeout--;
                         }
                         if(productionTimeout <= 0) {
-                            productionTimeout = rand.nextInt(20) + 40;
+                            productionTimeout = rand.nextInt(10) + 20;
                             BoreType type = getCurrentBoreType();
                             if(type != null) {
                                 switch (type) {
@@ -159,6 +157,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                                     drained = new FluidStack(FluidRegistry.WATER, mbDrain);
                                                 }
                                                 List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                                                out.removeIf((t) -> t.getPos().equals(getPos().up()));
                                                 if(!out.isEmpty()) {
                                                     TileChalice target = out.get(rand.nextInt(out.size()));
                                                     LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
@@ -167,6 +166,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                             } else {
                                                 drained = new FluidStack(FluidRegistry.WATER, mbDrain);
                                                 List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                                                out.removeIf((t) -> t.getPos().equals(getPos().up()));
                                                 if(!out.isEmpty()) {
                                                     TileChalice target = out.get(rand.nextInt(out.size()));
                                                     LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
@@ -195,11 +195,11 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                     yTarget = this.getPos().getY() * (0.75F - (this.digPercentage / 4F));
                     target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
                     origin = origin.clone().add(
-                            rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1),
+                            rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
                             0,
-                            rand.nextFloat() * 0.2 * (rand.nextBoolean() ? 1 : -1));
-                    beam = EffectHandler.getInstance().lightbeam(target, origin, 2).setAlphaMultiplier(1);
-                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0xFF000089));
+                            rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+                    beam = EffectHandler.getInstance().lightbeam(target, origin, 0.8).setAlphaMultiplier(1);
+                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x6A9EFF));
                 }
             }
         }
@@ -238,7 +238,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
                 world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
         if(!out.isEmpty() && world instanceof WorldServer) {
-            BlockDropCaptureAssist.startCapturing(false);
+            BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {
                     IBlockState state = world.getBlockState(p);
@@ -295,17 +295,46 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     @Override
     public void acceptStarlight(int mbLiquidStarlight) {
-        this.mbStarlight += mbLiquidStarlight;
+        this.mbStarlight += mbLiquidStarlight * 2;
         markForUpdate();
     }
 
     private void updateMultiblockState() {
         boolean found = getRequiredStructure().matches(world, getPos());
+        if(found) {
+            found = doEmptyCheck();
+        }
         boolean update = hasMultiblock != found;
         this.hasMultiblock = found;
         if(update) {
             markForUpdate();
         }
+    }
+
+    private boolean doEmptyCheck() {
+        for (int yy = -2; yy <= 2; yy++) {
+            for (int xx = -3; xx <= 3; xx++) {
+                for (int zz = -3; zz <= 3; zz++) {
+                    if(Math.abs(xx) == 3 && Math.abs(zz) == 3) continue; //corners
+                    BlockPos at = getPos().add(xx, yy, zz);
+                    if(xx == 0 && zz == 0) {
+                        switch (yy) {
+                            case -2: {
+                                if(!world.isAirBlock(at)) {
+                                    return false;
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        if(!world.isAirBlock(at)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     @SideOnly(Side.CLIENT)

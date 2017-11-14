@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.*;
+import hellfirepvp.astralsorcery.common.tile.TileBore;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -61,7 +62,7 @@ public class RegistryResearch {
     private static void initRadiance() {
         ResearchProgression.Registry regRadiance = ResearchProgression.RADIANCE.getRegistry();
 
-        ResearchNode resHintRecipes = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "CRAFTING_FOCUS_HINT", 5, 5);
+        ResearchNode resHintRecipes = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "CRAFTING_FOCUS_HINT", 4, 5);
         resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.1"));
         resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.2"));
 
@@ -94,20 +95,32 @@ public class RegistryResearch {
         resAttWandEvorsio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentEvorsio));
         resAttWandEvorsio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
-        ResearchNode resCape = new ResearchNode(new ItemStack(ItemsAS.armorImbuedCape), "ATT_CAPE", 4, 6);
+        ResearchNode resCape = new ResearchNode(new ItemStack(ItemsAS.armorImbuedCape), "ATT_CAPE", 3, 6);
         resCape.addPage(getTextPage("ATT_CAPE.1"));
         resCape.addPage(new JournalPageTraitRecipe(RegistryRecipes.rCapeBase));
         resCape.addPage(getTextPage("ATT_CAPE.3"));
         resCape.addPage(getTextPage("ATT_CAPE.4"));
 
-        ResearchNode resChalice = new ResearchNode(new ItemStack(BlocksAS.blockChalice), "C_CHALICE", 7, 4);
+        ResearchNode resChalice = new ResearchNode(new ItemStack(BlocksAS.blockChalice), "C_CHALICE", 5, 4);
         resChalice.addPage(getTextPage("C_CHALICE.1"));
         resChalice.addPage(new JournalPageTraitRecipe(RegistryRecipes.rChalice));
         resChalice.addPage(getTextPage("C_CHALICE.3"));
         resChalice.addPage(getTextPage("C_CHALICE.4"));
 
-        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape), resCape,    1, ResearchProgression.RADIANCE);
-        registerItemLookup(new ItemStack(BlocksAS.blockChalice),   resChalice, 1, ResearchProgression.RADIANCE);
+        ResearchNode resBore = new ResearchNode(new ItemStack(BlocksAS.blockBore), "BORE_CORE", 7, 5);
+        resBore.addPage(new JournalPageEmpty());
+        resBore.addPage(new JournalPageStructure(MultiBlockArrays.patternFountain));
+        resBore.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBore));
+
+        ResearchNode resBoreLiquid = new ResearchNode(new ItemStack(BlocksAS.blockBoreHead, 1, TileBore.BoreType.LIQUID.ordinal()), "BORE_HEAD_LIQUID", 8, 4);
+        resBoreLiquid.addPage(new JournalPageEmpty());
+        resBoreLiquid.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadLiquid));
+        resBoreLiquid.addPage(new JournalPageTraitRecipe(RegistryRecipes.rResonatorLiquid));
+
+        registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape),                      resCape,       1, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockChalice),                        resChalice,    1, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockBore),                           resBore,       2, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 0),   resBoreLiquid, 1, ResearchProgression.RADIANCE);
 
         resAttWandArmara.addSourceConnectionFrom(resAttWands);
         resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
@@ -117,6 +130,8 @@ public class RegistryResearch {
         resAttWands.addSourceConnectionFrom(resHintRecipes);
         resCape.addSourceConnectionFrom(resHintRecipes);
         resChalice.addSourceConnectionFrom(resHintRecipes);
+        resBore.addSourceConnectionFrom(resChalice);
+        resBoreLiquid.addSourceConnectionFrom(resBore);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -127,6 +142,8 @@ public class RegistryResearch {
         regRadiance.register(resCape);
         regRadiance.register(resHintRecipes);
         regRadiance.register(resChalice);
+        regRadiance.register(resBore);
+        regRadiance.register(resBoreLiquid);
     }
 
     private static void initConstellation() {

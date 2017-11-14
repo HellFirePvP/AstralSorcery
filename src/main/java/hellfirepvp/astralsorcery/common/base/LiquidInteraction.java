@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.tile.TileChalice;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
@@ -227,7 +228,10 @@ public class LiquidInteraction {
 
         @Override
         public void doInteraction(World world, Vector3 position) {
-            ItemUtils.dropItemNaturally(world, position.getX(), position.getY(), position.getZ(), result.copy());
+            EntityItem ei = ItemUtils.dropItemNaturally(world, position.getX(), position.getY(), position.getZ(), result.copy());
+            if(ei != null) {
+                ei.age = ei.lifespan / 2;
+            }
         }
 
     }

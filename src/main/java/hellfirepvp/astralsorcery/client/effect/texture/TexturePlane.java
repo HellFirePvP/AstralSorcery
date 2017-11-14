@@ -237,7 +237,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
 
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         //GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glDisable(GL11.GL_BLEND);

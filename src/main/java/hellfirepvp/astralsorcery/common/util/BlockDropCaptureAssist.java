@@ -17,6 +17,9 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -28,43 +31,37 @@ public class BlockDropCaptureAssist {
 
     public static BlockDropCaptureAssist instance = new BlockDropCaptureAssist();
 
-    private static NonNullList<ItemStack> capturedStacks = NonNullList.create();
-    private static boolean capturing = false, expectCaptureStone = false;
+    private static Map<Integer, NonNullList<ItemStack>> capturedStacks = new HashMap<>();
+    private static int stack = -1;
 
     private BlockDropCaptureAssist() {}
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onDrop(EntityJoinWorldEvent event) {
-        if (event.getEntity() instanceof EntityItem && capturing) {
-            ItemStack stack = ((EntityItem) event.getEntity()).getItem();
+        if (event.getEntity() instanceof EntityItem && stack > -1) {
+            ItemStack itemStack = ((EntityItem) event.getEntity()).getItem();
             event.setCanceled(true);
-            if(!stack.isEmpty()) {
-                if(!expectCaptureStone) {
-                    if(stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock().equals(Blocks.STONE)) {
-                        event.getEntity().setDead();
-                        return;
-                    }
+            if(!itemStack.isEmpty()) {
+                if(itemStack.getItem() instanceof ItemBlock && ((ItemBlock) itemStack.getItem()).getBlock().equals(Blocks.STONE)) {
+                    event.getEntity().setDead();
+                    return;
                 }
-                capturedStacks.add(stack);
+                capturedStacks.get(stack).add(itemStack);
             }
             event.getEntity().setDead();
         }
     }
 
-    public static void startCapturing(boolean expectStone) {
-        if(capturing) {
-            throw new IllegalStateException("Tried to start capturing stacks while already capturing itemstacks... ?");
-        }
-        capturing = true;
-        expectCaptureStone = expectStone;
+    public static void startCapturing() {
+        stack++;
+        capturedStacks.put(stack, NonNullList.create());
     }
 
     public static NonNullList<ItemStack> getCapturedStacksAndStop() {
-        capturing = false;
-        expectCaptureStone = false;
-        NonNullList<ItemStack> captured = capturedStacks;
-        capturedStacks = NonNullList.create();
-        return captured;
+        NonNullList<ItemStack> pop = capturedStacks.get(stack);
+        capturedStacks.remove(stack);
+        stack--;
+        return pop;
     }
 
 }

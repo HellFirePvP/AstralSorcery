@@ -159,12 +159,12 @@ research.NOC_POWDER.name=Nocturnal Powder
 astralsorcery.journal.NOC_POWDER.1.text=The night harbors many dangers and brings forth endless creatures with malicious intent. While those monsters are not really interesting by themselves, the things they carry with them are much more desireable.<NL>However, those creatures either avoid daytime completely or act all too friendly when being exposed to daylight. The newfound dust that can create a bright light out of nothing could maybe be turned around and create a dark area that allows for theses monsters to spawn.
 astralsorcery.journal.NOC_POWDER.3.text=While a block can be rightclicked to create this field that spawns monsters for a few seconds, having it appear so close-up might not be a great idea. The powder can be thrown like the illumination powder to create this field wherever it lands.<NL>Due to the effect the powder creates, only one can be active at a time in its general vicinity.
 
-research.SKY_RESO.name=Starlight Resonator
-astralsorcery.journal.SKY_RESO.1.text= Looking up in the sky with the naked eye, it is nearly impossible to discern the magnitude of starlight  emitted in a given area. However there is empirical evidence based on the starlight crafting altar’s reservoir alone that the light stars send varies from position to position; the light of one star can overlay with others causing it to either amplify in strength or just vanish entirely.<NL>Altars and other structures that rely on starlight can perform at a higher capacity in an amplified starlight field.
+research.SKY_RESO.name=Fosic Resonator
+astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky with the naked eye, it is nearly impossible to discern the magnitude of starlight  emitted in a given area. However there is empirical evidence based on the starlight crafting altar’s reservoir alone that the light stars send varies from position to position; the light of one star can overlay with others causing it to either amplify in strength or just vanish entirely.<NL>Altars and other structures that rely on starlight can perform at a higher capacity in an amplified starlight field.
 astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky or an altar’s reservoir at different positions seems tedious, and ineffectual.<NL>A better solution would be a device that resonates with both the light spectrum visible to the naked eye and amplified starlight fields. It does not replace the need for exploring to find a suitable place, but should make them much easier to spot in the night by looking along the surface while holding the device However preliminary calculations show that areas of high starlight are somewhat rare, and could easily be hundreds to a thousand meters apart.
 
 research.SPEC_RELAY.name=Spectral Relay
-astralsorcery.journal.SPEC_RELAY.1.text=The starlight resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
+astralsorcery.journal.SPEC_RELAY.1.text=The fosic resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
 astralsorcery.journal.SPEC_RELAY.4.text=A small setup, dedicated to collecting starlight for the altar near should help solve that problem. A clear view of the sky is most certainly a necessity and better results will most likely be achieved at night.<NL>When the relay has been placed high up but close to an altar, it will collect and focus starlight once a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many relays close to each other will result in one cannibalizing the others' starlight and will most likely create  much more... §odisappointing§r results..
 
 research.KNOWLEDGE_SHARE.name=Written Expertise
@@ -402,12 +402,12 @@ item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
 item.itemskyresonator.name=Starlight Resonator
 
-item.itemskyresonator.starlight.name=Starlight Resonator
-item.itemskyresonator.liquid.name=[Liquid] Resonator
-item.itemskyresonator.structure.name=[Multiblock-Check] Resonator
-item.itemskyresonator.upgrade.starlight.name=Starlight
-item.itemskyresonator.upgrade.liquid.name=[Liquid]
-item.itemskyresonator.upgrade.structure.name=[Multiblock-Check]
+item.itemskyresonator.starlight.name=Fosic Resonator
+item.itemskyresonator.liquid.name=Ichosic Resonator
+item.itemskyresonator.structure.name=Domi Resonator
+item.itemskyresonator.upgrade.starlight.name=Fosic
+item.itemskyresonator.upgrade.liquid.name=Ichosic
+item.itemskyresonator.upgrade.structure.name=Domi
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break

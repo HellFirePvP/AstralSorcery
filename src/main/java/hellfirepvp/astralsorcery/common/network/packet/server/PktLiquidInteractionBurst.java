@@ -68,6 +68,8 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
     @SideOnly(Side.CLIENT)
     private void playClientEffect(PktLiquidInteractionBurst message) {
+        if(Minecraft.getMinecraft().world == null) return;
+
         TextureAtlasSprite tas1 = RenderingUtils.tryGetFlowingTextureOfFluidStack(message.comp1);
 
         for (int i = 0; i < 11 + rand.nextInt(3); i++) {

@@ -64,6 +64,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
     private LiquidInteraction purpose;
     private TileEntity tileTarget;
+    private BlockPos resolvableTilePos = null;
 
     public EntityLiquidSpark(World worldIn) {
         super(worldIn);
@@ -139,6 +140,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         this.noClip = getEntityWorld().getBlockState(this.getPosition()).getBlock().equals(BlocksAS.blockChalice);
 
+        if(this.resolvableTilePos != null) {
+            this.tileTarget = MiscUtils.getTileAt(world, resolvableTilePos, TileEntity.class, true);
+            this.resolvableTilePos = null;
+        }
+
         if(!world.isRemote) {
             if(purpose != null) {
                 int target = this.dataManager.get(ENTITY_TARGET);
@@ -169,13 +175,14 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     this.moveHelper.setMoveTo(e.posX, e.posY, e.posZ, 2.4F);
                 }
             } else if(tileTarget != null) {
-                if(tileTarget.isInvalid()) {
+                if(tileTarget.isInvalid() ||
+                        MiscUtils.getTileAt(world, tileTarget.getPos(), tileTarget.getClass(), true) == null) {
                     setDead();
                     return;
                 }
                 Vector3 target = new Vector3(tileTarget.getPos()).add(0.5, 0.5, 0.5);
 
-                if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.7F) {
+                if(getDistance(target.getX(), target.getY(), target.getZ()) < 1.1F) {
                     setDead();
                     if(getRepresentitiveFluid().getFluid() == BlocksAS.fluidLiquidStarlight && tileTarget instanceof ILiquidStarlightPowered) {
                         ((ILiquidStarlightPowered) tileTarget).acceptStarlight(getRepresentitiveFluid().amount);
@@ -241,11 +248,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.readEntityFromNBT(compound);
 
         if(compound.hasKey("tileTarget")) {
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
-            TileEntity powered = MiscUtils.getTileAt(world, pos, TileEntity.class, true);
-            if(powered != null) {
-                this.tileTarget = powered;
-            }
+            this.resolvableTilePos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
         }
     }
 

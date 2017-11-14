@@ -143,6 +143,11 @@ public class BlockChalice extends BlockContainer {
     }
 
     @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up());
+    }
+
+    @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if(state.getValue(ACTIVE)) {
             if(world.isAirBlock(pos.up())) {

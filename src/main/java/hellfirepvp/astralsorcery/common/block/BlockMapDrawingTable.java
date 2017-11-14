@@ -67,7 +67,7 @@ public class BlockMapDrawingTable extends BlockContainer {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        for (int i = 0; i < rand.nextInt(2) + 1; i++) {
+        for (int i = 0; i < rand.nextInt(2) + 2; i++) {
             Vector3 offset = new Vector3(-5.0 / 16.0, 1.505, -3.0 / 16.0);
             int random = rand.nextInt(12);
             if(random > 5) {

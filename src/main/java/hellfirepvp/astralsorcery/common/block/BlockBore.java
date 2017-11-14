@@ -60,10 +60,11 @@ public class BlockBore extends BlockContainer {
                     if(!playerIn.isCreative()) {
                         held.shrink(1);
                     }
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
