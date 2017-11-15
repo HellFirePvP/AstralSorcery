@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.auxiliary;
+package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,7 +57,6 @@ public class FluidRarityRegistry {
         rarityList.add(FluidRarityEntry.EMPTY);
 
         registerFluidRarity("lava", 7500, 4000_000, 1000_000);
-        registerFluidRarity("astralsorcery.liquidstarlight", 4000, 2000_000, 400_000);
 
         //AA
         registerFluidRarity("crystaloil", 800, 600_000, 400_000);

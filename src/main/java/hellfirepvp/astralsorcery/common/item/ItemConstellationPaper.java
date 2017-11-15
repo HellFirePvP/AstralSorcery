@@ -17,11 +17,13 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.entities.EntityItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -51,7 +53,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.05.2016 / 15:16
  */
-public class ItemConstellationPaper extends Item implements ItemHighlighted {
+public class ItemConstellationPaper extends Item implements ItemHighlighted, ItemDynamicColor {
 
     public ItemConstellationPaper() {
         setMaxDamage(0);
@@ -73,6 +75,18 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted {
                 items.add(cPaper);
             }
         }
+    }
+
+    @Override
+    public int getColorForItemStack(ItemStack stack, int tintIndex) {
+        if(tintIndex != 1) return 0xFFFFFFFF;
+        IConstellation c = getConstellation(stack);
+        if(c != null) {
+            if(ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                return 0xFF000000 | c.getConstellationColor().getRGB();
+            }
+        }
+        return 0xFF333333;
     }
 
     @Override

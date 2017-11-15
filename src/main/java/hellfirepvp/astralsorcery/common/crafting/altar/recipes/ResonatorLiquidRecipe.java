@@ -60,9 +60,9 @@ public class ResonatorLiquidRecipe extends TraitRecipe {
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT,
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT);
 
-        addOuterTraitItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
         addOuterTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack());
-        addOuterTraitItem(ItemCraftingComponent.MetaType.AQUAMARINE.asStack());
+        addOuterTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+        addOuterTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack());
         setRequiredConstellation(Constellations.octans);
     }
 

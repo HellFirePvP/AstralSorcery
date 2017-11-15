@@ -135,6 +135,7 @@ public class TileWell extends TileReceiverBaseInventory {
                     TileChalice target = out.get(rand.nextInt(out.size()));
                     LiquidStarlightChaliceHandler.doFluidTransfer(this, target, fluidStack.copy());
                     this.tank.drain(mb, true);
+                    markForUpdate();
                 }
             }
         } else {

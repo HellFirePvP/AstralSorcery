@@ -9,33 +9,32 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.client.effect.texture.TextureSpritePlane;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
-import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
-import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
-import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -182,27 +181,156 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 }
             }
         } else {
-            if(hasMultiblock && this.operationTicks > 0) {
+            if(hasMultiblock && this.operationTicks > 0 && getCurrentBoreType() != null) {
                 updateBoreSprite();
 
-                if(getCurrentWorkingSegment().ordinal() >= OperationSegment.DIG.ordinal() && ticksExisted % 25 == 0) {
-                    float yTarget = this.getPos().getY() * (1 - this.digPercentage);
-                    Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
-                    Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
-                    EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 9).setAlphaMultiplier(1);
-                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5);
-
-                    yTarget = this.getPos().getY() * (0.75F - (this.digPercentage / 4F));
-                    target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
-                    origin = origin.clone().add(
-                            rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
-                            0,
-                            rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
-                    beam = EffectHandler.getInstance().lightbeam(target, origin, 0.8).setAlphaMultiplier(1);
-                    beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x6A9EFF));
+                switch (getCurrentWorkingSegment()) {
+                    case STARTUP:
+                        float chance = ((float) this.operationTicks) / ((float) SEGMENT_STARTUP);
+                        playVortex(chance);
+                        playArcs(chance);
+                        break;
+                    case PREPARATION:
+                        float prepChance = ((float) this.operationTicks - SEGMENT_STARTUP) / ((float) SEGMENT_PREPARATION - SEGMENT_STARTUP);
+                        playArcs(prepChance);
+                        playVortex(1F - prepChance);
+                        if(operationTicks == SEGMENT_PREPARATION) {
+                            markDigProcess();
+                        }
+                        if(prepChance <= 0.85) {
+                            playInnerVortex(Math.max(0, (-0.35 + prepChance) * 2F));
+                        } else {
+                            double ch = (prepChance - 0.85);
+                            ch /= 0.15;
+                            playInnerVortex(1 - ch);
+                        }
+                        break;
+                    case DIG:
+                    case PRODUCTION:
+                        playLightbeam();
+                        playArcs(1);
+                        break;
                 }
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playInnerVortex(double chance) {
+        for (int i = 0; i < 12; i++) {
+            if(rand.nextFloat() < chance) {
+                Vector3 particlePos = new Vector3(
+                        pos.getX() - 0.4 + rand.nextFloat() * 1.8,
+                        pos.getY()       - rand.nextFloat() * 3,
+                        pos.getZ() - 0.4 + rand.nextFloat() * 1.8
+                );
+                Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+                p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                if(rand.nextBoolean()) {
+                    p.setColor(new Color(0x5865FF));
+                }
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void markDigProcess() {
+        int x = getPos().getX();
+        int z = getPos().getZ();
+        for (int yy = 0; yy < getPos().getY(); yy++) {
+            BlockPos pos = new BlockPos(x, yy, z);
+            IBlockState at = world.getBlockState(pos);
+            if(at.isTranslucent() || at.getBlock().isAir(at, world, pos)) {
+                for (int i = 0; i < 20; i++) {
+                    Vector3 v = new Vector3(
+                            x + 0.2 + rand.nextFloat() * 0.6,
+                            yy + rand.nextFloat(),
+                            z + 0.2 + rand.nextFloat() * 0.6
+                    );
+                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                    p.setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
+                    p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+                }
+            }
+        }
+
+        Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
+        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(0);
+        EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 1.5).setAlphaMultiplier(1);
+        beam.setAlphaFunction(EntityComplexFX.AlphaFunction.FADE_OUT);
+        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x5865FF));
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playVortex(float chance) {
+        for (int i = 0; i < 20; i++) {
+            if(rand.nextFloat() < chance) {
+                Vector3 particlePos = new Vector3(
+                        pos.getX() - 3   + rand.nextFloat() * 7,
+                        pos.getY()       + rand.nextFloat(),
+                        pos.getZ() - 3   + rand.nextFloat() * 7
+                );
+                Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
+                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+                p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
+                p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playArcs(float chance) {
+        if((chance == 1 || rand.nextFloat() < chance) && rand.nextInt(10) == 0) {
+            Vector3 pos = new Vector3(this).add(0.5, 0.5, 0.5);
+            Vector3 dir = new Vector3(1, 0, 0).rotate(Math.toRadians(rand.nextFloat() * 360), Vector3.RotAxis.Y_AXIS);
+            dir.normalize().multiply(4);
+            Vector3 pos1 = pos.clone().add(dir);
+            dir = new Vector3(1, 0, 0).rotate(Math.toRadians(rand.nextFloat() * 360), Vector3.RotAxis.Y_AXIS);
+            dir.normalize().multiply(4);
+            Vector3 pos2 = pos.clone().add(dir);
+
+            EffectHandler.getInstance().lightning(pos1, pos2);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playLightbeam() {
+        Vector3 particlePos = new Vector3(
+                pos.getX() - 2.5 + rand.nextFloat() * 6,
+                pos.getY() - 1.2 + rand.nextFloat() * 3.4,
+                pos.getZ() - 2.5 + rand.nextFloat() * 6
+        );
+        Vector3 dir = particlePos.clone().subtract(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).normalize().divide(-30);
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(particlePos.getX(), particlePos.getY(), particlePos.getZ());
+        p.motion(dir.getX(), dir.getY(), dir.getZ()).setAlphaMultiplier(1F).setMaxAge(rand.nextInt(40) + 20);
+        p.enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT).scale(0.2F + rand.nextFloat() * 0.1F).setColor(Color.WHITE);
+
+        for (int i = 0; i < 5; i++) {
+            Vector3 v = new Vector3(this).add(0.3 + rand.nextFloat() * 0.4, -rand.nextFloat() * 1.7, 0.3 + rand.nextFloat() * 0.4);
+            EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+            particle.gravity(0.004).scale(0.4F).setAlphaMultiplier(1F);
+            particle.motion(0, -rand.nextFloat() * 0.015, 0);
+            particle.setColor(Color.getHSBColor(rand.nextFloat() * 360F, 1F, 1F));
+        }
+
+        if(ticksExisted % 25 != 0) return;
+
+        float yTarget = this.getPos().getY() * (1 - this.digPercentage);
+        Vector3 origin = new Vector3(getPos()).add(0.5, 0.5, 0.5);
+        Vector3 target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
+        EffectLightbeam beam = EffectHandler.getInstance().lightbeam(target, origin, 9).setAlphaMultiplier(1);
+        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5);
+
+        yTarget = this.getPos().getY() * (0.75F - (this.digPercentage / 4F));
+        target = new Vector3(getPos()).add(0.5, 0, 0.5).setY(yTarget);
+        origin = origin.clone().add(
+                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1),
+                0,
+                rand.nextFloat() * 0.05 * (rand.nextBoolean() ? 1 : -1));
+        beam = EffectHandler.getInstance().lightbeam(target, origin, 0.8).setAlphaMultiplier(1);
+        beam.setDistanceCapSq(Config.maxEffectRenderDistanceSq * 5).setColorOverlay(new Color(0x6A9EFF));
     }
 
     private boolean consumeLiquid() {

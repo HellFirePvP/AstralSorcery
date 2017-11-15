@@ -327,9 +327,20 @@ research.ATT_WAND_VICIO.name=Wand Attunement: Vicio
 astralsorcery.journal.ATT_WAND_VICIO.1.text=While freely flying through the air and reaching for the stars might not be achievable with this, the wand being exposed to the effects of vicio certainly helps with that a bit. While holding right-click it can be charged up like a bow, but upon releasing it doesn't shoot an arrow, but the wielder itself through the air.
 
 research.C_CHALICE.name=Containment Chalice
-astralsorcery.journal.C_CHALICE.1.text=The lightwell is certainly nice and functional, however its basin seems small. So all that liquid uses more space than what it's worth - even more so now that infusion works through a lot of it in no time.<NL>A stronger and more useful way of storing liquid might be worthwhile. Some sort of chalice, holding whatever fluid on top of it, compressing it into a more managable size.
+astralsorcery.journal.C_CHALICE.1.text=The lightwell is certainly nice and functional, however its basin seems small. So all that liquid uses more space than what it's worth - even more so now that infusion works through a lot of it in no time.<NL>A stronger and more useful way of storing liquid might be worthwhile. Some sort of chalice, holding whatever fluid on top of it, compressing it into a more managable size, holding up to 24 buckets of that liquid.
 astralsorcery.journal.C_CHALICE.3.text=Designing a chalice that is strong enough to contain the liquid and keeps the fluid in balance so nothing disperses and vanishes proves to be very difficult. The now final contraption seems to hold the fluid stable so it is safe for storing the excess liquids.<NL>While contained, the liquid acts strange. As if being driven by the energies that hold it in place, occasional outbursts of fluid break free from the containment.
 astralsorcery.journal.C_CHALICE.4.text=Instead of getting lost, those irregularities seem to have purpose. If a similar device is placed close-by and two liquids that form a block or any other interaction together are contained inside, occasionally, small sparks of those will break free and gravitate towards one another, forming the result they normally might undergo.<NL>With this being so impulsive, using it as additional liquid source for infusion might be of value.<NL>Only bottom side seems solid enough to transfer liquid by mechanical means.
+astralsorcery.journal.C_CHALICE.5.text=While the chalice can see nearby lightwells, it might destabilize their liquid and draw it towards the chalice.<NR>As this volatile state might become undesirable for specific purposes, adding some weak power in form of a redstone signal to it will stabilize the held liquid and stop any interactions that would normally occur.
+
+research.BORE_CORE.name=Evershifting Fountain
+astralsorcery.journal.BORE_CORE.1.text=Liquid starlight in its basic concept is a rather strange substance. Condensed energy in a stable, rather easily manageable state compared to the starlight itself that's rather inconsistent and hard to handle.<NL>Releasing the energy that liquid starlight harbors in a controlled manner to channel its energy as desired might be extremely useful.
+astralsorcery.journal.BORE_CORE.2.text=A device, able to both withstand the stress that returning liquid starlight into its former state brings along.<NL>While such a machine is now possible thanks to the new crafting options, an additional focus-ring will be required around it to ensure nothing of the energized liquid starlight gets lost during its conversion process. For safety measure, nothing may be placed within that inner circle of the structure.
+astralsorcery.journal.BORE_CORE.4.text=As the now called "Fountain" runs its processes with liquid starlight, a sky-view is not required in order for it to run. However, as its work process is very delicate, it will only accept the liquid starlight from a chalice filled with it that sits directly on top of the fountain block itself.<NL>The fountain is only the preprocessor of starlight. The functionality that the resulting energy is used for, depends on the prime that's used together the fountain and placed below the block itself.
+
+research.BORE_HEAD_LIQUID.name=Neromantic Prime
+astralsorcery.journal.BORE_HEAD_LIQUID.1.text=One such use of the Evershifting Fountain is to stimulate the currents of liquid resources below the bedrock level with the now releasable massive energy.<NL>Using the Neromantic Prime will result in the accumulation of the liquid, that's been stored below bedrock for eons, in the central fountain-core.
+astralsorcery.journal.BORE_HEAD_LIQUID.2.text=While the fountain cannot be mechanically interacted with, the resulting liquid can be extracted by chalices with sufficient space.<NL>These underground oceans are not infinite however, so once the stored liquid has been used up, unlimited mundane water will take its place.<NL>The production results vary heavily between even short distances and setting up the fountain just to see the result is tiresome and expensive.
+astralsorcery.journal.BORE_HEAD_LIQUID.4.text=Recalling the large area the fosic resonator could gather its information from, an adjustment that would allow it to draw forth very small samples of liquid for some random positions around the one that wields the resonator. No enough to be useable, but enough to gather the necessary information if setting up the fountain might be beneficial or not.<NL>The resonator, even with two modes, only best during the night. Modes can be changed by shift-right-clicking while holding it.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -400,7 +411,7 @@ item.itemknowledgeshare.name=Scroll of written Expertise
 item.itemusabledust.illumination.name=Illumination Powder
 item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
-item.itemskyresonator.name=Starlight Resonator
+item.itemskyresonator.name=Fosic Resonator
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator

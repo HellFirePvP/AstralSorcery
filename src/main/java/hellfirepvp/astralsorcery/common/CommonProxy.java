@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
-import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;

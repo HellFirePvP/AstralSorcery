@@ -75,27 +75,22 @@ public class RegistryResearch {
         ResearchNode resAttWandArmara = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.ARMARA), "ATT_WAND_ARMARA", 1, 5);
         resAttWandArmara.addPage(getTextPage("ATT_WAND_ARMARA.1"));
         resAttWandArmara.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentArmara));
-        resAttWandArmara.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandDiscidia = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.DISCIDIA), "ATT_WAND_DISCIDIA", 1, 3);
         resAttWandDiscidia.addPage(getTextPage("ATT_WAND_DISCIDIA.1"));
         resAttWandDiscidia.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentDiscidia));
-        resAttWandDiscidia.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandAevitas = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.AEVITAS), "ATT_WAND_AEVITAS", 4, 2);
         resAttWandAevitas.addPage(getTextPage("ATT_WAND_AEVITAS.1"));
         resAttWandAevitas.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentAevitas));
-        resAttWandAevitas.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandVicio = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.VICIO), "ATT_WAND_VICIO", 5, 3);
         resAttWandVicio.addPage(getTextPage("ATT_WAND_VICIO.1"));
         resAttWandVicio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentVicio));
-        resAttWandVicio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resAttWandEvorsio = new ResearchNode(ItemWand.setAugment(new ItemStack(ItemsAS.wand), WandAugment.EVORSIO), "ATT_WAND_EVORSIO", 2, 2);
         resAttWandEvorsio.addPage(getTextPage("ATT_WAND_EVORSIO.1"));
         resAttWandEvorsio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentEvorsio));
-        resAttWandEvorsio.setTextureColorHintWithAlpha(new Color(0x5613B6));
 
         ResearchNode resCape = new ResearchNode(new ItemStack(ItemsAS.armorImbuedCape), "ATT_CAPE", 3, 6);
         resCape.addPage(getTextPage("ATT_CAPE.1"));
@@ -108,15 +103,20 @@ public class RegistryResearch {
         resChalice.addPage(new JournalPageTraitRecipe(RegistryRecipes.rChalice));
         resChalice.addPage(getTextPage("C_CHALICE.3"));
         resChalice.addPage(getTextPage("C_CHALICE.4"));
+        resChalice.addPage(getTextPage("C_CHALICE.5"));
 
         ResearchNode resBore = new ResearchNode(new ItemStack(BlocksAS.blockBore), "BORE_CORE", 7, 5);
-        resBore.addPage(new JournalPageEmpty());
-        resBore.addPage(new JournalPageStructure(MultiBlockArrays.patternFountain));
+        resBore.addPage(getTextPage("BORE_CORE.1"));
+        resBore.addPage(getTextPage("BORE_CORE.2"));
         resBore.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBore));
+        resBore.addPage(getTextPage("BORE_CORE.4"));
+        resBore.addPage(new JournalPageStructure(MultiBlockArrays.patternFountain));
 
         ResearchNode resBoreLiquid = new ResearchNode(new ItemStack(BlocksAS.blockBoreHead, 1, TileBore.BoreType.LIQUID.ordinal()), "BORE_HEAD_LIQUID", 8, 4);
-        resBoreLiquid.addPage(new JournalPageEmpty());
+        resBoreLiquid.addPage(getTextPage("BORE_HEAD_LIQUID.1"));
+        resBoreLiquid.addPage(getTextPage("BORE_HEAD_LIQUID.2"));
         resBoreLiquid.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadLiquid));
+        resBoreLiquid.addPage(getTextPage("BORE_HEAD_LIQUID.4"));
         resBoreLiquid.addPage(new JournalPageTraitRecipe(RegistryRecipes.rResonatorLiquid));
 
         registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape),                      resCape,       1, ResearchProgression.RADIANCE);

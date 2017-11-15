@@ -10,9 +10,11 @@ package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.starmap.ActiveStarMap;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
@@ -21,6 +23,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,7 +41,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.04.2017 / 16:54
  */
-public class ItemInfusedGlass extends Item {
+public class ItemInfusedGlass extends Item implements INBTModel {
 
     public ItemInfusedGlass() {
         setMaxStackSize(1);
@@ -121,6 +125,23 @@ public class ItemInfusedGlass extends Item {
         NBTTagCompound tag = NBTHelper.getPersistentData(infusedGlassStack);
         if(!tag.hasKey("map")) return null;
         return ActiveStarMap.deserialize(tag.getCompoundTag("map"));
+    }
+
+    @Override
+    public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
+        if(ItemInfusedGlass.getMapEngravingInformations(stack) == null) {
+            return suggestedDefaultLocation;
+        }
+        return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
+                suggestedDefaultLocation.getResourcePath() + "_engraved"), suggestedDefaultLocation.getVariant());
+    }
+
+    @Override
+    public List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation) {
+        List<ResourceLocation> out = new LinkedList<>();
+        out.add(defaultLocation);
+        out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_engraved"));
+        return out;
     }
 
 }
