@@ -177,7 +177,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                     int oZ = rand.nextInt(30) * (rand.nextBoolean() ? 1 : -1);
 
                     BlockPos pos = new BlockPos(entityIn.getPosition()).add(oX, 0, oZ);
-                    pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(pos);
+                    pos = worldIn.getTopSolidOrLiquidBlock(pos);
                     if(pos.getDistance(MathHelper.floor(entityIn.posX), MathHelper.floor(entityIn.posY), MathHelper.floor(entityIn.posZ)) > 75) {
                         return;
                     }
