@@ -144,7 +144,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                 do {
                     tries--;
                     try {
-                        ((IGrowable) b).grow(world, rand, possibleSapling, state);
+                        ((IGrowable) b).grow(world, rand, possibleSapling, possibleSapling.getStateAt());
                     } catch (Exception ignored) {}
                 } while (TreeCaptureHelper.oneTimeCatches.contains(possibleSapling) || tries > 0);
                 world.captureBlockSnapshots = false;
