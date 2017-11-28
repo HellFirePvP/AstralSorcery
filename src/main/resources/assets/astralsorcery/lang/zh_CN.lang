@@ -330,6 +330,17 @@ research.C_CHALICE.name=遏制圣杯
 astralsorcery.journal.C_CHALICE.1.text=聚光井功能齐全，唯一的缺点就是储量太小了。这些液态使用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方便控制大小的酒杯。
 astralsorcery.journal.C_CHALICE.3.text=设计一个足够大的能储存液体并保持液体平衡而不会挥发或流水的圣杯是极为困难的。最终的设计已经能够保证流体的稳定了，建议用来储存多余的液体，这是安全的做法。<NL>当里面存有液体时会略显奇怪。就如同被某种能量所限制一样固定在一块，不过偶尔爆发的液体会超出掌控。
 astralsorcery.journal.C_CHALICE.4.text=这些非常规行为似乎并非杂乱无章的。如果有类似的设备在附近，且两边的液体形成块状或通过其他方式使其发生相互作用将液体包含在内，此时它们之间产生的小火花将相互排斥同时也会相互吸引，其结果与常理一样。<NL>在这种冲动下，或许能将其作为额外的液体来源。<NL>底部看起来足够坚固，可以使用机械手段传输液体。
+astralsorcery.journal.C_CHALICE.5.text=当圣杯能看到附近的聚光井时，它会使其中的液体不稳定并对其作出牵引。<NR>这种不稳定状态有的时候并不希望出现，用红石信号施加一些微弱的能量可以稳定液体并阻止通常情况下一切相互作用。
+
+research.BORE_CORE.name=恒久变化之泉
+astralsorcery.journal.BORE_CORE.1.text=从基本概念上说，星能液是种相当奇怪的物质。能量被浓缩于与反复无常难以控制的星辉本身相比较稳定,容易处置的状态。<NL>以受控方式释放星能液蓄积的能量而随心所欲地引导这一能量会相当有用。
+astralsorcery.journal.BORE_CORE.2.text=一种设备，能够承担将星能液还原为其本来状态时带来的压力。<NL>尽管新的合成选项使这种机器成为可能，在其周围需要加上额外的聚焦环以阻止星能液在转换过程中散失。出于安全考虑，结构内圈不可摆放任何物体。
+astralsorcery.journal.BORE_CORE.4.text=这个现在叫"泉"的机器运行时处理星能液，其运行时不需要天文观测。然而，它的运转过程相当微妙，只接受此泉正上方摆放的圣杯中的星能液。<NL>此泉只是星辉预处理器。 所引发的能量的去处和用途取决于在泉中使用和下方摆放的源质。
+
+research.BORE_HEAD_LIQUID.name=黑灵源质
+astralsorcery.journal.BORE_HEAD_LIQUID.1.text=恒久变化之泉的功用之一是激发基岩层下的承载着现今可以释放的可能量的液体资源流。<NL>使用黑灵源质会使基岩下万古以来储存了的液体集中在中央泉核中。
+astralsorcery.journal.BORE_HEAD_LIQUID.2.text=尽管此泉不能用机械进行互动，产生的液体可用空间足够的圣杯容纳。<NL>然而这些地下海洋不是无限的，所以一旦存储的液体枯竭，无限的普通水会取而代之。<NL>预期出产甚至在短距离内都会有很大变化，而仅仅为了探测而架设泉水是无聊而破费的。
+astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起星辉共振器能收集大范围的信息，一个调整能使其在持有共振器者周边一些地点采集极少量样品。不够实际使用，但足以获取关于架设泉水是否有利的必要信息。<NL>甚至是有两个模式的共振器都只在夜间达到最佳状态。模式可通过手持共振器shift右击调整。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -403,11 +414,11 @@ item.itemcape.name=星斗披风
 item.itemskyresonator.name=星辉共振器
 
 item.itemskyresonator.starlight.name=星辉共振器
-item.itemskyresonator.liquid.name=[液体] 共振器
-item.itemskyresonator.structure.name=[多方块检测] 共振器
+item.itemskyresonator.liquid.name=液体共振器
+item.itemskyresonator.structure.name=结构共振器
 item.itemskyresonator.upgrade.starlight.name=星辉
-item.itemskyresonator.upgrade.liquid.name=[液体]
-item.itemskyresonator.upgrade.structure.name=[多方块检测]
+item.itemskyresonator.upgrade.liquid.name=液体
+item.itemskyresonator.upgrade.structure.name=结构
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
@@ -475,7 +486,10 @@ tile.blocktranslucentblock.name=半透明方块
 tile.blockmapdrawingtable.name=恒星映射台
 tile.blockcelestialgateway.name=天体调谐器
 tile.blockchalice.name=遏制圣杯
-tile.blockfountain.name=Evershifting Fountain
+tile.blockfountain.name=恒久变化之泉
+tile.blockbore.name=恒久变化之泉
+tile.blockborehead.liquid.name=黑灵源质
+tile.blockborehead.ore.name=岩灵源质
 
 tile.blockgeolosyssamplecluster.name=水晶石样品
 
