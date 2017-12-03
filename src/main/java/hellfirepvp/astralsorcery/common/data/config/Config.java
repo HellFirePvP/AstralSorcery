@@ -16,10 +16,7 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,6 +59,10 @@ public class Config {
     @Sync public static boolean craftingLiqCrystalToolGrowth = true;
     @Sync public static boolean craftingLiqCelestialCrystalForm = true;
     @Sync public static boolean canCrystalGrowthYieldDuplicates = true;
+
+    public static boolean liquidStarlightAquamarine = true;
+    public static boolean liquidStarlightSand = true;
+    public static boolean liquidStarlightIce = true;
 
     public static boolean enableRetroGen = false;
 
@@ -195,6 +196,10 @@ public class Config {
         craftingLiqCelestialCrystalForm = latestConfig.getBoolean("liquidStarlightCelestialCrystalCluster", "crafting", true, "Set this to false to disable crystal + stardust -> Celestial Crystal cluster forming");
         craftingLiqCrystalToolGrowth = latestConfig.getBoolean("liquidStarlightCrystalToolGrowth", "crafting", craftingLiqCrystalToolGrowth, "Set this to false to disable Crystal Tool growth in liquid starlight");
         canCrystalGrowthYieldDuplicates = latestConfig.getBoolean("canCrystalGrowthYieldDuplicates", "crafting", canCrystalGrowthYieldDuplicates, "Set this to false to disable the chance to get a 2nd crystal when growing a max-sized one in liquid starlight.");
+
+        liquidStarlightAquamarine = latestConfig.getBoolean("liquidStarlightAquamarine", "crafting", liquidStarlightAquamarine, "Set this to false to disable that liquid starlight + lava occasionally/rarely produces aquamarine shale instead of sand.");
+        liquidStarlightSand = latestConfig.getBoolean("liquidStarlightSand", "crafting", liquidStarlightSand, "Set this to false to disable that liquid starlight + lava produces sand.");
+        liquidStarlightIce = latestConfig.getBoolean("liquidStarlightIce", "crafting", liquidStarlightIce, "Set this to false to disable that liquid starlight + water produces ice.");
 
         latestConfig.addCustomCategoryComment("lightnetwork", "Maintenance options for the Starlight network. Use the integrity check when you did a bigger rollback or MC-Edited stuff out of the world. Note that it will only affect worlds that get loaded. So if you edited out something on, for example, dimension -76, be sure to go into that dimension with the maintenance options enabled to properly perform maintenance there.");
         performNetworkIntegrityCheck = latestConfig.getBoolean("performNetworkIntegrityCheck", "lightnetwork", false, "NOTE: ONLY run this once and set it to false again afterwards, nothing will be gained by setting this to true permanently, just longer loading times. When set to true and the server started, this will perform an integrity check over all nodes of the starlight network whenever a world gets loaded, removing invalid ones in the process. This might, depending on network sizes, take a while. It'll leave a message in the console when it's done. After this check has been run, you might need to tear down and rebuild your starlight network in case something doesn't work anymore.");

@@ -49,20 +49,19 @@ public class BlockBore extends BlockContainer {
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
-    //TODO test
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
-            if(worldIn.getBlockState(pos.down()).getBlock().isReplaceable(worldIn, pos.down())) {
-                TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
-                ItemStack held = playerIn.getHeldItem(hand);
-                if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
+        if(worldIn.getBlockState(pos.down()).getBlock().isReplaceable(worldIn, pos.down())) {
+            TileBore tb = MiscUtils.getTileAt(worldIn, pos, TileBore.class, true);
+            ItemStack held = playerIn.getHeldItem(hand);
+            if(tb != null && !held.isEmpty() && held.getItem() instanceof ItemBlock && ((ItemBlock) held.getItem()).getBlock() instanceof BlockBoreHead) {
+                if(!worldIn.isRemote) {
                     worldIn.setBlockState(pos.down(), BlocksAS.blockBoreHead.getStateFromMeta(held.getItemDamage()));
                     if(!playerIn.isCreative()) {
                         held.shrink(1);
                     }
-                    return true;
                 }
+                return true;
             }
         }
         return false;

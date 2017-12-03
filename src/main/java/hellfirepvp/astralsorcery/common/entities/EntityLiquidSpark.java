@@ -146,6 +146,11 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         }
 
         if(!world.isRemote) {
+            if(ticksExisted > 800) {
+                setDead();
+                return;
+            }
+
             if(purpose != null) {
                 int target = this.dataManager.get(ENTITY_TARGET);
                 if(target == -1) {

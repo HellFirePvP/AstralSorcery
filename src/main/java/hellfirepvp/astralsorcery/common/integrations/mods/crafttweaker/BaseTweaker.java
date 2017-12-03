@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker;
 
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
@@ -32,34 +33,16 @@ public abstract class BaseTweaker {
 
     @Nonnull
     public static ItemStack convertToItemStack(IItemStack stack) {
-        if(stack == null) {
-            return ItemStack.EMPTY;
-        }
-        Object objStack = stack.getInternal();
-        if (!(objStack instanceof ItemStack)) {
-            CraftTweakerAPI.logError("Invalid ItemStack: " + objStack);
-            return ItemStack.EMPTY;
-        } else {
-            return (ItemStack) objStack;
-        }
+        return CraftTweakerMC.getItemStack(stack);
     }
 
     @Nullable
     public static FluidStack convertToFluidStack(ILiquidStack stack, boolean capAndLimitToBuckets) {
-        if(stack == null) {
-            return null;
+        FluidStack fs = CraftTweakerMC.getLiquidStack(stack);
+        if(fs != null && capAndLimitToBuckets) {
+            fs.amount = Fluid.BUCKET_VOLUME; //Only full buckets please...
         }
-        Object objStack = stack.getInternal();
-        if (!(objStack instanceof FluidStack)) {
-            CraftTweakerAPI.logError("Invalid FluidStack: " + objStack);
-            return null;
-        } else {
-            FluidStack flStack = (FluidStack) objStack;
-            if(capAndLimitToBuckets) {
-                flStack.amount = Fluid.BUCKET_VOLUME; //Only full buckets please...
-            }
-            return flStack;
-        }
+        return fs;
     }
 
     @Nullable

@@ -54,31 +54,31 @@ public class LiquidInteraction {
             new LiquidInteraction(3,
                     new FluidStack(FluidRegistry.WATER, 10),
                     new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0.5F, 0, new ItemStack(Blocks.STONE)));
+                    createItemDropAction(1F, 0.4F, new ItemStack(Blocks.STONE)));
 
     public static final LiquidInteraction WATER_LAVA_OBSIDIAN =
             new LiquidInteraction(1,
                     new FluidStack(FluidRegistry.WATER, 10),
                     new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0F, 0.2F, new ItemStack(Blocks.OBSIDIAN)));
+                    createItemDropAction(0.7F, 1F, new ItemStack(Blocks.OBSIDIAN)));
 
     public static final LiquidInteraction STARLIGHT_WATER_ICE =
             new LiquidInteraction(1,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 10),
+                    new FluidStack(BlocksAS.fluidLiquidStarlight, 30),
                     new FluidStack(FluidRegistry.WATER, 10),
-                    createItemDropAction(0F, 0F, new ItemStack(Blocks.ICE)));
+                    createItemDropAction(1F, 1F, new ItemStack(Blocks.ICE)));
 
     public static final LiquidInteraction STARLIGHT_LAVA_SAND =
             new LiquidInteraction(1200,
                     new FluidStack(BlocksAS.fluidLiquidStarlight, 10),
                     new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0F, 0F, new ItemStack(Blocks.SAND)));
+                    createItemDropAction(0.8F, 0.8F, new ItemStack(Blocks.SAND)));
 
     public static final LiquidInteraction STARLIGHT_LAVA_AQUAMARINE =
             new LiquidInteraction(30,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 10),
-                    new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0.2F, 0.2F, BlockCustomSandOre.OreType.AQUAMARINE.asStack()));
+                    new FluidStack(BlocksAS.fluidLiquidStarlight, 70),
+                    new FluidStack(FluidRegistry.LAVA, 70),
+                    createItemDropAction(1F, 1F, BlockCustomSandOre.OreType.AQUAMARINE.asStack()));
 
     public static final LiquidInteraction STARLIGHT_LAVA_CRYSTAL =
             new LiquidInteraction(1,

@@ -3,6 +3,7 @@ itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 jei.category.well=Lightwell
+jei.category.grindstone=Grindstone
 jei.category.infuser=Starlight Infusion
 jei.category.transmutation=Starlight Transmutation
 jei.category.altar.discovery=Luminous Crafting Table
@@ -23,6 +24,7 @@ potion.as.crafted.name=Stardew
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
+misc.grindstone.double=Chance to double output: %s
 misc.knowledge.missing=A empty and sparkly scroll
 misc.knowledge.inscribed=Contains knowledge from %s
 misc.knowledge.inscribed.creative=Contains massive knowledge
@@ -618,7 +620,7 @@ perk.DEF_DMGREDUCTION.info=Reduces overall damage taken
 perk.DEF_DODGE=Higher Dexterity
 perk.DEF_DODGE.info=Grants a chance to dodge incoming damage
 perk.DEF_NOARMOR=No armor is more armor
-perk.DEF_NOARMOR.info=Resistances and heal when wearing less than 2 armor pieces
+perk.DEF_NOARMOR.info=Resistances and heal when wearing less then 3 armor pieces
 perk.DEF_ELEMENTAL=Elemental shield
 perk.DEF_ELEMENTAL.info=Take less damage from elemental damage
 perk.DEF_FALLRED=Additional feathers

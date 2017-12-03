@@ -68,7 +68,7 @@ public abstract class SimpleTransmissionReceiver implements ITransmissionReceive
 
     @Nullable
     public <T extends TileEntity> T getTileAtPos(World world, Class<T> tileClass) {
-        return MiscUtils.getTileAt(world, getPos(), tileClass, true);
+        return MiscUtils.getTileAt(world, getPos(), tileClass, false);
     }
 
     @Override

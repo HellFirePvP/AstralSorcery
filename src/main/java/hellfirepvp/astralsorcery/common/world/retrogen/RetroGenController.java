@@ -10,13 +10,14 @@ package hellfirepvp.astralsorcery.common.world.retrogen;
 
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,23 +28,72 @@ import java.util.List;
  */
 public class RetroGenController {
 
-    private static List<ChunkPos> retroGenActive = new LinkedList<>();
+    private static Map<Integer, List<ChunkPos>> retroGenActive = new HashMap<>();
+    private static Map<Integer, List<ChunkPos>> queuedPopulation = new HashMap<>();
+
+    @SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event) {
+        retroGenActive.remove(event.getWorld().provider.getDimension());
+        queuedPopulation.remove(event.getWorld().provider.getDimension());
+    }
+
+    //Clean up the mess we create.
+    @SubscribeEvent
+    public void onChunkUnload(ChunkEvent.Unload event) {
+        World w = event.getWorld();
+        if(w.isRemote) return;
+        ChunkPos pos = event.getChunk().getPos();
+        int dimId = w.provider.getDimension();
+
+        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        queue.add(pos);
+    }
 
     @SubscribeEvent
     public void onChunkLoad(ChunkEvent.Load event) {
+        World w = event.getWorld();
+        if(w.isRemote) return;
         ChunkPos pos = event.getChunk().getPos();
-        if(event.getWorld().isRemote || !event.getChunk().isTerrainPopulated() || retroGenActive.contains(pos)) return;
+        int dimId = w.provider.getDimension();
 
-        Integer chunkVersion = -1;
-        if(((AnvilChunkLoader) ((WorldServer) event.getWorld()).getChunkProvider().chunkLoader).chunkExists(event.getWorld(), pos.x, pos.z)) {
-            chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
-            if(chunkVersion == null) {
-                return;
+        List<ChunkPos> active = retroGenActive.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        if(!event.getChunk().isTerrainPopulated() || active.contains(pos)) {
+            visitChunkPopulation(w);
+            return;
+        }
+
+        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        queue.add(pos);
+        visitChunkPopulation(w);
+    }
+
+    private void visitChunkPopulation(World w) {
+        int dimId = w.provider.getDimension();
+        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        List<ChunkPos> active = retroGenActive.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        Iterator<ChunkPos> iterator = queue.iterator();
+        while (iterator.hasNext()) {
+            ChunkPos pos = iterator.next();
+            int chX = pos.x;
+            int chZ = pos.z;
+
+            if(w.isChunkGeneratedAt(chX + 1, chZ) &&
+                    w.isChunkGeneratedAt(chX, chZ + 1) &&
+                    w.isChunkGeneratedAt(chX + 1, chZ + 1)) {
+                Integer chunkVersion = -1;
+                if(((WorldServer) w).getChunkProvider().chunkLoader.isChunkGeneratedAt(pos.x, pos.z)) {
+                    chunkVersion = ChunkVersionController.instance.getGenerationVersion(pos);
+                    if(chunkVersion == null) {
+                        return;
+                    }
+                }
+                active.add(pos);
+                CommonProxy.worldGenerator.handleRetroGen(w, pos, chunkVersion);
+                active.remove(pos);
+
+                iterator.remove();
             }
         }
-        retroGenActive.add(pos);
-        CommonProxy.worldGenerator.handleRetroGen(event.getWorld(), pos, chunkVersion);
-        retroGenActive.remove(pos);
     }
 
 }

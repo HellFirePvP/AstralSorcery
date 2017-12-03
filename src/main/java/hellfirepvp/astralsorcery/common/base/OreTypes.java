@@ -130,13 +130,13 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
 
     @Nullable
     @Override
-    public OreEntry appendDataSet(String str) {
+    public Optional<OreEntry> appendDataSet(String str) {
         OreEntry entry = OreEntry.deserialize(str);
         if(entry == null) {
             return null;
         }
         appendOreEntry(entry);
-        return entry;
+        return Optional.of(entry);
     }
 
 }

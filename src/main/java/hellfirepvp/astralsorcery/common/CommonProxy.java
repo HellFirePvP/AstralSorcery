@@ -115,6 +115,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDataRegistry(OreTypes.RITUAL_MINERALIS);
         Config.addDataRegistry(OreTypes.AEVITAS_ORE_PERK);
         Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
+        Config.addDataRegistry(FluidRarityRegistry.INSTANCE);
     }
 
     public void preInit() {
@@ -193,6 +194,7 @@ public class CommonProxy implements IGuiHandler {
         RegistryStructures.init();
         registerOreDictEntries();
         RegistryResearch.init();
+        RegistryRecipes.initGrindstoneOreRecipes();
 
         RegistryConstellations.initMapEffects();
 
@@ -221,7 +223,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.EVENT_INSTANCE);
+        MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -233,7 +235,6 @@ public class CommonProxy implements IGuiHandler {
 
         SyncDataHolder.initialize();
         TileAccelerationBlacklist.init();
-        FluidRarityRegistry.init();
         LightOreTransmutations.init();
         HerdableAnimal.init();
         WellLiquefaction.init();

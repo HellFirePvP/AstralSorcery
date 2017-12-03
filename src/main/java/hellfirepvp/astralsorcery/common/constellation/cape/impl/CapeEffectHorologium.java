@@ -29,10 +29,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class CapeEffectHorologium extends CapeArmorEffect {
 
     private static float effectRange = 20F;
-    private static int duration = 100;
+    private static int duration = 180;
 
     private static int cooldown = 1000;
-    private static float chanceProc = 0.15F;
+    private static float chanceProc = 0.4F;
 
     public CapeEffectHorologium(NBTTagCompound cmp) {
         super(cmp, "horologium");

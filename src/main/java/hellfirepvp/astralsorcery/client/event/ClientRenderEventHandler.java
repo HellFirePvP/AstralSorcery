@@ -10,11 +10,8 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.effect.EffectHelper;
-import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.sky.RenderRiftSkybox;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -27,7 +24,6 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
@@ -38,7 +34,6 @@ import hellfirepvp.astralsorcery.common.item.base.render.ItemHandRender;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemHudRender;
 import hellfirepvp.astralsorcery.common.item.tool.ItemSkyResonator;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
-import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -54,7 +49,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -64,7 +58,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -98,15 +91,9 @@ public class ClientRenderEventHandler {
     @SideOnly(Side.CLIENT)
     public void onRender(RenderWorldLastEvent event) {
         World world = Minecraft.getMinecraft().world;
-        if (/*world.provider.getDimension() != Config.dimensionIdSkyRift*/ true) {
-            if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
-                if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
-                    world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
-                }
-            }
-        } else {
-            if (!(world.provider.getSkyRenderer() instanceof RenderRiftSkybox)) {
-                world.provider.setSkyRenderer(new RenderRiftSkybox());
+        if(Config.constellationSkyDimWhitelist.contains(world.provider.getDimension())) {
+            if (!(world.provider.getSkyRenderer() instanceof RenderSkybox)) {
+                world.provider.setSkyRenderer(new RenderSkybox(world, world.provider.getSkyRenderer()));
             }
         }
 

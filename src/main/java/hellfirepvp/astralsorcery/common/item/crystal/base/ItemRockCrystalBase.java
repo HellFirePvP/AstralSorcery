@@ -9,33 +9,24 @@
 package hellfirepvp.astralsorcery.common.item.crystal.base;
 
 import hellfirepvp.astralsorcery.common.entities.EntityCrystal;
-import hellfirepvp.astralsorcery.common.entities.EntityFlare;
-import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.ItemHighlighted;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,7 +35,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 08.05.2016 / 21:38
  */
-public abstract class ItemRockCrystalBase extends Item implements IGrindable, ItemHighlighted {
+public abstract class ItemRockCrystalBase extends Item implements ItemHighlighted {
 
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
@@ -64,26 +55,6 @@ public abstract class ItemRockCrystalBase extends Item implements IGrindable, It
                 CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomRock());
             }
         }
-    }
-
-    @Override
-    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
-        return true;
-    }
-
-    @Nonnull
-    @Override
-    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
-        CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        CrystalProperties result = prop.grindCopy(rand);
-        if(result == null) {
-            return GrindResult.failBreakItem();
-        }
-        CrystalProperties.applyCrystalProperties(stack, result);
-        if(result.getSize() <= 0) {
-            return GrindResult.failBreakItem();
-        }
-        return GrindResult.success();
     }
 
     @Override

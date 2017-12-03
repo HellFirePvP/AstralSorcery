@@ -12,8 +12,11 @@ import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
@@ -63,6 +66,7 @@ public class CraftingAccessManager {
         removeAll(InfusionRecipeRegistry.mtRecipes);
         removeAll(LightOreTransmutations.mtTransmutations);
         removeAll(WellLiquefaction.mtLiquefactions.values());
+        removeAll(GrindstoneRecipeRegistry.mtRecipes);
         for (TileAltar.AltarLevel al : TileAltar.AltarLevel.values()) {
             removeAll(AltarRecipeRegistry.mtRecipes.get(al));
         }
@@ -72,6 +76,7 @@ public class CraftingAccessManager {
         InfusionRecipeRegistry.recipes.clear();
         LightOreTransmutations.mtTransmutations.clear();
         WellLiquefaction.mtLiquefactions.clear();
+        GrindstoneRecipeRegistry.mtRecipes.clear();
         AltarRecipeRegistry.mtRecipes.clear();
         AltarRecipeRegistry.recipes.clear();
 
@@ -92,6 +97,7 @@ public class CraftingAccessManager {
         AltarRecipeRegistry.loadFromFallback();
         LightOreTransmutations.loadFromFallback();
         WellLiquefaction.loadFromFallback();
+        GrindstoneRecipeRegistry.loadFromFallback();
     }
 
     public static void registerMTInfusion(AbstractInfusionRecipe recipe) {
@@ -120,7 +126,7 @@ public class CraftingAccessManager {
             LightOreTransmutations.Transmutation tr = new LightOreTransmutations.Transmutation(stateIn, stateOut, in, out, cost);
             tr = LightOreTransmutations.registerTransmutation(tr);
             if (tr != null) {
-                addRecipe(tr);
+                //addRecipe(tr); Is picked up by default logic
                 LightOreTransmutations.mtTransmutations.add(tr);
             }
         }
@@ -141,6 +147,17 @@ public class CraftingAccessManager {
 
     public static void removeMTLiquefaction(ItemStack match, @Nullable Fluid fluid) {
         markForRemoval(WellLiquefaction.tryRemoveLiquefaction(match, fluid));
+    }
+
+    public static void addGrindstoneRecipe(ItemHandle in, ItemStack out, int chance) {
+        GrindstoneRecipe gr = new GrindstoneRecipe(in, out, chance);
+
+        GrindstoneRecipeRegistry.mtRecipes.add(gr);
+        addRecipe(gr);
+    }
+
+    public static void removeGrindstoneRecipe(ItemStack out) {
+        markForRemoval(GrindstoneRecipeRegistry.tryRemoveGrindstoneRecipe(out));
     }
 
     /*
@@ -170,5 +187,4 @@ public class CraftingAccessManager {
             }
         }
     }
-
 }

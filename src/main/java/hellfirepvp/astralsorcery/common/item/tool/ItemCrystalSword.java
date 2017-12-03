@@ -11,11 +11,9 @@ package hellfirepvp.astralsorcery.common.item.tool;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import hellfirepvp.astralsorcery.common.entities.EntityCrystalTool;
-import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -43,7 +41,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 19.09.2016 / 15:52
  */
-public class ItemCrystalSword extends ItemSword implements IGrindable {
+public class ItemCrystalSword extends ItemSword {
 
     private static final Random rand = new Random();
 
@@ -162,26 +160,6 @@ public class ItemCrystalSword extends ItemSword implements IGrindable {
             }
         }
         return modifiers;
-    }
-
-    @Override
-    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
-        return true;
-    }
-
-    @Nonnull
-    @Override
-    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
-        ToolCrystalProperties prop = getToolProperties(stack);
-        ToolCrystalProperties result = prop.grindCopy(rand);
-        if(result == null) {
-            return GrindResult.failBreakItem();
-        }
-        setToolProperties(stack, result);
-        if(stack.getItemDamage() >= stack.getMaxDamage()) {
-            return GrindResult.failBreakItem();
-        }
-        return GrindResult.success();
     }
 
 }
