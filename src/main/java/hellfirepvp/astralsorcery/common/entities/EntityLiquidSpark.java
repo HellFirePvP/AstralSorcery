@@ -195,12 +195,12 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                         IFluidHandler handler = tileTarget.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                         if(handler != null) {
                             handler.fill(getRepresentitiveFluid(), true);
-                            if(tileTarget instanceof TileEntitySynchronized) {
-                                ((TileEntitySynchronized) tileTarget).markForUpdate();
-                            } else {
-                                tileTarget.markDirty();
-                            }
                         }
+                    }
+                    if(tileTarget instanceof TileEntitySynchronized) {
+                        ((TileEntitySynchronized) tileTarget).markForUpdate();
+                    } else {
+                        tileTarget.markDirty();
                     }
                     Vector3 at = Vector3.atEntityCenter(this);
 
