@@ -3,6 +3,7 @@ itemGroup.astralsorcery.papers=[AS]星图
 itemGroup.astralsorcery.crystals=[AS]共振水晶
 
 jei.category.well=聚星缸
+jei.category.grindstone=砂轮
 jei.category.infuser=星能聚合器
 jei.category.transmutation=星辉转化
 jei.category.altar.discovery=星辉合成台
@@ -23,6 +24,7 @@ potion.as.crafted.name=星露
 
 misc.moreInformation=<按住 SHIFT 来查看详细内容>
 misc.craftInformation=§7点击查看合成
+misc.grindstone.double=可能双倍产出：%s
 misc.knowledge.missing=一个空白光亮的卷轴
 misc.knowledge.inscribed=包含了 %s 的知识
 misc.knowledge.inscribed.creative=包含了大量的知识
@@ -40,6 +42,9 @@ misc.chaos.resistance.max=混沌免疫
 
 effect.as.cheatdeath=凤凰之火
 effect.as.bleed=撕裂
+
+enchantment.astralsorcery.enchantment.as.nightvision.desc=赋予佩戴者夜视效果。
+enchantment.astralsorcery.enchantment.as.smelting.desc=使用具有此附魔的工具开采的方块将导致获得的物品是掉落方法被熔炼的结果。("自动冶炼")
 
 gui.journal.bm.knowledge.name=研究
 gui.journal.bm.constellations.name=星座
@@ -106,7 +111,7 @@ astralsorcery.journal.WAND.3.text=共鸣之杖有一些非比寻常的特性。�
 research.ORES.name=矿物
 astralsorcery.journal.ORES.1.text=§7§n水晶石矿石：§r在世界的最深处，因高温和高压而形成的稀有而脆弱的晶体，真是令人难以置信！这些水晶有着独一无二的属性，它们在星辉下似乎变的非比寻常。由于水晶石太过脆弱，mechanicalhands易破坏矿石。
 
-astralsorcery.journal.ORES.2.text=它们是珍惜资源，别想着在地下找到这些矿石，但是这些水晶石在靠近基岩的位置还会吸引星辉。也行有一个能与星辉进行共鸣以便于勘探矿石的工具？<NL>§1§n海蓝宝石砂岩：§r在星辉长久的照射与水流连续不断的冲刷下，在河床下的沙内形成的小而脆弱的宝石。通常，可以在被泥沙掩埋的顶部找到它们。
+astralsorcery.journal.ORES.2.text=它们是珍稀资源，别想着在地下找到这些矿石，但是这些水晶石在靠近基岩的位置还会吸引星辉。也行有一个能与星辉进行共鸣以便于勘探矿石的工具？<NL>§1§n海蓝宝石砂岩：§r在星辉长久的照射与水流连续不断的冲刷下，在河床下的沙内形成的小而脆弱的宝石。通常，可以在被泥沙掩埋的顶部找到它们。
 
 research.ALTAR1.name=星辉合成台
 astralsorcery.journal.ALTAR1.1.text=看起来普通的合成台利用水晶能量的效率很低。只能接收到非常少的星能。而且为了更充分的吸收星能必须将合成台尽可能靠近神殿水晶就是之后被称作增幅水晶的东西。
@@ -159,12 +164,12 @@ research.NOC_POWDER.name=暗夜粉
 astralsorcery.journal.NOC_POWDER.1.text=黑夜中隐藏着许多危险，还带来了无数充满恶意的生物。这些怪物本身并没什么用，但它们所携带的东西却备受欢迎。<NL>然而这些生物在白天时要么不出现要么非常友好。这种新发现的粉尘可以生成不含任何光的光芒，并反转一切，形成一个黑暗区域以生成这些怪物。
 astralsorcery.journal.NOC_POWDER.3.text=可以右击一个方块形成一个能生成怪物几秒的区域，但这么近的距离可不是什么好主意。它可以想辉光粉一样扔出去，并在掉落点形成区域。<NL>受粉末自身的影响，在其附近只能有一个活跃区域。
 
-research.SKY_RESO.name=星辉共振器
+research.SKY_RESO.name=法斯刻共振器
 astralsorcery.journal.SKY_RESO.1.text=用肉眼是无法直接分辨出特定区域的星辉强弱的。然而根据长期使用星辉祭坛内的星能缓存库的经验，星辉的强弱因地而异，当星辉相互重叠时，星能可能增强或减弱。<NL>星辉祭坛以及其他需求星辉的结构在这个强星能区域将有更多的星能缓存。
 astralsorcery.journal.SKY_RESO.3.text=想要通过简单的观测星空或在不同位置查看祭坛的缓存来找到这样的位置，既乏味又低效。<NL>一个能与强星能场进行共振并投影到现实的设备将是最好的解决方案。你仍然需要寻找合适的地方，但在使用该设备时可以在晚上的地表更容易的找到适合的地方。但是，经过初步计算结果说明强星能场比较罕见，其间相距数百到上千米的距离。
 
 research.SPEC_RELAY.name=光波增幅器
-astralsorcery.journal.SPEC_RELAY.1.text=星辉共振器可以找到强星能场以及可用星能。但问题是不可能把基地搬迁到那附近或让星辉进行远距离传输。随着对古代历史的深入研究，无疑需要大量的星能，必须有个替代品了。
+astralsorcery.journal.SPEC_RELAY.1.text=法斯刻共振器可以找到强星能场以及可用星能。但问题是不可能把基地搬迁到那附近或让星辉进行远距离传输。随着对古代历史的深入研究，无疑需要大量的星能，必须有个替代品了。
 astralsorcery.journal.SPEC_RELAY.4.text=或许一个专门收集附近星能的小型设备能解决这个问题。当然必须在天空下，晚上可能会有更好的效果。<NL>在增幅器放置在祭坛附近的高处时，放上玻璃透镜就能聚集星辉。星辉会像小火花一样被重定向到附近最近的祭坛。<NL>然而在同一位置放置太多聚能祭坛将只有一个会工作。很可能会导致许多§o不可预知的§r结果。
 
 research.KNOWLEDGE_SHARE.name=知识共享
@@ -207,7 +212,7 @@ research.TOOL_WANDS.name=接引之力
 astralsorcery.journal.TOOL_WANDS.1.text=在直接用手传输星能的过程中失败了，除了一小撮光移动外什么都没有改变。<NL>利用这些新发现的星尘特性制作的法杖可以让这种能量趋向于熵减状态。将方块以直线或其他方式放置会更便于法杖使用。
 astralsorcery.journal.TOOL_WANDS.3.text=潜行右键选择想要放置或替换的方块。将直接使用持有者背包内的相应物品。<NL>在使用了一些星能后，使用者将感觉有些虚弱。在使用这类小工具时应注意下自身所存的星能，以防止星能不足。
 
-research.GRAPPLE_WAND.name=涡漩星杖
+research.GRAPPLE_WAND.name=冲击星杖
 astralsorcery.journal.GRAPPLE_WAND.1.text=如果末影珍珠不那么难获得且不会在使用中损坏的话将是一个极好的道具。<NL>在对这些新奇的星能进行研究后发现可以制作一种利用末影珍珠来进行更安全的方式传输星能的法杖。<NL>与珍珠的不同之处在于它的范围有限，且不是直接传送到目标而是将用户拉过去。
 
 research.RIT_PEDESTAL.name=信标基座
@@ -327,20 +332,20 @@ research.ATT_WAND_VICIO.name=Vicio共鸣之杖
 astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然在大气中自由飞翔或伸手摘星是完全不可能实现的，但与 vicio 进行共鸣的法杖肯定有助于这一点。手持时按住右键，它可以像弓一样蓄力，但在释放后并不会射出一个箭头，但能让使用者自身穿过空气。
 
 research.C_CHALICE.name=遏制圣杯
-astralsorcery.journal.C_CHALICE.1.text=聚光井功能齐全，唯一的缺点就是储量太小了。这些液态使用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方便控制大小的酒杯。
-astralsorcery.journal.C_CHALICE.3.text=设计一个足够大的能储存液体并保持液体平衡而不会挥发或流水的圣杯是极为困难的。最终的设计已经能够保证流体的稳定了，建议用来储存多余的液体，这是安全的做法。<NL>当里面存有液体时会略显奇怪。就如同被某种能量所限制一样固定在一块，不过偶尔爆发的液体会超出掌控。
+astralsorcery.journal.C_CHALICE.1.text=聚光井功能齐全，唯一的缺点就是储量太小了。这些液态使用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方便控制大小的酒杯，最多可容纳24桶液体。
+astralsorcery.journal.C_CHALICE.3.text=设计一个足够大的能储存液体并保持液体平衡而不会挥发或流失的圣杯是极为困难的。最终的设计已经能够保证流体的稳定了，建议用来储存多余的液体，这才是最安全的做法。<NL>当里面存有液体时会略显奇怪。就如同被某种能量所限制一样固定在一块，不过偶尔爆发的液体会超出掌控。
 astralsorcery.journal.C_CHALICE.4.text=这些非常规行为似乎并非杂乱无章的。如果有类似的设备在附近，且两边的液体形成块状或通过其他方式使其发生相互作用将液体包含在内，此时它们之间产生的小火花将相互排斥同时也会相互吸引，其结果与常理一样。<NL>在这种冲动下，或许能将其作为额外的液体来源。<NL>底部看起来足够坚固，可以使用机械手段传输液体。
-astralsorcery.journal.C_CHALICE.5.text=当圣杯能看到附近的聚光井时，它会使其中的液体不稳定并对其作出牵引。<NR>这种不稳定状态有的时候并不希望出现，用红石信号施加一些微弱的能量可以稳定液体并阻止通常情况下一切相互作用。
+astralsorcery.journal.C_CHALICE.5.text=当圣杯发现附近的聚星缸时，它将降低液体的稳定性并使其从聚星缸内流向圣杯。<NR>有时这种挥发性状态可能因特殊目的而对情况不利，以红石信号的形式增强其微弱的能量，使其内的液体保持恒定并阻止任何正常的交互行为。
 
-research.BORE_CORE.name=恒久变化之泉
-astralsorcery.journal.BORE_CORE.1.text=从基本概念上说，星能液是种相当奇怪的物质。能量被浓缩于与反复无常难以控制的星辉本身相比较稳定,容易处置的状态。<NL>以受控方式释放星能液蓄积的能量而随心所欲地引导这一能量会相当有用。
-astralsorcery.journal.BORE_CORE.2.text=一种设备，能够承担将星能液还原为其本来状态时带来的压力。<NL>尽管新的合成选项使这种机器成为可能，在其周围需要加上额外的聚焦环以阻止星能液在转换过程中散失。出于安全考虑，结构内圈不可摆放任何物体。
-astralsorcery.journal.BORE_CORE.4.text=这个现在叫"泉"的机器运行时处理星能液，其运行时不需要天文观测。然而，它的运转过程相当微妙，只接受此泉正上方摆放的圣杯中的星能液。<NL>此泉只是星辉预处理器。 所引发的能量的去处和用途取决于在泉中使用和下方摆放的源质。
+research.BORE_CORE.name=万象泉
+astralsorcery.journal.BORE_CORE.1.text=星能液本身是一种相当奇怪的物质。与高浓度稳定的能量及易于管理的星辉本身相比它更不稳定且难于掌控。<NL>以可控的方式释放星能液中所蕴藏的能量并根据需要引导能量，将是大有裨益的。
+astralsorcery.journal.BORE_CORE.2.text=一种能够承受将星能液中的能量释放出来产生的压力的装置。<NL>得益于新的制作工艺，最终成功制作出了这台设备。为了确保激发态的星能液在转换时不会丢失，还需要在周围增加一个聚能环。为了安全起见，不用将任何东西放在结构范围内。
+astralsorcery.journal.BORE_CORE.4.text=由于所谓的“喷泉”是利用星能液运行的，因此不需要露天。然而由于其运作过程的精确性，它只接收喷泉方块正上方圣杯内所装的星能液。<NL>喷泉只是星辉的一种预处理方式，它所产生的能量与功能取决于喷泉与其下方所放置的基座方块。
 
-research.BORE_HEAD_LIQUID.name=黑灵源质
-astralsorcery.journal.BORE_HEAD_LIQUID.1.text=恒久变化之泉的功用之一是激发基岩层下的承载着现今可以释放的可能量的液体资源流。<NL>使用黑灵源质会使基岩下万古以来储存了的液体集中在中央泉核中。
-astralsorcery.journal.BORE_HEAD_LIQUID.2.text=尽管此泉不能用机械进行互动，产生的液体可用空间足够的圣杯容纳。<NL>然而这些地下海洋不是无限的，所以一旦存储的液体枯竭，无限的普通水会取而代之。<NL>预期出产甚至在短距离内都会有很大变化，而仅仅为了探测而架设泉水是无聊而破费的。
-astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起星辉共振器能收集大范围的信息，一个调整能使其在持有共振器者周边一些地点采集极少量样品。不够实际使用，但足以获取关于架设泉水是否有利的必要信息。<NL>甚至是有两个模式的共振器都只在夜间达到最佳状态。模式可通过手持共振器shift右击调整。
+research.BORE_HEAD_LIQUID.name=Neromantic基座
+astralsorcery.journal.BORE_HEAD_LIQUID.1.text=其中一种使用万象泉的方法是利用当前释放的大量能量来激发基岩下永世存在的液体资源。<NL>使用Neromantic基座将导致大量的液体积聚在中央的喷泉核心中。
+astralsorcery.journal.BORE_HEAD_LIQUID.2.text=喷泉无法与其他机械设备进行互动，唯一的解决办法就是利用圣杯的剩余空间将喷泉产生的液体导出。<NL>然而这些地下的海洋并非无限的，一旦这些存储的液体用完，无限的水将取而代之。<NL>短距离内的生成结果差异巨大，光是安置喷泉结构查看其结果既破费且令人厌烦。
+astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起法斯刻共振器对大面积区域的信息收集能力，稍加调整可以让其在共振器周围的某个位置抽出一个小的液体样板。并不实用，但收集的信息足够对附近是否适合放置万象泉有一个大致的了解。<NL>共振器一共有两种模式，在夜晚的效率更高些。手持共振器通过shift右键来切换模式。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -350,12 +355,12 @@ astralsorcery.journal.recipe.attunement=调用水晶：%s
 astralsorcery.journal.recipe.removalinfo=§c此合成已在当前的整合包内移除！请通过其他信息来源查找合成方式！
 astralsorcery.journal.recipe.amt.desc=需要星能：
 
-astralsorcery.journal.recipe.amt.lowest=几乎没有
-astralsorcery.journal.recipe.amt.low=不多
-astralsorcery.journal.recipe.amt.avg=平均
-astralsorcery.journal.recipe.amt.more=高于平均值
+astralsorcery.journal.recipe.amt.lowest=几乎不需要
+astralsorcery.journal.recipe.amt.low=一点点
+astralsorcery.journal.recipe.amt.avg=一半的量
+astralsorcery.journal.recipe.amt.more=高于一半
 astralsorcery.journal.recipe.amt.high=很多
-astralsorcery.journal.recipe.amt.highest=大量
+astralsorcery.journal.recipe.amt.highest=非常多
 astralsorcery.journal.recipe.amt.toomuch=§c太多了
 
 crystal.size=大小
@@ -403,7 +408,7 @@ item.itemhandtelescope.name=望远镜
 item.itemilluminationwand.name=照明之杖
 item.itemarchitectwand.name=秩序之杖
 item.itemexchangewand.name=转位之杖
-item.itemgrapplewand.name=涡漩星杖
+item.itemgrapplewand.name=冲击星杖
 item.itemshiftingstar.name=更替之星
 item.iteminfusedglass.name=聚能玻璃
 item.iteminfusedglass.active.name=蚀刻玻璃
@@ -411,14 +416,14 @@ item.itemknowledgeshare.name=知识共享卷轴
 item.itemusabledust.illumination.name=辉光粉
 item.itemusabledust.nocturnal.name=暗夜粉
 item.itemcape.name=星斗披风
-item.itemskyresonator.name=星辉共振器
+item.itemskyresonator.name=法斯刻共振器
 
-item.itemskyresonator.starlight.name=星辉共振器
-item.itemskyresonator.liquid.name=液体共振器
-item.itemskyresonator.structure.name=结构共振器
-item.itemskyresonator.upgrade.starlight.name=星辉
-item.itemskyresonator.upgrade.liquid.name=液体
-item.itemskyresonator.upgrade.structure.name=结构
+item.itemskyresonator.starlight.name=法斯刻共振器
+item.itemskyresonator.liquid.name=艾克斯共振器
+item.itemskyresonator.structure.name=多米共振器
+item.itemskyresonator.upgrade.starlight.name=法斯刻
+item.itemskyresonator.upgrade.liquid.name=艾克斯
+item.itemskyresonator.upgrade.structure.name=多米
 
 item.itemcoloredlens.effect.fire.name=燃烧
 item.itemcoloredlens.effect.break.name=中断
@@ -486,10 +491,10 @@ tile.blocktranslucentblock.name=半透明方块
 tile.blockmapdrawingtable.name=恒星映射台
 tile.blockcelestialgateway.name=天体调谐器
 tile.blockchalice.name=遏制圣杯
-tile.blockfountain.name=恒久变化之泉
-tile.blockbore.name=恒久变化之泉
-tile.blockborehead.liquid.name=黑灵源质
-tile.blockborehead.ore.name=岩灵源质
+tile.blockfountain.name=万象泉
+tile.blockbore.name=万象泉
+tile.blockborehead.liquid.name=Neromantic基座
+tile.blockborehead.ore.name=Petromantic基座
 
 tile.blockgeolosyssamplecluster.name=水晶石样品
 
