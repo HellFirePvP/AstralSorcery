@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.block.Block;
@@ -19,17 +20,20 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,7 +42,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 22.05.2016 / 16:13
  */
-public class BlockMarble extends Block implements BlockCustomName, BlockVariants {
+public class BlockMarble extends Block implements BlockCustomName, BlockVariants, BlockDynamicStateMapper {
 
     //private static final int RAND_MOSS_CHANCE = 10;
 
@@ -195,7 +199,18 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
 
     @Override
     public String getStateName(IBlockState state) {
-        return state.getValue(MARBLE_TYPE).getName();
+        return state.getValue(MARBLE_TYPE).getName() + (handleRegisterStateMapper() ? "_festive" : "");
+    }
+
+    @Override
+    public Map<IBlockState, ModelResourceLocation> getModelLocations(Block blockIn) {
+        ResourceLocation rl = Block.REGISTRY.getNameForObject(blockIn);
+        rl = new ResourceLocation(rl.getResourceDomain(), rl.getResourcePath() + "_festive");
+        Map<IBlockState, ModelResourceLocation> out = Maps.newHashMap();
+        for (IBlockState state : getValidStates()) {
+            out.put(state, new ModelResourceLocation(rl, getPropertyString(state.getProperties())));
+        }
+        return out;
     }
 
     public static enum MarbleBlockType implements IStringSerializable {

@@ -32,6 +32,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
+import hellfirepvp.astralsorcery.common.block.BlockDynamicStateMapper;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
@@ -294,6 +295,12 @@ public class ClientProxy extends CommonProxy {
         }
 
         for (RenderInfoBlock modelEntry : blockRegister) {
+            if(modelEntry.block instanceof BlockDynamicStateMapper) {
+                if(((BlockDynamicStateMapper) modelEntry.block).handleRegisterStateMapper()) {
+                    ((BlockDynamicStateMapper) modelEntry.block).registerStateMapper();
+                }
+            }
+
             Item item = Item.getItemFromBlock(modelEntry.block);
             ModelResourceLocation def = new ModelResourceLocation(AstralSorcery.MODID + ":" + modelEntry.name, "inventory");
             if(item instanceof INBTModel) {

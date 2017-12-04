@@ -162,6 +162,7 @@ public class RegistryBlocks {
         registerBlockRender(customFlower);
         registerBlockRender(blockStructural);
         registerBlockRender(blockMachine);
+        registerBlockRender(treeBeacon);
     }
 
     //Tiles
