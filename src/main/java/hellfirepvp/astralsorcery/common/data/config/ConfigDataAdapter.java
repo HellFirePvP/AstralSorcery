@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -28,8 +29,15 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
 
     public String getDescription();
 
+    /**
+     * Try add a entry to the data-set. The return value defines what happened:
+     * - null: Adding the element failed due to an error in the format
+     * - Empty optional: Adding the element failed, however reason being contextual information or pack-configurations.
+     *          Does not omit the generic format-error message, suggesting the method already gave appropiate information
+     * - Optional with value: Everything went fine.
+     */
     @Nullable
-    public T appendDataSet(String str);
+    public Optional<T> appendDataSet(String str);
 
     @Nonnull
     default public String[] serializeDataSet() {

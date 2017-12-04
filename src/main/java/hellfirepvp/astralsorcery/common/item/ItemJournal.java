@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
@@ -54,7 +55,7 @@ public class ItemJournal extends Item {
         } else if(!worldIn.isRemote && playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
             AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.JOURNAL_STORAGE, playerIn, worldIn, 0, 0, 0);
         }
-        return super.onItemRightClick(worldIn, playerIn, hand);
+        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
 
     @Nullable

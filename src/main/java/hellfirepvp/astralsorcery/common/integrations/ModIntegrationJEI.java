@@ -13,16 +13,20 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.block.BlockMachine;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.DiscoveryRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
+import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -54,6 +58,7 @@ public class ModIntegrationJEI implements IModPlugin {
     public static boolean jeiRegistrationPhase = true;
 
     public static final String idWell = "astralsorcery.lightwell";
+    public static final String idGrindstone = "astralsorcery.grindstone";
     public static final String idInfuser = "astralsorcery.infuser";
     public static final String idTransmutation = "astralsorcery.lightTransmutation";
 
@@ -67,7 +72,9 @@ public class ModIntegrationJEI implements IModPlugin {
     public static IRecipeRegistry recipeRegistry;
 
     @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {}
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        subtypeRegistry.useNbtForSubtypes(ItemsAS.wand, ItemsAS.armorImbuedCape);
+    }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registry) {}
@@ -78,6 +85,7 @@ public class ModIntegrationJEI implements IModPlugin {
 
         registry.addRecipeCategories(
                 new CategoryWell(guiHelper),
+                new CategoryGrindstone(guiHelper),
                 new CategoryInfuser(guiHelper),
                 new CategoryTransmutation(guiHelper),
 
@@ -94,6 +102,7 @@ public class ModIntegrationJEI implements IModPlugin {
         hideItems(registry.getJeiHelpers().getIngredientBlacklist());
 
         registerRecipeHandle(registry, WellLiquefaction.LiquefactionEntry.class,   WellRecipeWrapper::new,               idWell);
+        registerRecipeHandle(registry, GrindstoneRecipe.class,                     GrindstoneRecipeWrapper::new,         idGrindstone);
         registerRecipeHandle(registry, AbstractInfusionRecipe.class,               InfuserRecipeWrapper::new,            idInfuser);
         registerRecipeHandle(registry, LightOreTransmutations.Transmutation.class, TransmutationRecipeWrapper::new,      idTransmutation);
         registerRecipeHandle(registry, TraitRecipe.class,                          AltarTraitRecipeWrapper::new,         idAltarTrait);
@@ -102,6 +111,7 @@ public class ModIntegrationJEI implements IModPlugin {
         registerRecipeHandle(registry, DiscoveryRecipe.class,                      AltarDiscoveryRecipeWrapper::new,     idAltarDiscovery);
 
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockWell), idWell);
+        registry.addRecipeCatalyst(BlockMachine.MachineType.GRINDSTONE.asStack(), idGrindstone);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.starlightInfuser), idInfuser);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.lens), idTransmutation);
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.lensPrism), idTransmutation);
@@ -111,6 +121,7 @@ public class ModIntegrationJEI implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), idAltarTrait);
 
         registry.addRecipes(InfusionRecipeRegistry.recipes, idInfuser);
+        registry.addRecipes(GrindstoneRecipeRegistry.getValidRecipes(), idGrindstone);
         registry.addRecipes(LightOreTransmutations.getRegisteredTransmutations(), idTransmutation);
         registry.addRecipes(WellLiquefaction.getRegisteredLiquefactions(), idWell);
 

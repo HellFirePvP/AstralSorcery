@@ -6,24 +6,22 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.sky;
+package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraftforge.client.IRenderHandler;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: RenderRiftSkybox
+ * Class: ResonatorStructureRecipe
  * Created by HellFirePvP
- * Date: 13.01.2017 / 16:19
+ * Date: 12.11.2017 / 21:55
  */
-public class RenderRiftSkybox extends IRenderHandler {
+public class ResonatorStructureRecipe extends AttunementRecipe {
 
-    @Override
-    public void render(float partialTicks, WorldClient world, Minecraft mc) {
-
+    //TODO soon? idk?
+    public ResonatorStructureRecipe(AccessibleRecipe recipe) {
+        super(recipe);
     }
 
 }

@@ -19,12 +19,13 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.tile.TileRitualLink;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
-import hellfirepvp.astralsorcery.common.util.BlockBreakAssist;
-import hellfirepvp.astralsorcery.common.util.ILocatable;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -77,9 +78,15 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                         return false;
                     }
                 }
+            } else {
+                TileRitualLink link = MiscUtils.getTileAt(world, origin.getPos(), TileRitualLink.class, true);
+                if(link != null) {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -127,7 +134,10 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
             if(be != null) {
                 removeElement(be);
+                BlockDropCaptureAssist.startCapturing();
                 MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
+                NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
+                captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
             }

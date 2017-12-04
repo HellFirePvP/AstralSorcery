@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -79,13 +80,16 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         BlockPos initial = new BlockPos(chX * 16 + 8, 0, chZ * 16 + 8);
         if(world instanceof WorldServer) {
-            BlockPos blockpos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, "Stronghold", initial, false);
-            if(blockpos != null) {
-                double xDst = blockpos.getX() - initial.getX();
-                double zDst = blockpos.getZ() - initial.getZ();
-                float flatDst = MathHelper.sqrt(xDst * xDst + zDst * zDst);
-                if(flatDst <= 20) {
-                    return null;
+            ChunkGeneratorSettings settings = ChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+            if(settings.useStrongholds) {
+                BlockPos blockpos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, "Stronghold", initial, false);
+                if(blockpos != null) {
+                    double xDst = blockpos.getX() - initial.getX();
+                    double zDst = blockpos.getZ() - initial.getZ();
+                    float flatDst = MathHelper.sqrt(xDst * xDst + zDst * zDst);
+                    if(flatDst <= 20) {
+                        return null;
+                    }
                 }
             }
         }

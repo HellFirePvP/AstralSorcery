@@ -46,6 +46,13 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
         return timeoutListMap.containsKey(key);
     }
 
+    @Nullable
+    public TimeoutList<V> removeList(K key) {
+        TimeoutList<V> ret = timeoutListMap.remove(key);
+        ret.forEach((v) -> delegate.onContainerTimeout(key, v));
+        return ret;
+    }
+
     public TimeoutList<V> getOrCreateList(K key) {
         TimeoutList<V> list = timeoutListMap.get(key);
         if(list == null) {

@@ -299,6 +299,10 @@ public class ItemUtils {
         return getOreDictNames(stack).contains(name);
     }
 
+    public static NonNullList<ItemStack> getStacksOfOredict(String name) {
+        return OreDictionary.getOres(name, false);
+    }
+
     private static List<String> getOreDictNames(ItemStack stack) {
         List<String> out = Lists.newArrayList();
         for (int id : OreDictionary.getOreIDs(stack)) {

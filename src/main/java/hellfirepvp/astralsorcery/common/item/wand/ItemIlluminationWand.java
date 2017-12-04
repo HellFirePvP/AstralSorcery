@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.block.BlockFlareLight;
 import hellfirepvp.astralsorcery.common.block.BlockTranslucentBlock;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemAlignmentChargeConsumer;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
@@ -38,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -47,7 +49,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 17.01.2017 / 15:09
  */
-public class ItemIlluminationWand extends Item implements ItemAlignmentChargeConsumer {
+public class ItemIlluminationWand extends Item implements ItemAlignmentChargeConsumer, ItemDynamicColor {
 
     public ItemIlluminationWand() {
         setMaxDamage(0);
@@ -68,6 +70,15 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
     @SideOnly(Side.CLIENT)
     public boolean shouldReveal(ChargeType ct, ItemStack stack) {
         return ct == ChargeType.TEMP;
+    }
+
+    @Override
+    public int getColorForItemStack(ItemStack stack, int tintIndex) {
+        if(tintIndex != 1) return 0xFFFFFF;
+        EnumDyeColor color = getConfiguredColor(stack);
+        if(color == null) color = EnumDyeColor.YELLOW;
+        Color c = MiscUtils.flareColorFromDye(color);
+        return 0xFF000000 | c.getRGB();
     }
 
     public static void setConfiguredColor(ItemStack stack, EnumDyeColor color) {

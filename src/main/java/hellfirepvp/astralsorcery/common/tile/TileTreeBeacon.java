@@ -146,7 +146,9 @@ public class TileTreeBeacon extends TileReceiverBase {
                     try {
                         ((IGrowable) b).grow(world, rand, possibleSapling, state);
                     } catch (Exception ignored) {}
-                } while (TreeCaptureHelper.oneTimeCatches.contains(possibleSapling) || tries > 0);
+                    state = possibleSapling.getStateAt();
+                    b = state.getBlock();
+                } while (b instanceof IGrowable && TreeCaptureHelper.oneTimeCatches.contains(possibleSapling) && tries > 0);
                 world.captureBlockSnapshots = false;
 
                 return updatePositionsFromSnapshots(world, possibleSapling, pos);
@@ -160,7 +162,9 @@ public class TileTreeBeacon extends TileReceiverBase {
                     try {
                         b.updateTick(world, possibleSapling, state, rand);
                     } catch (Exception ignored) {}
-                } while (TreeCaptureHelper.oneTimeCatches.contains(possibleSapling) || ticksToExecute > 0);
+                    state = possibleSapling.getStateAt();
+                    b = state.getBlock();
+                } while (b.getTickRandomly() && TreeCaptureHelper.oneTimeCatches.contains(possibleSapling) && ticksToExecute > 0);
                 world.captureBlockSnapshots = false;
 
                 return updatePositionsFromSnapshots(world, possibleSapling, pos);

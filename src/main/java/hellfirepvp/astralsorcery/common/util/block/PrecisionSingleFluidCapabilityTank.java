@@ -133,12 +133,12 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
 
     @Override
     public boolean canFillFluidType(FluidStack fluidStack) {
-        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
+        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid)) && this.amount + fluidStack.amount <= this.maxCapacity;
     }
 
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
+        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid)) && this.amount >= fluidStack.amount;
     }
 
     public float getPercentageFilled() {

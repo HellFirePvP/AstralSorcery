@@ -69,7 +69,7 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         public void revertGLContext() {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
-                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
                     GL11.glPopAttrib();
                     break;
             }

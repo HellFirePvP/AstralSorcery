@@ -26,10 +26,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
-import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
-import hellfirepvp.astralsorcery.common.util.data.TimeoutList;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
+import hellfirepvp.astralsorcery.common.util.data.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -47,6 +44,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,6 +72,19 @@ public class EventHandlerEntity {
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
     public static Map<Integer, EntityAttackStack> attackStack = new HashMap<>();
+
+    @SubscribeEvent
+    public void onClone(PlayerEvent.Clone event) {
+        mergeTimeoutContents(EventHandlerServer.perkCooldowns, event.getOriginal(), event.getEntityPlayer());
+        mergeTimeoutContents(EventHandlerServer.perkCooldownsClient, event.getOriginal(), event.getEntityPlayer());
+    }
+
+    private <V> void mergeTimeoutContents(TimeoutListContainer<EntityPlayer, V> container, EntityPlayer old, EntityPlayer newPlayer) {
+        if(container.hasList(old)) {
+            TimeoutList<V> list = container.removeList(old);
+            container.getOrCreateList(newPlayer).addAll(list);
+        }
+    }
 
     @SubscribeEvent
     public void onTarget(LivingSetAttackTargetEvent event) {

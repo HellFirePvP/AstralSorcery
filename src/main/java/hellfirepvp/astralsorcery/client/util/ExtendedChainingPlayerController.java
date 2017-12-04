@@ -37,6 +37,8 @@ import net.minecraft.world.World;
  */
 public class ExtendedChainingPlayerController extends PlayerControllerMP {
 
+    public static boolean call = false;
+
     private final PlayerControllerMP delegate;
     private float reachModifier = 0.0F;
 
@@ -96,6 +98,7 @@ public class ExtendedChainingPlayerController extends PlayerControllerMP {
 
     @Override
     public float getBlockReachDistance() {
+        call = true;
         return delegate.getBlockReachDistance() + reachModifier;
     }
 

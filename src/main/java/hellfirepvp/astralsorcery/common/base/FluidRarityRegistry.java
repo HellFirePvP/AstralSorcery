@@ -6,9 +6,10 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.auxiliary;
+package hellfirepvp.astralsorcery.common.base;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -28,10 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -41,10 +39,10 @@ import java.util.concurrent.Callable;
  * Created by HellFirePvP
  * Date: 30.10.2017 / 14:03
  */
-public class FluidRarityRegistry {
+public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistry.FluidRarityEntry> {
 
     private static final ResourceLocation CAP_FLUIDENTRY_NAME = new ResourceLocation(AstralSorcery.MODID, "cap_chunk_fluid_fountain");
-    public static FluidRarityRegistry EVENT_INSTANCE = new FluidRarityRegistry();
+    public static FluidRarityRegistry INSTANCE = new FluidRarityRegistry();
 
     @CapabilityInject(ChunkFluidEntry.class)
     private static Capability<ChunkFluidEntry> CAPABILITY_CHUNK_FLUID = null;
@@ -53,57 +51,79 @@ public class FluidRarityRegistry {
 
     private static List<FluidRarityEntry> rarityList = new LinkedList<>();
 
-    public static void init() {
-        rarityList.add(FluidRarityEntry.EMPTY);
+    @Override
+    public Iterable<FluidRarityRegistry.FluidRarityEntry> getDefaultDataSets() {
+        List<FluidRarityEntry> entries = new LinkedList<>();
 
-        registerFluidRarity("lava", 7500, 4000_000, 1000_000);
-        registerFluidRarity("astralsorcery.liquidstarlight", 4000, 2000_000, 400_000);
+        tryAddEntry("water", 14000, Integer.MAX_VALUE, Integer.MAX_VALUE, entries);
+        tryAddEntry("lava", 7500, 4000_000, 1000_000, entries);
 
         //AA
-        registerFluidRarity("crystaloil", 800, 600_000, 400_000);
-        registerFluidRarity("empoweredoil", 200, 350_000, 150_000);
+        tryAddEntry("crystaloil", 800, 600_000, 400_000, entries);
+        tryAddEntry("empoweredoil", 200, 350_000, 150_000, entries);
 
         //TE
-        registerFluidRarity("redstone", 500, 120_000, 70_000);
-        registerFluidRarity("glowstone", 500, 120_000, 70_000);
-        registerFluidRarity("ender", 250, 140_000, 60_000);
-        registerFluidRarity("pyrotheum", 200, 200_000, 120_000);
-        registerFluidRarity("cryotheum", 200, 200_000, 120_000);
-        registerFluidRarity("refined_oil", 600, 480_000, 400_000);
-        registerFluidRarity("refined_fuel", 550, 450_000, 300_000);
+        tryAddEntry("redstone", 500, 120_000, 70_000, entries);
+        tryAddEntry("glowstone", 500, 120_000, 70_000, entries);
+        tryAddEntry("ender", 250, 140_000, 60_000, entries);
+        tryAddEntry("pyrotheum", 200, 200_000, 120_000, entries);
+        tryAddEntry("cryotheum", 200, 200_000, 120_000, entries);
+        tryAddEntry("refined_oil", 600, 480_000, 400_000, entries);
+        tryAddEntry("refined_fuel", 550, 450_000, 300_000, entries);
 
         //TiC
-        registerFluidRarity("iron", 900, 600_000, 350_000);
-        registerFluidRarity("gold", 600, 400_000, 350_000);
-        registerFluidRarity("cobalt", 80, 150_000, 150_000);
-        registerFluidRarity("ardite", 80, 150_000, 150_000);
-        registerFluidRarity("emerald", 30, 60_000, 90_000);
+        tryAddEntry("iron", 900, 600_000, 350_000, entries);
+        tryAddEntry("gold", 600, 400_000, 350_000, entries);
+        tryAddEntry("cobalt", 80, 150_000, 150_000, entries);
+        tryAddEntry("ardite", 80, 150_000, 150_000, entries);
+        tryAddEntry("emerald", 30, 60_000, 90_000, entries);
 
         //TR
-        registerFluidRarity("fluidoil", 900, 500_000, 350_000);
-        registerFluidRarity("fluidnitrodiesel", 450, 400_000, 250_000);
+        tryAddEntry("fluidoil", 900, 500_000, 350_000, entries);
+        tryAddEntry("fluidnitrodiesel", 450, 400_000, 250_000, entries);
 
         //IC2
-        registerFluidRarity("ic2uu_matter", 1, 600, 800);
-        registerFluidRarity("ic2biomass", 600, 300_000, 200_000);
-        registerFluidRarity("ic2biogas", 500, 250_000, 150_000);
+        tryAddEntry("ic2uu_matter", 1, 600, 800, entries);
+        tryAddEntry("ic2biomass", 600, 300_000, 200_000, entries);
+        tryAddEntry("ic2biogas", 500, 250_000, 150_000, entries);
 
-        Collections.shuffle(rarityList);
+        //Wizardry (King Steve it up)
+        tryAddEntry("mana", 1500, 550_000, 120_000, entries);
+        tryAddEntry("nacre", 250, 150_000, 250_000, entries);
+
+        return entries;
     }
 
-    public static void registerFluidRarity(String name, int rarity, int guaraneedAmt, int additionalAmt) {
-        Fluid f = FluidRegistry.getFluid(name);
-        if(f != null) {
-            rarityList.add(new FluidRarityEntry(f, rarity, guaraneedAmt, additionalAmt));
-        } else {
-            AstralSorcery.log.info("[AstralSorcery] Ignoring fluid " + name + " for rarity registry - it doesn't exist in the current environment");
+    private void tryAddEntry(String fluidName, int rarity, int guaranteedAmt, int addRand, List<FluidRarityEntry> out) {
+        out.add(new FluidRarityEntry(fluidName, rarity, guaranteedAmt, addRand));
+    }
+
+    @Override
+    public String getDescription() {
+        return "Defines fluid-rarities and amounts for the evershifting fountain's neromantic prime. The lower the relative rarity, the more rare the fluid. " +
+                "Format: <FluidName>;<guaranteedMbAmount>;<additionalRandomMbAmount>;<rarity>";
+    }
+
+    @Override
+    public String getDataFileName() {
+        return "fluid_rarities";
+    }
+
+    @Nullable
+    @Override
+    public Optional<FluidRarityEntry> appendDataSet(String str) {
+        FluidRarityEntry entry = FluidRarityEntry.deserialize(str);
+        if(entry == null) {
+            return Optional.empty();
         }
+        rarityList.add(entry);
+        return Optional.of(entry);
     }
 
     @Nullable
     private static FluidRarityEntry selectFluidEntry(Random random) {
         FluidRarityEntry entry = WeightedRandom.getRandomItem(random, rarityList);
-        if(entry == FluidRarityEntry.EMPTY || entry.fluid == null) {
+        if(entry.fluid == null || entry.fluid.equals(FluidRegistry.WATER)) {
             return null;
         }
         return entry;
@@ -147,20 +167,73 @@ public class FluidRarityRegistry {
         chunkEvent.addCapability(CAP_FLUIDENTRY_NAME, new ChunkFluidEntryProvider());
     }
 
-    public static class FluidRarityEntry extends WeightedRandom.Item {
+    public static class FluidRarityEntry extends WeightedRandom.Item implements ConfigDataAdapter.DataSet {
 
-        public static final FluidRarityEntry EMPTY = new FluidRarityEntry(null, 14000, 0, 0);
-
+        private final String fluidNameTmp;
         public final Fluid fluid;
         public final int guaranteedAmount, additionalRandomAmount, rarity;
 
+        private FluidRarityEntry(String fluidNameTmp, int rarity, int guaranteedAmount, int additionalRandomAmount) {
+            super(rarity);
+            this.fluidNameTmp = fluidNameTmp;
+            this.fluid = null;
+            this.rarity = rarity;
+            this.guaranteedAmount = guaranteedAmount;
+            this.additionalRandomAmount = additionalRandomAmount;
+        }
+
         private FluidRarityEntry(Fluid fluid, int rarity, int guaranteedAmount, int additionalRandomAmount) {
             super(rarity);
+            this.fluidNameTmp = null;
             this.fluid = fluid;
             this.rarity = rarity;
             this.guaranteedAmount = guaranteedAmount;
             this.additionalRandomAmount = additionalRandomAmount;
         }
+
+        @Nonnull
+        @Override
+        public String serialize() {
+            StringBuilder sb = new StringBuilder();
+            if(fluid == null) {
+                if(fluidNameTmp != null) {
+                    sb.append(fluidNameTmp);
+                } else {
+                    sb.append("water");
+                }
+            } else {
+                sb.append(fluid.getName());
+            }
+            sb.append(";").append(guaranteedAmount).append(";").append(additionalRandomAmount).append(";").append(rarity);
+            return sb.toString();
+        }
+
+        @Nullable
+        public static FluidRarityEntry deserialize(String str) {
+            String[] split = str.split(";");
+            if(split.length != 4) {
+                return null;
+            }
+            String fluidName = split[0];
+            Fluid f = FluidRegistry.getFluid(fluidName);
+            if(f == null) {
+                AstralSorcery.log.info("[AstralSorcery] Ignoring fluid " + fluidName + " for rarity registry - it doesn't exist in the current environment");
+                return null;
+            }
+            String strGAmount = split[1];
+            String strRAmount = split[2];
+            String strRarity = split[3];
+            int guaranteed, randomAmt, rarity;
+            try {
+                guaranteed = Integer.parseInt(strGAmount);
+                randomAmt = Integer.parseInt(strRAmount);
+                rarity = Integer.parseInt(strRarity);
+            } catch (NumberFormatException exc) {
+                return null;
+            }
+            return new FluidRarityEntry(f, rarity, guaranteed, randomAmt);
+        }
+
     }
 
     public static class ChunkFluidEntry implements INBTSerializable<NBTTagCompound> {

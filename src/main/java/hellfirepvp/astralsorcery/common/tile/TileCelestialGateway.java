@@ -22,6 +22,9 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,7 +38,7 @@ import java.awt.*;
  * Created by HellFirePvP
  * Date: 16.04.2017 / 17:59
  */
-public class TileCelestialGateway extends TileEntityTick implements IMultiblockDependantTile {
+public class TileCelestialGateway extends TileEntityTick implements IMultiblockDependantTile, IWorldNameable {
 
     private boolean hasMultiblock = false;
     private boolean doesSeeSky = false;
@@ -74,6 +77,22 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                 }
             }
         }
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return display != null && !display.isEmpty();
+    }
+
+    @Override
+    public String getName() {
+        return hasCustomName() ? display : "";
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getDisplayName() {
+        return hasCustomName() ? new TextComponentString(getName()) : new TextComponentString("");
     }
 
     @Override
