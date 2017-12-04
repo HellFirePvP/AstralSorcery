@@ -42,7 +42,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 22.05.2016 / 16:13
  */
-public class BlockMarble extends Block implements BlockCustomName, BlockVariants, BlockDynamicStateMapper {
+public class BlockMarble extends Block implements BlockCustomName, BlockVariants, BlockDynamicStateMapper.Festive {
 
     //private static final int RAND_MOSS_CHANCE = 10;
 

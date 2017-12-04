@@ -40,7 +40,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 30.12.2016 / 13:26
  */
-public class BlockTreeBeacon extends BlockStarlightNetwork implements BlockDynamicStateMapper, BlockVariants {
+public class BlockTreeBeacon extends BlockStarlightNetwork implements BlockDynamicStateMapper.Festive, BlockVariants {
 
     private static final AxisAlignedBB box = new AxisAlignedBB(3D / 16D, 0D, 3D / 16D, 13D / 16D, 1D, 13D / 16D);
 
