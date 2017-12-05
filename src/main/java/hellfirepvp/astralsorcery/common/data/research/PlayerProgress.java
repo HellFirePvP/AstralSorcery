@@ -231,6 +231,7 @@ public class PlayerProgress {
     }
 
     public List<ResearchProgression> getResearchProgression() {
+        researchProgression.removeIf(Objects::isNull);
         return Lists.newLinkedList(researchProgression);
     }
 

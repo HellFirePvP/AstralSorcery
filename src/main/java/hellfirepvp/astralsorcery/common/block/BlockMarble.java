@@ -147,9 +147,6 @@ public class BlockMarble extends Block implements BlockCustomName, BlockVariants
         IBlockState other = world.getBlockState(pos.offset(face));
         if((other.getBlock() instanceof BlockLiquid || other.getBlock() instanceof BlockFluidBase) &&
                 (marbleType == MarbleBlockType.PILLAR || marbleType == MarbleBlockType.PILLAR_BOTTOM || marbleType == MarbleBlockType.PILLAR_TOP)) {
-            return true;
-        }
-        if(marbleType == MarbleBlockType.PILLAR) {
             return false;
         }
         if(marbleType == MarbleBlockType.PILLAR_TOP) {

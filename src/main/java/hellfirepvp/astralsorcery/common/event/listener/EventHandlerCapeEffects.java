@@ -282,7 +282,7 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
                 List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {
-                    player.heal(0.8F);
+                    player.heal(0.3F);
                     player.getFoodStats().addStats(2, 0.4F);
                 }
             }
