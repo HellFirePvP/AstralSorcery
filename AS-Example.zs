@@ -11,22 +11,6 @@
 // Example:
 // mods.astralsorcery.StarlightInfusion.removeInfusion(<minecraft:ice>);
 
-// Adds a Ore that's possible to be spawned via the Mineralis ritual.
-// Adds it via oreDict. To make it work, be sure the oreDict name has at least 1 ore *Block*
-// Already-registered oreDict entries can be found here:
-//    https://github.com/HellFirePvP/AstralSorcery/blob/master/src/main/java/hellfirepvp/astralsorcery/common/base/OreTypes.java#L35-L58
-// GregTech ores are blacklisted for stability reasons.
-// Parameters:
-// OreDictName, spawnWeight
-// Example:
-// mods.astralsorcery.RitualMineralis.addOre("blockMarble", 6000);
-
-// Removes an oreDict entry from the list of ores the mineralis ritual can possibly spawn.
-// Parameters:
-// OreDictName
-// Example:
-// mods.astralsorcery.RitualMineralis.removeOre("oreCoal");
-
 // Adds a light transmutation recipe
 // Each input & output item specified *has to have* a block representation or the recipe will be skipped.
 // Metadata of the itemstacks is used to determine the blockstate.
