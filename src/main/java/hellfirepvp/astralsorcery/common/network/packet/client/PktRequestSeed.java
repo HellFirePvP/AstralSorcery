@@ -18,6 +18,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Random;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -63,11 +65,12 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
             long seed;
             try {
                 WorldProvider mgr = DimensionManager.getProvider(message.dimId);
-                seed = mgr.getSeed();
+                seed = new Random(mgr.getSeed()).nextLong();
             } catch (Exception exc) {
                 World plWorld = ctx.getServerHandler().player.world;
                 if(plWorld.provider.getDimension() == message.dimId) {
                     seed = ctx.getServerHandler().player.world.getSeed();
+                    seed = new Random(seed).nextLong();
                 } else {
                     return null; //Who sent that packet? World desync between server and client?...
                 }

@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.tile.base;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -30,10 +32,24 @@ public abstract class TileNetworkSkybound extends TileNetwork {
 
     protected void updateSkyState(boolean seesSky) {
         this.doesSeeSky = seesSky;
+        markForUpdate();
     }
 
     public boolean doesSeeSky() {
         return doesSeeSky;
     }
 
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+
+        this.doesSeeSky = compound.getBoolean("doesSeeSky");
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+
+        compound.setBoolean("doesSeeSky", this.doesSeeSky);
+    }
 }

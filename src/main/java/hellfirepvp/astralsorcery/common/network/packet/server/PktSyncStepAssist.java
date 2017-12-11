@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -51,6 +52,10 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
 
     @SideOnly(Side.CLIENT)
     public void apply(float stepHeight) {
+        if(Minecraft.getMinecraft().player == null) {
+            AstralSorcery.proxy.scheduleClientside(() -> apply(stepHeight), 4);
+            return;
+        }
         Minecraft.getMinecraft().player.stepHeight = stepHeight;
     }
 

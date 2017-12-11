@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.*;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -107,13 +108,14 @@ public enum ConstellationPerks {
 
     }
 
-    public static class PerkTimeoutHandler implements TimeoutListContainer.ContainerTimeoutDelegate<EntityPlayer, Integer> {
+    public static class PerkTimeoutHandler implements
+            TimeoutListContainer.ContainerTimeoutDelegate<EventHandlerServer.PlayerWrapperContainer, Integer> {
 
         @Override
-        public void onContainerTimeout(EntityPlayer key, Integer id) {
+        public void onContainerTimeout(EventHandlerServer.PlayerWrapperContainer key, Integer id) {
             ConstellationPerks timedOut = getById(id);
             if(timedOut != null) {
-                timedOut.getSingleInstance().onTimeout(key);
+                timedOut.getSingleInstance().onTimeout(key.player);
             }
         }
     }

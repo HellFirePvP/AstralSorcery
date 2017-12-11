@@ -23,18 +23,18 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandlerAchievements {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onPick(PlayerEvent.ItemPickupEvent event) {
-        if(!event.isCanceled()) {
-            if(event.pickedUp != null && !event.pickedUp.getItem().isEmpty() &&
-                    event.pickedUp.getItem().getItem() instanceof ItemRockCrystalBase) {
-                //FIXME RE-ADD AFTER ADVANCEMENTS
-                //event.player.addStat(RegistryAchievements.achvRockCrystal);
-                if(event.pickedUp.getItem().getItem() instanceof ItemCelestialCrystal) {
-                    //event.player.addStat(RegistryAchievements.achvCelestialCrystal);
-                }
-            }
-        }
-    }
+    //@SubscribeEvent(priority = EventPriority.LOWEST)
+    //public void onPick(PlayerEvent.ItemPickupEvent event) {
+    //    if(!event.isCanceled()) {
+    //        if(event.pickedUp != null && !event.pickedUp.getItem().isEmpty() &&
+    //                event.pickedUp.getItem().getItem() instanceof ItemRockCrystalBase) {
+    //            //FIXME RE-ADD AFTER ADVANCEMENTS
+    //            //event.player.addStat(RegistryAchievements.achvRockCrystal);
+    //            if(event.pickedUp.getItem().getItem() instanceof ItemCelestialCrystal) {
+    //                //event.player.addStat(RegistryAchievements.achvCelestialCrystal);
+    //            }
+    //        }
+    //    }
+    //}
 
 }

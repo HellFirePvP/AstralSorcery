@@ -79,7 +79,7 @@ public class PktEngraveGlass implements IMessage, IMessageHandler<PktEngraveGlas
     public IMessage onMessage(PktEngraveGlass message, MessageContext ctx) {
         World w = DimensionManager.getWorld(message.dimId);
         if(w != null) {
-            TileMapDrawingTable tmt = MiscUtils.getTileAt(w, message.pos, TileMapDrawingTable.class, true);
+            TileMapDrawingTable tmt = MiscUtils.getTileAt(w, message.pos, TileMapDrawingTable.class, false);
             if(tmt != null) {
                 tmt.tryEngraveGlass(message.constellations);
             }

@@ -211,7 +211,9 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     if(inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
                 }
                 for (int i = 25; i < inputs.length; i++) {
-                    rRec.addOuterTraitItem(inputs[i]);
+                    if(inputs[i] != null) {
+                        rRec.addOuterTraitItem(inputs[i]);
+                    }
                 }
                 return rRec;
         }

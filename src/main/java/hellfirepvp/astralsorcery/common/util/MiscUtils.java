@@ -82,6 +82,10 @@ public class MiscUtils {
         return max;
     }
 
+    public static boolean isConnectionEstablished(EntityPlayerMP player) {
+        return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
+    }
+
     @Nonnull
     public static Color flareColorFromDye(EnumDyeColor color) {
         Color c = prettierColorMapping.get(color);

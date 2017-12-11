@@ -74,12 +74,15 @@ public class TileOreGenerator extends TileEntitySynchronized {
             return false; //Uhm... shit like redstone ore and stuff.
         }
         if(remainingGuaranteed > 0) {
+            generatingOre = true;
+            world.setBlockState(pos, oldState);
             if(world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
                 MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true, true);
                 BlockCustomOre.allowCrystalHarvest = false;
             }
-            generatingOre = true;
+            world.setBlockState(pos, newState);
+
             IBlockState state;
             if(ConfigEntryMultiOre.oreChance == 0 || rand.nextInt(ConfigEntryMultiOre.oreChance) != 0) {
                 state = Blocks.STONE.getDefaultState();

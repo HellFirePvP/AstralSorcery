@@ -163,6 +163,7 @@ public class RegistryRecipes {
     private static void initGrindstoneRecipes() {
         registerGrindstoneRecipe(new CrystalToolSharpeningRecipe(1));
         registerGrindstoneRecipe(new CrystalSharpeningRecipe(1));
+        registerGrindstoneRecipe(new SwordSharpeningRecipe());
 
         registerGrindstoneRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), ItemCraftingComponent.MetaType.STARDUST.asStack(), 20);
 

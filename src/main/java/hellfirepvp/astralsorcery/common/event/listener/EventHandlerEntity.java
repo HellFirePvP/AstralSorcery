@@ -75,11 +75,14 @@ public class EventHandlerEntity {
 
     @SubscribeEvent
     public void onClone(PlayerEvent.Clone event) {
-        mergeTimeoutContents(EventHandlerServer.perkCooldowns, event.getOriginal(), event.getEntityPlayer());
-        mergeTimeoutContents(EventHandlerServer.perkCooldownsClient, event.getOriginal(), event.getEntityPlayer());
+        EventHandlerServer.PlayerWrapperContainer ctOld = new EventHandlerServer.PlayerWrapperContainer(event.getOriginal());
+        EventHandlerServer.PlayerWrapperContainer ctNew = new EventHandlerServer.PlayerWrapperContainer(event.getEntityPlayer());
+        mergeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld, ctNew);
+        mergeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld, ctNew);
     }
 
-    private <V> void mergeTimeoutContents(TimeoutListContainer<EntityPlayer, V> container, EntityPlayer old, EntityPlayer newPlayer) {
+    private <V> void mergeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
+                                          EventHandlerServer.PlayerWrapperContainer old, EventHandlerServer.PlayerWrapperContainer newPlayer) {
         if(container.hasList(old)) {
             TimeoutList<V> list = container.removeList(old);
             container.getOrCreateList(newPlayer).addAll(list);

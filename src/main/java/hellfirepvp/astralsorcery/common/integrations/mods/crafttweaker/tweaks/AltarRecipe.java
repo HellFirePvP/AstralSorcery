@@ -120,17 +120,12 @@ public class AltarRecipe extends BaseTweaker {
     }
 
     @ZenMethod
-    public static void addTraitAltarrecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
-        addTraitAltarrecipe(output, starlightRequired, craftingTickTime, inputs, null);
+    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        addTraitAltarRecipe(output, starlightRequired, craftingTickTime, inputs, null);
     }
 
     @ZenMethod
-    public static void addTraitAltarrecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
-        if(true) {
-            CraftTweakerAPI.logError("[" + name + "] Skipping recipe-addition - T4 crafting not yet supported.");
-            return;
-        }
-
+    public static void addTraitAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs, @Nullable String iRequiredConstellationFocusName) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.TRAIT_CRAFT)) return;
 
         ItemStack out = convertToItemStack(output);

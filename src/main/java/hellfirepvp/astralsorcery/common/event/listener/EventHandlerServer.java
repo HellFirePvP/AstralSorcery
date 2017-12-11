@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.RockCrystalBuffer;
-import hellfirepvp.astralsorcery.common.entities.EntitySpectralTool;
 import hellfirepvp.astralsorcery.common.event.BlockModifyEvent;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -46,7 +45,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.Item;
@@ -72,8 +70,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -87,8 +85,8 @@ public class EventHandlerServer {
 
     private static final Random rand = new Random();
 
-    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
-    public static TimeoutListContainer<EntityPlayer, Integer> perkCooldownsClient = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.CLIENT);
+    public static TimeoutListContainer<PlayerWrapperContainer, Integer> perkCooldowns = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.SERVER);
+    public static TimeoutListContainer<PlayerWrapperContainer, Integer> perkCooldownsClient = new TimeoutListContainer<>(new ConstellationPerks.PerkTimeoutHandler(), TickEvent.Type.CLIENT);
 
     @SubscribeEvent
     public void attachPlague(AttachCapabilitiesEvent<Entity> event) {
@@ -372,6 +370,32 @@ public class EventHandlerServer {
                 }
             }
         }
+    }
+
+    public static class PlayerWrapperContainer {
+
+        @Nonnull
+        public final EntityPlayer player;
+
+        public PlayerWrapperContainer(@Nonnull EntityPlayer player) {
+            this.player = player;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(this == obj) return true;
+            if(obj == null) return player == null;
+            if(player == null) return false;
+            if(!(obj instanceof PlayerWrapperContainer)) return false;
+
+            return ((PlayerWrapperContainer) obj).player.getUniqueID().equals(player.getUniqueID());
+        }
+
+        @Override
+        public int hashCode() {
+            return player != null ? player.getUniqueID().hashCode() : 0;
+        }
+
     }
 
 }

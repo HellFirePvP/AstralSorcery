@@ -18,10 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -57,7 +54,7 @@ public class ConstellationSkyHandler implements ITickHandler {
             if(!w.isRemote) {
                 WorldSkyHandler handle = worldHandlersServer.get(w.provider.getDimension());
                 if(handle == null) {
-                    handle = new WorldSkyHandler(w.getSeed());
+                    handle = new WorldSkyHandler(new Random(w.getSeed()).nextLong());
                     worldHandlersServer.put(w.provider.getDimension(), handle);
                 }
                 handle.tick(w);

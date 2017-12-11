@@ -38,7 +38,7 @@ public class SkyCollectionHelper {
     }
 
     public static float getSkyNoiseDistribution(World world, BlockPos pos) {
-        return getDistributionInternal(world.getSeed(), pos);
+        return getDistributionInternal(new Random(world.getSeed()).nextLong(), pos);
     }
 
     private static float getDistributionInternal(long seed, BlockPos pos) {

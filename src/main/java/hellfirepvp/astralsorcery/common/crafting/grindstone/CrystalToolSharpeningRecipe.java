@@ -34,6 +34,11 @@ public class CrystalToolSharpeningRecipe extends GrindstoneRecipe {
                 (stackIn.getItem() instanceof ItemCrystalToolBase || stackIn.getItem() instanceof ItemCrystalSword);
     }
 
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
     @Nonnull
     @Override
     public GrindResult grind(ItemStack stackIn) {

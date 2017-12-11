@@ -32,6 +32,11 @@ public class CrystalSharpeningRecipe extends GrindstoneRecipe {
         return !stackIn.isEmpty() && (stackIn.getItem() instanceof ItemRockCrystalBase);
     }
 
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
     @Nonnull
     @Override
     public GrindResult grind(ItemStack stackIn) {

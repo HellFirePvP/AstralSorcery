@@ -60,7 +60,7 @@ public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchm
         if(ctx.side == Side.SERVER) {
             World world = DimensionManager.getWorld(message.dimId);
             if(world != null) {
-                TileMapDrawingTable tmt = MiscUtils.getTileAt(world, message.tablePos, TileMapDrawingTable.class, true);
+                TileMapDrawingTable tmt = MiscUtils.getTileAt(world, message.tablePos, TileMapDrawingTable.class, false);
                 if(tmt != null) {
                     if(tmt.burnParchment()) {
                         return new PktBurnParchment(-1, BlockPos.ORIGIN);

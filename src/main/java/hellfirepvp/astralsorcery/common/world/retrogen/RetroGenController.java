@@ -28,12 +28,12 @@ import java.util.*;
  */
 public class RetroGenController {
 
-    private static Map<Integer, List<ChunkPos>> retroGenActive = new HashMap<>();
+    private static boolean inPopulation = false;
+
     private static Map<Integer, List<ChunkPos>> queuedPopulation = new HashMap<>();
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        retroGenActive.remove(event.getWorld().provider.getDimension());
         queuedPopulation.remove(event.getWorld().provider.getDimension());
     }
 
@@ -56,8 +56,7 @@ public class RetroGenController {
         ChunkPos pos = event.getChunk().getPos();
         int dimId = w.provider.getDimension();
 
-        List<ChunkPos> active = retroGenActive.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        if(!event.getChunk().isTerrainPopulated() || active.contains(pos)) {
+        if(!event.getChunk().isTerrainPopulated()) {
             visitChunkPopulation(w);
             return;
         }
@@ -68,9 +67,9 @@ public class RetroGenController {
     }
 
     private void visitChunkPopulation(World w) {
+        if(inPopulation) return;
         int dimId = w.provider.getDimension();
         List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        List<ChunkPos> active = retroGenActive.computeIfAbsent(dimId, (id) -> new LinkedList<>());
         Iterator<ChunkPos> iterator = queue.iterator();
         while (iterator.hasNext()) {
             ChunkPos pos = iterator.next();
@@ -87,9 +86,9 @@ public class RetroGenController {
                         return;
                     }
                 }
-                active.add(pos);
+                inPopulation = true;
                 CommonProxy.worldGenerator.handleRetroGen(w, pos, chunkVersion);
-                active.remove(pos);
+                inPopulation = false;
 
                 iterator.remove();
             }
