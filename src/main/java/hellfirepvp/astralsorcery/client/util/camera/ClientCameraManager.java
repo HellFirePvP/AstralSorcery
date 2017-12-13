@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.TreeSet;
 
@@ -43,7 +44,7 @@ public class ClientCameraManager implements ITickHandler {
 
     private ClientCameraManager() {}
 
-    private TreeSet<ICameraTransformer> transformers = new TreeSet<>((t1, t2) -> t1.getPriority() - t2.getPriority());
+    private TreeSet<ICameraTransformer> transformers = new TreeSet<>(Comparator.comparingInt(ICameraTransformer::getPriority));
     private ICameraTransformer lastTransformer = null;
 
     public static ClientCameraManager getInstance() {
