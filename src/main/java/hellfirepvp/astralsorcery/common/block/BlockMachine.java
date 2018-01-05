@@ -11,7 +11,8 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.CommonProxy;
-import hellfirepvp.astralsorcery.common.item.base.IGrindable;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IVariantTileProvider;
@@ -132,6 +133,11 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     @Override
+    public boolean hasTileEntity() {
+        return true;
+    }
+
+    @Override
     public boolean hasTileEntity(IBlockState state) {
         return true;
     }
@@ -186,9 +192,9 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
                                 tgr.setGrindingItem(ItemStack.EMPTY);
                             } else {
-                                Item i = grind.getItem();
-                                if(i instanceof IGrindable) {
-                                    IGrindable.GrindResult result = ((IGrindable) i).grind(tgr, grind, rand);
+                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                                if(recipe != null) {
+                                    GrindstoneRecipe.GrindResult result = recipe.grind(grind);
                                     switch (result.getType()) {
                                         case SUCCESS:
                                             tgr.setGrindingItem(grind); //Update
@@ -213,8 +219,8 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                             ItemStack stack = player.getHeldItem(hand);
 
                             if(!stack.isEmpty()) {
-                                Item trySet = stack.getItem();
-                                if(trySet instanceof IGrindable && ((IGrindable) trySet).canGrind(tgr, stack)) {
+                                GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(stack);
+                                if(recipe != null) {
                                     ItemStack toSet = stack.copy();
                                     toSet.setCount(1);
                                     tgr.setGrindingItem(toSet);
@@ -238,15 +244,13 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                     } else {
                         ItemStack grind = tgr.getGrindingItem();
                         if(!grind.isEmpty() && !player.isSneaking()) {
-                            Item i = grind.getItem();
-                            if(i instanceof IGrindable) {
-                                if(((IGrindable) i).canGrind(tgr, grind)) {
-                                    for (int j = 0; j < 8; j++) {
-                                        world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
-                                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
-                                                (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
-                                    }
+                            GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
+                            if(recipe != null) {
+                                for (int j = 0; j < 8; j++) {
+                                    world.spawnParticle(EnumParticleTypes.CRIT, posX + 0.5, posY + 0.8, posZ + 0.4,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
+                                            (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
                                 }
                             } else if(SwordSharpenHelper.canBeSharpened(grind) && !SwordSharpenHelper.isSwordSharpened(grind)) {
                                 for (int j = 0; j < 8; j++) {

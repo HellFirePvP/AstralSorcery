@@ -55,7 +55,7 @@ public class WellRecipe extends BaseTweaker {
 
         FluidStack fs = convertToFluidStack(output, false);
         if (fs == null) {
-            CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input fluid.");
+            CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid output fluid.");
             return;
         }
 

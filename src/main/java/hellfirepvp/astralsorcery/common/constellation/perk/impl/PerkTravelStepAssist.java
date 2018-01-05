@@ -34,18 +34,14 @@ public class PerkTravelStepAssist extends ConstellationPerk {
         if(side == Side.SERVER) {
             if(!isCooldownActiveForPlayer(player)) {
                 player.stepHeight += 0.5F;
-
-                PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
-                PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
             } else {
                 if(player.stepHeight < 1.1F) {
                     player.stepHeight = 1.1F;
-
-                    PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
-                    PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
                 }
             }
             forceSetCooldownForPlayer(player, 20);
+            PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
+            PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
         }
     }
 

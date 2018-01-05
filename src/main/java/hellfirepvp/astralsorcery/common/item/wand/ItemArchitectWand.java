@@ -224,6 +224,29 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         if(playerIn.isSneaking()) {
             tryStoreBlock(stack, world, pos);
             return EnumActionResult.SUCCESS;
+        } else {
+            if(!world.isRemote) {
+                IBlockState stored = getStoredState(stack);
+                ItemStack consumeStack = getStoredStateAsStack(stack);
+                if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack.isEmpty()) return EnumActionResult.SUCCESS;
+
+                Deque<BlockPos> placeable = filterBlocksToPlace(playerIn, world, architectRange);
+                if(!placeable.isEmpty()) {
+                    for (BlockPos placePos : placeable) {
+                        if(drainTempCharge(playerIn, Config.architectWandUseCost, true)
+                                && (playerIn.isCreative() || ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), true))) {
+                            drainTempCharge(playerIn, Config.architectWandUseCost, false);
+                            if(!playerIn.isCreative()) {
+                                ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
+                            }
+                            world.setBlockState(placePos, stored);
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                            ev.setAdditionalData(Block.getStateId(stored));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                        }
+                    }
+                }
+            }
         }
 
         return EnumActionResult.SUCCESS;

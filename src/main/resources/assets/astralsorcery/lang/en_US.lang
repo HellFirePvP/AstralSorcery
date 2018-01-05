@@ -3,6 +3,7 @@ itemGroup.astralsorcery.papers=[AS] Constellation Papers
 itemGroup.astralsorcery.crystals=[AS] Attuned Crystals
 
 jei.category.well=Lightwell
+jei.category.grindstone=Grindstone
 jei.category.infuser=Starlight Infusion
 jei.category.transmutation=Starlight Transmutation
 jei.category.altar.discovery=Luminous Crafting Table
@@ -23,6 +24,7 @@ potion.as.crafted.name=Stardew
 
 misc.moreInformation=<Hold SHIFT for more details>
 misc.craftInformation=§7Click to see recipe
+misc.grindstone.double=Chance to double output: %s
 misc.knowledge.missing=A empty and sparkly scroll
 misc.knowledge.inscribed=Contains knowledge from %s
 misc.knowledge.inscribed.creative=Contains massive knowledge
@@ -40,6 +42,9 @@ misc.chaos.resistance.max=Chaos Immunity
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
+
+enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
+enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools that have this enchantment on them will cause the result being the item that would be the result of smelting the original drop. ("Auto-Smelt")
 
 gui.journal.bm.knowledge.name=Knowledge
 gui.journal.bm.constellations.name=Constellations
@@ -159,12 +164,12 @@ research.NOC_POWDER.name=Nocturnal Powder
 astralsorcery.journal.NOC_POWDER.1.text=The night harbors many dangers and brings forth endless creatures with malicious intent. While those monsters are not really interesting by themselves, the things they carry with them are much more desireable.<NL>However, those creatures either avoid daytime completely or act all too friendly when being exposed to daylight. The newfound dust that can create a bright light out of nothing could maybe be turned around and create a dark area that allows for theses monsters to spawn.
 astralsorcery.journal.NOC_POWDER.3.text=While a block can be rightclicked to create this field that spawns monsters for a few seconds, having it appear so close-up might not be a great idea. The powder can be thrown like the illumination powder to create this field wherever it lands.<NL>Due to the effect the powder creates, only one can be active at a time in its general vicinity.
 
-research.SKY_RESO.name=Starlight Resonator
-astralsorcery.journal.SKY_RESO.1.text= Looking up in the sky with the naked eye, it is nearly impossible to discern the magnitude of starlight  emitted in a given area. However there is empirical evidence based on the starlight crafting altar’s reservoir alone that the light stars send varies from position to position; the light of one star can overlay with others causing it to either amplify in strength or just vanish entirely.<NL>Altars and other structures that rely on starlight can perform at a higher capacity in an amplified starlight field.
+research.SKY_RESO.name=Fosic Resonator
+astralsorcery.journal.SKY_RESO.1.text=Looking up in the sky with the naked eye, it is nearly impossible to discern the magnitude of starlight  emitted in a given area. However there is empirical evidence based on the starlight crafting altar’s reservoir alone that the light stars send varies from position to position; the light of one star can overlay with others causing it to either amplify in strength or just vanish entirely.<NL>Altars and other structures that rely on starlight can perform at a higher capacity in an amplified starlight field.
 astralsorcery.journal.SKY_RESO.3.text=Finding such positions by just plainly observing the sky or an altar’s reservoir at different positions seems tedious, and ineffectual.<NL>A better solution would be a device that resonates with both the light spectrum visible to the naked eye and amplified starlight fields. It does not replace the need for exploring to find a suitable place, but should make them much easier to spot in the night by looking along the surface while holding the device However preliminary calculations show that areas of high starlight are somewhat rare, and could easily be hundreds to a thousand meters apart.
 
 research.SPEC_RELAY.name=Spectral Relay
-astralsorcery.journal.SPEC_RELAY.1.text=The starlight resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
+astralsorcery.journal.SPEC_RELAY.1.text=The fosic resonator can find fields of intense starlight which can be useful for harnessing the energy. The problem is moving infrastructure or traveling vast distances to harness the starlight can at times be impractical. As delving further into the secrets of the Ancients will undoubtedly require more and more starlight an alternative is in order.
 astralsorcery.journal.SPEC_RELAY.4.text=A small setup, dedicated to collecting starlight for the altar near should help solve that problem. A clear view of the sky is most certainly a necessity and better results will most likely be achieved at night.<NL>When the relay has been placed high up but close to an altar, it will collect and focus starlight once a glass lens is placed inside it. The starlight is then redirected as small sparks to the closest nearby altar.<NL>However, placing too many relays close to each other will result in one cannibalizing the others' starlight and will most likely create  much more... §odisappointing§r results..
 
 research.KNOWLEDGE_SHARE.name=Written Expertise
@@ -327,9 +332,20 @@ research.ATT_WAND_VICIO.name=Wand Attunement: Vicio
 astralsorcery.journal.ATT_WAND_VICIO.1.text=While freely flying through the air and reaching for the stars might not be achievable with this, the wand being exposed to the effects of vicio certainly helps with that a bit. While holding right-click it can be charged up like a bow, but upon releasing it doesn't shoot an arrow, but the wielder itself through the air.
 
 research.C_CHALICE.name=Containment Chalice
-astralsorcery.journal.C_CHALICE.1.text=The lightwell is certainly nice and functional, however its basin seems small. So all that liquid uses more space than what it's worth - even more so now that infusion works through a lot of it in no time.<NL>A stronger and more useful way of storing liquid might be worthwhile. Some sort of chalice, holding whatever fluid on top of it, compressing it into a more managable size.
+astralsorcery.journal.C_CHALICE.1.text=The lightwell is certainly nice and functional, however its basin seems small. So all that liquid uses more space than what it's worth - even more so now that infusion works through a lot of it in no time.<NL>A stronger and more useful way of storing liquid might be worthwhile. Some sort of chalice, holding whatever fluid on top of it, compressing it into a more managable size, holding up to 24 buckets of that liquid.
 astralsorcery.journal.C_CHALICE.3.text=Designing a chalice that is strong enough to contain the liquid and keeps the fluid in balance so nothing disperses and vanishes proves to be very difficult. The now final contraption seems to hold the fluid stable so it is safe for storing the excess liquids.<NL>While contained, the liquid acts strange. As if being driven by the energies that hold it in place, occasional outbursts of fluid break free from the containment.
 astralsorcery.journal.C_CHALICE.4.text=Instead of getting lost, those irregularities seem to have purpose. If a similar device is placed close-by and two liquids that form a block or any other interaction together are contained inside, occasionally, small sparks of those will break free and gravitate towards one another, forming the result they normally might undergo.<NL>With this being so impulsive, using it as additional liquid source for infusion might be of value.<NL>Only bottom side seems solid enough to transfer liquid by mechanical means.
+astralsorcery.journal.C_CHALICE.5.text=While the chalice can see nearby lightwells, it might destabilize their liquid and draw it towards the chalice.<NR>As this volatile state might become undesirable for specific purposes, adding some weak power in form of a redstone signal to it will stabilize the held liquid and stop any interactions that would normally occur.
+
+research.BORE_CORE.name=Evershifting Fountain
+astralsorcery.journal.BORE_CORE.1.text=Liquid starlight in its basic concept is a rather strange substance. Condensed energy in a stable, rather easily manageable state compared to the starlight itself that's rather inconsistent and hard to handle.<NL>Releasing the energy that liquid starlight harbors in a controlled manner to channel its energy as desired might be extremely useful.
+astralsorcery.journal.BORE_CORE.2.text=A device, able to both withstand the stress that returning liquid starlight into its former state brings along.<NL>While such a machine is now possible thanks to the new crafting options, an additional focus-ring will be required around it to ensure nothing of the energized liquid starlight gets lost during its conversion process. For safety measure, nothing may be placed within that inner circle of the structure.
+astralsorcery.journal.BORE_CORE.4.text=As the now called "Fountain" runs its processes with liquid starlight, a sky-view is not required in order for it to run. However, as its work process is very delicate, it will only accept the liquid starlight from a chalice filled with it that sits directly on top of the fountain block itself.<NL>The fountain is only the preprocessor of starlight. The functionality that the resulting energy is used for, depends on the prime that's used together the fountain and placed below the block itself.
+
+research.BORE_HEAD_LIQUID.name=Neromantic Prime
+astralsorcery.journal.BORE_HEAD_LIQUID.1.text=One such use of the Evershifting Fountain is to stimulate the currents of liquid resources below the bedrock level with the now releasable massive energy.<NL>Using the Neromantic Prime will result in the accumulation of the liquid, that's been stored below bedrock for eons, in the central fountain-core.
+astralsorcery.journal.BORE_HEAD_LIQUID.2.text=While the fountain cannot be mechanically interacted with, the resulting liquid can be extracted by chalices with sufficient space.<NL>These underground oceans are not infinite however, so once the stored liquid has been used up, unlimited mundane water will take its place.<NL>The production results vary heavily between even short distances and setting up the fountain just to see the result is tiresome and expensive.
+astralsorcery.journal.BORE_HEAD_LIQUID.4.text=Recalling the large area the fosic resonator could gather its information from, an adjustment that would allow it to draw forth very small samples of liquid for some random positions around the one that wields the resonator. No enough to be useable, but enough to gather the necessary information if setting up the fountain might be beneficial or not.<NL>The resonator, even with two modes, only best during the night. Modes can be changed by shift-right-clicking while holding it.
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -400,14 +416,14 @@ item.itemknowledgeshare.name=Scroll of written Expertise
 item.itemusabledust.illumination.name=Illumination Powder
 item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
-item.itemskyresonator.name=Starlight Resonator
+item.itemskyresonator.name=Fosic Resonator
 
-item.itemskyresonator.starlight.name=Starlight Resonator
-item.itemskyresonator.liquid.name=[Liquid] Resonator
-item.itemskyresonator.structure.name=[Multiblock-Check] Resonator
-item.itemskyresonator.upgrade.starlight.name=Starlight
-item.itemskyresonator.upgrade.liquid.name=[Liquid]
-item.itemskyresonator.upgrade.structure.name=[Multiblock-Check]
+item.itemskyresonator.starlight.name=Fosic Resonator
+item.itemskyresonator.liquid.name=Ichosic Resonator
+item.itemskyresonator.structure.name=Domi Resonator
+item.itemskyresonator.upgrade.starlight.name=Fosic
+item.itemskyresonator.upgrade.liquid.name=Ichosic
+item.itemskyresonator.upgrade.structure.name=Domi
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break
@@ -607,7 +623,7 @@ perk.DEF_DMGREDUCTION.info=Reduces overall damage taken
 perk.DEF_DODGE=Higher Dexterity
 perk.DEF_DODGE.info=Grants a chance to dodge incoming damage
 perk.DEF_NOARMOR=No armor is more armor
-perk.DEF_NOARMOR.info=Resistances and heal when wearing less than 2 armor pieces
+perk.DEF_NOARMOR.info=Resistances and heal when wearing less then 3 armor pieces
 perk.DEF_ELEMENTAL=Elemental shield
 perk.DEF_ELEMENTAL.info=Take less damage from elemental damage
 perk.DEF_FALLRED=Additional feathers

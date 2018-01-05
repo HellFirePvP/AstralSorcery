@@ -84,8 +84,8 @@ public class ConstellationMapEffectRegistry {
 
         public EnchantmentMapEffect(Enchantment ench, int min, int max) {
             this.ench = ench;
-            this.maxEnchLevel = min;
-            this.minEnchLevel = max;
+            this.maxEnchLevel = max;
+            this.minEnchLevel = min;
         }
 
     }

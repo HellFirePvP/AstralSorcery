@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXCrystalBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.block.fluid.FluidLiquidStarlight;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
@@ -40,6 +41,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,7 +49,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -123,6 +125,18 @@ public class TileWell extends TileReceiverBaseInventory {
                 starlightBuffer = 0;
             } else {
                 starlightBuffer = 0;
+            }
+
+            if((ticksExisted % 100 == 0) && getHeldFluid() != null && getFluidAmount() > 100) {
+                int mb = Math.min(400, getFluidAmount());
+                FluidStack fluidStack = new FluidStack(getHeldFluid(), mb);
+                java.util.List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, fluidStack);
+                if(!out.isEmpty()) {
+                    TileChalice target = out.get(rand.nextInt(out.size()));
+                    LiquidStarlightChaliceHandler.doFluidTransfer(this, target, fluidStack.copy());
+                    this.tank.drain(mb, true);
+                    markForUpdate();
+                }
             }
         } else {
             ItemStack stack = getInventoryHandler().getStackInSlot(0);

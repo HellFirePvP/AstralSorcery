@@ -199,6 +199,7 @@ public class MiscUtils {
             if(breakBlock) {
                 if(!block.removedByPlayer(suggestedBrokenState, world, pos, fp, harvestable)) {
                     world.captureBlockSnapshots = false;
+                    world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
                     world.capturedBlockSnapshots.clear();
                     return false;
                 }
@@ -225,11 +226,13 @@ public class MiscUtils {
         if (exp > 0) {
             block.dropXpOnBlockBreak(world, pos, exp);
         }
+        BlockDropCaptureAssist.startCapturing();
         //Capturing block snapshots is aids. don't try that at home kids.
         world.captureBlockSnapshots = false;
         world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
         world.capturedBlockSnapshots.forEach((s) -> world.setBlockToAir(s.getPos()));
         world.capturedBlockSnapshots.clear();
+        BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
         return true;
     }
 

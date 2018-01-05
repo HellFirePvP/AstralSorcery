@@ -62,6 +62,20 @@
 // Example:
 // mods.astralsorcery.Lightwell.addLiquefaction(<minecraft:dirt>, <liquid:water>, 1, 0.2, 0);
 
+// Adds a grindstone recipe
+// The 'Input' can be both an itemstack or a oredict name!
+// Parameters:
+// Input, Output-ItemStack
+// Example:
+// mods.astralsorcery.Grindstone.addRecipe(<minecraft:stone>, <minecraft:gravel>);
+
+// Removes a single grindstone recipes
+// Only 1 recipe will be removed, the first one matching the output-stack specified.
+// Parameters:
+// Output-ItemStack
+// Example:
+// mods.astralsorcery.Grindstone.removeReipce(<minecraft:redstone>);
+
 // Removes a recipe from the altar recipe registry.
 // Removes only the first it finds. Add multiple removeAltarRecipe-calls to remove multiples, if present.
 // Parameters:

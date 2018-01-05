@@ -79,6 +79,11 @@ public class AltarRecipe extends BaseTweaker {
     }
 
     @ZenMethod
+    public static void addAttunementAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
+        addAttunmentAltarRecipe(output, starlightRequired, craftingTickTime, inputs);
+    }
+
+    @ZenMethod
     public static void addAttunmentAltarRecipe(IItemStack output, int starlightRequired, int craftingTickTime, IIngredient[] inputs) {
         if(!matchNeededSlots(inputs, TileAltar.AltarLevel.ATTUNEMENT)) return;
 

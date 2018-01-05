@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
-import hellfirepvp.astralsorcery.common.auxiliary.FluidRarityRegistry;
+import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -79,14 +79,14 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         if(isInCreativeTab(tab)) {
             items.add(new ItemStack(this));
 
-            ItemStack enhanced = new ItemStack(this);
-            setEnhanced(enhanced);
-            items.add(enhanced);
+            ItemStack enhanced;
 
             enhanced = new ItemStack(this);
             setEnhanced(enhanced);
             for (ResonatorUpgrade upgrade : ResonatorUpgrade.values()) {
-                setUpgradeUnlocked(enhanced, upgrade);
+                if(upgrade.obtainable()) {
+                    setUpgradeUnlocked(enhanced, upgrade);
+                }
             }
             items.add(enhanced);
         }
@@ -124,7 +124,8 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     @Override
     public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
         if(!stack.isEmpty() && stack.getItem() instanceof ItemSkyResonator &&
-                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK) {
+                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK &&
+                getCurrentUpgrade(player, stack).obtainable()) {
             TileEntity te = world.getTileEntity(at);
             if(te != null && te instanceof IMultiblockDependantTile) {
                 if(((IMultiblockDependantTile) te).getRequiredStructure() != null &&
@@ -139,7 +140,8 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     @Override
     public boolean onRightClick(World world, BlockPos at, EntityPlayer player, EnumFacing side, EnumHand hand, ItemStack stack) {
         if(!stack.isEmpty() && stack.getItem() instanceof ItemSkyResonator &&
-                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK) {
+                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK &&
+                getCurrentUpgrade(player, stack).obtainable()) {
             TileEntity te = world.getTileEntity(at);
             if(te != null && te instanceof IMultiblockDependantTile) {
                 if(((IMultiblockDependantTile) te).getRequiredStructure() != null &&
@@ -165,7 +167,8 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
         if(!worldIn.isRemote) {
             if(isSelected && entityIn instanceof EntityPlayerMP &&
-                    getCurrentUpgrade((EntityPlayerMP) entityIn, stack) == ResonatorUpgrade.FLUID_FIELDS) {
+                    getCurrentUpgrade((EntityPlayerMP) entityIn, stack) == ResonatorUpgrade.FLUID_FIELDS &&
+                    getCurrentUpgrade((EntityPlayer) entityIn, stack).obtainable()) {
                 double dstr = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(worldIn);
                 if(dstr <= 1E-4) return;
                 if(rand.nextFloat() < dstr && rand.nextInt(15) == 0) {
@@ -174,7 +177,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                     int oZ = rand.nextInt(30) * (rand.nextBoolean() ? 1 : -1);
 
                     BlockPos pos = new BlockPos(entityIn.getPosition()).add(oX, 0, oZ);
-                    pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(pos);
+                    pos = worldIn.getTopSolidOrLiquidBlock(pos);
                     if(pos.getDistance(MathHelper.floor(entityIn.posX), MathHelper.floor(entityIn.posY), MathHelper.floor(entityIn.posZ)) > 75) {
                         return;
                     }
@@ -183,7 +186,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
                     FluidStack display = at == null ? new FluidStack(FluidRegistry.WATER, 1) : at.tryDrain(1, false);
                     if(display == null || display.getFluid() == null) display = new FluidStack(FluidRegistry.WATER, 1);
                     PktPlayLiquidSpring pkt = new PktPlayLiquidSpring(display, new Vector3(pos).add(rand.nextFloat(), 0, rand.nextFloat()));
-                    PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) entityIn);
+                    PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(worldIn, entityIn.getPosition(), 32));
                 }
             }
         }
@@ -205,6 +208,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         List<ResourceLocation> out = new LinkedList<>();
         out.add(defaultLocation);
         for (ResonatorUpgrade upgrade : ResonatorUpgrade.values()) {
+            if(!upgrade.obtainable()) continue;
             out.add(new ResourceLocation(defaultLocation.getResourceDomain(),
                     defaultLocation.getResourcePath() + "_upgraded_" + upgrade.appendixUpgrade));
         }
@@ -216,10 +220,11 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         return NBTHelper.getPersistentData(stack).getBoolean("enhanced");
     }
 
-    public static void setEnhanced(ItemStack stack) {
-        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return;
+    public static ItemStack setEnhanced(ItemStack stack) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
         NBTHelper.getPersistentData(stack).setBoolean("enhanced", true);
         setUpgradeUnlocked(stack, ResonatorUpgrade.STARLIGHT);
+        return stack;
     }
 
     public static boolean cycleUpgrade(@Nonnull EntityPlayer player, ItemStack stack) {
@@ -240,7 +245,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
             test++;
             test %= ResonatorUpgrade.values().length;
             ResonatorUpgrade testUpgrade = ResonatorUpgrade.values()[test];
-            if(testUpgrade.canSwitchTo(viewing, stack) && testUpgrade != current) {
+            if(testUpgrade.obtainable() && testUpgrade.canSwitchTo(viewing, stack) && testUpgrade != current) {
                 return testUpgrade;
             }
         } while (test != currentOrd);
@@ -249,11 +254,17 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
     public static boolean setCurrentUpgrade(EntityPlayer setting, ItemStack stack, ResonatorUpgrade upgrade) {
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return false;
-        if(upgrade.canSwitchTo(setting, stack)) {
+        if(upgrade.obtainable() && upgrade.canSwitchTo(setting, stack)) {
             NBTHelper.getPersistentData(stack).setInteger("selected_upgrade", upgrade.ordinal());
             return true;
         }
         return false;
+    }
+
+    public static ItemStack setCurrentUpgradeUnsafe(ItemStack stack, ResonatorUpgrade upgrade) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator) || !upgrade.obtainable()) return stack;
+        NBTHelper.getPersistentData(stack).setInteger("selected_upgrade", upgrade.ordinal());
+        return stack;
     }
 
     @Nonnull
@@ -263,6 +274,9 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         int current = cmp.getInteger("selected_upgrade");
         ResonatorUpgrade upgrade = ResonatorUpgrade.values()[MathHelper.clamp(current, 0, ResonatorUpgrade.values().length - 1)];
+        if(!upgrade.obtainable()) {
+            return ResonatorUpgrade.STARLIGHT;
+        }
         if(viewing != null) {
             if(!upgrade.canSwitchTo(viewing, stack)) {
                 return ResonatorUpgrade.STARLIGHT;
@@ -271,15 +285,19 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         return upgrade;
     }
 
-    public static void setUpgradeUnlocked(ItemStack stack, ResonatorUpgrade upgrade) {
-        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return;
-        if(!isEnhanced(stack)) return;
-        upgrade.applyUpgrade(stack);
+    public static ItemStack setUpgradeUnlocked(ItemStack stack, ResonatorUpgrade upgrade) {
+        if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return stack;
+        if(!isEnhanced(stack)) return stack;
+        if(upgrade.obtainable()) {
+            upgrade.applyUpgrade(stack);
+        }
+        return stack;
     }
 
     public static boolean hasUpgrade(ItemStack stack, ResonatorUpgrade upgrade) {
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemSkyResonator)) return false;
         if(!isEnhanced(stack)) return false;
+        if(!upgrade.obtainable()) return false;
         return upgrade.hasUpgrade(stack);
     }
 
@@ -288,7 +306,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         if(!isEnhanced(stack)) return Lists.newArrayList(ResonatorUpgrade.STARLIGHT);
         List<ResonatorUpgrade> upgrades = Lists.newLinkedList();
         for (ResonatorUpgrade ru : ResonatorUpgrade.values()) {
-            if(ru.hasUpgrade(stack)) {
+            if(ru.hasUpgrade(stack) && ru.obtainable()) {
                 upgrades.add(ru);
             }
         }
@@ -315,6 +333,10 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
 
         public String getUnlocalizedUpgradeName() {
             return "item.itemskyresonator.upgrade." + appendixUpgrade + ".name";
+        }
+
+        public boolean obtainable() {
+            return this != STRUCTURE_CHECK;
         }
 
         public boolean hasUpgrade(ItemStack stack) {

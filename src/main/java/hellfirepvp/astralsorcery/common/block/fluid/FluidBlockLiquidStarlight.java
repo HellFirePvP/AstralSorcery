@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -108,12 +109,20 @@ public class FluidBlockLiquidStarlight extends BlockFluidClassic {
 
         if (shouldCreateBlock) {
             if (isCold) {
-                world.setBlockState(pos, Blocks.ICE.getDefaultState());
-            } else {
-                if(world.rand.nextInt(900) == 0) {
-                    world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState().withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));
+                if(Config.liquidStarlightIce) {
+                    world.setBlockState(pos, Blocks.ICE.getDefaultState());
                 } else {
-                    world.setBlockState(pos, Blocks.SAND.getDefaultState());
+                    world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
+                }
+            } else {
+                if(Config.liquidStarlightSand) {
+                    if(Config.liquidStarlightAquamarine && world.rand.nextInt(900) == 0) {
+                        world.setBlockState(pos, BlocksAS.customSandOre.getDefaultState().withProperty(BlockCustomSandOre.ORE_TYPE, BlockCustomSandOre.OreType.AQUAMARINE));
+                    } else {
+                        world.setBlockState(pos, Blocks.SAND.getDefaultState());
+                    }
+                } else {
+                    world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
                 }
             }
 

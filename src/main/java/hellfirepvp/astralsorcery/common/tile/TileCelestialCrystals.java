@@ -22,12 +22,14 @@ import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileSkybound;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.Random;
 
@@ -42,6 +44,9 @@ public class TileCelestialCrystals extends TileSkybound {
     //Just in case you wonder. i do have a reason to control growth in the TileEntity other than just in the block itself.
 
     private static final Random rand = new Random();
+    private static Vector3[] crystalEffectPositions = new Vector3[] {
+            new Vector3(0.5, 0.5, 0.5)
+    };
 
     public int getGrowth() {
         IBlockState state = world.getBlockState(getPos());
@@ -71,6 +76,23 @@ public class TileCelestialCrystals extends TileSkybound {
                     downState.getValue(BlockCustomOre.ORE_TYPE) == BlockCustomOre.OreType.STARMETAL) {
                 playStarmetalOreParticles();
             }
+            int stage = getGrowth();
+            if(stage == 4) {
+                playHarvestEffects();
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playHarvestEffects() {
+        if(rand.nextInt(15) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    pos.getX() + 0.3 + rand.nextFloat() * 0.4,
+                    pos.getY()       + rand.nextFloat() * 0.1,
+                    pos.getZ() + 0.3 + rand.nextFloat() * 0.4);
+            p.motion(0, rand.nextFloat() * 0.05, 0);
+            p.setColor(Color.WHITE);
+            p.scale(0.2F);
         }
     }
 

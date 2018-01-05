@@ -24,14 +24,15 @@ import net.minecraft.item.ItemStack;
  */
 public class InfusionRecipeAdd implements SerializeableRecipe {
 
-    private ItemStack in, out;
+    private ItemStack out;
+    private ItemHandle in;
     private boolean consumeAll;
     private float consumeChance;
     private int craftingTickTime;
 
     InfusionRecipeAdd() {}
 
-    public InfusionRecipeAdd(ItemStack in, ItemStack out, boolean consumeMultiple, float consumeChance, int craftingTickTime) {
+    public InfusionRecipeAdd(ItemHandle in, ItemStack out, boolean consumeMultiple, float consumeChance, int craftingTickTime) {
         this.in = in;
         this.out = out;
         this.consumeAll = consumeMultiple;
@@ -46,7 +47,7 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
 
     @Override
     public void read(ByteBuf buf) {
-        this.in = ByteBufUtils.readItemStack(buf);
+        this.in = ItemHandle.deserialize(buf);
         this.out = ByteBufUtils.readItemStack(buf);
         this.consumeAll = buf.readBoolean();
         this.consumeChance = buf.readFloat();
@@ -55,7 +56,7 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
 
     @Override
     public void write(ByteBuf buf) {
-        ByteBufUtils.writeItemStack(buf, this.in);
+        this.in.serialize(buf);
         ByteBufUtils.writeItemStack(buf, this.out);
         buf.writeBoolean(this.consumeAll);
         buf.writeFloat(this.consumeChance);
@@ -68,7 +69,7 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
     }
 
     public AbstractInfusionRecipe compile() {
-        return new AbstractInfusionRecipe(out, new ItemHandle(in)) {
+        return new AbstractInfusionRecipe(out, this.in) {
             @Override
             public int craftingTickTime() {
                 return craftingTickTime;

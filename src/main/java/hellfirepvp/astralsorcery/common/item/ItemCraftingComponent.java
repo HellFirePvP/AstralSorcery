@@ -9,11 +9,9 @@
 package hellfirepvp.astralsorcery.common.item;
 
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
-import hellfirepvp.astralsorcery.common.item.base.IGrindable;
 import hellfirepvp.astralsorcery.common.item.base.IItemVariants;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -22,9 +20,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -33,7 +29,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.08.2016 / 13:10
  */
-public class ItemCraftingComponent extends Item implements IGrindable, IItemVariants {
+public class ItemCraftingComponent extends Item implements IItemVariants {
 
     public ItemCraftingComponent() {
         setMaxStackSize(64);
@@ -84,26 +80,6 @@ public class ItemCraftingComponent extends Item implements IGrindable, IItemVari
             return super.getUnlocalizedName(stack) + "." + type.getUnlocalizedName();
         }
         return super.getUnlocalizedName(stack);
-    }
-
-    @Override
-    public boolean canGrind(TileGrindstone grindstone, ItemStack stack) {
-        MetaType type = MetaType.fromMeta(stack.getItemDamage());
-        return type.isGrindable();
-    }
-
-    @Nonnull
-    @Override
-    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand) {
-        MetaType type = MetaType.fromMeta(stack.getItemDamage());
-        switch (type) {
-            case STARMETAL_INGOT:
-                if(rand.nextInt(20) == 0) {
-                    return GrindResult.itemChange(new ItemStack(this, 1, MetaType.STARDUST.getMeta()));
-                }
-                break;
-        }
-        return GrindResult.failNoOp();
     }
 
     @Override

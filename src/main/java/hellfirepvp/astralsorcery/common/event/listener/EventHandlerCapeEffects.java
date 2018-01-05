@@ -385,9 +385,9 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 //entity.motionX += mV.getX() * 0.1D + (mV.getX() * 1.5D - entity.motionX) * 0.5D;
                 //entity.motionY += mV.getY() * 0.1D + (mV.getY() * 1.5D - entity.motionY) * 0.5D;
                 //entity.motionZ += mV.getZ() * 0.1D + (mV.getZ() * 1.5D - entity.motionZ) * 0.5D;
-                entity.motionX *= 1.013F;
-                entity.motionY *= 1.013F;
-                entity.motionZ *= 1.013F;
+                entity.motionX *= 1.005F;
+                entity.motionY *= 1.005F;
+                entity.motionZ *= 1.005F;
             }
         }
     }

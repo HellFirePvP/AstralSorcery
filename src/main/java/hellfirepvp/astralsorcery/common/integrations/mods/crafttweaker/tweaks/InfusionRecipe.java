@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.InfusionRecipeAdd;
@@ -33,9 +34,9 @@ public class InfusionRecipe extends BaseTweaker {
 
     @ZenMethod
     public static void addInfusion(IItemStack input, IItemStack output, boolean consumeMultiple, float consumptionChance, int craftingTickTime) {
-        ItemStack in = convertToItemStack(input);
+        ItemHandle in = convertToHandle(input);
         ItemStack out = convertToItemStack(output);
-        if(in.isEmpty() || out.isEmpty()) {
+        if(in == null || out.isEmpty()) {
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe due to invalid input/output.");
             return;
         }

@@ -66,7 +66,11 @@ public class PerkCreationReach extends ConstellationPerk {
         EntityPlayer pl = Minecraft.getMinecraft().player;
         PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
         if(pl != null && ctrl != null) {
-            if(!(ctrl instanceof ExtendedChainingPlayerController)) {
+            //So apparently multiple mods do this. And we keep chaining on top of it. So let's stop this.
+            //This way we make sure if we're somewhere being called down the line, or not.
+            ExtendedChainingPlayerController.call = false;
+            ctrl.getBlockReachDistance();
+            if(!ExtendedChainingPlayerController.call && !(ctrl instanceof ExtendedChainingPlayerController)) {
                 ExtendedChainingPlayerController ovr = new ExtendedChainingPlayerController(ctrl);
                 boolean isFlying = pl.capabilities.isFlying;
                 boolean allowFlight = pl.capabilities.allowFlying;

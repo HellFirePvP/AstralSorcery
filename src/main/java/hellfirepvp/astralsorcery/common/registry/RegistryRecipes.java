@@ -18,9 +18,11 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
+import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.TraitUpgradeRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.*;
 import hellfirepvp.astralsorcery.common.crafting.helper.*;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
@@ -32,6 +34,7 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
+import hellfirepvp.astralsorcery.common.tile.TileBore;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
@@ -39,6 +42,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
@@ -46,6 +50,7 @@ import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistr
 import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
+import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
 import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
 
 /**
@@ -83,6 +88,10 @@ public class RegistryRecipes {
     public static AttunementRecipe rKnowledgeShare;
     public static TraitRecipe rCapeBase;
     public static TraitRecipe rChalice;
+    public static TraitRecipe rBore;
+    public static TraitRecipe rBoreHeadLiquid;
+
+    public static ResonatorLiquidRecipe rResonatorLiquid;
 
     public static WandAttunementRecipe rWandAugmentDiscidia, rWandAugmentAevitas, rWandAugmentVicio,
             rWandAugmentEvorsio, rWandAugmentArmara;
@@ -118,6 +127,8 @@ public class RegistryRecipes {
 
         initCapeAttunementRecipes();
 
+        initGrindstoneRecipes();
+
         InfusionRecipeRegistry.cacheLocalRecipes();
         AltarRecipeRegistry.cacheLocalRecipes();
     }
@@ -147,6 +158,51 @@ public class RegistryRecipes {
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalPickaxe));
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalShovel));
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalSword));
+    }
+
+    private static void initGrindstoneRecipes() {
+        registerGrindstoneRecipe(new CrystalToolSharpeningRecipe(1));
+        registerGrindstoneRecipe(new CrystalSharpeningRecipe(1));
+
+        registerGrindstoneRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), ItemCraftingComponent.MetaType.STARDUST.asStack(), 20);
+
+        GrindstoneRecipeRegistry.cacheLocalFallback();
+    }
+
+    public static void initGrindstoneOreRecipes() {
+        String srcPrefix = "ore";
+        String dstPrefix = "dust";
+
+        for (String oreDict : OreDictionary.getOreNames()) {
+            if(oreDict.startsWith(srcPrefix)) {
+                String suffix = oreDict.substring(srcPrefix.length());
+                attemptRegisterGrindstoneRecipe(oreDict, dstPrefix + suffix, 0.85F);
+            }
+        }
+    }
+
+    private static void attemptRegisterGrindstoneRecipe(String nameIn, String nameOut, float doubleChance) {
+        boolean multi = nameIn.endsWith("Redstone");
+
+        NonNullList<ItemStack> inputs = ItemUtils.getStacksOfOredict(nameIn);
+        ItemStack output = Iterables.getFirst(ItemUtils.getStacksOfOredict(nameOut), ItemStack.EMPTY);
+        if(!inputs.isEmpty() && !output.isEmpty()) {
+            if(output.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                NonNullList<ItemStack> st = NonNullList.create();
+                output.getItem().getSubItems(output.getItem().getCreativeTab(), st);
+                if(!st.isEmpty()) {
+                    output = Iterables.getFirst(st, ItemStack.EMPTY);
+                }
+            }
+
+            if(!output.isEmpty()) {
+                output = ItemUtils.copyStackWithSize(output, output.getCount());
+                if(multi) {
+                    output.setCount(output.getCount() * 4);
+                }
+            }
+            registerGrindstoneRecipe(new DustGrindstoneRecipe(new ItemHandle(inputs), output, 12, doubleChance));
+        }
     }
 
     private static void initVanilla() {
@@ -335,6 +391,76 @@ public class RegistryRecipes {
 
         rCelestialGateway = registerAltarRecipe(new CelestialGatewayRecipe());
         rDrawingTable = registerAltarRecipe(new DrawingTableRecipe());
+
+        rResonatorLiquid = registerAltarRecipe(new ResonatorLiquidRecipe());
+
+        rBoreHeadLiquid = registerTraitRecipe(newShapedRecipe("internal/altar/bore_head_liquid", new ItemStack(BlocksAS.blockBoreHead, 1, TileBore.BoreType.LIQUID.ordinal()))
+                .addPart(ItemHandle.getCrystalVariant(false, false),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_RIGHT,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.LOWER_LEFT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .unregisteredAccessibleShapedRecipe());
+        rBoreHeadLiquid.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
+        rBoreHeadLiquid.setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
+                AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
+                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
+        rBoreHeadLiquid.setInnerTraitItem(OreDictAlias.ITEM_GOLD_INGOT,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rBoreHeadLiquid.setInnerTraitItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        rBoreHeadLiquid.setInnerTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER);
+        rBoreHeadLiquid.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
+        rBoreHeadLiquid.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
+        rBoreHeadLiquid.setPassiveStarlightRequirement(4400);
+        rBoreHeadLiquid.setRequiredConstellation(Constellations.octans);
+
+        rBore = registerTraitRecipe(newShapedRecipe("internal/altar/bore_core", BlocksAS.blockBore)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT,
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .unregisteredAccessibleShapedRecipe());
+        rBore.setAttItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT,
+                AttunementRecipe.AttunementAltarSlot.UPPER_LEFT);
+        rBore.setCstItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
+        rBore.setInnerTraitItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rBore.setInnerTraitItem(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
+        rBore.setCstItem(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT);
+        rBore.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
+        rBore.addOuterTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+        rBore.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
+        rBore.addOuterTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack());
+        rBore.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
+        rBore.setPassiveStarlightRequirement(6500);
 
         rChalice = registerTraitRecipe(newShapedRecipe("internal/altar/chalice", BlocksAS.blockChalice)
                 .addPart(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(),

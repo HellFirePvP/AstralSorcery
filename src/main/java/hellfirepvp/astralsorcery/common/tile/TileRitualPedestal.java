@@ -650,7 +650,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                     if(idleBuffer > 2) {
                         flagAsInactive(world);
                         ce = null;
-                        //tw = null;
                     } else {
                         idleBuffer++;
                     }
@@ -659,7 +658,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 if(idleBuffer > 2) {
                     flagAsInactive(world);
                     ce = null;
-                    //tw = null;
                 } else {
                     idleBuffer++;
                 }
@@ -743,23 +741,25 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         private void flagAsInactive(World world) {
             if(doesWorkBuffer) {
-                doesWorkBuffer = false;
-                channeled = 0;
                 TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
                 if(ped != null) {
+                    doesWorkBuffer = false;
+                    channeled = 0;
+
                     ped.working = false;
                     ped.markForUpdate();
-                }
 
-                clearAllMirrorPositions(world);
+                    clearAllMirrorPositions(world);
+                }
             }
         }
 
         private void flagAsWorking(World world) {
             if(!doesWorkBuffer) {
-                doesWorkBuffer = true;
                 TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
                 if(ped != null) {
+
+                    doesWorkBuffer = true;
                     ped.working = true;
                     ped.markForUpdate();
                 }

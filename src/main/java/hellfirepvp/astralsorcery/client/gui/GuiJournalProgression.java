@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -173,9 +172,9 @@ public class GuiJournalProgression extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if(Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode())) {
+        if(mc.gameSettings.keyBindForward.isKeyDown()) {
             progressionRenderer.handleZoomIn();
-        } else if(Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
+        } else if(mc.gameSettings.keyBindBack.isKeyDown()) {
             progressionRenderer.handleZoomOut();
         }
     }

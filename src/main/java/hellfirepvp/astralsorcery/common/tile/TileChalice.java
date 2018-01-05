@@ -83,6 +83,10 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
             playFluidEffect();
         } else {
+            if(world.isBlockIndirectlyGettingPowered(getPos()) > 0) {
+                return;
+            }
+
             if(nextTest == -1) {
                 nextTest = ticksExisted + 40 + rand.nextInt(90);
             }
@@ -97,6 +101,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
                     Collections.shuffle(tch);
                     for (TileChalice ch : tch) {
                         if(ch.getPos().equals(getPos())) continue;
+                        if(world.isBlockIndirectlyGettingPowered(ch.pos) > 0) continue;
                         TileChalice other = MiscUtils.getTileAt(world, ch.pos, TileChalice.class, true);
                         if(other == null) {
                             WorldChaliceCache.remove(ch);
@@ -219,7 +224,8 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
     @Override
     public void acceptStarlight(int mbLiquidStarlight) {
         if(canAcceptStarlight(mbLiquidStarlight)) {
-            getTank().addAmount(mbLiquidStarlight);
+            getTank().fill(new FluidStack(BlocksAS.fluidLiquidStarlight, mbLiquidStarlight), true);
+            markForUpdate();
         }
     }
 

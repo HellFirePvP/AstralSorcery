@@ -68,6 +68,28 @@ public class AstralPatchTransformer implements SubClassTransformer {
                 }
             }
         }
+        if(load == 0) {
+            FMLLog.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
+            String[] references = new String[] {
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchBlockModify",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchKnockbackEvent",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra"
+            };
+            for (String str : references) {
+                try {
+                    ClassPatch c = (ClassPatch) Class.forName(str).newInstance();
+                    if(!availablePatches.containsKey(c.getClassName())) {
+                        availablePatches.put(c.getClassName(), new LinkedList<>());
+                    }
+                    availablePatches.get(c.getClassName()).add(c);
+                    load++;
+                } catch (Exception exc) {
+                    FMLLog.warning("Could not load ClassPatch: " + str);
+                    exc.printStackTrace();
+                }
+            }
+        }
+
         return load;
     }
 

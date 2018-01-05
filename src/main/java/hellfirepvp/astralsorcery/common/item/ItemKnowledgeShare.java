@@ -11,11 +11,13 @@ package hellfirepvp.astralsorcery.common.item;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -35,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +48,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 05.07.2017 / 11:39
  */
-public class ItemKnowledgeShare extends Item {
+public class ItemKnowledgeShare extends Item implements INBTModel {
 
     public ItemKnowledgeShare() {
         setMaxStackSize(1);
@@ -78,6 +81,24 @@ public class ItemKnowledgeShare extends Item {
                 tooltip.add(I18n.format("misc.knowledge.inscribed", (TextFormatting.BLUE + name)));
             }
         }
+    }
+
+    @Override
+    public ModelResourceLocation getModelLocation(ItemStack stack, ModelResourceLocation suggestedDefaultLocation) {
+        if(isCreative(stack) || getKnowledgeOwnerName(stack) != null) {
+            return new ModelResourceLocation(new ResourceLocation(suggestedDefaultLocation.getResourceDomain(),
+                    suggestedDefaultLocation.getResourcePath() + "_written"),
+                    suggestedDefaultLocation.getVariant());
+        }
+        return suggestedDefaultLocation;
+    }
+
+    @Override
+    public List<ResourceLocation> getAllPossibleLocations(ModelResourceLocation defaultLocation) {
+        List<ResourceLocation> out = new LinkedList<>();
+        out.add(defaultLocation);
+        out.add(new ResourceLocation(defaultLocation.getResourceDomain(), defaultLocation.getResourcePath() + "_written"));
+        return out;
     }
 
     @Override

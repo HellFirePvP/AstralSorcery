@@ -6,13 +6,11 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.base;
+package hellfirepvp.astralsorcery.common.crafting.grindstone;
 
-import hellfirepvp.astralsorcery.common.tile.TileGrindstone;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -20,30 +18,59 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IGrindable
+ * Class: GrindstoneRecipe
  * Created by HellFirePvP
- * Date: 13.09.2016 / 13:10
+ * Date: 19.11.2017 / 10:22
  */
-public interface IGrindable {
+public class GrindstoneRecipe {
 
-    public boolean canGrind(TileGrindstone grindstone, ItemStack stack);
+    protected static final Random rand = new Random();
 
-    @Nonnull
-    public GrindResult grind(TileGrindstone grindstone, ItemStack stack, Random rand);
+    protected final ItemHandle input;
+    protected final ItemStack output;
+    protected final int chance;
 
-    @SideOnly(Side.CLIENT)
-    default public void applyClientGrindstoneTransforms() {
-        applyDefaultGrindstoneTransforms();
+    public GrindstoneRecipe(ItemStack input, ItemStack output, int chance) {
+        this.input = new ItemHandle(input);
+        this.output = output;
+        this.chance = chance;
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void applyDefaultGrindstoneTransforms() {
-        GL11.glTranslated(0.55, 0.75, 0.6);
-        GL11.glRotated(125, 1, 0, 0);
-        GL11.glRotated(180, 0, 0, 1);
-        /*GL11.glRotated(180, 0, 1, 0);
-        GL11.glRotated(35, 1, 0, 0);
-        GL11.glRotated(15, 0, 0, 1);*/
+    public GrindstoneRecipe(ItemHandle input, ItemStack output, int chance) {
+        this.input = input;
+        this.output = output;
+        this.chance = chance;
+    }
+
+    public boolean matches(ItemStack stackIn) {
+        return this.input.matchCrafting(stackIn);
+    }
+
+    public boolean isValid() {
+        return this.input.getApplicableItems().size() > 0 && !this.output.isEmpty();
+    }
+
+    @Nonnull
+    public GrindResult grind(ItemStack stackIn) {
+        if(rand.nextInt(chance) == 0) {
+            return GrindResult.itemChange(ItemUtils.copyStackWithSize(this.output, this.output.getCount()));
+        }
+        return GrindResult.failNoOp();
+    }
+
+    @Nonnull
+    public ItemStack getOutputForMatching() {
+        return this.output;
+    }
+
+    @Nonnull
+    public ItemHandle getOutputForRender() {
+        return new ItemHandle(this.output);
+    }
+
+    @Nonnull
+    public ItemHandle getInputForRender() {
+        return this.input;
     }
 
     public static class GrindResult {
@@ -91,5 +118,4 @@ public interface IGrindable {
         FAIL_BREAK_ITEM //The item broke while grinding.
 
     }
-
 }
