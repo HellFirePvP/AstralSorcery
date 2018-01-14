@@ -35,6 +35,7 @@ misc.link.start=Selected %s!
 misc.link.link=Linked %s to %s!
 misc.link.link.block=a block
 misc.link.unlink=Unlinked %s from %s!
+misc.link.unlink.all=Unlinked all links!
 
 misc.sword.sharpened=Sharpened (%s increased Damage)
 misc.chaos.resistance=+%s Chaos Resistance

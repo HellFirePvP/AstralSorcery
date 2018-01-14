@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -75,13 +75,20 @@ public class TileOreGenerator extends TileEntitySynchronized {
         }
         if(remainingGuaranteed > 0) {
             generatingOre = true;
+            boolean stopGen = false;
             world.setBlockState(pos, oldState);
             if(world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true, true);
+                if(!MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState,
+                        false, true, true)) {
+                    stopGen = true;
+                }
                 BlockCustomOre.allowCrystalHarvest = false;
             }
             world.setBlockState(pos, newState);
+            if(stopGen) {
+                return true; //Rip gen.
+            }
 
             IBlockState state;
             if(ConfigEntryMultiOre.oreChance == 0 || rand.nextInt(ConfigEntryMultiOre.oreChance) != 0) {

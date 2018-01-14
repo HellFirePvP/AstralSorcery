@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectControlle
 import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -37,7 +38,7 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 07.01.2017 / 19:24
  */
-public class CEffectLucerna extends ConstellationEffect {
+public class CEffectLucerna extends ConstellationEffect implements ConstellationEffectStatus {
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
@@ -63,6 +64,24 @@ public class CEffectLucerna extends ConstellationEffect {
     }
 
     @Override
+    public boolean runEffect(World world, BlockPos pos, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+        if(!enabled) return false;
+        WorldBlockPos at = new WorldBlockPos(world, pos);
+        TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
+        if(token != null) {
+            int next = token.getRemainingTimeout() + 80;
+            if(next > 400) next = 400;
+            token.setTimeout(next);
+            rememberedTimeout = next;
+        } else {
+            rememberedTimeout = Math.min(400, rememberedTimeout + 80);
+            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(range, rememberedTimeout));
+        }
+        return false;
+    }
+
+    @Override
+    @Deprecated
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
@@ -70,20 +89,24 @@ public class CEffectLucerna extends ConstellationEffect {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
-        int toAdd = 1 + rand.nextInt(3);
         WorldBlockPos at = new WorldBlockPos(world, pos);
         TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
         if(token != null) {
-            int next = token.getRemainingTimeout() + toAdd;
+            int next = token.getRemainingTimeout() + 80;
             if(next > 400) next = 400;
             token.setTimeout(next);
             rememberedTimeout = next;
         } else {
-            rememberedTimeout = Math.min(400, rememberedTimeout + toAdd);
+            rememberedTimeout = Math.min(400, rememberedTimeout + 80);
             EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(range, rememberedTimeout));
         }
 
         return true;
+    }
+
+    @Override
+    public boolean runTraitEffect(World world, BlockPos pos, IMinorConstellation traitType) {
+        return false;
     }
 
     @Override

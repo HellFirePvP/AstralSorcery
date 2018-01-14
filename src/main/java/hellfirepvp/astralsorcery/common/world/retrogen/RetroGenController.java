@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -30,7 +30,7 @@ public class RetroGenController {
 
     private static boolean inPopulation = false;
 
-    private static Map<Integer, List<ChunkPos>> queuedPopulation = new HashMap<>();
+    private static Map<Integer, LinkedList<ChunkPos>> queuedPopulation = new HashMap<>();
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
@@ -69,10 +69,9 @@ public class RetroGenController {
     private void visitChunkPopulation(World w) {
         if(inPopulation) return;
         int dimId = w.provider.getDimension();
-        List<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
-        Iterator<ChunkPos> iterator = queue.iterator();
-        while (iterator.hasNext()) {
-            ChunkPos pos = iterator.next();
+        LinkedList<ChunkPos> queue = queuedPopulation.computeIfAbsent(dimId, (id) -> new LinkedList<>());
+        while (!queue.isEmpty()) {
+            ChunkPos pos = queue.getFirst();
             int chX = pos.x;
             int chZ = pos.z;
 
@@ -90,7 +89,7 @@ public class RetroGenController {
                 CommonProxy.worldGenerator.handleRetroGen(w, pos, chunkVersion);
                 inPopulation = false;
 
-                iterator.remove();
+                queue.removeFirst();
             }
         }
     }

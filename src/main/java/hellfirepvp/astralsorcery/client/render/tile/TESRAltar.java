@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -66,17 +66,19 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                     ActiveCraftingTask act = te.getActiveCraftingTask();
                     if(act != null && act.getRecipeToCraft() instanceof TraitRecipe) {
                         Collection<ItemHandle> requiredHandles = ((TraitRecipe) act.getRecipeToCraft()).getTraitItemHandles();
-                        int amt = 60 / requiredHandles.size();
-                        for (ItemHandle outer : requiredHandles) {
-                            NonNullList<ItemStack> stacksApplicable = outer.getApplicableItemsForRender();
-                            int mod = (int) (ClientScheduler.getClientTick() % (stacksApplicable.size() * 60));
-                            ItemStack element = stacksApplicable.get(MathHelper.floor(
-                                    MathHelper.clamp(stacksApplicable.size() * (mod / (stacksApplicable.size() * 60)), 0, stacksApplicable.size() - 1)));
-                            Color col = ItemColorizationHelper.getDominantColorFromItemStack(element);
-                            if(col == null) {
-                                col = BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+                        if(!requiredHandles.isEmpty()) {
+                            int amt = 60 / requiredHandles.size();
+                            for (ItemHandle outer : requiredHandles) {
+                                NonNullList<ItemStack> stacksApplicable = outer.getApplicableItemsForRender();
+                                int mod = (int) (ClientScheduler.getClientTick() % (stacksApplicable.size() * 60));
+                                ItemStack element = stacksApplicable.get(MathHelper.floor(
+                                        MathHelper.clamp(stacksApplicable.size() * (mod / (stacksApplicable.size() * 60)), 0, stacksApplicable.size() - 1)));
+                                Color col = ItemColorizationHelper.getDominantColorFromItemStack(element);
+                                if(col == null) {
+                                    col = BlockCollectorCrystal.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor;
+                                }
+                                RenderingUtils.renderLightRayEffects(0, 0.5, 0, col, 0x12315L | outer.hashCode(), ClientScheduler.getClientTick(), 20, 2F, amt, amt / 2);
                             }
-                            RenderingUtils.renderLightRayEffects(0, 0.5, 0, col, 0x12315L | outer.hashCode(), ClientScheduler.getClientTick(), 20, 2F, amt, amt / 2);
                         }
                         RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0, ClientScheduler.getClientTick(), 15, 2F, 40, 25);
                     } else {

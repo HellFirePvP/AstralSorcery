@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -31,7 +31,7 @@ public class FluidLiquidStarlight extends Fluid {
         setLuminosity(15);
         setDensity(1001);
         setViscosity(300);
-        setTemperature(100);
+        setTemperature(10);
         setFillSound(SoundEvents.ITEM_BUCKET_FILL);
     }
 

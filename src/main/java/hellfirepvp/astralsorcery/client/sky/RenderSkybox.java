@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -27,6 +27,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class RenderSkybox extends IRenderHandler {
 
+    private static boolean inRender = false;
+
     private static final RenderDefaultSkybox defaultSky = new RenderDefaultSkybox();
     private static final RenderAstralSkybox astralSky = new RenderAstralSkybox();
 
@@ -44,7 +46,9 @@ public class RenderSkybox extends IRenderHandler {
             astralSky.setInitialized(world.getWorldInfo().getSeed());
         }
 
-        //if(true) return;
+        if (inRender) return;
+
+        inRender = true;
 
         if (Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
             if(otherSkyRenderer != null) {
@@ -77,6 +81,8 @@ public class RenderSkybox extends IRenderHandler {
         } else {
             astralSky.render(partialTicks, world, mc);
         }
+
+        inRender = false;
     }
 
     public static void resetAstralSkybox() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.registry.internal;
 
+import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.registry.*;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -80,6 +82,8 @@ public class PrimerEventHandler {
         registry.wipe(event.getClass());
         RegistryRecipes.initVanillaRecipes();
         RegistryRecipes.initAstralRecipes();
+        WellLiquefaction.init();
+        LightOreTransmutations.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
