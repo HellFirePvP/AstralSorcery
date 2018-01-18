@@ -138,14 +138,45 @@ public class RegistryConstellations {
                         new PotionMapEffect(MobEffects.ABSORPTION, 1, 4)));
 
         registerMapEffect(gelu,
-                Arrays.asList(new EnchantmentMapEffect(Enchantments.FROST_WALKER)),
-                Arrays.asList(new PotionMapEffect(MobEffects.RESISTANCE, 1, 2)));
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.FROST_WALKER),
+                        new EnchantmentMapEffect(Enchantments.FEATHER_FALLING),
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 1, 4)
+                        ),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.RESISTANCE, 1, 2),
+                        new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0),
+                        new PotionMapEffect(MobEffects.SLOWNESS, 0, 0)));
         registerMapEffect(ulteria,
-                Arrays.asList(new EnchantmentMapEffect(Enchantments.UNBREAKING, 1, 4)),
-                Arrays.asList(new PotionMapEffect(MobEffects.ABSORPTION, 0, 4)));
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompaibility()),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.ABSORPTION, 0, 3),
+                        new PotionMapEffect(MobEffects.REGENERATION, 1, 2),
+                        new PotionMapEffect(MobEffects.WEAKNESS, 1, 2)));
         registerMapEffect(alcara,
-                Arrays.asList(new EnchantmentMapEffect(Enchantments.DEPTH_STRIDER, 1, 4)),
-                Arrays.asList(new PotionMapEffect(MobEffects.JUMP_BOOST, 0, 2)));
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 6),
+                        new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.LUCK, 2, 4),
+                        new PotionMapEffect(MobEffects.INVISIBILITY, 0, 1),
+                        new PotionMapEffect(MobEffects.HUNGER, 0, 1)));
+        registerMapEffect(vorux,
+                Arrays.asList(
+                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 5).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.POWER, 3, 5).setIgnoreCompaibility()),
+                Arrays.asList(
+                        new PotionMapEffect(MobEffects.STRENGTH, 2, 3),
+                        new PotionMapEffect(MobEffects.RESISTANCE, 0, 1),
+                        new PotionMapEffect(MobEffects.MINING_FATIGUE, 0, 1)));
     }
 
     private static void registerConstellations() {
@@ -169,6 +200,7 @@ public class RegistryConstellations {
         ConstellationRegistry.registerConstellation(gelu);
         ConstellationRegistry.registerConstellation(ulteria);
         ConstellationRegistry.registerConstellation(alcara);
+        ConstellationRegistry.registerConstellation(vorux);
     }
 
     private static void registerSignatureItems() {
@@ -483,6 +515,22 @@ public class RegistryConstellations {
         alcara.addConnection(sl1, sl4);
         alcara.addConnection(sl4, sl5);
         alcara.addConnection(sl4, sl6);
+
+        vorux = new ConstellationBase.Minor("vorux", new Color(0xA8881E));
+        sl1 = vorux.addStar(3, 21);
+        sl2 = vorux.addStar(7, 7);
+        sl3 = vorux.addStar(14, 15);
+        sl4 = vorux.addStar(18, 5);
+        sl5 = vorux.addStar(25, 16);
+        sl6 = vorux.addStar(16, 26);
+        sl7 = vorux.addStar(27, 2);
+
+        vorux.addConnection(sl1, sl2);
+        vorux.addConnection(sl2, sl3);
+        vorux.addConnection(sl3, sl4);
+        vorux.addConnection(sl4, sl5);
+        vorux.addConnection(sl5, sl6);
+        vorux.addConnection(sl4, sl7);
     }
 
 }

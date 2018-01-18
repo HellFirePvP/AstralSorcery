@@ -38,5 +38,6 @@ public class Constellations {
     public static IMinorConstellation gelu;
     public static IMinorConstellation ulteria;
     public static IMinorConstellation alcara;
+    public static IMinorConstellation vorux;
 
 }

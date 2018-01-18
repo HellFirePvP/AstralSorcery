@@ -46,6 +46,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -169,8 +170,12 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
     }
 
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
+        EnumHand hand = event.getHand();
+        World world = event.getWorld();
+        EntityPlayer player = event.getEntityPlayer();
+        BlockPos pos = event.getPos();
+        IBlockState state = world.getBlockState(pos);
         MachineType type = state.getValue(MACHINE_TYPE);
         int posX = pos.getX();
         int posY = pos.getY();
@@ -238,12 +243,14 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                     if(!player.isCreative()) {
                                         stack.setCount(stack.getCount() - 1);
                                     }
+                                } else if(player.isSneaking()) {
+                                    return false;
                                 }
                             }
                         }
                     } else {
                         ItemStack grind = tgr.getGrindingItem();
-                        if(!grind.isEmpty() && !player.isSneaking()) {
+                        if(!grind.isEmpty()) {
                             GrindstoneRecipe recipe = GrindstoneRecipeRegistry.findMatchingRecipe(grind);
                             if(recipe != null) {
                                 for (int j = 0; j < 8; j++) {
@@ -259,6 +266,8 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3,
                                             (rand.nextBoolean() ? 1 : -1) * rand.nextFloat() * 0.3);
                                 }
+                            } else if(player.isSneaking()) {
+                                return false;
                             }
                         }
                     }

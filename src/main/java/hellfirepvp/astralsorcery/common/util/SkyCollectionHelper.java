@@ -72,10 +72,10 @@ public class SkyCollectionHelper {
         float xPart = Math.abs(((float) (exact.getX() - lXlZ.getX()) ) / accuracy);
         float zPart = Math.abs(((float) (exact.getZ() - lXlZ.getZ()) ) / accuracy);
 
-        return linearInterpolate(linearInterpolate(nll, nhl, xPart), linearInterpolate(nlh, nhh, xPart), zPart);
+        return cosInterpolate(cosInterpolate(nll, nhl, xPart), cosInterpolate(nlh, nhh, xPart), zPart);
     }
 
-    private static float linearInterpolate(float l, float h, float partial) {
+    private static float cosInterpolate(float l, float h, float partial) {
         float t2 = (1F - MathHelper.cos((float) (partial * Math.PI))) / 2F;
         return(l * (1F - t2) + h * t2);
     }

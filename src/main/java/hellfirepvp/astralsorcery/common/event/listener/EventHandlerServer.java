@@ -54,6 +54,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -196,6 +197,15 @@ public class EventHandlerServer {
 
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
+        IBlockState at = event.getWorld().getBlockState(event.getPos());
+        if(at.getBlock() instanceof BlockMachine) {
+            if(((BlockMachine) at.getBlock()).handleSpecificActivateEvent(event)) {
+                event.setCancellationResult(EnumActionResult.SUCCESS);
+                event.setCanceled(true);
+                return;
+            }
+        }
+
         ItemStack hand = event.getItemStack();
         if (event.getHand() == EnumHand.OFF_HAND) {
             hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
@@ -318,9 +328,11 @@ public class EventHandlerServer {
         if(found != null && found.equals(WandAugment.EVORSIO)) {
             if(rand.nextFloat() < Config.evorsioEffectChance) {
                 World w = event.getWorld();
+                IBlockState stateAt = w.getBlockState(at);
                 BlockArray foundBlocks = BlockDiscoverer.searchForBlocksAround(w, at, 2,
                         ((world, pos, state) -> (
                                 pos.getY() >= event.getPlayer().getPosition().getY() &&
+                                        state.equals(stateAt) &&
                                         state.getBlockHardness(world, pos) >= 0 &&
                                         world.getTileEntity(pos) == null &&
                                         !world.isAirBlock(pos) &&

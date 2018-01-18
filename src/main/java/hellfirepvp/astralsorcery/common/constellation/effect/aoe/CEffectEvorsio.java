@@ -65,11 +65,11 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             TileRitualPedestal pedestal = MiscUtils.getTileAt(world, origin.getPos(), TileRitualPedestal.class, true);
             if(pedestal != null) {
                 if(copyResizedPedestal == null) {
-                    if(MultiBlockArrays.patternRitualPedestal != null) {
+                    if(MultiBlockArrays.patternRitualPedestalWithLink != null) {
                         copyResizedPedestal = new BlockArray();
                         for (int i = 0; i < 5; i++) {
                             int finalI = i;
-                            copyResizedPedestal.addAll(MultiBlockArrays.patternRitualPedestal, (p) -> p.add(0, finalI, 0));
+                            copyResizedPedestal.addAll(MultiBlockArrays.patternRitualPedestalWithLink, (p) -> p.add(0, finalI, 0));
                         }
                     }
                 }

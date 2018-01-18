@@ -376,7 +376,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             }
         }
         if(match != null) {
-            if(wsh.getActiveConstellations().contains(match)) {
+            if(wsh.getActiveConstellations().contains(match) && wsh.isActive(match)) {
                 activeFound = match;
                 markForUpdate();
             }

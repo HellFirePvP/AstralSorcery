@@ -57,9 +57,6 @@ public class RegistryBookLookups {
         if(info == null) return;
 
         GuiScreen current = Minecraft.getMinecraft().currentScreen;
-        if(current instanceof GuiJournalPages) {
-            if(((GuiJournalPages) current).getResearchNode().equals(info.node)) return;
-        }
         Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPages(current, info.node, info.pageIndex));
     }
 

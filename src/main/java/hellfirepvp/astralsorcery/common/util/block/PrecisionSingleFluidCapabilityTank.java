@@ -58,7 +58,7 @@ public class PrecisionSingleFluidCapabilityTank  implements IFluidTank, IFluidTa
 
     //returns min(toAdd, what can be added at most)
     public double getMaxAddable(double toAdd) {
-        return Math.min(toAdd, maxCapacity - toAdd);
+        return Math.min(toAdd, maxCapacity - amount);
     }
 
     public int getMaxDrainable(double toDrain) {

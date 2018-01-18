@@ -33,8 +33,10 @@ public class PerkDamageBleed extends ConstellationPerk {
 
     @Override
     public float onEntityAttack(EntityPlayer attacker, EntityLivingBase attacked, float dmgIn) {
-        attacked.addPotionEffect(new PotionEffect(RegistryPotions.potionBleed, durationApplied, amplifierApplied, false, true));
-        addAlignmentCharge(attacker, 0.1 * Math.max(0, dmgIn));
+        if (!attacker.equals(attacked)) {
+            attacked.addPotionEffect(new PotionEffect(RegistryPotions.potionBleed, durationApplied, amplifierApplied, false, true));
+            addAlignmentCharge(attacker, 0.1 * Math.max(0, dmgIn));
+        }
         return dmgIn;
     }
 

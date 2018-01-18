@@ -115,7 +115,7 @@ public class TileIlluminator extends TileSkybound {
             BlockPos at = list.remove(index);
             if(!needsRecalc && list.isEmpty()) needsRecalc = true;
             at = at.add(rand.nextInt(5) - 2, rand.nextInt(13) - 6, rand.nextInt(5) - 2);
-            if(illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
+            if(world.isBlockLoaded(at) && illuminatorCheck.isStateValid(world, at, world.getBlockState(at))) {
                 world.setBlockState(at, BlocksAS.blockVolatileLight.getDefaultState());
                 if(rand.nextInt(4) == 0) {
                     EntityFlare.spawnAmbient(world, new Vector3(this).add(-1 + rand.nextFloat() * 3, 0.6, -1 + rand.nextFloat() * 3));

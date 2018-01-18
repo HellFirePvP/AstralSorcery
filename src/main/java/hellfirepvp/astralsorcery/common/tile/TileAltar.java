@@ -100,6 +100,24 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.level = level;
     }
 
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new ItemHandlerTileFiltered(this) {
+            @Override
+            public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+                if(!super.canInsertItem(slot, toAdd, existing)) {
+                    return false;
+                }
+                AltarLevel al = TileAltar.this.getAltarLevel();
+                if(al == null) {
+                    al = AltarLevel.DISCOVERY;
+                }
+                int allowed = al.getAccessibleInventorySize();
+                return slot >= 0 && slot < allowed;
+            }
+        };
+    }
+
     public void receiveStarlight(@Nullable IWeakConstellation type, double amount) {
         if(amount <= 0.001) return;
 
@@ -576,17 +594,19 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
     public static enum AltarLevel {
 
-        DISCOVERY          ((ta) -> true       ),
-        ATTUNEMENT         (new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement)),
-        CONSTELLATION_CRAFT(new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation)),
-        TRAIT_CRAFT        (new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait)),
-        ENDGAME            ((ta) -> true       );
+        DISCOVERY          (9, (ta) -> true       ),
+        ATTUNEMENT         (13, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarAttunement)),
+        CONSTELLATION_CRAFT(21, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarConstellation)),
+        TRAIT_CRAFT        (25, new PatternAltarMatcher(() -> MultiBlockArrays.patternAltarTrait)),
+        ENDGAME            (25, (ta) -> true       );
 
         private final int maxStarlightStorage;
+        private final int accessibleInventorySize;
         private final IAltarMatcher matcher;
 
-        AltarLevel(IAltarMatcher matcher) {
+        AltarLevel(int invSize, IAltarMatcher matcher) {
             this.matcher = matcher;
+            this.accessibleInventorySize = invSize;
             this.maxStarlightStorage = (int) (1000 * Math.pow(2, ordinal()));
         }
 
@@ -600,6 +620,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
 
         public int getStarlightMaxStorage() {
             return maxStarlightStorage;
+        }
+
+        public int getAccessibleInventorySize() {
+            return accessibleInventorySize;
         }
 
         public BlockAltar.AltarType getType() {

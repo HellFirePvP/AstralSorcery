@@ -171,9 +171,11 @@ public class ActiveStarMap {
         for (Map.Entry<IConstellation, List<ConstellationMapEffectRegistry.EnchantmentMapEffect>> entry : effectMap.entrySet()) {
             for (ConstellationMapEffectRegistry.EnchantmentMapEffect effect : entry.getValue()) {
                 if (enchantments.containsKey(effect.ench)) continue;
-                for (Enchantment existing : enchantments.keySet()) {
-                    if(!existing.isCompatibleWith(effect.ench)) {
-                        continue lblEnchantments;
+                if (!effect.ignoreCompaibility) {
+                    for (Enchantment existing : enchantments.keySet()) {
+                        if(!existing.isCompatibleWith(effect.ench)) {
+                            continue lblEnchantments;
+                        }
                     }
                 }
 

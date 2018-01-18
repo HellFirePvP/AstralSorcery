@@ -57,7 +57,7 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
 
     //returns min(toAdd, what can be added at most)
     public int getMaxAddable(int toAdd) {
-        return Math.min(toAdd, maxCapacity - toAdd);
+        return Math.min(toAdd, maxCapacity - amount);
     }
 
     public int getMaxDrainable(int toDrain) {

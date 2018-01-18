@@ -80,18 +80,20 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
     public BlockPos getGenerationPosition(int chX, int chZ, World world, Random rand) {
         BlockPos initial = new BlockPos(chX * 16 + 8, 0, chZ * 16 + 8);
         if(world instanceof WorldServer) {
-            ChunkGeneratorSettings settings = ChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
-            if(settings.useStrongholds) {
-                BlockPos blockpos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, "Stronghold", initial, false);
-                if(blockpos != null) {
-                    double xDst = blockpos.getX() - initial.getX();
-                    double zDst = blockpos.getZ() - initial.getZ();
-                    float flatDst = MathHelper.sqrt(xDst * xDst + zDst * zDst);
-                    if(flatDst <= 20) {
-                        return null;
+            try {
+                ChunkGeneratorSettings settings = ChunkGeneratorSettings.Factory.jsonToFactory(world.getWorldInfo().getGeneratorOptions()).build();
+                if(settings.useStrongholds) {
+                    BlockPos blockpos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, "Stronghold", initial, false);
+                    if(blockpos != null) {
+                        double xDst = blockpos.getX() - initial.getX();
+                        double zDst = blockpos.getZ() - initial.getZ();
+                        float flatDst = MathHelper.sqrt(xDst * xDst + zDst * zDst);
+                        if(flatDst <= 20) {
+                            return null;
+                        }
                     }
                 }
-            }
+            } catch (Exception ignored) {} //Well, then we just don't care about generating into strongholds *shrugs*
         }
         for (int i = 0; i < 15; i++) {
             BlockPos pos = initial.add(rand.nextInt(16), this.cfgEntry.getMinY() + rand.nextInt(this.cfgEntry.getMaxY() - this.cfgEntry.getMinY()), rand.nextInt(16));
