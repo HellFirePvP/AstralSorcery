@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -171,9 +171,11 @@ public class ActiveStarMap {
         for (Map.Entry<IConstellation, List<ConstellationMapEffectRegistry.EnchantmentMapEffect>> entry : effectMap.entrySet()) {
             for (ConstellationMapEffectRegistry.EnchantmentMapEffect effect : entry.getValue()) {
                 if (enchantments.containsKey(effect.ench)) continue;
-                for (Enchantment existing : enchantments.keySet()) {
-                    if(!existing.isCompatibleWith(effect.ench)) {
-                        continue lblEnchantments;
+                if (!effect.ignoreCompaibility) {
+                    for (Enchantment existing : enchantments.keySet()) {
+                        if(!existing.isCompatibleWith(effect.ench)) {
+                            continue lblEnchantments;
+                        }
                     }
                 }
 

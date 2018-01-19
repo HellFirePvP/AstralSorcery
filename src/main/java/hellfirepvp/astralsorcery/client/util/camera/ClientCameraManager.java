@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.TreeSet;
 
@@ -43,7 +44,7 @@ public class ClientCameraManager implements ITickHandler {
 
     private ClientCameraManager() {}
 
-    private TreeSet<ICameraTransformer> transformers = new TreeSet<>((t1, t2) -> t1.getPriority() - t2.getPriority());
+    private TreeSet<ICameraTransformer> transformers = new TreeSet<>(Comparator.comparingInt(ICameraTransformer::getPriority));
     private ICameraTransformer lastTransformer = null;
 
     public static ClientCameraManager getInstance() {

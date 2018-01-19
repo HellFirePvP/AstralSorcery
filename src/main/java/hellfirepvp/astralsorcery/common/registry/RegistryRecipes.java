@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -163,6 +163,7 @@ public class RegistryRecipes {
     private static void initGrindstoneRecipes() {
         registerGrindstoneRecipe(new CrystalToolSharpeningRecipe(1));
         registerGrindstoneRecipe(new CrystalSharpeningRecipe(1));
+        registerGrindstoneRecipe(new SwordSharpeningRecipe());
 
         registerGrindstoneRecipe(ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack(), ItemCraftingComponent.MetaType.STARDUST.asStack(), 20);
 

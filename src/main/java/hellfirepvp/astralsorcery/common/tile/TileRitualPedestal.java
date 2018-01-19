@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -665,6 +666,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void doTraitEffect(World world, ConstellationEffect ce) {
+            if(ce instanceof ConstellationEffectStatus) {
+                BlockPos to = getPos();
+                if(ritualLinkTo != null) to = ritualLinkTo;
+                if(((ConstellationEffectStatus) ce).runTraitEffect(world, to, trait)) markDirty(world);
+                return;
+            }
+
             double maxDrain = 7D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
@@ -700,6 +708,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         //TODO occasionally returns with <0?
         private void doMainEffect(World world, ConstellationEffect ce, @Nullable IMinorConstellation trait, boolean mayDoTrait) {
+            if(ce instanceof ConstellationEffectStatus) {
+                BlockPos to = getPos();
+                if(ritualLinkTo != null) to = ritualLinkTo;
+                if(((ConstellationEffectStatus) ce).runEffect(world, to, mayDoTrait, trait)) markDirty(world);
+                return;
+            }
+
             double maxDrain = 7D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);

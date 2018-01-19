@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -62,6 +62,10 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
             }
         }
         ActiveTransmutation node = runningTransmutations.get(pos);
+        if(LightOreTransmutations.searchForTransmutation(world.getBlockState(pos)) != node.runningTransmutation) {
+            runningTransmutations.remove(pos);
+            return;
+        }
         long diff = ms - node.lastMSrec;
         if(diff >= 15_000) node.accCharge = 0;
         node.accCharge += amount;

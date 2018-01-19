@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -57,7 +57,7 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
 
     //returns min(toAdd, what can be added at most)
     public int getMaxAddable(int toAdd) {
-        return Math.min(toAdd, maxCapacity - toAdd);
+        return Math.min(toAdd, maxCapacity - amount);
     }
 
     public int getMaxDrainable(int toDrain) {
@@ -132,12 +132,12 @@ public class SimpleSingleFluidCapabilityTank implements IFluidTank, IFluidTankPr
 
     @Override
     public boolean canFillFluidType(FluidStack fluidStack) {
-        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid)) && this.amount + fluidStack.amount <= this.maxCapacity;
+        return canFill() && (this.fluid == null || fluidStack.getFluid().equals(this.fluid));
     }
 
     @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
-        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid)) && this.amount >= fluidStack.amount;
+        return canDrain() && (this.fluid != null && fluidStack.getFluid().equals(this.fluid));
     }
 
     public float getPercentageFilled() {

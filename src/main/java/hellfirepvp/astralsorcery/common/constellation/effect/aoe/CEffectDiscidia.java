@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -64,8 +64,10 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
 
     @Override
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+        if(world.getTotalWorldTime() % 20 != 0) return false;
+
         percStrength *= potencyMultiplier;
-        if(percStrength < 1) {
+        if(percStrength < 1 ) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
         float actDamageDealt = percStrength * damage;
@@ -74,9 +76,15 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
             DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
             for (EntityLivingBase entity : entities) {
-                if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+                int hrTime = entity.hurtResistantTime;
+                entity.hurtResistantTime = 0;
+                try {
+                    if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+                    }
+                } finally {
+                    entity.hurtResistantTime = hrTime;
                 }
             }
         }

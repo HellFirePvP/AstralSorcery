@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -172,9 +173,9 @@ public class GuiJournalProgression extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if(mc.gameSettings.keyBindForward.isKeyDown()) {
+        if(Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode())) {
             progressionRenderer.handleZoomIn();
-        } else if(mc.gameSettings.keyBindBack.isKeyDown()) {
+        } else if(Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
             progressionRenderer.handleZoomOut();
         }
     }

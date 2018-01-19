@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -63,7 +63,7 @@ public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTe
         if(ctx.side == Side.SERVER) {
             if(DimensionManager.isDimensionRegistered(message.dimId)) {
                 WorldServer ws = DimensionManager.getWorld(message.dimId);
-                TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, true);
+                TileTelescope tt = MiscUtils.getTileAt(ws, message.pos, TileTelescope.class, false);
                 if(tt != null) {
                     tt.setRotation(message.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
                     return new PktRotateTelescope(message.isClockwise, message.dimId, message.pos);
@@ -78,7 +78,7 @@ public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTe
     @SideOnly(Side.CLIENT)
     private void applyRotation(PktRotateTelescope pkt) {
         if(Minecraft.getMinecraft().world.provider.getDimension() == pkt.dimId) {
-            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pkt.pos, TileTelescope.class, true);
+            TileTelescope tt = MiscUtils.getTileAt(Minecraft.getMinecraft().world, pkt.pos, TileTelescope.class, false);
             if(tt != null) {
                 tt.setRotation(pkt.isClockwise ? tt.getRotation().nextClockWise() : tt.getRotation().nextCounterClockWise());
             }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -63,10 +63,11 @@ public class LinkHandler implements ITickHandler {
         switch (result.getType()) {
             case SELECT:
                 String name = tile.getUnLocalizedDisplayName();
-                if(name != null) {
-                    playerIn.sendMessage(new TextComponentTranslation("misc.link.start", new TextComponentTranslation(name)).setStyle(green));
+                if(tile.onSelect(playerIn)) {
+                    if(name != null) {
+                        playerIn.sendMessage(new TextComponentTranslation("misc.link.start", new TextComponentTranslation(name)).setStyle(green));
+                    }
                 }
-                tile.onSelect(playerIn);
                 break;
             case TRY_LINK:
                 TileEntity te = worldIn.getTileEntity(pos);

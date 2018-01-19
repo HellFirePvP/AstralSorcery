@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.tile;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.client.util.obj.Face;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -25,6 +26,8 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,6 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -74,12 +78,25 @@ public class TileOreGenerator extends TileEntitySynchronized {
             return false; //Uhm... shit like redstone ore and stuff.
         }
         if(remainingGuaranteed > 0) {
-            if(world instanceof WorldServer) {
-                BlockCustomOre.allowCrystalHarvest = true;
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState, false, true, true);
-                BlockCustomOre.allowCrystalHarvest = false;
+            if (!isActualPlayerNearby(world, pos)) {
+                return true;
             }
             generatingOre = true;
+            boolean stopGen = false;
+            world.setBlockState(pos, oldState);
+            if(world instanceof WorldServer) {
+                BlockCustomOre.allowCrystalHarvest = true;
+                if(!MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState,
+                        false, true, true)) {
+                    stopGen = true;
+                }
+                BlockCustomOre.allowCrystalHarvest = false;
+            }
+            world.setBlockState(pos, newState);
+            if(stopGen) {
+                return true; //Rip gen.
+            }
+
             IBlockState state;
             if(ConfigEntryMultiOre.oreChance == 0 || rand.nextInt(ConfigEntryMultiOre.oreChance) != 0) {
                 state = Blocks.STONE.getDefaultState();
@@ -105,6 +122,12 @@ public class TileOreGenerator extends TileEntitySynchronized {
             return false;
         }
         return true;
+    }
+
+    private boolean isActualPlayerNearby(World world, BlockPos pos) {
+        return !world.getEntities(EntityPlayer.class,
+                (p) -> p != null && p instanceof EntityPlayerMP && !p.isDead &&
+                        p.getDistanceSq(pos) < 81 && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) p)).isEmpty();
     }
 
     @Override

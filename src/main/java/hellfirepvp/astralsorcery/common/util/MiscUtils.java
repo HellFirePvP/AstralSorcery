@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -80,6 +80,10 @@ public class MiscUtils {
             }
         }
         return max;
+    }
+
+    public static boolean isConnectionEstablished(EntityPlayerMP player) {
+        return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
     }
 
     @Nonnull
@@ -177,7 +181,6 @@ public class MiscUtils {
             exp = event.getExpToDrop();
             if(event.isCanceled()) return false;
         } catch (Exception exc) {
-            exc.printStackTrace();
             return false;
         }
         TileEntity tileentity = world.getTileEntity(pos);

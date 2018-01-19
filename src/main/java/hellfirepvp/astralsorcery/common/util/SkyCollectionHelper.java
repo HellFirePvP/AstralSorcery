@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -38,7 +38,7 @@ public class SkyCollectionHelper {
     }
 
     public static float getSkyNoiseDistribution(World world, BlockPos pos) {
-        return getDistributionInternal(world.getSeed(), pos);
+        return getDistributionInternal(new Random(world.getSeed()).nextLong(), pos);
     }
 
     private static float getDistributionInternal(long seed, BlockPos pos) {
@@ -72,10 +72,10 @@ public class SkyCollectionHelper {
         float xPart = Math.abs(((float) (exact.getX() - lXlZ.getX()) ) / accuracy);
         float zPart = Math.abs(((float) (exact.getZ() - lXlZ.getZ()) ) / accuracy);
 
-        return linearInterpolate(linearInterpolate(nll, nhl, xPart), linearInterpolate(nlh, nhh, xPart), zPart);
+        return cosInterpolate(cosInterpolate(nll, nhl, xPart), cosInterpolate(nlh, nhh, xPart), zPart);
     }
 
-    private static float linearInterpolate(float l, float h, float partial) {
+    private static float cosInterpolate(float l, float h, float partial) {
         float t2 = (1F - MathHelper.cos((float) (partial * Math.PI))) / 2F;
         return(l * (1F - t2) + h * t2);
     }

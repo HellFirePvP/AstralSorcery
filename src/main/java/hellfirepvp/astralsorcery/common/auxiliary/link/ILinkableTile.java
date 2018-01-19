@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -67,8 +67,12 @@ public interface ILinkableTile {
      * Informs that a player right-clicked the tile to start the linking process.
      *
      * @param player the player starting to create a link
+     *
+     * @return boolean true if the select actually selected it, false for any other selection modification
      */
-    default public void onSelect(EntityPlayer player) {}
+    default public boolean onSelect(EntityPlayer player) {
+        return true;
+    }
 
     /**
      * Called when a player right-clicks any other block while in link mode

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -119,8 +119,12 @@ public class TreeDiscoverer {
 
         TreeTypes t = TreeTypes.getTree(world, pos);
         if(t != null) {
-            logCheck = t.getLogCheck();
-            leafCheck = t.getLeavesCheck();
+            if(t.getLogCheck().isStateValid(world, pos, world.getBlockState(pos))) {
+                logCheck = t.getLogCheck();
+            }
+            if(t.getLeavesCheck().isStateValid(world, pos, world.getBlockState(pos))) {
+                leafCheck = t.getLeavesCheck();
+            }
         } else {
             IBlockState at = world.getBlockState(pos);
             if (at.getBlock() instanceof BlockLog) {

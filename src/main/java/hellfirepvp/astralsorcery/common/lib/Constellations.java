@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -38,5 +38,6 @@ public class Constellations {
     public static IMinorConstellation gelu;
     public static IMinorConstellation ulteria;
     public static IMinorConstellation alcara;
+    public static IMinorConstellation vorux;
 
 }

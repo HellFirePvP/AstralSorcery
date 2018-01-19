@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -65,7 +65,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
     @Nullable
     public T getRandomElementByChance(Random rand) {
         if(elements.isEmpty()) return null;
-        if(rand.nextInt((maxCount - elements.size()) / 4 + 1) == 0) {
+        if(rand.nextInt(Math.max((maxCount - elements.size()) / 4, 0) + 1) == 0) {
             return getRandomElement(rand);
         }
         return null;

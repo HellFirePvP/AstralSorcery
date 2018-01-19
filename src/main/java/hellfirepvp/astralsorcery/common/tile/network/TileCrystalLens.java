@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -126,13 +126,14 @@ public class TileCrystalLens extends TileTransmissionBase {
     private void doLensColorEffects(ItemColoredLens.ColorType lensColor) {
         if(getTicksExisted() % 4 != 0) return;
 
+        this.occupiedConnections.clear();
+        markForUpdate();
+
         if(lensEffectTimeout > 0) {
             lensEffectTimeout--;
         } else {
             return;
         }
-
-        this.occupiedConnections.clear();
 
         Vector3 thisVec = new Vector3(this).add(0.5, 0.5, 0.5);
         List<BlockPos> linked = getLinkedPositions();
@@ -162,8 +163,6 @@ public class TileCrystalLens extends TileTransmissionBase {
                 }
             }
         }
-
-        markForUpdate();
     }
 
     @SideOnly(Side.CLIENT)

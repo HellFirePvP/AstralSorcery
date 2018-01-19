@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -65,13 +65,16 @@ public class CelestialStrike {
         dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 40F;
         dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 20F;
         for (EntityLivingBase living : livingEntities) {
-            if(!(living instanceof EntityPlayer) || (!((EntityPlayer) living).isSpectator() && !((EntityPlayer) living).isCreative())) {
-                float dstPerc = (float) (Vector3.atEntityCenter(living).distance(position) / radius);
-                dstPerc = 1F - MathHelper.clamp(dstPerc, 0F, 1F);
-                float dmgDealt = dstPerc * dmg;
-                if(dmgDealt > 0.5) {
-                    living.attackEntityFrom(ds, dmgDealt);
-                }
+            if ((living instanceof EntityPlayer) &&
+                    (((EntityPlayer) living).isSpectator() || ((EntityPlayer) living).isCreative() ||
+                            (attacker != null && living.isOnSameTeam(attacker)))) {
+                continue;
+            }
+            float dstPerc = (float) (Vector3.atEntityCenter(living).distance(position) / radius);
+            dstPerc = 1F - MathHelper.clamp(dstPerc, 0F, 1F);
+            float dmgDealt = dstPerc * dmg;
+            if(dmgDealt > 0.5) {
+                living.attackEntityFrom(ds, dmgDealt);
             }
         }
         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CEL_STRIKE, displayPosition);

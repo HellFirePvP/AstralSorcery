@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,11 +8,14 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationReach;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -24,30 +27,31 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PktUpdateReach implements IMessage, IMessageHandler<PktUpdateReach, IMessage> {
 
     public boolean apply = false;
-    public float modifier = 0.0F;
 
     public PktUpdateReach() {}
 
-    public PktUpdateReach(boolean apply, float modifier) {
+    public PktUpdateReach(boolean apply) {
         this.apply = apply;
-        this.modifier = modifier;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
         this.apply = buf.readBoolean();
-        this.modifier = buf.readFloat();
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeBoolean(apply);
-        buf.writeFloat(modifier);
     }
 
     @Override
     public IMessage onMessage(PktUpdateReach message, MessageContext ctx) {
-        PerkCreationReach.updateReach(message.apply, message.modifier);
+        updateReachClient(message);
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void updateReachClient(PktUpdateReach message) {
+        AstralSorcery.proxy.scheduleClientside(() -> PerkCreationReach.updateReach(message.apply));
     }
 }

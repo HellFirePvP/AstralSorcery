@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -7,6 +7,8 @@
  ******************************************************************************/
 
 package hellfirepvp.astralsorcery.common.tile.base;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -30,10 +32,24 @@ public abstract class TileNetworkSkybound extends TileNetwork {
 
     protected void updateSkyState(boolean seesSky) {
         this.doesSeeSky = seesSky;
+        markForUpdate();
     }
 
     public boolean doesSeeSky() {
         return doesSeeSky;
     }
 
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+
+        this.doesSeeSky = compound.getBoolean("doesSeeSky");
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+
+        compound.setBoolean("doesSeeSky", this.doesSeeSky);
+    }
 }

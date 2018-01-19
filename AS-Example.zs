@@ -11,22 +11,6 @@
 // Example:
 // mods.astralsorcery.StarlightInfusion.removeInfusion(<minecraft:ice>);
 
-// Adds a Ore that's possible to be spawned via the Mineralis ritual.
-// Adds it via oreDict. To make it work, be sure the oreDict name has at least 1 ore *Block*
-// Already-registered oreDict entries can be found here:
-//    https://github.com/HellFirePvP/AstralSorcery/blob/master/src/main/java/hellfirepvp/astralsorcery/common/base/OreTypes.java#L35-L58
-// GregTech ores are blacklisted for stability reasons.
-// Parameters:
-// OreDictName, spawnWeight
-// Example:
-// mods.astralsorcery.RitualMineralis.addOre("blockMarble", 6000);
-
-// Removes an oreDict entry from the list of ores the mineralis ritual can possibly spawn.
-// Parameters:
-// OreDictName
-// Example:
-// mods.astralsorcery.RitualMineralis.removeOre("oreCoal");
-
 // Adds a light transmutation recipe
 // Each input & output item specified *has to have* a block representation or the recipe will be skipped.
 // Metadata of the itemstacks is used to determine the blockstate.
@@ -106,7 +90,7 @@
 // ]);
 
 
-//Adds a recipe to the attunement/tier2 altar recipes
+// Adds a recipe to the attunement/tier2 altar recipes
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -131,7 +115,7 @@
 // ]);
 
 
-//Adds a recipe to the constellation/tier3 altar recipes
+// Adds a recipe to the constellation/tier3 altar recipes
 // This cannot be shapeless.
 // Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
 // Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
@@ -160,8 +144,35 @@
 // ]);
 
 
-
-
-
-
-
+// Adds a recipe to the trait/tier4 altar recipes
+// This cannot be shapeless.
+// Can accept an ItemStack, OreDicitionary, LiquidStack or null in any slot.
+// Formats (just as reminder): (ItemStack should be known), OreDicitionary: <ore:OreDictName>, Liquid: <liquid:LiquidName>
+// Output has to be an ItemStack.
+// Inputs have to have at least 1 non-null input.
+// Inputs at index 25 or higher are considered the "outer items" the player has to put onto relays around the tier4+ altar
+// Arrays are indexed as follows:
+//
+// [ 9] [13] [21] [14] [10]
+// [15] [ 0] [ 1] [ 2] [16]
+// [22] [ 3] [ 4] [ 5] [23]
+// [17] [ 6] [ 7] [ 8] [18]
+// [11] [19] [24] [20] [12]
+//
+// Parameters:
+// OutputStack, (int) starlightRequired, (int) craftTickTime, Inputs-Array (*has* to be 25 or more elements), (optional, string) required-unlocalized-constellation-name
+// Example:
+// mods.astralsorcery.Altar.addTraitAltarRecipe(<minecraft:tnt>, 4500, 100, [
+// <liquid:lava>, <liquid:lava>, <liquid:lava>,
+// <liquid:lava>, <minecraft:gunpowder>, <liquid:lava>,
+// <liquid:lava>, <liquid:lava>, <liquid:lava>,
+// null, null, null, null,
+// <ore:blockMarble>, <ore:blockMarble>,
+// <astralsorcery:itemusabledust>, <astralsorcery:itemusabledust>,
+// <astralsorcery:itemusabledust>, <astralsorcery:itemusabledust>,
+// <ore:blockMarble>, <ore:blockMarble>,
+// <minecraft:redstone>, <minecraft:redstone>,
+// <minecraft:redstone>, <minecraft:redstone>,
+// <minecraft:sand>, <minecraft:sand>, <minecraft:sand>, <minecraft:sand>, <minecraft:sand>
+// ],
+// "astralsorcery.constellation.evorsio");

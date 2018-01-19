@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -106,33 +106,37 @@ public abstract class ConstellationPerk extends ConfigEntry {
     }
 
     public final boolean isCooldownActiveForPlayer(EntityPlayer player) {
-        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, Integer> container = player.getEntityWorld().isRemote ?
                 EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
-        return container.hasList(player) &&
-                container.getOrCreateList(player).contains(getId());
+        EventHandlerServer.PlayerWrapperContainer ct = new EventHandlerServer.PlayerWrapperContainer(player);
+        return container.hasList(ct) &&
+                container.getOrCreateList(ct).contains(getId());
     }
 
     public final void setCooldownActiveForPlayer(EntityPlayer player, int cooldownTicks) {
-        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, Integer> container = player.getEntityWorld().isRemote ?
                 EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
-        container.getOrCreateList(player).setOrAddTimeout(cooldownTicks, getId());
+        EventHandlerServer.PlayerWrapperContainer ct = new EventHandlerServer.PlayerWrapperContainer(player);
+        container.getOrCreateList(ct).setOrAddTimeout(cooldownTicks, getId());
     }
 
     public final void forceSetCooldownForPlayer(EntityPlayer player, int cooldownTicks) {
-        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, Integer> container = player.getEntityWorld().isRemote ?
                 EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
-        if(!container.getOrCreateList(player).setTimeout(cooldownTicks, getId())) {
+        EventHandlerServer.PlayerWrapperContainer ct = new EventHandlerServer.PlayerWrapperContainer(player);
+        if(!container.getOrCreateList(ct).setTimeout(cooldownTicks, getId())) {
             setCooldownActiveForPlayer(player, cooldownTicks);
         }
     }
 
     public final int getActiveCooldownForPlayer(EntityPlayer player) {
-        TimeoutListContainer<EntityPlayer, Integer> container = player.getEntityWorld().isRemote ?
+        TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, Integer> container = player.getEntityWorld().isRemote ?
                 EventHandlerServer.perkCooldownsClient : EventHandlerServer.perkCooldowns;
-        if(!container.hasList(player)) {
+        EventHandlerServer.PlayerWrapperContainer ct = new EventHandlerServer.PlayerWrapperContainer(player);
+        if(!container.hasList(ct)) {
             return -1;
         }
-        return container.getOrCreateList(player).getTimeout(getId());
+        return container.getOrCreateList(ct).getTimeout(getId());
     }
 
     public final void addAlignmentCharge(EntityPlayer player, double charge) {
@@ -199,7 +203,7 @@ public abstract class ConstellationPerk extends ConfigEntry {
 
         /**
          * Gets called on a harvest-check event
-         * Calls {@link #onCanHarvest(EntityPlayer, IBlockState, boolean)}
+         * Calls {@link #onCanHarvest(EntityPlayer, ItemStack, IBlockState, boolean)}
          */
         PLAYER_HARVEST_TYPE
 

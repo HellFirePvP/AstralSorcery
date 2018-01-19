@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -458,7 +458,8 @@ public class RenderAstralSkybox extends IRenderHandler {
                 Map<IConstellation, ClientConstellationPositionMapping.RenderPosition> renderMap = mapping.getCurrentRenderPositions();
                 for (Map.Entry<IConstellation, ClientConstellationPositionMapping.RenderPosition> entry : renderMap.entrySet()) {
                     IConstellation c = entry.getKey();
-                    if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) continue;
+                    if (!ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()) ||
+                            !handle.isActive(c)) continue;
 
                     RenderConstellation.renderConstellation(c, entry.getValue(), new RenderConstellation.BrightnessFunction() {
                         @Override

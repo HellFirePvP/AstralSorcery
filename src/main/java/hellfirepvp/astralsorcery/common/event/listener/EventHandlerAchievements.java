@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -23,18 +23,18 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 public class EventHandlerAchievements {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onPick(PlayerEvent.ItemPickupEvent event) {
-        if(!event.isCanceled()) {
-            if(event.pickedUp != null && !event.pickedUp.getItem().isEmpty() &&
-                    event.pickedUp.getItem().getItem() instanceof ItemRockCrystalBase) {
-                //FIXME RE-ADD AFTER ADVANCEMENTS
-                //event.player.addStat(RegistryAchievements.achvRockCrystal);
-                if(event.pickedUp.getItem().getItem() instanceof ItemCelestialCrystal) {
-                    //event.player.addStat(RegistryAchievements.achvCelestialCrystal);
-                }
-            }
-        }
-    }
+    //@SubscribeEvent(priority = EventPriority.LOWEST)
+    //public void onPick(PlayerEvent.ItemPickupEvent event) {
+    //    if(!event.isCanceled()) {
+    //        if(event.pickedUp != null && !event.pickedUp.getItem().isEmpty() &&
+    //                event.pickedUp.getItem().getItem() instanceof ItemRockCrystalBase) {
+    //            //FIXME RE-ADD AFTER ADVANCEMENTS
+    //            //event.player.addStat(RegistryAchievements.achvRockCrystal);
+    //            if(event.pickedUp.getItem().getItem() instanceof ItemCelestialCrystal) {
+    //                //event.player.addStat(RegistryAchievements.achvCelestialCrystal);
+    //            }
+    //        }
+    //    }
+    //}
 
 }

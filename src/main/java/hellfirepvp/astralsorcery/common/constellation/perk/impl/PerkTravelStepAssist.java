@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.impl;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncStepAssist;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
@@ -31,7 +32,7 @@ public class PerkTravelStepAssist extends ConstellationPerk {
 
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
-        if(side == Side.SERVER) {
+        if(side == Side.SERVER && player instanceof EntityPlayerMP) {
             if(!isCooldownActiveForPlayer(player)) {
                 player.stepHeight += 0.5F;
             } else {
@@ -40,8 +41,10 @@ public class PerkTravelStepAssist extends ConstellationPerk {
                 }
             }
             forceSetCooldownForPlayer(player, 20);
-            PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
-            PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
+            if(MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
+                PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
+                PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
+            }
         }
     }
 
@@ -52,8 +55,10 @@ public class PerkTravelStepAssist extends ConstellationPerk {
             player.stepHeight = 0.6F;
         }
 
-        PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
-        PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
+        if(MiscUtils.isConnectionEstablished((EntityPlayerMP) player)) {
+            PktSyncStepAssist sync = new PktSyncStepAssist(player.stepHeight);
+            PacketChannel.CHANNEL.sendTo(sync, (EntityPlayerMP) player);
+        }
     }
 
     @Override

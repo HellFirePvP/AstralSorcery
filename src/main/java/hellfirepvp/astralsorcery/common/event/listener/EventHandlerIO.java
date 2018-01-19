@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
+import hellfirepvp.astralsorcery.common.auxiliary.StorageNetworkHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.tile.TileOreGenerator;
@@ -41,6 +42,7 @@ public class EventHandlerIO {
     public void onUnload(WorldEvent.Unload event) {
         World w = event.getWorld();
         ConstellationSkyHandler.getInstance().informWorldUnload(w);
+        StorageNetworkHandler.clearHandler(w);
         if (w.isRemote) {
             clientUnload();
         }

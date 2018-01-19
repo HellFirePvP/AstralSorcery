@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -262,6 +262,7 @@ public class WorldCacheManager implements ITickHandler {
         CHUNK_VERSIONING("chunkversions", ChunkVersionBuffer::new),
         GATEWAY_DATA("gateway", GatewayCache::new),
         STRUCTURE_GEN("structures", StructureGenBuffer::new);
+        //STORAGE_BUFFER("storagenetwork", StructureGenBuffer::new);
 
         private final String identifier;
         private final DataProvider<CachedWorldData> instanceProvider;

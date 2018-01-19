@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -8,19 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.tile;
 
-import elucent.albedo.lighting.ILightProvider;
-import elucent.albedo.lighting.Light;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -30,8 +24,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 30.07.2017 / 17:35
  */
-@Optional.Interface(modid = "albedo", iface = "elucent.albedo.lighting.ILightProvider")
-public class TileVanishing extends TileEntityTick implements ILightProvider {
+public class TileVanishing extends TileEntityTick {
 
     private static final AxisAlignedBB topBox = new AxisAlignedBB(-0.9,0, -0.9, 0.9, 0.9, 0.9);
 
@@ -58,13 +51,4 @@ public class TileVanishing extends TileEntityTick implements ILightProvider {
     @Override
     protected void onFirstTick() {}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public Light provideLight() {
-        return new Light.Builder()
-                .pos(getPos())
-                .radius(6F)
-                .color(0xFF1324EE, true)
-                .build();
-    }
 }

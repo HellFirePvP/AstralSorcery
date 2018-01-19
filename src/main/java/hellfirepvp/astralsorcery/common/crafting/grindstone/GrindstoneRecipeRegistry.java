@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -45,7 +45,10 @@ public class GrindstoneRecipeRegistry {
     }
 
     public static Collection<GrindstoneRecipe> getValidRecipes() {
-        return recipes.stream().filter(GrindstoneRecipe::isValid).collect(Collectors.toList());
+        return recipes.stream().filter(GrindstoneRecipe::isValid)
+                .filter(r -> !(r instanceof CrystalToolSharpeningRecipe ||
+                        r instanceof CrystalSharpeningRecipe || r instanceof SwordSharpeningRecipe))
+                .collect(Collectors.toList());
     }
 
     public static GrindstoneRecipe tryRemoveGrindstoneRecipe(ItemStack matchOut) {

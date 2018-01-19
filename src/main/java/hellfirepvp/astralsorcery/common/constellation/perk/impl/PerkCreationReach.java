@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -9,17 +9,18 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.impl;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.client.util.ExtendedChainingPlayerController;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateReach;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PerkCreationReach extends ConstellationPerk {
 
     private static float reachModifier = 3.5F;
+    private static AttributeModifier MODIFIER_EXTEND_REACH;
 
     public PerkCreationReach() {
         super("CRE_REACH", Target.PLAYER_TICK);
@@ -40,12 +42,11 @@ public class PerkCreationReach extends ConstellationPerk {
     public void onPlayerTick(EntityPlayer player, Side side) {
         if(side == Side.SERVER) {
             if(!isCooldownActiveForPlayer(player)) {
-                if(player instanceof EntityPlayerMP) {
-                    double reach = Math.max(5D, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance() + reachModifier);
-                    ((EntityPlayerMP) player).interactionManager.setBlockReachDistance(reach);
-                    PktUpdateReach pkt = new PktUpdateReach(true, reachModifier);
-                    PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+                if(!player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).hasModifier(MODIFIER_EXTEND_REACH)) {
+                    player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).applyModifier(MODIFIER_EXTEND_REACH);
                 }
+                PktUpdateReach pkt = new PktUpdateReach(true);
+                PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
             }
             setCooldownActiveForPlayer(player, 30);
         }
@@ -53,41 +54,28 @@ public class PerkCreationReach extends ConstellationPerk {
 
     @Override
     public void onTimeout(EntityPlayer player) {
-        if(player instanceof EntityPlayerMP) {
-            double reach = Math.max(5D, ((EntityPlayerMP) player).interactionManager.getBlockReachDistance() - reachModifier);
-            ((EntityPlayerMP) player).interactionManager.setBlockReachDistance(reach);
-            PktUpdateReach pkt = new PktUpdateReach(false, 0F);
-            PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        if(player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).hasModifier(MODIFIER_EXTEND_REACH)) {
+            player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).removeModifier(MODIFIER_EXTEND_REACH);
         }
+        PktUpdateReach pkt = new PktUpdateReach(false);
+        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
     }
 
     @SideOnly(Side.CLIENT)
-    public static void updateReach(boolean apply, float modifierIn) {
+    public static void updateReach(boolean apply) {
         EntityPlayer pl = Minecraft.getMinecraft().player;
-        PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
-        if(pl != null && ctrl != null) {
-            //So apparently multiple mods do this. And we keep chaining on top of it. So let's stop this.
-            //This way we make sure if we're somewhere being called down the line, or not.
-            ExtendedChainingPlayerController.call = false;
-            ctrl.getBlockReachDistance();
-            if(!ExtendedChainingPlayerController.call && !(ctrl instanceof ExtendedChainingPlayerController)) {
-                ExtendedChainingPlayerController ovr = new ExtendedChainingPlayerController(ctrl);
-                boolean isFlying = pl.capabilities.isFlying;
-                boolean allowFlight = pl.capabilities.allowFlying;
-                ovr.setGameType(ctrl.getCurrentGameType()); //Overwrites fly states depending on gametype. Please. no.
-                pl.capabilities.isFlying = isFlying;
-                pl.capabilities.allowFlying = allowFlight;
-                Minecraft.getMinecraft().playerController = ovr;
-            }
-
-            ExtendedChainingPlayerController ctr = (ExtendedChainingPlayerController) Minecraft.getMinecraft().playerController;
-            if(apply) {
-                ctr.setReachModifier(modifierIn);
+        if(pl != null) {
+            if(!apply) {
+                if(pl.getEntityAttribute(EntityPlayer.REACH_DISTANCE).hasModifier(MODIFIER_EXTEND_REACH)) {
+                    pl.getEntityAttribute(EntityPlayer.REACH_DISTANCE).removeModifier(MODIFIER_EXTEND_REACH);
+                }
             } else {
-                ctr.setReachModifier(0F);
+                if(!pl.getEntityAttribute(EntityPlayer.REACH_DISTANCE).hasModifier(MODIFIER_EXTEND_REACH)) {
+                    pl.getEntityAttribute(EntityPlayer.REACH_DISTANCE).applyModifier(MODIFIER_EXTEND_REACH);
+                }
             }
         } else {
-            AstralSorcery.proxy.scheduleClientside(() -> updateReach(apply, modifierIn)); //Retry.
+            AstralSorcery.proxy.scheduleClientside(() -> updateReach(apply)); //Retry.
         }
     }
 
@@ -98,7 +86,9 @@ public class PerkCreationReach extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        reachModifier = cfg.getFloat(getKey() + "ReachModifier", getConfigurationSection(), 2.5F, 0F, 200F, "Sets the reach modifier that gets applied when the player has this perk. (Too high values might cause issues.)");
+        reachModifier = cfg.getFloat(getKey() + "ReachModifier", getConfigurationSection(), reachModifier, 0F, 200F, "Sets the reach modifier that gets applied when the player has this perk. (Too high values might cause issues.)");
+
+        MODIFIER_EXTEND_REACH = new AttributeModifier(UUID.fromString("2f36e6fc-ddfe-11e7-80c1-9a214cf093ae"), "AS_REACH_EXTEND", reachModifier, 0);
     }
 
 }

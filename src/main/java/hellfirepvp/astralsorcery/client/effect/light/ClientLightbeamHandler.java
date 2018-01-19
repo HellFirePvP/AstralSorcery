@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -51,10 +51,8 @@ public class ClientLightbeamHandler implements ITickHandler {
 
                 Map<BlockPos, List<BlockPos>> positions = connections.getClientConnections(dimId);
                 if(positions != null) {
-                    Iterator<Map.Entry<BlockPos, List<BlockPos>>> iterator = positions.entrySet().iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry<BlockPos, List<BlockPos>> entry = iterator.next();
-                        if(entry == null) continue;
+                    for (Map.Entry<BlockPos, List<BlockPos>> entry : positions.entrySet()) {
+                        if (entry == null) continue;
                         BlockPos at = entry.getKey();
                         if (rView.getDistanceSq(at) <= Config.maxEffectRenderDistanceSq) {
                             Vector3 source = new Vector3(at).add(0.5, 0.5, 0.5);

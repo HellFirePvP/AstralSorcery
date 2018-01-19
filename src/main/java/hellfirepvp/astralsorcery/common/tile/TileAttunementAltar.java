@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -376,7 +376,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             }
         }
         if(match != null) {
-            if(wsh.getActiveConstellations().contains(match)) {
+            if(wsh.getActiveConstellations().contains(match) && wsh.isActive(match)) {
                 activeFound = match;
                 markForUpdate();
             }

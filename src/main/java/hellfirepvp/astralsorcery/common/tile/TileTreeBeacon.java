@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -175,29 +175,38 @@ public class TileTreeBeacon extends TileReceiverBase {
 
     private boolean updatePositionsFromSnapshots(World world, WorldBlockPos saplingPos, BlockPos origin) {
         boolean ret = false;
-        if(!TreeCaptureHelper.oneTimeCatches.remove(saplingPos) &&
-                !world.capturedBlockSnapshots.isEmpty() &&
-                world.capturedBlockSnapshots.size() > 2) { //I guess then something grew after all?
-            if(treePositions.getSize() + world.capturedBlockSnapshots.size() <= ConfigEntryTreeBeacon.maxCount) {
-                for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
-                    IBlockState setBlock = snapshot.getCurrentBlock();
-                    if(!setBlock.getBlock().equals(BlocksAS.blockFakeTree) && !setBlock.getBlock().equals(Blocks.DIRT) && !setBlock.getBlock().equals(Blocks.GRASS)) {
-                        world.setBlockState(snapshot.getPos(), BlocksAS.blockFakeTree.getDefaultState());
-                        TileFakeTree tft = MiscUtils.getTileAt(world, snapshot.getPos(), TileFakeTree.class, true);
-                        if(tft != null) {
-                            tft.setupTile(origin, setBlock);
+        try {
+            if (!TreeCaptureHelper.oneTimeCatches.remove(saplingPos) &&
+                    !world.capturedBlockSnapshots.isEmpty() &&
+                    world.capturedBlockSnapshots.size() > 2) { //I guess then something grew after all?
+                if (treePositions.getSize() + world.capturedBlockSnapshots.size() <= ConfigEntryTreeBeacon.maxCount) {
+                    for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
+                        IBlockState setBlock = snapshot.getCurrentBlock();
+                        BlockPos at = snapshot.getPos();
+                        IBlockState current = world.getBlockState(at);
+                        if (current.getBlockHardness(world, at) == -1 || world.getTileEntity(at) != null) {
+                            continue;
                         }
-                        if(treePositions.offerElement(snapshot.getPos())) ret = true;
+                        if (!setBlock.getBlock().equals(BlocksAS.blockFakeTree) && !setBlock.getBlock().equals(Blocks.DIRT) && !setBlock.getBlock().equals(Blocks.GRASS)) {
+                            world.setBlockState(snapshot.getPos(), BlocksAS.blockFakeTree.getDefaultState());
+                            TileFakeTree tft = MiscUtils.getTileAt(world, snapshot.getPos(), TileFakeTree.class, true);
+                            if (tft != null) {
+                                tft.setupTile(origin, setBlock);
+                            }
+                            if (treePositions.offerElement(snapshot.getPos())) ret = true;
+                        }
+                    }
+                } else {
+                    for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
+                        IBlockState current = world.getBlockState(snapshot.getPos());
+                        world.notifyBlockUpdate(snapshot.getPos(), current, current, 3);
                     }
                 }
-            } else {
-                for (BlockSnapshot snapshot : world.capturedBlockSnapshots) {
-                    IBlockState current = world.getBlockState(snapshot.getPos());
-                    world.notifyBlockUpdate(snapshot.getPos(), current, current, 3);
-                }
             }
+        } catch (Exception ignored) {
+        } finally {
+            world.capturedBlockSnapshots.clear();
         }
-        world.capturedBlockSnapshots.clear();
         return ret;
     }
 

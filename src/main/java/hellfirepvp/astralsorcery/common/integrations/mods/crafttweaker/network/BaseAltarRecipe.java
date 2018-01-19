@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -211,7 +211,9 @@ public abstract class BaseAltarRecipe implements SerializeableRecipe {
                     if(inputs[al.getSlotId()] != null) rRec.setInnerTraitItem(inputs[al.getSlotId()], al);
                 }
                 for (int i = 25; i < inputs.length; i++) {
-                    rRec.addOuterTraitItem(inputs[i]);
+                    if(inputs[i] != null) {
+                        rRec.addOuterTraitItem(inputs[i]);
+                    }
                 }
                 return rRec;
         }

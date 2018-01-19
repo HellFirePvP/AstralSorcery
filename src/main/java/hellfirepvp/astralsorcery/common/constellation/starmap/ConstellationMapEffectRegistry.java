@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -75,6 +75,7 @@ public class ConstellationMapEffectRegistry {
 
         public final Enchantment ench;
         public final int minEnchLevel, maxEnchLevel;
+        public boolean ignoreCompaibility = false;
 
         public EnchantmentMapEffect(Enchantment ench) {
             this.ench = ench;
@@ -88,6 +89,10 @@ public class ConstellationMapEffectRegistry {
             this.minEnchLevel = min;
         }
 
+        public EnchantmentMapEffect setIgnoreCompaibility() {
+            this.ignoreCompaibility = true;
+            return this;
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * HellFirePvP / Astral Sorcery 2017
+ * HellFirePvP / Astral Sorcery 2018
  *
  * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
@@ -71,7 +71,7 @@ public class PerkCreationStoneEnrichment extends ConstellationPerk {
     @Override
     public void loadFromConfig(Configuration cfg) {
         enrichmentRadius = cfg.getInt(getKey() + "GenRadius", getConfigurationSection(), 3, 2, 50, "Defines the radius where a random position to generate a ore at is searched");
-        chanceToEnrich = cfg.getInt(getKey() + "GenChance", getConfigurationSection(), 70, 10, 2000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore");
+        chanceToEnrich = cfg.getInt(getKey() + "GenChance", getConfigurationSection(), 70, 10, 2_000_000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random stone next to the player should get turned into an ore");
     }
 
     private static class CleanStoneCheck implements BlockStateCheck {
