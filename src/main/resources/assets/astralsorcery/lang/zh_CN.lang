@@ -578,11 +578,13 @@ astralsorcery.constellation.pelotrio.ritual=被此星座的散射光所浸没的
 astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将星辉转变为工具形态，它将模仿穿戴者的行为，用镐挖掘方块，用斧砍倒树，甚至能用武器攻击敌人。
 
 astralsorcery.constellation.gelu=Gelu
-astralsorcery.constellation.gelu.info=-
+astralsorcery.constellation.gelu.info=Frigidity
 astralsorcery.constellation.ulteria=Ulteria
-astralsorcery.constellation.ulteria.info=-
+astralsorcery.constellation.ulteria.info=Tenacity
 astralsorcery.constellation.alcara=Alcara
-astralsorcery.constellation.alcara.info=-
+astralsorcery.constellation.alcara.info=Resonance
+astralsorcery.constellation.vorux=Vorux
+astralsorcery.constellation.vorux.info=Ferocity
 
 perk.info.locked=§7锁定
 perk.info.available=§9可用
