@@ -149,8 +149,8 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         List<TileChalice> out = new LinkedList<>();
         for (int xx = chMin.x; xx <= chMax.x; xx++) {
             for (int zz = chMin.z; zz < chMax.z; zz++) {
-                if(world.isBlockLoaded(new BlockPos((chMin.x + xx) << 4, 0, (chMin.z + zz) << 4))) {
-                    Chunk loaded = world.getChunkFromChunkCoords(chMin.x + xx, chMin.z + zz);
+                if(world.isBlockLoaded(new BlockPos((xx) << 4, 0, (zz) << 4))) {
+                    Chunk loaded = world.getChunkFromChunkCoords(xx, zz);
                     for (TileEntity te : loaded.getTileEntityMap().values()) {
                         if(te instanceof TileChalice && !te.isInvalid()) {
                             out.add((TileChalice) te);
