@@ -55,7 +55,7 @@ public class CelestialGatewaySystem {
 
     public GatewayWorldFilter getFilter() {
         File f = FileStorageUtil.getGeneralSubDirectory("gatewayFilter");
-        File worldFilter = new File(f, "worldFilter");
+        File worldFilter = new File(f, "worldFilter.dat");
         if(!worldFilter.exists()) {
             try {
                 worldFilter.createNewFile();

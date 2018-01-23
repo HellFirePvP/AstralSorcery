@@ -242,6 +242,10 @@ public class MiscUtils {
     public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {
         if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
         if(entity.getEntityWorld().provider.getDimension() != targetDimId) {
+            if(!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, targetDimId)) {
+                return;
+            }
+
             if(entity instanceof EntityPlayerMP) {
                 FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) entity, targetDimId, new NoOpTeleporter(((EntityPlayerMP) entity).getServerWorld()));
             } else {
