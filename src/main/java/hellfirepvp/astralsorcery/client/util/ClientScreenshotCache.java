@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.common.util.FileStorageUtil;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
@@ -183,14 +184,7 @@ public class ClientScreenshotCache {
     @Nullable
     private static File getDirectoryForCurrentContext() {
         if(addrContext == null) return null; //Uh... unexpected call.
-        File f = new File(System.getProperty("user.dir"), AstralSorcery.MODID);
-        if(!f.exists()) {
-            f.mkdirs();
-        }
-        f = new File(f, "gatewayScreenshots");
-        if(!f.exists()) {
-            f.mkdirs();
-        }
+        File f = FileStorageUtil.getGeneralSubDirectory("gatewayScreenshots");
         f = new File(f, addrContext);
         if(!f.exists()) {
             f.mkdirs();

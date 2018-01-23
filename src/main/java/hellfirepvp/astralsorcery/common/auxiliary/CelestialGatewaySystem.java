@@ -8,27 +8,33 @@
 
 package hellfirepvp.astralsorcery.common.auxiliary;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktUpdateGateways;
+import hellfirepvp.astralsorcery.common.util.FileStorageUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -47,14 +53,31 @@ public class CelestialGatewaySystem {
 
     private CelestialGatewaySystem() {}
 
+    public GatewayWorldFilter getFilter() {
+        File f = FileStorageUtil.getGeneralSubDirectory("gatewayFilter");
+        File worldFilter = new File(f, "worldFilter");
+        if(!worldFilter.exists()) {
+            try {
+                worldFilter.createNewFile();
+            } catch (IOException ignored) {}
+        }
+        return new GatewayWorldFilter(worldFilter);
+    }
+
     public void onServerStart() {
         startup = true;
+        GatewayWorldFilter filter = getFilter();
         Integer[] worlds = DimensionManager.getStaticDimensionIDs(); //Should be loaded during startup = we should grab those.
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        List<Integer> involved = filter.getInvolvedWorlds();
         for (Integer id : worlds) {
-            if(id == null) continue;
+            if(id == null || !involved.contains(id)) continue;
             WorldServer world = server.getWorld(id);
             loadWorldCache(world);
+
+            if(world.getChunkProvider().getLoadedChunkCount() <= 0 && ForgeChunkManager.getPersistentChunksFor(world).size() == 0 && !world.provider.getDimensionType().shouldLoadSpawn()){
+                DimensionManager.unloadWorld(world.provider.getDimension());
+            }
         }
         startup = false;
         syncToAll();
@@ -101,6 +124,7 @@ public class CelestialGatewaySystem {
             return;
         }
 
+        getFilter().appendAndSave(dim);
         List<GatewayCache.GatewayNode> cache = serverCache.get(dim);
         if(!cache.contains(pos)) {
             cache.add(pos);
@@ -134,6 +158,57 @@ public class CelestialGatewaySystem {
     private void loadWorldCache(World world) {
         GatewayCache cache = WorldCacheManager.getOrLoadData(world, WorldCacheManager.SaveKey.GATEWAY_DATA);
         serverCache.put(world.provider.getDimension(), cache.getGatewayPositions());
+    }
+
+    public static class GatewayWorldFilter {
+
+        private final File gatewayCacheFile;
+        private List<Integer> cache = null;
+
+        private GatewayWorldFilter(File gatewayCacheFile) {
+            this.gatewayCacheFile = gatewayCacheFile;
+        }
+
+        public List<Integer> getInvolvedWorlds() {
+            if(cache == null) {
+                loadCache();
+            }
+            return cache;
+        }
+
+        private void loadCache() {
+            try {
+                NBTTagCompound tag = CompressedStreamTools.read(this.gatewayCacheFile);
+                NBTTagList list = tag.getTagList("list", Constants.NBT.TAG_INT);
+                cache = Lists.newArrayList(0);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    int id = list.getIntAt(i);
+                    if(!cache.contains(id)) {
+                        cache.add(id);
+                    }
+                }
+            } catch (IOException ignored) {
+                cache = Lists.newArrayList(0);
+            }
+        }
+
+        public void appendAndSave(int id) {
+            if(cache == null) {
+                loadCache();
+            }
+            if(!cache.contains(id)) {
+                try {
+                    NBTTagList list = new NBTTagList();
+                    for (int dimId : cache) {
+                        list.appendTag(new NBTTagInt(dimId));
+                    }
+                    NBTTagCompound cmp = new NBTTagCompound();
+                    cmp.setTag("list", list);
+                    CompressedStreamTools.write(cmp, this.gatewayCacheFile);
+                } catch (IOException ignored) {}
+            }
+        }
+
     }
 
 }

@@ -575,6 +575,19 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         public void update(World world) {
             ticksTicking++;
 
+            TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
+            if(ped != null) {
+                ItemStack focus = ped.getInventoryHandler().getStackInSlot(0);
+                if(!focus.isEmpty() && focus.getItem() instanceof ItemTunedCrystalBase) {
+                    CrystalProperties properties = CrystalProperties.getCrystalProperties(focus);
+                    IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(focus);
+                    IMinorConstellation trait = ItemTunedCrystalBase.getTrait(focus);
+                    updateCrystalProperties(world, properties, tuned, trait);
+                } else {
+                    updateCrystalProperties(world, null, null, null);
+                }
+            }
+
             if(channeling != null && properties != null && hasMultiblock) {
                 if(ce == null) {
                     ce = channeling.getRitualEffect(this);
@@ -967,10 +980,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         public void updateCrystalProperties(World world, CrystalProperties properties, IWeakConstellation channeling, IMinorConstellation trait) {
+            IWeakConstellation prev = this.channeling;
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            this.clearAllMirrorPositions(world);
+            if(this.channeling == null || this.channeling != prev) {
+                this.clearAllMirrorPositions(world);
+            }
 
             markDirty(world);
         }
