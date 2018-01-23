@@ -28,6 +28,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -242,7 +243,7 @@ public class MiscUtils {
     public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {
         if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
         if(entity.getEntityWorld().provider.getDimension() != targetDimId) {
-            if(!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, targetDimId)) {
+            if(!ForgeHooks.onTravelToDimension(entity, targetDimId)) {
                 return;
             }
 

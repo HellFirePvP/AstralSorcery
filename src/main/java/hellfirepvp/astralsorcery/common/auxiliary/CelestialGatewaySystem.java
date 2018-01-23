@@ -66,10 +66,9 @@ public class CelestialGatewaySystem {
 
     public void onServerStart() {
         startup = true;
-        GatewayWorldFilter filter = getFilter();
         Integer[] worlds = DimensionManager.getStaticDimensionIDs(); //Should be loaded during startup = we should grab those.
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        List<Integer> involved = filter.getInvolvedWorlds();
+        List<Integer> involved = getFilter().getInvolvedWorlds();
         for (Integer id : worlds) {
             if(id == null || !involved.contains(id)) continue;
             WorldServer world = server.getWorld(id);
@@ -197,6 +196,7 @@ public class CelestialGatewaySystem {
                 loadCache();
             }
             if(!cache.contains(id)) {
+                cache.add(id);
                 try {
                     NBTTagList list = new NBTTagList();
                     for (int dimId : cache) {
