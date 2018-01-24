@@ -59,7 +59,9 @@ public class CelestialGatewaySystem {
         if(!worldFilter.exists()) {
             try {
                 worldFilter.createNewFile();
-            } catch (IOException ignored) {}
+            } catch (IOException exc) {
+                throw new IllegalStateException("Couldn't create plain world filter file! Are we missing file permissions?", exc);
+            }
         }
         return new GatewayWorldFilter(worldFilter);
     }
@@ -139,6 +141,9 @@ public class CelestialGatewaySystem {
             return;
         }
         if(serverCache.get(dim).remove(pos)) {
+            if(serverCache.get(dim).isEmpty()) {
+                getFilter().removeAndSave(dim);
+            }
             syncToAll();
         }
     }
@@ -191,12 +196,30 @@ public class CelestialGatewaySystem {
             }
         }
 
-        public void appendAndSave(int id) {
+        private void appendAndSave(int id) {
             if(cache == null) {
                 loadCache();
             }
             if(!cache.contains(id)) {
                 cache.add(id);
+                try {
+                    NBTTagList list = new NBTTagList();
+                    for (int dimId : cache) {
+                        list.appendTag(new NBTTagInt(dimId));
+                    }
+                    NBTTagCompound cmp = new NBTTagCompound();
+                    cmp.setTag("list", list);
+                    CompressedStreamTools.write(cmp, this.gatewayCacheFile);
+                } catch (IOException ignored) {}
+            }
+        }
+
+        private void removeAndSave(int dim) {
+            if(cache == null) {
+                loadCache();
+            }
+            if(cache.contains(dim)) {
+                cache.remove(dim);
                 try {
                     NBTTagList list = new NBTTagList();
                     for (int dimId : cache) {

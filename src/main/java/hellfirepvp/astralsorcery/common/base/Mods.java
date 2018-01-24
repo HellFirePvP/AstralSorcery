@@ -36,11 +36,12 @@ public enum Mods {
     GALACTICRAFT_CORE("galacticraftcore"),
     GEOLOSYS("geolosys"),
     ORESTAGES("orestages"),
-    DRACONICEVOLUTION("draconicevolution");
+    DRACONICEVOLUTION("draconicevolution"),
+    UNIVERSALREMOTE("universalremote");
 
     public final String modid;
 
-    private static Class<?> gcPlayerClass;
+    private static Class<?> gcPlayerClass, urPlayerClass;
 
     private Mods(String modName) {
         this.modid = modName;
@@ -75,14 +76,24 @@ public enum Mods {
     }
 
     @Nullable
-    public static Class<?> getGCPlayerClass() {
-        if(GALACTICRAFT_CORE.isPresent()) {
-            if(gcPlayerClass == null) {
-                try {
-                    gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCEntityPlayerMP");
-                } catch (Exception ignored) {}
-            }
-            return gcPlayerClass;
+    public Class<?> getExtendedPlayerClass() {
+        if(!isPresent()) return null;
+
+        switch (this) {
+            case GALACTICRAFT_CORE:
+                if(gcPlayerClass == null) {
+                    try {
+                        gcPlayerClass = Class.forName("micdoodle8.mods.galacticraft.core.entities.player.GCEntityPlayerMP");
+                    } catch (Exception ignored) {}
+                }
+                return gcPlayerClass;
+            case UNIVERSALREMOTE:
+                if(urPlayerClass == null) {
+                    try {
+                        urPlayerClass = Class.forName("clayborn.universalremote.hooks.entity.HookedEntityPlayerMP");
+                    } catch (Exception ignored) {}
+                }
+                return urPlayerClass;
         }
         return null;
     }

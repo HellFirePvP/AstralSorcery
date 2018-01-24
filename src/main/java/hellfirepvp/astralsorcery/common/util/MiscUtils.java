@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -41,7 +40,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -309,15 +307,19 @@ public class MiscUtils {
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {
         if(player instanceof FakePlayer) return true;
 
-        if(Mods.GALACTICRAFT_CORE.isPresent()) {
-            Class<?> plClass = Mods.getGCPlayerClass();
-            if(plClass != null) {
-                if(player.getClass() != EntityPlayerMP.class && player.getClass() != plClass) return true;
-            } else {
-                if(player.getClass() != EntityPlayerMP.class) return true;
+        boolean isModdedPlayer = false;
+        for (Mods mod : Mods.values()) {
+            if(!mod.isPresent()) continue;
+            Class<?> specificPlayerClass = mod.getExtendedPlayerClass();
+            if(specificPlayerClass != null) {
+                if(player.getClass() != EntityPlayerMP.class && player.getClass() == specificPlayerClass) {
+                    isModdedPlayer = true;
+                    break;
+                }
             }
-        } else {
-            if(player.getClass() != EntityPlayerMP.class) return true;
+        }
+        if(!isModdedPlayer && player.getClass() != EntityPlayerMP.class) {
+            return true;
         }
 
         if(player.connection == null) return true;
