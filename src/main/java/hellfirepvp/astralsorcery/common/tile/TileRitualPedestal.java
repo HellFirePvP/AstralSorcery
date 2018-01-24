@@ -682,7 +682,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             if(ce instanceof ConstellationEffectStatus) {
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
-                if(((ConstellationEffectStatus) ce).runTraitEffect(world, to, trait)) markDirty(world);
+                if(((ConstellationEffectStatus) ce).runTraitEffect(world, to, getCollectedBackmirrors(), trait)) markDirty(world);
                 return;
             }
 
@@ -724,7 +724,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             if(ce instanceof ConstellationEffectStatus) {
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
-                if(((ConstellationEffectStatus) ce).runEffect(world, to, mayDoTrait, trait)) markDirty(world);
+                if(((ConstellationEffectStatus) ce).runEffect(world, to, getCollectedBackmirrors(), mayDoTrait, trait)) markDirty(world);
                 return;
             }
 

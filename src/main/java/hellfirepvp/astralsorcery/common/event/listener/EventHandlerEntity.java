@@ -71,6 +71,13 @@ public class EventHandlerEntity {
 
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
+    public static TimeoutList<EntityPlayer> ritualFlight = new TimeoutList<>(player -> {
+        if(!player.isCreative()) {
+            player.capabilities.allowFlying = false;
+            player.capabilities.isFlying = false;
+            player.sendPlayerAbilities();
+        }
+    }, TickEvent.Type.SERVER);
     public static Map<Integer, EntityAttackStack> attackStack = new HashMap<>();
 
     @SubscribeEvent

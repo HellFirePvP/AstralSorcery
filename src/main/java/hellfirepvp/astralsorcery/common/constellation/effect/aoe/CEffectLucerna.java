@@ -64,7 +64,7 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
     }
 
     @Override
-    public boolean runEffect(World world, BlockPos pos, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean runEffect(World world, BlockPos pos, int mirrorAmount, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         WorldBlockPos at = new WorldBlockPos(world, pos);
         TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
@@ -77,35 +77,17 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
             rememberedTimeout = Math.min(400, rememberedTimeout + 80);
             EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(range, rememberedTimeout));
         }
-        return false;
+        return true;
     }
 
     @Override
     @Deprecated
     public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
-        if(!enabled) return false;
-        percStrength *= potencyMultiplier;
-        if(percStrength < 1) {
-            if(world.rand.nextFloat() > percStrength) return false;
-        }
-
-        WorldBlockPos at = new WorldBlockPos(world, pos);
-        TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
-        if(token != null) {
-            int next = token.getRemainingTimeout() + 80;
-            if(next > 400) next = 400;
-            token.setTimeout(next);
-            rememberedTimeout = next;
-        } else {
-            rememberedTimeout = Math.min(400, rememberedTimeout + 80);
-            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(range, rememberedTimeout));
-        }
-
-        return true;
+        return false;
     }
 
     @Override
-    public boolean runTraitEffect(World world, BlockPos pos, IMinorConstellation traitType) {
+    public boolean runTraitEffect(World world, BlockPos pos, int mirrorAmount, IMinorConstellation traitType) {
         return false;
     }
 

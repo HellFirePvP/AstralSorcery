@@ -258,6 +258,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(EventHandlerServer.perkCooldowns);
         manager.register(EventHandlerServer.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
         manager.register(EventHandlerEntity.invulnerabilityCooldown);
+        manager.register(EventHandlerEntity.ritualFlight);
     }
 
     public void postInit() {
