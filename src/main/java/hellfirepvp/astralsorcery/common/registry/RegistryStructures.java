@@ -10,10 +10,8 @@ package hellfirepvp.astralsorcery.common.registry;
 
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.multiblock.*;
-import hellfirepvp.astralsorcery.common.registry.structures.StructureAncientShrine;
-import hellfirepvp.astralsorcery.common.registry.structures.StructureDesertShrine;
-import hellfirepvp.astralsorcery.common.registry.structures.StructureSmallShrine;
-import hellfirepvp.astralsorcery.common.registry.structures.StructureTreasureShrine;
+import hellfirepvp.astralsorcery.common.registry.structures.*;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 
 import static hellfirepvp.astralsorcery.common.lib.MultiBlockArrays.*;
 
@@ -31,6 +29,7 @@ public class RegistryStructures {
         desertShrine = new StructureDesertShrine();
         smallShrine = new StructureSmallShrine();
         treasureShrine = new StructureTreasureShrine();
+        smallRuin = new StructureSmallRuin();
 
         patternRitualPedestal = new MultiblockRitualPedestal();
         patternAltarAttunement = new MultiblockAltarAttunement();
@@ -42,6 +41,9 @@ public class RegistryStructures {
         patternCelestialGateway = new MultiblockGateway();
         patternCollectorEnhancement = new MultiblockCrystalEnhancement();
         patternFountain = new MultiblockFountain();
+
+        patternSmallRuin = new PatternBlockArray();
+        patternSmallRuin.addAll(smallRuin);
 
         patternRitualPedestalWithLink = new MultiblockRitualPedestal();
         patternRitualPedestalWithLink.addBlock(0, 5, 0, BlocksAS.ritualLink.getDefaultState());

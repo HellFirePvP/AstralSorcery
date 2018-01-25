@@ -6,50 +6,32 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.item.wearable;
+package hellfirepvp.astralsorcery.common.item.useables;
 
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
-import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
-import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ItemEnchantmentAmulet
+ * Class: ItemFracturedEssence
  * Created by HellFirePvP
- * Date: 25.01.2018 / 19:05
+ * Date: 25.01.2018 / 20:27
  */
-public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBauble {
+public class ItemFracturedEssence extends Item implements ItemDynamicColor {
 
-    public ItemEnchantmentAmulet() {
+    public ItemFracturedEssence() {
         setMaxDamage(0);
-        setMaxStackSize(1);
+        setMaxStackSize(16);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 
     @Override
     public int getColorForItemStack(ItemStack stack, int tintIndex) {
-        if(tintIndex != 1) return 0xFFFFFFFF;
-        int tick = (int) (ClientScheduler.getClientTick() % 100000L);
-        int c = Color.getHSBColor((tick / 100000F) * 360F, 0.7F, 1F).getRGB();
+        int c = 0x00FFFFFF;
         return c | 0xFF000000;
-    }
-
-    @Override
-    public BaubleType getBaubleType(ItemStack itemstack) {
-        return BaubleType.AMULET;
-    }
-
-    @Override
-    public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
-        return true;
     }
 
 }

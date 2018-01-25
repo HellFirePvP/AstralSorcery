@@ -499,6 +499,7 @@ tile.blockbore.name=Evershifting Fountain
 tile.blockborehead.liquid.name=Neromantic Prime
 tile.blockborehead.ore.name=Petromantic Prime
 tile.blockborehead.vortex.name=Fysallidic Prime
+tile.blockportalnode.name=
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 

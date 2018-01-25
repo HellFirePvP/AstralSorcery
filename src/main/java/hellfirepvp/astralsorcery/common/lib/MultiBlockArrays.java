@@ -33,6 +33,9 @@ public class MultiBlockArrays {
 
     public static StructureBlockArray treasureShrine;
 
+    public static StructureBlockArray smallRuin;
+    public static PatternBlockArray patternSmallRuin;
+
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;
 

@@ -123,6 +123,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(starlightInfuser);
         ritualLink = registerBlock(new BlockRitualLink());
         queueDefaultItemBlock(ritualLink);
+        blockPortalNode = registerBlock(new BlockPortalNode());
+        queueDefaultItemBlock(blockPortalNode);
 
         treeBeacon = registerBlock(new BlockTreeBeacon());
         queueDefaultItemBlock(treeBeacon);
@@ -190,6 +192,7 @@ public class RegistryBlocks {
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
         registerTile(TileBore.class);
+        registerTile(TilePortalNode.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);
