@@ -519,7 +519,7 @@ astralsorcery.constellation.vicio=Vicio
 astralsorcery.constellation.vicio.info=Travel
 astralsorcery.constellation.vicio.effect=这个星座的微弱的光芒使周围的一切都变慢了，与此同时你可以更快的完成你的工作。
 astralsorcery.constellation.vicio.enchantments=据专家所诉，饮用受Vicio所蚀刻的药水能提高速度，若是靴子受过蚀刻则可以使穿戴者减少坠落伤害。
-astralsorcery.constellation.vicio.ritual=赋予附近的实体敏捷强化，为他们提供了更快的速度与更高的跳跃能力。
+astralsorcery.constellation.vicio.ritual=赋予附近的玩家一定程度的敏捷与速度强化，让他们在靠近时能在空中自由移动。
 astralsorcery.constellation.vicio.capeeffect=这种共振通过减轻你的体重来减小驾驭风飞行进行旅行的负担，就如同鞘翅一样。
 astralsorcery.constellation.aevitas=Aevitas
 astralsorcery.constellation.aevitas.info=Creation
@@ -578,11 +578,13 @@ astralsorcery.constellation.pelotrio.ritual=被此星座的散射光所浸没的
 astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将星辉转变为工具形态，它将模仿穿戴者的行为，用镐挖掘方块，用斧砍倒树，甚至能用武器攻击敌人。
 
 astralsorcery.constellation.gelu=Gelu
-astralsorcery.constellation.gelu.info=-
+astralsorcery.constellation.gelu.info=Frigidity
 astralsorcery.constellation.ulteria=Ulteria
-astralsorcery.constellation.ulteria.info=-
+astralsorcery.constellation.ulteria.info=Tenacity
 astralsorcery.constellation.alcara=Alcara
-astralsorcery.constellation.alcara.info=-
+astralsorcery.constellation.alcara.info=Resonance
+astralsorcery.constellation.vorux=Vorux
+astralsorcery.constellation.vorux.info=Ferocity
 
 perk.info.locked=§7锁定
 perk.info.available=§9可用
