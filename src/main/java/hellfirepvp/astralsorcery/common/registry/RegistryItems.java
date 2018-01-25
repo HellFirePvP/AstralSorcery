@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
@@ -31,6 +32,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import net.minecraft.block.Block;
@@ -123,6 +125,7 @@ public class RegistryItems {
         handTelescope = registerItem(new ItemHandTelescope());
         linkingTool = registerItem(new ItemLinkingTool());
         wand = registerItem(new ItemWand());
+        sextant = registerItem(new ItemSextant());
         illuminationWand = registerItem(new ItemIlluminationWand());
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
@@ -144,6 +147,7 @@ public class RegistryItems {
         chargedCrystalShovel = registerItem(new ItemChargedCrystalShovel());
 
         armorImbuedCape = registerItem(new ItemCape());
+        enchantmentAmulet = registerItem(new ItemEnchantmentAmulet());
     }
 
     //Items associated to blocks/itemblocks

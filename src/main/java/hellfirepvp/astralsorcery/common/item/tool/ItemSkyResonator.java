@@ -64,7 +64,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 17.01.2017 / 00:53
  */
-public class ItemSkyResonator extends Item implements INBTModel, ISpecialInteractItem {
+public class ItemSkyResonator extends Item implements INBTModel {
 
     private static Random rand = new Random();
 
@@ -119,46 +119,6 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
             }
         }
         return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
-    }
-
-    @Override
-    public boolean needsSpecialHandling(World world, BlockPos at, EntityPlayer player, ItemStack stack) {
-        if(!stack.isEmpty() && stack.getItem() instanceof ItemSkyResonator &&
-                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK &&
-                getCurrentUpgrade(player, stack).obtainable()) {
-            TileEntity te = world.getTileEntity(at);
-            if(te != null && te instanceof IMultiblockDependantTile) {
-                if(((IMultiblockDependantTile) te).getRequiredStructure() != null &&
-                        !((IMultiblockDependantTile) te).getRequiredStructure().matches(world, at)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onRightClick(World world, BlockPos at, EntityPlayer player, EnumFacing side, EnumHand hand, ItemStack stack) {
-        if(!stack.isEmpty() && stack.getItem() instanceof ItemSkyResonator &&
-                getCurrentUpgrade(player, stack) == ResonatorUpgrade.STRUCTURE_CHECK &&
-                getCurrentUpgrade(player, stack).obtainable()) {
-            TileEntity te = world.getTileEntity(at);
-            if(te != null && te instanceof IMultiblockDependantTile) {
-                if(((IMultiblockDependantTile) te).getRequiredStructure() != null &&
-                        !((IMultiblockDependantTile) te).getRequiredStructure().matches(world, at)) {
-                    if(world.isRemote) {
-                        requestPreview(te);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void requestPreview(TileEntity te) {
-        EffectHandler.getInstance().requestStructurePreviewFor((IMultiblockDependantTile) te);
     }
 
     @Override
@@ -316,8 +276,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
     public static enum ResonatorUpgrade {
 
         STARLIGHT("starlight", (p, s) -> true),
-        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT)),
-        STRUCTURE_CHECK("structure", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT));
+        FLUID_FIELDS("liquid", (p, s) -> ResearchManager.getProgressTestAccess(p).getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT));
 
         private final ResonatorUpgradeCheck check;
         private final String appendixUpgrade;
@@ -336,7 +295,7 @@ public class ItemSkyResonator extends Item implements INBTModel, ISpecialInterac
         }
 
         public boolean obtainable() {
-            return this != STRUCTURE_CHECK;
+            return true;
         }
 
         public boolean hasUpgrade(ItemStack stack) {

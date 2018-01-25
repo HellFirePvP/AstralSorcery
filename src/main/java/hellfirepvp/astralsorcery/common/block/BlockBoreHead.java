@@ -100,6 +100,11 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
     }
 
     @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
+    }
+
+    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, BORE_TYPE);
     }

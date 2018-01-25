@@ -50,6 +50,12 @@ repositories {
         url "http://maven.blamejared.com/"
     }
 
+    maven {
+        //Baubles
+        name 'thiakil'
+        url 'http://maven.thiakil.com'
+    }
+
 }
 
 dependencies {
@@ -65,6 +71,8 @@ dependencies {
     def ct_version = "4.0.0.7"
 
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
+
+    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
 }
 

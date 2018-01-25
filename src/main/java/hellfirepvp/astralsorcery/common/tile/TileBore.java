@@ -558,7 +558,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     public static enum BoreType implements IStringSerializable {
 
-        LIQUID;
+        LIQUID,
+        VORTEX;
 
         @Override
         public String getName() {

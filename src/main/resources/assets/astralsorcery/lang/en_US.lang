@@ -418,6 +418,8 @@ item.itemusabledust.illumination.name=Illumination Powder
 item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
 item.itemskyresonator.name=Fosic Resonator
+item.itemsextant.name=Sextant
+item.itemenchantmentamulet.name=Resplendent prism
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
@@ -496,6 +498,7 @@ tile.blockfountain.name=Evershifting Fountain
 tile.blockbore.name=Evershifting Fountain
 tile.blockborehead.liquid.name=Neromantic Prime
 tile.blockborehead.ore.name=Petromantic Prime
+tile.blockborehead.vortex.name=Fysallidic Prime
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 

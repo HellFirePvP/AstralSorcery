@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
  * Date: 07.05.2016 / 00:20
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
-        dependencies = "required-after:forge@[14.23.1.2560,);after:crafttweaker",
+        dependencies = "required-after:forge@[14.23.1.2560,);required-after:baubles;after:crafttweaker",
         certificateFingerprint = "certificate-placeholder :^)",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {

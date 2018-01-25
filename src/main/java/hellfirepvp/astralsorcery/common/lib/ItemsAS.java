@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.crystal.ItemRockCrystalSimple;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedCelestialCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.ItemTunedRockCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.*;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
@@ -22,6 +23,7 @@ import hellfirepvp.astralsorcery.common.item.wand.ItemExchangeWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemGrappleWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemIlluminationWand;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -62,8 +64,10 @@ public class ItemsAS {
     public static ItemChargedCrystalShovel chargedCrystalShovel;
 
     public static ItemCape armorImbuedCape;
+    public static ItemEnchantmentAmulet enchantmentAmulet;
 
     public static ItemWand wand;
+    public static ItemSextant sextant;
     public static ItemColoredLens coloredLens;
     public static ItemSkyResonator skyResonator;
 
