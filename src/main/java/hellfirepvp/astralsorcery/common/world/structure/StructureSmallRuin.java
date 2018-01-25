@@ -33,7 +33,7 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
     private int heightThreshold = 0;
 
     public StructureSmallRuin() {
-        super(3, "smallRuin", () -> MultiBlockArrays.smallRuin, StructureGenBuffer.StructureType.SMALL_RUIN, false, BiomeDictionary.Type.PLAINS);
+        super(3, "smallRuin", () -> MultiBlockArrays.smallRuin, StructureGenBuffer.StructureType.SMALL_RUIN, true);
         this.idealDistance = 2048F;
     }
 
@@ -45,7 +45,6 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
-        if(!isApplicableBiome(world, pos)) return false;
         if(!canSpawnPosition(world, pos.add(-1, 0,  5))) return false;
         if(!canSpawnPosition(world, pos.add( 1, 0, -5))) return false;
         if(!canSpawnPosition(world, pos.add( 1, 0,  5))) return false;
@@ -55,24 +54,11 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     private boolean canSpawnPosition(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
-        if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isApplicableBiome(world, pos)) {
+        if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
             IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY, pos.getZ()));
-            return !at.getMaterial().isLiquid() && at.getMaterial().isSolid() && at.getMaterial().isOpaque();
+            return !at.getMaterial().isLiquid();
         }
         return false;
-    }
-
-    private boolean isApplicableBiome(World world, BlockPos pos) {
-        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
-
-        Biome b = world.getBiome(pos);
-        Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
-        if(types.isEmpty()) return false;
-        boolean applicable = false;
-        for (BiomeDictionary.Type t : types) {
-            if (cfgEntry.getTypes().contains(t)) applicable = true;
-        }
-        return applicable;
     }
 
     @Nullable
@@ -81,7 +67,7 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
         int rX = (chX * 16) + rand.nextInt(16) + 8;
         int rZ = (chZ * 16) + rand.nextInt(16) + 8;
         int rY = world.getTopSolidOrLiquidBlock(new BlockPos(rX, 0, rZ)).getY();
-        return new BlockPos(rX, rY, rZ);
+        return new BlockPos(rX, rY - 1, rZ);
     }
 
     @Override
