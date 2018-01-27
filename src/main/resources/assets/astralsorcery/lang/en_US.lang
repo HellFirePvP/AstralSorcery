@@ -44,6 +44,13 @@ misc.chaos.resistance.max=Chaos Immunity
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
 
+amulet.enchantment.level.one=level
+amulet.enchantment.level.more=levels
+
+amulet.enchantment.add_to_specific.name=+%s %s to %s
+amulet.enchantment.add_to_existing_specific.name=+%s %s to existing %s
+amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
+
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
 enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools that have this enchantment on them will cause the drop to be the item that would be the result of smelting the original drop. ("Auto-Smelt")
 

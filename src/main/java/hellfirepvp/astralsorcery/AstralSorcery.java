@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
@@ -65,12 +66,14 @@ public class AstralSorcery {
 
         proxy.registerConfigDataRegistries();
         Config.loadDataRegistries(event.getModConfigurationDirectory());
+        Config.loadConfigRegistries(ConfigDataAdapter.LoadPhase.PRE_INIT);
 
         proxy.preInit();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        Config.loadConfigRegistries(ConfigDataAdapter.LoadPhase.INIT);
         MinecraftForge.EVENT_BUS.register(this);
 
         proxy.init();
@@ -78,6 +81,7 @@ public class AstralSorcery {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        Config.loadConfigRegistries(ConfigDataAdapter.LoadPhase.POST_INIT);
         proxy.postInit();
     }
 

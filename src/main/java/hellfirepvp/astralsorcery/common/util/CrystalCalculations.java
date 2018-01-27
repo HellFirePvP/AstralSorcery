@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +45,13 @@ public class CrystalCalculations {
         double purity = Math.sqrt((((double) properties.getPurity()) / 100D));
         double cutting = Math.sqrt((((double) properties.getCollectiveCapability()) / 100D));
         return Math.max(1, purity * 2D + cutting * 2D);
+    }
+
+    public static float getPerfection(CrystalProperties properties) {
+        float purity = MathHelper.sqrt((((float) properties.getPurity()) / 100D));
+        float cutting = MathHelper.sqrt((((float) properties.getCollectiveCapability()) / 100D));
+        float size = MathHelper.sqrt((((float) properties.getSize()) / 900D));
+        return purity * cutting * size;
     }
 
     //Between 0-18

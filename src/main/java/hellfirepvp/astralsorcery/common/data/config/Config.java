@@ -32,6 +32,8 @@ public class Config {
     private static Configuration latestConfig;
     public static List<PktSyncConfig.SyncTuple> savedSyncTuples = new LinkedList<>();
 
+    private static File dirConfigurationRegistries;
+
     //public static boolean stopOnIllegalState = true;
     public static boolean spawnRockCrystalOres = true;
     public static boolean respectIdealDistances = true;
@@ -139,8 +141,15 @@ public class Config {
         if(!dirAS.exists()) {
             dirAS.mkdirs();
         }
+        dirConfigurationRegistries = dirAS;
+    }
+
+    public static void loadConfigRegistries(ConfigDataAdapter.LoadPhase phase) {
         for (ConfigDataAdapter<?> cfg : dataAdapters) {
-            attemptLoad(cfg, new File(dirAS, cfg.getDataFileName() + ".cfg"));
+            if(cfg.getLoadPhase() != phase) {
+                continue;
+            }
+            attemptLoad(cfg, new File(dirConfigurationRegistries, cfg.getDataFileName() + ".cfg"));
         }
     }
 

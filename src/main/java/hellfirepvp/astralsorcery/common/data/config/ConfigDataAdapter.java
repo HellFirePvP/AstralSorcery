@@ -39,6 +39,10 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
     @Nullable
     public Optional<T> appendDataSet(String str);
 
+    default public LoadPhase getLoadPhase() {
+        return LoadPhase.PRE_INIT;
+    }
+
     @Nonnull
     default public String[] serializeDataSet() {
         List<String> defaultValueStrings = new LinkedList<>();
@@ -53,6 +57,14 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
 
         @Nonnull
         public String serialize();
+
+    }
+
+    public static enum LoadPhase {
+
+        PRE_INIT,
+        INIT,
+        POST_INIT
 
     }
 

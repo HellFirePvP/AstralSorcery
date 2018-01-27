@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
@@ -116,6 +117,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDataRegistry(OreTypes.AEVITAS_ORE_PERK);
         Config.addDataRegistry(OreTypes.TREASURE_SHRINE_GEN);
         Config.addDataRegistry(FluidRarityRegistry.INSTANCE);
+        Config.addDataRegistry(AmuletEnchantmentRegistry.INSTANCE);
     }
 
     public void preInit() {
