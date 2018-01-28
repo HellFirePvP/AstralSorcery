@@ -30,8 +30,8 @@ public class AmuletEnchantHelper {
 
     private static final Random rand = new Random();
 
-    private static final float chance2nd = 0.7F;
-    private static final float chance3rd = 0.2F;
+    private static final float chance2nd = 0.9F;
+    private static final float chance3rd = 0.3F;
 
     private static final float chance2Level = 0.08F;
 

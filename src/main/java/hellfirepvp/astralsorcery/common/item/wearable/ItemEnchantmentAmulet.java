@@ -66,12 +66,6 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
         if(isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
 
-            //setAmuletEnchantments(stack, Lists.newArrayList(
-            //        new AmuletEnchantment(AmuletEnchantment.Type.ADD_TO_SPECIFIC, Enchantments.FORTUNE, rand.nextInt(2) + 1),
-            //        new AmuletEnchantment(AmuletEnchantment.Type.ADD_TO_EXISTING_SPECIFIC, Enchantments.EFFICIENCY, rand.nextInt(2) + 1),
-            //        new AmuletEnchantment(AmuletEnchantment.Type.ADD_TO_EXISTING_ALL,rand.nextInt(2) + 1)
-            //));
-
             items.add(stack);
         }
     }
@@ -181,12 +175,13 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
 
     @Override
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-        player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 1.9f);
+        player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
     }
 
     @Override
     public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-        player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 2f);
+        player.playSound(SoundEvents.BLOCK_GLASS_PLACE, .65F, 6.4f);
+        //player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, .75F, 5f);
     }
 
     @Override
