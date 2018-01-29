@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -36,7 +37,7 @@ import java.util.Map;
  * Created by HellFirePvP
  * Date: 12.12.2016 / 13:07
  */
-public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, PktUnlockPerk> {
+public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, PktUnlockPerk>, ClientReplyPacket {
 
     private ConstellationPerks perk;
     private IMajorConstellation owningConstellation;

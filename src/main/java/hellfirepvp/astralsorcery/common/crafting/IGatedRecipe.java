@@ -37,7 +37,7 @@ public interface IGatedRecipe {
         ResearchProgression getRequiredProgression();
 
         default public boolean hasProgressionServer(EntityPlayer player) {
-            PlayerProgress progress = ResearchManager.getProgress(player);
+            PlayerProgress progress = ResearchManager.getProgress(player, Side.SERVER);
             return progress != null && progress.getResearchProgression().contains(getRequiredProgression());
         }
 

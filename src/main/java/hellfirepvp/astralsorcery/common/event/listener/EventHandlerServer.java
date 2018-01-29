@@ -153,7 +153,7 @@ public class EventHandlerServer {
             DamageSource source = event.getSource();
             if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityPlayer) {
                 EntityPlayer p = (EntityPlayer) source.getImmediateSource();
-                PlayerProgress prog = ResearchManager.getProgress(p);
+                PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
                 if (prog != null) {
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                     for (ConstellationPerk perk : perks.keySet()) {
@@ -256,8 +256,10 @@ public class EventHandlerServer {
                 pl.inventory.addItemStackToInventory(new ItemStack(ItemsAS.journal));
             }
         }
-        ResearchManager.loadPlayerKnowledge(event.player);
-        ResearchManager.savePlayerKnowledge(event.player);
+        if(event.player instanceof EntityPlayerMP) {
+            ResearchManager.loadPlayerKnowledge((EntityPlayerMP) event.player);
+            ResearchManager.savePlayerKnowledge((EntityPlayerMP) event.player);
+        }
     }
 
     @SubscribeEvent

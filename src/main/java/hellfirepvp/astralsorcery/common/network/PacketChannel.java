@@ -9,13 +9,17 @@
 package hellfirepvp.astralsorcery.common.network;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientProxy;
+import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.network.packet.client.*;
 import hellfirepvp.astralsorcery.common.network.packet.server.*;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -26,7 +30,21 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class PacketChannel {
 
-    public static final SimpleNetworkWrapper CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(AstralSorcery.NAME);
+    public static final SimpleNetworkWrapper CHANNEL = new SimpleNetworkWrapper(AstralSorcery.NAME) {
+
+        @Override
+        public void sendToServer(IMessage message) {
+            if(message instanceof ClientReplyPacket && !PacketChannel.canBeSent(message)) {
+                return;
+            }
+            super.sendToServer(message);
+        }
+    };
+
+    @SideOnly(Side.CLIENT)
+    private static boolean canBeSent(IMessage message) {
+        return ClientProxy.connected;
+    }
 
     public static void init() {
         int id = 0;
@@ -58,6 +76,7 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktShootEntity.class, PktShootEntity.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktLiquidInteractionBurst.class, PktLiquidInteractionBurst.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktPlayLiquidSpring.class, PktPlayLiquidSpring.class, id++, Side.CLIENT);
+        CHANNEL.registerMessage(PktFinalizeLogin.class, PktFinalizeLogin.class, id++, Side.CLIENT);
 
         //(client -> server)
         CHANNEL.registerMessage(PktDiscoverConstellation.class, PktDiscoverConstellation.class, id++, Side.SERVER);

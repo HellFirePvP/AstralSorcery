@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpda
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -76,18 +77,23 @@ public class ResearchManager {
     public static PlayerProgress getProgress(EntityPlayer player, Side side) {
         if(side == Side.CLIENT) {
             return clientProgress;
+        } else if(player instanceof EntityPlayerMP) {
+            return getProgress((EntityPlayerMP) player);
         } else {
-            return getProgress(player);
+            return null;
         }
     }
 
     @Nonnull
-    public static PlayerProgress getProgress(EntityPlayer player) {
+    public static PlayerProgress getProgress(EntityPlayerMP player) {
+        if(MiscUtils.isPlayerFakeMP(player)) {
+            return new PlayerProgressTestAccess();
+        }
         return getProgress(player.getUniqueID());
     }
 
     @Nonnull
-    public static PlayerProgress getProgress(UUID uuid) {
+    private static PlayerProgress getProgress(UUID uuid) {
         PlayerProgress progress = playerProgressServer.get(uuid);
         if (progress == null) {
             loadPlayerKnowledge(uuid);
@@ -101,21 +107,21 @@ public class ResearchManager {
         return progress;
     }
 
-    public static void wipeKnowledge(EntityPlayer p) {
+    public static void wipeKnowledge(EntityPlayerMP p) {
         wipeFile(p);
         playerProgressServer.remove(p.getUniqueID());
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
+        PacketChannel.CHANNEL.sendTo(pkt, p);
         PktSyncKnowledge pk = new PktSyncKnowledge(PktSyncKnowledge.STATE_WIPE);
-        PacketChannel.CHANNEL.sendTo(pk, (net.minecraft.entity.player.EntityPlayerMP) p);
+        PacketChannel.CHANNEL.sendTo(pk, p);
         loadPlayerKnowledge(p);
         pushProgressToClientUnsafe(p);
     }
 
-    public static void sendInitClientKnowledge(EntityPlayer p) {
+    public static void sendInitClientKnowledge(EntityPlayerMP p) {
         UUID uuid = p.getUniqueID();
         if (playerProgressServer.get(uuid) == null) {
-            loadPlayerKnowledge(uuid);
+            loadPlayerKnowledge(p);
         }
         if (playerProgressServer.get(uuid) == null) {
             AstralSorcery.log.warn("[AstralSorcery] Failed to load AstralSocery Progress data for " + p.getName());
@@ -125,8 +131,8 @@ public class ResearchManager {
         pushProgressToClientUnsafe(p);
     }
 
-    public static void unsafeForceGiveResearch(EntityPlayer player, ResearchProgression prog) {
-        PlayerProgress progress = getProgress(player);
+    public static void unsafeForceGiveResearch(EntityPlayerMP player, ResearchProgression prog) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return;
 
         ProgressionTier reqTier = prog.getRequiredProgress();
@@ -145,14 +151,14 @@ public class ResearchManager {
         }
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
-        PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
+        PacketChannel.CHANNEL.sendTo(pkt, player);
 
         pushProgressToClientUnsafe(player);
         savePlayerKnowledge(player);
     }
 
     public static void giveResearchIgnoreFail(EntityPlayer player, ResearchProgression prog) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return;
 
         ProgressionTier tier = prog.getRequiredProgress();
@@ -166,12 +172,12 @@ public class ResearchManager {
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
     }
 
     public static void giveProgressionIgnoreFail(EntityPlayer player, ProgressionTier tier) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return;
 
         ProgressionTier t = progress.getTierReached();
@@ -183,23 +189,23 @@ public class ResearchManager {
         PktProgressionUpdate pkt = new PktProgressionUpdate(next);
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
     }
 
     public static boolean mergeApplyPlayerprogress(PlayerProgress toMergeFrom, EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.acceptMergeFrom(toMergeFrom);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         for (IConstellation c : csts) {
@@ -209,13 +215,13 @@ public class ResearchManager {
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean discoverConstellation(IConstellation c, EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.discoverConstellation(c.getUnlocalizedName());
@@ -223,48 +229,48 @@ public class ResearchManager {
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvDiscoverConstellation);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean memorizeConstellation(IConstellation c, EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.memorizeConstellation(c.getUnlocalizedName());
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean maximizeTier(EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
         progress.setTierReached(ProgressionTier.values()[ProgressionTier.values().length - 1]);
 
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean setAttunedBefore(EntityPlayer player, boolean wasAttunedBefore) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.setAttunedBefore(wasAttunedBefore);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean setAttunedConstellation(EntityPlayer player, @Nullable IMajorConstellation constellation) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.clearPerks();
@@ -274,13 +280,13 @@ public class ResearchManager {
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvPlayerAttunement);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
         if(!progress.hasFreeAlignmentLevel()) return false;
         if(progress.hasPerkUnlocked(perk)) return false;
@@ -289,48 +295,48 @@ public class ResearchManager {
         if(free == -1) return false;
         progress.addPerk(perk.getSingleInstance(), free);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean resetPerks(EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.clearPerks();
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean forceCharge(EntityPlayer player, int charge) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.forceCharge(charge);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static boolean modifyAlignmentCharge(EntityPlayer player, double charge) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
         progress.modifyCharge(charge);
 
         //AstralSorcery.log.info("NewCharge: " + player.getName() + " - " + progress.getAlignmentCharge());
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
     public static void forceMaximizeAll(EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return;
         ProgressionTier before = progress.getTierReached();
 
@@ -344,12 +350,12 @@ public class ResearchManager {
             PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
         }
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
     }
 
     public static boolean forceMaximizeResearch(EntityPlayer player) {
-        PlayerProgress progress = getProgress(player);
+        PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
         for (ResearchProgression progression : ResearchProgression.values()) {
             progress.forceGainResearch(progression);
@@ -358,27 +364,29 @@ public class ResearchManager {
         PktProgressionUpdate pkt = new PktProgressionUpdate();
         PacketChannel.CHANNEL.sendTo(pkt, (EntityPlayerMP) player);
 
-        pushProgressToClientUnsafe(player);
-        savePlayerKnowledge(player);
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
-    private static void pushProgressToClientUnsafe(EntityPlayer p) {
+    private static void pushProgressToClientUnsafe(EntityPlayerMP p) {
         PlayerProgress progress = playerProgressServer.get(p.getUniqueID());
         PktSyncKnowledge pkt = new PktSyncKnowledge(PktSyncKnowledge.STATE_ADD);
         pkt.load(progress);
-        PacketChannel.CHANNEL.sendTo(pkt, (net.minecraft.entity.player.EntityPlayerMP) p);
+        PacketChannel.CHANNEL.sendTo(pkt, p);
     }
 
-    private static void wipeFile(EntityPlayer player) {
+    private static void wipeFile(EntityPlayerMP player) {
         getPlayerFile(player).delete();
     }
 
-    public static void savePlayerKnowledge(EntityPlayer p) {
-        savePlayerKnowledge(p.getUniqueID());
+    public static void savePlayerKnowledge(EntityPlayerMP p) {
+        if(!MiscUtils.isPlayerFakeMP(p)) {
+            savePlayerKnowledge(p.getUniqueID());
+        }
     }
 
-    public static void savePlayerKnowledge(UUID pUUID) {
+    private static void savePlayerKnowledge(UUID pUUID) {
         if (playerProgressServer.get(pUUID) == null) return;
         File playerFile = getPlayerFile(pUUID);
         try {
@@ -394,11 +402,13 @@ public class ResearchManager {
         } catch (IOException e) {}
     }
 
-    public static void loadPlayerKnowledge(EntityPlayer p) {
-        loadPlayerKnowledge(p.getUniqueID());
+    public static void loadPlayerKnowledge(EntityPlayerMP p) {
+        if(!MiscUtils.isPlayerFakeMP(p)) {
+            loadPlayerKnowledge(p.getUniqueID());
+        }
     }
 
-    public static void loadPlayerKnowledge(UUID pUUID) {
+    private static void loadPlayerKnowledge(UUID pUUID) {
         File playerFile = getPlayerFile(pUUID);
         try {
             load_unsafe(pUUID, playerFile);

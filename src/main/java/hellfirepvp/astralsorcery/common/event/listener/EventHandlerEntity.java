@@ -116,7 +116,7 @@ public class EventHandlerEntity {
 
         if (attacker instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) attacker;
-            PlayerProgress prog = ResearchManager.getProgress(p);
+            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
             if (prog != null) {
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks.keySet()) {
@@ -222,7 +222,7 @@ public class EventHandlerEntity {
                 event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
             }
 
-            PlayerProgress prog = ResearchManager.getProgress(p);
+            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
             if (prog != null) {
                 float dmg = event.getAmount();
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
@@ -239,7 +239,7 @@ public class EventHandlerEntity {
         if (entity != null) {
             if(entity instanceof EntityPlayer) {
                 EntityPlayer hurt = (EntityPlayer) entity;
-                PlayerProgress prog = ResearchManager.getProgress(hurt);
+                PlayerProgress prog = ResearchManager.getProgress(hurt, Side.SERVER);
                 if (prog != null) {
                     float dmg = event.getAmount();
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();

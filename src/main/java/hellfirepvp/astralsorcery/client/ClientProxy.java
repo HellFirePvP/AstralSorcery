@@ -89,7 +89,10 @@ import java.util.List;
  */
 public class ClientProxy extends CommonProxy {
 
+    //Marks if the client is connected and received all server data from AS' serverside
+    public static boolean connected = false;
     private final ClientScheduler scheduler = new ClientScheduler();
+
     @Override
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(this);

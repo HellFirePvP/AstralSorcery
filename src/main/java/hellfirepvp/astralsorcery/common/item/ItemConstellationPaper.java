@@ -133,7 +133,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
         IConstellation cst = getConstellation(stack);
 
         if(cst == null) {
-            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
             if (progress != null) {
                 List<IConstellation> constellations = new ArrayList<>();
                 for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
@@ -165,7 +165,7 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
         cst = getConstellation(stack);
         if(cst != null) {
-            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn, Side.SERVER);
             if(progress != null) {
                 boolean has = false;
                 for (String strConstellation : progress.getSeenConstellations()) {
