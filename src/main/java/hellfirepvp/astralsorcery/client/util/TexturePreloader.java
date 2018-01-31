@@ -100,6 +100,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare1")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "vortex1")              .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_cheatdeath")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_bleed")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "moon_full")              .allocateGlId();
