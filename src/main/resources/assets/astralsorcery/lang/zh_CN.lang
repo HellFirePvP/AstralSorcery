@@ -44,6 +44,13 @@ misc.chaos.resistance.max=混沌免疫
 effect.as.cheatdeath=凤凰之火
 effect.as.bleed=撕裂
 
+amulet.enchantment.level.one=级别
+amulet.enchantment.level.more=等级
+
+amulet.enchantment.add_to_specific.name=+%s %s 到 %s
+amulet.enchantment.add_to_existing_specific.name=+%s %s 对现有 %s
+amulet.enchantment.add_to_existing_all.name=+%s %s 对现有的所有附魔
+
 enchantment.astralsorcery.enchantment.as.nightvision.desc=赋予佩戴者夜视效果。
 enchantment.astralsorcery.enchantment.as.smelting.desc=使用具有此附魔的工具开采的方块将获得熔炼后的掉落物。("自动冶炼")
 
@@ -229,34 +236,34 @@ astralsorcery.journal.ALTAR3.1.text=正如你所怀疑的那样，星尘有着�
 astralsorcery.journal.ALTAR3.4.text=唯一想到的用途是强化星辉祭坛的星辉收集能力。就和以前一样，将它与海蓝宝石，大理石以及水晶石混合来增加额外的星能存储。<NL>不幸的是，目前的大理石结构对星能的利用不高，不适合天辉祭坛。一个完全暴露在太空下的更大的大理石结构，应该能够满足星能需求。
 
 research.LENS.name=水晶透镜
-astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。光源的位置可能不太合适，又或者距离目的地太远。<NL>突然灵光一现，用透镜改变光源的方向并聚集足够的星能以便随时使用。
-astralsorcery.journal.LENS.3.text=不断改变光线的方向会对其造成损害。而且光线的传播距离有限。<NL>另外，这个能改变星辉方向的透镜的主要部分是由水晶石制成的，它的属性影响着透镜的优劣。纯度太低的水晶石会大大的影响透镜的功效。水晶石越大，制作的透镜越多。
-astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜能接受多个光源但只有一个输出点。无论什么方向的星辉，透镜都能将其折射到正确的位置。为了正确的发射星辉，照射路径不得阻挡。
+astralsorcery.journal.LENS.1.text=星辉源到目标的路径十分曲折。星源的位置可能不太合适，又或者距离目的地太远。<NL>突然灵光一现，用透镜改变光源的方向并聚集足够的星能以便随时使用。
+astralsorcery.journal.LENS.3.text=不断改变光线的方向会对星能造成损耗。距离越远星能越弱。<NL>另外，这个能改变星辉方向的透镜的主体是由水晶石制成的，它的属性影响着透镜的优劣。纯度太低的水晶石制作的透镜会大大的降低星能的穿透性。水晶石的体积越大，能制作的透镜越多。
+astralsorcery.journal.LENS.4.text=受到物理规则的限制，透镜虽然能接受多个方向的星能输入但只能有一个输出方向。无论什么方向的星辉，透镜都能将其折射到正确的位置。为了正确的传输星能，照射路径上不得有方块阻挡。
 
 research.STARLIGHT_NETWORK.name=聚焦星辉
-astralsorcery.journal.STARLIGHT_NETWORK.1.text=闪烁着蓝光的铁矿看起来十分养眼，但这些星能束比它更有用。<NL>具体来说，正因为这些星能束是由星辉凝聚而成的，许多新发明，仪式，祭坛以及更多需要星能的设备在接受到这些星光束时将受到增益。这样的结构所收集的星能比设备自身吸收的更稳定，更多。
+astralsorcery.journal.STARLIGHT_NETWORK.1.text=闪耀着蓝光的铁矿看起来十分漂亮，但这些星能束想必比它有更多的作用。<NL>具体来说，正因为这些光束是由星能凝聚而成的，许多新发明，仪式，祭坛以及其他需要星能的设备在接受到这些星光束时将受到增益。这样的结构所收集的星能远比设备自身吸收的更稳定，更多。
 
 research.LENSES_EFFECTS.name=彩色透镜
-astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能对周围的一切造成广泛的影响。正常情况下，星辉间保持着平衡状态，其光线也是近乎中性的。<NL>你想将星辉中的其他光谱过滤掉，只留下需要的那部分。
-astralsorcery.journal.LENSES_EFFECTS.2.text=将海蓝宝石和其他材料的混合物涂抹在水晶透镜上，最终你做出了能发射彩色光束的透镜。<NL>世界万物皆是平衡的，你获得了星辉的特殊能力的同时，所能使用的星能自然就减少了。
+astralsorcery.journal.LENSES_EFFECTS.1.text=星辉继承了星座的力量并能对周围的一切造成广泛的潜在影响。正常情况下，星辉间保持着平衡状态，其光线也是近乎中性的。<NL>将星辉中的其他光谱过滤掉，只留下需要的那部分，应该能产生更大的效用。
+astralsorcery.journal.LENSES_EFFECTS.2.text=用海蓝宝石和其他材料做成的特殊玻璃透镜，嵌入水晶透镜内，就能发射彩色光束。<NL>世界万物皆是平衡的，你获得了星辉的特殊部分的同时，透镜所能传输的星能自然就减少了。
 
 research.RITUAL_LINK.name=稳定效应
-astralsorcery.journal.RITUAL_LINK.1.text=将星辉聚焦到效应放大器上可以让水晶与世界的联系更加紧密。不幸的是，需要一个较大的空间来保证水晶的完整性。为此，你可以用效应链接通道将放大效应重定位，效应链接通道在效应放大器上方5格高处，可以连接到附近的基石上来确定范围。
+astralsorcery.journal.RITUAL_LINK.1.text=将星辉聚集在效应放大器上可以让水晶石的力量覆盖到世界上。不幸的是，需要一个较大的空间来确保水晶石的完整性。为此，你可以用效应链接通道将放大效应重定位，效应链接通道在效应放大器上方5格高处，可以连接到附近的基座上来确定范围。
 
 research.LINKTOOL.name=链接器
-astralsorcery.journal.LINKTOOL.1.text=回想起海蓝宝石对星能液的牵引作用，将多个宝石和水晶融合可以增强它牵引星辉的能力以便于更好的掌控星能。<NL>如果你的星能不足，水晶石的融合将失败。不过，你新升级的祭坛能解决这个问题。
-astralsorcery.journal.LINKTOOL.3.text=然而直接用手抓着水晶会使其受到污染，还会减低星辉操纵力，因此链接器最好做出魔杖的样子。<NL>这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。
-astralsorcery.journal.LINKTOOL.4.text=要选择星辉源，只需右键单击源头，比如神殿里的浮动水晶。要选定目标，只要右键单击目标的位置。要断开连接，在潜行时右键单击目标位置即会中断链接。要取消选择星辉源并停止连接过程，只要切换物品栏即可。<NL>若将水晶链接到多个目标将均匀地进行输出。
+astralsorcery.journal.LINKTOOL.1.text=回想起海蓝宝石对星能液的牵引作用，将多个海蓝宝石和水晶融合应该能增强它牵引星能的能力以便于更好的掌控星能。<NL>如果星能不足，水晶石的融合将失败。不过，新型的祭坛应该能解决这个问题。
+astralsorcery.journal.LINKTOOL.3.text=然而直接用手抓着水晶会使其受到污染，还会减低星能的操纵力，因此链接器最好做成类似法杖那样。<NL>这种由海蓝宝石融合成的水晶之杖可以随心所意地持续改变周围星能的流向。
+astralsorcery.journal.LINKTOOL.4.text=要选择星能源，只需先右键单击源头，比如神殿里的浮动水晶。要选定目标，只要右键单击目标的位置。要断开链接，在潜行时右键单击目标位置即会中断链接。要取消选择星辉源并停止连接过程，只要切换物品栏即可。<NL>若将水晶链接到多个目标，星能将均匀地进行输出。
 
 research.ILLUMINATION_WAND.name=照明之杖
-astralsorcery.journal.ILLUMINATION_WAND.1.text=在不断试图强化星能时，你发现可以用体内的星能来点亮周围的世界。<NL>通过聚集环境中游离的星能，并将其注入方块或在空气中凝聚，可以强化方块以抵御几乎任何类型的伤害。
-astralsorcery.journal.ILLUMINATION_WAND.3.text=当能量足够时，按住shift右键一个方块会将其变为荧光状态或正常状态。右键会生成一个与荧光粉类似的小耀斑。<NL>可以用染料合成会改变法杖及耀斑的颜色。
+astralsorcery.journal.ILLUMINATION_WAND.1.text=在不断试图强化与星座之间的联系以获得更多的星能时，显而易见的你可以用体内的星能来点亮周围的世界。<NL>通过聚集环境中游离的星能，并将其注入方块或在空气中凝聚，可以强化方块以抵御几乎任何类型的伤害。
+astralsorcery.journal.ILLUMINATION_WAND.3.text=当充能完成时，按住shift右键一个方块会将其变为发光状态或恢复为正常状态。右键则会生成一个与荧光粉类似的小耀斑。<NL>可以用染料合成会改变法杖及耀斑的颜色。
 
 research.SHIFT_STAR.name=更替之星
-astralsorcery.journal.SHIFT_STAR.1.text=虽然与一个星座进行共鸣能获得强大的力量。但也有其局限性，无法再获得其他星座的力量。<NL>很快，你找到了解决方法，释放你所有的星能到周围，以断开共鸣的那个星座。<NL>不幸的是，在能量都消耗完时，更替之星也破碎了。
+astralsorcery.journal.SHIFT_STAR.1.text=虽然与一个星座进行共鸣能获得强大的力量。但也有其局限性，无法再获得其他星座的力量。<NL>很快，你找到了解决方法，释放你所有的星能到周围的环境，以切断与星座间的联系。<NL>不幸的是，在能量都消耗完时，更替之星也会破碎。
 
 research.STARMETAL_ORE.name=铁矿转化
-astralsorcery.journal.STARMETAL_ORE.1.text=这些光束除了好看之外肯定还有其他的用途，或许能在一定程度上改变世界。何不用链接器把光聚集在一个普通的铁矿石上呢？所有能聚集星辉束的光源都行，也可以用神殿里的浮动水晶。在星空下或许能提高效率。<NL>在星辉照耀下铁矿石闪烁着微蓝色的光。也许某些事物随时间而改变？
+astralsorcery.journal.STARMETAL_ORE.1.text=这些光束除了好看之外肯定还有其他的用途，或许能在一定程度上改变世界。何不用链接器把光束聚集在一个普通的铁矿石上呢？所有能聚集星辉束的光源都行，也可以用神殿里的浮动水晶。在星空下或许能提高效率。<NL>在星辉的照耀下铁矿石闪烁着微蓝色的光。也许某些事物会随时间而改变？
 
 research.TRANSMUTATION_ORES.name=方块转化
 astralsorcery.journal.TRANSMUTATION_ORES.1.text=也许铁矿石不是唯一受星辉影响的方块？其他方块应该也能转化....
@@ -269,53 +276,53 @@ research.PRISM.name=水晶棱镜
 astralsorcery.journal.PRISM.1.text=虽然水晶透镜很好用，但无法将星辉束分散到多个方位。<NL>经过一些测试后，将水晶石打磨成棱镜作为星辉散射中心均匀的分布星辉束。除了散射星辉束外，它也能像水晶透镜那样工作。
 
 research.COLL_CRYSTAL.name=增幅水晶
-astralsorcery.journal.COLL_CRYSTAL.1.text=你对共鸣水晶的属性及使用方式越来越熟练了，或许可以仿制出神殿里发现的那些东西。普通的水晶石还是太小，不足以充当做浮动水晶来传输星能。<NL>将水晶石进行强化就可以得到与浮动水晶十分相似的增幅水晶，以后应该有更好的办法来进一步强化。
+astralsorcery.journal.COLL_CRYSTAL.1.text=在对共鸣水晶的性质深入了解后，或许可以仿制出在神殿里所发现的那些东西。单个水晶石还是不足以传输像浮动水晶那样大的星能量。<NL>将共鸣水晶石进行强化就应该能得到与浮动水晶十分相似的增幅水晶，未来想必有更好的办法来进一步的强化。
 
 research.CEL_CRYSTAL_GROW.name=天体水晶簇
-astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=星尘看起来是一种非常好的混合材料。如同闪烁着海滩边的沙子，它也不断的闪着绚烂的光。<NL>据说，当一些星尘粘在了水晶石上时。它们会立即融合，无法擦除，就像个薄涂层。
-astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=也许你想把星尘和水晶石融合而不是去掉涂层。利用星能液的特性让它们融合也是一种可行的方法。<NL>经过一段时间，它们耗光了星能液并形成了蓝色的小晶体簇。<NL>它们似乎还在生长。也行应该将它们闲置一段时间，直到它们长好。将星辉聚焦在它身上应该对你有所帮助。
+astralsorcery.journal.CEL_CRYSTAL_GROW.1.text=星尘看起来是一种非常好的混合材料。它也不断的闪着绚烂的光，如同海滩边的潮流一般流动。<NL>在一次意外中，一些星尘粘在了水晶石上。它们会立即融合，无法擦除，就像个薄涂层。
+astralsorcery.journal.CEL_CRYSTAL_GROW.2.text=也许不该去掉涂层而是让它以某种方式融入水晶石？利用星能液的特性让它们融合也是一种可行的方法。<NL>经过一段时间，它们耗光了星能液并形成了蓝色的小晶体簇。<NL>它们似乎还在生长。也许应该将它们放置一段时间，等待它们成长。将星辉聚焦在它身上应该能加快生长进度。
 
 research.CEL_CRYSTALS.name=天体水晶
-astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色晶体后，你发现它们与水晶石有相同的属性。但比白色的同类水晶石更大更坚硬。<NL>进一步研究后，它们不仅在各个方面与水晶石相似，且效用要远高于水晶石。用这种水晶来代替水晶石是非常有利的。
+astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色晶体后，它们似乎与水晶石有相似的性质。但比白色的同类水晶石体积更大硬度更高。<NL>在进一步研究后，发现它们不仅在各个方面与水晶石相似，但效用要远高于水晶石。用这种水晶来代替那些小型水晶石是非常有利的。
 
 research.PED_ACCEL.name=效应增强
-astralsorcery.journal.PED_ACCEL.1.text=效应放大器的设定是完全正确的，但它的效率还是很低，或许它需要在星空下来吸收星座的力量减轻负担。让笨重的信标动起来。<NL>同样的是，作为一个星辉的汇聚晶体也可以用水晶透镜来提供星能。
-astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的压力，如同在聚星缸那样。幸运的是，得益于效应放大器的优良设计，水晶石所承受的压力会分散到四周。<NL>其中一些星辉将显现出奇怪的图案，你确信水晶透镜能增强效应放大器的效果。你现在需要做的是保护好你的水晶防止它崩碎。
+astralsorcery.journal.PED_ACCEL.1.text=效应放大器的设定是完全正确的，但它的效率还是很低，或许它需要在星空下来吸收星座的力量减轻负担。否则，光靠自身的力量会显得过于笨重。<NL>如果它只是需要大量的星能来运作的话，那应该也能用之前设计的水晶透镜提供它所需要的星能。
+astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的挤压力，如同在聚星缸那样。幸运的是，得益于效应放大器的优良设计，水晶石所承受的压力将会分散到四周发散的光线中。<NL>其中一些星辉将显现出奇怪的图案，将水晶透镜放置在光线反射的地方并链接到效应放大器上能产生更强的效果。不过要小心，别因此而使最珍贵的水晶石崩碎。
 
 research.CELESTIAL_GATEWAY.name=天体星门
-astralsorcery.journal.CELESTIAL_GATEWAY.1.text=那些由无尽的星星而形成的错综复杂的星座将引导着世间的一切。他们永恒不灭，只要你能在夜空发现星星，你就能根据星座所描绘的星空而确认自己的方位。似乎很久以前这些水晶是参照星空而制作的，这恐怕无法用语言来描述。<NL>通过在水晶石外面涂抹上辉光粉并注入星能，可以形成一个远距离连接的基座，甚至还有突破位面屏障的力量。
-astralsorcery.journal.CELESTIAL_GATEWAY.3.text=在搭建完适合星门的结构并进入其中时，世间的天体星门将与其产生共鸣并变的异常显眼。<NL>当你专注于你的目标方向上的一点时，星辉将充斥你的视野，并将你带到目的地。当星门首次建立连接时，会将附近的地形记录下来以便以后使用。
+astralsorcery.journal.CELESTIAL_GATEWAY.1.text=那些由无尽的星星而形成的错综复杂的星座引导着世间的一切。他们永恒不灭，世人以其为方位参照，从而确认自身所在的方位。似乎很久以前星空就成为了这些水晶创造者的指引，但更多是字面意义上的。<NL>通过在水晶石外面涂抹上辉光粉并注入星能，可以让其拥有远距离传送的能力，甚至还有突破位面屏障的力量。
+astralsorcery.journal.CELESTIAL_GATEWAY.3.text=在搭建完适合星门的结构并进入其中时，世间的天体星门将与其产生共鸣并变的异常显眼。<NL>当你专注于你的目标方向上的一点并蹲着时，星辉将充斥你的视野，并将你带到目的地。当星门首次建立连接时，会将附近的地形记录下来用于分辨。
 
 research.ENHANCED_COLLECTOR.name=强力增幅水晶
-astralsorcery.journal.ENHANCED_COLLECTOR.1.text=用水晶石和星尘制作的强力水晶收集装置比大部分水晶收集装置更强大更稳定。不过，随着夜晚的过去，能使用的星能大大减少。或许可以构建一个环绕着星能液的平台来不断的调整水晶的共振频率，以进一步平衡和稳定这种新型水晶聚集星能的力量。这使得星能不再受时间影响而增减，反而还更加强大。
+astralsorcery.journal.ENHANCED_COLLECTOR.1.text=用水晶石和星尘制作的强力天体水晶比大部分天体水晶能提供更强大更稳定的星能。尽管如此，星能仍将随着夜晚的过去而减少。或许可以构建一个环绕着星能液的平台来不断的调整水晶的共振频率，以进一步平衡和稳定这种新型水晶聚集星能的力量。这减少了白天下降的星能，反而还略有增强。
 
 research.SPECTRAL_LENS.name=汇聚透镜
-astralsorcery.journal.SPECTRAL_LENS.1.text=星能的传输深受增幅仪式，透镜和星能源的特殊效果影响。在天空下可以更轻松自如的进行星能的传输，但在幽暗的地下室或密闭空间进行的想法是不切实际的。通过将星尘注入到辉光粉中并用共振宝石进行调和，最终可以使星辉进行透射，当然这是以降低星能为代价的。
+astralsorcery.journal.SPECTRAL_LENS.1.text=星能的传输对增幅仪式，透镜和星能源的特殊效果至关重要。在开阔的天空下可以更轻松自如的进行星能的传输，但在幽暗的地下室或密闭空间进行的想法是不切实际的。通过将星尘注入到辉光粉中并用共振宝石进行调和，最终可以使星辉进行透射，当然这是以降低星能为代价的。
 
 research.DRAWING_TABLE.name=恒星映射台
-astralsorcery.journal.DRAWING_TABLE.1.text=对星座的组成特性的深入研究让你产生了新的想法。你创建了一个能够映射所有已知星座能量的台子，将星辉聚集在工作区中央，这产生的能量将远超所有已知的能量的强度。
-astralsorcery.journal.DRAWING_TABLE.2.text=在重叠的星辉产生严重的光污染前，这个台子能同时处理多达3个不同的星座。另外，这个台子必须要深夜才能工作，记得消除天空上多余的其他光的干扰源。<NL>星座的放置顺序似乎影响它们在最终图形的主导地位。在映射完成时，星座之间的重叠点会变的更加强大。
-astralsorcery.journal.DRAWING_TABLE.4.text=利用海蓝宝石吸收星辉的能力而专门制作的羊皮纸可以将星座映射到台子上。<NL>这需要一个专门容纳星座的特殊力量的玻璃。基于彩色透镜变化的性质，并进一步加入星尘与共振宝石，就做出了既坚固又灵敏的星辉聚能玻璃。
-astralsorcery.journal.DRAWING_TABLE.6.text=将羊皮纸和注能玻璃放在桌子上并将星座映射在羊皮纸上，就创建了一个能够扩展的主星座。<NL>黎明与黄昏的光线将导致羊皮纸无法吸收这种原始能量而燃烧，一旦所有3个星座都映射到羊皮纸上且羊皮纸没有起火烧毁，那么这个图形将被蚀刻在玻璃上。
-astralsorcery.journal.DRAWING_TABLE.7.text=将星座的图形蚀刻在某些物品上会产生强大的魔咒力，最适合星座所给予的魔咒力的还是书、护甲和武器。
-astralsorcery.journal.DRAWING_TABLE.8.text=当然，你也可以把这些力量装在瓶子里。只要在台子上放置一个水瓶，平凡的，浓稠的，粗制的药水，星辉将会凝结出最纯净的星之酿。<NL>用这种方式来制作药水和书有可能导致玻璃毁坏，直接附魔的话必定会损坏。
+astralsorcery.journal.DRAWING_TABLE.1.text=对星座的组成特性的深入研究产生了新的思路。一个能够映射所有已知星座能量的台子，它能通过一系列的折射将星辉聚集在中央，使其拥有超过任何其他附魔的力量。
+astralsorcery.journal.DRAWING_TABLE.2.text=在重叠的星辉产生严重的光污染前，这个台子最多能同时容纳多达3个不同的星座。另外，这个台子必须要深夜才能使用，切要消除天空上多余的其他的干扰光源。<NL>星座的放置位置影响它们在最终图形的主导地位。星座之间的重叠点越少，越容易完成映射。
+astralsorcery.journal.DRAWING_TABLE.4.text=利用海蓝宝石吸收星辉的能力而专门制作的羊皮纸可以记录下映射的星座。<NL>这需要一个专门容纳星座的特殊力量的玻璃。基于彩色透镜变化的性质，并进一步加入星辉锭与共振宝石，就做出了既坚固又灵敏的星辉聚能玻璃。
+astralsorcery.journal.DRAWING_TABLE.6.text=将羊皮纸和聚能玻璃放在桌子上并开始星座映射，通过在羊皮纸上引导星座的位置，就创建了一个能够扩展的主星座。<NL>黎明与黄昏的光线将导致羊皮纸无法吸收这种原始能量而燃烧，一旦所有3个星座都映射到羊皮纸上且羊皮纸没有起火烧毁，那么这个图形将被蚀刻在玻璃上。
+astralsorcery.journal.DRAWING_TABLE.7.text=最后的步骤就是将这些星座的图案转化为更有用的东西。最适合星座所给予的魔咒力的还是书、护甲和武器，前提是与当前的星座匹配。
+astralsorcery.journal.DRAWING_TABLE.8.text=当然，你也可以把这些力量装在瓶子里。只要在台子上放置一个水瓶，平凡的，浓稠的，粗制的药水都行，星辉将会凝结出最纯净的星之酿。<NL>用这种方式来制作药水和书有可能导致玻璃毁坏，直接附魔的话必定会损坏。
 
 research.ALTAR4.name=五彩祭坛
-astralsorcery.journal.ALTAR4.1.text=虽然天辉祭坛有着明确的使用目的，但它也有着非常明显的缺点。于是，诞生了一个新想法，即聚焦特定星座的星光于祭坛可能比吸收所有种类的星光更加强大。<NL>以当前的祭坛结构是无法做到这一点的，也许可以利用熏黑大理石以及新发现的天体水晶这些强力材料做一个更合适的结构。
-astralsorcery.journal.ALTAR4.4.text=不仅新设计需要更细微的结构，合成时也需要额外添加其他材料。要做到这一点，光波增幅器必须放置在祭坛结构中的熏黑大理石上。<NL>在合成时，聚焦水晶将发射一束有色光线到附近空的光波增幅器上，其上将显示合成的物品以便于继续进行合成。
+astralsorcery.journal.ALTAR4.1.text=虽然天辉祭坛达到目前的使用要求，但它也有着非常明显的缺点。由此，诞生了一个新想法，即聚焦特定星座的星能于祭坛可能比单纯吸收所有种类的星光更加强大。<NL>以当前的祭坛结构是无法做到这一点的，也许可以利用熏黑大理石以及新发现的天体水晶这些强力材料做一个更合适的结构。
+astralsorcery.journal.ALTAR4.4.text=不仅新设计需要更精巧的结构，合成时也需要额外添加其他材料。要做到这一点，光波增幅器必须放置在祭坛结构中的熏黑大理石上。<NL>在合成时，聚焦水晶将发射一束有色光线到附近空的光波增幅器上，其上将显示用于继续进行合成需求的物品。
 
 research.CRAFTING_FOCUS_HINT.name=聚焦合成
-astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=另外，由于白天的星能减少而中断的合成将在有足够星能后继续进行合成。<NL>新祭坛在设计上有个独特而强大的能力，在祭坛上方的天体水晶所赋予它的能力，在制作过程中抽取特定星座的星辉并用于合成。
-astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=即使是共鸣祭坛也无法将星光图案的能量尽数集中与一块进行注入。要这么做必须先与一个星座进行共鸣。在祭坛的特殊槽内放入一个共振水晶，它能过滤并引导星能用于合成。<NL>这样可以实现更复杂与强劲的合成方式，某些特定星座的的本质是解锁一些强力物品的关键。
+astralsorcery.journal.CRAFTING_FOCUS_HINT.1.text=另外，那些由于白天的星能减少而中断的合成将在有足够星能后继续进行。<NL>新祭坛在设计上有个独特而强大的能力，在祭坛上方的天体水晶所赋予它的能力，在制作过程中抽取特定星座的星辉并用于合成。
+astralsorcery.journal.CRAFTING_FOCUS_HINT.2.text=即使是共鸣祭坛也无法将星光图案的能量尽数集中与一块进行注入。但要这么做必须先与一个星座进行共鸣。在祭坛的特殊槽内放入一个共振水晶，它能根据合成来过滤并引导星能。<NL>这样可以实现更复杂与强劲的合成方式，利用某些星座蕴含的特殊力量来解锁一些更强力的物品。
 
 research.ATT_CAPE.name=星斗披风
-astralsorcery.journal.ATT_CAPE.1.text=像皮革和铁这样的普通装甲的确能达到保护的目的，但它们既不美观也不实用。将共振宝石的能量属性与星尘的穿透能力注入皮革外套，就能获得一个更合适的护甲。
-astralsorcery.journal.ATT_CAPE.3.text=除了显现出的对魔咒的强大亲和力外，披风就像共鸣祭坛一样被强大的星能环绕着。如同有强大的能量传过一样，但找不到来源。<NL>可能需要一个更强力的共振方式来适当的释放披风内所蕴含的强大力量。
-astralsorcery.journal.ATT_CAPE.4.text=更有针对性的选择合成应该足以实现这一点。然而，披风一次只能用一个星座进行共鸣。在进行与原先不同的聚焦合成时旧的共鸣能力将会失效，并转变为新的共鸣能力。<NL>为了更好的了解那些能力，每个星座都附加了更详细的细节页面。
+astralsorcery.journal.ATT_CAPE.1.text=像皮革和铁这样的普通装甲的确能达到保护的目的，但它们既不美观也不实用。将共振宝石的能量属性与星尘的穿透能力注入皮革外套，就能获得一个更强大的护甲。
+astralsorcery.journal.ATT_CAPE.3.text=除了显现出的对魔咒的强大亲和力外，披风就像共鸣祭坛一样始终被强大的星能环绕着。如同被一股强大的电流穿过一样，但缺无法找到来源。<NL>可能需要一个更强力的共鸣方式来释放披风内所蕴含的强大力量。
+astralsorcery.journal.ATT_CAPE.4.text=更有针对性的选择合成应该足以实现这一点。然而，披风一次只能与一个星座进行共鸣。在进行与原先不同的共鸣合成时旧的共鸣能力将会失效，并转变为新的共鸣能力。<NL>为了更好的了解那些能力，每个星座都附加了更详细的细节页面。
 
 research.ATT_WANDS.name=调谐共鸣之杖
-astralsorcery.journal.ATT_WANDS.1.text=在星辉合成方面有了新的发现，也许可以稍微改变下这个只能用来找水晶石的小法杖，让它有更多的功能。<NL>在聚焦之光下向法杖注入各种材料能获得更加强大的力量。
-astralsorcery.journal.ATT_WANDS.2.text=这是一个十分微妙的过程，并没有一个明确的结果，结果可能是不可逆的也无法被别的注入所覆盖。
+astralsorcery.journal.ATT_WANDS.1.text=在星辉合成方面有了新的发现，也许可以稍微改变下这个只能用来找水晶石的小法杖，让它兼具更多的功能。<NL>向法杖注入各种材料能获得更加强大的效果。
+astralsorcery.journal.ATT_WANDS.2.text=这是一个十分微妙的过程，并没有一个明确的结果，结果可能是不可逆的也无法被别的注入过程所覆盖。
 
 research.ATT_WAND_ARMARA.name=Armara共鸣之杖
 astralsorcery.journal.ATT_WAND_ARMARA.1.text=弹性与保护性，这种材料组合的法杖有保护能力。手持法杖时可以当做盾牌。当屏障被攻击时，使用者将获得额外的防护能力。
@@ -330,23 +337,23 @@ research.ATT_WAND_EVORSIO.name=Evorsio共鸣之杖
 astralsorcery.journal.ATT_WAND_EVORSIO.1.text=虽然evorsio并不足以强大到毁灭整个世界，但与其进行共鸣的法杖带来了它的一部分力量。但使用者手持法杖破坏一个方块时，那个方块附近的同类方块也将在一瞬间摧毁成掉落物。
 
 research.ATT_WAND_VICIO.name=Vicio共鸣之杖
-astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然在大气中自由飞翔或伸手摘星是完全不可能实现的，但与vicio进行共鸣的法杖肯定有助于这一点。手持时按住右键，它可以像弓一样蓄力，但在释放后并不会射出一个箭头，但能让使用者自身穿过空气。
+astralsorcery.journal.ATT_WAND_VICIO.1.text=虽然翱翔云空或伸手摘星是完全不可能实现的，但与vicio进行共鸣的法杖肯定对此有帮助。手持时按住右键，它可以像弓一样蓄力，但在释放后会让使用者自身像箭一样穿过空气。
 
 research.C_CHALICE.name=遏制圣杯
-astralsorcery.journal.C_CHALICE.1.text=聚星缸功能齐全，唯一的缺点就是储量太小了。这些液体使用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方便控制大小的杯子，最多可容纳24桶液体。
+astralsorcery.journal.C_CHALICE.1.text=聚星缸功能齐全，唯一的缺点就是储量太小了。这些液体占用的空间远比它们的价值要高的多得多，在聚合时需要花大量的时间进行液体运输。<NL>为此你需要一个更强有力的方式来储存液体。某种能把其上方的液体压缩成方块大小的杯子，最多可容纳24桶液体。
 astralsorcery.journal.C_CHALICE.3.text=设计一个足够大的能储存液体并保持液体平衡而不会挥发或流失的圣杯是极为困难的。最终的设计已经能够保证流体的稳定了，建议用来储存多余的液体，这才是最安全的做法。<NL>当里面存有液体时会略显奇怪。就如同被某种能量所限制一样固定在一块，不过偶尔爆发的液体会超出掌控。
-astralsorcery.journal.C_CHALICE.4.text=这些非常规行为似乎并非杂乱无章的。如果有类似的设备在附近，且两边的液体形成块状或通过其他方式使其发生相互作用将液体包含在内，此时它们之间产生的小火花将相互排斥同时也会相互吸引，其结果与常理相同。<NL>在这种冲动下，或许能将其作为额外的液体来源。<NL>底部看起来足够坚固，可以使用机械手段传输液体。
-astralsorcery.journal.C_CHALICE.5.text=当圣杯发现附近的聚星缸时，它将降低液体的稳定性使其从聚星缸内流向圣杯。<NL>由于这种挥发性状态可能因特殊目的而难于获取，以红石信号的形式增强其微弱的能量，使其内的液体保持恒定并阻止任何正常的交互行为。
+astralsorcery.journal.C_CHALICE.4.text=这些非常规行为似乎并非杂乱无章的。如果有类似的设备在附近，且两边的液体是相同的那么它们之间会发生相互作用将液体互相传输，这是正常的现象。<NL>基于这个机制，或许能将其作为额外的液体传输方式。<NL>底部看起来足够坚固，可以使用机械手段传输液体。
+astralsorcery.journal.C_CHALICE.5.text=当圣杯发现附近的聚星缸时，它将降低液体的稳定性使其从聚星缸内流向圣杯。<NL>由于这种挥发性状态可能因特殊目的而不适合要求，以红石信号的形式增强其微弱的能量，使其内的液体保持恒定并阻止任何正常情况下可能的交互行为。
 
 research.BORE_CORE.name=万象泉
-astralsorcery.journal.BORE_CORE.1.text=星能液本身是一种相当奇怪的物质。与高浓度稳定的能量及易于管理的星辉本身相比它更不稳定且难于掌控。<NL>以可控的方式释放星能液中所蕴藏的能量并根据需要引导能量，将是大有裨益的。
-astralsorcery.journal.BORE_CORE.2.text=一种能够承受将星能液中的能量释放出来产生的压力的装置。<NL>得益于新的制作工艺，最终成功制作出了这台设备。为了确保激发态的星能液在转换时不会丢失，还需要在周围增加一个聚能环。为了安全起见，不要将任何东西放在结构范围内。
-astralsorcery.journal.BORE_CORE.4.text=由于所谓的“喷泉”是利用星能液运行的，因此不需要露天。然而由于其运作过程的精确性，它只接收喷泉方块正上方圣杯内所装的星能液。<NL>喷泉只是星辉的一种预处理方式，它所产生的能量与功能取决于喷泉与其下方所放置的基座方块。
+astralsorcery.journal.BORE_CORE.1.text=星能液本身是一种相当奇怪的物质。与高浓度稳定的能量及易于控制的星辉本身相比它更不稳定且难于掌控。<NL>以可控的方式释放星能液中所蕴藏的能量并根据需要进行引导，将是大有裨益的。
+astralsorcery.journal.BORE_CORE.2.text=这是一种能够承受将星能液中的能量释放出来产生的压力的装置。<NL>得益于新的制作工艺，最终成功设计出此结构。为了确保激发态的星能液在转换时不会散发，还需要在周围增加一个聚能环。为了安全起见，不要将任何东西放在结构范围内。
+astralsorcery.journal.BORE_CORE.4.text=由于所谓的“喷泉”是利用星能液运行的，因此不需要露天。然而由于其运作过程的精确性，它只接收喷泉方块正上方圣杯内所装的星能液。<NL>喷泉只是星辉的一种预处理方式，它所产生的能量与功能取决于喷泉下方使用的基座。
 
 research.BORE_HEAD_LIQUID.name=Neromantic基座
-astralsorcery.journal.BORE_HEAD_LIQUID.1.text=其中一种使用万象泉的方法是利用当前释放的大量能量来激发基岩下永世存在的液体资源。<NL>使用Neromantic基座将导致大量的液体积聚在中央的喷泉核心中。
-astralsorcery.journal.BORE_HEAD_LIQUID.2.text=喷泉无法与其他机械设备进行互动，唯一的解决办法就是利用圣杯的剩余空间将喷泉产生的液体导出。<NL>然而这些地下的海洋并非无限的，一旦这些存储的液体用完，无限的水将取而代之。<NL>短距离内的生成结果差异巨大，光是安置喷泉结构查看其结果就颇为破费且令人厌烦。
-astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起法斯刻共振器对大面积区域的信息收集能力，稍加调整可以让其在共振器周围的某个位置抽出一个小的液体抽样。并不实用，但收集的信息足够对附近是否适合放置万象泉有一个大致的了解。<NL>共振器一共有两种模式，在夜晚的效率更高些。手持共振器通过shift右键来切换模式。
+astralsorcery.journal.BORE_HEAD_LIQUID.1.text=其中一种使用万象泉的方法是利用当前释放的大量能量来激发基岩下永世存在的大量液体资源。<NL>使用Neromantic基座将导致大量的液体积聚在中央的喷泉核心中。
+astralsorcery.journal.BORE_HEAD_LIQUID.2.text=喷泉核心无法与其他机械设备进行交互，唯一的解决办法就是利用有充足空间的圣杯将喷泉产生的液体吸出。<NL>然而这些地下的液体海洋并非无限的，一旦这些存储的液体抽完，剩下的将是无限的水。<NL>短距离内的生成结果差异巨大，光是安置喷泉结构查看其结果就颇为破费且令人厌烦。
+astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起法斯刻共振器对大面积区域的信息收集能力，稍加调整可以让其在共振器周围的某些位置抽出一个小型的液体抽样并显示出来。这种抽样并没有实际效用，但收集的信息足够对附近是否适合放置万象泉有一个大致的了解。<NL>共振器的两种模式都只能在夜晚使用。手持共振器通过shift右键来切换模式。
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -498,7 +505,7 @@ tile.blockfountain.name=万象泉
 tile.blockbore.name=万象泉
 tile.blockborehead.liquid.name=Neromantic基座
 tile.blockborehead.ore.name=Petromantic基座
-tile.blockborehead.vortex.name=Fysallidic Prime
+tile.blockborehead.vortex.name=Fysallidic基座
 tile.blockportalnode.name=
 
 tile.blockgeolosyssamplecluster.name=水晶石样本
@@ -515,27 +522,27 @@ astralsorcery.constellation.discidia.ritual=将强光中的一部分聚集在这
 astralsorcery.constellation.discidia.capeeffect=一旦注入这个星座的星能，披风就能吸收敌人对你的攻击，并赋予你的更强大的反击能力来对抗敌人。一旦被击中，穿戴者就能将自己所受到的伤害转变为对怪物的额外伤害。
 astralsorcery.constellation.armara=Armara
 astralsorcery.constellation.armara.info=Defence
-astralsorcery.constellation.armara.effect=有一种推力使你远离这个星光，就像个盾牌或者防护罩。
+astralsorcery.constellation.armara.effect=这个星辉中散发出强大的排斥力，就像个盾牌或者防护罩。
 astralsorcery.constellation.armara.enchantments=这个星座的守护性质赋予玩家的力量能够抵消伤害，或者给装备提供额外的防护。
 astralsorcery.constellation.armara.ritual=将此光线中所蕴含的排斥力引导到附近的区域内以形成一个小型力场，能够反弹所有弹射物并将怪物推到范围外。
-astralsorcery.constellation.armara.capeeffect=被注入此星座星能的披风将随时间的推移缓慢的吸收同种能量，并用其形成一个能完全保护你免收单一攻击的屏障。
+astralsorcery.constellation.armara.capeeffect=被注入此星座星能的披风将随时间的推移缓慢的吸收同种能量，并用其形成一个能完全抵御一次攻击的屏障。
 astralsorcery.constellation.vicio=Vicio
 astralsorcery.constellation.vicio.info=Travel
 astralsorcery.constellation.vicio.effect=这个星座的微弱的光芒使周围的一切都变慢了，与此同时你可以更快的完成你的工作。
 astralsorcery.constellation.vicio.enchantments=据专家所诉，饮用受Vicio所蚀刻的药水能提高速度，若是靴子受过蚀刻则可以使穿戴者减少坠落伤害。
-astralsorcery.constellation.vicio.ritual=赋予附近的玩家一定程度的敏捷与速度强化，让他们在靠近时能在空中自由移动。
+astralsorcery.constellation.vicio.ritual=赋予附近的玩家一定程度的敏捷与速度强化，让他们在范围内时能自由移动。
 astralsorcery.constellation.vicio.capeeffect=这种共振通过减轻你的体重来减小驾驭风飞行进行旅行的负担，就如同鞘翅一样。
 astralsorcery.constellation.aevitas=Aevitas
 astralsorcery.constellation.aevitas.info=Creation
 astralsorcery.constellation.aevitas.effect=在这个星座的光芒的照耀下，附近的花和植物都欣欣向荣。
 astralsorcery.constellation.aevitas.enchantments=当药水经受星座的活力蚀刻后，将拥有再生之力，而工具在受到Aevitas的附属后能够进行自我修复。
-astralsorcery.constellation.aevitas.ritual=仪式所在的区域内弥漫着强烈的生命力，附近所有的生命都会获得再生能力，而作物的生长速度加快，欣欣向荣。
+astralsorcery.constellation.aevitas.ritual=仪式所在的区域内弥漫着强烈的生命力，附近所有的生命都会获得再生能力，而作物的生长速度加快，一切都欣欣向荣。
 astralsorcery.constellation.aevitas.capeeffect=沐浴在创生之力中，你的饥饿感消退了，同时拥有治愈之环的力量。此外，你附近的植物或许会因为你荒诞不经的想法而突变为别的种类。
 astralsorcery.constellation.evorsio=Evorsio
 astralsorcery.constellation.evorsio.info=Destruction
 astralsorcery.constellation.evorsio.effect=无与伦比的破坏性；此星座的光线异常尖锐，大部分固体材料都会被它穿透。
 astralsorcery.constellation.evorsio.enchantments=遭受此光线蚀刻的工具将拥有比其他同类更高的效率，喝下此种药水会让饮用者以破坏性的急速来完成他们的任务。
-astralsorcery.constellation.evorsio.ritual=通过仪式将此星座的星光从聚焦核心分散开，将导致附近任何受到直射的固体方块破坏与分解。
+astralsorcery.constellation.evorsio.ritual=经效应放大器发散的星辉拥有强大的破坏力，将导致附近任何受到直射的固体方块分解。
 astralsorcery.constellation.evorsio.capeeffect=注入此种星能的披风能增强你的潜在破坏力，在千军中取其首级，如探囊取物。
 
 astralsorcery.constellation.mineralis=Mineralis
@@ -547,39 +554,39 @@ astralsorcery.constellation.mineralis.capeeffect=当披风被注入此种星能�
 astralsorcery.constellation.lucerna=Lucerna
 astralsorcery.constellation.lucerna.info=Light
 astralsorcery.constellation.lucerna.effect=尽管这个星座离你很遥远，但它的光线非常明亮。甚至亮到在其区域内无法生成其他敌对生物。
-astralsorcery.constellation.lucerna.enchantments=喝下此受星座蚀刻的药水将赋予你强大的视觉能力以适应黑暗的环境，同样的经受Lucerna蚀刻的头盔也具有相同的能力。
+astralsorcery.constellation.lucerna.enchantments=喝下此受星座蚀刻的药水将赋予你强大的视觉能力以适应最黑暗的环境，同样的经受Lucerna蚀刻的头盔也具有相同的能力。
 astralsorcery.constellation.lucerna.ritual=此仪式能操纵星光来放逐特定区域内的敌对性生物，并阻止它们生成。
-astralsorcery.constellation.lucerna.capeeffect=穿上与此星座共鸣的披风，将揭示出你附近的敌对生物位置，并干扰它们的判断。对于那些从无尽生物的笼子中出来的怪物所在的位置的反应尤为激烈。
+astralsorcery.constellation.lucerna.capeeffect=穿上与此星座共鸣的披风，将干扰你附近的敌对生物，并显示出它们的位置。对于那些从无尽生物的笼子中出来的怪物所在的位置的反应尤为激烈。
 astralsorcery.constellation.horologium=Horologium
 astralsorcery.constellation.horologium.info=Time
-astralsorcery.constellation.horologium.effect=这个星座在不断的随时间移动。不仅很难发现，它的光线似乎能扭曲时间，在它的光芒下时间会流的更快。
+astralsorcery.constellation.horologium.effect=这个星座隐匿于时间之中。不仅很难发现，它的光线似乎能扭曲时间，在它的光芒下时间飞速流逝。
 astralsorcery.constellation.horologium.enchantments=扭曲与混乱的时间，即使是用刚刚被这个星座蚀刻过的工具进行收获，所得也远比平常要多。另一方面，同样的药水也能给使用者提高奔跑于采掘矿物的速度。
 astralsorcery.constellation.horologium.ritual=这个仪式大大增强了那些嗡嗡作响的机器与星座的亲和力，加快了附近机器的工作速度。
-astralsorcery.constellation.horologium.capeeffect=穿上拥有时间力量的披风后能在被攻击或处于危险状态时暂停附近的时间。这种力量并不能一直使用，所以一旦发生这种状况，短时间内将无法再次使用。由于其与fornax有相近的性质，因此此能力无法被任何火焰类的伤害触发。
+astralsorcery.constellation.horologium.capeeffect=穿上拥有时间力量的披风后能在被攻击或处于危险状态时冻结附近的一切。这种力量并不能一直使用，所以一旦使用过后，短时间内将无法再次使用。由于其与fornax有相近的性质，因此此能力无法被任何火焰类的伤害触发。
 astralsorcery.constellation.octans=Octans
 astralsorcery.constellation.octans.info=Fishing
-astralsorcery.constellation.octans.effect=将这个星座的光反射到水上会产生奇怪的气泡，水看起来比平常更活跃。
-astralsorcery.constellation.octans.enchantments=与Octans进行共鸣的头盔被发现能提供额外的氧气进行水下呼吸，同理，喝下这种药水会让饮用者长出一个临时用于水下呼吸的鳃。
+astralsorcery.constellation.octans.effect=将这个星座的光反射到水上会产生奇怪的气泡，水看起充满了活力。
+astralsorcery.constellation.octans.enchantments=与Octans进行共鸣的头盔被发现能提供额外的氧气进行水下呼吸，同理，喝下这种药水会让饮用者临时长出一个用于水下呼吸的鳃。
 astralsorcery.constellation.octans.ritual=受星光影响，这个仪式吸引了附近水方块内的鱼，并将其捕捉。
 astralsorcery.constellation.octans.capeeffect=这个星座与水的亲和力意味着穿上此种披风能使你如鱼得水，你将拥有无限的水下呼吸，并且像往常一样在水下使用你的工具。
 astralsorcery.constellation.bootes=Bootes
 astralsorcery.constellation.bootes.info=Herding
 astralsorcery.constellation.bootes.effect=看起来这些微弱的光线使所有的动物都对什么感兴趣，保持它们的平静与强健。
-astralsorcery.constellation.bootes.enchantments=在此光之下，任何人的愤怒都将消逝，如同被切割成小份的方块一样，饮用此药水后杀死动物的一段时间内无需进食。
-astralsorcery.constellation.bootes.ritual=在星辉照射下，附近的动物似乎更悠闲了，也不在担忧温饱问题了。
+astralsorcery.constellation.bootes.enchantments=在此光之下，任何人的愤怒都将像小方块一样，大事化小小事化了，饮用此药水后杀死动物的一段时间内无需进食。
+astralsorcery.constellation.bootes.ritual=在星辉照射下，附近的动物似乎更悠闲了，取而代之的是随着年龄的增长而增加的资源的消耗。
 astralsorcery.constellation.bootes.capeeffect=穿上此种披风，附近的耀斑将追随你，帮助你杀敌。
 astralsorcery.constellation.fornax=Fornax
 astralsorcery.constellation.fornax.info=Heat
 astralsorcery.constellation.fornax.effect=这束星辉上带有强大的力量和剧烈的热量，仅仅是注视着就感到口干舌燥。
-astralsorcery.constellation.fornax.enchantments=直接使用此种共鸣工具并不舒服，就如同你千辛万苦所获得的东西结果却在你面前烧毁一样，但喝下此药水能防止受到火灾的威胁。
+astralsorcery.constellation.fornax.enchantments=直接使用此种共鸣工具并不舒服，因为你千辛万苦所获得的东西结果却在你面前烧毁，但喝下此药水能防止受到火焰的威胁。
 astralsorcery.constellation.fornax.ritual=用仪式的力量热量分散到更大的地方能防止因雷击而引起的火灾，缺点就是附近的方块可能会被烧焦或熔化。
-astralsorcery.constellation.fornax.capeeffect=穿着与星座相似的披风，你将拥有浴火重生的力量，火焰不再是你的敌人。此外，多余的火焰将被导入脚下的大地，或许会使其完全熔化或烧焦。
+astralsorcery.constellation.fornax.capeeffect=穿着与星座相似的披风，你将浴火重生的力量，火焰不再是你的敌人。此外，多余的火焰将被导入脚下的大地，或许会使其完全烧焦或熔化。
 astralsorcery.constellation.pelotrio=Pelotrio
 astralsorcery.constellation.pelotrio.info=Convocation
 astralsorcery.constellation.pelotrio.effect=这个星座的非自然力量不可抗拒，仅仅在最黑暗或最明亮的夜晚才能被发觉。
-astralsorcery.constellation.pelotrio.enchantments=将这些腐败的能量注入普通的工具内，似乎能将碎裂的工具进行些微的修复或拥有无限的弹药。同样的效果适用于喝过相应的蚀刻药水之人。
+astralsorcery.constellation.pelotrio.enchantments=将这些腐蚀的能量注入普通的工具内，似乎能将工具碎裂的部分粘合起来而弓箭将拥有无限的弹药。同样的效果适用于喝过相应的蚀刻药水之人。
 astralsorcery.constellation.pelotrio.ritual=被此星座的散射光所浸没的区域将带来各种各样的生命。
-astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将星辉转变为工具形态，它将模仿穿戴者的行为，用镐挖掘方块，用斧砍倒树，甚至能用武器攻击敌人。
+astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将星辉转变为工具形态，它将模仿穿戴者的行为，用镐挖掘方块，用斧砍倒树，或用武器攻击敌人。
 
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=Frigidity
