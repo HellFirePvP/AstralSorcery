@@ -45,8 +45,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     public static void renderTranslucentBlocks() {
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
         GlStateManager.color(1F, 1F, 1F,1F);
 
@@ -63,21 +62,24 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
                 blocks.clear();
             }
         }
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.CONSTANT_ALPHA.apply();
-        GL11.glCallList(batchDList);
+        GlStateManager.enableBlend();
+        Blending.CONSTANT_ALPHA.applyStateManager();
+        GlStateManager.callList(batchDList);
         blocks.clear();
-        Blending.DEFAULT.apply();
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.color(1F, 1F, 1F,1F);
+        //Drawing color-overlay'd blocks leaks color states into native GL context but doesn't apply them
+        //to minecraft's GL wrapper. updating this manually.
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.popMatrix();
     }
 
     private static void batchBlocks() {
         IBlockAccess iba = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
         batchDList = GLAllocation.generateDisplayLists(1);
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.CONSTANT_ALPHA.apply();
-        GL11.glNewList(batchDList, GL11.GL_COMPILE);
+        GlStateManager.enableBlend();
+        Blending.CONSTANT_ALPHA.applyStateManager();
+        GlStateManager.glNewList(batchDList, GL11.GL_COMPILE);
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -85,8 +87,8 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
             Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tbs.state, tbs.pos, iba, vb);
         }
         tes.draw();
-        GL11.glEndList();
-        Blending.DEFAULT.apply();
+        GlStateManager.glEndList();
+        Blending.DEFAULT.applyStateManager();
     }
 
     private static int hashBlocks() {
@@ -112,6 +114,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
     public void render(TileTranslucent te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
+        if(x * x + y * y + z * z >= 64 * 64) return;
         addForRender(renderState, te.getPos());
     }
 

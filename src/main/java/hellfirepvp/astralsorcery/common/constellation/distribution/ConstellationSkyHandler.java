@@ -41,6 +41,8 @@ public class ConstellationSkyHandler implements ITickHandler {
     private Map<Integer, WorldSkyHandler> worldHandlersServer  = new HashMap<>();
     private Map<Integer, WorldSkyHandler> worldHandlersClient  = new HashMap<>();
 
+    private Map<Integer, Boolean> skyRevertMap = new HashMap<>();
+
     private ConstellationSkyHandler() {}
 
     public static ConstellationSkyHandler getInstance() {
@@ -52,6 +54,7 @@ public class ConstellationSkyHandler implements ITickHandler {
         if(type == TickEvent.Type.WORLD) {
             World w = (World) context[0];
             if(!w.isRemote) {
+                skyRevertMap.put(w.provider.getDimension(), false);
                 WorldSkyHandler handle = worldHandlersServer.get(w.provider.getDimension());
                 if(handle == null) {
                     handle = new WorldSkyHandler(new Random(w.getSeed()).nextLong());
@@ -133,6 +136,15 @@ public class ConstellationSkyHandler implements ITickHandler {
             handlerMap = worldHandlersServer;
         }
         return handlerMap.get(world.provider.getDimension());
+    }
+
+    public void revertWorldTimeTick(World world) {
+        int dimId = world.provider.getDimension();
+        Boolean state = skyRevertMap.get(dimId);
+        if(!world.isRemote && state != null && !state) {
+            skyRevertMap.put(dimId, true);
+            world.setWorldTime(world.getWorldTime() - 1);
+        }
     }
 
     public void clientClearCache() {

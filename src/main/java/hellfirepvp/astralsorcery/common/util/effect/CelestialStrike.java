@@ -63,7 +63,7 @@ public class CelestialStrike {
         }
         float dmg = 10;
         dmg += ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world) * 40F;
-        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 20F;
+        dmg += SkyCollectionHelper.getSkyNoiseDistribution(world, position.toBlockPos()) * 60F;
         for (EntityLivingBase living : livingEntities) {
             if ((living instanceof EntityPlayer) &&
                     (((EntityPlayer) living).isSpectator() || ((EntityPlayer) living).isCreative() ||

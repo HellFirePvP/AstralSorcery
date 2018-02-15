@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.base.TileAccelerationBlacklist;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionList;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -22,6 +23,8 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopZone;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -49,21 +52,32 @@ public class CEffectHorologium extends CEffectPositionList {
     public boolean enabled = true;
     public static double potencyMultiplier = 1;
 
-    public static int searchRange = 8;
+    public static int searchRange = 16;
     public static int maxCount = 30;
 
     public CEffectHorologium(@Nullable ILocatable origin) {
-        super(origin, Constellations.horologium, "horologium", searchRange, maxCount, (world, pos) -> TileAccelerationBlacklist.canAccelerate(world.getTileEntity(pos)));
+        super(origin, Constellations.horologium, "horologium", maxCount, (world, pos) -> TileAccelerationBlacklist.canAccelerate(world.getTileEntity(pos)));
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
+        if(modified.isCorrupted()) {
+            TimeStopZone zone = TimeStopController.tryGetZoneAt(world, pos);
+            if(zone == null) {
+                zone = TimeStopController.freezeWorldAt(TimeStopZone.EntityTargetController.noPlayers(), world, pos, true, (float) modified.getSize(), 100);
+            }
+            if(zone == null) {
+                return false;
+            }
+            zone.setTicksToLive(100);
+            return true;
+        }
         boolean changed = false;
         GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
         if(entry != null) {
@@ -97,14 +111,9 @@ public class CEffectHorologium extends CEffectPositionList {
             }
         }
 
-        if(findNewPosition(world, pos)) changed = true;
+        if(findNewPosition(world, pos, modified)) changed = true;
 
         return changed;
-    }
-
-    @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -121,8 +130,13 @@ public class CEffectHorologium extends CEffectPositionList {
     }
 
     @Override
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectHorologium.searchRange);
+    }
+
+    @Override
     public void loadFromConfig(Configuration cfg) {
-        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 8, 1, 32, "Defines the radius (in blocks) in which the ritual will search for valid tileEntities to accelerate");
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), searchRange, 1, 64, "Defines the radius (in blocks) in which the ritual will search for valid tileEntities to accelerate");
         maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 30, 1, 4000, "Defines the amount of tileEntities the ritual can cache and accelerate at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");

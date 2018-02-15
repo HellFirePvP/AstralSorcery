@@ -23,9 +23,12 @@ import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
@@ -34,11 +37,20 @@ import hellfirepvp.astralsorcery.common.util.data.VerticalConeBlockDiscoverer;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -49,7 +61,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -112,7 +126,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
             }
             if(!consumeLiquid()) {
                 if(this.operationTicks > 0) {
-                    operationTicks--;
+                    operationTicks -= 10;
                     markForUpdate();
                 }
                 return;
@@ -142,41 +156,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 checkDigState();
                             }
                             if(this.preparationSuccessful) {
-                                if(productionTimeout > 0) {
-                                    productionTimeout--;
-                                }
-                                if(productionTimeout <= 0) {
-                                    productionTimeout = rand.nextInt(10) + 20;
-                                    Chunk ch = world.getChunkFromBlockCoords(getPos());
-                                    FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
-                                    if(entry != null) {
-                                        int mbDrain = rand.nextInt(300) + 300;
-                                        int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
-                                        FluidStack drained;
-                                        if(entry.isValid() && actMbDrain > 0) {
-                                            drained = entry.tryDrain(actMbDrain, false);
-                                            if(drained == null || drained.getFluid() == null) {
-                                                drained = new FluidStack(FluidRegistry.WATER, mbDrain);
-                                            }
-                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
-                                            out.removeIf((t) -> t.getPos().equals(getPos().up()));
-                                            if(!out.isEmpty()) {
-                                                TileChalice target = out.get(rand.nextInt(out.size()));
-                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
-                                                entry.tryDrain(actMbDrain, true);
-                                            }
-                                        } else {
-                                            drained = new FluidStack(FluidRegistry.WATER, mbDrain);
-                                            List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
-                                            out.removeIf((t) -> t.getPos().equals(getPos().up()));
-                                            if(!out.isEmpty()) {
-                                                TileChalice target = out.get(rand.nextInt(out.size()));
-                                                LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
-                                            }
-                                        }
-
-                                    }
-                                }
+                                playBoreLiquidEffect();
                             }
                         }
                         break;
@@ -190,7 +170,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                                 checkVortexDigState();
                             }
                             if(this.preparationSuccessful) {
-
+                                playBoreVortexEffect();
                             }
                         }
                         break;
@@ -251,6 +231,126 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                         playArcs(1);
                         break;
                 }
+            }
+        }
+    }
+
+    private void playBoreVortexEffect() {
+        AxisAlignedBB boxVortex = new AxisAlignedBB(-3, -7, -3, 3, -3, 3).offset(getPos());
+        AxisAlignedBB drawBox = boxVortex.grow(16);
+
+        double boxSizeX = boxVortex.maxX - boxVortex.minX;
+        double boxSizeY = boxVortex.maxY - boxVortex.minY;
+        double boxSizeZ = boxVortex.maxZ - boxVortex.minZ;
+
+        double densityMax = boxSizeX * boxSizeY * boxSizeZ;
+        double density = densityMax;
+        List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boxVortex);
+        for (EntityLivingBase e : entities) {
+            if(e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
+            if(e.width * e.width * e.height >= boxSizeX * boxSizeY * boxSizeZ) {
+                if(e.getPositionVector().distanceTo(new Vec3d(getPos().getX() + 0.5, getPos().getY() - 5.5, getPos().getZ() + 0.5)) >= 0.1) {
+                    e.setPositionAndUpdate(
+                            getPos().getX() + 0.5,
+                            getPos().getY() - 5.5,
+                            getPos().getZ() + 0.5
+                    );
+                    //To move all the dragon-pieces along...
+                    if(e instanceof EntityDragon) {
+                        String prev = world.getGameRules().getString("mobGriefing");
+                        world.getGameRules().setOrCreateGameRule("mobGriefing", "false");
+                        e.onLivingUpdate();
+                        world.getGameRules().setOrCreateGameRule("mobGriefing", prev);
+                    }
+                }
+            }
+            if(e instanceof EntityDragon) {
+                e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 40, 0));
+            } else {
+                e.addPotionEffect(new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+            }
+            density -= (e.width * e.width * e.height);
+        }
+        consumeLiquid(Math.max(0, MathHelper.ceil(Math.abs(density) / densityMax)));
+
+        List<EntityLivingBase> draws = world.getEntitiesWithinAABB(EntityLivingBase.class, drawBox);
+        draws.removeAll(entities);
+        for (EntityLivingBase e : draws) {
+            if(e == null || e.isDead || e instanceof EntityPlayer || e instanceof EntityTechnicalAmbient) continue;
+            if(e instanceof EntityDragon) {
+                e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+            }
+            EntityUtils.applyVortexMotion((v) -> Vector3.atEntityCorner(e), (v) -> {
+                if(e instanceof EntityDragon) {
+                    e.posX += v.getX();
+                    e.posY += v.getY();
+                    e.posZ += v.getZ();
+                    e.motionX = 0;
+                    e.motionY = 0;
+                    e.motionZ = 0;
+                } else {
+                    e.motionX += v.getX();
+                    e.motionY += (v.getY() * 2.5);
+                    e.motionZ += v.getZ();
+                }
+                return null;
+            }, new Vector3(this).addY(-4.5), 48, 3);
+
+            if(e.getDistanceSq(getPos().add(0, -5, 0)) <= (25)) { // 5 * 5
+                Vector3 randomBuffer = new Vector3(
+                        Math.max(0, (boxSizeX - e.width ) / 2D),
+                        Math.max(0, (boxSizeY - e.height) / 2D),
+                        Math.max(0, (boxSizeZ - e.width ) / 2D));
+                Vector3 randPos = new Vector3(this).addY(-4.5)
+                        .add(
+                                randomBuffer.getX() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
+                                randomBuffer.getY() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1),
+                                randomBuffer.getZ() * rand.nextFloat() * (rand.nextBoolean() ? 1 : -1));
+                e.setPositionAndUpdate(randPos.getX(), randPos.getY(), randPos.getZ());
+                if(e instanceof EntityDragon) {
+                    e.getActivePotionMap().put(RegistryPotions.potionTimeFreeze, new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+                } else {
+                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionTimeFreeze, 80, 0));
+                }
+                consumeLiquid(2);
+            }
+        }
+    }
+
+    private void playBoreLiquidEffect() {
+        if(productionTimeout > 0) {
+            productionTimeout--;
+        }
+        if(productionTimeout <= 0) {
+            productionTimeout = rand.nextInt(10) + 20;
+            Chunk ch = world.getChunkFromBlockCoords(getPos());
+            FluidRarityRegistry.ChunkFluidEntry entry = FluidRarityRegistry.getChunkEntry(ch);
+            if(entry != null) {
+                int mbDrain = rand.nextInt(300) + 300;
+                int actMbDrain = Math.min(entry.getMbRemaining(), mbDrain);
+                FluidStack drained;
+                if(entry.isValid() && actMbDrain > 0) {
+                    drained = entry.tryDrain(actMbDrain, false);
+                    if(drained == null || drained.getFluid() == null) {
+                        drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                    }
+                    List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                    out.removeIf((t) -> t.getPos().equals(getPos().up()));
+                    if(!out.isEmpty()) {
+                        TileChalice target = out.get(rand.nextInt(out.size()));
+                        LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                        entry.tryDrain(actMbDrain, true);
+                    }
+                } else {
+                    drained = new FluidStack(FluidRegistry.WATER, mbDrain);
+                    List<TileChalice> out = LiquidStarlightChaliceHandler.findNearbyChalicesWithSpaceFor(this, drained);
+                    out.removeIf((t) -> t.getPos().equals(getPos().up()));
+                    if(!out.isEmpty()) {
+                        TileChalice target = out.get(rand.nextInt(out.size()));
+                        LiquidStarlightChaliceHandler.doFluidTransfer(this, target, drained.copy());
+                    }
+                }
+
             }
         }
     }
@@ -501,10 +601,15 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
     }
 
     private boolean consumeLiquid() {
-        if(mbStarlight > 0) {
-            mbStarlight--;
+        return consumeLiquid(1);
+    }
+
+    private boolean consumeLiquid(int amt) {
+        if(mbStarlight >= amt) {
+            mbStarlight -= amt;
             return true;
         }
+        mbStarlight = 0;
         return false;
     }
 
@@ -592,12 +697,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                     }
                 }
             } finally {
-                double x = getPos().getX() + 0.5;
-                double y = getPos().getY() + 1.5;
-                double z = getPos().getZ() + 0.5;
-                for (ItemStack stack : BlockDropCaptureAssist.getCapturedStacksAndStop()) {
-                    ItemUtils.dropItem(world, x, y, z, stack);
-                }
+                BlockDropCaptureAssist.getCapturedStacksAndStop();
             }
         }
         this.digPercentage = downPerc;

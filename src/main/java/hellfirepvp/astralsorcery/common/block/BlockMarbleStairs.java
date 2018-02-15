@@ -25,6 +25,7 @@ public class BlockMarbleStairs extends BlockStairs {
         setHardness(1.0F);
         setHarvestLevel("pickaxe", 1);
         setResistance(3.0F);
+        setLightOpacity(0);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 }

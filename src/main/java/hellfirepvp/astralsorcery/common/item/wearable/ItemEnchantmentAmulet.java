@@ -85,7 +85,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
             freezeAmuletColor(stack);
         }
         if(!worldIn.isRemote && getAmuletEnchantments(stack).isEmpty()) {
-            AmuletEnchantHelper.rollAmulet(stack, 1);
+            AmuletEnchantHelper.rollAmulet(stack, 0);
         }
     }
 

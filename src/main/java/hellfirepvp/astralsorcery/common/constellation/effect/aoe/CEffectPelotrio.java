@@ -8,19 +8,29 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,6 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -41,17 +52,28 @@ import java.util.List;
  */
 public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.PelotrioSpawnListEntry> {
 
+    private static Tuple<Class<Entity>, Class<Entity>>[] swapTable = new Tuple[] {
+            new Tuple(EntitySkeleton.class, EntityWitherSkeleton.class),
+            new Tuple(EntityVillager.class, EntityWitch.class),
+            new Tuple(EntityPig.class,      EntityPigZombie.class),
+            new Tuple(EntityCow.class,      EntityZombie.class),
+            new Tuple(EntityParrot.class,   EntityGhast.class),
+            new Tuple(EntityChicken.class,  EntityBlaze.class),
+            new Tuple(EntitySheep.class,    EntityStray.class),
+            new Tuple(EntityHorse.class,    EntitySkeletonHorse.class)
+    };
+
     private static AxisAlignedBB proximityCheckBox = new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(24);
 
     private static boolean enabled = true;
     private static float potencyMultiplier = 1F;
-    private static int searchRange = 8;
+    private static int searchRange = 12;
 
     private static float selectChance = 0.1F;
     private static int proximityAmount = 40;
 
     public CEffectPelotrio(@Nullable ILocatable origin) {
-        super(origin, Constellations.pelotrio, "pelotrio", searchRange, 5,
+        super(origin, Constellations.pelotrio, "pelotrio", 5,
                 (w, pos) -> GenListEntries.PelotrioSpawnListEntry.createEntry(w, pos) != null, GenListEntries.PelotrioSpawnListEntry::new);
     }
 
@@ -77,11 +99,28 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
+        }
+
+        if(modified.isCorrupted()) {
+            boolean did = false;
+            List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(modified.getSize()).offset(pos));
+            for (EntityLivingBase e : entities) {
+                if(e != null && !e.isDead && rand.nextInt(100) == 0) {
+                    e = trySwapEntity(world, e);
+                    if(e != null) {
+                        EntityLivingBase finalEntity = e;
+                        e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, Integer.MAX_VALUE, 2));
+                        AstralSorcery.proxy.scheduleDelayed(() -> world.spawnEntity(finalEntity));
+                        did = true;
+                    }
+                }
+            }
+            return did;
         }
 
         GenListEntries.PelotrioSpawnListEntry entry = getRandomElement(rand);
@@ -102,7 +141,7 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
 
         boolean update = false;
         if(rand.nextFloat() < selectChance) {
-            if(findNewPosition(world, pos)) {
+            if(findNewPosition(world, pos, modified)) {
                 update = true;
             }
         }
@@ -110,9 +149,28 @@ public class CEffectPelotrio extends CEffectPositionListGen<GenListEntries.Pelot
         return update;
     }
 
+    private EntityLivingBase trySwapEntity(World world, EntityLivingBase e) {
+        for (Tuple<Class<Entity>, Class<Entity>> tpl : swapTable) {
+            if(e.getClass().isAssignableFrom(tpl.key)) {
+                NBTTagCompound cmp = new NBTTagCompound();
+                e.writeToNBT(cmp);
+                world.removeEntity(e);
+                NBTHelper.removeUUID(cmp, "UUID");
+                try {
+                    EntityLivingBase ews = (EntityLivingBase) tpl.value.getConstructor(World.class).newInstance(world);
+                    ews.readFromNBT(cmp);
+                    return ews;
+                } catch (Exception e1) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectPelotrio.searchRange);
     }
 
     @Override

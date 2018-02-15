@@ -35,14 +35,13 @@ import java.util.function.Function;
 public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CEffectGenListEntry> extends ConstellationEffect {
 
     protected final Function<BlockPos, T> elementProvider;
-    protected final int searchRange, maxCount;
+    protected final int maxCount;
     protected final Verifier verifier;
     private List<T> elements = new ArrayList<>();
 
-    public CEffectPositionListGen(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, int searchRange, int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
+    public CEffectPositionListGen(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, int maxCount, Verifier verifier, Function<BlockPos, T> emptyElementProvider) {
         super(origin, constellation, cfgName);
         this.elementProvider = emptyElementProvider;
-        this.searchRange = searchRange;
         this.maxCount = maxCount;
         this.verifier = verifier;
     }
@@ -81,11 +80,12 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return elements.add(element);
     }
 
-    public boolean findNewPosition(World world, BlockPos pos) {
+    public boolean findNewPosition(World world, BlockPos pos, ConstellationEffectProperties prop) {
         if(maxCount > elements.size()) {
-            int offX = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
-            int offY = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
-            int offZ = -searchRange + world.rand.nextInt(searchRange * 2 + 1);
+            double searchRange = prop.getSize();
+            double offX = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
             BlockPos at = pos.add(offX, offY, offZ);
             if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
                 T element = newElement(world, at);

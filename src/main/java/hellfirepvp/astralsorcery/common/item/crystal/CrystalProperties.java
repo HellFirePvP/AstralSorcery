@@ -8,9 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -44,11 +46,17 @@ public class CrystalProperties {
     protected int size; //(theoretically) 0 to X
     protected int purity; //0 to 100 where 100 being completely pure.
     protected int collectiveCapability; //0 to 100 where 100 being best collection rate.
+    protected int fractured = 0; //0 to 100 where 100 means the crystal should shatter due to its integrity being too damaged
 
     public CrystalProperties(int size, int purity, int collectiveCapability) {
+        this(size, purity, collectiveCapability, 0);
+    }
+
+    public CrystalProperties(int size, int purity, int collectiveCapability, int fractured) {
         this.size = size;
         this.purity = purity;
         this.collectiveCapability = collectiveCapability;
+        this.fractured = fractured;
     }
 
     public int getSize() {
@@ -63,11 +71,16 @@ public class CrystalProperties {
         return collectiveCapability;
     }
 
+    public int getFracturation() {
+        return fractured;
+    }
+
     public static CrystalProperties readFromNBT(NBTTagCompound compound) {
         CrystalProperties prop = new CrystalProperties(0, 0, 0);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
+        prop.fractured = NBTHelper.getInteger(compound, "fract", 0);
         return prop;
     }
 
@@ -75,6 +88,7 @@ public class CrystalProperties {
         compound.setInteger("size", size);
         compound.setInteger("purity", purity);
         compound.setInteger("collect", collectiveCapability);
+        compound.setInteger("fract", fractured);
     }
 
     public static CrystalProperties createStructural() {
@@ -145,6 +159,9 @@ public class CrystalProperties {
                 } else {
                     missing = true;
                 }
+                if(EnumGatedKnowledge.CRYSTAL_FRACTURE.canSee(tier) && prop.getFracturation() > 0) {
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.fracture") + ": " + TextFormatting.RED + prop.getFracturation() + "%");
+                }
                 if(missing) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
@@ -182,6 +199,7 @@ public class CrystalProperties {
         crystalProp.setInteger("size", properties.getSize());
         crystalProp.setInteger("purity", properties.getPurity());
         crystalProp.setInteger("collectiveCapability", properties.getCollectiveCapability());
+        crystalProp.setInteger("fract", properties.getFracturation());
         cmp.setTag("crystalProperties", crystalProp);
     }
 
@@ -192,11 +210,12 @@ public class CrystalProperties {
         Integer size = prop.getInteger("size");
         Integer purity = prop.getInteger("purity");
         Integer colCap = prop.getInteger("collectiveCapability");
-        return new CrystalProperties(size, purity, colCap);
+        Integer fract = prop.getInteger("fract");
+        return new CrystalProperties(size, purity, colCap, fract);
     }
 
     @Override
     public String toString() {
-        return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + "}";
+        return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + ",Fractured=" + fractured + "}";
     }
 }

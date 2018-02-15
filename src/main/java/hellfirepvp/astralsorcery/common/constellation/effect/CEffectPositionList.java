@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
  */
 public abstract class CEffectPositionList extends CEffectPositionListGen<GenListEntries.SimpleBlockPosEntry> {
 
-    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
-        super(origin, c, cfgName, searchRange, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
+    public CEffectPositionList(@Nullable ILocatable origin, IWeakConstellation c, String cfgName, int maxCount, Verifier verifier) {
+        super(origin, c, cfgName, maxCount, verifier, GenListEntries.SimpleBlockPosEntry::new);
     }
 
     public boolean offerNewBlockPos(BlockPos pos) {

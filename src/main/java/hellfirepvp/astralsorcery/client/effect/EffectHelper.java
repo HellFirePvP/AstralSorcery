@@ -39,6 +39,13 @@ public class EffectHelper {
         return p;
     }
 
+    public static EntityFXFacingParticle genericGatewayFlareParticle(double x, double y, double z) {
+        EntityFXFacingParticle p = new EntityFXFacingParticle.Gateway(x, y, z);
+        p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(0.75F).setColor(new Color(60, 0, 255));
+        EffectHandler.getInstance().registerFX(p);
+        return p;
+    }
+
     public static EntityFXFacingDepthParticle genericDepthIgnoringFlareParticle(double x, double y, double z) {
         EntityFXFacingDepthParticle p = new EntityFXFacingDepthParticle(x, y, z);
         p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(0.75F).setColor(new Color(60, 0, 255));

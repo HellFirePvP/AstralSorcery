@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.GenListEntries;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -25,6 +26,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -33,6 +35,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,18 +61,47 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
     public static int maxFishTickTime = 5000;
 
     public CEffectOctans(@Nullable ILocatable origin) {
-        super(origin, Constellations.octans, "octans", searchRange, maxFishingGrounds, (world, pos) -> {
+        super(origin, Constellations.octans, "octans", maxFishingGrounds, (world, pos) -> {
             IBlockState at = world.getBlockState(pos);
             return at.getBlock() instanceof BlockLiquid && at.getBlock().getMaterial(at).equals(Material.WATER) && at.getValue(BlockLiquid.LEVEL) == 0 && world.isAirBlock(pos.up());
         }, (pos) -> new GenListEntries.CounterMaxListEntry(pos, minFishTickTime + rand.nextInt(maxFishTickTime - minFishTickTime + 1)));
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
+        }
+
+        if(modified.isCorrupted()) {
+            boolean did = false;
+            double searchRange = modified.getSize();
+            double offX = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            BlockPos at = pos.add(offX, offY, offZ);
+            IBlockState state = world.getBlockState(at);
+            if((world.isAirBlock(at) || state.getBlock().isReplaceable(world, at)) &&
+                    ((Math.abs(offX) > 5 || Math.abs(offZ) > 5) || offY < 0)) {
+                world.setBlockState(at, Blocks.WATER.getDefaultState());
+                world.neighborChanged(at, Blocks.WATER, at);
+                did = true;
+            } else if((state.getBlock() instanceof BlockLiquid ||
+                    state.getBlock() instanceof BlockFluidBase) &&
+                    !state.getBlock().equals(Blocks.WATER) &&
+                    !state.getBlock().equals(Blocks.FLOWING_WATER)) {
+                if(rand.nextBoolean()) {
+                    world.setBlockState(at, Blocks.SAND.getDefaultState());
+                    world.neighborChanged(at, Blocks.SAND, at);
+                    did = true;
+                } else {
+                    world.setBlockToAir(at);
+                    did = true;
+                }
+            }
+            return did;
         }
 
         boolean changed = false;
@@ -102,14 +134,14 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
             }
         }
 
-        if(findNewPosition(world, pos)) changed = true;
+        if(findNewPosition(world, pos, modified)) changed = true;
 
         return changed;
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectOctans.searchRange);
     }
 
     @Override

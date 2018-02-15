@@ -6,7 +6,7 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.effect.controller;
+package hellfirepvp.astralsorcery.client.effect.controller.orbital;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -18,11 +18,11 @@ import java.util.Random;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: OrbitalEffectLucerna
+ * Class: OrbitalPropertiesRitualArmara
  * Created by HellFirePvP
- * Date: 07.01.2017 / 19:26
+ * Date: 07.11.2016 / 12:21
  */
-public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect, OrbitalEffectController.OrbitTickModifier {
+public class OrbitalPropertiesRitualArmara implements OrbitalEffectController.OrbitPersistence, OrbitalEffectController.OrbitPointEffect, OrbitalEffectController.OrbitTickModifier {
 
     private static final Random rand = new Random();
 
@@ -43,9 +43,9 @@ public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersis
                     pos.getZ());
             p.setMaxAge(45);
             p.offset((rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
-                    (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
-            p.setColor(new Color(255, 255, 127));
+                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1),
+                     (rand.nextFloat() * 0.01F) * (rand.nextBoolean() ? 1 : -1));
+            p.setColor(new Color(201, 30, 0));
             p.scale(0.25F).gravity(0.008);
         }
         if(rand.nextInt(3) == 0) {
@@ -57,7 +57,7 @@ public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersis
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.025F) * (rand.nextBoolean() ? 1 : -1));
             p.setMaxAge(35);
-            p.scale(0.25F).setColor(Color.WHITE);
+            p.scale(0.25F).setColor(new Color(80, 0, 150));
         }
     }
 
@@ -65,4 +65,5 @@ public class OrbitalEffectLucerna implements OrbitalEffectController.OrbitPersis
     public void onTick(OrbitalEffectController controller) {
         controller.getOffset().add(0, 0.05, 0);
     }
+
 }

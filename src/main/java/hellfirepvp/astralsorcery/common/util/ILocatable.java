@@ -21,4 +21,23 @@ public interface ILocatable {
 
     public BlockPos getPos();
 
+    public static ILocatable fromPos(BlockPos pos) {
+        return new PosLocateable(pos);
+    }
+
+    class PosLocateable implements ILocatable {
+
+        private final BlockPos pos;
+
+        private PosLocateable(BlockPos pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public BlockPos getPos() {
+            return pos;
+        }
+
+    }
+
 }

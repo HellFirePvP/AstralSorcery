@@ -118,6 +118,33 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
         return result;
     }
 
+    @Nonnull
+    public ItemStack getNonWeightedOre(Random random) {
+        ItemStack result = ItemStack.EMPTY;
+        int runs = 0;
+        while (result.isEmpty() && runs < 150) {
+
+            String key = oreDictWeights.get(random.nextInt(oreDictWeights.size())).oreName;
+            NonNullList<ItemStack> ores = OreDictionary.getOres(key);
+
+            for (ItemStack stack : ores) {
+                if(stack.isEmpty() || Block.getBlockFromItem(stack.getItem()) == Blocks.AIR) continue;
+                Item i = stack.getItem();
+                String regModid = i.getRegistryName().getResourceDomain();
+                if(Config.modidOreGenBlacklist.contains(regModid)) continue;
+
+                String className = i.getClass().getName();
+                if(!className.toLowerCase().contains("greg")) {
+                    if(stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) stack.setItemDamage(0);
+                    result = stack;
+                }
+            }
+            runs++;
+        }
+
+        return result;
+    }
+
     @Override
     public String getDataFileName() {
         return name;

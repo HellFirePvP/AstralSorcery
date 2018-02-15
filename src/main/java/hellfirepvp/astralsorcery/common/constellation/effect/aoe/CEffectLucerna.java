@@ -9,13 +9,14 @@
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
-import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
-import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectLucerna;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectLucerna;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
@@ -42,7 +43,7 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
 
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
-    public static double range = 256;
+    public static double range = 64, rangeIncrease = 64;
 
     private int rememberedTimeout = 0;
 
@@ -64,36 +65,43 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
     }
 
     @Override
-    public boolean runEffect(World world, BlockPos pos, int mirrorAmount, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean runEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
+
+        if(modified.isCorrupted()) {
+            if(ConstellationSkyHandler.getInstance().isNight(world)) {
+                if(rand.nextInt(4) == 0) {
+                    ConstellationSkyHandler.getInstance().revertWorldTimeTick(world);
+                }
+            }
+            return true;
+        }
         WorldBlockPos at = new WorldBlockPos(world, pos);
         TickTokenizedMap.SimpleTickToken<Double> token = EventHandlerEntity.spawnDenyRegions.get(at);
-        if(token != null) {
+        if(token != null && Math.abs(token.getValue() - modified.getSize()) < 1E-3) {
             int next = token.getRemainingTimeout() + 80;
             if(next > 400) next = 400;
             token.setTimeout(next);
             rememberedTimeout = next;
         } else {
+            if(token != null) {
+                token.setTimeout(0);
+            }
             rememberedTimeout = Math.min(400, rememberedTimeout + 80);
-            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(range, rememberedTimeout));
+            EventHandlerEntity.spawnDenyRegions.put(at, new TickTokenizedMap.SimpleTickToken<>(modified.getSize(), rememberedTimeout));
         }
         return true;
     }
 
     @Override
     @Deprecated
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         return false;
     }
 
     @Override
-    public boolean runTraitEffect(World world, BlockPos pos, int mirrorAmount, IMinorConstellation traitType) {
-        return false;
-    }
-
-    @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectLucerna.range + mirrorCount * CEffectLucerna.rangeIncrease);
     }
 
     @Override
@@ -113,7 +121,8 @@ public class CEffectLucerna extends ConstellationEffect implements Constellation
     @Override
     public void loadFromConfig(Configuration cfg) {
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
-        range = cfg.getFloat(getKey() + "DenyRange", getConfigurationSection(), 256, 2, 2048, "Defines the range in which the ritual will prevent mobspawning.");
+        range = cfg.getFloat(getKey() + "DenyRange", getConfigurationSection(), (float) range, 2, 2048, "Defines the range in which the ritual will prevent mobspawning.");
+        rangeIncrease = cfg.getFloat(getKey() + "DenyRangeIncrease", getConfigurationSection(), (float) rangeIncrease, 2, 2048, "Defines the range-increase that the ritual will get per additional lens focusing light back onto the pedestal");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }
 }

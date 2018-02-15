@@ -27,13 +27,13 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
 
     @Override
     public final void render(float pTicks) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         getGroup().beginDrawing(vb);
         render(vb, pTicks);
         tes.draw();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public abstract ObjectGroup getGroup();
@@ -55,13 +55,11 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
         public void prepareGLContext() {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    GL11.glEnable(GL11.GL_BLEND);
+                    GlStateManager.enableBlend();
                     Blending.DEFAULT.apply();
                     GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
-                    GL11.glDisable(GL11.GL_CULL_FACE);
-
-                    GL11.glDisable(GL11.GL_TEXTURE_2D);
+                    GlStateManager.disableTexture2D();
+                    GlStateManager.depthMask(false);
                     break;
             }
         }
@@ -70,7 +68,9 @@ public abstract class CompoundObjectEffect extends EntityComplexFX {
             switch (this) {
                 case SOLID_COLOR_SPHERE:
                     GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-                    GL11.glPopAttrib();
+                    GlStateManager.depthMask(true);
+                    GlStateManager.disableBlend();
+                    GlStateManager.enableTexture2D();
                     break;
             }
         }

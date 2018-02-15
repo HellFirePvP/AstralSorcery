@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nonnull;
@@ -45,14 +46,17 @@ public class EnchantmentUpgradeHelper {
     public static String NBT_KEY_WEARER = "amulet-wearer";
 
     public static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item) {
+        if(isItemBlacklisted(item)) return current;
         return getNewEnchantmentLevel(current, currentEnchantmentId, item, null);
     }
 
     public static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item) {
+        if(isItemBlacklisted(item)) return current;
         return getNewEnchantmentLevel(current, enchantment, item, null);
     }
 
     private static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item, @Nullable List<AmuletEnchantment> context) {
+        if(isItemBlacklisted(item)) return current;
         Enchantment ench = Enchantment.getEnchantmentByID(currentEnchantmentId);
         if(ench != null) {
             return getNewEnchantmentLevel(current, ench, item, context);
@@ -61,6 +65,8 @@ public class EnchantmentUpgradeHelper {
     }
 
     private static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item, @Nullable List<AmuletEnchantment> context) {
+        if(isItemBlacklisted(item)) return current;
+
         if(item.isEmpty() || !item.hasTagCompound() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
             return current;
         }
@@ -90,6 +96,8 @@ public class EnchantmentUpgradeHelper {
     }
 
     public static NBTTagList modifyEnchantmentTags(@Nonnull NBTTagList existingEnchantments, ItemStack stack) {
+        if(isItemBlacklisted(stack)) return existingEnchantments;
+
         List<AmuletEnchantment> context = getEnchantmentAdditions(stack);
         if(context.isEmpty()) return existingEnchantments;
 
@@ -133,6 +141,8 @@ public class EnchantmentUpgradeHelper {
     }
 
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantmentLevelMap, ItemStack stack) {
+        if(isItemBlacklisted(stack)) return enchantmentLevelMap;
+
         List<AmuletEnchantment> context = getEnchantmentAdditions(stack);
         if(context.isEmpty()) return enchantmentLevelMap;
 
@@ -159,19 +169,35 @@ public class EnchantmentUpgradeHelper {
         return copyRet;
     }
 
+    private static boolean isItemBlacklisted(ItemStack stack) {
+        if(!stack.isEmpty()) {
+            ResourceLocation rl = stack.getItem().getRegistryName();
+            if(rl == null) return true; //Yea... no questions asked i guess.
+
+            if(rl.getResourceDomain().equalsIgnoreCase("draconicevolution")) {
+                //Exploit with DE's item-GUI being able to draw item's enchantments while having it equipped
+                //causes infinite feedback loop stacking enchantments higher and higher.
+                return true;
+            }
+        }
+        return false;
+    }
+
     //---------------------------------------------------
     // Data organization
     //---------------------------------------------------
 
     //This is more or less just a map to say whatever we add upon.
     private static List<AmuletEnchantment> getEnchantmentAdditions(ItemStack tool) {
+        if(isItemBlacklisted(tool)) return Lists.newArrayList();
+
         ItemStack linkedAmulet = getWornAmulet(tool);
         if(linkedAmulet.isEmpty()) return Lists.newArrayList();
 
         return ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet);
     }
 
-    public static boolean hasAmuletTag(ItemStack anyTool) {
+    private static boolean hasAmuletTag(ItemStack anyTool) {
         if(anyTool.isEmpty() || !anyTool.hasTagCompound()) {
             return false;
         }
@@ -180,7 +206,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     @Nullable
-    public static UUID getWornPlayerUUID(ItemStack anyTool) {
+    private static UUID getWornPlayerUUID(ItemStack anyTool) {
         if(!hasAmuletTag(anyTool)) return null;
         return NBTHelper.getPersistentData(anyTool).getUniqueId(NBT_KEY_WEARER);
     }

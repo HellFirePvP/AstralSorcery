@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -121,48 +120,6 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         flagRemoved = false;
     }
 
-    public static void renderFast(List<EffectLightbeam> beams) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        SpriteLibrary.spriteLightbeam.getResource().bind();
-        //RenderingUtils.removeStandartTranslationFromTESRMatrix(Minecraft.getMinecraft().getRenderPartialTicks());
-
-        Tessellator t = Tessellator.getInstance();
-        BufferBuilder vb = t.getBuffer();
-        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-
-        Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
-        if(rView == null) rView = Minecraft.getMinecraft().player;
-
-        for (EffectLightbeam beam : beams) {
-            if(rView.getDistanceSq(beam.from.getX(), beam.from.getY(), beam.from.getZ()) > beam.distanceCapSq) return;
-            beam.renderFast(vb);
-        }
-
-        t.draw();
-
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
-    }
-
-    private void renderFast(BufferBuilder vb) {
-        float tr = alphaFunction.getAlpha(age, maxAge);
-        tr *= 0.6;
-        tr *= alphaMultiplier;
-        renderBeamOnAngles(vb, SpriteLibrary.spriteLightbeam.getUVOffset(age), tr);
-    }
-
     @Override
     public void render(float pTicks) {
         Entity rView = Minecraft.getMinecraft().getRenderViewEntity();
@@ -173,17 +130,17 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         tr *= 0.6;
         tr *= alphaMultiplier;
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         removeOldTranslate(rView, pTicks);
-        GL11.glColor4f(cR * tr, cG * tr, cB * tr, cA * tr);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(false);
+        GlStateManager.color(cR * tr, cG * tr, cB * tr, cA * tr);
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.depthMask(false);
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
-        Blending.PREALPHA.apply();
+        Blending.PREALPHA.applyStateManager();
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if(lighting) {
-            GL11.glDisable(GL11.GL_LIGHTING);
+            GlStateManager.disableLighting();
         }
         SpriteLibrary.spriteLightbeam.getResource().bind();
 
@@ -192,22 +149,22 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         renderCurrentTextureAroundAxis(Math.toRadians(240F));
 
         if(lighting) {
-            GL11.glEnable(GL11.GL_LIGHTING);
+            GlStateManager.enableLighting();
         }
-        Blending.DEFAULT.apply();
-        GL11.glDisable(GL11.GL_BLEND);
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.enableBlend();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
     }
 
     private void removeOldTranslate(Entity entity, float partialTicks) {
         double x = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double y = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double z = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-        GL11.glTranslated(-x, -y, -z);
+        GlStateManager.translate(-x, -y, -z);
     }
 
     private void renderBeamOnAngles(BufferBuilder vb, Tuple<Double, Double> uvOffset, float br) {

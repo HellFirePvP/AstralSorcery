@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.client.effect;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
-import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
@@ -32,13 +32,8 @@ import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -75,6 +70,7 @@ public final class EffectHandler {
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
     public static final List<EntityFXFacingParticle> fastRenderParticles = new LinkedList<>();
+    public static final List<EntityFXFacingParticle> fastRenderGatewayParticles = new LinkedList<>();
     public static final List<EffectLightning> fastRenderLightnings = new LinkedList<>();
     public static final Map<CompoundObjectEffect.ObjectGroup, List<CompoundObjectEffect>> objects = new HashMap<>();
 
@@ -149,6 +145,23 @@ public final class EffectHandler {
         TESRPrismLens.renderColoredPrismsLast();
         float pTicks = event.getPartialTicks();
         acceptsNewParticles = false;
+        if(structurePreview != null) {
+            structurePreview.appendPreviewBlocks();
+        }
+        GlStateManager.disableDepth();
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
+        GlStateManager.enableDepth();
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
+        EffectLightning.renderFast(pTicks, fastRenderLightnings);
+
+        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
+        for (int i = 0; i <= 2; i++) {
+            for (IComplexEffect effect : layeredEffects.get(i)) {
+                effect.render(pTicks);
+            }
+        }
+        TESRTranslucentBlock.renderTranslucentBlocks();
+        TESRMapDrawingTable.renderRemainingGlasses(pTicks);
         for (CompoundObjectEffect.ObjectGroup og : objects.keySet()) {
             og.prepareGLContext();
             for (CompoundObjectEffect effect : objects.get(og)) {
@@ -164,28 +177,8 @@ public final class EffectHandler {
                 uiGateway.renderGatewayTarget(pTicks);
             }
         }
-        if(structurePreview != null) {
-            structurePreview.appendPreviewBlocks();
-        }
-        GlStateManager.disableDepth();
-        EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
-        GlStateManager.enableDepth();
-        EntityFXFacingParticle.renderFast(pTicks, fastRenderParticles);
-        EffectLightning.renderFast(pTicks, fastRenderLightnings);
-
-        Map<Integer, List<IComplexEffect>> layeredEffects = complexEffects.get(IComplexEffect.RenderTarget.RENDERLOOP);
-        for (int i = 0; i <= 2; i++) {
-            for (IComplexEffect effect : layeredEffects.get(i)) {
-                GL11.glPushMatrix();
-                GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                effect.render(pTicks);
-                GL11.glPopAttrib();
-                GL11.glPopMatrix();
-            }
-        }
+        EntityFXFacingParticle.renderFast(pTicks, fastRenderGatewayParticles);
         acceptsNewParticles = true;
-        TESRMapDrawingTable.renderRemainingGlasses(pTicks);
-        TESRTranslucentBlock.renderTranslucentBlocks();
     }
 
     @SubscribeEvent
@@ -272,6 +265,8 @@ public final class EffectHandler {
 
         if(effect instanceof EffectLightning) {
             fastRenderLightnings.add((EffectLightning) effect);
+        } else if(effect instanceof EntityFXFacingParticle.Gateway) {
+            fastRenderGatewayParticles.add((EntityFXFacingParticle) effect);
         } else if(effect instanceof EntityFXFacingDepthParticle) {
             fastRenderDepthParticles.add((EntityFXFacingDepthParticle) effect);
         } else if(effect instanceof EntityFXFacingParticle) {
@@ -359,6 +354,17 @@ public final class EffectHandler {
             if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
                 effect.flagAsRemoved();
                 fastRenderDepthParticles.remove(effect);
+            }
+        }
+        for (EntityFXFacingParticle effect : new ArrayList<>(fastRenderGatewayParticles)) {
+            if (effect == null) {
+                fastRenderGatewayParticles.remove(null);
+                continue;
+            }
+            effect.tick();
+            if (effect.canRemove() || effect.getPosition().distanceSquared(playerPos) >= Config.maxEffectRenderDistanceSq) {
+                effect.flagAsRemoved();
+                fastRenderGatewayParticles.remove(effect);
             }
         }
         for (EffectLightning effect : new ArrayList<>(fastRenderLightnings)) {

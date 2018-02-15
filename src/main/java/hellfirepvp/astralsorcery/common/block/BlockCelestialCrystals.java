@@ -147,8 +147,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> drops = Lists.newLinkedList();
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
         int stage = state.getValue(STAGE);
         switch (stage) {
@@ -177,7 +176,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                 }
                 break;
         }
-        return drops;
     }
 
     private boolean checkSafety(World world, BlockPos pos) {

@@ -12,9 +12,11 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.CropHelper;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
@@ -27,6 +29,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,7 +55,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
     public static int potionAmplifier = 1;
 
     public CEffectAevitas(@Nullable ILocatable origin) {
-        super(origin, Constellations.aevitas, "aevitas", searchRange, maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
+        super(origin, Constellations.aevitas, "aevitas", maxCropCount, (world, pos) -> CropHelper.wrapPlant(world, pos) != null, CropHelper.GrowableWrapper::new);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
@@ -80,26 +83,43 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
         CropHelper.GrowablePlant plant = getRandomElementByChance(rand);
         if(plant != null) {
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(plant.getPos()))) {
-                if(!plant.isValid(world, true)) {
-                    removeElement(plant);
-                    changed = true;
-                } else {
-                    if(plant.tryGrow(world, rand)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, plant.getPos());
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, plant.getPos(), 8));
+                if(modified.isCorrupted()) {
+                    if(world instanceof WorldServer) {
+                        MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), plant.getPos());
                         changed = true;
+                    } else {
+                        world.setBlockToAir(plant.getPos());
+                        changed = true;
+                    }
+                } else {
+                    if(!plant.isValid(world, true)) {
+                        removeElement(plant);
+                        changed = true;
+                    } else {
+                        if(plant.tryGrow(world, rand)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, plant.getPos());
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, plant.getPos(), 8));
+                            changed = true;
+                        }
                     }
                 }
             }
         }
 
-        if(findNewPosition(world, pos)) changed = true;
-        if(findNewPosition(world, pos)) changed = true;
+        if(findNewPosition(world, pos, modified)) changed = true;
+        if(findNewPosition(world, pos, modified)) changed = true;
 
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(searchRange));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
-                entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, potionAmplifier));
+                if(modified.isCorrupted()) {
+                    entity.addPotionEffect(new PotionEffect(RegistryPotions.potionBleed, 200, potionAmplifier * 2));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 200, potionAmplifier * 3));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 200, potionAmplifier * 4));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, potionAmplifier * 2));
+                } else {
+                    entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, potionAmplifier));
+                }
             }
         }
 
@@ -112,8 +132,8 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectAevitas.searchRange);
     }
 
     @SideOnly(Side.CLIENT)

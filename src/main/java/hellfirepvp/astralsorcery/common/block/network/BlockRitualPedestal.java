@@ -105,22 +105,19 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
         if(pedestal == null) {
             return false;
         }
+        if(worldIn.isRemote) {
+            return true;
+        }
         ItemStack heldItem = playerIn.getHeldItem(hand);
 
-        ItemStackHandler handle = pedestal.getInventoryHandler();
-        ItemStack in = handle.getStackInSlot(0);
         if(!heldItem.isEmpty()) {
-            Item i = heldItem.getItem();
-            if(i instanceof ItemTunedCrystalBase) {
-                if(in.isEmpty()) {
-                    handle.setStackInSlot(0, ItemUtils.copyStackWithSize(heldItem, 1));
-                    playerIn.setHeldItem(hand, ItemStack.EMPTY);
-                }
-            }
+            playerIn.setHeldItem(hand, pedestal.placeCrystalIntoPedestal(heldItem));
+            return true;
         }
+        ItemStack in = pedestal.getCurrentPedestalCrystal();
         if(!in.isEmpty() && playerIn.isSneaking()) {
+            pedestal.placeCrystalIntoPedestal(ItemStack.EMPTY);
             playerIn.inventory.placeItemBackInInventory(worldIn, in);
-            handle.setStackInSlot(0, ItemStack.EMPTY);
         }
         return true;
     }

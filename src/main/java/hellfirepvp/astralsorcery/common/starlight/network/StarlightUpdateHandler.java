@@ -69,7 +69,7 @@ public class StarlightUpdateHandler implements ITickHandler {
         }
     }
 
-    public void informWorldUnload(World world) {
+    public void informWorldLoad(World world) {
         synchronized (accessLock) {
             updateRequired.remove(world.provider.getDimension());
         }
@@ -89,4 +89,5 @@ public class StarlightUpdateHandler implements ITickHandler {
     public String getName() {
         return "Starlight Update Handler";
     }
+
 }

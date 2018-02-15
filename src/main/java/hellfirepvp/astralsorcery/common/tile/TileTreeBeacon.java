@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.common.base.TreeTypes;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -27,9 +28,12 @@ import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
+import hellfirepvp.astralsorcery.common.util.WRItemObject;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedList;
+import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -67,7 +71,7 @@ public class TileTreeBeacon extends TileReceiverBase {
     private TreeCaptureHelper.TreeWatcher treeWatcher = null;
     private double starlightCharge = 0D;
 
-    private NonDuplicateCappedList<BlockPos> treePositions = new NonDuplicateCappedList<>(MathHelper.floor(ConfigEntryTreeBeacon.maxCount));
+    private NonDuplicateCappedWeightedList<BlockPos> treePositions = new NonDuplicateCappedWeightedList<>(MathHelper.floor(ConfigEntryTreeBeacon.maxCount));
 
     @Override
     public void update() {
@@ -87,22 +91,26 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(searchForTrees(possibleTreePositions)) changed = true;
                 }
             }
-            int runs = MathHelper.ceil(starlightCharge * 3.4D);
+            int runs = MathHelper.ceil(starlightCharge * 1.4D);
             starlightCharge = 0D;
-            for (int i = 0; i < Math.max(8, runs); i++) {
-                BlockPos randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
-                if(randPos != null) {
-                    TileFakeTree tft = MiscUtils.getTileAt(world, randPos, TileFakeTree.class, false);
+            for (int i = 0; i < Math.max(1, runs); i++) {
+                if(treePositions.getSize() <= 0) continue;
+                if(rand.nextFloat() >= (treePositions.getSize() / (((float) ConfigEntryTreeBeacon.maxCount) * 5F))) continue;
+
+                WRItemObject<BlockPos> randPos = treePositions.getRandomElementByChance(rand, ConfigEntryTreeBeacon.speedLimiter);
+                BlockPos actPos = randPos.getValue();
+                if(actPos != null) {
+                    TileFakeTree tft = MiscUtils.getTileAt(world, actPos, TileFakeTree.class, false);
                     if(tft != null && tft.getFakedState() != null) {
                         IBlockState fake = tft.getFakedState();
-                        if(tryHarvestBlock(world, pos, randPos, fake)) { //True, if block disappeared.
-                            world.setBlockToAir(randPos);
+                        if(tryHarvestBlock(world, pos, actPos, fake)) { //True, if block disappeared.
+                            world.setBlockToAir(actPos);
                             if(treePositions.removeElement(randPos)) {
                                 changed = true;
                             }
                         }
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, randPos);
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, randPos, 32));
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
                     } else {
                         if(treePositions.removeElement(randPos)) {
                             changed = true;
@@ -193,7 +201,17 @@ public class TileTreeBeacon extends TileReceiverBase {
                             if (tft != null) {
                                 tft.setupTile(origin, setBlock);
                             }
-                            if (treePositions.offerElement(snapshot.getPos())) ret = true;
+                            boolean isTreeBlock = false;
+                            if(current.getBlock().isWood(world, at)) {
+                                isTreeBlock = true;
+                            } else {
+                                TreeTypes tt = TreeTypes.getTree(world, at, current);
+                                if(tt != null && tt.getLogCheck().isStateValid(world, at, current)) {
+                                    isTreeBlock = true;
+                                }
+                            }
+                            WRItemObject<BlockPos> element = new WRItemObject<>(isTreeBlock ? 4 : 1, snapshot.getPos());
+                            if (treePositions.offerElement(element)) ret = true;
                         }
                     }
                 } else {
@@ -277,7 +295,8 @@ public class TileTreeBeacon extends TileReceiverBase {
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
             BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
-            treePositions.offerElement(pos);
+            int weight = NBTHelper.getInteger(tag, "weight", 1);
+            treePositions.offerElement(new WRItemObject<>(weight, pos));
         }
     }
 
@@ -288,9 +307,10 @@ public class TileTreeBeacon extends TileReceiverBase {
         compound.setDouble("starlight", this.starlightCharge);
 
         NBTTagList listPositions = new NBTTagList();
-        for (BlockPos pos : treePositions) {
+        for (WRItemObject<BlockPos> pos : treePositions) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, tag);
+            NBTUtils.writeBlockPosToNBT(pos.getValue(), tag);
+            tag.setInteger("weight", pos.itemWeight);
             listPositions.appendTag(tag);
         }
         compound.setTag("positions", listPositions);
@@ -359,7 +379,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         public static double treeBeaconRange = 16D;
         public static int maxCount = 600;
         public static int dropsChance = 4;
-        public static int breakChance = 500;
+        public static int breakChance = 350;
         public static float speedLimiter = 1;
 
         private ConfigEntryTreeBeacon() {
@@ -371,8 +391,8 @@ public class TileTreeBeacon extends TileReceiverBase {
             speedLimiter = cfg.getFloat(getKey() + "EfficiencyLimiter", getConfigurationSection(), 1F, 0F, 1F, "Percentage, how hard the speed limiter should slow down production of the tree beacon. 1=max, 0=no limiter");
             maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 600, 1, 4000, "Defines the amount of blocks the treeBeacon can support at max count");
             treeBeaconRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), 16F, 4F, 64F, "Defines the Range where the TreeBeacon will scan for Tree's to grow.");
-            dropsChance = cfg.getInt(getKey() + "DropsChance", getConfigurationSection(), 4, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
-            breakChance = cfg.getInt(getKey() + "BreakChance", getConfigurationSection(), 500, 20, Integer.MAX_VALUE, "Defines the chance that the block harvested is going to break per random-selection tick. The higher the value the lower the chance");
+            dropsChance = cfg.getInt(getKey() + "DropsChance", getConfigurationSection(), dropsChance, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
+            breakChance = cfg.getInt(getKey() + "BreakChance", getConfigurationSection(), breakChance, 20, Integer.MAX_VALUE, "Defines the chance that the block harvested is going to break per random-selection tick. The higher the value the lower the chance");
         }
 
     }

@@ -43,6 +43,7 @@ misc.chaos.resistance.max=Chaos Immunity
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
+effect.as.dropmod=Inner Wealth
 
 amulet.enchantment.level.one=level
 amulet.enchantment.level.more=levels
@@ -374,6 +375,7 @@ astralsorcery.journal.recipe.amt.toomuch=§cToo much
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Cutting
+crystal.fracture=Fractured
 crystal.attuned=Tuned to %s
 crystal.trait=Trait of %s
 crystal.collect.type=Collects starlight from %s

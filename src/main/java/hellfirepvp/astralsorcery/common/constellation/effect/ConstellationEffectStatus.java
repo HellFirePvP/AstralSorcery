@@ -24,8 +24,6 @@ import javax.annotation.Nullable;
 //Interface for constellation effects that don't care how strong the starlight influx is, they just provide a certain status
 public interface ConstellationEffectStatus {
 
-    public abstract boolean runEffect(World world, BlockPos pos, int mirrorAmount, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect);
-
-    public abstract boolean runTraitEffect(World world, BlockPos pos, int mirrorAmount, IMinorConstellation traitType);
+    public abstract boolean runEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect);
 
 }

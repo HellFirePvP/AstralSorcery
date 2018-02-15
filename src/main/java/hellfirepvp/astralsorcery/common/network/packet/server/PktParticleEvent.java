@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.tile.network.TileCollectorCrystal;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.effect.CelestialStrike;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopEffectHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3i;
@@ -133,6 +134,7 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
         ENGRAVE_LENS,
         GEN_STRUCTURE,
         DISCIDIA_ATTACK_STACK,
+        TIME_FREEZE_EFFECT,
 
         CE_CROP_INTERACT,
         CE_MELT_BLOCK,
@@ -207,6 +209,8 @@ public class PktParticleEvent implements IMessage, IMessageHandler<PktParticleEv
                     return CapeEffectEvorsio::playBlockBreakParticles;
                 case CAPE_EVORSIO_AOE:
                     return CapeEffectEvorsio::playAreaDamageParticles;
+                case TIME_FREEZE_EFFECT:
+                    return TimeStopEffectHelper::playEntityParticles;
             }
             return null;
         }
