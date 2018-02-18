@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
@@ -24,8 +25,8 @@ import java.util.Random;
  */
 public class ToolCrystalProperties extends CrystalProperties {
 
-    public ToolCrystalProperties(int size, int purity, int collectiveCapability, int fracturation) {
-        super(size, purity, collectiveCapability, fracturation);
+    public ToolCrystalProperties(int size, int purity, int collectiveCapability, int fracturation, int sizeOverride) {
+        super(size, purity, collectiveCapability, fracturation, sizeOverride);
     }
 
     public static ToolCrystalProperties merge(CrystalProperties... properties) {
@@ -37,30 +38,47 @@ public class ToolCrystalProperties extends CrystalProperties {
         int totalPurity = 0;
         int totalCollectivity = 0;
         int frac = 0;
+        int ovr = 0;
         for (CrystalProperties c : properties) {
             totalSize += c.getSize();
             totalPurity += c.getPurity();
             totalCollectivity += c.getCollectiveCapability();
-            frac += c.fractured;
+            frac += c.getFracturation();
+            if(c.getSizeOverride() >= 0) {
+                ovr += (c.getSizeOverride() - MAX_SIZE_CELESTIAL);
+            }
+        }
+        if(ovr != 0) {
+            ovr /= properties.size();
+            ovr += MAX_SIZE_CELESTIAL * properties.size();
+        } else {
+            ovr = -1;
         }
         return new ToolCrystalProperties(
                 totalSize,
                 totalPurity / properties.size(),
                 totalCollectivity / properties.size(),
-                frac / properties.size());
+                frac / properties.size(),
+                ovr);
     }
 
     public static ToolCrystalProperties readFromNBT(NBTTagCompound compound) {
-        ToolCrystalProperties prop = new ToolCrystalProperties(0, 0, 0, 0);
+        ToolCrystalProperties prop = new ToolCrystalProperties(0, 0, 0, 0, -1);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
         prop.fractured = compound.getInteger("fract");
+        prop.sizeOverride = NBTHelper.getInteger(compound, "sizeOverride", -1);
         return prop;
     }
 
-    public void damageCutting() {
-        this.collectiveCapability = Math.max(0, this.collectiveCapability - 1);
+    public ToolCrystalProperties copyDamagedCutting() {
+        return new ToolCrystalProperties(
+                this.size,
+                this.purity,
+                Math.max(0, this.collectiveCapability - 1),
+                this.fractured,
+                this.sizeOverride);
     }
 
     //Return null if the tool should break during grind.
@@ -68,7 +86,7 @@ public class ToolCrystalProperties extends CrystalProperties {
     public ToolCrystalProperties grindCopy(Random rand) {
         CrystalProperties out = super.grindCopy(rand);
         if(out == null) return null;
-        return new ToolCrystalProperties(out.size, out.purity, out.collectiveCapability, out.fractured);
+        return new ToolCrystalProperties(out.size, out.purity, out.collectiveCapability, out.fractured, out.sizeOverride);
     }
 
     public float getEfficiencyMultiplier() {

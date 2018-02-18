@@ -28,6 +28,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransm
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.SkyCollectionHelper;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.block.PrecisionSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -67,6 +68,7 @@ public class TileWell extends TileReceiverBaseInventory {
 
     private PrecisionSingleFluidCapabilityTank tank;
     private double starlightBuffer = 0;
+    private float posDistribution = -1;
 
     public TileWell() {
         super(1, EnumFacing.UP);
@@ -93,7 +95,12 @@ public class TileWell extends TileReceiverBaseInventory {
                 } else {
                     dstr = yLevel / 120F;
                 }
+                if(posDistribution == -1) {
+                    posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
+                }
+
                 sbDayDistribution *= dstr;
+                sbDayDistribution *= 1 + (1.2 * posDistribution);
                 starlightBuffer += Math.max(0.0001, sbDayDistribution);
             }
 

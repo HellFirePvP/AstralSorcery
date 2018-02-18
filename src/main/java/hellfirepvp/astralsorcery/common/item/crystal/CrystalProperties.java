@@ -8,11 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.block.network.BlockLens;
+import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
+import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
@@ -38,19 +46,21 @@ public class CrystalProperties {
 
     public static final int MAX_SIZE_ROCK = 400;
     public static final int MAX_SIZE_CELESTIAL = 900;
-    private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100, 0);
-    private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100, 0);
+    private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100, 0, -1);
+    private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100, 0, -1);
 
     protected int size; //(theoretically) 0 to X
     protected int purity; //0 to 100 where 100 being completely pure.
     protected int collectiveCapability; //0 to 100 where 100 being best collection rate.
     protected int fractured = 0; //0 to 100 where 100 means the crystal should shatter due to its integrity being too damaged
+    protected int sizeOverride = -1; //Set to -1 = no override
 
-    public CrystalProperties(int size, int purity, int collectiveCapability, int fractured) {
+    public CrystalProperties(int size, int purity, int collectiveCapability, int fractured, int sizeOverride) {
         this.size = size;
         this.purity = purity;
         this.collectiveCapability = collectiveCapability;
         this.fractured = fractured;
+        this.sizeOverride = sizeOverride;
     }
 
     public int getSize() {
@@ -69,12 +79,17 @@ public class CrystalProperties {
         return fractured;
     }
 
+    public int getSizeOverride() {
+        return sizeOverride;
+    }
+
     public static CrystalProperties readFromNBT(NBTTagCompound compound) {
-        CrystalProperties prop = new CrystalProperties(0, 0, 0, 0);
+        CrystalProperties prop = new CrystalProperties(0, 0, 0, 0, -1);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
         prop.fractured = NBTHelper.getInteger(compound, "fract", 0);
+        prop.sizeOverride = NBTHelper.getInteger(compound, "sizeOverride", -1);
         return prop;
     }
 
@@ -83,27 +98,28 @@ public class CrystalProperties {
         compound.setInteger("purity", purity);
         compound.setInteger("collect", collectiveCapability);
         compound.setInteger("fract", fractured);
+        compound.setInteger("sizeOverride", sizeOverride);
     }
 
     public static CrystalProperties createStructural() {
         int size = Math.min(CrystalProperties.MAX_SIZE_ROCK, (CrystalProperties.MAX_SIZE_ROCK / 2) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK / 2));
         int purity = 60 + rand.nextInt(41);
         int collect = 45 + rand.nextInt(56);
-        return new CrystalProperties(size, purity, collect, 0);
+        return new CrystalProperties(size, purity, collect, 0, -1);
     }
 
     public static CrystalProperties createRandomRock() {
         int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_ROCK) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK)) / 2);
         int purity = (rand.nextInt(101) + rand.nextInt(101)) / 2;
         int collect = 5 + rand.nextInt(26);
-        return new CrystalProperties(size, purity, collect, 0);
+        return new CrystalProperties(size, purity, collect, 0, -1);
     }
 
     public static CrystalProperties createRandomCelestial() {
         int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL) + rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL)) / 2);
         int purity = 40 + rand.nextInt(61);
         int collect = 50 + rand.nextInt(26);
-        return new CrystalProperties(size, purity, collect, 0);
+        return new CrystalProperties(size, purity, collect, 0, -1);
     }
 
     public static CrystalProperties getMaxRockProperties() {
@@ -112,6 +128,42 @@ public class CrystalProperties {
 
     public static CrystalProperties getMaxCelestialProperties() {
         return MAXED_CELESTIAL_PROPERTIES;
+    }
+
+    public static int getMaxSize(ItemStack stack) {
+        CrystalProperties prop = getCrystalProperties(stack);
+        if(prop != null && prop.sizeOverride != -1) {
+            return prop.sizeOverride;
+        }
+
+        if(stack.isEmpty()) {
+            return MAX_SIZE_ROCK;
+        }
+
+        if(stack.getItem() instanceof ItemCollectorCrystal) {
+            BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
+            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                return MAX_SIZE_CELESTIAL;
+            }
+            return MAX_SIZE_ROCK;
+        }
+
+        if(stack.getItem() instanceof ItemBlock) {
+            Block b = ((ItemBlock) stack.getItem()).getBlock();
+            if(b instanceof BlockLens || b instanceof BlockPrism) {
+                return MAX_SIZE_CELESTIAL;
+            }
+        }
+
+        if(stack.getItem() instanceof ItemCrystalToolBase) {
+            return ((ItemCrystalToolBase) stack.getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
+        }
+        if(stack.getItem() instanceof ItemCrystalSword) {
+            return 2 * CrystalProperties.MAX_SIZE_CELESTIAL;
+        }
+
+        return (stack.getItem() instanceof ItemCelestialCrystal || stack.getItem() instanceof ItemTunedCelestialCrystal) ?
+                MAX_SIZE_CELESTIAL : MAX_SIZE_ROCK;
     }
 
     @SideOnly(Side.CLIENT)
@@ -173,7 +225,7 @@ public class CrystalProperties {
 
     @Nullable
     public CrystalProperties grindCopy(Random rand) {
-        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability, fractured);
+        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability, fractured, sizeOverride);
         int grind = 7 + rand.nextInt(5);
         double purity = ((double) this.purity) / 100D;
         if(purity <= 0.4) purity = 0.4;
@@ -197,6 +249,7 @@ public class CrystalProperties {
         crystalProp.setInteger("purity", properties.getPurity());
         crystalProp.setInteger("collectiveCapability", properties.getCollectiveCapability());
         crystalProp.setInteger("fract", properties.getFracturation());
+        crystalProp.setInteger("sizeOverride", properties.getSizeOverride());
         cmp.setTag("crystalProperties", crystalProp);
     }
 
@@ -208,11 +261,12 @@ public class CrystalProperties {
         Integer purity = prop.getInteger("purity");
         Integer colCap = prop.getInteger("collectiveCapability");
         Integer fract = prop.getInteger("fract");
-        return new CrystalProperties(size, purity, colCap, fract);
+        Integer sizeOvr = NBTHelper.getInteger(prop, "sizeOverride", -1);
+        return new CrystalProperties(size, purity, colCap, fract, sizeOvr);
     }
 
     @Override
     public String toString() {
-        return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + ",Fractured=" + fractured + "}";
+        return "CrystalProperties={Size=" + size + ", Purity=" + purity + ",Cutting=" + collectiveCapability + ",Fractured=" + fractured + ",SizeOverride=" + sizeOverride + "}";
     }
 }

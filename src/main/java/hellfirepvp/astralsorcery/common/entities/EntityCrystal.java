@@ -99,15 +99,14 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
         if(foundItems.size() <= 0) {
             ItemStack stack = getItem();
             CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-            int max = (stack.getItem() instanceof ItemCelestialCrystal ||
-                    stack.getItem() instanceof ItemTunedCelestialCrystal) ?
-                    CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK;
+            int max = CrystalProperties.getMaxSize(stack);
             if(prop.getFracturation() > 0) {
                 CrystalProperties newProp = new CrystalProperties(
                         prop.getSize(),
                         prop.getPurity(),
                         prop.getCollectiveCapability(),
-                        Math.max(0, prop.getFracturation() - 15 - rand.nextInt(20)));
+                        Math.max(0, prop.getFracturation() - 15 - rand.nextInt(20)),
+                        prop.getSizeOverride());
                 CrystalProperties.applyCrystalProperties(stack, newProp);
                 return;
             }
@@ -119,7 +118,8 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                         rand.nextInt(100) + 20,
                         Math.min(prop.getPurity() + rand.nextInt(10), 100),
                         rand.nextInt(40) + 30,
-                        0);
+                        0,
+                         prop.getSizeOverride());
                 CrystalProperties.applyCrystalProperties(newStack, newProp);
                 ItemUtils.dropItemNaturally(world, posX, posY, posZ, newStack);
 
@@ -128,12 +128,13 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                                 rand.nextInt(300) + 100,
                                 prop.getPurity(),
                                 rand.nextInt(40) + 30,
-                                prop.getFracturation()));
+                                prop.getFracturation(),
+                                prop.getSizeOverride()));
             } else {
                 int grow = rand.nextInt(90) + 40;
                 max = Math.min(prop.getSize() + grow, max);
                 CrystalProperties.applyCrystalProperties(stack,
-                        new CrystalProperties(max, prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation()));
+                        new CrystalProperties(max, prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation(), prop.getSizeOverride()));
             }
         }
     }

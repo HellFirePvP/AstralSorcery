@@ -95,8 +95,7 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
 
     @SideOnly(Side.CLIENT)
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
-        boolean isCelestial = this instanceof ItemCelestialCrystal || this instanceof ItemTunedCelestialCrystal;
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, isCelestial ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);
+        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.getMaxSize(stack));
     }
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();

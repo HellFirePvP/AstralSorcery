@@ -632,6 +632,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         private double collectionChannelBuffer = 0D;
         private boolean doesWorkBuffer = false;
+        private float posDistribution = -1;
 
         private int idleBuffer = 0;
 
@@ -710,11 +711,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 if(doesSeeSky) {
                     double perc = 0.2D + (0.8D * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world));
                     WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(world);
-                    double collect = 0;
-                    if(handle != null) {
-                        collect = perc * CrystalCalculations.getCollectionAmt(properties, handle.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
+
+                    if(posDistribution == -1) {
+                        posDistribution = SkyCollectionHelper.getSkyNoiseDistribution(world, getPos());
                     }
-                    collectionChannelBuffer += collect / 2D;
+
+                    if(handle != null) {
+                        perc *= CrystalCalculations.getCollectionAmt(properties, handle.getCurrentDistribution(channeling, (in) -> 0.2F + (0.8F * in)));
+                        perc *= 1 + (0.5 * posDistribution);
+                    }
+                    collectionChannelBuffer += perc / 2D;
                 }
                 if(collectionChannelBuffer > 0) {
                     idleBuffer = 0;
@@ -799,7 +805,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             if(!this.crystal.isEmpty()) {
                 CrystalProperties prop = CrystalProperties.getCrystalProperties(this.crystal);
                 if(prop != null) {
-                    prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1);
+                    prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1, prop.getSizeOverride());
                     if(prop.getFracturation() >= 100) {
                         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, world, getPos(), 7.5F, 1.4F);
                         Vector3 at = new Vector3(getPos()).add(0.5, 1.5, 0.5);

@@ -129,8 +129,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
-        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, type == CollectorCrystalType.CELESTIAL_CRYSTAL ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);
+        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.getMaxSize(stack));
 
         if(missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
