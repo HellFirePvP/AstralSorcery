@@ -149,10 +149,10 @@ public class RegistryConstellations {
                         new PotionMapEffect(MobEffects.SLOWNESS, 0, 0)));
         registerMapEffect(ulteria,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompaibility()),
+                        new EnchantmentMapEffect(Enchantments.UNBREAKING, 2, 4).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.FIRE_PROTECTION, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.BLAST_PROTECTION, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.PROJECTILE_PROTECTION, 4, 6).setIgnoreCompatibility()),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.ABSORPTION, 0, 3),
                         new PotionMapEffect(MobEffects.REGENERATION, 1, 2),
@@ -160,8 +160,8 @@ public class RegistryConstellations {
         registerMapEffect(alcara,
                 Arrays.asList(
                         new EnchantmentMapEffect(Enchantments.SWEEPING, 3, 6),
-                        new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompaibility(),
+                        new EnchantmentMapEffect(Enchantments.LURE, 2, 5).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.LUCK_OF_THE_SEA, 3, 6).setIgnoreCompatibility(),
                         new EnchantmentMapEffect(Enchantments.SILK_TOUCH, 1, 1)),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.LUCK, 2, 4),
@@ -169,10 +169,10 @@ public class RegistryConstellations {
                         new PotionMapEffect(MobEffects.HUNGER, 0, 1)));
         registerMapEffect(vorux,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 6).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 6).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 5).setIgnoreCompaibility(),
-                        new EnchantmentMapEffect(Enchantments.POWER, 3, 5).setIgnoreCompaibility()),
+                        new EnchantmentMapEffect(Enchantments.SMITE, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.BANE_OF_ARTHROPODS, 4, 6).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.SHARPNESS, 3, 5).setIgnoreCompatibility(),
+                        new EnchantmentMapEffect(Enchantments.POWER, 3, 5).setIgnoreCompatibility()),
                 Arrays.asList(
                         new PotionMapEffect(MobEffects.STRENGTH, 2, 3),
                         new PotionMapEffect(MobEffects.RESISTANCE, 0, 1),

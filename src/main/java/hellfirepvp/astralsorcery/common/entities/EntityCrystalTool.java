@@ -133,7 +133,7 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
                 int grow = rand.nextInt(250) + 100;
                 max = Math.min(prop.getSize() + grow, max);
                 int cut = Math.max(0, prop.getCollectiveCapability() - (rand.nextInt(10) + 10));
-                applyProperties(new ToolCrystalProperties(max, prop.getPurity(), cut));
+                applyProperties(new ToolCrystalProperties(max, prop.getPurity(), cut, prop.getFracturation()));
             }
         }
     }

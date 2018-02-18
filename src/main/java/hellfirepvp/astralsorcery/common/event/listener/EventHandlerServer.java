@@ -56,6 +56,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -360,10 +361,10 @@ public class EventHandlerServer {
             if(!main.isEmpty()) {
                 if(EnchantmentHelper.getEnchantmentLevel(EnchantmentsAS.enchantmentScorchingHeat, main) > 0) {
                     int fortuneLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, main);
-                    List<ItemStack> dropsCopy = new LinkedList<>();
-                    dropsCopy.addAll(event.getDrops());
+                    NonNullList<ItemStack> drops = NonNullList.create();
                     event.getDrops().clear();
-                    for (ItemStack stack : dropsCopy) {
+                    event.getState().getBlock().getDrops(drops, event.getWorld(), event.getPos(), event.getState(), 0);
+                    for (ItemStack stack : drops) {
                         ItemStack out = FurnaceRecipes.instance().getSmeltingResult(stack);
                         if(!out.isEmpty()) {
                             ItemStack furnaced = ItemUtils.copyStackWithSize(out, 1);

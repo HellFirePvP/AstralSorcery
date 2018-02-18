@@ -47,14 +47,21 @@ public class ClientConstellationPositionMapping {
     static {
         availablePositions.add(RenderPosition.createRenderInfoFor( 0.2,  -0.2,     0,   5));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.2,  -0.2,  -0.05,  5));
-        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -0.25, -0.2,   8));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -0.2,  -0.2,   8));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -0.6,   0.5,  18));
         availablePositions.add(RenderPosition.createRenderInfoFor( 0.3,  -0.5,   0.5,  19));
+
         availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.2,  -0.1,   5));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.05, -0.3,   0.4,  10));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.3,   0.1,  10));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.3,  -0.4,  -0.35, 15));
         availablePositions.add(RenderPosition.createRenderInfoFor( 0.4,  -0.4,   0.2,  15));
+
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.5,   0.2,  15));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  32));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  30));
+        availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -1.3,   0.5,  35));
+        availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -1.1,  -0.5,  28));
     }
 
     public static class RenderPosition {

@@ -746,7 +746,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         //TODO occasionally returns with <0?
         private void doMainEffect(World world, ConstellationEffect ce, @Nullable IMinorConstellation trait) {
             ConstellationEffectProperties prop = ce.provideProperties(getCollectedBackmirrors());
-            trait = Constellations.alcara;
             if(trait != null) {
                 prop = prop.modify(trait);
             }

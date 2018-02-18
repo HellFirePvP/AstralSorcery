@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.potion;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
 
@@ -34,6 +36,7 @@ public class PotionTimeFreeze extends PotionCustomTexture {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public BindableResource getResource() {
         if(texBuffer == null) {
             texBuffer = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "potion_timefreeze");

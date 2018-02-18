@@ -24,8 +24,8 @@ import java.util.Random;
  */
 public class ToolCrystalProperties extends CrystalProperties {
 
-    public ToolCrystalProperties(int size, int purity, int collectiveCapability) {
-        super(size, purity, collectiveCapability);
+    public ToolCrystalProperties(int size, int purity, int collectiveCapability, int fracturation) {
+        super(size, purity, collectiveCapability, fracturation);
     }
 
     public static ToolCrystalProperties merge(CrystalProperties... properties) {
@@ -36,19 +36,26 @@ public class ToolCrystalProperties extends CrystalProperties {
         int totalSize = 0;
         int totalPurity = 0;
         int totalCollectivity = 0;
+        int frac = 0;
         for (CrystalProperties c : properties) {
             totalSize += c.getSize();
             totalPurity += c.getPurity();
             totalCollectivity += c.getCollectiveCapability();
+            frac += c.fractured;
         }
-        return new ToolCrystalProperties(totalSize, totalPurity / properties.size(), totalCollectivity / properties.size());
+        return new ToolCrystalProperties(
+                totalSize,
+                totalPurity / properties.size(),
+                totalCollectivity / properties.size(),
+                frac / properties.size());
     }
 
     public static ToolCrystalProperties readFromNBT(NBTTagCompound compound) {
-        ToolCrystalProperties prop = new ToolCrystalProperties(0, 0, 0);
+        ToolCrystalProperties prop = new ToolCrystalProperties(0, 0, 0, 0);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
+        prop.fractured = compound.getInteger("fract");
         return prop;
     }
 
@@ -61,7 +68,7 @@ public class ToolCrystalProperties extends CrystalProperties {
     public ToolCrystalProperties grindCopy(Random rand) {
         CrystalProperties out = super.grindCopy(rand);
         if(out == null) return null;
-        return new ToolCrystalProperties(out.size, out.purity, out.collectiveCapability);
+        return new ToolCrystalProperties(out.size, out.purity, out.collectiveCapability, out.fractured);
     }
 
     public float getEfficiencyMultiplier() {

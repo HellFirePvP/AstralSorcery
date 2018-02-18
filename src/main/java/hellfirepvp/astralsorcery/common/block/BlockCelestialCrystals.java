@@ -165,7 +165,11 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                         CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
                         int missing = 100 - prop.getPurity();
                         if(missing > 0) {
-                            prop = new CrystalProperties(prop.getSize(), MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100), prop.getCollectiveCapability());
+                            prop = new CrystalProperties(
+                                    prop.getSize(),
+                                    MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
+                                    prop.getCollectiveCapability(),
+                                    prop.getFracturation());
                             CrystalProperties.applyCrystalProperties(celCrystal, prop);
                         }
                     }

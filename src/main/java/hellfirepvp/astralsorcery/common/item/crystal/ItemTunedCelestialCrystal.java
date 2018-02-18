@@ -39,7 +39,7 @@ public class ItemTunedCelestialCrystal extends ItemTunedCrystalBase implements I
             ItemStack stack;
             for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
                 stack = new ItemStack(this);
-                CrystalProperties.applyCrystalProperties(stack, new CrystalProperties(CrystalProperties.MAX_SIZE_CELESTIAL, 100, 100));
+                CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
                 applyMainConstellation(stack, c);
                 subItems.add(stack);
             }

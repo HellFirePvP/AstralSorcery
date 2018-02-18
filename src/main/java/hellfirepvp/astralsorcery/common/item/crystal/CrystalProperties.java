@@ -8,11 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.util.CrystalCalculations;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -40,17 +38,13 @@ public class CrystalProperties {
 
     public static final int MAX_SIZE_ROCK = 400;
     public static final int MAX_SIZE_CELESTIAL = 900;
-    private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100);
-    private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100);
+    private static final CrystalProperties MAXED_ROCK_PROPERTIES = new CrystalProperties(MAX_SIZE_ROCK, 100, 100, 0);
+    private static final CrystalProperties MAXED_CELESTIAL_PROPERTIES = new CrystalProperties(MAX_SIZE_CELESTIAL, 100, 100, 0);
 
     protected int size; //(theoretically) 0 to X
     protected int purity; //0 to 100 where 100 being completely pure.
     protected int collectiveCapability; //0 to 100 where 100 being best collection rate.
     protected int fractured = 0; //0 to 100 where 100 means the crystal should shatter due to its integrity being too damaged
-
-    public CrystalProperties(int size, int purity, int collectiveCapability) {
-        this(size, purity, collectiveCapability, 0);
-    }
 
     public CrystalProperties(int size, int purity, int collectiveCapability, int fractured) {
         this.size = size;
@@ -76,7 +70,7 @@ public class CrystalProperties {
     }
 
     public static CrystalProperties readFromNBT(NBTTagCompound compound) {
-        CrystalProperties prop = new CrystalProperties(0, 0, 0);
+        CrystalProperties prop = new CrystalProperties(0, 0, 0, 0);
         prop.size = compound.getInteger("size");
         prop.purity = compound.getInteger("purity");
         prop.collectiveCapability = compound.getInteger("collect");
@@ -95,21 +89,21 @@ public class CrystalProperties {
         int size = Math.min(CrystalProperties.MAX_SIZE_ROCK, (CrystalProperties.MAX_SIZE_ROCK / 2) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK / 2));
         int purity = 60 + rand.nextInt(41);
         int collect = 45 + rand.nextInt(56);
-        return new CrystalProperties(size, purity, collect);
+        return new CrystalProperties(size, purity, collect, 0);
     }
 
     public static CrystalProperties createRandomRock() {
         int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_ROCK) + rand.nextInt(CrystalProperties.MAX_SIZE_ROCK)) / 2);
         int purity = (rand.nextInt(101) + rand.nextInt(101)) / 2;
         int collect = 5 + rand.nextInt(26);
-        return new CrystalProperties(size, purity, collect);
+        return new CrystalProperties(size, purity, collect, 0);
     }
 
     public static CrystalProperties createRandomCelestial() {
         int size = Math.max(1, (rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL) + rand.nextInt(CrystalProperties.MAX_SIZE_CELESTIAL)) / 2);
         int purity = 40 + rand.nextInt(61);
         int collect = 50 + rand.nextInt(26);
-        return new CrystalProperties(size, purity, collect);
+        return new CrystalProperties(size, purity, collect, 0);
     }
 
     public static CrystalProperties getMaxRockProperties() {
@@ -145,17 +139,20 @@ public class CrystalProperties {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + (prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getSize());
+                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.RED : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + (prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getPurity() + "%");
+                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.RED : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + (prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE) + prop.getCollectiveCapability() + "%");
+                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.RED : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
                 }
@@ -176,7 +173,7 @@ public class CrystalProperties {
 
     @Nullable
     public CrystalProperties grindCopy(Random rand) {
-        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability);
+        CrystalProperties copy = new CrystalProperties(size, purity, collectiveCapability, fractured);
         int grind = 7 + rand.nextInt(5);
         double purity = ((double) this.purity) / 100D;
         if(purity <= 0.4) purity = 0.4;

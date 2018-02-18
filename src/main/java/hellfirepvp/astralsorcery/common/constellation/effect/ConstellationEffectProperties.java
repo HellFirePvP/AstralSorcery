@@ -66,7 +66,7 @@ public class ConstellationEffectProperties {
                 size *= 0.4F;
             }
             if(trait.equals(Constellations.alcara)) {
-                fracturationLower *= 0.005F;
+                fracturationLower *= 0.01F;
                 fracturationRate *= 15F;
 
                 size *= 1.7F;
