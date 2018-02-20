@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -28,8 +28,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -40,7 +40,6 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -242,6 +241,10 @@ public class MiscUtils {
     public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {
         if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
         if(entity.getEntityWorld().provider.getDimension() != targetDimId) {
+            if(!ForgeHooks.onTravelToDimension(entity, targetDimId)) {
+                return;
+            }
+
             if(entity instanceof EntityPlayerMP) {
                 FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP) entity, targetDimId, new NoOpTeleporter(((EntityPlayerMP) entity).getServerWorld()));
             } else {
@@ -304,15 +307,19 @@ public class MiscUtils {
     public static boolean isPlayerFakeMP(EntityPlayerMP player) {
         if(player instanceof FakePlayer) return true;
 
-        if(Mods.GALACTICRAFT_CORE.isPresent()) {
-            Class<?> plClass = Mods.getGCPlayerClass();
-            if(plClass != null) {
-                if(player.getClass() != EntityPlayerMP.class && player.getClass() != plClass) return true;
-            } else {
-                if(player.getClass() != EntityPlayerMP.class) return true;
+        boolean isModdedPlayer = false;
+        for (Mods mod : Mods.values()) {
+            if(!mod.isPresent()) continue;
+            Class<?> specificPlayerClass = mod.getExtendedPlayerClass();
+            if(specificPlayerClass != null) {
+                if(player.getClass() != EntityPlayerMP.class && player.getClass() == specificPlayerClass) {
+                    isModdedPlayer = true;
+                    break;
+                }
             }
-        } else {
-            if(player.getClass() != EntityPlayerMP.class) return true;
+        }
+        if(!isModdedPlayer && player.getClass() != EntityPlayerMP.class) {
+            return true;
         }
 
         if(player.connection == null) return true;

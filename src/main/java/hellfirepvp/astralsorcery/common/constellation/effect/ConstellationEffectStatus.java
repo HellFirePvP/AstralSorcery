@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
 //Interface for constellation effects that don't care how strong the starlight influx is, they just provide a certain status
 public interface ConstellationEffectStatus {
 
-    public abstract boolean runEffect(World world, BlockPos pos, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect);
+    public abstract boolean runEffect(World world, BlockPos pos, int mirrorAmount, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect);
 
-    public abstract boolean runTraitEffect(World world, BlockPos pos, IMinorConstellation traitType);
+    public abstract boolean runTraitEffect(World world, BlockPos pos, int mirrorAmount, IMinorConstellation traitType);
 
 }

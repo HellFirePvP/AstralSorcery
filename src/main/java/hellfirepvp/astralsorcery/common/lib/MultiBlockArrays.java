@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -32,6 +32,9 @@ public class MultiBlockArrays {
     public static StructureBlockArray smallShrine;
 
     public static StructureBlockArray treasureShrine;
+
+    public static StructureBlockArray smallRuin;
+    public static PatternBlockArray patternSmallRuin;
 
     @PasteBlacklist
     public static PatternBlockArray patternRitualPedestal;

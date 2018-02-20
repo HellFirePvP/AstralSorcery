@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -15,7 +15,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
-import hellfirepvp.astralsorcery.common.auxiliary.WorldChaliceCache;
+import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -34,14 +34,14 @@ import org.apache.logging.log4j.Logger;
  * Date: 07.05.2016 / 00:20
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
-        dependencies = "required-after:forge@[14.23.1.2560,);after:crafttweaker",
+        dependencies = "required-after:forge@[14.23.1.2560,);required-after:baubles;after:crafttweaker",
         certificateFingerprint = "certificate-placeholder :^)",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.8.4";
+    public static final String VERSION = "1.8.5";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 
@@ -99,12 +99,12 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStopping(FMLServerStoppingEvent event) {
         ResearchManager.saveAndClearServerCache();
+        StarlightTransmissionHandler.getInstance().serverCleanHandlers();
     }
 
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
-        WorldChaliceCache.wipeCache();
         //SpellCastingManager.INSTANCE.clearEffects();
     }
 

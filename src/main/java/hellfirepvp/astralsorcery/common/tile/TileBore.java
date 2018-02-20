@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -558,7 +558,8 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
 
     public static enum BoreType implements IStringSerializable {
 
-        LIQUID;
+        LIQUID,
+        VORTEX;
 
         @Override
         public String getName() {

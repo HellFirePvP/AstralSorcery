@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -132,6 +132,38 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
 
         IConstellation cst = getConstellation(stack);
 
+        if(cst == null) {
+            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
+            if (progress != null) {
+                List<IConstellation> constellations = new ArrayList<>();
+                for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                    if(c.canDiscover(progress)) {
+                        constellations.add(c);
+                    }
+                }
+
+                for (String strConstellation : progress.getKnownConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
+                for (String strConstellation : progress.getSeenConstellations()) {
+                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
+                    if(c != null) {
+                        constellations.remove(c);
+                    }
+                }
+
+                if (!constellations.isEmpty()) {
+                    List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
+                    WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
+                    setConstellation(stack, result.getValue());
+                }
+            }
+        }
+
+        cst = getConstellation(stack);
         if(cst != null) {
             PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
             if(progress != null) {
@@ -157,40 +189,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
                         }
                     }
                 }
-            }
-            return;
-        }
-
-        if ((worldIn.getTotalWorldTime() & 7)  == 0) {
-            PlayerProgress progress = ResearchManager.getProgress((EntityPlayer) entityIn);
-            if (progress != null) {
-                List<IConstellation> constellations = new ArrayList<>();
-                for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                    if(c.canDiscover(progress)) {
-                        constellations.add(c);
-                    }
-                }
-
-                for (String strConstellation : progress.getKnownConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
-                for (String strConstellation : progress.getSeenConstellations()) {
-                    IConstellation c = ConstellationRegistry.getConstellationByName(strConstellation);
-                    if(c != null) {
-                        constellations.remove(c);
-                    }
-                }
-
-                if (constellations.isEmpty()) {
-                    return;
-                }
-
-                List<WRItemObject<IConstellation>> wrp = buildWeightedRandomList(constellations);
-                WRItemObject<IConstellation> result = WeightedRandom.getRandomItem(worldIn.rand, wrp);
-                setConstellation(stack, result.getValue());
             }
         }
     }

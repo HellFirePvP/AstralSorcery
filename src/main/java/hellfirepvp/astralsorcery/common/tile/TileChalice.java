@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -20,13 +20,17 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.auxiliary.WorldChaliceCache;
 import hellfirepvp.astralsorcery.common.util.block.SimpleSingleFluidCapabilityTank;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
@@ -38,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -97,15 +102,13 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
                 }
                 List<LiquidInteraction> interactions = LiquidInteraction.getPossibleInteractions(this.tank.getFluid());
                 if(!interactions.isEmpty()) {
-                    List<TileChalice> tch = WorldChaliceCache.getChalices(this.world);
+                    List<TileChalice> tch = collectChalicesFlat();
                     Collections.shuffle(tch);
                     for (TileChalice ch : tch) {
                         if(ch.getPos().equals(getPos())) continue;
                         if(world.isBlockIndirectlyGettingPowered(ch.pos) > 0) continue;
                         TileChalice other = MiscUtils.getTileAt(world, ch.pos, TileChalice.class, true);
-                        if(other == null) {
-                            WorldChaliceCache.remove(ch);
-                        } else {
+                        if (other != null) {
                             if(new Vector3(this).distance(ch.getPos()) <= ConfigEntryChalice.chaliceRange) {
                                 RaytraceAssist rta = new RaytraceAssist(getPos(), ch.getPos());
                                 if(rta.isClear(this.world)) {
@@ -136,6 +139,27 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
                 }
             }
         }
+    }
+
+    private List<TileChalice> collectChalicesFlat() {
+        int ceilRange = MathHelper.ceil(ConfigEntryChalice.chaliceRange);
+        BlockPos min = this.pos.add(-ceilRange, -ceilRange, -ceilRange);
+        BlockPos max = this.pos.add( ceilRange,  ceilRange,  ceilRange);
+        ChunkPos chMin = new ChunkPos(min), chMax = new ChunkPos(max);
+        List<TileChalice> out = new LinkedList<>();
+        for (int xx = chMin.x; xx <= chMax.x; xx++) {
+            for (int zz = chMin.z; zz < chMax.z; zz++) {
+                if(world.isBlockLoaded(new BlockPos((xx) << 4, 0, (zz) << 4))) {
+                    Chunk loaded = world.getChunkFromChunkCoords(xx, zz);
+                    for (TileEntity te : loaded.getTileEntityMap().values()) {
+                        if(te instanceof TileChalice && !te.isInvalid()) {
+                            out.add((TileChalice) te);
+                        }
+                    }
+                }
+            }
+        }
+        return out;
     }
 
     @SideOnly(Side.CLIENT)
@@ -231,26 +255,6 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
     @Override
     protected void onFirstTick() {}
-
-    @Override
-    public void onLoad() {
-        if(this.world.isRemote) return;
-        WorldChaliceCache.register(this);
-    }
-
-    @Override
-    public void onChunkUnload() {
-        super.onChunkUnload();
-        if(this.world.isRemote) return;
-        WorldChaliceCache.remove(this);
-    }
-
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        if(this.world.isRemote) return;
-        WorldChaliceCache.remove(this);
-    }
 
     public int getFluidAmount() {
         return tank.getFluidAmount();

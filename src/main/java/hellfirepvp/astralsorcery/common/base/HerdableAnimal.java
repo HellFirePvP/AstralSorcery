@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -236,10 +236,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
             LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
             builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
             List<ItemStack> drops = world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_SHEEP).generateLootForPools(rand, builder.build());
-            if(rand.nextFloat() <= 0.01) {
-                entity.setSheared(true);
-            }
-            if(!entity.getSheared() && rand.nextFloat() <= 0.05) {
+            if(!entity.getSheared() && rand.nextFloat() <= 0.3) {
                 drops.add(new ItemStack(Blocks.WOOL, rand.nextInt(2) + 1));
             }
             return drops;

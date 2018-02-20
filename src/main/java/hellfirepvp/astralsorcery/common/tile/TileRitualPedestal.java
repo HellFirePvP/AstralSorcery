@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -575,6 +575,19 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         public void update(World world) {
             ticksTicking++;
 
+            TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
+            if(ped != null) {
+                ItemStack focus = ped.getInventoryHandler().getStackInSlot(0);
+                if(!focus.isEmpty() && focus.getItem() instanceof ItemTunedCrystalBase) {
+                    CrystalProperties properties = CrystalProperties.getCrystalProperties(focus);
+                    IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(focus);
+                    IMinorConstellation trait = ItemTunedCrystalBase.getTrait(focus);
+                    updateCrystalProperties(world, properties, tuned, trait);
+                } else {
+                    updateCrystalProperties(world, null, null, null);
+                }
+            }
+
             if(channeling != null && properties != null && hasMultiblock) {
                 if(ce == null) {
                     ce = channeling.getRitualEffect(this);
@@ -669,7 +682,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             if(ce instanceof ConstellationEffectStatus) {
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
-                if(((ConstellationEffectStatus) ce).runTraitEffect(world, to, trait)) markDirty(world);
+                if(((ConstellationEffectStatus) ce).runTraitEffect(world, to, getCollectedBackmirrors(), trait)) markDirty(world);
                 return;
             }
 
@@ -711,7 +724,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             if(ce instanceof ConstellationEffectStatus) {
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
-                if(((ConstellationEffectStatus) ce).runEffect(world, to, mayDoTrait, trait)) markDirty(world);
+                if(((ConstellationEffectStatus) ce).runEffect(world, to, getCollectedBackmirrors(), mayDoTrait, trait)) markDirty(world);
                 return;
             }
 
@@ -967,10 +980,13 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         public void updateCrystalProperties(World world, CrystalProperties properties, IWeakConstellation channeling, IMinorConstellation trait) {
+            IWeakConstellation prev = this.channeling;
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            this.clearAllMirrorPositions(world);
+            if(this.channeling == null || this.channeling != prev) {
+                this.clearAllMirrorPositions(world);
+            }
 
             markDirty(world);
         }

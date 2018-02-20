@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.8.4"
+version = "1.12.2-1.8.5"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
@@ -50,6 +50,12 @@ repositories {
         url "http://maven.blamejared.com/"
     }
 
+    maven {
+        //Baubles
+        name 'thiakil'
+        url 'http://maven.thiakil.com'
+    }
+
 }
 
 dependencies {
@@ -65,6 +71,8 @@ dependencies {
     def ct_version = "4.0.0.7"
 
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
+
+    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 
 }
 

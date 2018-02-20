@@ -1,7 +1,7 @@
 /*******************************************************************************
  * HellFirePvP / Astral Sorcery 2018
  *
- * This project is licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+ * All rights reserved.
  * The source code is available on github: https://github.com/HellFirePvP/AstralSorcery
  * For further details, see the License file there.
  ******************************************************************************/
@@ -47,6 +47,13 @@ public class StarlightTransmissionHandler implements ITickHandler {
             worldHandlers.put(dimId, handle);
         }
         handle.tick();
+    }
+
+    public void serverCleanHandlers() {
+        for (int id : worldHandlers.keySet()) {
+            worldHandlers.get(id).clear(id);
+        }
+        worldHandlers.clear();
     }
 
     public void informWorldUnload(World world) {
