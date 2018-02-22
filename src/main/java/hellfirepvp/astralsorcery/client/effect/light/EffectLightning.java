@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -149,14 +150,13 @@ public class EffectLightning extends EntityComplexFX {
     }
 
     public static void renderFast(float pTicks, List<EffectLightning> toBeRendered) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        Blending.ADDITIVE_ALPHA.apply();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.disableAlpha();
+        Blending.ADDITIVE_ALPHA.applyStateManager();
         connection.bind();
 
         Tessellator tes = Tessellator.getInstance();
@@ -174,13 +174,12 @@ public class EffectLightning extends EntityComplexFX {
         tes.draw();
 
         TextureHelper.refreshTextureBindState();
-        Blending.DEFAULT.apply();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
     }
 
     private void renderF(float partialTicks, BufferBuilder vb) {

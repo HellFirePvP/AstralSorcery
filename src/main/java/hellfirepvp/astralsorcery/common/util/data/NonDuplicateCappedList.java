@@ -23,9 +23,9 @@ import java.util.Random;
  */
 public class NonDuplicateCappedList<T> implements Iterable<T> {
 
-    private static final Random rand = new Random();
+    protected static final Random rand = new Random();
 
-    private List<T> elements = new LinkedList<>();
+    protected List<T> elements = new LinkedList<>();
 
     private int cap = 0;
 

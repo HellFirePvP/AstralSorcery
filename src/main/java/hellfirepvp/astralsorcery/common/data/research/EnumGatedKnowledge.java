@@ -23,6 +23,7 @@ public enum EnumGatedKnowledge {
     CRYSTAL_COLLECT(ProgressionTier.BASIC_CRAFT),
     CRYSTAL_TUNE(ProgressionTier.ATTUNEMENT),
     CRYSTAL_TRAIT(ProgressionTier.TRAIT_CRAFT),
+    CRYSTAL_FRACTURE(ProgressionTier.ATTUNEMENT),
 
     COLLECTOR_CRYSTAL(ProgressionTier.CONSTELLATION_CRAFT),
     COLLECTOR_TYPE(ProgressionTier.CONSTELLATION_CRAFT),

@@ -25,9 +25,6 @@ import java.util.Map;
  */
 public interface IIndependentStarlightSource {
 
-    //Called eventhough the tile is not loaded. that's what we wanted.
-    //public void onUpdate(World world, BlockPos pos);
-
     //As the purpose of the source, this should produce the starlight - called once every tick
     public float produceStarlightTick(World world, BlockPos pos);
 

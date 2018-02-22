@@ -25,6 +25,7 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
     public void render(TileFakeTree te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(te.getFakedState() == null) return;
         IBlockState renderState = te.getFakedState();
+        if(x * x + y * y + z * z >= 64 * 64) return;
         TESRTranslucentBlock.blocks.add(new TESRTranslucentBlock.TranslucentBlockState(renderState, te.getPos()));
     }
 

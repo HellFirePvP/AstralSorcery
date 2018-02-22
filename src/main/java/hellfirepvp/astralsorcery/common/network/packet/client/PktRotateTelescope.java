@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.client.gui.GuiTelescope;
+import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -30,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by HellFirePvP
  * Date: 10.01.2017 / 00:54
  */
-public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTelescope, PktRotateTelescope> {
+public class PktRotateTelescope implements IMessage, IMessageHandler<PktRotateTelescope, PktRotateTelescope>, ClientReplyPacket {
 
     private boolean isClockwise = false;
     private int dimId = -1;

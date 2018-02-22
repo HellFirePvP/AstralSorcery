@@ -63,7 +63,7 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.MAX_SIZE_CELESTIAL * crystalCount);
+        CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.getMaxSize(stack));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
@@ -137,10 +137,10 @@ public abstract class ItemCrystalToolBase extends ItemTool {
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(3) == 0) prop.damageCutting();
+                if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
                 if(purity <= rand.nextFloat()) {
-                    if(rand.nextInt(3) == 0) prop.damageCutting();
+                    if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
                 }
             }
         }

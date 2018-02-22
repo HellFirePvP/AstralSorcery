@@ -8,15 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.base.HerdableAnimal;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
@@ -39,36 +43,45 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
     public static float dropChance = 0.01F;
 
     public CEffectBootes(@Nullable ILocatable origin) {
-        super(origin, Constellations.bootes, "bootes", 12, EntityLivingBase.class, (e) -> HerdableAnimal.getHerdable(e) != null);
+        super(origin, Constellations.bootes, "bootes", 12D, EntityLivingBase.class, (e) -> HerdableAnimal.getHerdable(e) != null);
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
-        List<EntityLivingBase> entities = collectEntities(world, pos);
+        boolean did = false;
+        List<EntityLivingBase> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             for (EntityLivingBase e : entities) {
                 HerdableAnimal herd = HerdableAnimal.getHerdable(e);
                 if(herd == null) continue;
+                if(modified.isCorrupted()) {
+                    did = true;
+                    e.hurtResistantTime = 0;
+                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 0));
+                    e.attackEntityFrom(CommonProxy.dmgSourceStellar, 5000);
+                    continue;
+                }
                 if(rand.nextFloat() < herdChance) {
                     List<ItemStack> drops = herd.getHerdingDropsTick(e, world, rand, herdingLuck);
                     for (ItemStack stack : drops) {
                         if(rand.nextFloat() < dropChance) {
                             ItemUtils.dropItemNaturally(world, e.posX, e.posY, e.posZ, stack);
+                            did = true;
                         }
                     }
                 }
             }
         }
-        return false;
+        return did;
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(this.range);
     }
 
     @Override

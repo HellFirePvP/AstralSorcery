@@ -24,6 +24,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -132,7 +133,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void attuneToConstellation(MinecraftServer server, ICommandSender sender, String otherPlayerName, String majorConstellationStr) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -154,7 +155,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void setCharge(MinecraftServer server, ICommandSender sender, String otherPlayerName, String strCharge) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -177,12 +178,12 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void modifyResearch(MinecraftServer server, ICommandSender sender, String otherPlayerName, String research) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
         PlayerProgress progress = prTuple.value;
-        EntityPlayer other = prTuple.key;
+        EntityPlayerMP other = prTuple.key;
 
         if(research.equalsIgnoreCase("all")) {
             ResearchManager.forceMaximizeResearch(other);
@@ -201,7 +202,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void maxAll(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -257,19 +258,19 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void wipeProgression(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
         PlayerProgress progress = prTuple.value;
-        EntityPlayer other = prTuple.key;
+        EntityPlayerMP other = prTuple.key;
 
         ResearchManager.wipeKnowledge(other);
         sender.sendMessage(new TextComponentString("§aWiped " + otherPlayerName + "'s data!"));
     }
 
     private void modifyProgress(MinecraftServer server, ICommandSender sender, String otherPlayerName, String argument) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -296,7 +297,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void showProgress(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -333,7 +334,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void addConstellations(MinecraftServer server, ICommandSender sender, String otherPlayerName, String argument) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -363,7 +364,7 @@ public class CommandAstralSorcery extends CommandBase {
     }
 
     private void listConstellations(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
-        Tuple<EntityPlayer, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
+        Tuple<EntityPlayerMP, PlayerProgress> prTuple = tryGetProgressWithMessages(server, sender, otherPlayerName);
         if (prTuple == null) {
             return;
         }
@@ -379,15 +380,15 @@ public class CommandAstralSorcery extends CommandBase {
         }
     }
 
-    private Tuple<EntityPlayer, PlayerProgress> tryGetProgressWithMessages(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
-        EntityPlayer other;
+    private Tuple<EntityPlayerMP, PlayerProgress> tryGetProgressWithMessages(MinecraftServer server, ICommandSender sender, String otherPlayerName) {
+        EntityPlayerMP other;
         try {
             other = getPlayer(server, sender, otherPlayerName);
         } catch (CommandException e) {
             sender.sendMessage(new TextComponentString("§cSpecified player (" + otherPlayerName + ") is not online!"));
             return null;
         }
-        PlayerProgress progress = ResearchManager.getProgress(other.getUniqueID());
+        PlayerProgress progress = ResearchManager.getProgress(other);
         if (progress == null) {
             sender.sendMessage(new TextComponentString("§cCould not get Progress for (" + otherPlayerName + ") !"));
             return null;

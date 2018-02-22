@@ -30,6 +30,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -52,6 +54,8 @@ public class RenderAstralSkybox extends IRenderHandler {
     public static final BindableResource TEX_STAR_2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     public static final BindableResource TEX_STAR_3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2");
     public static final BindableResource TEX_STAR_4 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1");
+
+    public static final BindableResource TEX_DEBUG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "debug");
 
     public static final BindableResource TEX_CONNECTION = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
     public static final BindableResource TEX_SOLAR_ECLIPSE = AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solareclipse");
@@ -339,14 +343,21 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         poss.add(new double[] { 0.2,  -0.2,     0,   5});
         poss.add(new double[] {-0.2,  -0.2,  -0.05,  5});
-        poss.add(new double[] {   0,  -0.25, -0.2,   8});
+        poss.add(new double[] {   0,  -0.2,  -0.2,   8});
         poss.add(new double[] {-0.4,  -0.6,   0.5,  18});
         poss.add(new double[] { 0.3,  -0.5,   0.5,  19});
+
         poss.add(new double[] { 0.15, -0.2,  -0.1,   5});
         poss.add(new double[] {-0.05, -0.3,   0.4,  10});
         poss.add(new double[] {-0.3,  -0.3,   0.1,  10});
         poss.add(new double[] {-0.3,  -0.4,  -0.35, 15});
         poss.add(new double[] { 0.4,  -0.4,   0.2,  15});
+
+        poss.add(new double[] { 0.15, -0.5,   0.2,  15});
+        poss.add(new double[] {-0.5,  -1.1,  -0.2,  32});
+        poss.add(new double[] { 0.5,  -1.1,  -0.2,  30});
+        poss.add(new double[] {-0.4,  -1.3,   0.5,  35});
+        poss.add(new double[] {   0,  -1.1,  -0.5,  28});
 
         for (double[] position : poss) {
             double x = position[0];
@@ -360,7 +371,6 @@ public class RenderAstralSkybox extends IRenderHandler {
             double d8 = Math.atan2(x, z); // [-PI - PI]
             double d9 = Math.sin(d8);
             double d10 = Math.cos(d8);
-            //                                pythagoras?
             double d11 = Math.atan2(Math.sqrt(x * x + z * z), y); // [-PI - PI]
             double d12 = Math.sin(d11);
             double d13 = Math.cos(d11);

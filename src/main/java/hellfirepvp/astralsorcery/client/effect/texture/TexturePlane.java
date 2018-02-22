@@ -213,12 +213,10 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
             alphaGrad = renderAlphaFunction.getRenderAlpha(this, alphaGrad);
         }
 
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
-        //removeOldTranslate(rView, partialTicks);
-        GL11.glColor4f(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
+        GlStateManager.pushMatrix();
+        GlStateManager.color(colorOverlay.getRed() / 255F, colorOverlay.getGreen() / 255F, colorOverlay.getBlue() / 255F, alphaGrad);
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
         Vector3 axis = this.axis.clone();
         float deg;
         if(ticksPerFullRot >= 0) {
@@ -230,19 +228,16 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
             deg = fixDegree;
         }
 
-        //GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableCull();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0001F);
 
         currRenderAroundAxis(partialTicks, Math.toRadians(deg), axis);
 
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GlStateManager.enableCull();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-        //GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
 
     private void currRenderAroundAxis(float parTicks, double angle, Vector3 axis) {
@@ -252,13 +247,6 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         }
         texture.bind();
         RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
-    }
-
-    private void removeOldTranslate(Entity entity, float partialTicks) {
-        double x = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
-        double y = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
-        double z = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-        GL11.glTranslated(-x, -y, -z);
     }
 
 }

@@ -127,17 +127,15 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> out = new LinkedList<>();
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                out.add(BlockMachine.MachineType.TELESCOPE.asStack());
+                drops.add(BlockMachine.MachineType.TELESCOPE.asStack());
                 break;
             ///case ATTUNEMENT_ALTAR_STRUCT:
             ///    out.add(new ItemStack(BlocksAS.attunementAltar));
             ///    break;
         }
-        return out;
     }
 
     @Override

@@ -10,11 +10,13 @@ package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -24,6 +26,9 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +57,7 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
     public static int searchRange = 13;
 
     public CEffectEvorsio(@Nullable ILocatable origin) {
-        super(origin, Constellations.evorsio, "evorsio", searchRange, 2, (w, pos) -> isAllowedToBreak(origin, w, pos), (pos) -> null);
+        super(origin, Constellations.evorsio, "evorsio", 2, (w, pos) -> isAllowedToBreak(origin, w, pos), (pos) -> null);
     }
 
     private static boolean isAllowedToBreak(@Nullable ILocatable origin, World world, BlockPos pos) {
@@ -123,30 +128,74 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
-        if(world instanceof WorldServer && findNewPosition(world, pos)) {
-            BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
-            if(be != null) {
-                removeElement(be);
-                BlockDropCaptureAssist.startCapturing();
-                MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
-                NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
-                captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
-                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
-                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+        if(modified.isCorrupted()) {
+            double searchRange = modified.getSize();
+            double offX = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            BlockPos at = pos.add(offX, offY, offZ);
+            if(!world.isAirBlock(at) && !world.getBlockState(at).getBlock().isReplaceable(world, at)) {
+                return false;
+            }
+            IBlockState toSet = rand.nextBoolean() ? Blocks.DIRT.getDefaultState() : Blocks.STONE.getDefaultState();
+            if(rand.nextInt(20) == 0) {
+                ItemStack randOre = OreTypes.RITUAL_MINERALIS.getNonWeightedOre(rand);
+                if(!randOre.isEmpty()) {
+                    IBlockState state = ItemUtils.createBlockState(randOre);
+                    if(state != null) {
+                        toSet = state;
+                    }
+                }
+            }
+            TileRitualLink link = MiscUtils.getTileAt(world, pos, TileRitualLink.class, false);
+            if(link != null) {
+                if(!at.equals(pos)) {
+                    world.setBlockState(at, toSet, 2);
+                    world.playEvent(2001, at, Block.getStateId(toSet));
+                    return true;
+                }
+            } else {
+                TileRitualPedestal ped = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
+                if(ped != null) {
+                    if(at.getZ() == pos.getZ() && at.getX() == pos.getX()) {
+                        return false;
+                    }
+                    BlockArray ba = new BlockArray();
+                    if(MultiBlockArrays.patternRitualPedestalWithLink != null) {
+                        for (int i = 0; i < 5; i++) {
+                            int finalI = i;
+                            ba.addAll(MultiBlockArrays.patternRitualPedestalWithLink, (p) -> p.add(pos).add(0, finalI, 0));
+                        }
+                        if(!ba.hasBlockAt(at)) {
+                            world.setBlockState(at, toSet, 2);
+                            world.playEvent(2001, at, Block.getStateId(toSet));
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        } else {
+            if(world instanceof WorldServer && findNewPosition(world, pos, modified)) {
+                BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
+                if(be != null) {
+                    removeElement(be);
+                    BlockDropCaptureAssist.startCapturing();
+                    MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
+                    NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
+                    captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+                }
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
         return false;
     }
 
@@ -172,6 +221,11 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     break;
             }
         }
+    }
+
+    @Override
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectEvorsio.searchRange);
     }
 
     @Override

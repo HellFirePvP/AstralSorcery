@@ -49,7 +49,7 @@ public class ControllerNoisePlane implements EntityComplexFX.RenderOffsetControl
         FXPlanarEffect p = new FXPlanarEffect(0, 0, 0,
                 T_RAND.nextFloat() * 360F,
                 ringSize * 0.9F + T_RAND.nextFloat() * ringSize * 0.2F);
-        p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(0.75F).setColor(new Color(60, 0, 255));
+        p.enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).setAlphaMultiplier(0.75F).setColor(Color.WHITE);
         p.setRenderOffsetController(this).gravity(0.004);
         EffectHandler.getInstance().registerFX(p);
         return p;

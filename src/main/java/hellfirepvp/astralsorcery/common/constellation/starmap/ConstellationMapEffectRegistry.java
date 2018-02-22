@@ -89,7 +89,7 @@ public class ConstellationMapEffectRegistry {
             this.minEnchLevel = min;
         }
 
-        public EnchantmentMapEffect setIgnoreCompaibility() {
+        public EnchantmentMapEffect setIgnoreCompatibility() {
             this.ignoreCompaibility = true;
             return this;
         }

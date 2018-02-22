@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.client.models.base;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
@@ -72,7 +73,7 @@ public class ASprism_color extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
         this.glass.render(scale);
-        GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
         this.fitting4.render(scale);
         this.fitting8.render(scale);

@@ -11,9 +11,16 @@ package hellfirepvp.astralsorcery.common.util.effect.time;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.dragon.phase.PhaseList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -41,21 +48,36 @@ public class TimeStopController implements ITickHandler {
 
     private TimeStopController() {}
 
+    @Nullable
+    public static TimeStopZone tryGetZoneAt(World world, BlockPos pos) {
+        if(world.isRemote) return null;
+        int dimId = world.provider.getDimension();
+        List<TimeStopZone> zones = INSTANCE.activeTimeStopZones.get(dimId);
+        if(zones == null || zones.isEmpty()) return null;
+        for (TimeStopZone zone : zones) {
+            if(zone.offset.equals(pos)) {
+                return zone;
+            }
+        }
+        return null;
+    }
+
     /**
      * Stops Tile- & Entityticks in a specific region of a world
      *
-     * @param ownerEntity the entity that caused this effect and is exluded from its freeze effects
+     * @param controller a target controller to determine how to handle/filter entity freezing
      * @param world to spawn the timeFreeze in
      * @param offset the center position
      * @param range the range of the timeFreeze effect
      * @param maxAge the duration in ticks
+     * @param reducedParticles set to true to reduce the amount of particles spawned by the effect
      * @return null if the world's provider is null, otherwise a registered and running instance of the timeStopEffect
      */
     @Nullable
-    public static TimeStopZone freezeWorldAt(@Nullable Entity ownerEntity, @Nonnull World world, @Nonnull BlockPos offset, float range, int maxAge) {
+    public static TimeStopZone freezeWorldAt(@Nonnull TimeStopZone.EntityTargetController controller, @Nonnull World world, @Nonnull BlockPos offset, boolean reducedParticles, float range, int maxAge) {
         if(world.provider == null) return null;
 
-        TimeStopZone stopZone = new TimeStopZone(ownerEntity, range, offset, world, maxAge);
+        TimeStopZone stopZone = new TimeStopZone(controller, range, offset, world, maxAge, reducedParticles);
         int dimId = world.provider.getDimension();
         List<TimeStopZone> zones = INSTANCE.activeTimeStopZones.computeIfAbsent(dimId, (id) -> new LinkedList<>());
         zones.add(stopZone);
@@ -83,6 +105,23 @@ public class TimeStopController implements ITickHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLivingTickTest(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase e = event.getEntityLiving();
+        if(e.isPotionActive(RegistryPotions.potionTimeFreeze)) {
+            boolean shouldFreeze = true;
+            if(e.isDead || e.getHealth() <= 0) {
+                shouldFreeze = false;
+            }
+            if(e instanceof EntityDragon && ((EntityDragon) e).getPhaseManager().getCurrentPhase().getPhaseList() == PhaseList.DYING) {
+                shouldFreeze = false;
+            }
+            if(shouldFreeze) {
+                if(e.world.isRemote && e.world.rand.nextInt(5) == 0) {
+                    TimeStopEffectHelper.playEntityParticles(e);
+                }
+                TimeStopZone.handleImportantEntityTicks(e);
+                event.setCanceled(true);
+                return;
+            }
+        }
         World w = e.world;
         if(w != null && w.provider != null) {
             int id = w.provider.getDimension();
@@ -90,7 +129,7 @@ public class TimeStopController implements ITickHandler {
             if(freezeAreas != null && !freezeAreas.isEmpty()) {
                 for (TimeStopZone stop : freezeAreas) {
                     if(stop.interceptEntityTick(e)) {
-                        stop.handleImportantEntityTicks(e);
+                        TimeStopZone.handleImportantEntityTicks(e);
                         event.setCanceled(true);
                         return;
                     }

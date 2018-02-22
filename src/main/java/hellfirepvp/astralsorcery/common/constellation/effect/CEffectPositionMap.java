@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
  */
 public abstract class CEffectPositionMap<K extends NBTBase, V extends NBTBase> extends CEffectPositionListGen<GenListEntries.PosDefinedTuple<K, V>> {
 
-    public CEffectPositionMap(@Nullable ILocatable origin, IMajorConstellation c, String cfgName, int searchRange, int maxCount, Verifier verifier) {
-        super(origin, c, cfgName, searchRange, maxCount, verifier, GenListEntries.PosDefinedTuple::new);
+    public CEffectPositionMap(@Nullable ILocatable origin, IMajorConstellation c, String cfgName, int maxCount, Verifier verifier) {
+        super(origin, c, cfgName, maxCount, verifier, GenListEntries.PosDefinedTuple::new);
     }
 
 }

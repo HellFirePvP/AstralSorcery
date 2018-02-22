@@ -12,12 +12,12 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.12.2-1.8.5"
+version = "1.12.2-1.9.0"
 group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "14.23.1.2560"
+    version = "14.23.2.2611"
     runDir = "run"
     useDepAts = true
 
@@ -60,15 +60,15 @@ repositories {
 
 dependencies {
 
-    def jei_mc_version = "1.12.1"
-    def jei_version = "4.7.8.91"
+    def jei_mc_version = "1.12.2"
+    def jei_version = "4.8.5.151"
 
     ////JEI stuff
     deobfCompile "mezz.jei:jei_${jei_mc_version}:${jei_version}"
 
     def mc_version = "1.12"
     def ct_mc_version = "MC1120"
-    def ct_version = "4.0.0.7"
+    def ct_version = "4.1.2.404"
 
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
 

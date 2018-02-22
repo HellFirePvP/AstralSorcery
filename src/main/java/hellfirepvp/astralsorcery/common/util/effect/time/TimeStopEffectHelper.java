@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
@@ -44,22 +45,23 @@ import java.util.Random;
 //Shell class for rendering and syncing over network.
 public class TimeStopEffectHelper {
 
+    private static Random rand = new Random();
+
     @Nonnull
     private BlockPos position;
     private float range;
+    private TimeStopZone.EntityTargetController targetController;
+    private boolean reducedParticles;
 
-    private boolean hasOwner;
-    private int ownerEntityId;
-
-    private TimeStopEffectHelper(@Nonnull BlockPos position, float range, boolean hasOwner, int ownerEntityId) {
+    private TimeStopEffectHelper(@Nonnull BlockPos position, float range, TimeStopZone.EntityTargetController targetController, boolean reducedParticles) {
         this.position = position;
         this.range = range;
-        this.hasOwner = hasOwner;
-        this.ownerEntityId = ownerEntityId;
+        this.targetController = targetController;
+        this.reducedParticles = reducedParticles;
     }
 
     static TimeStopEffectHelper fromZone(TimeStopZone zone) {
-        return new TimeStopEffectHelper(zone.offset, zone.range, zone.hasOwner, zone.ownerId);
+        return new TimeStopEffectHelper(zone.offset, zone.range, zone.targetController, zone.reducedParticles);
     }
 
     @Nonnull
@@ -71,39 +73,48 @@ public class TimeStopEffectHelper {
         return range;
     }
 
-    public boolean hasOwner() {
-        return hasOwner;
+    public TimeStopZone.EntityTargetController getTargetController() {
+        return targetController;
     }
 
-    public int getOwnerEntityId() {
-        return ownerEntityId;
+    @SideOnly(Side.CLIENT)
+    static void playEntityParticles(EntityLivingBase e) {
+        double x = e.posX - e.width + rand.nextFloat() * e.width * 2;
+        double y = e.posY + rand.nextFloat() * e.height;
+        double z = e.posZ - e.width + rand.nextFloat() * e.width * 2;
+        playEntityParticles(x, y, z);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void playEntityParticles(PktParticleEvent ev) {
+        playEntityParticles(ev.getVec().getX(), ev.getVec().getY(), ev.getVec().getZ());
+    }
+
+    @SideOnly(Side.CLIENT)
+    static void playEntityParticles(double x, double y, double z) {
+        EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
+        p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
+        p.setMaxAge(40 + rand.nextInt(20));
+
+        if(rand.nextFloat() < 0.9F) {
+            p = EffectHelper.genericFlareParticle(x, y, z);
+            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.scale(rand.nextFloat() * 0.2F + 0.1F).gravity(0.004);
+            p.setMaxAge(30 + rand.nextInt(10));
+        }
     }
 
     @SideOnly(Side.CLIENT)
     public void playClientTickEffect() {
-        Color c = new Color(0xDDDDDD);
         Random rand = new Random();
         List<EntityLivingBase> entities = Minecraft.getMinecraft().world.getEntitiesWithinAABB(EntityLivingBase.class,
                 new AxisAlignedBB(-range, -range, -range, range, range, range).offset(position.getX(), position.getY(), position.getZ()),
                 EntitySelectors.withinRange(position.getX(), position.getY(), position.getZ(), range));
         for (EntityLivingBase e : entities) {
-            if(e != null && !e.isDead && (!hasOwner || e.getEntityId() != ownerEntityId)) {
-                if(rand.nextInt(3) != 0) continue;
-                double x = e.posX - e.width + rand.nextFloat() * e.width * 2;
-                double y = e.posY + rand.nextFloat() * e.height;
-                double z = e.posZ - e.width + rand.nextFloat() * e.width * 2;
-
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-                p.setColor(c).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
-                p.setMaxAge(40 + rand.nextInt(20));
-
-                if(rand.nextFloat() < 0.9F) {
-                    p = EffectHelper.genericFlareParticle(x, y, z);
-                    p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
-                    p.scale(rand.nextFloat() * 0.2F + 0.1F).gravity(0.004);
-                    p.setMaxAge(30 + rand.nextInt(10));
-                }
+            if(e != null && !e.isDead && targetController.shouldFreezeEntity(e)) {
+                if(reducedParticles && rand.nextInt(5) == 0) continue;
+                playEntityParticles(e);
             }
         }
 
@@ -118,7 +129,7 @@ public class TimeStopEffectHelper {
                 if(!ch.isEmpty()) {
                     Map<BlockPos, TileEntity> map = ch.getTileEntityMap();
                     for (Map.Entry<BlockPos, TileEntity> teEntry : map.entrySet()) {
-                        if(rand.nextInt(3) != 0) continue;
+                        if(reducedParticles && rand.nextInt(5) == 0) continue;
                         TileEntity te = teEntry.getValue();
                         if(te != null &&
                                 te instanceof ITickable &&
@@ -129,7 +140,7 @@ public class TimeStopEffectHelper {
                             double z = te.getPos().getZ() + rand.nextFloat();
 
                             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-                            p.setColor(c).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+                            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
                             p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
                             p.setMaxAge(40 + rand.nextInt(20));
 
@@ -145,15 +156,16 @@ public class TimeStopEffectHelper {
             }
         }
 
-        Vector3 pos = null;
+        Vector3 pos;
         for (int i = 0; i < 10; i++) {
+            if(reducedParticles && rand.nextInt(5) == 0) continue;
             pos = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
 
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(x, y, z);
-            p.setColor(c).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            p.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
             p.scale(rand.nextFloat() * 0.5F + 0.3F).gravity(0.004);
             p.setMaxAge(40 + rand.nextInt(20));
 
@@ -165,9 +177,11 @@ public class TimeStopEffectHelper {
             }
         }
         if(rand.nextInt(4) == 0) {
-            Vector3 rand1 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
-            Vector3 rand2 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
-            AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().world, rand1, rand2, c);
+            if(!reducedParticles || rand.nextInt(5) == 0) {
+                Vector3 rand1 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
+                Vector3 rand2 = Vector3.random().normalize().multiply(rand.nextFloat() * range).add(position);
+                AstralSorcery.proxy.fireLightning(Minecraft.getMinecraft().world, rand1, rand2, Color.WHITE);
+            }
         }
     }
 
@@ -176,8 +190,8 @@ public class TimeStopEffectHelper {
         NBTTagCompound out = new NBTTagCompound();
         NBTUtils.writeBlockPosToNBT(this.position, out);
         out.setFloat("range", this.range);
-        out.setBoolean("hasOwner", this.hasOwner);
-        out.setInteger("ownerEntityId", this.ownerEntityId);
+        out.setTag("targetController", this.targetController.serializeNBT());
+        out.setBoolean("reducedParticles", this.reducedParticles);
         return out;
     }
 
@@ -185,9 +199,8 @@ public class TimeStopEffectHelper {
     public static TimeStopEffectHelper deserializeNBT(NBTTagCompound cmp) {
         BlockPos at = NBTUtils.readBlockPosFromNBT(cmp);
         float range = cmp.getFloat("range");
-        boolean hasOwner = cmp.getBoolean("hasOwner");
-        int ownerId = cmp.getInteger("ownerEntityId");
-        return new TimeStopEffectHelper(at, range, hasOwner, ownerId);
+        boolean reducedParticles = cmp.getBoolean("reducedParticles");
+        return new TimeStopEffectHelper(at, range, TimeStopZone.EntityTargetController.deserializeNBT(cmp.getCompoundTag("targetController")), reducedParticles);
     }
 
     @Override
@@ -198,8 +211,6 @@ public class TimeStopEffectHelper {
         TimeStopEffectHelper that = (TimeStopEffectHelper) o;
 
         return Float.compare(that.range, range) == 0 &&
-                hasOwner == that.hasOwner &&
-                ownerEntityId == that.ownerEntityId &&
                 position.equals(that.position);
     }
 
@@ -207,8 +218,6 @@ public class TimeStopEffectHelper {
     public int hashCode() {
         int result = position.hashCode();
         result = 31 * result + (range != +0.0f ? Float.floatToIntBits(range) : 0);
-        result = 31 * result + (hasOwner ? 1 : 0);
-        result = 31 * result + ownerEntityId;
         return result;
     }
 

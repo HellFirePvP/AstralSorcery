@@ -247,6 +247,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                         BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
                                 (world, at, state) -> world.getTileEntity(at) == null &&
                                         !state.getBlock().isAir(state, world, at) &&
+                                        state.getBlockHardness(world, at) != -1 &&
                                         state.getBlockHardness(world, at) <= 10 &&
                                         MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_PICKAXE))
                         );
@@ -256,6 +257,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 (world, at, state) -> world.getTileEntity(at) == null &&
                                     !state.getBlock().isAir(state, world, at) &&
                                     (state.getBlock().isWood(world, at) || state.getBlock().isLeaves(state, world, at)) &&
+                                    state.getBlockHardness(world, at) != -1 &&
                                     state.getBlockHardness(world, at) <= 10 &&
                                     MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_AXE))
                         );
@@ -402,6 +404,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                     BlockPos validStateStone = MiscUtils.searchAreaForFirst(parentEntity.world, parentEntity.getPosition(), 8, Vector3.atEntityCorner(this.parentEntity),
                             (world, at, state) -> world.getTileEntity(at) == null &&
                             !state.getBlock().isAir(state, world, at) &&
+                            state.getBlockHardness(world, at) != -1 &&
                             state.getBlockHardness(world, at) <= 10 &&
                             MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_PICKAXE))
                     );
@@ -419,6 +422,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             (world, at, state) -> world.getTileEntity(at) == null &&
                                     !state.getBlock().isAir(state, world, at) &&
                                     (state.getBlock().isWood(world, at) || state.getBlock().isLeaves(state, world, at)) &&
+                                    state.getBlockHardness(world, at) != -1 &&
                                     state.getBlockHardness(world, at) <= 10 &&
                                     MiscUtils.canToolBreakBlockWithoutPlayer(world, at, state, new ItemStack(Items.DIAMOND_AXE))
                     );

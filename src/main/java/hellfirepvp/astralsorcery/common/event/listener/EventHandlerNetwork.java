@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLeve
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktFinalizeLogin;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,6 +43,8 @@ public class EventHandlerNetwork {
         ResearchManager.sendInitClientKnowledge(p);
         CelestialGatewaySystem.instance.syncTo(p);
         SyncDataHolder.syncAllDataTo(p);
+
+        PacketChannel.CHANNEL.sendTo(new PktFinalizeLogin(), p);
     }
 
     @SubscribeEvent

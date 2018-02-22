@@ -9,15 +9,16 @@
 package hellfirepvp.astralsorcery.common.constellation.effect.aoe;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
-import hellfirepvp.astralsorcery.client.effect.controller.OrbitalEffectController;
-import hellfirepvp.astralsorcery.client.effect.controller.OrbitalPropertiesRitualArmara;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
+import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalPropertiesRitualArmara;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
-import hellfirepvp.astralsorcery.common.entities.EntityGrapplingHook;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
+import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
@@ -28,6 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -72,6 +74,15 @@ public class CEffectArmara extends ConstellationEffect {
             ctrl.setOrbitAxis(Vector3.RotAxis.Y_AXIS);
             ctrl.setTicksPerRotation(20 + rand.nextInt(20));
         }
+        ItemStack socket = pedestal.getInventoryHandler().getStackInSlot(0);
+        if(!socket.isEmpty() && socket.getItem() instanceof ItemTunedCrystalBase) {
+            IMinorConstellation trait = ItemTunedCrystalBase.getTrait(socket);
+            ConstellationEffectProperties prop = provideProperties(0);
+            prop.modify(trait);
+            if(prop.isCorrupted()) {
+                return;
+            }
+        }
         List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         if(!projectiles.isEmpty()) {
             for (Entity e : projectiles) {
@@ -92,7 +103,7 @@ public class CEffectArmara extends ConstellationEffect {
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
@@ -114,21 +125,23 @@ public class CEffectArmara extends ConstellationEffect {
 
         EntityPlayer owner = getOwningPlayerInWorld(world, pos);
 
-        List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
-        if(!projectiles.isEmpty()) {
-            for (Entity e : projectiles) {
-                if(!e.isDead && !(e instanceof EntityTechnicalAmbient)) {
-                    if(e instanceof IProjectile) {
-                        double xRatio = (pos.getX() + 0.5) - e.posX;
-                        double zRatio = (pos.getZ() + 0.5) - e.posZ;
-                        float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
-                        e.motionX /= 2.0D;
-                        e.motionZ /= 2.0D;
-                        e.motionX -= xRatio / f * 0.4;
-                        e.motionZ -= zRatio / f * 0.4;
-                        ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
-                    } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
-                        ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
+        if(!modified.isCorrupted()) {
+            List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
+            if(!projectiles.isEmpty()) {
+                for (Entity e : projectiles) {
+                    if(!e.isDead && !(e instanceof EntityTechnicalAmbient)) {
+                        if(e instanceof IProjectile) {
+                            double xRatio = (pos.getX() + 0.5) - e.posX;
+                            double zRatio = (pos.getZ() + 0.5) - e.posZ;
+                            float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+                            e.motionX /= 2.0D;
+                            e.motionZ /= 2.0D;
+                            e.motionX -= xRatio / f * 0.4;
+                            e.motionZ -= zRatio / f * 0.4;
+                            ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
+                        } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
+                            ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
+                        }
                     }
                 }
             }
@@ -136,9 +149,21 @@ public class CEffectArmara extends ConstellationEffect {
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
         for (EntityLivingBase entity : entities) {
             if(!entity.isDead) {
-                entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));
-                if (entity instanceof EntityPlayer) {
-                    entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 30, potionAmplifier));
+                if(modified.isCorrupted()) {
+                    if(entity instanceof EntityPlayer) continue;
+
+                    entity.addPotionEffect(new PotionEffect(MobEffects.SPEED, 100, potionAmplifier + 4));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, potionAmplifier + 4));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, potionAmplifier + 2));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 100, potionAmplifier + 4));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 100, potionAmplifier + 4));
+                    entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 100, potionAmplifier + 4));
+                    entity.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 40000, 2));
+                } else {
+                    entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));
+                    if (entity instanceof EntityPlayer) {
+                        entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 30, potionAmplifier));
+                    }
                 }
             }
         }
@@ -147,8 +172,8 @@ public class CEffectArmara extends ConstellationEffect {
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectArmara.protectionRange);
     }
 
     @Override

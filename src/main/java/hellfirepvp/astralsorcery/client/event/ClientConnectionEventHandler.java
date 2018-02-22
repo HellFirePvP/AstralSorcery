@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.ClientProxy;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
@@ -65,6 +66,7 @@ public class ClientConnectionEventHandler {
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();
         ((DataTimeFreezeEffects) SyncDataHolder.getDataClient(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).clientClean();
+        ClientProxy.connected = false;
         AstralSorcery.log.info("[AstralSorcery] Cleared cached client data! Disconnected from server.");
     }
 
@@ -96,6 +98,7 @@ public class ClientConnectionEventHandler {
         for (char c0 : ChatAllowedCharacters.ILLEGAL_FILE_CHARACTERS) {
             addr = addr.replace(c0, '_');
         }
+        addr = addr.replaceAll("[^a-zA-Z0-9\\.\\-]", "_"); //Anything else that falls through
         return addr;
     }
 

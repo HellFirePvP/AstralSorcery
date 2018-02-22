@@ -240,6 +240,7 @@ public class MiscUtils {
 
     public static void transferEntityTo(Entity entity, int targetDimId, BlockPos targetPos) {
         if(entity.getEntityWorld().isRemote) return; //No transfers on clientside.
+        entity.setSneaking(false);
         if(entity.getEntityWorld().provider.getDimension() != targetDimId) {
             if(!ForgeHooks.onTravelToDimension(entity, targetDimId)) {
                 return;

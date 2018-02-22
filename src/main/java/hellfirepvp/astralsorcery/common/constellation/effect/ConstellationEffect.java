@@ -57,41 +57,13 @@ public abstract class ConstellationEffect extends ConfigEntry {
         return constellation;
     }
 
-    public boolean mayExecuteMultipleMain() {
-        return false;
-    }
-
-    public boolean mayExecuteMultipleTrait() {
-        return false;
-    }
-
     //Once per TE client tick
     @SideOnly(Side.CLIENT)
     public void playClientEffect(World world, BlockPos pos, TileRitualPedestal pedestal,  float percEffectVisibility, boolean extendedEffects) {}
 
     //May be executed multiple times per tick
     //Even if this effect can handle multiple effects per tick, it is still possible that this method is called.
-    public abstract boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect);
-
-    //May be executed multiple times per tick
-    public abstract boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength);
-
-    //Should handle multiple executions at once ('times' executions)
-    public boolean playMainEffectMultiple(World world, BlockPos pos, int times, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
-        boolean changed = false;
-        for (int i = 0; i < times; i++) {
-            if(playMainEffect(world, pos, 1, mayDoTraitEffect, possibleTraitEffect)) changed = true;
-        }
-        return changed;
-    }
-
-    public boolean playTraitEffectMultiple(World world, BlockPos pos, IMinorConstellation traitType, int times) {
-        boolean changed = false;
-        for (int i = 0; i < times; i++) {
-            if(playTraitEffect(world, pos, traitType, 1)) changed = true;
-        }
-        return changed;
-    }
+    public abstract boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect);
 
     @Nullable
     public TileRitualPedestal getPedestal(World world, BlockPos pos) {
@@ -104,6 +76,8 @@ public abstract class ConstellationEffect extends ConfigEntry {
         }
         return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;
     }
+
+    public abstract ConstellationEffectProperties provideProperties(int mirrorCount);
 
     public void clearCache() {}
 

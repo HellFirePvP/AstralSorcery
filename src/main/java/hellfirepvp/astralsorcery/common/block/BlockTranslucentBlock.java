@@ -104,12 +104,7 @@ public class BlockTranslucentBlock extends BlockContainer {
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) { }
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {}
 
     private IBlockState getFakedStateTile(World world, BlockPos pos) {
         TileTranslucent tt = MiscUtils.getTileAt(world, pos, TileTranslucent.class, true);

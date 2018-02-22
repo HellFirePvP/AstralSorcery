@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
+import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -22,6 +24,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,7 +50,7 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
     public static float damage = 6.5F;
 
     public CEffectDiscidia(@Nullable ILocatable origin) {
-        super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer));
+        super(origin, Constellations.discidia, "discidia", 16D, EntityLivingBase.class, (entity) -> !entity.isDead && !(entity instanceof EntityPlayer) && !(entity instanceof EntityTechnicalAmbient));
     }
 
     @Override
@@ -63,37 +67,50 @@ public class CEffectDiscidia extends CEffectEntityCollect<EntityLivingBase> {
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(world.getTotalWorldTime() % 20 != 0) return false;
 
         percStrength *= potencyMultiplier;
-        if(percStrength < 1 ) {
+        if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
+        boolean did = false;
         float actDamageDealt = percStrength * damage;
-        List<EntityLivingBase> entities = collectEntities(world, pos);
+        List<EntityLivingBase> entities = collectEntities(world, pos, modified);
         if(!entities.isEmpty()) {
             EntityPlayer owner = getOwningPlayerInWorld(world, pos);
             DamageSource dmgSource = owner == null ? CommonProxy.dmgSourceStellar : DamageSource.causePlayerDamage(owner);
+            if(modified.isCorrupted() && owner != null && owner.getDistanceSq(pos) <= (modified.getSize() * modified.getSize())) {
+                owner.attackEntityFrom(CommonProxy.dmgSourceStellar, 1.2F * percStrength);
+                did = true;
+            }
             for (EntityLivingBase entity : entities) {
-                int hrTime = entity.hurtResistantTime;
-                entity.hurtResistantTime = 0;
-                try {
-                    if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
-                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
-                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+                if(modified.isCorrupted()) {
+                    if(!(entity instanceof EntityPlayer)) {
+                        entity.heal(actDamageDealt);
+                        entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, 2));
+                        did = true;
                     }
-                } finally {
-                    entity.hurtResistantTime = hrTime;
+                } else {
+                    int hrTime = entity.hurtResistantTime;
+                    entity.hurtResistantTime = 0;
+                    try {
+                        if(entity.attackEntityFrom(dmgSource, actDamageDealt)) {
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_DMG_ENTITY, entity.posX, entity.posY + entity.height / 2, entity.posZ);
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 16));
+                        }
+                    } finally {
+                        entity.hurtResistantTime = hrTime;
+                    }
                 }
             }
         }
-        return false;
+        return did;
     }
 
     @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(this.range);
     }
 
     @Override

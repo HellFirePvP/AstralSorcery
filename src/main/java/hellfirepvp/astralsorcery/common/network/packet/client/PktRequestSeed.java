@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
@@ -27,7 +28,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 02.12.2016 / 17:40
  */
-public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed, PktRequestSeed> {
+public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed, PktRequestSeed>, ClientReplyPacket {
 
     private int dimId, session;
     private long seed;

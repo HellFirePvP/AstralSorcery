@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util;
 
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +46,27 @@ public class CrystalCalculations {
         double purity = Math.sqrt((((double) properties.getPurity()) / 100D));
         double cutting = Math.sqrt((((double) properties.getCollectiveCapability()) / 100D));
         return Math.max(1, purity * 2D + cutting * 2D);
+    }
+
+    public static int getChannelingCapacity(CrystalProperties properties) {
+        float purity = (float) Math.sqrt((((float) properties.getPurity()) / 100));
+        return Math.max(10, MathHelper.floor(purity * 20));
+    }
+
+    //Let's say you get 1 cycle over what the properties can do (20 at most free) that means you get about 40% fracture per irl day.
+    public static float getFractureChance(int castTimes, int cap) {
+        if(castTimes <= cap) {
+            return 0F;
+        }
+        int remaining = castTimes - cap;
+        return Math.max(1E-5F, remaining / 40000F);
+    }
+
+    public static float getPerfection(CrystalProperties properties, int maxSize) {
+        float purity = MathHelper.sqrt((((float) properties.getPurity()) / 100D));
+        float cutting = MathHelper.sqrt((((float) properties.getCollectiveCapability()) / 100D));
+        float size = MathHelper.sqrt((((float) properties.getSize()) / maxSize));
+        return purity * cutting * size;
     }
 
     //Between 0-18

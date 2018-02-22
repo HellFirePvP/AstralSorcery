@@ -29,6 +29,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
@@ -94,6 +95,11 @@ public class TileFakeTree extends TileEntityTick {
     @Nullable
     public BlockPos getReference() {
         return ta instanceof TreeBeaconRef ? ((TreeBeaconRef) ta).ref : null;
+    }
+
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return INFINITE_EXTENT_AABB;
     }
 
     @Override

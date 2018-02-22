@@ -33,12 +33,12 @@ import java.util.Map;
  */
 public abstract class CEffectEntityCollect<T extends Entity> extends ConstellationEffect {
 
+    private static final AxisAlignedBB BOX = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+
     protected final Class<T> classToSearch;
     protected final Predicate<T> searchFilter;
     protected double range;
-    public static boolean enabled = true;
-
-    private static Map<Class, AxisAlignedBB> baseBoundingBox = new HashMap<>();
+    public boolean enabled = true;
 
     public CEffectEntityCollect(@Nullable ILocatable origin, IWeakConstellation constellation, String cfgName, double defaultRange, Class<T> entityClass, Predicate<T> filter) {
         super(origin, constellation, cfgName);
@@ -47,17 +47,15 @@ public abstract class CEffectEntityCollect<T extends Entity> extends Constellati
         this.range = defaultRange;
     }
 
-    public List<T> collectEntities(World world, BlockPos pos) {
+    public List<T> collectEntities(World world, BlockPos pos, ConstellationEffectProperties prop) {
         if(!enabled) return Lists.newArrayList();
-        return world.getEntitiesWithinAABB(classToSearch, baseBoundingBox.get(getClass()).offset(pos), searchFilter);
+        return world.getEntitiesWithinAABB(classToSearch, BOX.grow(prop.getSize()).offset(pos), searchFilter);
     }
 
     @Override
     public void loadFromConfig(Configuration cfg) {
         range = cfg.getFloat(getKey() + "Range", getConfigurationSection(), (float) range, 2, 64, "Defines the range in which the ritual will try to find entities");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
-
-        baseBoundingBox.put(getClass(), new AxisAlignedBB(0, 0, 0, 1, 1, 1).grow(range));
     }
 
 }

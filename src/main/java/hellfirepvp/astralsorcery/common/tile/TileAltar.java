@@ -407,7 +407,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         if(doesSeeSky() && handle != null) {
             int yLevel = getPos().getY();
             if(yLevel > 40) {
-                float collect = 200;
+                float collect = 160;
 
                 float dstr;
                 if(yLevel > 120) {
@@ -421,7 +421,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
                 }
 
                 collect *= dstr;
-                collect *= posDistribution;
+                collect *= (0.6 + (0.4 * posDistribution));
                 collect *= 0.2 + (0.8 * ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(getWorld()));
 
                 starlightStored = Math.min(getMaxStarlightStorage(), (int) (starlightStored + collect));

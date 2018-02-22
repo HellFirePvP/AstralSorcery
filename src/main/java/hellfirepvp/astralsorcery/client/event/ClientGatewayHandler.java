@@ -111,7 +111,7 @@ public class ClientGatewayHandler {
             Vector3 pos = focusingEntry.relativePos.clone().add(ui.getPos());
             if(focusTicks > 40) {
                 for (Vector3 v : MiscUtils.getCirclePositions(pos, dir, EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.3 + 0.2, EffectHandler.STATIC_EFFECT_RAND.nextInt(20) + 30)) {
-                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                    EntityFXFacingParticle p = EffectHelper.genericGatewayFlareParticle(v.getX(), v.getY(), v.getZ());
                     Vector3 m = mov.clone().multiply(0.5 + EffectHandler.STATIC_EFFECT_RAND.nextFloat() * 0.5);
                     p.gravity(0.004).scale(0.1F).motion(
                             m.getX(),
@@ -138,7 +138,7 @@ public class ClientGatewayHandler {
                     if(pc >= perc) continue;
 
                     Vector3 v = positions.get(i);
-                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                    EntityFXFacingParticle p = EffectHelper.genericGatewayFlareParticle(v.getX(), v.getY(), v.getZ());
                     p.gravity(0.004).scale(0.08F);
                     if(EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
                         Vector3 to = pos.clone().subtract(v);
@@ -164,7 +164,7 @@ public class ClientGatewayHandler {
                     if(pc >= perc) continue;
 
                     Vector3 v = positions.get(i);
-                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(v.getX(), v.getY(), v.getZ());
+                    EntityFXFacingParticle p = EffectHelper.genericGatewayFlareParticle(v.getX(), v.getY(), v.getZ());
                     p.gravity(0.004).scale(0.08F);
                     if(EffectHandler.STATIC_EFFECT_RAND.nextInt(3) == 0) {
                         Vector3 to = pos.clone().subtract(v);
@@ -186,6 +186,7 @@ public class ClientGatewayHandler {
             }
 
             if(focusTicks > 95) { //Time explained below
+                Minecraft.getMinecraft().player.setSneaking(false);
                 PacketChannel.CHANNEL.sendToServer(new PktRequestTeleport(focusingEntry.originalDimId, focusingEntry.originalBlockPos.up()));
                 focusTicks = 0;
                 focusingEntry = null;

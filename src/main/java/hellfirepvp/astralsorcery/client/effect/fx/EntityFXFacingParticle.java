@@ -171,23 +171,32 @@ public class EntityFXFacingParticle extends EntityComplexFX {
 
     @Override
     public void render(float pTicks) {
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDepthMask(false);
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.disableCull();
+        GlStateManager.depthMask(false);
         float alpha = fadeFunction.getAlpha(age, maxAge);
         alpha *= alphaMultiplier;
-        GL11.glColor4f(colorRed, colorGreen, colorBlue, alpha);
+        GlStateManager.color(colorRed, colorGreen, colorBlue, alpha);
         staticFlareTex.bind();
         RenderingUtils.renderFacingQuad(interpolate(oldX, x, pTicks), interpolate(oldY, y, pTicks), interpolate(oldZ, z, pTicks), pTicks, scale, 0, 0, 0, 1, 1);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableCull();
     }
 
     private double interpolate(double oldP, double newP, float partial) {
         return oldP + ((newP - oldP) * partial);
+    }
+
+    public static class Gateway extends EntityFXFacingParticle {
+
+        public Gateway(double x, double y, double z) {
+            super(x, y, z);
+        }
+
     }
 
 }

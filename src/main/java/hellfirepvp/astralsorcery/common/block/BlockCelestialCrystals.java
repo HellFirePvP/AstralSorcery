@@ -147,8 +147,7 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        List<ItemStack> drops = Lists.newLinkedList();
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         drops.add(ItemCraftingComponent.MetaType.STARDUST.asStack());
         int stage = state.getValue(STAGE);
         switch (stage) {
@@ -166,7 +165,12 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                         CrystalProperties prop = CrystalProperties.getCrystalProperties(celCrystal);
                         int missing = 100 - prop.getPurity();
                         if(missing > 0) {
-                            prop = new CrystalProperties(prop.getSize(), MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100), prop.getCollectiveCapability());
+                            prop = new CrystalProperties(
+                                    prop.getSize(),
+                                    MathHelper.clamp(prop.getPurity() + rand.nextInt(missing) + 1, 0, 100),
+                                    prop.getCollectiveCapability(),
+                                    prop.getFracturation(),
+                                    prop.getSizeOverride());
                             CrystalProperties.applyCrystalProperties(celCrystal, prop);
                         }
                     }
@@ -177,7 +181,6 @@ public class BlockCelestialCrystals extends BlockContainer implements IBlockStar
                 }
                 break;
         }
-        return drops;
     }
 
     private boolean checkSafety(World world, BlockPos pos) {

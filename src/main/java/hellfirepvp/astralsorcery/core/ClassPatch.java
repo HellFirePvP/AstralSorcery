@@ -102,6 +102,15 @@ public abstract class ClassPatch {
         throw new ASMTransformationException("Couldn't find Instruction with opcode " + opCode);
     }
 
+    public static int peekFirstInstructionAfter(MethodNode mn, int startingIndex, int opCode) {
+        for (int i = startingIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (ain.getOpcode() == opCode)
+                return i;
+        }
+        return -1;
+    }
+
     @Nonnull
     public static MethodInsnNode getFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
         for (int i = startingIndex; i < mn.instructions.size(); i++) {
@@ -114,6 +123,19 @@ public abstract class ClassPatch {
             }
         }
         throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " nameDeobf=" + nameDeobf + " nameObf=" + nameObf + " signature=" + sig);
+    }
+
+    public static int peekFirstMethodCallAfter(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
+        for (int i = startingIndex; i < mn.instructions.size(); i++) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (ain instanceof MethodInsnNode) {
+                MethodInsnNode min = (MethodInsnNode)ain;
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     @Nonnull

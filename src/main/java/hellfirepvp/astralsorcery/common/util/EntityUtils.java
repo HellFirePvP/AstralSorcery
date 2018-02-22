@@ -19,10 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -34,6 +37,8 @@ import java.util.function.Function;
  * Date: 14.09.2016 / 20:10
  */
 public class EntityUtils {
+
+    private static final Method getLootTableMethod;
 
     public static boolean canEntitySpawnHere(World world, BlockPos at, ResourceLocation entityKey, boolean respectConditions) {
         Entity entity = EntityList.createEntityByIDFromName(entityKey, world);
@@ -75,42 +80,33 @@ public class EntityUtils {
     }
 
     public static Predicate<? super Entity> selectEntities(Class<? extends Entity>... entities) {
-        return new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                if(entity == null || entity.isDead) return false;
-                Class<? extends Entity> clazz = entity.getClass();
-                for (Class<? extends Entity> test : entities) {
-                    if(test.isAssignableFrom(clazz)) return true;
-                }
-                return false;
+        return (Predicate<Entity>) entity -> {
+            if(entity == null || entity.isDead) return false;
+            Class<? extends Entity> clazz = entity.getClass();
+            for (Class<? extends Entity> test : entities) {
+                if(test.isAssignableFrom(clazz)) return true;
             }
+            return false;
         };
     }
 
     public static Predicate<? super Entity> selectItemClassInstaceof(Class<?> itemClass) {
-        return new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                if(entity == null || entity.isDead) return false;
-                if(!(entity instanceof EntityItem)) return false;
-                ItemStack i = ((EntityItem) entity).getItem();
-                if(i.isEmpty()) return false;
-                return itemClass.isAssignableFrom(i.getItem().getClass());
-            }
+        return (Predicate<Entity>) entity -> {
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
+            ItemStack i = ((EntityItem) entity).getItem();
+            if(i.isEmpty()) return false;
+            return itemClass.isAssignableFrom(i.getItem().getClass());
         };
     }
 
     public static Predicate<? super Entity> selectItem(Item item) {
-        return new Predicate<Entity>() {
-            @Override
-            public boolean apply(@Nullable Entity entity) {
-                if(entity == null || entity.isDead) return false;
-                if(!(entity instanceof EntityItem)) return false;
-                ItemStack i = ((EntityItem) entity).getItem();
-                if(i.isEmpty()) return false;
-                return i.getItem().equals(item);
-            }
+        return (Predicate<Entity>) entity -> {
+            if(entity == null || entity.isDead) return false;
+            if(!(entity instanceof EntityItem)) return false;
+            ItemStack i = ((EntityItem) entity).getItem();
+            if(i.isEmpty()) return false;
+            return i.getItem().equals(item);
         };
     }
 
@@ -138,6 +134,25 @@ public class EntityUtils {
             }
         }
         return closestElement;
+    }
+
+    @Nullable
+    public static LootTable getLootTable(EntityLiving entity) {
+        if(getLootTableMethod == null) return null;
+        try {
+            ResourceLocation lootTable = (ResourceLocation) getLootTableMethod.invoke(entity);
+            return entity.world.getLootTableManager().getLootTableFromLocation(lootTable);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    static {
+        Method m = null;
+        try {
+            m = ReflectionHelper.findMethod(EntityLiving.class, "getLootTable", "func_184647_J");
+        } catch (Exception exc) {}
+        getLootTableMethod = m;
     }
 
 }

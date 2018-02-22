@@ -109,6 +109,11 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
         return "fluid_rarities";
     }
 
+    @Override
+    public LoadPhase getLoadPhase() {
+        return LoadPhase.INIT;
+    }
+
     @Nullable
     @Override
     public Optional<FluidRarityEntry> appendDataSet(String str) {

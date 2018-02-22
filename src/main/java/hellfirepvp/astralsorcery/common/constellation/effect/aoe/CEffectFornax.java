@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.base.MeltInteraction;
 import hellfirepvp.astralsorcery.common.base.WorldMeltables;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -23,10 +24,16 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockStaticLiquid;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -51,7 +58,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
     public static double meltDurationDivisor = 1;
 
     public CEffectFornax(@Nullable ILocatable origin) {
-        super(origin, Constellations.fornax, "fornax", searchRange, maxCount, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null, WorldMeltables.ActiveMeltableEntry::new);
+        super(origin, Constellations.fornax, "fornax", maxCount, (world, pos) -> WorldMeltables.getMeltable(world, pos) != null, WorldMeltables.ActiveMeltableEntry::new);
     }
 
     @Override
@@ -78,47 +85,83 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
     }
 
     @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         if(!enabled) return false;
         percStrength *= potencyMultiplier;
         if(percStrength < 1) {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
-        boolean changed = false;
-        WorldMeltables.ActiveMeltableEntry entry = getRandomElementByChance(rand);
-        if(entry != null) {
-            BlockPos bp = entry.getPos();
-            if(MiscUtils.isChunkLoaded(world, new ChunkPos(bp))) {
-                if(!entry.isValid(world, true)) {
-                    removeElement(entry);
+        if(modified.isCorrupted()) {
+            boolean changed = false;
+            double searchRange = modified.getSize();
+            double offX = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offY = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            double offZ = -searchRange + world.rand.nextFloat() * (2 * searchRange + 1);
+            BlockPos at = pos.add(offX, offY, offZ);
+            IBlockState state = world.getBlockState(at);
+            if(state.getBlock().equals(Blocks.WATER) &&
+                    state.getBlock() instanceof BlockStaticLiquid) {
+                if(state.getValue(BlockStaticLiquid.LEVEL) == 0) {
+                    world.setBlockState(at, Blocks.STONE.getDefaultState());
                     changed = true;
-                } else {
-                    entry.counter++;
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
-                    MeltInteraction melt = entry.getMeltable(world);
-                    if(entry.counter >= (melt.getMeltTickDuration() / meltDurationDivisor)) {
-                        if(failChance > 0 && rand.nextFloat() <= failChance) {
-                            world.setBlockToAir(bp);
-                        } else {
-                            melt.placeResultAt(world, bp);
+                }
+            } else if(state.getBlock().equals(Blocks.LAVA) &&
+                    state.getBlock() instanceof BlockStaticLiquid) {
+                if(state.getValue(BlockStaticLiquid.LEVEL) == 0) {
+                    world.setBlockState(at, Blocks.OBSIDIAN.getDefaultState());
+                    changed = true;
+                }
+            } else if(state.getBlock().equals(Blocks.FIRE)) {
+                world.setBlockToAir(at);
+                changed = true;
+            } else if(state.getBlock() instanceof BlockFluidBase) {
+                if(state.getValue(BlockFluidBase.LEVEL) == 0) {
+                    IBlockState generate = Blocks.STONE.getDefaultState();
+                    Fluid f = ((BlockFluidBase) state.getBlock()).getFluid();
+                    if(f != null) {
+                        if(f.getTemperature(world, at) <= 200) {
+                            generate = Blocks.ICE.getDefaultState();
+                        } else if(f.getTemperature(world, at) >= 500) {
+                            generate = Blocks.OBSIDIAN.getDefaultState();
                         }
-                        removeElement(entry);
                     }
+                    world.setBlockState(at, generate);
                     changed = true;
                 }
             }
+            return changed;
+        } else {
+            boolean changed = false;
+            WorldMeltables.ActiveMeltableEntry entry = getRandomElementByChance(rand);
+            if(entry != null) {
+                BlockPos bp = entry.getPos();
+                if(MiscUtils.isChunkLoaded(world, new ChunkPos(bp))) {
+                    if(!entry.isValid(world, true)) {
+                        removeElement(entry);
+                        changed = true;
+                    } else {
+                        entry.counter++;
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, bp.getX(), bp.getY(), bp.getZ());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, bp, 16));
+                        MeltInteraction melt = entry.getMeltable(world);
+                        if(melt.isMeltable(world, bp, world.getBlockState(bp)) && entry.counter >= (melt.getMeltTickDuration() / meltDurationDivisor)) {
+                            if(failChance > 0 && rand.nextFloat() <= failChance) {
+                                world.setBlockToAir(bp);
+                            } else {
+                                melt.placeResultAt(world, bp);
+                            }
+                            removeElement(entry);
+                        }
+                        changed = true;
+                    }
+                }
+            }
+
+            if(findNewPosition(world, pos, modified)) changed = true;
+
+            return changed;
         }
-
-        if(findNewPosition(world, pos)) changed = true;
-
-        return changed;
-    }
-
-    @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
     }
 
     @SideOnly(Side.CLIENT)
@@ -132,6 +175,11 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
             p.motion(0, 0.016 + rand.nextFloat() * 0.02, 0);
             p.scale(0.2F).setColor(Color.RED);
         }
+    }
+
+    @Override
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectFornax.searchRange);
     }
 
     @Override

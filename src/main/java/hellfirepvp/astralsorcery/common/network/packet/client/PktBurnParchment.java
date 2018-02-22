@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiMapDrawing;
+import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -31,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by HellFirePvP
  * Date: 30.04.2017 / 22:20
  */
-public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchment, PktBurnParchment> {
+public class PktBurnParchment implements IMessage, IMessageHandler<PktBurnParchment, PktBurnParchment>, ClientReplyPacket {
 
     public int dimId;
     public BlockPos tablePos;

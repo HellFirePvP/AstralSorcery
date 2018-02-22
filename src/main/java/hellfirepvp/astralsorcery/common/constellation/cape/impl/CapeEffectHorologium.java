@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopController;
+import hellfirepvp.astralsorcery.common.util.effect.time.TimeStopZone;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
@@ -32,7 +33,7 @@ public class CapeEffectHorologium extends CapeArmorEffect {
     private static int duration = 180;
 
     private static int cooldown = 1000;
-    private static float chanceProc = 0.4F;
+    private static float chanceProc = 0.8F;
 
     public CapeEffectHorologium(NBTTagCompound cmp) {
         super(cmp, "horologium");
@@ -42,7 +43,7 @@ public class CapeEffectHorologium extends CapeArmorEffect {
         if(player.getCooldownTracker().hasCooldown(ItemsAS.armorImbuedCape)) return;
 
         if(rand.nextFloat() < chanceProc) {
-            TimeStopController.freezeWorldAt(player, player.world, player.getPosition(), effectRange, duration);
+            TimeStopController.freezeWorldAt(TimeStopZone.EntityTargetController.allExcept(player), player.world, player.getPosition(), false, effectRange, duration);
             player.getCooldownTracker().setCooldown(ItemsAS.armorImbuedCape, cooldown);
         }
     }

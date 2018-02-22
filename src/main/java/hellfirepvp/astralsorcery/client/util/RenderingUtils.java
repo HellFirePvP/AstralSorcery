@@ -457,8 +457,8 @@ public class RenderingUtils {
 
     public static void renderLightRayEffects(double x, double y, double z, Color effectColor, long seed, long continuousTick, int dstJump, float scale, int countFancy, int countNormal) {
         rand.setSeed(seed);
-        GL11.glPushMatrix();
-        GL11.glTranslated(x, y, z);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, z);
 
         int fancy_count = !FMLClientHandler.instance().getClient().gameSettings.fancyGraphics ? countNormal : countFancy;
 
@@ -469,20 +469,21 @@ public class RenderingUtils {
         float f1 = continuousTick / 400.0F;
         float f2 = 0.4F;
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glShadeModel(GL11.GL_SMOOTH);
-        GL11.glEnable(GL11.GL_BLEND);
+        GlStateManager.disableTexture2D();
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDepthMask(false);
-        GL11.glPushMatrix();
+        //GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        GlStateManager.disableAlpha();
+        GlStateManager.depthMask(false);
+        GlStateManager.pushMatrix();
         for (int i = 0; i < fancy_count; i++) {
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(rand.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(rand.nextFloat() * 360.0F + f1 * 360.0F, 0.0F, 0.0F, 1.0F);
             vb.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
             float fa = rand.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
             float f4 = rand.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
@@ -495,17 +496,17 @@ public class RenderingUtils {
             vb.pos(-0.7D * f4, fa,   -0.5F * f4).color(effectColor.getRed(), effectColor.getGreen(), effectColor.getBlue(), 0).endVertex();
             tes.draw();
         }
-        GL11.glPopMatrix();
-        GL11.glDepthMask(true);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glShadeModel(GL11.GL_FLAT);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GlStateManager.popMatrix();
+        GlStateManager.depthMask(true);
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.disableBlend();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableAlpha();
         RenderHelper.enableStandardItemLighting();
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public static void renderBlueStackTooltip(int x, int y, List<Tuple<ItemStack, String>> tooltipData, FontRenderer fr, RenderItem ri) {
@@ -639,7 +640,7 @@ public class RenderingUtils {
         double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
-        GL11.glTranslated(-tx, -ty, -tz);
+        GlStateManager.translate(-tx, -ty, -tz);
     }
 
     public static Vector3 getStandartTranslationRemovalVector(float partialTicks) {
@@ -675,7 +676,7 @@ public class RenderingUtils {
     }
 
     public static void renderAngleRotatedTexturedRect(Vector3 renderOffset, Vector3 axis, double angleRad, double scale, double u, double v, double uLength, double vLength, float partialTicks) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         removeStandartTranslationFromTESRMatrix(partialTicks);
 
         Vector3 renderStart = axis.clone().perpendicular().rotate(angleRad, axis).normalize();
@@ -698,7 +699,7 @@ public class RenderingUtils {
 
         tes.draw();
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public static void drawGradientRect(int x, int y, float z, int toX, int toY, Color color, Color colorFade) {

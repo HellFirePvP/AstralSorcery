@@ -111,17 +111,6 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
         }
     }
 
-    private int getMaxSize() {
-        if(getItem().isEmpty()) return CrystalProperties.MAX_SIZE_CELESTIAL;
-        if(getItem().getItem() instanceof ItemCrystalToolBase) {
-            return ((ItemCrystalToolBase) getItem().getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-        if(getItem().getItem() instanceof ItemCrystalSword) {
-            return 2 * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-        return CrystalProperties.MAX_SIZE_CELESTIAL;
-    }
-
     private void increaseSize() {
         world.setBlockToAir(getPosition());
         List<Entity> foundItems = world.getEntitiesInAABBexcluding(this, boxCraft.offset(posX, posY, posZ).grow(0.1),
@@ -129,11 +118,11 @@ public class EntityCrystalTool extends EntityItem implements EntityStarlightReac
         if(foundItems.size() <= 0) {
             CrystalProperties prop = getProperties();
             if(prop != null) {
-                int max = getMaxSize();
+                int max = CrystalProperties.getMaxSize(getItem());
                 int grow = rand.nextInt(250) + 100;
                 max = Math.min(prop.getSize() + grow, max);
                 int cut = Math.max(0, prop.getCollectiveCapability() - (rand.nextInt(10) + 10));
-                applyProperties(new ToolCrystalProperties(max, prop.getPurity(), cut));
+                applyProperties(new ToolCrystalProperties(max, prop.getPurity(), cut, prop.getFracturation(), prop.getSizeOverride()));
             }
         }
     }

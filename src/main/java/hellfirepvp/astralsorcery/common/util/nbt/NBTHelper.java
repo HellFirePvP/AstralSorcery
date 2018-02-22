@@ -96,6 +96,11 @@ public class NBTHelper {
         compound.setTag(tag, uuidComp);
     }
 
+    public static void removeUUID(NBTTagCompound compound, String key) {
+        compound.removeTag(key + "Most");
+        compound.removeTag(key + "Least");
+    }
+
     public static ItemStack getStack(NBTTagCompound compound, String tag) {
         return getStack(compound, tag, ItemStack.EMPTY);
     }

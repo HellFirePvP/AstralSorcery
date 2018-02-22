@@ -170,6 +170,17 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tgr.getGrindingItem());
     }
 
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        MachineType type = state.getValue(MACHINE_TYPE);
+        if (type == MachineType.TELESCOPE) {
+            if (player.world.isRemote) {
+                AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+        return true;
+    }
+
     public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
         EnumHand hand = event.getHand();
         World world = event.getWorld();
@@ -181,11 +192,6 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         int posY = pos.getY();
         int posZ = pos.getZ();
         switch (type) {
-            case TELESCOPE:
-                if (player.world.isRemote) {
-                    AstralSorcery.proxy.openGui(CommonProxy.EnumGuiId.TELESCOPE, player, player.world, posX, posY, posZ);
-                }
-                break;
             case GRINDSTONE:
                 TileGrindstone tgr = MiscUtils.getTileAt(world, pos, TileGrindstone.class, true);
                 if(tgr != null) {
@@ -272,9 +278,9 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
                         }
                     }
                 }
-                break;
+                return true;
         }
-        return true;
+        return false;
     }
 
     @Override

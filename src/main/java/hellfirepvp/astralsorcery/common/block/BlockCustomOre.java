@@ -112,9 +112,8 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         OreType type = state.getValue(ORE_TYPE);
-        List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case ROCK_CRYSTAL:
                 if(world != null && world instanceof World && (allowCrystalHarvest || (checkSafety((World) world, pos) && securityCheck((World) world, pos, harvesters.get())))) {
@@ -133,7 +132,6 @@ public class BlockCustomOre extends Block implements BlockCustomName, BlockVaria
                 drops.add(new ItemStack(this, 1, OreType.STARMETAL.ordinal()));
                 break;
         }
-        return drops;
     }
 
     private boolean securityCheck(World world, BlockPos pos, EntityPlayer player) {

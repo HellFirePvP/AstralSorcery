@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
@@ -33,6 +34,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
@@ -40,19 +42,25 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -116,7 +124,7 @@ public class EventHandlerEntity {
 
         if (attacker instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) attacker;
-            PlayerProgress prog = ResearchManager.getProgress(p);
+            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
             if (prog != null) {
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
                 for (ConstellationPerk perk : perks.keySet()) {
@@ -176,6 +184,49 @@ public class EventHandlerEntity {
         attackStack.remove(event.getEntity().getEntityId());
     }
 
+    @SubscribeEvent
+    public void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
+        if(event.getEntityLiving().isPotionActive(RegistryPotions.potionTimeFreeze)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onDrops(LivingDropsEvent event) {
+        if(event.getEntityLiving().world == null ||
+                event.getEntityLiving().world.isRemote ||
+                !(event.getEntityLiving().world instanceof WorldServer)) {
+            return;
+        }
+        if(event.getEntityLiving() instanceof EntityPlayer || !(event.getEntityLiving() instanceof EntityLiving)) return;
+        EntityLiving el = (EntityLiving) event.getEntityLiving();
+        WorldServer ws = (WorldServer) el.world;
+
+        PotionEffect pe = el.getActivePotionEffect(RegistryPotions.potionDropModifier);
+        if (pe != null) {
+            el.removeActivePotionEffect(RegistryPotions.potionDropModifier);
+            int ampl = pe.getAmplifier();
+            if(ampl == 0) {
+                event.getDrops().clear();
+            } else {
+                LootTable lootTableRef = EntityUtils.getLootTable(el);
+                LootContext.Builder builder = new LootContext.Builder(ws).withLootedEntity(el)
+                        .withDamageSource(event.getSource()).withLuck(0);
+                if(lootTableRef != null) {
+                    for (int i = 0; i < ampl; i++) {
+                        for (ItemStack stack : lootTableRef.generateLootForPools(rand, builder.build())) {
+                            if(stack.isEmpty()) continue;
+
+                            EntityItem ei = new EntityItem(ws, el.posX, el.posY, el.posZ, stack);
+                            ei.setDefaultPickupDelay();
+                            event.getDrops().add(ei);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
@@ -222,7 +273,7 @@ public class EventHandlerEntity {
                 event.setAmount(event.getAmount() * (1 + ((float) Config.swordSharpMultiplier)));
             }
 
-            PlayerProgress prog = ResearchManager.getProgress(p);
+            PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
             if (prog != null) {
                 float dmg = event.getAmount();
                 Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
@@ -239,7 +290,7 @@ public class EventHandlerEntity {
         if (entity != null) {
             if(entity instanceof EntityPlayer) {
                 EntityPlayer hurt = (EntityPlayer) entity;
-                PlayerProgress prog = ResearchManager.getProgress(hurt);
+                PlayerProgress prog = ResearchManager.getProgress(hurt, Side.SERVER);
                 if (prog != null) {
                     float dmg = event.getAmount();
                     Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();

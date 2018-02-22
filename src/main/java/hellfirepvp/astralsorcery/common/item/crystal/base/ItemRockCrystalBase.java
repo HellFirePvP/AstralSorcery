@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,6 +38,8 @@ import java.util.Optional;
  * Date: 08.05.2016 / 21:38
  */
 public abstract class ItemRockCrystalBase extends Item implements ItemHighlighted {
+
+    private static Random rand = new Random();
 
     public ItemRockCrystalBase() {
         setMaxStackSize(1);
@@ -53,6 +57,11 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
                 CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomCelestial());
             } else {
                 CrystalProperties.applyCrystalProperties(stack, CrystalProperties.createRandomRock());
+            }
+        } else {
+            if(prop.getFracturation() >= 100) {
+                stack.setCount(0);
+                entityIn.playSound(SoundEvents.ENTITY_ITEM_BREAK, 0.5F, rand.nextFloat() * 0.2F + 0.8F);
             }
         }
     }
@@ -86,8 +95,7 @@ public abstract class ItemRockCrystalBase extends Item implements ItemHighlighte
 
     @SideOnly(Side.CLIENT)
     protected Optional<Boolean> addCrystalPropertyToolTip(ItemStack stack, List<String> tooltip) {
-        boolean isCelestial = this instanceof ItemCelestialCrystal || this instanceof ItemTunedCelestialCrystal;
-        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, isCelestial ? CrystalProperties.MAX_SIZE_CELESTIAL : CrystalProperties.MAX_SIZE_ROCK);
+        return CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.getMaxSize(stack));
     }
 
     public abstract ItemTunedCrystalBase getTunedItemVariant();

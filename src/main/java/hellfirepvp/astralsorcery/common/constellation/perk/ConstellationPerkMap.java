@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -84,7 +85,7 @@ public class ConstellationPerkMap {
 
     @Deprecated
     public List<ConstellationPerks> getAvailablePerksFor(EntityPlayer player, PerkOrder availableOrder, boolean client) {
-        PlayerProgress prog = client ? ResearchManager.clientProgress : ResearchManager.getProgress(player);
+        PlayerProgress prog = ResearchManager.getProgress(player, client ? Side.CLIENT : Side.SERVER);
         if(prog == null) return null;
         Map<ConstellationPerk, Integer> appliedPerks = prog.getAppliedPerks();
         List<ConstellationPerks> available = new LinkedList<>();

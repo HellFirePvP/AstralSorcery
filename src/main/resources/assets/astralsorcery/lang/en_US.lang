@@ -43,6 +43,14 @@ misc.chaos.resistance.max=Chaos Immunity
 
 effect.as.cheatdeath=Phoenix-Fire
 effect.as.bleed=Bleeding
+effect.as.dropmod=Inner Wealth
+
+amulet.enchantment.level.one=level
+amulet.enchantment.level.more=levels
+
+amulet.enchantment.add_to_specific.name=+%s %s to %s
+amulet.enchantment.add_to_existing_specific.name=+%s %s to existing %s
+amulet.enchantment.add_to_existing_all.name=+%s %s to all existing Enchantments
 
 enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
 enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools that have this enchantment on them will cause the drop to be the item that would be the result of smelting the original drop. ("Auto-Smelt")
@@ -367,6 +375,7 @@ astralsorcery.journal.recipe.amt.toomuch=§cToo much
 crystal.size=Size
 crystal.purity=Purity
 crystal.collectivity=Cutting
+crystal.fracture=Fractured
 crystal.attuned=Tuned to %s
 crystal.trait=Trait of %s
 crystal.collect.type=Collects starlight from %s
@@ -419,7 +428,7 @@ item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
 item.itemskyresonator.name=Fosic Resonator
 item.itemsextant.name=Sextant
-item.itemenchantmentamulet.name=Resplendent prism
+item.itemenchantmentamulet.name=Resplendent Prism
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator

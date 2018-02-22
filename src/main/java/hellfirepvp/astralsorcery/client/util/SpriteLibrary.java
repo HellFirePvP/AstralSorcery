@@ -35,6 +35,7 @@ public class SpriteLibrary {
     private static final BindableResource texHalo1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1");
     private static final BindableResource texHalo2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo2");
     private static final BindableResource texHalo3 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo3");
+    private static final BindableResource texVortex1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "vortex1");
     private static final BindableResource texStar1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star1");
     private static final BindableResource texStar2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "star2");
     private static final BindableResource texFlare1 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare1");
@@ -48,6 +49,7 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteLightbeam = texLightbeam.asSpriteSheet(4, 16);
     public static final SpriteSheetResource spriteHalo1 = texHalo1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteHalo2 = texHalo2.asSpriteSheet(8, 8);
+    public static final SpriteSheetResource spriteVortex1 = texVortex1.asSpriteSheet(5, 8);
     public static final SpriteSheetResource spriteHalo3 = texHalo3.asSpriteSheet(4, 8);
     public static final SpriteSheetResource spriteStar1 = texStar1.asSpriteSheet(6, 8);
     public static final SpriteSheetResource spriteStar2 = texStar2.asSpriteSheet(6, 8);

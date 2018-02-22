@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
+import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
@@ -27,6 +28,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,7 +48,8 @@ import java.util.List;
 public class CEffectVicio extends ConstellationEffect implements ConstellationEffectStatus {
 
     public static boolean enabled = true;
-    public static int effectRange = 16, effectRangePerLens = 8;
+    public static float effectRange = 16;
+    public static int effectRangePerLens = 8;
 
     public CEffectVicio(@Nullable ILocatable origin) {
         super(origin, Constellations.vicio, "vicio");
@@ -72,39 +75,57 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
     }
 
     @Override
-    public boolean runEffect(World world, BlockPos pos, int mirrorAmount, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
-        int range = effectRange + effectRangePerLens * mirrorAmount;
-        List<EntityPlayerMP> entities = world.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(range));
-        for (EntityPlayerMP pl : entities) {
-            if (EventHandlerEntity.ritualFlight.setOrAddTimeout(40, pl)) {
-                boolean prev = pl.capabilities.allowFlying;
-                pl.capabilities.allowFlying = true;
-                if (!prev) {
-                    pl.sendPlayerAbilities();
+    public boolean runEffect(World world, BlockPos pos, int mirrorAmount, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
+        if(!enabled) return false;
+        boolean foundPlayer = false;
+        double range = modified.getSize();
+        if(modified.isCorrupted()) {
+            List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(range));
+            for (EntityLivingBase entity : entities) {
+                if(entity instanceof EntityPlayerMP) {
+                    EntityPlayerMP pl = (EntityPlayerMP) entity;
+                    if(pl.interactionManager.getGameType() == GameType.SURVIVAL) {
+                        boolean prev = pl.capabilities.allowFlying;
+                        pl.capabilities.allowFlying = false;
+                        if (prev) {
+                            pl.sendPlayerAbilities();
+                        }
+                    }
+                }
+                foundPlayer = true;
+                entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 9));
+                entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 9));
+            }
+        } else {
+            List<EntityPlayerMP> entities = world.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(range));
+            for (EntityPlayerMP pl : entities) {
+                if (EventHandlerEntity.ritualFlight.setOrAddTimeout(40, pl)) {
+                    boolean prev = pl.capabilities.allowFlying;
+                    pl.capabilities.allowFlying = true;
+                    foundPlayer = true;
+                    if (!prev) {
+                        pl.sendPlayerAbilities();
+                    }
                 }
             }
         }
+        return foundPlayer;
+    }
+
+    @Override
+    @Deprecated
+    public boolean playEffect(World world, BlockPos pos, float percStrength, ConstellationEffectProperties modified, @Nullable IMinorConstellation possibleTraitEffect) {
         return false;
     }
 
     @Override
-    public boolean runTraitEffect(World world, BlockPos pos, int mirrorAmount, IMinorConstellation traitType) {
-        return false;
-    }
-
-    @Override
-    public boolean playMainEffect(World world, BlockPos pos, float percStrength, boolean mayDoTraitEffect, @Nullable IMinorConstellation possibleTraitEffect) {
-        return false;
-    }
-
-    @Override
-    public boolean playTraitEffect(World world, BlockPos pos, IMinorConstellation traitType, float traitStrength) {
-        return false;
+    public ConstellationEffectProperties provideProperties(int mirrorCount) {
+        return new ConstellationEffectProperties(CEffectVicio.effectRange + mirrorCount * CEffectVicio.effectRangePerLens);
     }
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        effectRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), effectRange, 1, 32, "Defines the radius (in blocks) in which the ritual will allow the players to fly in.");
+        effectRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), effectRange, 1, 64, "Defines the radius (in blocks) in which the ritual will allow the players to fly in.");
         effectRangePerLens = cfg.getInt(getKey() + "RangeIncreasePerLens", getConfigurationSection(), effectRangePerLens, 1, 32, "Defines the increase in radius the ritual will get per active lens enhancing the ritual.");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
     }

@@ -75,9 +75,8 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
     }
 
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         OreType type = state.getValue(ORE_TYPE);
-        List<ItemStack> drops = new ArrayList<>();
         switch (type) {
             case AQUAMARINE:
                 int f = fortune + 3;
@@ -90,7 +89,6 @@ public class BlockCustomSandOre extends BlockFalling implements BlockCustomName,
                 }
                 break;
         }
-        return drops;
     }
 
     @Override
