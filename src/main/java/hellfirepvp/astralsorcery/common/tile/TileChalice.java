@@ -114,8 +114,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
                                 if(rta.isClear(this.world)) {
                                     FluidStack otherC = other.getTank().getFluid();
                                     LiquidInteraction exec = LiquidInteraction.getMatchingInteraction(interactions, otherC);
-                                    if(exec != null) {
-                                        exec.drainComponents(this, other);
+                                    if(exec != null && exec.drainComponents(this, other)) {
                                         EntityLiquidSpark els1 = new EntityLiquidSpark(this.world, this.pos, exec);
                                         EntityLiquidSpark els2 = new EntityLiquidSpark(this.world, ch.getPos(), exec);
 

@@ -24,6 +24,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.LiquidStarlightChaliceHandler;
 import hellfirepvp.astralsorcery.common.block.BlockBoreHead;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.entities.EntityTechnicalAmbient;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
@@ -890,6 +891,10 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         @Override
         public String getName() {
             return name().toLowerCase();
+        }
+
+        public ItemStack asStack() {
+            return new ItemStack(BlocksAS.blockBoreHead, 1, ordinal());
         }
 
     }

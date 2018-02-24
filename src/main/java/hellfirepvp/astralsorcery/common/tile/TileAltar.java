@@ -540,9 +540,10 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         this.starlightStored = compound.getInteger("starlight");
         this.mbState = compound.getBoolean("mbState");
 
-        this.craftingTask = null;
         if(compound.hasKey("craftingTask")) {
-            this.craftingTask = ActiveCraftingTask.deserialize(compound.getCompoundTag("craftingTask"));
+            this.craftingTask = ActiveCraftingTask.deserialize(compound.getCompoundTag("craftingTask"), this.craftingTask);
+        } else {
+            this.craftingTask = null;
         }
 
         this.focusItem = ItemStack.EMPTY;

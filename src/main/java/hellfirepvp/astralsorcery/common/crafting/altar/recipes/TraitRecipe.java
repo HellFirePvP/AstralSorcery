@@ -194,7 +194,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
 
     @Override
     public int craftingTickTime() {
-        return 1400;
+        return 800;
     }
 
     @Override

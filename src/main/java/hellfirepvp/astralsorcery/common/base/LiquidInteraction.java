@@ -120,13 +120,13 @@ public class LiquidInteraction {
         };
     }
 
-    public void drainComponents(@Nonnull TileChalice tc1, @Nonnull TileChalice tc2) {
-        drainComponents(tc1.getTank(), tc2.getTank());
+    public boolean drainComponents(@Nonnull TileChalice tc1, @Nonnull TileChalice tc2) {
+        return drainComponents(tc1.getTank(), tc2.getTank());
     }
 
-    public <T extends IFluidTank & IFluidHandler> void drainComponents(@Nonnull T tank1, @Nonnull T tank2) {
-        this.action.drainComponent1(this.component1.copy(), tank1);
-        this.action.drainComponent2(this.component2.copy(), tank2);
+    public <T extends IFluidTank & IFluidHandler> boolean drainComponents(@Nonnull T tank1, @Nonnull T tank2) {
+        return this.action.drainComponent1(this.component1.copy(), tank1) &&
+                this.action.drainComponent2(this.component2.copy(), tank2);
     }
 
     public void triggerInteraction(World world, Vector3 position) {
@@ -193,9 +193,9 @@ public class LiquidInteraction {
 
     public static abstract class FluidInteractionAction {
 
-        public abstract void drainComponent1(FluidStack component, IFluidHandler tank);
+        public abstract boolean drainComponent1(FluidStack component, IFluidHandler tank);
 
-        public abstract void drainComponent2(FluidStack component, IFluidHandler tank);
+        public abstract boolean drainComponent2(FluidStack component, IFluidHandler tank);
 
         public abstract void doInteraction(World world, Vector3 position);
 
@@ -213,17 +213,31 @@ public class LiquidInteraction {
         }
 
         @Override
-        public void drainComponent1(FluidStack component, IFluidHandler tank) {
-            if(rand.nextFloat() < c1) {
-                tank.drain(component, true);
+        public boolean drainComponent1(FluidStack component, IFluidHandler tank) {
+            FluidStack drained = tank.drain(component, false);
+            if(drained == null || drained.amount < component.amount) {
+                return false;
             }
+
+            if(rand.nextFloat() < c1) {
+                drained = tank.drain(component, true);
+                return drained != null && drained.amount >= component.amount;
+            }
+            return true;
         }
 
         @Override
-        public void drainComponent2(FluidStack component, IFluidHandler tank) {
-            if(rand.nextFloat() < c2) {
-                tank.drain(component, true);
+        public boolean drainComponent2(FluidStack component, IFluidHandler tank) {
+            FluidStack drained = tank.drain(component, false);
+            if(drained == null || drained.amount < component.amount) {
+                return false;
             }
+
+            if(rand.nextFloat() < c2) {
+                drained = tank.drain(component, true);
+                return drained != null && drained.amount >= component.amount;
+            }
+            return true;
         }
 
         @Override

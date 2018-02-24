@@ -51,7 +51,7 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         float str = super.getStrVsBlock(stack, state);
         Material m = state.getMaterial();
-        if(m == Material.WOOD || m == Material.PLANTS || m == Material.VINE) {
+        if(m == Material.WOOD || m == Material.PLANTS || m == Material.VINE || m == Material.PISTON || m == Material.LEAVES) {
             str = RegistryItems.crystalToolMaterial.getEfficiencyOnProperMaterial();
         }
         return str;

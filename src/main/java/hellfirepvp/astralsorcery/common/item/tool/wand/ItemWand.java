@@ -359,6 +359,8 @@ public class ItemWand extends Item implements ISpecialInteractItem, INBTModel {
 
     @SideOnly(Side.CLIENT)
     public static void highlightEffects(PktParticleEvent event) {
+        if(Minecraft.getMinecraft().world == null) return;
+
         BlockPos orePos = event.getVec().toBlockPos();
         BlockPos pos = Minecraft.getMinecraft().world.getTopSolidOrLiquidBlock(orePos).up();
         Vector3 display = new Vector3(pos);

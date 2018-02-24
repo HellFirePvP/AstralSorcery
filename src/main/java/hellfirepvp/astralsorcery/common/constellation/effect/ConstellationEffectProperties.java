@@ -66,11 +66,11 @@ public class ConstellationEffectProperties {
                 size *= 0.4F;
             }
             if(trait.equals(Constellations.alcara)) {
-                fracturationLower *= 0.01F;
-                fracturationRate *= 15F;
+                fracturationLower *= 0.015F;
+                fracturationRate *= 10F;
 
                 size *= 1.7F;
-                effectAmplifier *= 1.8F;
+                effectAmplifier *= 1.6F;
                 corrupted = true;
             }
             if(trait.equals(Constellations.vorux)) {

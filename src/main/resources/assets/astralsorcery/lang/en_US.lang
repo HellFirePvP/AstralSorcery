@@ -289,6 +289,7 @@ astralsorcery.journal.CEL_CRYSTALS.1.text=After having the stardust completely f
 research.PED_ACCEL.name=Ritual Acceleration
 astralsorcery.journal.PED_ACCEL.1.text=That ritual pedestal set up is nice and all, but it seems a bit slow and it needs to have a view of the sky in order for it to focus and disperse its constellation's starlight, which makes it a bit clunky for what it's supposed to do.<NL>Well, if it's only the starlight of the constellation of the central focus crystal that's required to run it, it could be provided more as a focused beam of light with the crystal lenses previously designed.
 astralsorcery.journal.PED_ACCEL.2.text=Upon trying that, it seems the crystal experiences an immense stress, like that observed on the lightwell. Luckily, due to the design of the ritual pedestal, that stress gets dispersed into occasional beams of light away from the pedestal.<NL>Some of those beams show a more reliable pattern, and placing crystal lenses on those places where the light reflects and linking it back onto the ritual pedestal will yield an even stronger effect. Now to  be careful not to break the precious crystal by doing so...
+astralsorcery.journal.PED_ACCEL.3.text=That's easier said than done however, as accelerating the ritual way beyond of what's normally capable of, some damage seems to remain on the crystal. While one small crack might not seem very problematic, multiple ones over time might result in the crystal shattering as it can no longer withstand the stress.<NL>Thankfully, those cracks can be mended with some liquid starlight.
 
 research.CELESTIAL_GATEWAY.name=Celestial Gateway
 astralsorcery.journal.CELESTIAL_GATEWAY.1.text=The endless stars above form intricate constellations that guide all things. For eons the world has drawn upon them for references in navigation and direction, finding the morrow by the night's stars. It seems the stars acted as a guide for the crystal makers long ago, but in a much more literal sense.<NL>By focusing illumination, and embedding starlight into a surrounded rock crystal, a base can be built to connect distant locations, even to those in another world.
@@ -355,6 +356,18 @@ research.BORE_HEAD_LIQUID.name=Neromantic Prime
 astralsorcery.journal.BORE_HEAD_LIQUID.1.text=One such use of the Evershifting Fountain is to stimulate the currents of liquid resources below the bedrock level with the now-releasable massive energy.<NL>Using the Neromantic Prime will result in the accumulation of the liquid, that's been stored below bedrock for eons, in the central fountain-core.
 astralsorcery.journal.BORE_HEAD_LIQUID.2.text=While the fountain cannot be mechanically interacted with, the resulting liquid can be extracted by chalices with sufficient space.<NL>These underground oceans are not infinite, however, so once the stored liquid has been used up, unlimited mundane water will take its place.<NL>The production results vary heavily between even short distances, and setting up the fountain just to see the result is tiresome and expensive.
 astralsorcery.journal.BORE_HEAD_LIQUID.4.text=Recalling the large area the fosic resonator could gather its information from, adjusting the tool would allow it to draw forth very small samples of liquid for some random positions around the wielder of the resonator. Not enough liquid to be usable, but enough to determine if setting up the fountain might be beneficial or not.<NL>The resonator, even with two modes, only works during the night. Modes can be changed by shift-right-clicking while holding it.
+
+research.BORE_HEAD_VORTEX.name=Fysallidic Prime
+astralsorcery.journal.BORE_HEAD_VORTEX.1.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.3.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.4.text=
+
+research.ENCHANTMENT_AMULET.name=Resplendent Prism
+astralsorcery.journal.ENCHANTMENT_AMULET.1.text=
+astralsorcery.journal.ENCHANTMENT_AMULET.3.text=
+
+research.SEXTANT.name=Sextant
+astralsorcery.journal.SEXTANT.1.text=
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -529,7 +542,7 @@ astralsorcery.constellation.armara.enchantments=The protective nature of this co
 astralsorcery.constellation.armara.ritual=Channeling the repulsive forces that emit from this light into the near area creates a small force field, reflecting projectiles and pushing mobs outside its range.
 astralsorcery.constellation.armara.capeeffect=A cape infused with this constellation's light will slowly collect it over time, manifesting it into barriers which can protect completely from single attacks.
 astralsorcery.constellation.vicio=Vicio
-astralsorcery.constellation.vicio.info=Travel
+astralsorcery.constellation.vicio.info=Motion
 astralsorcery.constellation.vicio.effect=The faint rays of this constellation make everything feel slower, while seeming to make you faster in whatever you want to do.
 astralsorcery.constellation.vicio.enchantments=Scholars have reported that drinking a potion exposed to Vicio provided boosts to speed, whereas exposing boots allowed the wearer to reduce harm from falling.
 astralsorcery.constellation.vicio.ritual=Grants a level of nimbleness and celerity to nearby players, allowing them to freely move through the air within the ritual.
