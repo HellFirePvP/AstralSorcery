@@ -289,6 +289,7 @@ astralsorcery.journal.CEL_CRYSTALS.1.text=在星尘与水晶石融合成蓝色�
 research.PED_ACCEL.name=效应增强
 astralsorcery.journal.PED_ACCEL.1.text=效应放大器的设定是完全正确的，但它的效率还是很低，或许它需要在星空下来吸收星座的力量减轻负担。否则，光靠自身的力量会显得过于笨重。<NL>如果它只是需要大量的星能来运作的话，那应该也能用之前设计的水晶透镜提供它所需要的星能。
 astralsorcery.journal.PED_ACCEL.2.text=经过尝试，水晶石似乎在不断承受着巨大的挤压力，如同在聚星缸那样。幸运的是，得益于效应放大器的优良设计，水晶石所承受的压力将会分散到四周发散的光线中。<NL>其中一些星辉将显现出奇怪的图案，将水晶透镜放置在光线反射的地方并链接到效应放大器上能产生更强的效果。不过要小心，别因此而使最珍贵的水晶石崩碎。
+astralsorcery.journal.PED_ACCEL.3.text=然而，知易行难，效应放大仪式的促进方式远远超乎寻常方式，水晶石上似乎产生了一些裂缝。虽然单单一个小裂缝并不会产生大问题，但千里之堤溃于蚁穴，时间会改变一切。<NL>幸运的是，这些裂缝可以用星能液进行修复。
 
 research.CELESTIAL_GATEWAY.name=天体星门
 astralsorcery.journal.CELESTIAL_GATEWAY.1.text=那些由无尽的星星而形成的错综复杂的星座引导着世间的一切。他们永恒不灭，世人以其为方位参照，从而确认自身所在的方位。似乎很久以前星空就成为了这些水晶创造者的指引，但更多是字面意义上的。<NL>通过在水晶石外面涂抹上辉光粉并注入星能，可以让其拥有远距离传送的能力，甚至还有突破位面屏障的力量。
@@ -355,6 +356,18 @@ research.BORE_HEAD_LIQUID.name=Neromantic基座
 astralsorcery.journal.BORE_HEAD_LIQUID.1.text=其中一种使用万象泉的方法是利用当前释放的大量能量来激发基岩下永世存在的大量液体资源。<NL>使用Neromantic基座将导致大量的液体积聚在中央的喷泉核心中。
 astralsorcery.journal.BORE_HEAD_LIQUID.2.text=喷泉核心无法与其他机械设备进行交互，唯一的解决办法就是利用有充足空间的圣杯将喷泉产生的液体吸出。<NL>然而这些地下的液体海洋并非无限的，一旦这些存储的液体抽完，剩下的将是无限的水。<NL>短距离内的生成结果差异巨大，光是安置喷泉结构查看其结果就颇为破费且令人厌烦。
 astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起法斯刻共振器对大面积区域的信息收集能力，稍加调整可以让其在共振器周围的某些位置抽出一个小型的液体抽样并显示出来。这种抽样并没有实际效用，但收集的信息足够对附近是否适合放置万象泉有一个大致的了解。<NL>共振器的两种模式都只能在夜晚使用。手持共振器通过shift右键来切换模式。
+
+research.BORE_HEAD_VORTEX.name=Fysallidic基座
+astralsorcery.journal.BORE_HEAD_VORTEX.1.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.3.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.4.text=
+
+research.ENCHANTMENT_AMULET.name=璀璨棱镜
+astralsorcery.journal.ENCHANTMENT_AMULET.1.text=
+astralsorcery.journal.ENCHANTMENT_AMULET.3.text=
+
+research.SEXTANT.name=六分仪
+astralsorcery.journal.SEXTANT.1.text=
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -529,7 +542,7 @@ astralsorcery.constellation.armara.enchantments=这个星座的守护性质赋�
 astralsorcery.constellation.armara.ritual=将此光线中所蕴含的排斥力引导到附近的区域内以形成一个小型力场，能够反弹所有弹射物并将怪物推到范围外。
 astralsorcery.constellation.armara.capeeffect=被注入此星座星能的披风将随时间的推移缓慢的吸收同种能量，并用其形成一个能完全抵御一次攻击的屏障。
 astralsorcery.constellation.vicio=Vicio
-astralsorcery.constellation.vicio.info=Travel
+astralsorcery.constellation.vicio.info=Motion
 astralsorcery.constellation.vicio.effect=这个星座的微弱的光芒使周围的一切都变慢了，与此同时你可以更快的完成你的工作。
 astralsorcery.constellation.vicio.enchantments=据专家所诉，饮用受Vicio所蚀刻的药水能提高速度，若是靴子受过蚀刻则可以使穿戴者减少坠落伤害。
 astralsorcery.constellation.vicio.ritual=赋予附近的玩家一定程度的敏捷与速度强化，让他们在范围内时能自由移动。
