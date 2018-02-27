@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +41,16 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         setMaxDamage(0);
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    public static boolean isAdvanced(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return false;
+        return NBTHelper.getBoolean(NBTHelper.getPersistentData(sextantStack), "advanced", false);
+    }
+
+    public static void setAdvanced(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return;
+        NBTHelper.getPersistentData(sextantStack).setBoolean("advanced", true);
     }
 
     @Override

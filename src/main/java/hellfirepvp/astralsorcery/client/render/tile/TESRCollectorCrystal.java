@@ -50,7 +50,6 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
 
     @Override
     public void render(TileCollectorCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         BlockCollectorCrystalBase.CollectorCrystalType type = te.getType();
         if(te.doesSeeSky()) {
             long sBase = 1553015L;
@@ -58,7 +57,8 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
             sBase ^= (long) te.getPos().getY();
             sBase ^= (long) te.getPos().getZ();
             Color c = type == null ? BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor : type.displayColor;
-            GL11.glEnable(GL11.GL_BLEND);
+            GlStateManager.enableBlend();
+            Blending.DEFAULT.applyStateManager();
             Blending.DEFAULT.apply();
             if(te.isEnhanced()) {
                 RenderingUtils.renderLightRayEffects(x + 0.5, y + 0.5, z + 0.5, c, sBase, ClientScheduler.getClientTick(), 20, 1.4F, 50, 25);
@@ -72,7 +72,6 @@ public class TESRCollectorCrystal extends TileEntitySpecialRenderer<TileCollecto
         GlStateManager.translate(x + 0.5, y, z + 0.5);
         renderCrystal(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL, true);
         GlStateManager.popMatrix();
-        GL11.glPopAttrib();
     }
 
     public static void renderCrystal(boolean isCelestial, boolean bounce) {

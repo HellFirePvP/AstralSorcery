@@ -213,6 +213,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
+        TextureHelper.setActiveTextureToAtlasSprite();
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
@@ -222,6 +223,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
         vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
         tes.draw();
+        TextureHelper.refreshTextureBindState();
 
         Blending.DEFAULT.apply();
         if(!blend) {

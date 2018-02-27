@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -29,6 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -108,6 +110,14 @@ public class TileCrystalLens extends TileTransmissionBase {
     @Nullable
     public ItemColoredLens.ColorType getLensColor() {
         return lensColor;
+    }
+
+    public EnumFacing getPlacedAgainst() {
+        IBlockState state = world.getBlockState(getPos());
+        if(!(state.getBlock() instanceof BlockLens)) {
+            return EnumFacing.DOWN;
+        }
+        return state.getValue(BlockLens.PLACED_AGAINST);
     }
 
     @Override
@@ -225,11 +235,6 @@ public class TileCrystalLens extends TileTransmissionBase {
             list.appendTag(cmp);
         }
         compound.setTag("listOccupied", list);
-    }
-
-    @Override
-    public void onLinkCreate(EntityPlayer player, BlockPos other) {
-        super.onLinkCreate(player, other);
     }
 
     @Nullable

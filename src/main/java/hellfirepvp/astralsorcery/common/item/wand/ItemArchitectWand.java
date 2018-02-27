@@ -159,15 +159,14 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
         Deque<BlockPos> placeable = filterBlocksToPlace(Minecraft.getMinecraft().player, Minecraft.getMinecraft().world, architectRange);
         if(!placeable.isEmpty()) {
-            GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-            GL11.glPushMatrix();
-            boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
-            GL11.glEnable(GL11.GL_BLEND);
-            Blending.ADDITIVEDARK.apply();
-            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            GlStateManager.pushMatrix();
+            GlStateManager.enableBlend();
+            Blending.ADDITIVEDARK.applyStateManager();
+            GlStateManager.disableAlpha();
             RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
             World w = Minecraft.getMinecraft().world;
 
+            TextureHelper.setActiveTextureToAtlasSprite();
             Tessellator tes = Tessellator.getInstance();
             BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -176,13 +175,10 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             }
             vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
             tes.draw();
+            Blending.DEFAULT.applyStateManager();
             Blending.DEFAULT.apply();
-            if(!blend) {
-                GL11.glDisable(GL11.GL_BLEND);
-            }
-            GL11.glEnable(GL11.GL_ALPHA_TEST);
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
+            GlStateManager.enableAlpha();
+            GlStateManager.popMatrix();
         }
     }
 

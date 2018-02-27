@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +58,23 @@ public class StructureGenBuffer extends CachedWorldData {
             }
         }
         return closest;
+    }
+
+    @Nullable
+    public BlockPos getClosest(StructureType type, BlockPos dstTo) {
+        double closest = Double.MAX_VALUE;
+        BlockPos closestPos = null;
+        int x = dstTo.getX();
+        int y = dstTo.getY();
+        int z = dstTo.getZ();
+        for (BlockPos position : generatedStructures.get(type)) {
+            double dst = position.getDistance(x, y, z);
+            if(dst < closest) {
+                closest = dst;
+                closestPos = position;
+            }
+        }
+        return closestPos;
     }
 
     @Override

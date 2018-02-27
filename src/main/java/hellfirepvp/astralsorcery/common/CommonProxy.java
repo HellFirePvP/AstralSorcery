@@ -38,6 +38,7 @@ import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
@@ -197,6 +198,7 @@ public class CommonProxy implements IGuiHandler {
         registerOreDictEntries();
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
+        SextantFinder.initialize();
 
         RegistryConstellations.initMapEffects();
 

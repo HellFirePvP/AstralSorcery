@@ -11,12 +11,15 @@ package hellfirepvp.astralsorcery.common.tile.network;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.CrystalPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,6 +58,15 @@ public class TileCrystalPrismLens extends TileCrystalLens {
                 rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.03 * (rand.nextBoolean() ? 1 : -1));
         particle.scale(0.2F);
+    }
+
+    @Override
+    public EnumFacing getPlacedAgainst() {
+        IBlockState state = world.getBlockState(getPos());
+        if(!(state.getBlock() instanceof BlockPrism)) {
+            return EnumFacing.DOWN;
+        }
+        return state.getValue(BlockPrism.PLACED_AGAINST);
     }
 
     @Nullable

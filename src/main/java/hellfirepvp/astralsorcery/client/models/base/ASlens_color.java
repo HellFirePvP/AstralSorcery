@@ -47,12 +47,6 @@ public class ASlens_color extends ModelBase {
 
     @Override
     public void render(Entity entity, float modelYaw, float modelPitch, float f2, float f3, float f4, float scale) {
-        this.glass.    rotateAngleX = modelPitch * 0.017453292F;
-        this.fitting1. rotateAngleX = modelPitch * 0.017453292F;
-        this.fitting2. rotateAngleX = modelPitch * 0.017453292F;
-        this.detail1_1.rotateAngleX = modelPitch * 0.017453292F;
-        this.detail1.  rotateAngleX = modelPitch * 0.017453292F;
-
         this.glass.render(scale);
         GlStateManager.color(1F, 1F, 1F, 1F);
 

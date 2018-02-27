@@ -122,6 +122,8 @@ public class RegistryResearch {
         ResearchNode resBoreVortex = new ResearchNode(TileBore.BoreType.VORTEX.asStack(), "BORE_HEAD_VORTEX", 6, 6);
         resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.1"));
         resBoreVortex.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadVortex));
+        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.3"));
+        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.4"));
 
         registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape),                      resCape,       1, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockChalice),                        resChalice,    1, ResearchProgression.RADIANCE);
@@ -359,6 +361,7 @@ public class RegistryResearch {
         ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", 8, 2);
         resRitualAccel.addPage(getTextPage("PED_ACCEL.1"));
         resRitualAccel.addPage(getTextPage("PED_ACCEL.2"));
+        resRitualAccel.addPage(getTextPage("PED_ACCEL.3"));
 
         ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 5, 7);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));

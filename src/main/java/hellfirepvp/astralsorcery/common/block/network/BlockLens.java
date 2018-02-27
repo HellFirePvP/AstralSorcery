@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
@@ -22,6 +21,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -56,9 +56,15 @@ import java.util.List;
  */
 public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
 
-    private static final AxisAlignedBB boxLens = new AxisAlignedBB(2.5D/16D, 0, 2.5D/16D, 13.5D/16D, 14.5D/16D, 13.5D/16D);
+    private static final AxisAlignedBB boxLensDown =  new AxisAlignedBB(2.5D/16D, 0,        2.5D/16D, 13.5D/16D, 14.5D/16D, 13.5D/16D);
+    private static final AxisAlignedBB boxLensUp =    new AxisAlignedBB(2.5D/16D, 1.5D/16D, 2.5D/16D, 13.5D/16D, 1,         13.5D/16D);
+    private static final AxisAlignedBB boxLensNorth = new AxisAlignedBB(2.5D/16D, 2.5D/16D, 0,        13.5D/16D, 13.5D/16D, 14.5D/16D);
+    private static final AxisAlignedBB boxLensSouth = new AxisAlignedBB(2.5D/16D, 2.5D/16D, 1.5D/16D, 13.5D/16D, 13.5D/16D, 1);
+    private static final AxisAlignedBB boxLensEast =  new AxisAlignedBB(1.5D/16D, 2.5D/16D, 2.5D/16D, 1,         13.5D/16D, 13.5D/16D);
+    private static final AxisAlignedBB boxLensWest =  new AxisAlignedBB(0,        2.5D/16D, 2.5D/16D, 14.5D/16D, 13.5D/16D, 13.5D/16D);
 
     public static PropertyBool RENDER_FULLY = PropertyBool.create("render");
+    public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
 
     public BlockLens() {
         super(Material.ROCK, MapColor.BLACK);
@@ -67,7 +73,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
         setResistance(12.0F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
-        setDefaultState(this.blockState.getBaseState().withProperty(RENDER_FULLY, true));
+        setDefaultState(this.blockState.getBaseState().withProperty(RENDER_FULLY, true).withProperty(PLACED_AGAINST, EnumFacing.DOWN));
     }
 
     @Override
@@ -89,13 +95,49 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing facing = EnumFacing.UP;
+        for (EnumFacing f : EnumFacing.values()) {
+            if(f.getOpposite().ordinal() == meta) {
+                facing = f;
+                break;
+            }
+        }
+        return getDefaultState().withProperty(PLACED_AGAINST, facing);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(PLACED_AGAINST).getOpposite().ordinal();
+    }
+
+    @Override
     public boolean isTopSolid(IBlockState state) {
         return false;
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return boxLens;
+        switch (state.getValue(PLACED_AGAINST)) {
+            case NORTH:
+                return boxLensNorth;
+            case SOUTH:
+                return boxLensSouth;
+            case WEST:
+                return boxLensWest;
+            case EAST:
+                return boxLensEast;
+            case UP:
+                return boxLensUp;
+            default:
+            case DOWN:
+                return boxLensDown;
+        }
     }
 
     @Override
@@ -112,11 +154,6 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
-
-    @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileCrystalLens();
     }
@@ -128,7 +165,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, RENDER_FULLY);
+        return new BlockStateContainer(this, PLACED_AGAINST, RENDER_FULLY);
     }
 
     @Override

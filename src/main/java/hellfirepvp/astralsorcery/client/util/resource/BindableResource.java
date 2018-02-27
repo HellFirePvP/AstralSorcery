@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
  * Date: 07.05.2016 / 00:50
  */
 @SideOnly(Side.CLIENT)
-public class BindableResource {
+public class BindableResource extends AbstractRenderableTexture.Full {
 
     private ITextureObject resource = null;
     private String path;
@@ -74,6 +74,11 @@ public class BindableResource {
         if(AstralSorcery.isRunningInDevEnvironment()) {
             AstralSorcery.log.info("[AstralSorcery] [AssetLibrary] Allocated " + path + " to " + resource.getGlTextureId());
         }
+    }
+
+    @Override
+    public void bindTexture() {
+        bind();
     }
 
     public void bind() {

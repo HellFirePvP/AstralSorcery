@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
  */
 public interface IMultiblockDependantTile {
 
+    //'this' tile needs to be centered on that structure
     @Nullable
     public PatternBlockArray getRequiredStructure();
 

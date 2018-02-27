@@ -36,7 +36,7 @@ import java.util.List;
  */
 public abstract class TileTransmissionBase extends TileNetwork implements IStarlightTransmission, ILinkableTile {
 
-    private final boolean singleLink = getClass() == TileCrystalLens.class;
+    protected boolean singleLink = getClass() == TileCrystalLens.class;
 
     private List<BlockPos> positions = new LinkedList<>();
 
