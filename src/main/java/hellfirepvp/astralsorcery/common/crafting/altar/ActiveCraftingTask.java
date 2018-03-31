@@ -15,10 +15,13 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,6 +32,8 @@ import java.util.UUID;
  */
 public class ActiveCraftingTask {
 
+    private Map<Integer, Object> clientEffectContainer = new HashMap<>();
+
     private final AbstractAltarRecipe recipeToCraft;
     private final UUID playerCraftingUUID;
     private int ticksCrafting = 0;
@@ -37,9 +42,17 @@ public class ActiveCraftingTask {
     private NBTTagCompound craftingData = new NBTTagCompound();
 
     public ActiveCraftingTask(AbstractAltarRecipe recipeToCraft, UUID playerCraftingUUID) {
+        Objects.requireNonNull(recipeToCraft);
+
         this.recipeToCraft = recipeToCraft;
         this.playerCraftingUUID = playerCraftingUUID;
         this.state = CraftingState.ACTIVE;
+    }
+
+    private void attemptRecoverEffects(@Nullable ActiveCraftingTask previous) {
+        if (previous != null && previous.recipeToCraft.getUniqueRecipeId() == this.recipeToCraft.getUniqueRecipeId()) {
+            this.clientEffectContainer.putAll(previous.clientEffectContainer);
+        }
     }
 
     public CraftingState getState() {
@@ -67,6 +80,11 @@ public class ActiveCraftingTask {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerCraftingUUID);
     }
 
+    @SideOnly(Side.CLIENT)
+    public <T> T getEffectContained(int index, Function<Integer, T> provider) {
+        return (T) clientEffectContainer.computeIfAbsent(index, provider);
+    }
+
     //True if the recipe progressed, false if it's stuck
     public boolean tick(TileAltar altar) {
         if(recipeToCraft instanceof ICraftingProgress) {
@@ -91,7 +109,7 @@ public class ActiveCraftingTask {
     }
 
     @Nullable
-    public static ActiveCraftingTask deserialize(NBTTagCompound compound) {
+    public static ActiveCraftingTask deserialize(NBTTagCompound compound, @Nullable ActiveCraftingTask previous) {
         int recipeId = compound.getInteger("recipeId");
         AbstractAltarRecipe recipe = AltarRecipeRegistry.getRecipe(recipeId);
         if(recipe == null) {
@@ -105,6 +123,7 @@ public class ActiveCraftingTask {
             task.ticksCrafting = tick;
             task.setState(state);
             task.craftingData = compound.getCompoundTag("craftingData");
+            task.attemptRecoverEffects(previous);
             return task;
         }
     }

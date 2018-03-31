@@ -96,8 +96,8 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
         if(color.isPresent()) {
             return color.get();
         }
-        int tick = (int) (ClientScheduler.getClientTick() % 100000L);
-        int c = Color.getHSBColor((tick / 100000F) * 360F, 0.7F, 1F).getRGB();
+        int tick = (int) (ClientScheduler.getClientTick() % 500000L);
+        int c = Color.getHSBColor((tick / 500000F) * 360F, 0.7F, 1F).getRGB();
         return c | 0xFF000000;
     }
 

@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -69,6 +70,11 @@ public abstract class AbstractAltarRecipe {
 
     public final void setSpecialEffectRecovery(AbstractAltarRecipe specialEffectRecovery) {
         this.specialEffectRecovery = specialEffectRecovery;
+    }
+
+    @Nullable
+    protected ActiveCraftingTask getCurrentTask(TileAltar ta) {
+        return ta.getActiveCraftingTask();
     }
 
     //Output used for rendering purposes. (Shouldn't be empty)

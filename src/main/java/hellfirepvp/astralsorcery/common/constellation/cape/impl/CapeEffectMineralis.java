@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class CapeEffectMineralis extends CapeArmorEffect {
 
-    private static int highlightRange = 8;
+    private static int highlightRange = 20;
 
     public CapeEffectMineralis(NBTTagCompound cmp) {
         super(cmp, "mineralis");
@@ -56,12 +56,12 @@ public class CapeEffectMineralis extends CapeArmorEffect {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        highlightRange = cfg.getInt(getKey() + "HighlightRange", getConfigurationSection(), highlightRange, 4, 32, "Sets the highlight radius in which the cape effect will search for the block you're holding.");
+        highlightRange = cfg.getInt(getKey() + "HighlightRange", getConfigurationSection(), highlightRange, 4, 64, "Sets the highlight radius in which the cape effect will search for the block you're holding.");
     }
 
     @SideOnly(Side.CLIENT)
     public void playClientHighlightTick(EntityPlayer pl) {
-        if(rand.nextFloat() > 0.2F) return;
+        if(rand.nextFloat() > 0.7F) return;
 
         ItemStack main = pl.getHeldItemMainhand();
         IBlockState check = null;

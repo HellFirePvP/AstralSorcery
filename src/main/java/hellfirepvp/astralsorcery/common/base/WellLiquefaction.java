@@ -40,12 +40,12 @@ public class WellLiquefaction {
     private static Map<ItemStack, LiquefactionEntry> localFallback = new HashMap<>();
 
     public static void init() {
-        registerLiquefaction(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), BlocksAS.fluidLiquidStarlight, 0.3F, 6, new Color(0x00, 0x88, 0xDD));
-        registerLiquefaction(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), BlocksAS.fluidLiquidStarlight, 0.8F, 12, new Color(0x00, 0x88, 0xDD));
-        registerLiquefaction(new ItemStack(ItemsAS.tunedCelestialCrystal), BlocksAS.fluidLiquidStarlight, 1.4F, 280, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
-        registerLiquefaction(new ItemStack(ItemsAS.celestialCrystal), BlocksAS.fluidLiquidStarlight, 1.2F, 90, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
-        registerLiquefaction(new ItemStack(ItemsAS.tunedRockCrystal), BlocksAS.fluidLiquidStarlight, 1.1F, 200, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
-        registerLiquefaction(new ItemStack(ItemsAS.rockCrystal), BlocksAS.fluidLiquidStarlight, 1F, 70, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+        registerLiquefaction(ItemCraftingComponent.MetaType.AQUAMARINE.asStack(), BlocksAS.fluidLiquidStarlight, 0.4F, 12, new Color(0x00, 0x88, 0xDD));
+        registerLiquefaction(ItemCraftingComponent.MetaType.RESO_GEM.asStack(), BlocksAS.fluidLiquidStarlight, 0.6F, 18, new Color(0x00, 0x88, 0xDD));
+        registerLiquefaction(new ItemStack(ItemsAS.tunedCelestialCrystal), BlocksAS.fluidLiquidStarlight, 1.0F, 100, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
+        registerLiquefaction(new ItemStack(ItemsAS.celestialCrystal), BlocksAS.fluidLiquidStarlight, 0.9F, 50, BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL.displayColor);
+        registerLiquefaction(new ItemStack(ItemsAS.tunedRockCrystal), BlocksAS.fluidLiquidStarlight, 0.8F, 70, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
+        registerLiquefaction(new ItemStack(ItemsAS.rockCrystal), BlocksAS.fluidLiquidStarlight, 0.7F, 30, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL.displayColor);
 
         registerLiquefaction(new ItemStack(Blocks.ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));
         registerLiquefaction(new ItemStack(Blocks.PACKED_ICE), FluidRegistry.WATER, 1F, 15, new Color(0x5369FF));

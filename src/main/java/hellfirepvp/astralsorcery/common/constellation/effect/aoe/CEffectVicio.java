@@ -48,8 +48,8 @@ import java.util.List;
 public class CEffectVicio extends ConstellationEffect implements ConstellationEffectStatus {
 
     public static boolean enabled = true;
-    public static float effectRange = 16;
-    public static int effectRangePerLens = 8;
+    public static float effectRange = 24;
+    public static int effectRangePerLens = 16;
 
     public CEffectVicio(@Nullable ILocatable origin) {
         super(origin, Constellations.vicio, "vicio");
@@ -125,8 +125,8 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        effectRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), effectRange, 1, 64, "Defines the radius (in blocks) in which the ritual will allow the players to fly in.");
-        effectRangePerLens = cfg.getInt(getKey() + "RangeIncreasePerLens", getConfigurationSection(), effectRangePerLens, 1, 32, "Defines the increase in radius the ritual will get per active lens enhancing the ritual.");
+        effectRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), effectRange, 1, 512, "Defines the radius (in blocks) in which the ritual will allow the players to fly in.");
+        effectRangePerLens = cfg.getInt(getKey() + "RangeIncreasePerLens", getConfigurationSection(), effectRangePerLens, 1, 128, "Defines the increase in radius the ritual will get per active lens enhancing the ritual.");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
     }
 

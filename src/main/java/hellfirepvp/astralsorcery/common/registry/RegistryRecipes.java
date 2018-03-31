@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -89,7 +90,10 @@ public class RegistryRecipes {
     public static TraitRecipe rCapeBase;
     public static TraitRecipe rChalice;
     public static TraitRecipe rBore;
-    public static TraitRecipe rBoreHeadLiquid;
+    public static LiquidBoreRecipe rBoreHeadLiquid;
+    public static VortexBoreRecipe rBoreHeadVortex;
+    public static ConstellationRecipe rEnchAmuletOriginal, rEnchAmuletReroll;
+    public static DiscoveryRecipe rSextant;
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
 
@@ -395,39 +399,74 @@ public class RegistryRecipes {
 
         rResonatorLiquid = registerAltarRecipe(new ResonatorLiquidRecipe());
 
-        rBoreHeadLiquid = registerTraitRecipe(newShapedRecipe("internal/altar/bore_head_liquid", new ItemStack(BlocksAS.blockBoreHead, 1, TileBore.BoreType.LIQUID.ordinal()))
-                .addPart(ItemHandle.getCrystalVariant(false, false),
-                        ShapedRecipeSlot.UPPER_CENTER)
-                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                        ShapedRecipeSlot.UPPER_RIGHT,
-                        ShapedRecipeSlot.RIGHT,
-                        ShapedRecipeSlot.LOWER_RIGHT,
-                        ShapedRecipeSlot.UPPER_LEFT,
+        rBoreHeadLiquid = registerAltarRecipe(new LiquidBoreRecipe());
+        rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());
+
+        rSextant = registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/sextant", ItemsAS.sextant)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LEFT,
-                        ShapedRecipeSlot.LOWER_LEFT)
-                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.RIGHT)
+                .addPart(OreDictAlias.ITEM_STICKS,
+                        ShapedRecipeSlot.LOWER_CENTER,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
                         ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.UPPER_CENTER)
+            .unregisteredAccessibleShapedRecipe()) {
+
+            @Override
+            public boolean allowsForChaining() {
+                return false;
+            }
+        });
+        rSextant.setPassiveStarlightRequirement(450);
+
+        rEnchAmuletOriginal = registerAltarRecipe(new EnchantmentAmuletRecipe(newShapedRecipe("internal/altar/enchantment_amulet_craft", ItemsAS.enchantmentAmulet)
+                .addPart(Items.STRING,
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(OreDictAlias.ITEM_GOLD_INGOT,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemsAS.shiftingStar,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(Items.ENDER_EYE,
                         ShapedRecipeSlot.LOWER_CENTER)
-                .unregisteredAccessibleShapedRecipe());
-        rBoreHeadLiquid.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_LEFT,
-                ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
-                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT,
-                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
-        rBoreHeadLiquid.setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
-                AttunementRecipe.AttunementAltarSlot.UPPER_LEFT,
-                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
-        rBoreHeadLiquid.setInnerTraitItem(OreDictAlias.ITEM_GOLD_INGOT,
-                TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
-                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
-        rBoreHeadLiquid.setInnerTraitItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
-                TraitRecipe.TraitRecipeSlot.UPPER_CENTER);
-        rBoreHeadLiquid.setInnerTraitItem(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
-                TraitRecipe.TraitRecipeSlot.LOWER_CENTER);
-        rBoreHeadLiquid.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
-        rBoreHeadLiquid.addOuterTraitItem(ItemCraftingComponent.MetaType.STARDUST.asStack());
-        rBoreHeadLiquid.setPassiveStarlightRequirement(4400);
-        rBoreHeadLiquid.setRequiredConstellation(Constellations.octans);
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT)
+            .unregisteredAccessibleShapedRecipe()) {
+
+            @Override
+            public int craftingTickTime() {
+                return 600;
+            }
+        });
+        rEnchAmuletOriginal.setCstItem(OreDictAlias.ITEM_STARMETAL_DUST,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_RIGHT_RIGHT);
+        rEnchAmuletOriginal.setPassiveStarlightRequirement(3100);
+
+        rEnchAmuletReroll = registerAltarRecipe(new EnchantmentAmuletRecipe(newShapedRecipe("internal/altar/enchantment_amulet_reroll", ItemsAS.enchantmentAmulet)
+                .addPart(BlocksAS.fluidLiquidStarlight,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER)
+                .addPart(ItemsAS.enchantmentAmulet,
+                        ShapedRecipeSlot.CENTER)
+                .addPart(OreDictAlias.ITEM_STARMETAL_DUST,
+                        ShapedRecipeSlot.LOWER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .unregisteredAccessibleShapedRecipe()) {
+
+            @Override
+            public int craftingTickTime() {
+                return 250;
+            }
+        });
+        rEnchAmuletReroll.setPassiveStarlightRequirement(1400);
 
         rBore = registerTraitRecipe(newShapedRecipe("internal/altar/bore_core", BlocksAS.blockBore)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,

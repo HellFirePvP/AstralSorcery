@@ -28,8 +28,10 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +57,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 13:25
  */
-public class TileCollectorCrystal extends TileSourceBase {
+public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile {
 
     public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-1, -4, -1),
@@ -133,6 +135,15 @@ public class TileCollectorCrystal extends TileSourceBase {
                 }
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public PatternBlockArray getRequiredStructure() {
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            return MultiBlockArrays.patternCollectorEnhancement;
+        }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)

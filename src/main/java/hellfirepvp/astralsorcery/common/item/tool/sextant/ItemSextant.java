@@ -12,7 +12,9 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -59,6 +62,15 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
             PatternBlockArray struct = ((IMultiblockDependantTile) te).getRequiredStructure();
             if(struct != null &&
                     !struct.matches(world, pos)) {
+                if(!world.isRemote && world instanceof WorldServer &&
+                        entityPlayer.isCreative() && entityPlayer.isSneaking() &&
+                        MiscUtils.isChunkLoaded(world, pos)) {
+                    IBlockState current = world.getBlockState(pos);
+                    struct.placeInWorld(world, pos);
+                    if(!world.getBlockState(pos).equals(current)) {
+                        world.setBlockState(pos, current);
+                    }
+                }
                 if(world.isRemote) {
                     requestPreview(te);
                 }

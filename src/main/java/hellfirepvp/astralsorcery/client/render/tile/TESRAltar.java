@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -60,9 +61,8 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                         RenderConstellation.renderConstellationIntoWorldFlat(c, c.getConstellationColor(), new Vector3(te).add(0.5, 0.03, 0.5), 5 + tr, 2, 0.1F + br);
                         GL11.glPopMatrix();
                     }
-                    GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                    GL11.glPushMatrix();
-                    GL11.glTranslated(x + 0.5, y + 4, z + 0.5);
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(x + 0.5, y + 4, z + 0.5);
                     ActiveCraftingTask act = te.getActiveCraftingTask();
                     if(act != null && act.getRecipeToCraft() instanceof TraitRecipe) {
                         Collection<ItemHandle> requiredHandles = ((TraitRecipe) act.getRecipeToCraft()).getTraitItemHandles();
@@ -85,12 +85,11 @@ public class TESRAltar extends TileEntitySpecialRenderer<TileAltar> {
                         RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.WHITE, 0x12315661L, ClientScheduler.getClientTick(), 20, 2F, 50, 25);
                         RenderingUtils.renderLightRayEffects(0, 0.5, 0, Color.BLUE, 0, ClientScheduler.getClientTick(), 10, 1F, 40, 25);
                     }
-                    GL11.glTranslated(0, 0.15, 0);
-                    GL11.glScaled(0.7, 0.7, 0.7);
+                    GlStateManager.translate(0, 0.15, 0);
+                    GlStateManager.scale(0.7, 0.7, 0.7);
                     TESRCollectorCrystal.renderCrystal(true, true);
-                    GL11.glPopMatrix();
+                    GlStateManager.popMatrix();
                     TextureHelper.refreshTextureBindState();
-                    GL11.glPopAttrib();
                 }
                 break;
         }

@@ -499,6 +499,7 @@ public class RenderingUtils {
         GlStateManager.popMatrix();
         GlStateManager.depthMask(true);
         Blending.DEFAULT.applyStateManager();
+        Blending.DEFAULT.apply();
         GlStateManager.disableBlend();
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.color(1F, 1F, 1F, 1F);
