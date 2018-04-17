@@ -30,9 +30,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +77,73 @@ public class CommandAstralSorcery extends CommandBase {
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return index == 1;
+    }
+
+    private static final String[] COMMANDS = new String[]{
+            "help",
+            "constellations",
+            "research",
+            "progress",
+            "reset",
+            "charge",
+            "attune",
+            "build",
+            "maximize"
+    };
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, COMMANDS);
+        } else {
+            String identifier = args[0].toLowerCase();
+            if (identifier.equals("build")) {
+                Field[] fields = MultiBlockArrays.class.getDeclaredFields();
+                List<String> names = new ArrayList<>(fields.length);
+
+                for (Field f: fields) {
+                    if (f.isAnnotationPresent(MultiBlockArrays.PasteBlacklist.class)) {
+                        continue;
+                    }
+                    names.add(f.getName());
+                }
+                return getListOfStringsMatchingLastWord(args, names);
+            } else if (args.length == 2) {
+                return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+            } else if (args.length == 3) {
+                switch (identifier) {
+                    case "constellations": {
+                        List<String> names = new ArrayList<String>();
+                        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                            names.add(c.getUnlocalizedName());
+                        }
+                        names.add("all");
+                        return getListOfStringsMatchingLastWord(args, names);
+                    }
+                    case "research": {
+                        List<String> names = new ArrayList<String>();
+                        for (ResearchProgression r : ResearchProgression.values()) {
+                            names.add(r.name());
+                        }
+                        names.add("all");
+                        return getListOfStringsMatchingLastWord(args, names);
+
+                    }
+                    case "progress":
+                        return getListOfStringsMatchingLastWord(args, "all"); // fixme
+
+                    case "attune": {
+                        List<String> names = new ArrayList<String>();
+                        for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
+                            names.add(c.getUnlocalizedName());
+                        }
+                        return getListOfStringsMatchingLastWord(args, names);
+                    }
+                }
+
+            }
+        }
+        return Collections.<String>emptyList();
     }
 
     @Override
