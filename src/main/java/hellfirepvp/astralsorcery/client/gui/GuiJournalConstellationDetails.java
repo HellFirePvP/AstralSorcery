@@ -98,7 +98,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         if(has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(playerProgress))) {
             this.doublePages++;
 
-            if(EnumGatedKnowledge.CONSTELLATION_RITUAL_CORRUPTED.canSee(playerProgress)) {
+            if(EnumGatedKnowledge.CONSTELLATION_RITUAL_CORRUPTED.canSee(playerProgress) && (constellation instanceof IMinorConstellation)) {
                 this.doublePages++;
             }
 
