@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 
 /**
- * This class is part of the Fracture Mod
+ * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: SextantUpgradeRecipe
  * Created by HellFirePvP

@@ -21,7 +21,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
- * This class is part of the Fracture Mod
+ * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: LiquidInteraction
  * Created by HellFirePvP

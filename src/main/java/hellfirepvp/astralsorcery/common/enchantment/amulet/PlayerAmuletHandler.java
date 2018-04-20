@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.EnumSet;
 
 /**
- * This class is part of the Fracture Mod
+ * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
  * Class: PlayerAmuletHandler
  * Created by HellFirePvP
