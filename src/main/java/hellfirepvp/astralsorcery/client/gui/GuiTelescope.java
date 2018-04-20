@@ -97,19 +97,18 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
                     weakConstellations.add((IWeakConstellation) c);
                 }
             }
+            weakConstellations = weakConstellations.subList(0, Math.min(8, weakConstellations.size()));
             for (IWeakConstellation cst : weakConstellations) {
                 Tuple<Point, TileTelescope.TelescopeRotation> foundPoint;
-                int counter = 600;
                 do {
-                    counter--;
-                    foundPoint = findEmptyPlace(r, counter <= 0);
+                    foundPoint = findEmptyPlace(r);
                 } while (foundPoint == null);
                 currentInformation.informationMap.get(foundPoint.value).constellations.put(foundPoint.key, cst);
             }
         }
     }
 
-    private Tuple<Point, TileTelescope.TelescopeRotation> findEmptyPlace(Random rand, boolean ignoreCollision) {
+    private Tuple<Point, TileTelescope.TelescopeRotation> findEmptyPlace(Random rand) {
         TileTelescope.TelescopeRotation rot = TileTelescope.TelescopeRotation.values()[rand.nextInt(TileTelescope.TelescopeRotation.values().length)];
         RotationConstellationInformation info = currentInformation.informationMap.get(rot);
         int wh = ((int) SkyConstellationDistribution.constellationWH);
@@ -118,12 +117,10 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> {
         int rX = 6 + rand.nextInt(wdh);
         int rY = 6 + rand.nextInt(hgt);
         Rectangle constellationRect = new Rectangle(rX, rY, wh, wh);
-        if(!ignoreCollision) {
-            for (Point p : info.constellations.keySet()) {
-                Rectangle otherRect = new Rectangle(p.x, p.y, wh, wh);
-                if (otherRect.intersects(constellationRect)) {
-                    return null;
-                }
+        for (Point p : info.constellations.keySet()) {
+            Rectangle otherRect = new Rectangle(p.x, p.y, wh, wh);
+            if (otherRect.intersects(constellationRect)) {
+                return null;
             }
         }
         return new Tuple<>(new Point(rX, rY), rot);

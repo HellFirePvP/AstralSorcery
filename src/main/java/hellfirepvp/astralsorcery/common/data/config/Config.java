@@ -73,7 +73,7 @@ public class Config {
 
     public static int particleAmount = 2;
 
-    public static int ambientFlareChance = 20;
+    public static int ambientFlareChance = 9;
     public static boolean flareKillsBats = true;
 
     public static boolean shouldChargedToolsRevert = true;
@@ -178,7 +178,7 @@ public class Config {
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
 
-        ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", 20, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
+        ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", ambientFlareChance, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");
 
         lightProximityAltarRecipe = latestConfig.getBoolean("LightProximity-Altar", "recipes", lightProximityAltarRecipe, "If this is set to false, the luminous crafting table recipe that'd require 'light shining at a crafting table' is disabled.");

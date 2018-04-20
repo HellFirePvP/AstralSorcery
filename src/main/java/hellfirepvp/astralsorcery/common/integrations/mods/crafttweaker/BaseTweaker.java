@@ -15,7 +15,9 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.oredict.IOreDictEntry;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -60,8 +62,16 @@ public abstract class BaseTweaker {
             return new ItemHandle(ret);
         } else if(obj instanceof IOreDictEntry) {
             return new ItemHandle(((IOreDictEntry) obj).getName());
+        } else {
+            NonNullList<ItemStack> stacks = NonNullList.create();
+            for (IItemStack in : obj.getItems()) {
+                ItemStack real = convertToItemStack(in);
+                if (!real.isEmpty()) {
+                    stacks.add(real);
+                }
+            }
+            return new ItemHandle(stacks);
         }
-        return null;
     }
 
 }

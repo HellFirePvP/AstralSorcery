@@ -271,6 +271,7 @@ public class RegistryResearch {
         registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                     resInfuser,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),         resDrawing,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), resTraitUpgrade,      1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                              resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);
@@ -551,6 +552,7 @@ public class RegistryResearch {
         registerItemLookup(ItemUsableDust.DustType.ILLUMINATION.asStack(),                                            resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(ItemUsableDust.DustType.NOCTURNAL.asStack(),                                               resNocturnalPowder,         1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),         resIlluminator,             1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(new ItemStack(ItemsAS.sextant),                                                            resSextant,                 1, ResearchProgression.BASIC_CRAFT);
 
         regCrafting.register(resIlluminator);
         regCrafting.register(resTelescope);

@@ -224,8 +224,11 @@ public class TileFakeTree extends TileEntityTick {
 
         private void harvestAndAppend(TileFakeTree tft, NonNullList<ItemStack> out) {
             BlockDropCaptureAssist.startCapturing();
-            tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
-            out.addAll(BlockDropCaptureAssist.getCapturedStacksAndStop());
+            try {
+                tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
+            } finally {
+                out.addAll(BlockDropCaptureAssist.getCapturedStacksAndStop());
+            }
         }
 
         @Override

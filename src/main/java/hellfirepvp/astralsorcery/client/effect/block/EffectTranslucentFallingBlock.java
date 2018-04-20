@@ -212,7 +212,7 @@ public class EffectTranslucentFallingBlock extends EntityComplexFX {
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         IBlockAccess world = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
-        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(this.blockState, BlockPos.ORIGIN, world, vb);
+        RenderingUtils.renderBlockSafely(world, BlockPos.ORIGIN, this.blockState, vb);
         tes.draw();
 
         GL11.glEnable(GL11.GL_CULL_FACE);

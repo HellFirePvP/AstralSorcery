@@ -158,7 +158,7 @@ public class TimeStopZone {
 
         if(e instanceof EntityDragon) {
             IPhase phase = ((EntityDragon) e).getPhaseManager().getCurrentPhase();
-            if(phase.getPhaseList() != PhaseList.HOLDING_PATTERN && phase.getPhaseList() != PhaseList.DYING) {
+            if(phase.getType() != PhaseList.HOLDING_PATTERN && phase.getType() != PhaseList.DYING) {
                 ((EntityDragon) e).getPhaseManager().setPhase(PhaseList.HOLDING_PATTERN);
             }
         }

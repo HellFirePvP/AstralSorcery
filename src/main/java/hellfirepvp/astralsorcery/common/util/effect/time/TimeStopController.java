@@ -110,7 +110,7 @@ public class TimeStopController implements ITickHandler {
             if(e.isDead || e.getHealth() <= 0) {
                 shouldFreeze = false;
             }
-            if(e instanceof EntityDragon && ((EntityDragon) e).getPhaseManager().getCurrentPhase().getPhaseList() == PhaseList.DYING) {
+            if(e instanceof EntityDragon && ((EntityDragon) e).getPhaseManager().getCurrentPhase().getType() == PhaseList.DYING) {
                 shouldFreeze = false;
             }
             if(shouldFreeze) {

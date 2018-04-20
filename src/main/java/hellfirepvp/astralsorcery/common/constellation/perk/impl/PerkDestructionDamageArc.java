@@ -54,7 +54,7 @@ public class PerkDestructionDamageArc extends ConstellationPerk {
                     entities.removeIf(e -> e instanceof EntityPlayer);
                 }
                 if(!entities.isEmpty()) {
-                    EntityLivingBase closest = EntityUtils.selectClosest(entities, (e) -> (double) e.getDistanceToEntity(attacked));
+                    EntityLivingBase closest = EntityUtils.selectClosest(entities, (e) -> (double) e.getDistance(attacked));
                     if(closest != null && !closest.isDead) {
                         chaining = true;
                         AstralSorcery.proxy.fireLightning(attacked.getEntityWorld(), Vector3.atEntityCorner(attacked), Vector3.atEntityCorner(closest), Color.WHITE);

@@ -110,7 +110,7 @@ public class BlockPrism extends BlockStarlightNetwork {
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.UP;
         for (EnumFacing f : EnumFacing.values()) {
-            if(f.getOpposite().ordinal() == meta) {
+            if(f.ordinal() == meta) {
                 facing = f;
                 break;
             }
@@ -120,7 +120,7 @@ public class BlockPrism extends BlockStarlightNetwork {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(PLACED_AGAINST).getOpposite().ordinal();
+        return state.getValue(PLACED_AGAINST).ordinal();
     }
 
     @Override

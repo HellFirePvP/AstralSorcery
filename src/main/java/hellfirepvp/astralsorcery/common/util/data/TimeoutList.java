@@ -113,6 +113,15 @@ public class TimeoutList<V> implements ITickHandler, Iterable<V> {
         }
     }
 
+    public void clear() {
+        if (delegate != null) {
+            tickEntries.forEach(entry -> {
+                delegate.onTimeout(entry.value);
+            });
+        }
+        tickEntries.clear();
+    }
+
     @Override
     public Iterator<V> iterator() {
         return new Iterator<V>() {

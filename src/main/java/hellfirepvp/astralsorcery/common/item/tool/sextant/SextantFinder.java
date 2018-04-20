@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.item.tool.sextant;
 
 import com.google.common.collect.Iterables;
+import hellfirepvp.astralsorcery.client.util.image.ColorThief;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
@@ -20,6 +21,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -120,7 +123,11 @@ public class SextantFinder {
         public abstract boolean isSelectable(ItemStack stack);
 
         @Nonnull
+        @SideOnly(Side.CLIENT)
         public abstract AbstractRenderableTexture getRenderable();
+
+        @SideOnly(Side.CLIENT)
+        public abstract int getColorTheme();
 
         @Nullable
         public abstract BlockPos searchFor(WorldServer world, BlockPos searchPos);
@@ -132,11 +139,13 @@ public class SextantFinder {
         private final TextureQuery query;
         private final boolean advanced;
         private final String name;
+        private final int color;
 
-        public ASTargetObject(String iconName, boolean advanced) {
+        public ASTargetObject(String iconName, boolean advanced, int color) {
             this.query = new TextureQuery(AssetLoader.TextureLocation.MISC, iconName);
             this.advanced = advanced;
             this.name = iconName;
+            this.color = color;
         }
 
         @Override
@@ -151,18 +160,23 @@ public class SextantFinder {
 
         @Nonnull
         @Override
+        @SideOnly(Side.CLIENT)
         public AbstractRenderableTexture getRenderable() {
             return query.resolve();
         }
 
+        @Override
+        public int getColorTheme() {
+            return this.color;
+        }
     }
 
     public static class ASStructure extends ASTargetObject {
 
         private final StructureGenBuffer.StructureType structureType;
 
-        public ASStructure(String iconName, boolean advanced, StructureGenBuffer.StructureType type) {
-            super(iconName, advanced);
+        public ASStructure(String iconName, int color, boolean advanced, StructureGenBuffer.StructureType type) {
+            super(iconName, advanced, color);
             this.structureType = type;
         }
 
@@ -177,8 +191,8 @@ public class SextantFinder {
 
         private final String structureName;
 
-        public Structure(String iconName, boolean advanced, String structureName) {
-            super(iconName, advanced);
+        public Structure(String iconName, int color, boolean advanced, String structureName) {
+            super(iconName, advanced, color);
             this.structureName = structureName;
         }
 
@@ -193,8 +207,8 @@ public class SextantFinder {
 
         private final BiomeDictionary.Type biomeType;
 
-        public Biome(String iconName, boolean advanced, BiomeDictionary.Type biomeType) {
-            super(iconName, advanced);
+        public Biome(String iconName, int color, boolean advanced, BiomeDictionary.Type biomeType) {
+            super(iconName, advanced, color);
             this.biomeType = biomeType;
         }
 

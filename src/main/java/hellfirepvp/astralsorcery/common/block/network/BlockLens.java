@@ -103,7 +103,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.UP;
         for (EnumFacing f : EnumFacing.values()) {
-            if(f.getOpposite().ordinal() == meta) {
+            if(f.ordinal() == meta) {
                 facing = f;
                 break;
             }
@@ -113,7 +113,7 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(PLACED_AGAINST).getOpposite().ordinal();
+        return state.getValue(PLACED_AGAINST).ordinal();
     }
 
     @Override

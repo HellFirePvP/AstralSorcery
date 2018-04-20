@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.core;
 
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.tree.*;
 
 import javax.annotation.Nonnull;
@@ -39,6 +40,10 @@ public abstract class ClassPatch {
     }
 
     public abstract void patch(ClassNode cn);
+
+    public boolean canExecuteForSide(Side side) {
+        return true;
+    }
 
     public String getClassName() {
         return className;

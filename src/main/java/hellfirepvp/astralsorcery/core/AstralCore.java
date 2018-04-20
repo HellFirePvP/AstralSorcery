@@ -9,8 +9,10 @@
 package hellfirepvp.astralsorcery.core;
 
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Map;
 
@@ -26,8 +28,11 @@ import java.util.Map;
 @IFMLLoadingPlugin.SortingIndex(1005)
 public class AstralCore implements IFMLLoadingPlugin, IFMLCallHook {
 
+    public static Side side;
+
     public AstralCore() {
         FMLLog.info("[AstralCore] Initialized.");
+        side = FMLLaunchHandler.side();
     }
 
     @Override

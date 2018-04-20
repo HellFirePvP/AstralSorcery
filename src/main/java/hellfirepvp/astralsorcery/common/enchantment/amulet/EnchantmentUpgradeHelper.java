@@ -19,13 +19,18 @@ import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -169,7 +174,7 @@ public class EnchantmentUpgradeHelper {
         return copyRet;
     }
 
-    private static boolean isItemBlacklisted(ItemStack stack) {
+    public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
             ResourceLocation rl = stack.getItem().getRegistryName();
             if(rl == null) return true; //Yea... no questions asked i guess.
@@ -218,15 +223,56 @@ public class EnchantmentUpgradeHelper {
         tag.setUniqueId(NBT_KEY_WEARER, playerUUID);
     }
 
+    public static void removeAmuletTagsAndCleanup(EntityPlayer player, boolean keepEquipped) {
+        InventoryPlayer inv = player.inventory;
+        for (int i = 0; i < inv.mainInventory.size(); i++) {
+            if (i == inv.currentItem && keepEquipped) continue;
+            removeTagInfo(inv.mainInventory.get(i));
+        }
+        removeTagInfo(inv.getItemStack());
+        if(!keepEquipped) {
+            for (int i = 0; i < inv.armorInventory.size(); i++) {
+                removeTagInfo(inv.armorInventory.get(i));
+            }
+            for (int i = 0; i < inv.offHandInventory.size(); i++) {
+                removeTagInfo(inv.offHandInventory.get(i));
+            }
+        }
+    }
+
+    private static void removeTagInfo(ItemStack stack) {
+        if(stack.isEmpty() || !stack.hasTagCompound()) {
+            return;
+        }
+        if(!NBTHelper.hasPersistentData(stack)) {
+            return;
+        }
+        NBTTagCompound perm = NBTHelper.getPersistentData(stack);
+        if(perm.hasUniqueId(NBT_KEY_WEARER)) {
+            NBTHelper.removeUUID(perm, NBT_KEY_WEARER);
+        }
+        if(perm.getSize() <= 0) {
+            NBTHelper.removePersistentData(stack);
+            if (stack.getTagCompound().getSize() <= 0) {
+                stack.setTagCompound(null);
+            }
+        }
+    }
+
     private static ItemStack getWornAmulet(ItemStack anyTool) {
         if(!hasAmuletTag(anyTool)) return ItemStack.EMPTY;
 
         //Check if the player is online and exists & is set properly
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return ItemStack.EMPTY;
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if(server == null) return ItemStack.EMPTY;
-        EntityPlayer player = server.getPlayerList().getPlayerByUUID(plUUID);
+        EntityPlayer player;
+        if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            player = resolvePlayerClient(plUUID);
+        } else {
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            if(server == null) return ItemStack.EMPTY;
+            player = server.getPlayerList().getPlayerByUUID(plUUID);
+        }
         if(player == null) return ItemStack.EMPTY;
 
         //Check if the player actually wears/carries the tool
@@ -245,6 +291,13 @@ public class EnchantmentUpgradeHelper {
             return BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
         }
         return ItemStack.EMPTY;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static EntityPlayer resolvePlayerClient(UUID plUUID) {
+        World w = FMLClientHandler.instance().getWorldClient();
+        if (w == null) return null;
+        return w.getPlayerEntityByUUID(plUUID);
     }
 
 }

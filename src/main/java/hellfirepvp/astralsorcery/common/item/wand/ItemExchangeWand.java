@@ -76,7 +76,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         return 0;
     }
 
@@ -219,7 +219,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (BlockPos pos : found.getPattern().keySet()) {
-            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(stored, pos, airWorld, vb);
+            RenderingUtils.renderBlockSafely(airWorld, pos, stored, vb);
         }
         vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
         tes.draw();

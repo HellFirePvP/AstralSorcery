@@ -31,19 +31,21 @@ public interface SerializeableRecipe {
 
     public static enum CraftingType {
 
-        INFUSION_ADD     ((v) -> new InfusionRecipeAdd()),
-        INFUSION_REMOVE  ((v) -> new InfusionRecipeRemove()),
-        TRANSMUTE_ADD    ((v) -> new LightTransmutationAdd()),
-        TRANSMUTE_REMOVE ((v) -> new LightTransmutationRemove()),
-        WELL_ADD         ((v) -> new WellRecipeAdd()),
-        WELL_REMOVE      ((v) -> new WellRecipeRemove()),
-        GRINDSTONE_ADD   ((v) -> new GrindstoneRecipeAdd()),
-        GRINDSTONE_REMOVE((v) -> new GrindstoneRecipeRemove()),
-        ALTAR_REMOVE     ((v) -> new AltarRecipeRemove()),
-        ALTAR_T1_ADD     ((v) -> new AltarRecipeDiscovery()),
-        ALTAR_T2_ADD     ((v) -> new AltarRecipeAttunement()),
-        ALTAR_T3_ADD     ((v) -> new AltarRecipeConstellation()),
-        ALTAR_T4_ADD     ((v) -> new AltarRecipeTrait());
+        INFUSION_ADD          ((v) -> new InfusionRecipeAdd()),
+        INFUSION_REMOVE       ((v) -> new InfusionRecipeRemove()),
+        TRANSMUTE_ADD         ((v) -> new LightTransmutationAdd()),
+        TRANSMUTE_REMOVE      ((v) -> new LightTransmutationRemove()),
+        WELL_ADD              ((v) -> new WellRecipeAdd()),
+        WELL_REMOVE           ((v) -> new WellRecipeRemove()),
+        LIQINTERACTION_REMOVE ((v) -> new LiquidInteractionRemove()),
+        LIQINTERACTION_ADD    ((v) -> new LiquidInteractionAdd()),
+        GRINDSTONE_ADD        ((v) -> new GrindstoneRecipeAdd()),
+        GRINDSTONE_REMOVE     ((v) -> new GrindstoneRecipeRemove()),
+        ALTAR_REMOVE          ((v) -> new AltarRecipeRemove()),
+        ALTAR_T1_ADD          ((v) -> new AltarRecipeDiscovery()),
+        ALTAR_T2_ADD          ((v) -> new AltarRecipeAttunement()),
+        ALTAR_T3_ADD          ((v) -> new AltarRecipeConstellation()),
+        ALTAR_T4_ADD          ((v) -> new AltarRecipeTrait());
 
         private final Function<Void, ? extends SerializeableRecipe> recipeProvider;
 

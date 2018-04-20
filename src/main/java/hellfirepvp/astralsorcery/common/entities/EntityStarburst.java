@@ -53,7 +53,7 @@ public class EntityStarburst extends EntityThrowable {
 
     public EntityStarburst(World worldIn, EntityLivingBase throwerIn) {
         super(worldIn, throwerIn);
-        setHeadingFromThrower(throwerIn, throwerIn.rotationPitch, throwerIn.rotationYaw, 0.0F, 0.7F, 1.0F);
+        shoot(throwerIn, throwerIn.rotationPitch, throwerIn.rotationYaw, 0.0F, 0.7F, 1.0F);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class EntityStarburst extends EntityThrowable {
                 if(getThrower() != null) {
                     entities.remove(getThrower());
                 }
-                EntityLivingBase closest = EntityUtils.selectClosest(entities, entityLivingBase -> entityLivingBase.getDistanceSqToEntity(this));
+                EntityLivingBase closest = EntityUtils.selectClosest(entities, entityLivingBase -> entityLivingBase.getDistanceSq(this));
                 if(closest != null) {
                     targetId = closest.getEntityId();
                 }

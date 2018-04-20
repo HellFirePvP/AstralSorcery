@@ -188,7 +188,7 @@ public class WorldSkyHandler {
         activeDistributions.clear();
 
         int activeDay = lastRecordedDay % 8;
-        LinkedList<IConstellation> linkedConstellations = initialValueMappings.get(activeDay);
+        LinkedList<IConstellation> linkedConstellations = initialValueMappings.computeIfAbsent(activeDay, day -> new LinkedList<>());
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
         }
@@ -337,7 +337,7 @@ public class WorldSkyHandler {
         }
     }
 
-    public Float getCurrentDistribution(IWeakConstellation c, Function<Float, Float> func) {
+    public Float getCurrentDistribution(IConstellation c, Function<Float, Float> func) {
         if(!activeDistributions.containsKey(c)) return func.apply(0F);
         return func.apply(activeDistributions.get(c));
     }

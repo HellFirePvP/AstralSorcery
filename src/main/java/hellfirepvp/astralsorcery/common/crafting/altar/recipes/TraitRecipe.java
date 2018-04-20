@@ -55,6 +55,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
@@ -194,7 +195,23 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
 
     @Override
     public int craftingTickTime() {
-        return 800;
+        return 700;
+    }
+
+    @Override
+    public void handleInputConsumption(TileAltar ta, ActiveCraftingTask craftingTask, ItemStackHandler inventory) {
+        super.handleInputConsumption(ta, craftingTask, inventory);
+
+        for (TraitRecipe.TraitRecipeSlot slot : TraitRecipe.TraitRecipeSlot.values()) {
+            int slotId = slot.getSlotId();
+            if(mayDecrement(ta, slot)) {
+                ItemUtils.decrStackInInventory(inventory, slotId);
+            } else {
+                handleItemConsumption(ta, slot);
+            }
+        }
+
+        this.consumeOuterInputs(ta, craftingTask);
     }
 
     @Override

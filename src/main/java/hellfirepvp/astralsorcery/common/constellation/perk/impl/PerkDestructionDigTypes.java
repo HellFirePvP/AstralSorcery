@@ -58,7 +58,7 @@ public class PerkDestructionDigTypes extends ConstellationPerk {
                 if(!broken.getBlock().isToolEffective("pickaxe", broken)) {
                     if(broken.getBlock().isToolEffective("shovel", broken) || broken.getBlock().isToolEffective("axe", broken)) {
                         checkingSpeed = true;
-                        breakSpeedIn = playerMainHand.getStrVsBlock(Blocks.STONE.getDefaultState());
+                        breakSpeedIn = playerMainHand.getDestroySpeed(Blocks.STONE.getDefaultState());
                         checkingSpeed = false;
                     }
                 }

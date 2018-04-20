@@ -46,7 +46,10 @@ public class BlockDropCaptureAssist {
                     event.getEntity().setDead();
                     return;
                 }
-                capturedStacks.get(stack).add(itemStack);
+                //Apparently concurrency sometimes gets us here...
+                if (stack > -1) {
+                    capturedStacks.computeIfAbsent(stack, st -> NonNullList.create()).add(itemStack);
+                }
             }
             event.getEntity().setDead();
         }
@@ -60,8 +63,8 @@ public class BlockDropCaptureAssist {
     public static NonNullList<ItemStack> getCapturedStacksAndStop() {
         NonNullList<ItemStack> pop = capturedStacks.get(stack);
         capturedStacks.remove(stack);
-        stack--;
-        return pop;
+        stack = Math.max(-1, stack - 1);
+        return pop == null ? NonNullList.create() : pop;
     }
 
 }

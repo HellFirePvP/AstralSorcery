@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
@@ -255,6 +256,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
+        manager.register(PlayerAmuletHandler.INSTANCE);
         //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps

@@ -177,7 +177,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         ItemStack result = FurnaceRecipes.instance().getSmeltingResult(current);
                         if(!result.isEmpty()) {
                             Vector3 entityPos = Vector3.atEntityCenter(entity);
-                            ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, 1));
+                            ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, result.getCount()));
                             if(current.getCount() > 1) {
                                 current.shrink(1);
                                 ((EntityItem) entity).setItem(current);

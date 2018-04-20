@@ -40,6 +40,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -79,6 +80,12 @@ public class MiscUtils {
             }
         }
         return max;
+    }
+
+    public static <K, V, N> Map<K, N> remap(Map<K, V> map, Function<V, N> remapFct) {
+        return map.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, (e) -> remapFct.apply(e.getValue())));
     }
 
     public static boolean isConnectionEstablished(EntityPlayerMP player) {
@@ -229,12 +236,15 @@ public class MiscUtils {
             block.dropXpOnBlockBreak(world, pos, exp);
         }
         BlockDropCaptureAssist.startCapturing();
-        //Capturing block snapshots is aids. don't try that at home kids.
-        world.captureBlockSnapshots = false;
-        world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
-        world.capturedBlockSnapshots.forEach((s) -> world.setBlockToAir(s.getPos()));
-        world.capturedBlockSnapshots.clear();
-        BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
+        try {
+            //Capturing block snapshots is aids. don't try that at home kids.
+            world.captureBlockSnapshots = false;
+            world.capturedBlockSnapshots.forEach((s) -> s.restore(true));
+            world.capturedBlockSnapshots.forEach((s) -> world.setBlockToAir(s.getPos()));
+            world.capturedBlockSnapshots.clear();
+        } finally {
+            BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard
+        }
         return true;
     }
 

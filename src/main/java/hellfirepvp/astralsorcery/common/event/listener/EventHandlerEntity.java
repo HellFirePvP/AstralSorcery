@@ -42,7 +42,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -55,12 +54,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -91,16 +88,14 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onClone(PlayerEvent.Clone event) {
         EventHandlerServer.PlayerWrapperContainer ctOld = new EventHandlerServer.PlayerWrapperContainer(event.getOriginal());
-        EventHandlerServer.PlayerWrapperContainer ctNew = new EventHandlerServer.PlayerWrapperContainer(event.getEntityPlayer());
-        mergeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld, ctNew);
-        mergeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld, ctNew);
+        removeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld);
+        removeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld);
     }
 
-    private <V> void mergeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
-                                          EventHandlerServer.PlayerWrapperContainer old, EventHandlerServer.PlayerWrapperContainer newPlayer) {
+    private <V> void removeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
+                                           EventHandlerServer.PlayerWrapperContainer old) {
         if(container.hasList(old)) {
-            TimeoutList<V> list = container.removeList(old);
-            container.getOrCreateList(newPlayer).addAll(list);
+            container.removeList(old);
         }
     }
 

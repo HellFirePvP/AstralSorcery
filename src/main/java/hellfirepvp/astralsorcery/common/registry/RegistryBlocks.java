@@ -234,6 +234,8 @@ public class RegistryBlocks {
 
     private static void registerTile(Class<? extends TileEntity> tile, String name) {
         GameRegistry.registerTileEntity(tile, name);
+        //TODO once 1.13 hits, break all tiles
+        //GameRegistry.registerTileEntity(tile, new ResourceLocation(AstralSorcery.MODID, name).toString());
     }
 
     public static void registerTile(Class<? extends TileEntity> tile) {

@@ -70,7 +70,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
         float f = -MathHelper.sin(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
         float f1 = -MathHelper.sin((throwerIn.rotationPitch) * 0.017453292F);
         float f2 = MathHelper.cos(throwerIn.rotationYaw * 0.017453292F) * MathHelper.cos(throwerIn.rotationPitch * 0.017453292F);
-        this.setThrowableHeading((double) f, (double) f1, (double) f2, 1.7F, 0F);
+        this.shoot((double) f, (double) f1, (double) f2, 1.7F, 0F);
         this.throwingEntity = throwerIn;
         setSize(0.1F, 0.1F);
     }
@@ -140,7 +140,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 
         if(!isDespawning()) {
             EntityLivingBase throwing = getThrower();
-            double dist = Math.max(0.01, throwing.getDistanceToEntity(this));
+            double dist = Math.max(0.01, throwing.getDistance(this));
             if(!isDead && isPulling()) {
                 if(getPulling() != null) {
                     EntityLivingBase at = getPulling();
@@ -286,8 +286,8 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
     }
 
     @Override
-    public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy) {
-        super.setThrowableHeading(x, y, z, velocity, 0.0F);
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        super.shoot(x, y, z, velocity, 0.0F);
     }
 
     @Override

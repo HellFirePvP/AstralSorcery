@@ -171,7 +171,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             BufferBuilder vb = tes.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             for (BlockPos pos : placeable) {
-                Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(stored, pos, w, vb);
+                RenderingUtils.renderBlockSafely(w, pos, stored, vb);
             }
             vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
             tes.draw();

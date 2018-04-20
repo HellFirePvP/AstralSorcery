@@ -116,7 +116,7 @@ public class CelestialGatewaySystem {
     public void addPosition(World world, GatewayCache.GatewayNode pos) {
         if(world.isRemote) return;
 
-        int dim = world.provider.getDimension();
+        Integer dim = world.provider.getDimension();
         if(!serverCache.containsKey(dim)) {
             forceLoad(dim);
         }
@@ -136,7 +136,7 @@ public class CelestialGatewaySystem {
     public void removePosition(World world, BlockPos pos) {
         if(world.isRemote) return;
 
-        int dim = world.provider.getDimension();
+        Integer dim = world.provider.getDimension();
         if(!serverCache.containsKey(dim)) {
             return;
         }
@@ -186,7 +186,7 @@ public class CelestialGatewaySystem {
                 NBTTagList list = tag.getTagList("list", Constants.NBT.TAG_INT);
                 cache = Lists.newArrayList(0);
                 for (int i = 0; i < list.tagCount(); i++) {
-                    int id = list.getIntAt(i);
+                    Integer id = list.getIntAt(i);
                     if(!cache.contains(id)) {
                         cache.add(id);
                     }
@@ -196,7 +196,7 @@ public class CelestialGatewaySystem {
             }
         }
 
-        private void appendAndSave(int id) {
+        private void appendAndSave(Integer id) {
             if(cache == null) {
                 loadCache();
             }
@@ -214,7 +214,7 @@ public class CelestialGatewaySystem {
             }
         }
 
-        private void removeAndSave(int dim) {
+        private void removeAndSave(Integer dim) {
             if(cache == null) {
                 loadCache();
             }

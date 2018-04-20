@@ -58,7 +58,7 @@ public class CapeEffectBootes extends CapeArmorEffect {
         updateEntityList(w, flare);
         List<Entity> fl = gatherEntities(w);
         for (Entity e : fl) {
-            if(e instanceof EntityFlare && ((EntityFlare) e).getFollowingEntity() != null && pl.getDistanceToEntity(e) >= 10) {
+            if(e instanceof EntityFlare && ((EntityFlare) e).getFollowingEntity() != null && pl.getDistance(e) >= 10) {
                 e.setPositionAndRotation(pl.posX, pl.posY, pl.posZ, 0, 0);
             }
         }

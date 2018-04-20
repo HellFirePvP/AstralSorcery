@@ -95,7 +95,7 @@ public class CEffectArmara extends ConstellationEffect {
                         e.motionZ /= 2.0D;
                         e.motionX -= xRatio / f * 0.4;
                         e.motionZ -= zRatio / f * 0.4;
-                        ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
+                        ((IProjectile) e).shoot(e.motionX, e.motionY, e.motionZ, 1F, 0F);
                     }
                 }
             }
@@ -138,7 +138,7 @@ public class CEffectArmara extends ConstellationEffect {
                             e.motionZ /= 2.0D;
                             e.motionX -= xRatio / f * 0.4;
                             e.motionZ -= zRatio / f * 0.4;
-                            ((IProjectile) e).setThrowableHeading(e.motionX, e.motionY, e.motionZ, 1F, 0F);
+                            ((IProjectile) e).shoot(e.motionX, e.motionY, e.motionZ, 1F, 0F);
                         } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                             ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
                         }

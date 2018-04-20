@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.core.patch.helper;
 
 import hellfirepvp.astralsorcery.core.ClassPatch;
+import net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -54,4 +55,8 @@ public class PatchModifyEnchantmentLevelsTooltip extends ClassPatch {
         }
     }
 
+    @Override
+    public boolean canExecuteForSide(Side side) {
+        return side == Side.CLIENT;
+    }
 }

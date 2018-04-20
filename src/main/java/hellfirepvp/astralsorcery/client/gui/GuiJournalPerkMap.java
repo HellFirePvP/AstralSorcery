@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextComponentString;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -54,7 +55,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
     private static final BindableResource textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg");
 
-    private static final float mouseHoverMerge = 0.03F;
+    private static final float mouseHoverMerge = 0.1F;
     private float mouseHoverPerc = 0F;
 
     private static final double widthHeight = 70;
@@ -79,15 +80,23 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.thisFramePerks.clear();
+    public void updateScreen() {
+        super.updateScreen();
+
+        int guiMouseX =          Mouse.getEventX() * width  / mc.displayWidth;
+        int guiMouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
 
         Rectangle rectHover = new Rectangle(guiLeft + 10, guiTop + 5, guiWidth - 20, guiHeight - 10);
-        if(rectHover.contains(mouseX, mouseY)) {
+        if(rectHover.contains(guiMouseX, guiMouseY)) {
             mouseHoverPerc = Math.min(1F, mouseHoverPerc + mouseHoverMerge);
         } else {
             mouseHoverPerc = Math.max(0F, mouseHoverPerc - mouseHoverMerge);
         }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.thisFramePerks.clear();
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();

@@ -26,6 +26,7 @@ import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -61,7 +62,7 @@ public class ClientConnectionEventHandler {
         ClientRenderEventHandler.resetTempChargeReveal();
         AstralSorcery.proxy.scheduleClientside(TESRTranslucentBlock::cleanUp);
         PlayerChargeHandler.INSTANCE.setClientCharge(0F);
-        //CraftingAccessManager.clearModifications();
+        EventHandlerServer.perkCooldownsClient.clear();
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();

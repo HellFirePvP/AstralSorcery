@@ -155,7 +155,7 @@ public class ItemColorizationHelper implements IResourceManagerReloadListener {
             if(state == null) return -1;
             return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, 0);
         } else {
-            return Minecraft.getMinecraft().getItemColors().getColorFromItemstack(stack, 0);
+            return Minecraft.getMinecraft().getItemColors().colorMultiplier(stack, 0);
         }
     }
 

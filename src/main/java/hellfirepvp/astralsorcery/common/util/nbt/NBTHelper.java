@@ -89,13 +89,6 @@ public class NBTHelper {
         compound.setTag(tag, stackCompound);
     }
 
-    public static void setUUID(NBTTagCompound compound, String tag, UUID uuid) {
-        NBTTagCompound uuidComp = new NBTTagCompound();
-        uuidComp.setLong("mostSigBits", uuid.getMostSignificantBits());
-        uuidComp.setLong("leastSigBits", uuid.getLeastSignificantBits());
-        compound.setTag(tag, uuidComp);
-    }
-
     public static void removeUUID(NBTTagCompound compound, String key) {
         compound.removeTag(key + "Most");
         compound.removeTag(key + "Least");
@@ -105,22 +98,10 @@ public class NBTHelper {
         return getStack(compound, tag, ItemStack.EMPTY);
     }
 
-    public static UUID getUUID(NBTTagCompound compound, String tag) {
-        return getUUID(compound, tag, null);
-    }
-
     //Get tags with default value
     public static ItemStack getStack(NBTTagCompound compound, String tag, ItemStack defaultValue) {
         if (compound.hasKey(tag)) {
             return new ItemStack(compound.getCompoundTag(tag));
-        }
-        return defaultValue;
-    }
-
-    public static UUID getUUID(NBTTagCompound compound, String tag, UUID defaultValue) {
-        if (compound.hasKey(tag)) {
-            NBTTagCompound uuidComp = compound.getCompoundTag(tag);
-            return new UUID(uuidComp.getLong("mostSigBits"), uuidComp.getLong("leastSigBits"));
         }
         return defaultValue;
     }

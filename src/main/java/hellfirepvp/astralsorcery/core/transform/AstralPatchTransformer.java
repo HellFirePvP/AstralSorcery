@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.core.transform;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import hellfirepvp.astralsorcery.core.ASMTransformationException;
+import hellfirepvp.astralsorcery.core.AstralCore;
 import hellfirepvp.astralsorcery.core.ClassPatch;
 import hellfirepvp.astralsorcery.core.SubClassTransformer;
 import net.minecraftforge.fml.common.FMLLog;
@@ -103,6 +104,10 @@ public class AstralPatchTransformer implements SubClassTransformer {
                 FMLLog.info("[AstralTransformer] Transforming " + obfName + " : " + transformedClassName + " with " + patches.size() + " patches!");
                 try {
                     for (ClassPatch patch : patches) {
+                        if (!patch.canExecuteForSide(AstralCore.side)) {
+                            FMLLog.info("[AstralTransformer] Skipping " + patch.getClass().getSimpleName().toUpperCase() + " as it can't be applied for side " + AstralCore.side);
+                            continue;
+                        }
                         currentPatch = patch;
                         patch.transform(cn);
                         FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());

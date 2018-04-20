@@ -84,7 +84,7 @@ public class TESRTranslucentBlock extends TileEntitySpecialRenderer<TileTransluc
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (TranslucentBlockState tbs : blocks) {
-            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(tbs.state, tbs.pos, iba, vb);
+            RenderingUtils.renderBlockSafely(iba, tbs.pos, tbs.state, vb);
         }
         tes.draw();
         GlStateManager.glEndList();

@@ -46,6 +46,24 @@
 // Example:
 // mods.astralsorcery.Lightwell.addLiquefaction(<minecraft:dirt>, <liquid:water>, 1, 0.2, 0);
 
+// Adds a liquid interaction to the chalice-interactions
+// FluidStack amounts count as the amount of liquid that will be consumed if an interaction occurs.
+// chance1 and chance2 define the chances the input fluids input1 and input2 are consumed respectively.
+// weight determines how likely this is to be selected in comparison to the other liquid interactions registered for a given pair of fluid-inputs
+// Parameters:
+// Input-LiquidStack-1, (float) chance-consumption-1, Input-LiquidStack-2, (float) chance-consumption-2, (int) weight, Output-ItemStack
+// Example:
+// mods.astralsorcery.LiquidInteraction.addInteraction(<liquid:lava> * 10, 0.1, <liquid:water> * 90, 0.2, 400, <minecraft:diamond>);
+
+// Removes a liquid interaction from the chalice-interactions
+// FluidStack parameters match against the 2 components that would interact to produce some output
+// If a FluidStack combination can have multiple outputs, only the first matching one is removed!
+// The itemstack output-parameter is optional. It may be used to select a specific fluid-interaction to remove if multiple are present..
+// Parameters:
+// Input-LiquidStack, Input-LiquidStack [, (Optional) Output-ItemStack]
+// Example:
+// mods.astralsorcery.LiquidInteraction.removeInteraction(<liquid:lava>, <liquid:water>, <minecraft:obsidian>);
+
 // Adds a grindstone recipe
 // The 'Input' can be both an itemstack or a oredict name!
 // Parameters:

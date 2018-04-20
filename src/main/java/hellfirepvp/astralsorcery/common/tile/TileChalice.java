@@ -177,6 +177,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube = RenderingUtils.spawnFloatingBlockCubeParticle(at, tas);
             cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+            cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
             cube.setScale(0.08F * (getDrawSize().ordinal() + 1)).tumble().setMotion(
                     rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
@@ -190,6 +191,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         cube = RenderingUtils.spawnFloatingBlockCubeParticle(perp, tas);
         cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
         cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+        cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
         cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
                 rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
@@ -214,6 +216,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube = RenderingUtils.spawnFloatingBlockCubeParticle(perp, tas);
             cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
+            cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
             cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
                     rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),

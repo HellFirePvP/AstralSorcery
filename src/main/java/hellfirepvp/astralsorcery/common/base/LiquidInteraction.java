@@ -21,6 +21,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -42,49 +43,11 @@ import java.util.Random;
 public class LiquidInteraction {
 
     private static final Random rand = new Random();
-    private static List<LiquidInteraction> ALL_INTERACTIONS = new LinkedList<>();
 
-    public static final LiquidInteraction WATER_LAVA_COBBLESTONE =
-            new LiquidInteraction(6,
-                    new FluidStack(FluidRegistry.WATER, 10),
-                    new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0, 0, new ItemStack(Blocks.COBBLESTONE)));
+    private static List<LiquidInteraction> registeredInteractions = new LinkedList<>();
+    public static List<LiquidInteraction> mtInteractions = new LinkedList<>();
 
-    public static final LiquidInteraction WATER_LAVA_STONE =
-            new LiquidInteraction(3,
-                    new FluidStack(FluidRegistry.WATER, 10),
-                    new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(1F, 0.4F, new ItemStack(Blocks.STONE)));
-
-    public static final LiquidInteraction WATER_LAVA_OBSIDIAN =
-            new LiquidInteraction(1,
-                    new FluidStack(FluidRegistry.WATER, 10),
-                    new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0.7F, 1F, new ItemStack(Blocks.OBSIDIAN)));
-
-    public static final LiquidInteraction STARLIGHT_WATER_ICE =
-            new LiquidInteraction(1,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 30),
-                    new FluidStack(FluidRegistry.WATER, 10),
-                    createItemDropAction(1F, 1F, new ItemStack(Blocks.ICE)));
-
-    public static final LiquidInteraction STARLIGHT_LAVA_SAND =
-            new LiquidInteraction(1200,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 10),
-                    new FluidStack(FluidRegistry.LAVA, 10),
-                    createItemDropAction(0.8F, 0.8F, new ItemStack(Blocks.SAND)));
-
-    public static final LiquidInteraction STARLIGHT_LAVA_AQUAMARINE =
-            new LiquidInteraction(30,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 70),
-                    new FluidStack(FluidRegistry.LAVA, 70),
-                    createItemDropAction(1F, 1F, BlockCustomSandOre.OreType.AQUAMARINE.asStack()));
-
-    public static final LiquidInteraction STARLIGHT_LAVA_CRYSTAL =
-            new LiquidInteraction(1,
-                    new FluidStack(BlocksAS.fluidLiquidStarlight, 500),
-                    new FluidStack(FluidRegistry.LAVA, 500),
-                    createCrystalDropAction(1F, 1F));
+    private static List<LiquidInteraction> localFallback = new LinkedList<>();
 
     private final FluidStack component1, component2;
     private final int probability;
@@ -95,7 +58,53 @@ public class LiquidInteraction {
         this.component1 = component1;
         this.component2 = component2;
         this.action = action;
-        ALL_INTERACTIONS.add(this);
+        registeredInteractions.add(this);
+    }
+
+    public static void init() {
+        registerInteraction(new LiquidInteraction(6,
+                new FluidStack(FluidRegistry.WATER, 10),
+                new FluidStack(FluidRegistry.LAVA, 10),
+                createItemDropAction(0, 0, new ItemStack(Blocks.COBBLESTONE))));
+        registerInteraction(new LiquidInteraction(3,
+                new FluidStack(FluidRegistry.WATER, 10),
+                new FluidStack(FluidRegistry.LAVA, 10),
+                createItemDropAction(1F, 0.4F, new ItemStack(Blocks.STONE))));
+        registerInteraction(new LiquidInteraction(1,
+                new FluidStack(FluidRegistry.WATER, 10),
+                new FluidStack(FluidRegistry.LAVA, 10),
+
+                createItemDropAction(0.7F, 1F, new ItemStack(Blocks.OBSIDIAN))));
+        registerInteraction(new LiquidInteraction(1,
+                new FluidStack(BlocksAS.fluidLiquidStarlight, 30),
+                new FluidStack(FluidRegistry.WATER, 10),
+                createItemDropAction(1F, 1F, new ItemStack(Blocks.ICE))));
+        registerInteraction(new LiquidInteraction(1200,
+                new FluidStack(BlocksAS.fluidLiquidStarlight, 10),
+                new FluidStack(FluidRegistry.LAVA, 10),
+                createItemDropAction(0.8F, 0.8F, new ItemStack(Blocks.SAND))));
+
+        registerInteraction(new LiquidInteraction(30,
+                new FluidStack(BlocksAS.fluidLiquidStarlight, 70),
+                new FluidStack(FluidRegistry.LAVA, 70),
+                createItemDropAction(1F, 1F, BlockCustomSandOre.OreType.AQUAMARINE.asStack())));
+
+        cacheLocalFallback();
+    }
+
+    private static void cacheLocalFallback() {
+        if(localFallback.isEmpty()) {
+            localFallback.addAll(registeredInteractions);
+        }
+    }
+
+    public static void loadFromFallback() {
+        registeredInteractions.clear();
+        registeredInteractions.addAll(localFallback);
+    }
+
+    private static void registerInteraction(LiquidInteraction interaction) {
+        registeredInteractions.add(interaction);
     }
 
     public FluidStack getComponent1() {
@@ -148,7 +157,12 @@ public class LiquidInteraction {
         if(fluid1 == null || fluid2 == null) return null;
         List<WRItemObject<LiquidInteraction>> test = new LinkedList<>();
 
-        for (LiquidInteraction li : ALL_INTERACTIONS) {
+        for (LiquidInteraction li : registeredInteractions) {
+            if(fluid1.containsFluid(li.component1) && fluid2.containsFluid(li.component2)) {
+                test.add(new WRItemObject<>(li.probability, li));
+            }
+        }
+        for (LiquidInteraction li : mtInteractions) {
             if(fluid1.containsFluid(li.component1) && fluid2.containsFluid(li.component2)) {
                 test.add(new WRItemObject<>(li.probability, li));
             }
@@ -162,7 +176,12 @@ public class LiquidInteraction {
     public static List<LiquidInteraction> getPossibleInteractions(@Nullable FluidStack comp1) {
         List<LiquidInteraction> out = new LinkedList<>();
         if(comp1 == null) return out;
-        for (LiquidInteraction li : ALL_INTERACTIONS) {
+        for (LiquidInteraction li : registeredInteractions) {
+            if(li.component1.isFluidEqual(comp1)) {
+                out.add(li);
+            }
+        }
+        for (LiquidInteraction li : mtInteractions) {
             if(li.component1.isFluidEqual(comp1)) {
                 out.add(li);
             }
@@ -191,6 +210,21 @@ public class LiquidInteraction {
         return comp2 != null && li.component2.isFluidEqual(comp2);
     }
 
+    public static void removeInteraction(Fluid comp1, Fluid comp2, ItemStack output) {
+        for (LiquidInteraction li : registeredInteractions) {
+            if((li.component1.getFluid().equals(comp1) && li.component2.getFluid().equals(comp2)) ||
+                    (li.component2.getFluid().equals(comp1) && li.component1.getFluid().equals(comp2))) {
+                if(output != null && !output.isEmpty()) {
+                    if(!ItemUtils.matchStackLoosely(output, li.action.getOutputForMatching())) {
+                        continue;
+                    }
+                }
+                registeredInteractions.remove(li);
+                return;
+            }
+        }
+    }
+
     public static abstract class FluidInteractionAction {
 
         public abstract boolean drainComponent1(FluidStack component, IFluidHandler tank);
@@ -198,6 +232,8 @@ public class LiquidInteraction {
         public abstract boolean drainComponent2(FluidStack component, IFluidHandler tank);
 
         public abstract void doInteraction(World world, Vector3 position);
+
+        public abstract ItemStack getOutputForMatching();
 
     }
 
@@ -210,6 +246,11 @@ public class LiquidInteraction {
             this.c1 = chanceConsumption1;
             this.c2 = chanceConsumption2;
             this.result = resultBlockStack.copy();
+        }
+
+        @Override
+        public ItemStack getOutputForMatching() {
+            return ItemUtils.copyStackWithSize(result, result.getCount());
         }
 
         @Override

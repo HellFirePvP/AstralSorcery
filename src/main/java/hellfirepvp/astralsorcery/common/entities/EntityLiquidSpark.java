@@ -163,7 +163,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
                     return;
                 }
 
-                if(getDistanceToEntity(e) < 0.7F) {
+                if(getDistance(e) < 0.7F) {
                     setDead();
                     e.setDead();
                     Vector3 at = Vector3.atEntityCenter(e)
@@ -270,12 +270,15 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
     @SideOnly(Side.CLIENT)
     private void playAmbientParticles() {
-        TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(this.dataManager.get(FLUID_REPRESENTED));
+        FluidStack stack = this.dataManager.get(FLUID_REPRESENTED);
+        if(stack == null) return;
+        TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(stack);
 
         Vector3 at = Vector3.atEntityCenter(this);
         EntityFXFloatingCube cube = RenderingUtils.spawnFloatingBlockCubeParticle(at, tas);
         cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
         cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
+        cube.setColorHandler(cb -> new Color(stack.getFluid().getColor(stack)));
         cube.setScale(0.3F).tumble().setMotion(
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),

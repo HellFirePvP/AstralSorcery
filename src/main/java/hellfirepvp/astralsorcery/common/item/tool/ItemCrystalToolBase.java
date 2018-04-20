@@ -48,7 +48,7 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     }
 
     public void setDamageVsEntity(float damageVsEntity) {
-        this.damageVsEntity = damageVsEntity;
+        this.attackDamage = damageVsEntity;
     }
 
     public void setAttackSpeed(float attackSpeed) {
@@ -68,8 +68,8 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
-        float str = super.getStrVsBlock(stack, state);
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+        float str = super.getDestroySpeed(stack, state);
         ToolCrystalProperties properties = getToolProperties(stack);
         return str * properties.getEfficiencyMultiplier() * 1.5F;
     }
