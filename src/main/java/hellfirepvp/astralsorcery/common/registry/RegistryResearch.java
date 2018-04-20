@@ -241,6 +241,10 @@ public class RegistryResearch {
         resDrawing.addPage(getTextPage("DRAWING_TABLE.7"));
         resDrawing.addPage(getTextPage("DRAWING_TABLE.8"));
 
+        ResearchNode resSextantUpgrade = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT_UPGRADE", 2, 2);
+        resSextantUpgrade.addPage(getTextPage("SEXTANT_UPGRADE.1"));
+        resSextantUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rSextantUpgrade));
+
         ResearchNode resTraitUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "ALTAR4", 3, 3);
         resTraitUpgrade.addPage(getTextPage("ALTAR4.1"));
         resTraitUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rAltarUpgradeTrait));
@@ -304,6 +308,7 @@ public class RegistryResearch {
         regConstellation.register(resDrawing);
         regConstellation.register(resTraitUpgrade);
         regConstellation.register(resEnchantmentAmulet);
+        regConstellation.register(resSextantUpgrade);
     }
 
     private static void initAttunement() {

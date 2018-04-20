@@ -369,6 +369,9 @@ astralsorcery.journal.ENCHANTMENT_AMULET.3.text=While worn, such a prism adds or
 research.SEXTANT.name=Sextant
 astralsorcery.journal.SEXTANT.1.text=
 
+research.SEXTANT_UPGRADE.name=
+astralsorcery.journal.SEXTANT_UPGRADE.1.text=
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.constellation=Requires focus to constellation %s
@@ -441,6 +444,7 @@ item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
 item.itemskyresonator.name=Fosic Resonator
 item.itemsextant.name=Sextant
+item.itemsextant.upgraded=Advanced
 item.itemenchantmentamulet.name=Resplendent Prism
 
 item.itemskyresonator.starlight.name=Fosic Resonator

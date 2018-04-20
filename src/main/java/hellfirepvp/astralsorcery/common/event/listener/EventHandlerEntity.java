@@ -238,6 +238,10 @@ public class EventHandlerEntity {
         if(Mods.DRACONICEVOLUTION.isPresent()) {
             ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if(!chest.isEmpty() && chest.getItem() instanceof ItemCape && ModIntegrationDraconicEvolution.isChaosDamage(source)) {
+                if(living instanceof EntityPlayer && ((EntityPlayer) living).isCreative()) {
+                    event.setCanceled(true);
+                    return;
+                }
                 event.setAmount(event.getAmount() * (1F - Config.capeChaosResistance));
                 if(event.getAmount() <= 1E-4) {
                     event.setCanceled(true);
