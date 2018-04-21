@@ -330,7 +330,7 @@ research.ATT_WAND_ARMARA.name=Armara共鸣之杖
 astralsorcery.journal.ATT_WAND_ARMARA.1.text=弹性与保护性，这种材料组合的法杖有保护能力。手持法杖时可以当做盾牌。当屏障被攻击时，使用者将获得额外的防护能力。
 
 research.ATT_WAND_DISCIDIA.name=Discidia共鸣之杖
-astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=随着时间的推移，夜晚的危险越来越大，它们对于严重伤害的恢复能力也逐渐增强。在手持仿造discidia效果的法杖时，对同一目标的多次攻击将造成更大的伤害。
+astralsorcery.journal.ATT_WAND_DISCIDIA.1.text=随着时间的推移，夜晚的危险越来越大，它们对于严重伤害的恢复能力也逐渐增强。在手持模拟discidia效果的法杖时，对同一目标的多次攻击将造成更大的伤害。
 
 research.ATT_WAND_AEVITAS.name=Aevitas共鸣之杖
 astralsorcery.journal.ATT_WAND_AEVITAS.1.text=一把沉浸于生长于创造能力的法杖，给予了持有者在空中行走的方便，在他脚下会生成一片坚实的星空，用以防止因意外而摔落深渊。
@@ -358,16 +358,19 @@ astralsorcery.journal.BORE_HEAD_LIQUID.2.text=喷泉核心无法与其他机械�
 astralsorcery.journal.BORE_HEAD_LIQUID.4.text=回想起法斯刻共振器对大面积区域的信息收集能力，稍加调整可以让其在共振器周围的某些位置抽出一个小型的液体抽样并显示出来。这种抽样并没有实际效用，但收集的信息足够对附近是否适合放置万象泉有一个大致的了解。<NL>共振器的两种模式都只能在夜晚使用。手持共振器通过shift右键来切换模式。
 
 research.BORE_HEAD_VORTEX.name=Fysallidic基座
-astralsorcery.journal.BORE_HEAD_VORTEX.1.text=
-astralsorcery.journal.BORE_HEAD_VORTEX.3.text=
-astralsorcery.journal.BORE_HEAD_VORTEX.4.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.1.text=操纵喷泉能量的基本原则是利用星能间相互吸引的自然倾向对其进行诱导。<NL>当Neromantic基座将能量形成一道垂直的光束并从基岩内吸取交感液体时，你相信你已经找到了另一种用于增强局部能量漩涡的方法。
+astralsorcery.journal.BORE_HEAD_VORTEX.3.text=当它们自身完成加速并回归时，这些能量会以奇怪的方式与生物发生互感：将他们吸入涡流中心并“锁定”在那个位置直到作为能量来源的星能液耗光。<NL>当生物被困在这个漩涡中后，这些生物似乎很大程度上无法保护自身安全，尽管星能的消耗量深受漩涡中生物用其自身的力量试图挣脱漩涡的影响。
+astralsorcery.journal.BORE_HEAD_VORTEX.4.text=即使是神话生物也会被这个基座控制，尽管这需要它用全力才能做到。<NL>此外，有些生物看起来需要消耗远比聚星缸长时间能提供的量还要多的多的星能液，所以在内部存储的能量耗光后，无法长时间将生物固定在漩涡中心。
 
 research.ENCHANTMENT_AMULET.name=璀璨棱镜
-astralsorcery.journal.ENCHANTMENT_AMULET.1.text=
-astralsorcery.journal.ENCHANTMENT_AMULET.3.text=
+astralsorcery.journal.ENCHANTMENT_AMULET.1.text=关于星能的实验表明，更替之星会对星座产生奇怪的反应，在受到特殊的星辉照射后将停止发射其内的混沌魔能。<NL>随着散发的能量不断变化，或许比把能量集中更有益。<NL>将这些能量注入末影之眼后，会使它们向外发射轻微的短距辐射，而不会对环境造成破坏。
+astralsorcery.journal.ENCHANTMENT_AMULET.3.text=在佩戴时，这种棱镜会给佩戴者身上的其他装备增加或赋予特殊的魔法效果。<NL>所获得的效果是完全随机的，这些效果完全基于锁定下界之星时的奇特频率。<NL>将其他频率的星辉照射在这个棱镜上会改变其与原先星体间的锁定频率并更换星体，最终由更替之星内那不可控制的混沌方式来决定获得的神奇效果。
 
 research.SEXTANT.name=六分仪
 astralsorcery.journal.SEXTANT.1.text=
+
+research.SEXTANT_UPGRADE.name=
+astralsorcery.journal.SEXTANT_UPGRADE.1.text=
 
 astralsorcery.journal.recipe.starlight=合成时需要星能
 astralsorcery.journal.recipe.nighttime=只能在夜间制作
@@ -441,6 +444,7 @@ item.itemusabledust.nocturnal.name=暗夜粉
 item.itemcape.name=星斗披风
 item.itemskyresonator.name=法斯刻共振器
 item.itemsextant.name=六分仪
+item.itemsextant.upgraded=强化
 item.itemenchantmentamulet.name=璀璨棱镜
 
 item.itemskyresonator.starlight.name=法斯刻共振器
@@ -527,6 +531,7 @@ tile.blockgeolosyssamplecluster.name=水晶石样本
 
 gui.journal.cst.enchantments=映射台：
 gui.journal.cst.ritual=放大效应：
+gui.journal.cst.ritual.trait=修改仪式特质：
 gui.journal.cst.capeeffect=披风效果：
 
 astralsorcery.constellation.discidia=Discidia
@@ -605,20 +610,32 @@ astralsorcery.constellation.pelotrio.capeeffect=此种星斗披风通常会将�
 
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=Frigidity
+astralsorcery.constellation.gelu.effect=
+astralsorcery.constellation.gelu.enchantments=
+astralsorcery.constellation.gelu.trait=
 astralsorcery.constellation.ulteria=Ulteria
 astralsorcery.constellation.ulteria.info=Tenacity
+astralsorcery.constellation.ulteria.effect=
+astralsorcery.constellation.ulteria.enchantments=
+astralsorcery.constellation.ulteria.trait=
 astralsorcery.constellation.alcara=Alcara
 astralsorcery.constellation.alcara.info=Resonance
+astralsorcery.constellation.alcara.effect=
+astralsorcery.constellation.alcara.enchantments=
+astralsorcery.constellation.alcara.trait=
 astralsorcery.constellation.vorux=Vorux
 astralsorcery.constellation.vorux.info=Ferocity
+astralsorcery.constellation.vorux.effect=
+astralsorcery.constellation.vorux.enchantments=
+astralsorcery.constellation.vorux.trait=
 
 perk.info.locked=§7锁定
 perk.info.available=§9可用
 perk.info.active=§a激活
 perk.info.inactive=§c未激活（未达到要求等级）
 perk.info.unlock=§a强化解锁'%s'
-perk.info.unlock.level=§7升级来解锁此等级%s
-perk.info.unlocked.level=§7升级来解锁此等级%s
+perk.info.unlock.level=§7升级到等级 %s后可解锁
+perk.info.unlocked.level=已§7解锁于等级%s
 perk.info.unlocked.free=§7基础强化
 
 perk.DMG_KILL=嗜血
@@ -678,7 +695,7 @@ perk.DTR_BREAKSPEED.info=加快挖掘速度
 perk.DTR_DAMAGEARC=静磁力
 perk.DTR_DAMAGEARC.info=可能产生范围攻击
 perk.DTR_BREAKTYPE=上帝视角
-perk.DTR_BREAKTYPE.info=用镐代替铲或斧
+perk.DTR_BREAKTYPE.info=让镐子成为万用工具
 perk.DTR_LOW_HEALTH=回光返照
 perk.DTR_LOW_HEALTH.info=在生命值较低时获得更高的攻击伤害和更快的挖掘速度
 perk.DTR_ARMORBREAK=精确打击
