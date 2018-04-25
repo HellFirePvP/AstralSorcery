@@ -117,7 +117,6 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + obfName + " - " + transformedClassName + ") - Rethrowing exception!", exc);
                 }
             }
-            availablePatches.remove(transformedClassName);
         }
     }
 
