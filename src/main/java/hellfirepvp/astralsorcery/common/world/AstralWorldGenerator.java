@@ -50,11 +50,10 @@ public class AstralWorldGenerator implements IWorldGenerator {
         structures.add(new StructureSmallRuin());
 
         decorators.add(new GenAttributeGlowstoneFlower());
+        decorators.add(new GenAttributeRockCrystals());
     }
 
     public AstralWorldGenerator setupAttributes() {
-        decorators.add(new GenAttributeRockCrystals());
-
         if(Config.marbleAmount > 0) {
             decorators.add(new GenAttributeMarble());
         }
