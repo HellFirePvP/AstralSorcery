@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -34,8 +35,8 @@ import javax.annotation.Nonnull;
 public class SextantUpgradeRecipe extends ConstellationRecipe {
 
     public SextantUpgradeRecipe() {
-        super(ShapedRecipe.Builder.newShapedRecipe("internal/altar/sextant/upgrade", ItemsAS.sextant)
-                .addPart(ItemsAS.sextant,
+        super(ShapedRecipe.Builder.newShapedRecipe("internal/altar/sextant/upgrade", Items.APPLE)//ItemsAS.sextant)
+                .addPart(Items.APPLE,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemColoredLens.ColorType.SPECTRAL.asStack(),
                         ShapedRecipeSlot.CENTER,
@@ -61,13 +62,13 @@ public class SextantUpgradeRecipe extends ConstellationRecipe {
     @Nonnull
     @Override
     public ItemStack getOutputForMatching() {
-        return new ItemStack(ItemsAS.sextant);
+        return new ItemStack(Items.APPLE);
     }
 
     @Nonnull
     @Override
     public ItemStack getOutputForRender() {
-        ItemStack adv = new ItemStack(ItemsAS.sextant);
+        ItemStack adv = new ItemStack(Items.APPLE);
         ItemSextant.setAdvanced(adv);
         return adv;
     }

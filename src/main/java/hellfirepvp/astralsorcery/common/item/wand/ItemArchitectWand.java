@@ -193,6 +193,10 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
         ItemStack consumeStack = getStoredStateAsStack(stack);
         if(stored == null || stored.getBlock().equals(Blocks.AIR) || consumeStack.isEmpty()) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 
+        RayTraceResult rtr = getLookBlock(playerIn, false, true, architectRange);
+        if(rtr == null || rtr.sideHit == null || rtr.hitVec == null) return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+        EnumFacing sideHit = rtr.sideHit;
+
         Deque<BlockPos> placeable = filterBlocksToPlace(playerIn, world, architectRange);
         if(!placeable.isEmpty()) {
             for (BlockPos placePos : placeable) {
@@ -202,7 +206,11 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                     if(!playerIn.isCreative()) {
                         ItemUtils.consumeFromPlayerInventory(playerIn, stack, ItemUtils.copyStackWithSize(consumeStack, 1), false);
                     }
-                    world.setBlockState(placePos, stored);
+                    IBlockState place = stored;
+                    try {
+                        place = stored.getBlock().getStateForPlacement(world, placePos, sideHit, (float) rtr.hitVec.x, (float) rtr.hitVec.y, (float) rtr.hitVec.z, consumeStack.getMetadata(), playerIn, hand);
+                    } catch (Exception exc) {}
+                    world.setBlockState(placePos, place);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
                     ev.setAdditionalData(Block.getStateId(stored));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));

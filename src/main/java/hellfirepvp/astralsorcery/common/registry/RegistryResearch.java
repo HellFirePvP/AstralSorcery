@@ -119,17 +119,17 @@ public class RegistryResearch {
         resBoreLiquid.addPage(getTextPage("BORE_HEAD_LIQUID.4"));
         resBoreLiquid.addPage(new JournalPageTraitRecipe(RegistryRecipes.rResonatorLiquid));
 
-        ResearchNode resBoreVortex = new ResearchNode(TileBore.BoreType.VORTEX.asStack(), "BORE_HEAD_VORTEX", 6, 6);
-        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.1"));
-        resBoreVortex.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadVortex));
-        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.3"));
-        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.4"));
+        //ResearchNode resBoreVortex = new ResearchNode(TileBore.BoreType.VORTEX.asStack(), "BORE_HEAD_VORTEX", 6, 6);
+        //resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.1"));
+        //resBoreVortex.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadVortex));
+        //resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.3"));
+        //resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.4"));
 
         registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape),                      resCape,       1, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockChalice),                        resChalice,    1, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockBore),                           resBore,       2, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 0),   resBoreLiquid, 1, ResearchProgression.RADIANCE);
-        registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 1),   resBoreVortex, 1, ResearchProgression.RADIANCE);
+        //registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 1),   resBoreVortex, 1, ResearchProgression.RADIANCE);
 
         resAttWandArmara.addSourceConnectionFrom(resAttWands);
         resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
@@ -141,7 +141,7 @@ public class RegistryResearch {
         resChalice.addSourceConnectionFrom(resHintRecipes);
         resBore.addSourceConnectionFrom(resChalice);
         resBoreLiquid.addSourceConnectionFrom(resBore);
-        resBoreVortex.addSourceConnectionFrom(resBore);
+        //resBoreVortex.addSourceConnectionFrom(resBore);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -154,7 +154,7 @@ public class RegistryResearch {
         regRadiance.register(resChalice);
         regRadiance.register(resBore);
         regRadiance.register(resBoreLiquid);
-        regRadiance.register(resBoreVortex);
+        //regRadiance.register(resBoreVortex);
     }
 
     private static void initConstellation() {
@@ -241,9 +241,9 @@ public class RegistryResearch {
         resDrawing.addPage(getTextPage("DRAWING_TABLE.7"));
         resDrawing.addPage(getTextPage("DRAWING_TABLE.8"));
 
-        ResearchNode resSextantUpgrade = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT_UPGRADE", 2, 2);
-        resSextantUpgrade.addPage(getTextPage("SEXTANT_UPGRADE.1"));
-        resSextantUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rSextantUpgrade));
+        //ResearchNode resSextantUpgrade = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT_UPGRADE", 2, 2);
+        //resSextantUpgrade.addPage(getTextPage("SEXTANT_UPGRADE.1"));
+        //resSextantUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rSextantUpgrade));
 
         ResearchNode resTraitUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "ALTAR4", 3, 3);
         resTraitUpgrade.addPage(getTextPage("ALTAR4.1"));
@@ -251,11 +251,11 @@ public class RegistryResearch {
         resTraitUpgrade.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarTrait));
         resTraitUpgrade.addPage(getTextPage("ALTAR4.4"));
 
-        ResearchNode resEnchantmentAmulet = new ResearchNode(new ItemStack(ItemsAS.enchantmentAmulet), "ENCHANTMENT_AMULET", 6, 3);
-        resEnchantmentAmulet.addPage(getTextPage("ENCHANTMENT_AMULET.1"));
-        resEnchantmentAmulet.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rEnchAmuletOriginal));
-        resEnchantmentAmulet.addPage(getTextPage("ENCHANTMENT_AMULET.3"));
-        resEnchantmentAmulet.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rEnchAmuletReroll));
+        //ResearchNode resEnchantmentAmulet = new ResearchNode(new ItemStack(ItemsAS.enchantmentAmulet), "ENCHANTMENT_AMULET", 6, 3);
+        //resEnchantmentAmulet.addPage(getTextPage("ENCHANTMENT_AMULET.1"));
+        //resEnchantmentAmulet.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rEnchAmuletOriginal));
+        //resEnchantmentAmulet.addPage(getTextPage("ENCHANTMENT_AMULET.3"));
+        //resEnchantmentAmulet.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rEnchAmuletReroll));
 
         registerItemLookup(new ItemStack(ItemsAS.celestialCrystal, 1, OreDictionary.WILDCARD_VALUE),      resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.celestialCrystals, 1, OreDictionary.WILDCARD_VALUE),    resCelCrystalCluster, 0, ResearchProgression.CONSTELLATION);
@@ -275,7 +275,7 @@ public class RegistryResearch {
         registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                     resInfuser,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),         resDrawing,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), resTraitUpgrade,      1, ResearchProgression.CONSTELLATION);
-        registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                              resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
+        //registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                              resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);
@@ -291,7 +291,7 @@ public class RegistryResearch {
         resTraitUpgrade.addSourceConnectionFrom(resInfuser);
         resRitualLink.addSourceConnectionFrom(resInfuser);
         resTraitUpgrade.addSourceConnectionFrom(resCelCrystals);
-        resEnchantmentAmulet.addSourceConnectionFrom(resInfuser);
+        //resEnchantmentAmulet.addSourceConnectionFrom(resInfuser);
 
         regConstellation.register(resColoredLenses);
         regConstellation.register(resPrism);
@@ -307,8 +307,8 @@ public class RegistryResearch {
         regConstellation.register(resEnhancedCollCrystal);
         regConstellation.register(resDrawing);
         regConstellation.register(resTraitUpgrade);
-        regConstellation.register(resEnchantmentAmulet);
-        regConstellation.register(resSextantUpgrade);
+        //regConstellation.register(resEnchantmentAmulet);
+        //regConstellation.register(resSextantUpgrade);
     }
 
     private static void initAttunement() {
@@ -367,7 +367,7 @@ public class RegistryResearch {
         ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", 8, 2);
         resRitualAccel.addPage(getTextPage("PED_ACCEL.1"));
         resRitualAccel.addPage(getTextPage("PED_ACCEL.2"));
-        resRitualAccel.addPage(getTextPage("PED_ACCEL.3"));
+        //resRitualAccel.addPage(getTextPage("PED_ACCEL.3")); FIXME Add after 1.8.7
 
         ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 5, 7);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));
@@ -480,9 +480,9 @@ public class RegistryResearch {
         resTelescope.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rHandTelescope));
         resTelescope.addPage(getTextPage("HAND_TELESCOPE.4"));
 
-        ResearchNode resSextant = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT", 2, 3);
-        resSextant.addPage(getTextPage("SEXTANT.1"));
-        resSextant.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rSextant));
+        //ResearchNode resSextant = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT", 2, 3);
+        //resSextant.addPage(getTextPage("SEXTANT.1"));
+        //resSextant.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rSextant));
 
         ResearchNode resRelay = new ResearchNode(new ItemStack(BlocksAS.attunementRelay), "SPEC_RELAY", 2, 0);
         resRelay.addPage(getTextPage("SPEC_RELAY.1"));
@@ -557,7 +557,7 @@ public class RegistryResearch {
         registerItemLookup(ItemUsableDust.DustType.ILLUMINATION.asStack(),                                            resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(ItemUsableDust.DustType.NOCTURNAL.asStack(),                                               resNocturnalPowder,         1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),         resIlluminator,             1, ResearchProgression.BASIC_CRAFT);
-        registerItemLookup(new ItemStack(ItemsAS.sextant),                                                            resSextant,                 1, ResearchProgression.BASIC_CRAFT);
+        //registerItemLookup(new ItemStack(ItemsAS.sextant),                                                            resSextant,                 1, ResearchProgression.BASIC_CRAFT);
 
         regCrafting.register(resIlluminator);
         regCrafting.register(resTelescope);
@@ -571,7 +571,7 @@ public class RegistryResearch {
         regCrafting.register(resCrystalGrowth);
         regCrafting.register(resIlluminationPowder);
         regCrafting.register(resNocturnalPowder);
-        regCrafting.register(resSextant);
+        //regCrafting.register(resSextant);
 
         resGrindstone.addSourceConnectionFrom(resRockCrystals);
         resTools.addSourceConnectionFrom(resRockCrystals);

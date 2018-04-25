@@ -32,15 +32,13 @@ import java.util.Random;
 public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
 
     protected final WorldGenEntry cfgEntry;
-    private final boolean onlyGenerateInSkyDimensions;
 
-    public WorldGenAttributeCommon(int attributeVersion, boolean onlyGenerateInSkyDimensions, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
-        this(attributeVersion, 140, onlyGenerateInSkyDimensions, entry, ignoreBiomeSpecifications, types);
+    public WorldGenAttributeCommon(int attributeVersion, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
+        this(attributeVersion, 140, entry, ignoreBiomeSpecifications, types);
     }
 
-    public WorldGenAttributeCommon(int attributeVersion, int defaultChance, boolean onlyGenerateInSkyDimensions, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
+    public WorldGenAttributeCommon(int attributeVersion, int defaultChance, String entry, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
         super(attributeVersion);
-        this.onlyGenerateInSkyDimensions = onlyGenerateInSkyDimensions;
         this.cfgEntry = new WorldGenEntry(entry, defaultChance, ignoreBiomeSpecifications, types) {
             @Override
             public void loadFromConfig(Configuration cfg) {
@@ -78,7 +76,6 @@ public abstract class WorldGenAttributeCommon extends WorldGenAttribute {
 
     public boolean canGenerateAtAll(int chX, int chZ, World world, Random rand) {
         if(!cfgEntry.shouldGenerate()) return false;
-        if(onlyGenerateInSkyDimensions && !Config.worldGenDimWhitelist.contains(world.provider.getDimension())) return false;
         double chanceMultiplier = 1F;
         if(Config.respectIdealDistances && this instanceof WorldGenAttributeStructure) {
             StructureGenBuffer.StructureType type = ((WorldGenAttributeStructure) this).getStructureType();

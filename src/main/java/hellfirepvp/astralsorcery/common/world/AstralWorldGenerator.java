@@ -53,9 +53,8 @@ public class AstralWorldGenerator implements IWorldGenerator {
     }
 
     public AstralWorldGenerator setupAttributes() {
-        if(Config.spawnRockCrystalOres) {
-            decorators.add(new GenAttributeRockCrystals());
-        }
+        decorators.add(new GenAttributeRockCrystals());
+
         if(Config.marbleAmount > 0) {
             decorators.add(new GenAttributeMarble());
         }

@@ -34,7 +34,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
     private boolean ignoreSnowCondition = false;
 
     public GenAttributeGlowstoneFlower() {
-        super(1, 2, false, "glowstone_flower", false, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD);
+        super(1, 2, "glowstone_flower", false, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD);
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {

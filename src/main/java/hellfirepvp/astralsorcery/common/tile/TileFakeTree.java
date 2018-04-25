@@ -227,7 +227,11 @@ public class TileFakeTree extends TileEntityTick {
             try {
                 tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
             } finally {
-                out.addAll(BlockDropCaptureAssist.getCapturedStacksAndStop());
+                BlockDropCaptureAssist.getCapturedStacksAndStop().forEach(stack -> {
+                    if(stack != null && !stack.isEmpty()) {
+                        out.add(stack);
+                    }
+                });
             }
         }
 

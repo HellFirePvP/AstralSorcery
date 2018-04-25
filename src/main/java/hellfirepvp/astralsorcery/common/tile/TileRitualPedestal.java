@@ -803,7 +803,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void fractureCrystal(World world) {
-            if(!this.crystal.isEmpty()) {
+            if(!this.crystal.isEmpty() && false) { //FIXME remove after 1.8.7
                 CrystalProperties prop = CrystalProperties.getCrystalProperties(this.crystal);
                 if(prop != null) {
                     prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1, prop.getSizeOverride());
