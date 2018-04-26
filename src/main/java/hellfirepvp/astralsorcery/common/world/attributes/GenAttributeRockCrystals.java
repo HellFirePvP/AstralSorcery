@@ -71,6 +71,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                 return super.getConfigurationSection() + "." + getKey();
             }
         };
+        Config.addDynamicEntry(this.entry);
     }
 
     private boolean fitsBiome(World world, BlockPos pos) {

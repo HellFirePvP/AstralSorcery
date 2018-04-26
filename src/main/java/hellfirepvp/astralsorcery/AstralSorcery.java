@@ -38,13 +38,13 @@ import org.apache.logging.log4j.Logger;
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
         dependencies = "required-after:forge@[14.23.2.2611,);required-after:baubles;after:crafttweaker",
-        certificateFingerprint = "certificate-placeholder :^)",
+        certificateFingerprint = "a0f0b759d895c15ceb3e3bcb5f3c2db7c582edf0",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {
 
     public static final String MODID = "astralsorcery";
     public static final String NAME = "Astral Sorcery";
-    public static final String VERSION = "1.8.7";
+    public static final String VERSION = "1.9.0";
     public static final String CLIENT_PROXY = "hellfirepvp.astralsorcery.client.ClientProxy";
     public static final String COMMON_PROXY = "hellfirepvp.astralsorcery.common.CommonProxy";
 

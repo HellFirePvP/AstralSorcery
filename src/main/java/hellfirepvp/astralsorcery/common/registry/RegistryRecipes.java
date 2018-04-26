@@ -401,9 +401,8 @@ public class RegistryRecipes {
         rResonatorLiquid = registerAltarRecipe(new ResonatorLiquidRecipe());
 
         rBoreHeadLiquid = registerAltarRecipe(new LiquidBoreRecipe());
-        //rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());
+        rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());
 
-        /*
         rSextantUpgrade = registerAltarRecipe(new SextantUpgradeRecipe());
 
         rSextant = registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/sextant", ItemsAS.sextant)
@@ -471,7 +470,6 @@ public class RegistryRecipes {
             }
         });
         rEnchAmuletReroll.setPassiveStarlightRequirement(1400);
-        */
 
         rBore = registerTraitRecipe(newShapedRecipe("internal/altar/bore_core", BlocksAS.blockBore)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,

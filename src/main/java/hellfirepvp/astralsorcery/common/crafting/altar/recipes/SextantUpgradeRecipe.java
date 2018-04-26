@@ -35,8 +35,8 @@ import javax.annotation.Nonnull;
 public class SextantUpgradeRecipe extends ConstellationRecipe {
 
     public SextantUpgradeRecipe() {
-        super(ShapedRecipe.Builder.newShapedRecipe("internal/altar/sextant/upgrade", Items.APPLE)//ItemsAS.sextant)
-                .addPart(Items.APPLE,
+        super(ShapedRecipe.Builder.newShapedRecipe("internal/altar/sextant/upgrade", ItemsAS.sextant)
+                .addPart(ItemsAS.sextant,
                         ShapedRecipeSlot.LOWER_CENTER)
                 .addPart(ItemColoredLens.ColorType.SPECTRAL.asStack(),
                         ShapedRecipeSlot.CENTER,
@@ -62,13 +62,13 @@ public class SextantUpgradeRecipe extends ConstellationRecipe {
     @Nonnull
     @Override
     public ItemStack getOutputForMatching() {
-        return new ItemStack(Items.APPLE);
+        return new ItemStack(ItemsAS.sextant);
     }
 
     @Nonnull
     @Override
     public ItemStack getOutputForRender() {
-        ItemStack adv = new ItemStack(Items.APPLE);
+        ItemStack adv = new ItemStack(ItemsAS.sextant);
         ItemSextant.setAdvanced(adv);
         return adv;
     }
