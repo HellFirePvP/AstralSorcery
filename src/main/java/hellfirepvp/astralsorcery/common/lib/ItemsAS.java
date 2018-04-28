@@ -64,10 +64,10 @@ public class ItemsAS {
     public static ItemChargedCrystalShovel chargedCrystalShovel;
 
     public static ItemCape armorImbuedCape;
-    public static ItemEnchantmentAmulet enchantmentAmulet;
+    //public static ItemEnchantmentAmulet enchantmentAmulet;
 
     public static ItemWand wand;
-    public static ItemSextant sextant;
+    //public static ItemSextant sextant;
     public static ItemColoredLens coloredLens;
     public static ItemSkyResonator skyResonator;
 

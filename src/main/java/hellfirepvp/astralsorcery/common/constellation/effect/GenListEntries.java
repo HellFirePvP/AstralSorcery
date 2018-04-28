@@ -89,9 +89,7 @@ public class GenListEntries {
                     BlockPos at = getPos();
                     entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
                     if(entity instanceof EntityLiving) {
-                        if (!ForgeEventFactory.doSpecialSpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F)) {
-                            ((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(at), null);
-                        }
+                        ((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(at), null);
                         if(!((EntityLiving) entity).isNotColliding()) {
                             entity.setDead();
                             return;

@@ -41,8 +41,10 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
 
     private int generationChance;
     private boolean doGenerate = false;
-    private boolean doIgnoreBiomeSpecifications = false;
+    private boolean doIgnoreBiomeSpecifications = true;
+    private boolean doIgnoreDimensionSpecifications = true;
     private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
+    private List<Integer> applicableDimensions = new ArrayList<>();
     private int crystalDensity = 15;
 
     public GenAttributeRockCrystals() {
@@ -51,7 +53,8 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             @Override
             public void loadFromConfig(Configuration cfg) {
                 doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
-                doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
+                doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomeSpecification", getConfigurationSection(), doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
+                doIgnoreDimensionSpecifications = cfg.getBoolean("IgnoreDimensionSettings", getConfigurationSection(), doIgnoreDimensionSpecifications, "Ignore dimension-whitelist when trying to generate " + getKey());
                 generationChance = cfg.getInt("Chance", getConfigurationSection(), generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
                 crystalDensity = cfg.getInt("CrystalDensity", getConfigurationSection(), crystalDensity, 1, 40, "Defines how rarely Rock crystal ores spawn. The higher, the more rare.");
                 String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), new String[0], "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
@@ -64,6 +67,15 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                     }
                 }
                 biomeTypes = Lists.newArrayList(resolvedTypes);
+                String[] dimensionWhitelist = cfg.getStringList("DimensionWhitelist", getConfigurationSection(), new String[0], "Define an array of dimensionID's where the structure is allowed to spawn in.");
+                applicableDimensions = new ArrayList<>();
+                for (String s : dimensionWhitelist) {
+                    try {
+                        applicableDimensions.add(Integer.parseInt(s));
+                    } catch (NumberFormatException exc) {
+                        AstralSorcery.log.error("[AstralSorcery] Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+                    }
+                }
             }
 
             @Override
@@ -72,6 +84,17 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             }
         };
         Config.addDynamicEntry(this.entry);
+    }
+
+    private boolean isApplicableWorld(World world) {
+        if(this.doIgnoreDimensionSpecifications) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(this.applicableDimensions.isEmpty()) return false;
+        for (Integer dim : this.applicableDimensions) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
     }
 
     private boolean fitsBiome(World world, BlockPos pos) {
@@ -94,7 +117,7 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
             int zPos = chunkZ * 16 + random.nextInt(16) + 8;
             int yPos = 2 + random.nextInt(4);
             BlockPos pos = new BlockPos(xPos, yPos, zPos);
-            if(!fitsBiome(world, pos)) return;
+            if(!fitsBiome(world, pos) || !isApplicableWorld(world)) return;
             IBlockState state = world.getBlockState(pos);
             if (state.getBlock().equals(Blocks.STONE)) {
                 BlockStone.EnumType stoneType = state.getValue(BlockStone.VARIANT);

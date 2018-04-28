@@ -43,6 +43,7 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
+        if(!isApplicableWorld(world)) return false;
         if(!isApplicableBiome(world, pos)) return false;
         if(!canSpawnShrineCorner(world, pos.add(-7, 0,  7))) return false;
         if(!canSpawnShrineCorner(world, pos.add( 7, 0, -7))) return false;
@@ -62,6 +63,17 @@ public class StructureAncientShrine extends WorldGenAttributeStructure {
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
         return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isApplicableBiome(world, pos);
+    }
+
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {

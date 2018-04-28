@@ -50,6 +50,17 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
         return applicable;
     }
 
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
+    }
+
     @Override
     protected void loadAdditionalConfigEntries(Configuration cfg) {
         ignoreSnowCondition = cfg.getBoolean("ignoreSnowCondition", cfgEntry.getConfigurationSection(), false, "Set this to true and the decorator will ignore the spawn-condition if snow is/can fall in the area.");
@@ -82,6 +93,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
         return isApplicableBiome(world, pos) &&
+                isApplicableWorld(world) &&
                 pos.getY() >= cfgEntry.getMinY() && pos.getY() <= cfgEntry.getMaxY() &&
                 world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) &&
                 (ignoreSnowCondition || world.canSnowAt(pos, false));

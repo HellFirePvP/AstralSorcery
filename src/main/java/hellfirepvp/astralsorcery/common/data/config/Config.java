@@ -50,7 +50,7 @@ public class Config {
     @Sync public static float capeChaosResistance = 0.8F;
 
     //Attuned wands configs
-    @Sync public static float evorsioEffectChance = 0.25F;
+    @Sync public static float evorsioEffectChance = 0.8F;
     @Sync public static int discidiaStackCap = 10;
     @Sync public static float discidiaStackMultiplier = 1F;
 

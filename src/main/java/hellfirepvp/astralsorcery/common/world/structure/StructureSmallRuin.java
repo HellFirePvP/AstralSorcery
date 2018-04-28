@@ -45,6 +45,8 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
+        if(!isApplicableWorld(world)) return false;
+        if(!isApplicableBiome(world, pos)) return false;
         if(!canSpawnPosition(world, pos.add(-1, 0,  5))) return false;
         if(!canSpawnPosition(world, pos.add( 1, 0, -5))) return false;
         if(!canSpawnPosition(world, pos.add( 1, 0,  5))) return false;
@@ -52,11 +54,35 @@ public class StructureSmallRuin extends WorldGenAttributeStructure {
         return true;
     }
 
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
+    }
+
+    private boolean isApplicableBiome(World world, BlockPos pos) {
+        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+
+        Biome b = world.getBiome(pos);
+        Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
+        if(types.isEmpty()) return false;
+        boolean applicable = false;
+        for (BiomeDictionary.Type t : types) {
+            if (cfgEntry.getTypes().contains(t)) applicable = true;
+        }
+        return applicable;
+    }
+
     private boolean canSpawnPosition(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
         if (dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold) {
             IBlockState at = world.getBlockState(new BlockPos(pos.getX(), dY, pos.getZ()));
-            return !at.getMaterial().isLiquid();
+            return !at.getMaterial().isLiquid() && isApplicableBiome(world, pos);
         }
         return false;
     }

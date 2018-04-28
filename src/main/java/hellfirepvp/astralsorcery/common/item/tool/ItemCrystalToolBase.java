@@ -71,7 +71,7 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         float str = super.getDestroySpeed(stack, state);
         ToolCrystalProperties properties = getToolProperties(stack);
-        return str * properties.getEfficiencyMultiplier() * 1.5F;
+        return str * properties.getEfficiencyMultiplier() * 2F;
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {

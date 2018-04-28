@@ -1067,7 +1067,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             this.ritualLinkTo = ritualLink;
             if(prev == null && this.ritualLinkTo == null) return; //Wtf.
             if(prev == null || !prev.equals(this.ritualLinkTo)) {
-                this.ce = channeling.getRitualEffect(getRitualOrigin());
+                if (channeling != null) {
+                    this.ce = channeling.getRitualEffect(getRitualOrigin());
+                }
                 markDirty(world);
             }
         }

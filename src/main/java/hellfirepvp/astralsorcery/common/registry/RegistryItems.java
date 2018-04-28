@@ -125,7 +125,7 @@ public class RegistryItems {
         handTelescope = registerItem(new ItemHandTelescope());
         linkingTool = registerItem(new ItemLinkingTool());
         wand = registerItem(new ItemWand());
-        sextant = registerItem(new ItemSextant());
+        //sextant = registerItem(new ItemSextant());
         illuminationWand = registerItem(new ItemIlluminationWand());
         coloredLens = registerItem(new ItemColoredLens());
         skyResonator = registerItem(new ItemSkyResonator());
@@ -147,7 +147,7 @@ public class RegistryItems {
         chargedCrystalShovel = registerItem(new ItemChargedCrystalShovel());
 
         armorImbuedCape = registerItem(new ItemCape());
-        enchantmentAmulet = registerItem(new ItemEnchantmentAmulet());
+        //enchantmentAmulet = registerItem(new ItemEnchantmentAmulet());
     }
 
     //Items associated to blocks/itemblocks

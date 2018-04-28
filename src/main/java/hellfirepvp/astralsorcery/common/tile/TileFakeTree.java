@@ -200,9 +200,6 @@ public class TileFakeTree extends TileEntityTick {
             if(player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && tft.fakedState != null) {
                 NonNullList<ItemStack> out = NonNullList.create();
                 harvestAndAppend(tft, out);
-                if(rand.nextBoolean()) {
-                    harvestAndAppend(tft, out);
-                }
                 Vector3 plPos = Vector3.atEntityCenter(player);
                 for (ItemStack stack : out) {
                     ItemUtils.dropItemNaturally(player.getEntityWorld(),

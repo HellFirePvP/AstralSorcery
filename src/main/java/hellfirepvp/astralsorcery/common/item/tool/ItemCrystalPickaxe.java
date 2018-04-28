@@ -95,8 +95,8 @@ public class ItemCrystalPickaxe extends ItemCrystalToolBase {
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         float str = super.getDestroySpeed(stack, state);
         Material m = state.getMaterial();
-        if(m == Material.ROCK || m == Material.ANVIL || m == Material.IRON || m == Material.PISTON) {
-            str = RegistryItems.crystalToolMaterial.getEfficiency();
+        if(m != Material.ROCK && m != Material.ANVIL && m != Material.IRON && m != Material.PISTON) {
+            str /= this.efficiency;
         }
         return str;
     }

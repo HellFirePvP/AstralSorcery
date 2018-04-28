@@ -43,6 +43,7 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
+        if(!isApplicableWorld(world)) return false;
         if(!isDesertBiome(world, pos)) return false;
         if(!canSpawnShrineCorner(world, pos.add(-4, 0,  4))) return false;
         if(!canSpawnShrineCorner(world, pos.add( 4, 0, -4))) return false;
@@ -62,6 +63,17 @@ public class StructureDesertShrine extends WorldGenAttributeStructure {
     private boolean canSpawnShrineCorner(World world, BlockPos pos) {
         int dY = world.getTopSolidOrLiquidBlock(pos).getY();
         return dY >= cfgEntry.getMinY() && dY <= cfgEntry.getMaxY() && Math.abs(dY - pos.getY()) <= heightThreshold && isDesertBiome(world, pos);
+    }
+
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
     }
 
     private boolean isDesertBiome(World world, BlockPos pos) {

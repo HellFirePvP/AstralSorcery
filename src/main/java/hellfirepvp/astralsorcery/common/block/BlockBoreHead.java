@@ -52,6 +52,7 @@ public class BlockBoreHead extends Block implements BlockCustomName, BlockVarian
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         for (TileBore.BoreType bt : TileBore.BoreType.values()) {
+            if(bt == TileBore.BoreType.VORTEX) continue; //FIXME remove after 1.8.9
             items.add(new ItemStack(this, 1, bt.ordinal()));
         }
     }

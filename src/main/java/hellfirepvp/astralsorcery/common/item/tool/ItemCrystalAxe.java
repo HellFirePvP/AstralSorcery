@@ -51,8 +51,8 @@ public class ItemCrystalAxe extends ItemCrystalToolBase {
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         float str = super.getDestroySpeed(stack, state);
         Material m = state.getMaterial();
-        if(m == Material.WOOD || m == Material.PLANTS || m == Material.VINE || m == Material.PISTON || m == Material.LEAVES) {
-            str = RegistryItems.crystalToolMaterial.getEfficiency();
+        if(m != Material.WOOD && m != Material.PLANTS && m != Material.VINE && m != Material.PISTON && m != Material.LEAVES) {
+            str /= this.efficiency;
         }
         return str;
     }

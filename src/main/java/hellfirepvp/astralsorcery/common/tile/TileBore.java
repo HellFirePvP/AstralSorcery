@@ -132,7 +132,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
                 }
                 return;
             }
-            if(getCurrentBoreType() == null) {
+            if(getCurrentBoreType() == null || getCurrentBoreType() == BoreType.VORTEX) { //FIXME remove after 1.8.9
                 if(operationTicks > 0) {
                     markForUpdate();
                 }

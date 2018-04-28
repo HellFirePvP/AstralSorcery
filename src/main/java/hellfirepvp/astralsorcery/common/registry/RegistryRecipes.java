@@ -91,10 +91,10 @@ public class RegistryRecipes {
     public static TraitRecipe rChalice;
     public static TraitRecipe rBore;
     public static LiquidBoreRecipe rBoreHeadLiquid;
-    public static VortexBoreRecipe rBoreHeadVortex;
-    public static ConstellationRecipe rEnchAmuletOriginal, rEnchAmuletReroll;
-    public static DiscoveryRecipe rSextant;
-    public static SextantUpgradeRecipe rSextantUpgrade;
+    //public static VortexBoreRecipe rBoreHeadVortex;
+    //public static ConstellationRecipe rEnchAmuletOriginal, rEnchAmuletReroll;
+    //public static DiscoveryRecipe rSextant;
+    //public static SextantUpgradeRecipe rSextantUpgrade;
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
 
@@ -401,6 +401,7 @@ public class RegistryRecipes {
         rResonatorLiquid = registerAltarRecipe(new ResonatorLiquidRecipe());
 
         rBoreHeadLiquid = registerAltarRecipe(new LiquidBoreRecipe());
+        /*
         rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());
 
         rSextantUpgrade = registerAltarRecipe(new SextantUpgradeRecipe());
@@ -470,6 +471,7 @@ public class RegistryRecipes {
             }
         });
         rEnchAmuletReroll.setPassiveStarlightRequirement(1400);
+        */
 
         rBore = registerTraitRecipe(newShapedRecipe("internal/altar/bore_core", BlocksAS.blockBore)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
