@@ -35,10 +35,7 @@ public class PlayerAmuletHandler implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        EntityPlayer player = (EntityPlayer) context[0];
-        if (context[1] == Side.SERVER) {
-            clearAmuletTags(player);
-        }
+        clearAmuletTags((EntityPlayer) context[0]);
     }
 
     public void clearAmuletTags(EntityPlayer player) {

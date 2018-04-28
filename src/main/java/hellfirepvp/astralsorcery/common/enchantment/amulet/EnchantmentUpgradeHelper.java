@@ -203,7 +203,7 @@ public class EnchantmentUpgradeHelper {
     }
 
     private static boolean hasAmuletTag(ItemStack anyTool) {
-        if(anyTool.isEmpty() || !anyTool.hasTagCompound()) {
+        if(anyTool.isEmpty() || !anyTool.hasTagCompound() || !NBTHelper.hasPersistentData(anyTool)) {
             return false;
         }
         NBTTagCompound tag = NBTHelper.getPersistentData(anyTool);
