@@ -66,7 +66,7 @@ public class StructureFinder {
             return null;
         }
         BiomeProvider gen = world.getBiomeProvider();
-        for (int reach = 64; reach < 2112; reach += 128) {
+        for (int reach = 64; reach < 4160; reach += 128) {
             BlockPos closest = gen.findBiomePosition(playerPos.getX(), playerPos.getZ(), reach, fitting, new Random(world.getSeed()));
             if(closest != null) {
                 return closest;

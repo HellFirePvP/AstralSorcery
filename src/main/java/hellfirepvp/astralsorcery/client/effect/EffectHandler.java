@@ -103,6 +103,10 @@ public final class EffectHandler {
         this.sextantTarget = UISextantTarget.initialize(world, target, sextantTarget);
     }
 
+    public void resetSextantTarget() {
+        this.sextantTarget = null;
+    }
+
     @Nullable
     public UIGateway getUiGateway() {
         return uiGateway;
@@ -157,7 +161,7 @@ public final class EffectHandler {
             structurePreview.appendPreviewBlocks();
         }
         if(sextantTarget != null) {
-            sextantTarget.renderStar();
+            sextantTarget.renderStar(pTicks);
         }
         GlStateManager.disableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
@@ -306,7 +310,7 @@ public final class EffectHandler {
             objects.clear();
             toAddBuffer.clear();
             uiGateway = null;
-            sextantTarget = null;
+            resetSextantTarget();
             structurePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
@@ -323,10 +327,9 @@ public final class EffectHandler {
         }
 
         if(sextantTarget != null) {
-            if(ConstellationSkyHandler.getInstance().isDay(sextantTarget.getWorld()) ||
-                    (Minecraft.getMinecraft().world != null &&
-                            sextantTarget.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension())) {
-                sextantTarget = null;
+            if(Minecraft.getMinecraft().world != null &&
+                            sextantTarget.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
+                resetSextantTarget();
             }
         }
 
