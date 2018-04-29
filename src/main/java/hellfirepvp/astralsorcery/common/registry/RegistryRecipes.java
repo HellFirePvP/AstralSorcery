@@ -1133,6 +1133,7 @@ public class RegistryRecipes {
                 .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(rMarbleStairs)).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(rMarbleSlab)).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/marble_engraved", new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),
