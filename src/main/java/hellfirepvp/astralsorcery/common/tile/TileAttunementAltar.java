@@ -93,7 +93,6 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
 
         if(!(stack.getItem() instanceof ItemTunedCrystalBase)) return false;
         if(stack.getCount() != 1) return false;
-        if(true) return false; //FIXME remove after 1.8.7
 
         IWeakConstellation tuned = ItemTunedCrystalBase.getMainConstellation(stack);
         IMinorConstellation trait = ItemTunedCrystalBase.getTrait(stack);

@@ -36,7 +36,7 @@ public class AmuletEnchantHelper {
     private static final float chance2Level = 0.15F;
 
     private static final float chanceToAll = 0.02F;
-    private static final float chanceToNonExisting = 0.2F;
+    private static final float chanceToNonExisting = 0.35F;
 
     public static void rollAmulet(ItemStack stack, float perfectionDegree) {
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
