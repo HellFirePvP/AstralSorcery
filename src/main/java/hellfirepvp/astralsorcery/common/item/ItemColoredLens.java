@@ -234,10 +234,13 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                 case FIRE:
                     if(itemRand.nextFloat() > percStrength) return;
 
-                    ItemStack blockStack = new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
+                    ItemStack blockStack = ItemUtils.createBlockStack(state);
+                    if(blockStack.isEmpty()) return;
                     ItemStack result = FurnaceRecipes.instance().getSmeltingResult(blockStack);
-                    if(!result.isEmpty() && result.getItem() instanceof ItemBlock) {
-                        world.setBlockState(at, Block.getBlockFromItem(result.getItem()).getStateFromMeta(result.getItemDamage()));
+                    if(result.isEmpty()) return;
+                    IBlockState resState = ItemUtils.createBlockState(result);
+                    if(resState != null) {
+                        world.setBlockState(at, resState);
                     }
                     break;
                 /*case HARVEST:
@@ -260,7 +263,6 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     }
 
-    //Respectively only Entity-checks or only block-checks will be done.
     public static enum TargetType {
 
         ENTITY, BLOCK, NONE, ANY
