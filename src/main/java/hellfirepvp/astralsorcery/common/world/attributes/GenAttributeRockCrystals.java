@@ -39,7 +39,6 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
 
     private final ConfigEntry entry;
 
-    private int generationChance;
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = true;
     private boolean doIgnoreDimensionSpecifications = true;
@@ -55,7 +54,6 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                 doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
                 doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomeSpecification", getConfigurationSection(), doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
                 doIgnoreDimensionSpecifications = cfg.getBoolean("IgnoreDimensionSettings", getConfigurationSection(), doIgnoreDimensionSpecifications, "Ignore dimension-whitelist when trying to generate " + getKey());
-                generationChance = cfg.getInt("Chance", getConfigurationSection(), generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
                 crystalDensity = cfg.getInt("CrystalDensity", getConfigurationSection(), crystalDensity, 1, 40, "Defines how rarely Rock crystal ores spawn. The higher, the more rare.");
                 String[] strTypes = cfg.getStringList("BiomeTypes", getConfigurationSection(), new String[0], "Set the BiomeTypes (according to the BiomeDicitionary) this structure will spawn in.");
                 List<BiomeDictionary.Type> resolvedTypes = new LinkedList<>();
