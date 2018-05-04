@@ -32,6 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumActionResult;
@@ -127,7 +128,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     public static enum ColorType {
 
-        FIRE    (TargetType.ENTITY, 0xff7f00, 0.07F),
+        FIRE    (TargetType.ANY, 0xff7f00, 0.07F),
         BREAK   (TargetType.BLOCK,  0xffdf00, 0.07F),
         GROW    (TargetType.BLOCK,  0x00df00, 0.07F),
         DAMAGE  (TargetType.ENTITY, 0xdf0000, 0.07F),
@@ -230,6 +231,15 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
                     break;
+                case FIRE:
+                    if(itemRand.nextFloat() > percStrength) return;
+
+                    ItemStack blockStack = new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
+                    ItemStack result = FurnaceRecipes.instance().getSmeltingResult(blockStack);
+                    if(!result.isEmpty() && result.getItem() instanceof ItemBlock) {
+                        world.setBlockState(at, Block.getBlockFromItem(result.getItem()).getStateFromMeta(result.getItemDamage()));
+                    }
+                    break;
                 /*case HARVEST:
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.HarvestablePlant harvest = CropHelper.wrapHarvestablePlant(world, at);
@@ -253,7 +263,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
     //Respectively only Entity-checks or only block-checks will be done.
     public static enum TargetType {
 
-        ENTITY, BLOCK, NONE
+        ENTITY, BLOCK, NONE, ANY
 
     }
 

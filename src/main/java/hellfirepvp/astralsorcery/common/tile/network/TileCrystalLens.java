@@ -152,7 +152,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
-            if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK) {
+            if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 boolean clear = rta.isClear(world);
                 if(!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
@@ -163,7 +163,7 @@ public class TileCrystalLens extends TileTransmissionBase {
                             }
                     this.occupiedConnections.add(hit);
                 }
-            } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY) {
+            } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
