@@ -18,10 +18,12 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationDraconicEvolution;
+import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktClearBlockStorageStack;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
@@ -50,6 +52,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -219,6 +222,24 @@ public class EventHandlerEntity {
                     }
                 }
             }
+        }
+    }
+
+    //Just... do the clear.
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack held = event.getItemStack();
+        if(!event.getWorld().isRemote && !held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+            ItemBlockStorage.tryClearContainerFor(event.getEntityPlayer());
+        }
+    }
+
+    //Send clear to server
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void onLeftClickAir(PlayerInteractEvent.LeftClickEmpty event) {
+        ItemStack held = event.getItemStack();
+        if(!held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+            PacketChannel.CHANNEL.sendToServer(new PktClearBlockStorageStack());
         }
     }
 

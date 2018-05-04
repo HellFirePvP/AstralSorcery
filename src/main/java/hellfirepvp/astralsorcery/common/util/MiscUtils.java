@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,6 +40,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -86,6 +88,58 @@ public class MiscUtils {
         return map.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, (e) -> remapFct.apply(e.getValue())));
+    }
+
+    public static <T, K, V> List<T> flatten(Map<K, V> map, BiFunction<K, V, T> flatFunction) {
+        return map.entrySet()
+                .stream()
+                .map((entry) -> flatFunction.apply(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    @Nullable
+    public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
+        for (T element : collection) {
+            if(matchingFct.apply(element)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static IBlockState getMatchingState(Collection<IBlockState> applicableStates, @Nullable IBlockState test) {
+        for (IBlockState state : applicableStates) {
+            if(matchStateExact(state, test)) {
+                return state;
+            }
+        }
+        return null;
+    }
+
+    public static boolean matchStateExact(@Nullable IBlockState state, @Nullable IBlockState stateToTest) {
+        if(state == null) {
+            return stateToTest == null;
+        } else if (stateToTest == null) {
+            return false;
+        }
+
+        if(!state.getBlock().getRegistryName().equals(stateToTest.getBlock().getRegistryName())) {
+            return false;
+        }
+
+        for (IProperty<?> prop : state.getPropertyKeys()) {
+            Comparable<?> original = state.getValue(prop);
+            try {
+                Comparable<?> test = stateToTest.getValue(prop);
+                if(!original.equals(test)) {
+                    return false;
+                }
+            } catch (Exception exc) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isConnectionEstablished(EntityPlayerMP player) {
