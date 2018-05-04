@@ -232,12 +232,18 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                     }
                     break;
                 case FIRE:
-                    if(itemRand.nextFloat() > percStrength) return;
+                    if(world.rand.nextFloat() > percStrength) return;
 
                     ItemStack blockStack = ItemUtils.createBlockStack(state);
                     if(blockStack.isEmpty()) return;
                     ItemStack result = FurnaceRecipes.instance().getSmeltingResult(blockStack);
                     if(result.isEmpty()) return;
+
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, at);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
+                    if(world.rand.nextInt(20) != 0) {
+                        return;
+                    }
                     IBlockState resState = ItemUtils.createBlockState(result);
                     if(resState != null) {
                         world.setBlockState(at, resState);
