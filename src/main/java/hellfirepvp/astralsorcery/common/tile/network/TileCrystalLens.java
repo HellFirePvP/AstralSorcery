@@ -163,7 +163,8 @@ public class TileCrystalLens extends TileTransmissionBase {
                             }
                     this.occupiedConnections.add(hit);
                 }
-            } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
+            }
+            if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
