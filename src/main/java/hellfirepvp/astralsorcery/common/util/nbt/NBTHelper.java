@@ -142,7 +142,7 @@ public class NBTHelper {
                 try {
                     Optional<T> opt = match.parseValue(valueStr);
                     if(opt.isPresent()) {
-                        state.withProperty(match, opt.get());
+                        state = state.withProperty(match, opt.get());
                     }
                 } catch (Exception exc) {}
             }
