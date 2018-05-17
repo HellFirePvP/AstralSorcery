@@ -51,58 +51,58 @@ amulet.enchantment.level.more=livelli
 amulet.enchantment.add_to_specific.name=+%s %s a %s
 amulet.enchantment.add_to_existing_specific.name=+%s %s all'esistente %s
 amulet.enchantment.add_to_existing_all.name=+%s %s a tutti gli incantamenti esistenti
-#-------------------------------------------------------------------------------------	TODO 
-enchantment.astralsorcery.enchantment.as.nightvision.desc=Grants the wearer night vision.
-enchantment.astralsorcery.enchantment.as.smelting.desc=Blocks mined with tools that have this enchantment on them will cause the drop to be the item that would be the result of smelting the original drop. ("Auto-Smelt")
 
-gui.journal.bm.knowledge.name=Knowledge
-gui.journal.bm.constellations.name=Constellations
-gui.journal.bm.perks.name=Perks
-gui.journal.c.unmapped=Unknown
+enchantment.astralsorcery.enchantment.as.nightvision.desc=Garantisce visione notturna a colui che indossa.
+enchantment.astralsorcery.enchantment.as.smelting.desc=I blocchi minati con gli attrezzi che hanno questo incantamento saranno cotti automaticamente. ("Auto-cottura")
 
-death.attack.as.stellar=%1$s disintegrated into stardust
-death.attack.as.bleed=%1$s bled to death
+gui.journal.bm.knowledge.name=Conoscenza
+gui.journal.bm.constellations.name=Costellazioni
+gui.journal.bm.perks.name=benefici
+gui.journal.c.unmapped=Sconosciuto
 
-enchantment.as.nightvision=Night Vision
-enchantment.as.smelting=Scorching Heat
+death.attack.as.stellar=%1$s è stato disintegrato in polvere di stelle
+death.attack.as.bleed=%1$s è morto di emorragia
 
-achievementpage.astralsorcery.name=Astral Sorcery
-achievement.astralsorcery.minerockcrystal=Such pure crystals
-achievement.astralsorcery.minerockcrystal.desc=Mine rock crystals
-achievement.astralsorcery.celestialcrystal=Celestial purity
-achievement.astralsorcery.celestialcrystal.desc=Acquire celestial crystals
-achievement.astralsorcery.buildtelescope.1=A clear view of the sky
-achievement.astralsorcery.buildtelescope.1.desc=Make a looking glass
-achievement.astralsorcery.seeconstellation=What a beautiful pattern
-achievement.astralsorcery.seeconstellation.desc=Discover a constellation
-achievement.astralsorcery.buildtelescope.2=Looking further
-achievement.astralsorcery.buildtelescope.2.desc=Build an actual telescope
-achievement.astralsorcery.liquidstarlight=Liquified Light
-achievement.astralsorcery.liquidstarlight.desc=Obtain Liquid Starlight
-achievement.astralsorcery.playerAttunement=Alignment with the stars
-achievement.astralsorcery.playerAttunement.desc=Attune yourself with a constellation
+enchantment.as.nightvision=Visione Notturna
+enchantment.as.smelting=Calore Rovente
 
-progress.missing.knowledge=Something seems to be here, but you can’t tell what it is yet...
-progress.gain.progress.chat=Your vision expands.
-progress.gain.research.chat=You learned more about '%s'.
-progress.discover.constellation.chat=Discovered constellation %s!
-progress.seen.constellation.chat=You memorize a drawing of %s!
-progress.seen.constellation.first.chat=You add a tab to the Astral Tome to keep track of it.
-progress.remove.attunement=Your power fades...
+achievementpage.astralsorcery.name=Stregoneria Astrale
+achievement.astralsorcery.minerockcrystal=Cristalli purissimi levissimi altissimi!
+achievement.astralsorcery.minerockcrystal.desc=Mina dei cristalli rocciosi
+achievement.astralsorcery.celestialcrystal=Purezza Celestiale
+achievement.astralsorcery.celestialcrystal.desc=Acquisisci dei cristalli celestiali
+achievement.astralsorcery.buildtelescope.1=Una visione chiara del cielo
+achievement.astralsorcery.buildtelescope.1.desc=Crea un vetro da osservazione
+achievement.astralsorcery.seeconstellation=Che schema perfetto!
+achievement.astralsorcery.seeconstellation.desc=Scopri una costellazione
+achievement.astralsorcery.buildtelescope.2=Osservazione avanzata!
+achievement.astralsorcery.buildtelescope.2.desc=Costruisci un telescopio fisso
+achievement.astralsorcery.liquidstarlight=Luce Liquefatta
+achievement.astralsorcery.liquidstarlight.desc=Ottieni della Luce Stellare Liquefatta
+achievement.astralsorcery.playerAttunement=Allineamento delle stelle
+achievement.astralsorcery.playerAttunement.desc=Sincronizzati ad una costellazione
 
-astralsorcery.journal.cluster.discovery.name=Discovery
-astralsorcery.journal.cluster.basic_craft.name=Exploration
-astralsorcery.journal.cluster.attunement.name=Attunement
-astralsorcery.journal.cluster.constellation.name=Constellation
-astralsorcery.journal.cluster.radiance.name=Radiance
+progress.missing.knowledge=Qualcosa sembra essere qui, ma per ora non capisci cosa possa essere...
+progress.gain.progress.chat=La tua visione si espande.
+progress.gain.research.chat=Hai imparato di più circa '%s'.
+progress.discover.constellation.chat=Scoperta la costellazione %s!
+progress.seen.constellation.chat=Hai memorizzato il disegno di %s!
+progress.seen.constellation.first.chat=Hai aggiunto una sezione al Tomo Astrale per tenerne traccia.
+progress.remove.attunement=Il tuo potere svanisce...
 
-astralsorcery.journal.constellation.dst.major=Bright
-astralsorcery.journal.constellation.dst.weak=Dim
-astralsorcery.journal.constellation.dst.minor=Faint
+astralsorcery.journal.cluster.discovery.name=Scoperta
+astralsorcery.journal.cluster.basic_craft.name=Esplorazione
+astralsorcery.journal.cluster.attunement.name=Sincronizzazione
+astralsorcery.journal.cluster.constellation.name=Costellazione
+astralsorcery.journal.cluster.radiance.name=Splendore
 
-research.SHRINES.name=Ancient Shrines
-astralsorcery.journal.SHRINES.1.text=Scattered across the world there are ancient shrines built from marble by a civilization long past. Some of the most renowned shrines featuring elaborate structures have been located atop high hills and mountains, while smaller ones have been dug up from under the sands in deserts.<NL>While they don't seem to be very special at first, it's told that many of them harbor old and sacred treasures. Unlike the legends however, only a few old chests and stories of strange floating crystals have ever been reported within.
+astralsorcery.journal.constellation.dst.major=Luminosa
+astralsorcery.journal.constellation.dst.weak=Difettiva
+astralsorcery.journal.constellation.dst.minor=Debole
 
+research.SHRINES.name=Antichi Santuari
+astralsorcery.journal.SHRINES.1.text= Ci sono degli antichi santuari distribuiti nel mondo costruiti di marmo da una civiltà del lontano passato. Alcune delle strutture più rinomate ed elaborate sono locate sulla cima di alte colline e montagne, mentre alcune più piccole sono state scavate da sotto la sabbia del deserto.<NL>Sebbene all'inizio non sembrano avere niente di speciale, si dice che molte contengano tesori sacri. Inoltre alcune leggende parlano di strani cristalli fluttuanti.
+#----------------------------------------------------------------------------------------------------------------------	TODO 
 astralsorcery.journal.SHRINES.2.text=The properties of the floating crystals are quite bizarre. They appear to emit a constant shimmering starlight that flickers in an eerie and enchanting way.<NL>There is little doubt that these crystals are man-made. Their true age and origin is practically impossible to ascertain, but after some observation it can be determined that the crystals seem to be fixed in their alignment with the stars.
 
 astralsorcery.journal.SHRINES.3.text=Not even the tiniest sliver can be chipped from them, even with the most destructive methods.<NL>Something seems strange about these crystals. The light they emit seems to ebb and flow almost like water in response to certain objects. §3Maybe placing a crafting §3table nearby would yield §3interesting results?§r
