@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationOreStages;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktOreScan;
@@ -106,7 +107,7 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
             atPos.add(itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat());
             IBlockState state = Minecraft.getMinecraft().world.getBlockState(at);
             if(Mods.ORESTAGES.isPresent()) {
-                if(changed.contains(state) || !canSee(player, state)) {
+                if(changed.contains(state) || !ModIntegrationOreStages.canSeeOreClient(state)) {
                     changed.add(state);
                     continue;
                 }
@@ -126,16 +127,6 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
     @Override
     public Item getInertVariant() {
         return ItemsAS.crystalPickaxe;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Optional.Method(modid = "orestages")
-    private static boolean canSee(EntityPlayer player, IBlockState state) {
-        Tuple<String, IBlockState> replacement;
-        if((replacement = OreTiersAPI.getStageInfo(state)) != null) {
-            return OreTiersAPI.hasStage(player, replacement.getFirst());
-        }
-        return true;
     }
 
 }

@@ -177,19 +177,19 @@ public class CrystalProperties {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.RED : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.AQUA : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.RED : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.AQUA : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.RED : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.AQUA : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;

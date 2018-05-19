@@ -106,9 +106,13 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
                 if(frac >= 90 && cut >= 100 && frac >= cut - 10 && rand.nextBoolean()) {
                     cut++;
                 }
+                int purity = prop.getPurity();
+                if(frac >= 90 && purity >= 100 && frac >= purity - 10 && rand.nextBoolean()) {
+                    purity++;
+                }
                 CrystalProperties newProp = new CrystalProperties(
                         prop.getSize(),
-                        prop.getPurity(),
+                        purity,
                         cut,
                         Math.max(0, frac - 25 - rand.nextInt(30)),
                         prop.getSizeOverride());
