@@ -186,7 +186,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         for (Map.Entry<ItemStack, Integer> entry : amountMap.entrySet()) {
             String amountStr = String.valueOf(entry.getValue());
             if(entry.getValue() == -1) {
-                amountStr = "∞";
+                amountStr = "\u221E";
             }
             GlStateManager.pushMatrix();
             GlStateManager.translate(-Minecraft.getMinecraft().fontRenderer.getStringWidth(amountStr) / 3, 0, 0);
