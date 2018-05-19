@@ -48,8 +48,6 @@ import java.util.UUID;
  */
 public class EnchantmentUpgradeHelper {
 
-    public static String NBT_KEY_WEARER = "amulet-wearer";
-
     public static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item) {
         if(isItemBlacklisted(item)) return current;
         return getNewEnchantmentLevel(current, currentEnchantmentId, item, null);
@@ -206,66 +204,51 @@ public class EnchantmentUpgradeHelper {
         return ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet);
     }
 
-    private static boolean hasAmuletTag(ItemStack anyTool) {
-        if(anyTool.isEmpty() || !anyTool.hasTagCompound() || !NBTHelper.hasPersistentData(anyTool)) {
-            return false;
-        }
-        NBTTagCompound tag = NBTHelper.getPersistentData(anyTool);
-        return tag.hasUniqueId(NBT_KEY_WEARER);
-    }
-
-    @Nullable
-    private static UUID getWornPlayerUUID(ItemStack anyTool) {
-        if(!hasAmuletTag(anyTool)) return null;
-        return NBTHelper.getPersistentData(anyTool).getUniqueId(NBT_KEY_WEARER);
-    }
-
-    public static void applyAmuletTag(ItemStack tool, EntityPlayer wearer) {
-        if(tool.isEmpty()) return;
-        UUID playerUUID = wearer.getUniqueID();
-        NBTTagCompound tag = NBTHelper.getPersistentData(tool);
-        tag.setUniqueId(NBT_KEY_WEARER, playerUUID);
-    }
-
     public static void removeAmuletTagsAndCleanup(EntityPlayer player, boolean keepEquipped) {
         InventoryPlayer inv = player.inventory;
         for (int i = 0; i < inv.mainInventory.size(); i++) {
             if (i == inv.currentItem && keepEquipped) continue;
-            removeTagInfo(inv.mainInventory.get(i));
+            removeAmuletOwner(inv.mainInventory.get(i));
         }
-        removeTagInfo(inv.getItemStack());
+        removeAmuletOwner(inv.getItemStack());
         if(!keepEquipped) {
             for (int i = 0; i < inv.armorInventory.size(); i++) {
-                removeTagInfo(inv.armorInventory.get(i));
+                removeAmuletOwner(inv.armorInventory.get(i));
             }
             for (int i = 0; i < inv.offHandInventory.size(); i++) {
-                removeTagInfo(inv.offHandInventory.get(i));
+                removeAmuletOwner(inv.offHandInventory.get(i));
             }
         }
     }
 
-    private static void removeTagInfo(ItemStack stack) {
-        if(stack.isEmpty() || !stack.hasTagCompound()) {
-            return;
-        }
-        if(!NBTHelper.hasPersistentData(stack)) {
-            return;
-        }
-        NBTTagCompound perm = NBTHelper.getPersistentData(stack);
-        if(perm.hasUniqueId(NBT_KEY_WEARER)) {
-            NBTHelper.removeUUID(perm, NBT_KEY_WEARER);
-        }
-        if(perm.getSize() <= 0) {
-            NBTHelper.removePersistentData(stack);
-            if (stack.getTagCompound().getSize() <= 0) {
-                stack.setTagCompound(null);
+    @Nullable
+    private static UUID getWornPlayerUUID(ItemStack anyTool) {
+        if(!anyTool.isEmpty() && anyTool.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
+            AmuletHolderCapability cap = anyTool.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+            if(cap != null) {
+                return cap.getHolderUUID();
             }
         }
+        return null;
+    }
+
+    public static void applyAmuletOwner(ItemStack tool, EntityPlayer wearer) {
+        if(tool.isEmpty() || !tool.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) return;
+        AmuletHolderCapability cap = tool.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+        if(cap == null) return;
+        cap.setHolderUUID(wearer.getUniqueID());
+    }
+
+    private static void removeAmuletOwner(ItemStack stack) {
+        if(stack.isEmpty() || !stack.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
+            return;
+        }
+        AmuletHolderCapability cap = stack.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+        if(cap == null) return;
+        cap.setHolderUUID(null);
     }
 
     private static ItemStack getWornAmulet(ItemStack anyTool) {
-        if(!hasAmuletTag(anyTool)) return ItemStack.EMPTY;
-
         //Check if the player is online and exists & is set properly
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return ItemStack.EMPTY;

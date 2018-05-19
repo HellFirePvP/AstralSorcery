@@ -13,10 +13,10 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
 
@@ -32,6 +32,13 @@ public class PlayerAmuletHandler implements ITickHandler {
     public static final PlayerAmuletHandler INSTANCE = new PlayerAmuletHandler();
 
     private PlayerAmuletHandler() {}
+
+    @SubscribeEvent
+    public static void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
+        if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
+            itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
+        }
+    }
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
