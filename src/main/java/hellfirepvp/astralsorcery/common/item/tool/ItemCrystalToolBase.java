@@ -149,10 +149,10 @@ public abstract class ItemCrystalToolBase extends ItemTool implements CrystalPro
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+                if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
                 if(purity <= rand.nextFloat()) {
-                    if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+                    if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 }
             }
         }
