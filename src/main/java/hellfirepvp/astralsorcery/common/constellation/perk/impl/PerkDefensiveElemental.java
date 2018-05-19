@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
  */
 public class PerkDefensiveElemental extends ConstellationPerk {
 
-    private static float multiplierElementalReduction = 0.7F;
+    private static float multiplierElementalReduction = 0.8F;
 
     public PerkDefensiveElemental() {
         super("DEF_ELEMENTAL", Target.ENTITY_HURT);

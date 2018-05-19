@@ -24,8 +24,8 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class PerkDefensiveNoArmor extends ConstellationPerk {
 
-    private static float multiplierDamageReduction = 0.3F;
-    private static float healPerSec = 0.15F;
+    private static float multiplierDamageReduction = 0.7F;
+    private static float healPerSec = 0.05F;
 
     public PerkDefensiveNoArmor() {
         super("DEF_NOARMOR", Target.ENTITY_HURT, Target.PLAYER_TICK);

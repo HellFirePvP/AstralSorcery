@@ -282,8 +282,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
                 List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {
-                    player.heal(0.1F);
-                    player.getFoodStats().addStats(1, 0.2F);
+                    player.heal(cd.getHealPerCycle());
+                    player.getFoodStats().addStats(cd.getFoodLevelPerCycle(), cd.getFoodSaturationLevelPerCycle());
                 }
             }
             if(rand.nextFloat() < cd.getTurnChance()) {

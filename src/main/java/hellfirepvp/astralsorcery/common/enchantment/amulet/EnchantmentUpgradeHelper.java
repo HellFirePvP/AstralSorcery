@@ -176,6 +176,10 @@ public class EnchantmentUpgradeHelper {
 
     public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
+            if(stack.getMaxStackSize() > 1) {
+                return false; //Only swords & armor and stuff that isn't stackable
+            }
+
             ResourceLocation rl = stack.getItem().getRegistryName();
             if(rl == null) return true; //Yea... no questions asked i guess.
 

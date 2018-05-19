@@ -45,6 +45,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -201,6 +202,13 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
         Deque<BlockPos> placeable = filterBlocksToPlace(Minecraft.getMinecraft().player, Minecraft.getMinecraft().world, architectRange);
         if(!placeable.isEmpty()) {
+            RayTraceResult rtr = getLookBlock(Minecraft.getMinecraft().player, false, true, architectRange);
+            if(rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) {
+                return;
+            }
+            Vec3d hitVec = rtr.hitVec;
+            EnumFacing sideHit = rtr.sideHit;
+
             GlStateManager.pushMatrix();
             GlStateManager.enableBlend();
             Blending.ADDITIVEDARK.applyStateManager();
@@ -214,7 +222,11 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             for (BlockPos pos : placeable) {
                 Collections.shuffle(storedStates, r);
-                RenderingUtils.renderBlockSafely(w, pos, Iterables.getFirst(storedStates, Blocks.AIR.getDefaultState()), vb);
+                IBlockState potentialState = Iterables.getFirst(storedStates, Blocks.AIR.getDefaultState());
+                try {
+                    potentialState = potentialState.getBlock().getStateForPlacement(Minecraft.getMinecraft().world, pos, sideHit, (float) hitVec.x, (float) hitVec.y, (float) hitVec.z, potentialState.getBlock().getMetaFromState(potentialState), Minecraft.getMinecraft().player, hand);
+                } catch (Exception exc) {}
+                RenderingUtils.renderBlockSafely(w, pos, potentialState, vb);
             }
             vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
             tes.draw();
@@ -368,7 +380,7 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
 
     private Deque<BlockPos> getBlocksToPlaceAt(Entity entity, double range) {
         RayTraceResult rtr = getLookBlock(entity, false, true, range);
-        if(rtr == null) {
+        if(rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) {
             return Lists.newLinkedList();
         }
         LinkedList<BlockPos> blocks = Lists.newLinkedList();

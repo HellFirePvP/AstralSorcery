@@ -52,8 +52,10 @@ public class BlockDiscoverer {
     }
 
     public static BlockArray discoverBlocksWithSameStateAroundLimited(Map<IBlockState, Integer> stateLimits, World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        IBlockState testState = world.getBlockState(origin);
+
         BlockArray foundResult = new BlockArray();
-        foundResult.addBlock(origin, world.getBlockState(origin));
+        foundResult.addBlock(origin, testState);
         List<BlockPos> visited = new LinkedList<>();
 
         Deque<BlockPos> searchNext = new LinkedList<>();
@@ -77,13 +79,7 @@ public class BlockDiscoverer {
 
                                 if (!onlyExposed || isExposedToAir(world, search)) {
                                     IBlockState current = world.getBlockState(search);
-                                    IBlockState match = MiscUtils.getMatchingState(stateLimits.keySet(), current);
-                                    if (match != null && stateLimits.computeIfPresent(match, ((state, integer) -> {
-                                        if(integer - 1 <= 0) {
-                                            return null;
-                                        }
-                                        return integer - 1;
-                                    })) != null) {
+                                    if(MiscUtils.matchStateExact(current, testState)) {
                                         foundResult.addBlock(search, current);
                                         searchNext.add(search);
                                     }
@@ -102,13 +98,7 @@ public class BlockDiscoverer {
 
                         if (!onlyExposed || isExposedToAir(world, search)) {
                             IBlockState current = world.getBlockState(search);
-                            IBlockState match = MiscUtils.getMatchingState(stateLimits.keySet(), current);
-                            if (match != null && stateLimits.computeIfPresent(match, ((state, integer) -> {
-                                if(integer - 1 <= 0) {
-                                    return null;
-                                }
-                                return integer - 1;
-                            })) != null) {
+                            if(MiscUtils.matchStateExact(current, testState)) {
                                 foundResult.addBlock(search, current);
                                 searchNext.add(search);
                             }

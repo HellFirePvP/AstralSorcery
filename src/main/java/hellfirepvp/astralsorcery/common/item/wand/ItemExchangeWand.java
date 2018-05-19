@@ -258,7 +258,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
 
         Map<IBlockState, Integer> amtMap = MiscUtils.remap(amountMap, tpl -> tpl.value);
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAroundLimited(amtMap, Minecraft.getMinecraft().world, origin, true, searchDepth, total, false);
+        if(pl.isCreative()) {
+            for (IBlockState state : amtMap.keySet()) {
+                amtMap.put(state, Integer.MAX_VALUE);
+            }
+            total = Integer.MAX_VALUE;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, total, false);
         if(found.isEmpty()) return;
 
         List<IBlockState> applicableStates = Lists.newArrayList(storedStates.keySet());
@@ -336,7 +342,13 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         }
 
         Map<IBlockState, Integer> amtMap = MiscUtils.remap(amountMap, tpl -> tpl.value);
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAroundLimited(amtMap, playerIn.getEntityWorld(), origin, true, searchDepth, total, false);
+        if(playerIn.isCreative()) {
+            for (IBlockState state : amtMap.keySet()) {
+                amtMap.put(state, Integer.MAX_VALUE);
+            }
+            total = Integer.MAX_VALUE;
+        }
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(playerIn.getEntityWorld(), origin, true, searchDepth, total, false);
         if(found.isEmpty()) return  EnumActionResult.SUCCESS;
 
 
