@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktOreScan;
@@ -18,18 +19,17 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.OreDiscoverer;
+import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -97,10 +97,21 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
 
     @SideOnly(Side.CLIENT)
     public static void playClientEffects(Collection<BlockPos> positions, boolean tumble) {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player == null) return;
+        List<IBlockState> changed = new LinkedList<>();
+
         for (BlockPos at : positions) {
             Vector3 atPos = new Vector3(at).add(0.5, 0.5, 0.5);
             atPos.add(itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat(), itemRand.nextFloat() - itemRand.nextFloat());
             IBlockState state = Minecraft.getMinecraft().world.getBlockState(at);
+            if(Mods.ORESTAGES.isPresent()) {
+                if(changed.contains(state) || !canSee(player, state)) {
+                    changed.add(state);
+                    continue;
+                }
+            }
+
             EffectTranslucentFallingBlock bl = EffectHandler.getInstance().translucentFallingBlock(atPos, state);
             bl.setDisableDepth(true).setScaleFunction(new EntityComplexFX.ScaleFunction.Shrink<>());
             bl.setMotion(0, 0.03, 0).setAlphaFunction(EntityComplexFX.AlphaFunction.PYRAMID);
@@ -115,6 +126,16 @@ public class ItemChargedCrystalPickaxe extends ItemCrystalPickaxe implements Cha
     @Override
     public Item getInertVariant() {
         return ItemsAS.crystalPickaxe;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Optional.Method(modid = "orestages")
+    private static boolean canSee(EntityPlayer player, IBlockState state) {
+        Tuple<String, IBlockState> replacement;
+        if((replacement = OreTiersAPI.getStageInfo(state)) != null) {
+            return OreTiersAPI.hasStage(player, replacement.getFirst());
+        }
+        return true;
     }
 
 }
