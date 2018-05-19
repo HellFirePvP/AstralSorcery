@@ -225,7 +225,13 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
     @Override
     public Color getHightlightColor(ItemStack stack) {
         IConstellation c = getConstellation(stack);
-        return c == null ? Color.GRAY : c.getTierRenderColor();
+        if(c != null) {
+            if(ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
+                return c.getConstellationColor();
+            }
+            return c.getTierRenderColor();
+        }
+        return Color.GRAY;
     }
 
     public static IConstellation getConstellation(ItemStack stack) {

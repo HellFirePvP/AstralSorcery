@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block.network;
 
 import hellfirepvp.astralsorcery.common.block.BlockVariants;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -54,7 +55,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.08.2016 / 22:31
  */
-public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
+public class BlockLens extends BlockStarlightNetwork implements BlockVariants, CrystalPropertyItem {
 
     private static final AxisAlignedBB boxLensDown =  new AxisAlignedBB(2.5D/16D, 0,        2.5D/16D, 13.5D/16D, 14.5D/16D, 13.5D/16D);
     private static final AxisAlignedBB boxLensUp =    new AxisAlignedBB(2.5D/16D, 1.5D/16D, 2.5D/16D, 13.5D/16D, 1,         13.5D/16D);
@@ -86,7 +87,18 @@ public class BlockLens extends BlockStarlightNetwork implements BlockVariants {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.getMaxSize(stack));
+        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxSize(stack));
+    }
+
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_CELESTIAL;
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return CrystalProperties.getCrystalProperties(stack);
     }
 
     @Override

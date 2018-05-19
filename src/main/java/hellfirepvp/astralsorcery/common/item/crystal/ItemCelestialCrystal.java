@@ -38,8 +38,17 @@ public class ItemCelestialCrystal extends ItemRockCrystalBase implements ItemGat
         if(this.isInCreativeTab(tab)) {
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, CrystalProperties.getMaxCelestialProperties());
+
+            CrystalProperties prop = CrystalProperties.getMaxCelestialProperties();
+            prop = new CrystalProperties(prop.size, prop.getPurity(), prop.collectiveCapability, 95, prop.sizeOverride);
+            CrystalProperties.applyCrystalProperties(stack, prop);
             subItems.add(stack);
         }
+    }
+
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_CELESTIAL;
     }
 
     @Override
