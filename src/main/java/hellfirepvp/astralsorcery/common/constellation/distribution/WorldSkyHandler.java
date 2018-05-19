@@ -193,7 +193,12 @@ public class WorldSkyHandler {
             activeConstellations.addLast(linkedConstellations.get(i));
         }
 
-        activeDistributions = Maps.newHashMap(dayDistributionMap.get(activeDay));
+        Map<IConstellation, Float> iteration = dayDistributionMap.get(activeDay);
+        while (iteration == null) {
+            setupInitialFunctions();
+            iteration = dayDistributionMap.get(activeDay);
+        }
+        activeDistributions = Maps.newHashMap(iteration);
 
         for (IConstellationSpecialShowup special : ConstellationRegistry.getSpecialShowupConstellations()) {
             if(special.doesShowUp(this, w, lastRecordedDay)) {
