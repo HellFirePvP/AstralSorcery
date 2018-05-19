@@ -213,17 +213,18 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
     public void onRenderWhileInHand(ItemStack stack, EnumHand hand, float pTicks) {
         Map<IBlockState, ItemStack> storedStates = getMappedStoredStates(stack);
         if(storedStates.isEmpty()) return;
-        Random r = getPreviewRandomFromWorld(Minecraft.getMinecraft().world);
+        World world = Minecraft.getMinecraft().world;
+        Random r = getPreviewRandomFromWorld(world);
 
         EntityPlayer pl = Minecraft.getMinecraft().player;
         PlayerControllerMP ctrl = Minecraft.getMinecraft().playerController;
         if(ctrl == null || pl == null) return;
         RayTraceResult rtr = getLookBlock(pl, false, true, ctrl.getBlockReachDistance());
-        if(rtr == null) return;
+        if(rtr == null || rtr.typeOfHit != RayTraceResult.Type.BLOCK) return;
 
-        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, Minecraft.getMinecraft().world.getWorldType());
+        IBlockAccess airWorld = new AirBlockRenderWorld(Biomes.PLAINS, world.getWorldType());
         BlockPos origin = rtr.getBlockPos();
-        IBlockState atOrigin = Minecraft.getMinecraft().world.getBlockState(origin);
+        IBlockState atOrigin = world.getBlockState(origin);
         IBlockState match = MiscUtils.getMatchingState(storedStates.keySet(), atOrigin);
         if(match != null && storedStates.keySet().size() <= 1) {
             storedStates.remove(match);
@@ -231,7 +232,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         if(storedStates.isEmpty()) {
             return;
         }
-        float hardness = atOrigin.getBlockHardness(Minecraft.getMinecraft().world, origin);
+        float hardness = atOrigin.getBlockHardness(world, origin);
         if(Config.exchangeWandMaxHardness != -1) {
             if(hardness > Config.exchangeWandMaxHardness) {
                 return;
@@ -264,7 +265,7 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
             }
             total = Integer.MAX_VALUE;
         }
-        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(Minecraft.getMinecraft().world, origin, true, searchDepth, total, false);
+        BlockArray found = BlockDiscoverer.discoverBlocksWithSameStateAround(world, origin, true, searchDepth, total, false);
         if(found.isEmpty()) return;
 
         List<IBlockState> applicableStates = Lists.newArrayList(storedStates.keySet());
@@ -283,7 +284,11 @@ public class ItemExchangeWand extends ItemBlockStorage implements ItemHandRender
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         for (BlockPos pos : found.getPattern().keySet()) {
             Collections.shuffle(applicableStates, r);
-            RenderingUtils.renderBlockSafely(airWorld, pos, Iterables.getFirst(applicableStates, Blocks.AIR.getDefaultState()), vb);
+            IBlockState potentialState = Iterables.getFirst(applicableStates, Blocks.AIR.getDefaultState());
+            try {
+                potentialState = potentialState.getBlock().getStateForPlacement(world, pos, rtr.sideHit, (float) rtr.hitVec.x, (float) rtr.hitVec.y, (float) rtr.hitVec.z, potentialState.getBlock().getMetaFromState(potentialState), pl, hand);
+            } catch (Exception exc) {}
+            RenderingUtils.renderBlockSafely(airWorld, pos, potentialState, vb);
         }
         vb.sortVertexData((float) TileEntityRendererDispatcher.staticPlayerX, (float) TileEntityRendererDispatcher.staticPlayerY, (float) TileEntityRendererDispatcher.staticPlayerZ);
         tes.draw();
