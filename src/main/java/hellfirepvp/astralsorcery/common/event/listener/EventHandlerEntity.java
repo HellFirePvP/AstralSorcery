@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -240,6 +241,15 @@ public class EventHandlerEntity {
         ItemStack held = event.getItemStack();
         if(!held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
             PacketChannel.CHANNEL.sendToServer(new PktClearBlockStorageStack());
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRightClickDebug(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getEntityPlayer().isCreative() && !event.getWorld().isRemote) {
+            if(StarlightNetworkDebugHandler.INSTANCE.beginDebugFor(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
+                event.setCanceled(true);
+            }
         }
     }
 

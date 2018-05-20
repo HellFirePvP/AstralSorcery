@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.cmd;
 
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -88,7 +89,8 @@ public class CommandAstralSorcery extends CommandBase {
             "charge",
             "attune",
             "build",
-            "maximize"
+            "maximize",
+            "slnetwork"
     };
 
     @Override
@@ -157,6 +159,8 @@ public class CommandAstralSorcery extends CommandBase {
             String identifier = args[0];
             if (identifier.equalsIgnoreCase("help")) {
                 displayHelp(sender);
+            } else if (identifier.equalsIgnoreCase("slnetwork")) {
+                tryEnterSLNetworkDebugMode(server, sender);
             } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
                 if (args.length == 1) {
                     listConstellations(sender);
@@ -199,6 +203,21 @@ public class CommandAstralSorcery extends CommandBase {
                 }
             }
         }
+    }
+
+    private void tryEnterSLNetworkDebugMode(MinecraftServer server, ICommandSender sender) {
+        if(!(sender instanceof EntityPlayer)) {
+            sender.sendMessage(new TextComponentString("This command can only be executed by a player!"));
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) sender;
+        if (!player.isCreative()) {
+            sender.sendMessage(new TextComponentString("§cYou have to be in creative-mode to use the debug mode!"));
+            return;
+        }
+        StarlightNetworkDebugHandler.INSTANCE.awaitDebugInteraction(player, () -> sender.sendMessage(new TextComponentString("§cStarlight network debug-rightclick timed out.")));
+        sender.sendMessage(new TextComponentString("§aRightclick a block within 20 seconds to collect information about its starlight network activity."));
     }
 
     private void attuneToConstellation(MinecraftServer server, ICommandSender sender, String otherPlayerName, String majorConstellationStr) {
@@ -477,19 +496,20 @@ public class CommandAstralSorcery extends CommandBase {
         sender.sendMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
         sender.sendMessage(new TextComponentString("§a/astralsorcery charge [playerName] <charge>§7 - sets the alignment charge for a player"));
         sender.sendMessage(new TextComponentString("§a/astralsorcery attune [playerName] <majorConstellationName>§7 - sets the attunement constellation for a player"));
+        sender.sendMessage(new TextComponentString("§a/astralsorcery slnetwork§7 - Executing player enters StarlightNetwork debug mode for the next block"));
     }
 
     private void listConstellations(ICommandSender sender) {
-        sender.sendMessage(new TextComponentString("§cMajor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMajor \"Bright\" Constellations:"));
         for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§Weak Constellations:"));
+        sender.sendMessage(new TextComponentString("§Weak \"Dim\" Constellations:"));
         for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
             if(c instanceof IMajorConstellation) continue;
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§cMinor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMinor \"Faint\" Constellations:"));
         for (IMinorConstellation c : ConstellationRegistry.getMinorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
