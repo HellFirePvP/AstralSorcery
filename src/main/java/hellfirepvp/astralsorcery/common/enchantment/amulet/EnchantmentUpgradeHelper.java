@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchan
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +69,7 @@ public class EnchantmentUpgradeHelper {
     private static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item, @Nullable List<AmuletEnchantment> context) {
         if(isItemBlacklisted(item)) return current;
 
-        if(item.isEmpty() || !item.hasTagCompound() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
+        if(item.isEmpty() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
             return current;
         }
 
@@ -175,7 +174,7 @@ public class EnchantmentUpgradeHelper {
     public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
             if(stack.getMaxStackSize() > 1) {
-                return false; //Only swords & armor and stuff that isn't stackable
+                return true; //Only swords & armor and stuff that isn't stackable
             }
 
             ResourceLocation rl = stack.getItem().getRegistryName();

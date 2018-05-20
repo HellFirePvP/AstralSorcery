@@ -34,7 +34,7 @@ public class PlayerAmuletHandler implements ITickHandler {
     private PlayerAmuletHandler() {}
 
     @SubscribeEvent
-    public static void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
+    public void attachAmuletItemCapability(AttachCapabilitiesEvent<ItemStack> itemCapEvent) {
         if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
             itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
         }
