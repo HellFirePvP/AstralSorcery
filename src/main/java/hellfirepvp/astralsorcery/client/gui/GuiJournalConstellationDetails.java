@@ -76,7 +76,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     private List<MoonPhase> activePhases = new LinkedList<>();
 
     private List<String> locTextMain = new LinkedList<>();
-    private List<String> locTextEnchRitual = new LinkedList<>();
+    private List<String> locTextRitualEnch = new LinkedList<>();
     private List<String> locTextCapeEffect = new LinkedList<>();
 
     public GuiJournalConstellationDetails(GuiJournalConstellationCluster origin, IConstellation c) {
@@ -93,8 +93,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
         this.detailed = has;
         ProgressionTier playerProgress = ResearchManager.clientProgress.getTierReached();
-        if(has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(playerProgress) ||
-                EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(playerProgress))) {
+        if(has && (EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(playerProgress) || EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(playerProgress))) {
             this.doublePages++;
 
             if(EnumGatedKnowledge.CONSTELLATION_CAPE.canSee(playerProgress) && !(constellation instanceof IMinorConstellation)) {
@@ -105,7 +104,8 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         testPhases();
         testActivePhases();
         buildMainText();
-        buildEnchRitualText();
+        buildEnchText();
+        buildRitualText();
         buildCapeText();
     }
 
@@ -129,39 +129,58 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
         }
     }
 
-    private void buildEnchRitualText() {
-        if(EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(ResearchManager.clientProgress.getTierReached())) {
+    private void buildEnchText() {
+        if(EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(ResearchManager.clientProgress.getTierReached())) {
             String unlocEnch = constellation.getUnlocalizedName() + ".enchantments";
             String textEnch = I18n.format(unlocEnch);
             if(!unlocEnch.equals(textEnch)) {
                 String head = I18n.format("gui.journal.cst.enchantments");
-                locTextEnchRitual.add(head);
-                locTextEnchRitual.add("");
+                locTextRitualEnch.add(head);
+                locTextRitualEnch.add("");
 
                 List<String> lines = new LinkedList<>();
                 for (String segment : textEnch.split("<NL>")) {
                     lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
                     lines.add("");
                 }
-                locTextEnchRitual.addAll(lines);
-                locTextEnchRitual.add("");
+                locTextRitualEnch.addAll(lines);
+                locTextRitualEnch.add("");
             }
         }
+    }
 
+    private void buildRitualText() {
         if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(ResearchManager.clientProgress.getTierReached())) {
-            String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
-            String textRitual = I18n.format(unlocRitual);
-            if(!unlocRitual.equals(textRitual)) {
-                String head = I18n.format("gui.journal.cst.ritual");
-                locTextEnchRitual.add(head);
-                locTextEnchRitual.add("");
+            if (constellation instanceof IMinorConstellation) {
+                String unlocRitual = constellation.getUnlocalizedName() + ".trait";
+                String textRitual = I18n.format(unlocRitual);
+                if(!unlocRitual.equals(textRitual)) {
+                    String head = I18n.format("gui.journal.cst.ritual.trait");
+                    locTextRitualEnch.add(head);
+                    locTextRitualEnch.add("");
 
-                List<String> lines = new LinkedList<>();
-                for (String segment : textRitual.split("<NL>")) {
-                    lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
-                    lines.add("");
+                    List<String> lines = new LinkedList<>();
+                    for (String segment : textRitual.split("<NL>")) {
+                        lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                        lines.add("");
+                    }
+                    locTextRitualEnch.addAll(lines);
                 }
-                locTextEnchRitual.addAll(lines);
+            } else {
+                String unlocRitual = constellation.getUnlocalizedName() + ".ritual";
+                String textRitual = I18n.format(unlocRitual);
+                if(!unlocRitual.equals(textRitual)) {
+                    String head = I18n.format("gui.journal.cst.ritual");
+                    locTextRitualEnch.add(head);
+                    locTextRitualEnch.add("");
+
+                    List<String> lines = new LinkedList<>();
+                    for (String segment : textRitual.split("<NL>")) {
+                        lines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(segment, IJournalPage.DEFAULT_WIDTH));
+                        lines.add("");
+                    }
+                    locTextRitualEnch.addAll(lines);
+                }
             }
         }
     }
@@ -275,33 +294,27 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void drawERPInformationPages(float partialTicks, int mouseX, int mouseY) {
-        boolean usedLeftSide = false;
         ProgressionTier prog = ResearchManager.clientProgress.getTierReached();
-        if(EnumGatedKnowledge.CONSTELLATION_RITUAL.canSee(prog) ||
-                EnumGatedKnowledge.CONSTELLATION_STELLAR.canSee(prog)) {
-            usedLeftSide = true;
-
-            GlStateManager.color(0.86F, 0.86F, 0.86F, 0.8F);
-            GlStateManager.disableDepth();
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(guiLeft + 30, guiTop + 30, 0);
-            for (int i = 0; i < locTextEnchRitual.size(); i++) {
-                String line = locTextEnchRitual.get(i);
-                fontRenderer.drawString(line, 0, (i * 10), 0x00DDDDDD, true);
-            }
-            GlStateManager.popMatrix();
-            GlStateManager.enableDepth();
-            GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.color(0.86F, 0.86F, 0.86F, 0.8F);
+        GlStateManager.disableDepth();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(guiLeft + 30, guiTop + 30, 0);
+        for (int i = 0; i < locTextRitualEnch.size(); i++) {
+            String line = locTextRitualEnch.get(i);
+            fontRenderer.drawString(line, 0, (i * 10), 0x00DDDDDD, true);
         }
-        if(EnumGatedKnowledge.CONSTELLATION_PAPER_CRAFT.canSee(prog)) {
+        GlStateManager.popMatrix();
+        GlStateManager.enableDepth();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        if(EnumGatedKnowledge.CONSTELLATION_ENCH_POTION.canSee(prog)) {
             ConstellationPaperRecipe recipe = RecipesAS.paperCraftingRecipes.get(this.constellation);
             if(recipe != null) {
                 lastFramePage = new JournalPageTraitRecipe(recipe).buildRenderPage();
 
                 GlStateManager.pushMatrix();
                 GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-                lastFramePage.render    (guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
-                lastFramePage.postRender(guiLeft + (usedLeftSide ? 220 : 30), guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                lastFramePage.render    (guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
+                lastFramePage.postRender(guiLeft + 220, guiTop + 20, partialTicks, zLevel, mouseX, mouseY);
                 GL11.glPopAttrib();
                 GlStateManager.popMatrix();
             }

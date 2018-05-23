@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -30,18 +32,18 @@ import java.util.Random;
  */
 public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed, PktRequestSeed>, ClientReplyPacket {
 
-    private int dimId, session;
-    private long seed;
+    private Integer dimId, session;
+    private Long seed;
 
     public PktRequestSeed() {}
 
-    public PktRequestSeed(int session, int dimId) {
+    public PktRequestSeed(Integer session, Integer dimId) {
         this.dimId = dimId;
         this.session = session;
-        this.seed = -1;
+        this.seed = -1L;
     }
 
-    private PktRequestSeed seed(long seed) {
+    private PktRequestSeed seed(Long seed) {
         this.seed = seed;
         return this;
     }
@@ -63,7 +65,7 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
     @Override
     public PktRequestSeed onMessage(PktRequestSeed message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            long seed;
+            Long seed;
             try {
                 WorldProvider mgr = DimensionManager.getProvider(message.dimId);
                 seed = new Random(mgr.getSeed()).nextLong();
@@ -78,9 +80,15 @@ public class PktRequestSeed implements IMessage, IMessageHandler<PktRequestSeed,
             }
             return new PktRequestSeed(message.session, message.dimId).seed(seed);
         } else {
-            ConstellationSkyHandler.getInstance().updateSeedCache(message.dimId, message.session, message.seed);
+            updateSeedClient(message.dimId, message.session, message.seed);
         }
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void updateSeedClient(int dimId, int session, long seed) {
+        Minecraft.getMinecraft().addScheduledTask(() ->
+                ConstellationSkyHandler.getInstance().updateSeedCache(dimId, session, seed));
     }
 
 }

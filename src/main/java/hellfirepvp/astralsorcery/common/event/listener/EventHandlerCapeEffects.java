@@ -227,8 +227,8 @@ public class EventHandlerCapeEffects implements ITickHandler {
 
                 discidiaChainingAttack = true;
                 try {
-                    attacker.attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) added);
-                    attacker.attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
+                    event.getEntityLiving().attackEntityFrom(CommonProxy.dmgSourceStellar, (float) (added / 2));
+                    event.getEntityLiving().attackEntityFrom(DamageSource.causePlayerDamage(attacker), (float) (added / 2));
                 } finally {
                     discidiaChainingAttack = false;
                 }
@@ -282,8 +282,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 Predicate<Entity> pr = EntitySelectors.NOT_SPECTATING.and(EntitySelectors.IS_ALIVE);
                 List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, bb, pr::test);
                 for (EntityPlayer player : players) {
-                    player.heal(0.3F);
-                    player.getFoodStats().addStats(2, 0.4F);
+                    if(rand.nextFloat() <= cd.getFeedChancePerCycle()) {
+                        player.heal(cd.getHealPerCycle());
+                        player.getFoodStats().addStats(cd.getFoodLevelPerCycle(), cd.getFoodSaturationLevelPerCycle());
+                    }
                 }
             }
             if(rand.nextFloat() < cd.getTurnChance()) {

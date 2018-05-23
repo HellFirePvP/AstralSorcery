@@ -35,10 +35,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.WorldType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.input.Mouse;
@@ -124,6 +127,32 @@ public class RenderingUtils {
         cube.setPosition(pos);
         EffectHandler.getInstance().registerFX(cube);
         return cube;
+    }
+
+    public static void renderBlockSafely(IBlockAccess world, BlockPos offset, IBlockState state, BufferBuilder vb) {
+        BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
+        if (brd != null) {
+            try {
+                brd.renderBlock(state, offset, world, vb);
+            } catch (Exception exc) {
+                EnumBlockRenderType type = state.getRenderType();
+                if (type != EnumBlockRenderType.INVISIBLE) {
+                    if (world.getWorldType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
+                        try {
+                            state = state.getActualState(world, offset);
+                        } catch (Exception ignored) {}
+                    }
+                    switch (type){
+                        case MODEL:
+                            IBakedModel model = brd.getModelForState(state);
+                            try {
+                                state = state.getBlock().getExtendedState(state, world, offset);
+                            } catch (Exception ignored) {}
+                            brd.getBlockModelRenderer().renderModel(world, model, state, offset, vb, true);
+                    }
+                }
+            }
+        }
     }
 
     public static void renderTexturedCubeCentral(Vector3 offset, double size, double u, double v, double uLength, double vLength) {
@@ -294,7 +323,7 @@ public class RenderingUtils {
             int rgb = color.getRGB() | (color.getAlpha() << 24);
 
             if (flag && bakedquad.hasTintIndex()) {
-                rgb = itemColors.getColorFromItemstack(stack, bakedquad.getTintIndex());
+                rgb = itemColors.colorMultiplier(stack, bakedquad.getTintIndex());
 
                 if (EntityRenderer.anaglyphEnable) {
                     rgb = TextureUtil.anaglyphColor(rgb);

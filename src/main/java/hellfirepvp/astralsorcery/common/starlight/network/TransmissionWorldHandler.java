@@ -181,6 +181,10 @@ public class TransmissionWorldHandler {
         }
     }
 
+    public TransmissionChain getSourceChain(IIndependentStarlightSource source) {
+        return cachedSourceChain.get(source);
+    }
+
     //Remove a source from the network to trigger recalculation!
     public void breakSourceNetwork(IIndependentStarlightSource source) {
         synchronized (accessLock) {

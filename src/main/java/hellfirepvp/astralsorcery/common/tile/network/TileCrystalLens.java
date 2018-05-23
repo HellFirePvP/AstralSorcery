@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.common.block.network.BlockLens;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -29,6 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -110,6 +112,14 @@ public class TileCrystalLens extends TileTransmissionBase {
         return lensColor;
     }
 
+    public EnumFacing getPlacedAgainst() {
+        IBlockState state = world.getBlockState(getPos());
+        if(!(state.getBlock() instanceof BlockLens)) {
+            return EnumFacing.DOWN;
+        }
+        return state.getValue(BlockLens.PLACED_AGAINST);
+    }
+
     @Override
     public void update() {
         super.update();
@@ -142,7 +152,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         for (BlockPos linkedTo : linked) {
             Vector3 to = new Vector3(linkedTo).add(0.5, 0.5, 0.5);
             RaytraceAssist rta = new RaytraceAssist(thisVec, to).includeEndPoint();
-            if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK) {
+            if(lensColor.getType() == ItemColoredLens.TargetType.BLOCK || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 boolean clear = rta.isClear(world);
                 if(!clear && rta.blockHit() != null) {
                     BlockPos hit = rta.blockHit();
@@ -153,7 +163,8 @@ public class TileCrystalLens extends TileTransmissionBase {
                             }
                     this.occupiedConnections.add(hit);
                 }
-            } else if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY) {
+            }
+            if(lensColor.getType() == ItemColoredLens.TargetType.ENTITY || lensColor.getType() == ItemColoredLens.TargetType.ANY) {
                 rta.setCollectEntities(0.5);
                 rta.isClear(world);
                 List<Entity> found = rta.collectedEntities(world);
@@ -225,11 +236,6 @@ public class TileCrystalLens extends TileTransmissionBase {
             list.appendTag(cmp);
         }
         compound.setTag("listOccupied", list);
-    }
-
-    @Override
-    public void onLinkCreate(EntityPlayer player, BlockPos other) {
-        super.onLinkCreate(player, other);
     }
 
     @Nullable

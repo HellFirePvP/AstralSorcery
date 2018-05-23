@@ -183,7 +183,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
             this.pos = end;
             this.rayAssist = new RaytraceAssist(start, end);
             if(doRayTest) {
-                this.reachable = rayAssist.isClear(world);
+                this.reachable = parent.ignoreBlockCollision || rayAssist.isClear(world);
             } else {
                 this.reachable = oldRayState;
             }

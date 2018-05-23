@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
@@ -26,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -113,6 +115,20 @@ public class ConstellationRecipe extends AttunementRecipe {
     @Override
     public int craftingTickTime() {
         return 500;
+    }
+
+    @Override
+    public void handleInputConsumption(TileAltar ta, ActiveCraftingTask craftingTask, ItemStackHandler inventory) {
+        super.handleInputConsumption(ta, craftingTask, inventory);
+
+        for (ConstellationRecipe.ConstellationAtlarSlot slot : ConstellationRecipe.ConstellationAtlarSlot.values()) {
+            int slotId = slot.getSlotId();
+            if(mayDecrement(ta, slot)) {
+                ItemUtils.decrStackInInventory(inventory, slotId);
+            } else {
+                handleItemConsumption(ta, slot);
+            }
+        }
     }
 
     @Override

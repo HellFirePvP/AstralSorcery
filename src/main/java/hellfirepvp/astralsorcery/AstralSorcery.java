@@ -16,6 +16,8 @@ import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,7 +38,7 @@ import org.apache.logging.log4j.Logger;
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
         dependencies = "required-after:forge@[14.23.2.2611,);required-after:baubles;after:crafttweaker",
-        certificateFingerprint = "certificate-placeholder :^)",
+        certificateFingerprint = "a0f0b759d895c15ceb3e3bcb5f3c2db7c582edf0",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {
 
@@ -104,6 +106,11 @@ public class AstralSorcery {
     public void onServerStopping(FMLServerStoppingEvent event) {
         ResearchManager.saveAndClearServerCache();
         StarlightTransmissionHandler.getInstance().serverCleanHandlers();
+        EventHandlerServer.perkCooldowns.clear();
+        EventHandlerEntity.invulnerabilityCooldown.clear();
+        EventHandlerEntity.ritualFlight.clear();
+        EventHandlerEntity.attackStack.clear();
+        EventHandlerEntity.spawnDenyRegions.clear();
     }
 
     @Mod.EventHandler

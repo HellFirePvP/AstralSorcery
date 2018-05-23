@@ -23,10 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -78,7 +75,13 @@ public class GatewayCache extends CachedWorldData {
         Iterator<GatewayNode> iterator = gatewayPositions.iterator();
         while (iterator.hasNext()) {
             GatewayNode node = iterator.next();
-            TileCelestialGateway gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
+            TileCelestialGateway gateway;
+            try {
+                gateway = MiscUtils.getTileAt(world, node, TileCelestialGateway.class, true);
+            } catch (Exception loadEx) {
+                AstralSorcery.log.info("[AstralSorcery] Failed to check gateway for " + node + " skipping");
+                continue;
+            }
             if (gateway == null) {
                 iterator.remove();
                 AstralSorcery.log.info("[AstralSorcery] Invalid entry: " + node + " - no gateway tileentity found there!");
@@ -128,6 +131,12 @@ public class GatewayCache extends CachedWorldData {
         public boolean equals(Object pos) {
             return super.equals(pos);
         }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+
     }
 
 }

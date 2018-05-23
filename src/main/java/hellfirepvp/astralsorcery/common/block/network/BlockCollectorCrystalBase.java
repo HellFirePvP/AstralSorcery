@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.render.ISpecialStackDescriptor;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -61,7 +62,7 @@ import java.util.Optional;
  * Created by HellFirePvP
  * Date: 15.09.2016 / 19:03
  */
-public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor {
+public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork implements ISpecialStackDescriptor, CrystalPropertyItem {
 
     private static AxisAlignedBB boxCrystal = new AxisAlignedBB(0.3, 0, 0.3, 0.7, 1, 0.7);
 
@@ -129,7 +130,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
-        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.getMaxSize(stack));
+        Optional<Boolean> missing = CrystalProperties.addPropertyTooltip(prop, tooltip, getMaxSize(stack));
 
         if(missing.isPresent()) {
             ProgressionTier tier = ResearchManager.clientProgress.getTierReached();
@@ -142,6 +143,21 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
                 }
             }
         }
+    }
+
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
+        if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+            return CrystalProperties.MAX_SIZE_CELESTIAL;
+        }
+        return CrystalProperties.MAX_SIZE_ROCK;
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return CrystalProperties.getCrystalProperties(stack);
     }
 
     /*@Override

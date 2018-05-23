@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.core;
 
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.tree.*;
 
 import javax.annotation.Nonnull;
@@ -39,6 +40,10 @@ public abstract class ClassPatch {
     }
 
     public abstract void patch(ClassNode cn);
+
+    public boolean canExecuteForSide(Side side) {
+        return true;
+    }
 
     public String getClassName() {
         return className;
@@ -117,6 +122,20 @@ public abstract class ClassPatch {
             AbstractInsnNode ain = mn.instructions.get(i);
             if (ain instanceof MethodInsnNode) {
                 MethodInsnNode min = (MethodInsnNode)ain;
+                if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
+                    return min;
+                }
+            }
+        }
+        throw new ASMTransformationException("Couldn't find method Instruction: owner=" + owner + " nameDeobf=" + nameDeobf + " nameObf=" + nameObf + " signature=" + sig);
+    }
+
+    @Nonnull
+    public static MethodInsnNode getFirstMethodCallBefore(MethodNode mn, String owner, String nameDeobf, String nameObf, String sig, int startingIndex) {
+        for (int i = startingIndex; i >= 0; i--) {
+            AbstractInsnNode ain = mn.instructions.get(i);
+            if (ain instanceof MethodInsnNode) {
+                MethodInsnNode min = (MethodInsnNode) ain;
                 if (min.owner.equals(owner) && (min.name.equals(nameDeobf) || min.name.equals(nameObf)) && min.desc.equals(sig)) {
                     return min;
                 }

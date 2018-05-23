@@ -31,6 +31,8 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletHolderCapability;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.event.listener.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationBloodMagic;
@@ -38,6 +40,7 @@ import hellfirepvp.astralsorcery.common.integrations.ModIntegrationChisel;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.migration.MappingMigrationHandler;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktLightningEffect;
@@ -166,6 +169,19 @@ public class CommonProxy implements IGuiHandler {
                 instance.deserializeNBT((NBTTagCompound) nbt);
             }
         }, new FluidRarityRegistry.ChunkFluidEntryFactory());
+
+        CapabilityManager.INSTANCE.register(AmuletHolderCapability.class, new Capability.IStorage<AmuletHolderCapability>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side) {
+                return instance.serializeNBT();
+            }
+
+            @Override
+            public void readNBT(Capability<AmuletHolderCapability> capability, AmuletHolderCapability instance, EnumFacing side, NBTBase nbt) {
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, new AmuletHolderCapability.Factory());
     }
 
     private void registerOreDictEntries() {
@@ -197,6 +213,7 @@ public class CommonProxy implements IGuiHandler {
         registerOreDictEntries();
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
+        SextantFinder.initialize();
 
         RegistryConstellations.initMapEffects();
 
@@ -226,6 +243,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -253,6 +271,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
+        manager.register(PlayerAmuletHandler.INSTANCE);
         //manager.register(SpellCastingManager.INSTANCE);
 
         //TickTokenizedMaps

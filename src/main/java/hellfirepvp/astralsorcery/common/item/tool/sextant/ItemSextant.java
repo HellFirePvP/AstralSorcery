@@ -13,19 +13,28 @@ import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -40,6 +49,34 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         setMaxDamage(0);
         setMaxStackSize(1);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+    }
+
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if(isInCreativeTab(tab)) {
+            items.add(new ItemStack(this));
+            ItemStack adv = new ItemStack(this);
+            setAdvanced(adv);
+            items.add(adv);
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if(isAdvanced(stack)) {
+            tooltip.add(TextFormatting.BLUE.toString() + I18n.format("item.itemsextant.upgraded"));
+        }
+    }
+
+    public static boolean isAdvanced(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return false;
+        return NBTHelper.getBoolean(NBTHelper.getPersistentData(sextantStack), "advanced", false);
+    }
+
+    public static void setAdvanced(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return;
+        NBTHelper.getPersistentData(sextantStack).setBoolean("advanced", true);
     }
 
     @Override

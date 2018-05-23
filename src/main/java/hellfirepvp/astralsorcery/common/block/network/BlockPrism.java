@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Sounds;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -20,7 +20,9 @@ import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -47,9 +49,16 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 07.08.2016 / 22:37
  */
-public class BlockPrism extends BlockStarlightNetwork {
+public class BlockPrism extends BlockStarlightNetwork implements CrystalPropertyItem {
 
-    private static final AxisAlignedBB boxPrism = new AxisAlignedBB(3D/16D, 0, 3D/16D, 13D/16D, 14D/16D, 13D/16D);
+    private static final AxisAlignedBB boxPrismDown =  new AxisAlignedBB(3D/16D, 0,      3D/16D, 13D/16D, 14D/16D, 13D/16D);
+    private static final AxisAlignedBB boxPrismUp =    new AxisAlignedBB(3D/16D, 2D/16D, 3D/16D, 13D/16D, 1,       13D/16D);
+    private static final AxisAlignedBB boxPrismNorth = new AxisAlignedBB(3D/16D, 3D/16D, 0,      13D/16D, 13D/16D, 14D/16D);
+    private static final AxisAlignedBB boxPrismSouth = new AxisAlignedBB(3D/16D, 3D/16D, 2D/16D, 13D/16D, 13D/16D, 1);
+    private static final AxisAlignedBB boxPrismEast =  new AxisAlignedBB(2D/16D, 3D/16D, 3D/16D, 1,       13D/16D, 13D/16D);
+    private static final AxisAlignedBB boxPrismWest =  new AxisAlignedBB(0,      3D/16D, 3D/16D, 14D/16D, 13D/16D, 13D/16D);
+
+    public static PropertyEnum<EnumFacing> PLACED_AGAINST = PropertyEnum.create("against", EnumFacing.class);
 
     public BlockPrism() {
         super(Material.ROCK, MapColor.QUARTZ);
@@ -58,6 +67,7 @@ public class BlockPrism extends BlockStarlightNetwork {
         setResistance(12.0F);
         setHarvestLevel("pickaxe", 2);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
+        setDefaultState(this.blockState.getBaseState().withProperty(PLACED_AGAINST, EnumFacing.DOWN));
     }
 
     @Override
@@ -70,17 +80,68 @@ public class BlockPrism extends BlockStarlightNetwork {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, CrystalProperties.getMaxSize(stack));
+        CrystalProperties.addPropertyTooltip(CrystalProperties.getCrystalProperties(stack), tooltip, getMaxSize(stack));
+    }
+
+    @Override
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_CELESTIAL;
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return CrystalProperties.getCrystalProperties(stack);
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return boxPrism;
+        switch (state.getValue(PLACED_AGAINST)) {
+            case NORTH:
+                return boxPrismNorth;
+            case SOUTH:
+                return boxPrismSouth;
+            case WEST:
+                return boxPrismWest;
+            case EAST:
+                return boxPrismEast;
+            case UP:
+                return boxPrismUp;
+            default:
+            case DOWN:
+                return boxPrismDown;
+        }
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
+    }
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing facing = EnumFacing.UP;
+        for (EnumFacing f : EnumFacing.values()) {
+            if(f.ordinal() == meta) {
+                facing = f;
+                break;
+            }
+        }
+        return getDefaultState().withProperty(PLACED_AGAINST, facing);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(PLACED_AGAINST).ordinal();
+    }
+
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        return getDefaultState().withProperty(PLACED_AGAINST, facing.getOpposite());
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, PLACED_AGAINST);
     }
 
     @Override

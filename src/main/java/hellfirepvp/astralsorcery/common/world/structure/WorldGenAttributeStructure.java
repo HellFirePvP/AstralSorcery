@@ -34,13 +34,13 @@ public abstract class WorldGenAttributeStructure extends WorldGenAttributeCommon
     private final StructureQuery query;
 
     public WorldGenAttributeStructure(int attributeVersion, String entry, StructureQuery query, StructureGenBuffer.StructureType type, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
-        super(attributeVersion, true, entry, ignoreBiomeSpecifications, types);
+        super(attributeVersion, entry, ignoreBiomeSpecifications, types);
         this.query = query;
         this.type = type;
     }
 
     public WorldGenAttributeStructure(int attributeVersion, int defaultChance, String entry, StructureQuery query, StructureGenBuffer.StructureType type, boolean ignoreBiomeSpecifications, BiomeDictionary.Type... types) {
-        super(attributeVersion, defaultChance, true, entry, ignoreBiomeSpecifications, types);
+        super(attributeVersion, defaultChance, entry, ignoreBiomeSpecifications, types);
         this.query = query;
         this.type = type;
     }

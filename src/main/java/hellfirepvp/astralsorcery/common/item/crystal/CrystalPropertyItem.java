@@ -6,22 +6,24 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
+package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
+import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ResonatorStructureRecipe
+ * Class: CrystalPropertyItem
  * Created by HellFirePvP
- * Date: 12.11.2017 / 21:55
+ * Date: 19.05.2018 / 16:55
  */
-public class ResonatorStructureRecipe extends AttunementRecipe {
+public interface CrystalPropertyItem {
 
-    //TODO soon? idk?
-    public ResonatorStructureRecipe(AccessibleRecipe recipe) {
-        super(recipe);
-    }
+    int getMaxSize(ItemStack stack);
+
+    @Nullable
+    CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack);
 
 }

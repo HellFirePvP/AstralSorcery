@@ -101,11 +101,20 @@ public class EntityCrystal extends EntityItemHighlighted implements EntityStarli
             CrystalProperties prop = CrystalProperties.getCrystalProperties(stack);
             int max = CrystalProperties.getMaxSize(stack);
             if(prop.getFracturation() > 0) {
+                int frac = prop.getFracturation();
+                int cut = prop.getCollectiveCapability();
+                if(frac >= 90 && cut >= 100 && frac >= cut - 10 && rand.nextBoolean()) {
+                    cut++;
+                }
+                int purity = prop.getPurity();
+                if(frac >= 90 && purity >= 100 && frac >= purity - 10 && rand.nextBoolean()) {
+                    purity++;
+                }
                 CrystalProperties newProp = new CrystalProperties(
                         prop.getSize(),
-                        prop.getPurity(),
-                        prop.getCollectiveCapability(),
-                        Math.max(0, prop.getFracturation() - 15 - rand.nextInt(20)),
+                        purity,
+                        cut,
+                        Math.max(0, frac - 25 - rand.nextInt(30)),
                         prop.getSizeOverride());
                 CrystalProperties.applyCrystalProperties(stack, newProp);
                 return;

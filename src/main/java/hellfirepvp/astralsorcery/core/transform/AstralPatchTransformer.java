@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.core.transform;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import hellfirepvp.astralsorcery.core.ASMTransformationException;
+import hellfirepvp.astralsorcery.core.AstralCore;
 import hellfirepvp.astralsorcery.core.ClassPatch;
 import hellfirepvp.astralsorcery.core.SubClassTransformer;
 import net.minecraftforge.fml.common.FMLLog;
@@ -71,11 +72,12 @@ public class AstralPatchTransformer implements SubClassTransformer {
         if(load == 0) {
             FMLLog.info("[AstralTransformer] Found 0 Transformers! Trying to recover with direct references...");
             String[] references = new String[] {
-                    "hellfirepvp.astralsorcery.core.patch.amulet.PatchBlockModify",
-                    "hellfirepvp.astralsorcery.core.patch.amulet.PatchKnockbackEvent",
-                    "hellfirepvp.astralsorcery.core.patch.amulet.PatchUpdateElytra",
-                    "hellfirepvp.astralsorcery.core.patch.amulet.PatchModifyEnchantmentLevels",
-                    "hellfirepvp.astralsorcery.core.patch.amulet.PatchModifyEnchantmentLevelsTooltip"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchBlockModify",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchKnockbackEvent",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevels",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltip",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltipEvent"
             };
             for (String str : references) {
                 try {
@@ -103,6 +105,10 @@ public class AstralPatchTransformer implements SubClassTransformer {
                 FMLLog.info("[AstralTransformer] Transforming " + obfName + " : " + transformedClassName + " with " + patches.size() + " patches!");
                 try {
                     for (ClassPatch patch : patches) {
+                        if (!patch.canExecuteForSide(AstralCore.side)) {
+                            FMLLog.info("[AstralTransformer] Skipping " + patch.getClass().getSimpleName().toUpperCase() + " as it can't be applied for side " + AstralCore.side);
+                            continue;
+                        }
                         currentPatch = patch;
                         patch.transform(cn);
                         FMLLog.info("[AstralTransformer] Applied patch " + patch.getClass().getSimpleName().toUpperCase());
@@ -112,7 +118,6 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     throw new ASMTransformationException("Applying ClassPatches failed (ClassName: " + obfName + " - " + transformedClassName + ") - Rethrowing exception!", exc);
                 }
             }
-            availablePatches.remove(transformedClassName);
         }
     }
 

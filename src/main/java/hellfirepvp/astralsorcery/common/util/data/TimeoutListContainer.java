@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.util.data;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -73,6 +74,10 @@ public class TimeoutListContainer<K, V> implements ITickHandler {
                 it.remove();
             }
         }
+    }
+
+    public void clear() {
+        Lists.newArrayList(timeoutListMap.keySet()).forEach(this::removeList);
     }
 
     @Override

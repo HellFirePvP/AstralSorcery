@@ -8,7 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.util.struct;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,14 +51,11 @@ public class BlockDiscoverer {
         return out;
     }
 
-    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
-        IBlockState toMatch = world.getBlockState(origin);
+    public static BlockArray discoverBlocksWithSameStateAroundLimited(Map<IBlockState, Integer> stateLimits, World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        IBlockState testState = world.getBlockState(origin);
 
-        Block matchBlock = toMatch.getBlock();
-        int matchMeta = matchBlock.getMetaFromState(toMatch);
-
-        BlockArray foundArray = new BlockArray();
-        foundArray.addBlock(origin, toMatch);
+        BlockArray foundResult = new BlockArray();
+        foundResult.addBlock(origin, testState);
         List<BlockPos> visited = new LinkedList<>();
 
         Deque<BlockPos> searchNext = new LinkedList<>();
@@ -73,14 +73,14 @@ public class BlockDiscoverer {
                                 BlockPos search = offsetPos.add(xx, yy, zz);
                                 if (visited.contains(search)) continue;
                                 if (getCubeDistance(search, origin) > cubeSize) continue;
-                                if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
+                                if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
 
                                 visited.add(search);
 
                                 if (!onlyExposed || isExposedToAir(world, search)) {
                                     IBlockState current = world.getBlockState(search);
-                                    if (current.getBlock() == matchBlock && current.getBlock().getMetaFromState(current) == matchMeta) {
-                                        foundArray.addBlock(search, current);
+                                    if(MiscUtils.matchStateExact(current, testState)) {
+                                        foundResult.addBlock(search, current);
                                         searchNext.add(search);
                                     }
                                 }
@@ -92,14 +92,14 @@ public class BlockDiscoverer {
                         BlockPos search = offsetPos.offset(face);
                         if (visited.contains(search)) continue;
                         if (getCubeDistance(search, origin) > cubeSize) continue;
-                        if (limit != -1 && foundArray.pattern.size() + 1 > limit) continue;
+                        if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
 
                         visited.add(search);
 
                         if (!onlyExposed || isExposedToAir(world, search)) {
                             IBlockState current = world.getBlockState(search);
-                            if (current.getBlock() == matchBlock && current.getBlock().getMetaFromState(current) == matchMeta) {
-                                foundArray.addBlock(search, current);
+                            if(MiscUtils.matchStateExact(current, testState)) {
+                                foundResult.addBlock(search, current);
                                 searchNext.add(search);
                             }
                         }
@@ -108,7 +108,70 @@ public class BlockDiscoverer {
             }
         }
 
-        return foundArray;
+        return foundResult;
+    }
+
+    public static BlockArray discoverBlocksWithSameStateAround(List<IBlockState> states, World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        BlockArray foundResult = new BlockArray();
+        foundResult.addBlock(origin, world.getBlockState(origin));
+        List<BlockPos> visited = new LinkedList<>();
+
+        Deque<BlockPos> searchNext = new LinkedList<>();
+        searchNext.addFirst(origin);
+
+        while (!searchNext.isEmpty()) {
+            Deque<BlockPos> currentSearch = searchNext;
+            searchNext = new LinkedList<>();
+
+            for (BlockPos offsetPos : currentSearch) {
+                if (searchCorners) {
+                    for (int xx = -1; xx <= 1; xx++) {
+                        for (int yy = -1; yy <= 1; yy++) {
+                            for (int zz = -1; zz <= 1; zz++) {
+                                BlockPos search = offsetPos.add(xx, yy, zz);
+                                if (visited.contains(search)) continue;
+                                if (getCubeDistance(search, origin) > cubeSize) continue;
+                                if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+
+                                visited.add(search);
+
+                                if (!onlyExposed || isExposedToAir(world, search)) {
+                                    IBlockState current = world.getBlockState(search);
+                                    if (MiscUtils.getMatchingState(states, current) != null) {
+                                        foundResult.addBlock(search, current);
+                                        searchNext.add(search);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (EnumFacing face : EnumFacing.VALUES) {
+                        BlockPos search = offsetPos.offset(face);
+                        if (visited.contains(search)) continue;
+                        if (getCubeDistance(search, origin) > cubeSize) continue;
+                        if (limit != -1 && foundResult.pattern.size() + 1 > limit) continue;
+
+                        visited.add(search);
+
+                        if (!onlyExposed || isExposedToAir(world, search)) {
+                            IBlockState current = world.getBlockState(search);
+                            if (MiscUtils.getMatchingState(states, current) != null) {
+                                foundResult.addBlock(search, current);
+                                searchNext.add(search);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return foundResult;
+    }
+
+    public static BlockArray discoverBlocksWithSameStateAround(World world, BlockPos origin, boolean onlyExposed, int cubeSize, int limit, boolean searchCorners) {
+        IBlockState toMatch = world.getBlockState(origin);
+        return discoverBlocksWithSameStateAround(Lists.newArrayList(toMatch), world, origin, onlyExposed, cubeSize, limit, searchCorners);
     }
 
     public static int getCubeDistance(BlockPos p1, BlockPos p2) {

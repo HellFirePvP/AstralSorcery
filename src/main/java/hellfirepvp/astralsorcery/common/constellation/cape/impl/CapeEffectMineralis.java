@@ -11,8 +11,10 @@ package hellfirepvp.astralsorcery.common.constellation.cape.impl;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
+import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.cape.CapeArmorEffect;
+import hellfirepvp.astralsorcery.common.integrations.ModIntegrationOreStages;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -24,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -78,6 +81,12 @@ public class CapeEffectMineralis extends CapeArmorEffect {
         }
 
         if(check != null) {
+            if(Mods.ORESTAGES.isPresent()) {
+                if(!ModIntegrationOreStages.canSeeOreClient(check)) {
+                    return;
+                }
+            }
+
             Block b;
             int meta;
             try {

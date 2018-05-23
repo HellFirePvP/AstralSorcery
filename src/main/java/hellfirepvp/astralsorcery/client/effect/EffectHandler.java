@@ -26,7 +26,9 @@ import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -34,6 +36,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -66,6 +69,7 @@ public final class EffectHandler {
     public boolean renderGateway = true;
 
     private StructureMatchPreview structurePreview = null;
+    private UISextantTarget sextantTarget = null;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
@@ -93,6 +97,14 @@ public final class EffectHandler {
             structurePreview = new StructureMatchPreview(tile);
         }
         structurePreview.resetTimeout();
+    }
+
+    public void requestSextantTargetAt(World world, BlockPos target, SextantFinder.TargetObject sextantTarget) {
+        this.sextantTarget = UISextantTarget.initialize(world, target, sextantTarget);
+    }
+
+    public void resetSextantTarget() {
+        this.sextantTarget = null;
     }
 
     @Nullable
@@ -147,6 +159,9 @@ public final class EffectHandler {
         acceptsNewParticles = false;
         if(structurePreview != null) {
             structurePreview.appendPreviewBlocks();
+        }
+        if(sextantTarget != null) {
+            sextantTarget.renderStar(pTicks);
         }
         GlStateManager.disableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
@@ -295,6 +310,7 @@ public final class EffectHandler {
             objects.clear();
             toAddBuffer.clear();
             uiGateway = null;
+            resetSextantTarget();
             structurePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
@@ -307,6 +323,13 @@ public final class EffectHandler {
             structurePreview.tick();
             if(structurePreview.shouldBeRemoved()) {
                 structurePreview = null;
+            }
+        }
+
+        if(sextantTarget != null) {
+            if(Minecraft.getMinecraft().world != null &&
+                            sextantTarget.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
+                resetSextantTarget();
             }
         }
 

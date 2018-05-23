@@ -47,13 +47,13 @@ public class ASlens extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float modelYaw, float modelPitch, float f2, float f3, float f4, float scale) {
-        this.lens.rotateAngleX = modelPitch * 0.017453292F;
-
+    public void render(Entity entity, float f0, float f1, float f2, float f3, float f4, float scale) {
         this.Base.render(scale);
         this.frame1.render(scale);
         this.frame2.render(scale);
         this.lens.render(scale);
+
+        this.lens.rotateAngleX = 0;
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

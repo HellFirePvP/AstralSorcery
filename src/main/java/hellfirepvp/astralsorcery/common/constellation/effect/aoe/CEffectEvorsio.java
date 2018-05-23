@@ -188,9 +188,12 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                 if(be != null) {
                     removeElement(be);
                     BlockDropCaptureAssist.startCapturing();
-                    MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
-                    NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
-                    captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
+                    try {
+                        MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
+                    } finally {
+                        NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
+                        captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
+                    }
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
                 }

@@ -140,30 +140,16 @@ public class CrystalProperties {
             return MAX_SIZE_ROCK;
         }
 
-        if(stack.getItem() instanceof ItemCollectorCrystal) {
-            BlockCollectorCrystalBase.CollectorCrystalType type = ItemCollectorCrystal.getType(stack);
-            if(type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
-                return MAX_SIZE_CELESTIAL;
-            }
-            return MAX_SIZE_ROCK;
+        if(stack.getItem() instanceof CrystalPropertyItem) {
+            return ((CrystalPropertyItem) stack.getItem()).getMaxSize(stack);
         }
-
         if(stack.getItem() instanceof ItemBlock) {
             Block b = ((ItemBlock) stack.getItem()).getBlock();
-            if(b instanceof BlockLens || b instanceof BlockPrism) {
-                return MAX_SIZE_CELESTIAL;
+            if(b instanceof CrystalPropertyItem) {
+                return ((CrystalPropertyItem) b).getMaxSize(stack);
             }
         }
-
-        if(stack.getItem() instanceof ItemCrystalToolBase) {
-            return ((ItemCrystalToolBase) stack.getItem()).getCrystalCount() * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-        if(stack.getItem() instanceof ItemCrystalSword) {
-            return 2 * CrystalProperties.MAX_SIZE_CELESTIAL;
-        }
-
-        return (stack.getItem() instanceof ItemCelestialCrystal || stack.getItem() instanceof ItemTunedCelestialCrystal) ?
-                MAX_SIZE_CELESTIAL : MAX_SIZE_ROCK;
+        return MAX_SIZE_ROCK;
     }
 
     @SideOnly(Side.CLIENT)
@@ -191,19 +177,19 @@ public class CrystalProperties {
             if (extended) {
                 boolean missing = false;
                 if(EnumGatedKnowledge.CRYSTAL_SIZE.canSee(tier)) {
-                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.RED : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getSize() > maxSize ? TextFormatting.AQUA : prop.getSize() == maxSize ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.size") + ": " + color + prop.getSize());
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_PURITY.canSee(tier)) {
-                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.RED : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getPurity() > 100 ? TextFormatting.AQUA : prop.getPurity() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.purity") + ": " + color + prop.getPurity() + "%");
                 } else {
                     missing = true;
                 }
                 if(EnumGatedKnowledge.CRYSTAL_COLLECT.canSee(tier)) {
-                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.RED : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
+                    TextFormatting color = (prop.getCollectiveCapability() > 100 ? TextFormatting.AQUA : prop.getCollectiveCapability() == 100 ? TextFormatting.GOLD : TextFormatting.BLUE);
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collectivity") + ": " + color + prop.getCollectiveCapability() + "%");
                 } else {
                     missing = true;
@@ -253,6 +239,7 @@ public class CrystalProperties {
         cmp.setTag("crystalProperties", crystalProp);
     }
 
+    @Nullable
     public static CrystalProperties getCrystalProperties(ItemStack stack) {
         NBTTagCompound cmp = NBTHelper.getPersistentData(stack);
         if (!cmp.hasKey("crystalProperties")) return null;

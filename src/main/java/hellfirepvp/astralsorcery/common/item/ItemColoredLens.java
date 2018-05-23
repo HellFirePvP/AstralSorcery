@@ -32,6 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumActionResult;
@@ -127,7 +128,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     public static enum ColorType {
 
-        FIRE    (TargetType.ENTITY, 0xff7f00, 0.07F),
+        FIRE    (TargetType.ANY, 0xff7f00, 0.07F),
         BREAK   (TargetType.BLOCK,  0xffdf00, 0.07F),
         GROW    (TargetType.BLOCK,  0x00df00, 0.07F),
         DAMAGE  (TargetType.ENTITY, 0xdf0000, 0.07F),
@@ -177,7 +178,7 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         ItemStack result = FurnaceRecipes.instance().getSmeltingResult(current);
                         if(!result.isEmpty()) {
                             Vector3 entityPos = Vector3.atEntityCenter(entity);
-                            ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, 1));
+                            ItemUtils.dropItemNaturally(entity.getEntityWorld(), entityPos.getX(), entityPos.getY(), entityPos.getZ(), ItemUtils.copyStackWithSize(result, result.getCount()));
                             if(current.getCount() > 1) {
                                 current.shrink(1);
                                 ((EntityItem) entity).setItem(current);
@@ -230,6 +231,24 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
                         PacketChannel.CHANNEL.sendToAllAround(packet, PacketChannel.pointFromPos(world, at, 16));
                     }
                     break;
+                case FIRE:
+                    if(world.rand.nextFloat() > percStrength) return;
+
+                    ItemStack blockStack = ItemUtils.createBlockStack(state);
+                    if(blockStack.isEmpty()) return;
+                    ItemStack result = FurnaceRecipes.instance().getSmeltingResult(blockStack);
+                    if(result.isEmpty()) return;
+
+                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_MELT_BLOCK, at);
+                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
+                    if(world.rand.nextInt(20) != 0) {
+                        return;
+                    }
+                    IBlockState resState = ItemUtils.createBlockState(result);
+                    if(resState != null) {
+                        world.setBlockState(at, resState);
+                    }
+                    break;
                 /*case HARVEST:
                     if(world.rand.nextFloat() > percStrength) return;
                     CropHelper.HarvestablePlant harvest = CropHelper.wrapHarvestablePlant(world, at);
@@ -250,10 +269,9 @@ public class ItemColoredLens extends Item implements ItemDynamicColor {
 
     }
 
-    //Respectively only Entity-checks or only block-checks will be done.
     public static enum TargetType {
 
-        ENTITY, BLOCK, NONE
+        ENTITY, BLOCK, NONE, ANY
 
     }
 

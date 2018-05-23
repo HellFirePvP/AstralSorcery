@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
@@ -52,13 +53,40 @@ public class TESRPrismLens extends TileEntitySpecialRenderer<TileCrystalPrismLen
         Blending.DEFAULT.applyStateManager();
 
         for (TileCrystalPrismLens prism : coloredPositions) {
+            if(prism.getLensColor() == null) continue;
+            EnumFacing against = prism.getPlacedAgainst();
+
             Color c = prism.getLensColor().wrappedColor;
             GlStateManager.pushMatrix();
             BlockPos pos = prism.getPos();
 
-            GlStateManager.translate(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
+            switch (against) {
+                case DOWN:
+                    GlStateManager.translate(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5);
+                    GlStateManager.rotate(180, 1, 0, 0);
+                    break;
+                case UP:
+                    GlStateManager.translate(pos.getX() + 0.5, pos.getY() - 0.5, pos.getZ() + 0.5);
+                    break;
+                case NORTH:
+                    GlStateManager.translate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 1.5);
+                    GlStateManager.rotate(270, 1, 0, 0);
+                    break;
+                case SOUTH:
+                    GlStateManager.translate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() - 0.5);
+                    GlStateManager.rotate(90, 1, 0, 0);
+                    break;
+                case WEST:
+                    GlStateManager.translate(pos.getX() + 1.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    GlStateManager.rotate(90, 0, 0, 1);
+                    break;
+                case EAST:
+                    GlStateManager.translate(pos.getX() - 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    GlStateManager.rotate(270, 0, 0, 1);
+                    break;
+            }
+
             GlStateManager.scale(0.0625, 0.0625, 0.0625);
-            GlStateManager.rotate(180, 1, 0, 0);
 
             GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 1F);
             renderColoredPrism();

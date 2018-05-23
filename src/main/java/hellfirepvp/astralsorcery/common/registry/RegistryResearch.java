@@ -122,6 +122,8 @@ public class RegistryResearch {
         ResearchNode resBoreVortex = new ResearchNode(TileBore.BoreType.VORTEX.asStack(), "BORE_HEAD_VORTEX", 6, 6);
         resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.1"));
         resBoreVortex.addPage(new JournalPageTraitRecipe(RegistryRecipes.rBoreHeadVortex));
+        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.3"));
+        resBoreVortex.addPage(getTextPage("BORE_HEAD_VORTEX.4"));
 
         registerItemLookup(new ItemStack(ItemsAS.armorImbuedCape),                      resCape,       1, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockChalice),                        resChalice,    1, ResearchProgression.RADIANCE);
@@ -239,6 +241,10 @@ public class RegistryResearch {
         resDrawing.addPage(getTextPage("DRAWING_TABLE.7"));
         resDrawing.addPage(getTextPage("DRAWING_TABLE.8"));
 
+        ResearchNode resSextantUpgrade = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT_UPGRADE", 2, 2);
+        resSextantUpgrade.addPage(getTextPage("SEXTANT_UPGRADE.1"));
+        resSextantUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rSextantUpgrade));
+
         ResearchNode resTraitUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), "ALTAR4", 3, 3);
         resTraitUpgrade.addPage(getTextPage("ALTAR4.1"));
         resTraitUpgrade.addPage(new JournalPageConstellationRecipe(RegistryRecipes.rAltarUpgradeTrait));
@@ -269,6 +275,7 @@ public class RegistryResearch {
         registerItemLookup(ItemCraftingComponent.MetaType.RESO_GEM.asStack(),                                     resInfuser,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.drawingTable, 1, OreDictionary.WILDCARD_VALUE),         resDrawing,           1, ResearchProgression.CONSTELLATION);
         registerItemLookup(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_4.ordinal()), resTraitUpgrade,      1, ResearchProgression.CONSTELLATION);
+        registerItemLookup(new ItemStack(ItemsAS.enchantmentAmulet),                                              resEnchantmentAmulet, 1, ResearchProgression.CONSTELLATION);
 
         resCelCrystals.addSourceConnectionFrom(resCelCrystalCluster);
         resPrism.addSourceConnectionFrom(resInfuser);
@@ -301,6 +308,7 @@ public class RegistryResearch {
         regConstellation.register(resDrawing);
         regConstellation.register(resTraitUpgrade);
         regConstellation.register(resEnchantmentAmulet);
+        regConstellation.register(resSextantUpgrade);
     }
 
     private static void initAttunement() {
@@ -359,6 +367,7 @@ public class RegistryResearch {
         ResearchNode resRitualAccel = new ResearchNode(new ItemStack(BlocksAS.ritualPedestal), "PED_ACCEL", 8, 2);
         resRitualAccel.addPage(getTextPage("PED_ACCEL.1"));
         resRitualAccel.addPage(getTextPage("PED_ACCEL.2"));
+        resRitualAccel.addPage(getTextPage("PED_ACCEL.3"));
 
         ResearchNode resConstellationUpgrade = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_3.ordinal()), "ALTAR3", 5, 7);
         resConstellationUpgrade.addPage(getTextPage("ALTAR3.1"));
@@ -548,6 +557,7 @@ public class RegistryResearch {
         registerItemLookup(ItemUsableDust.DustType.ILLUMINATION.asStack(),                                            resIlluminationPowder,      1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(ItemUsableDust.DustType.NOCTURNAL.asStack(),                                               resNocturnalPowder,         1, ResearchProgression.BASIC_CRAFT);
         registerItemLookup(new ItemStack(BlocksAS.blockIlluminator, 1, OreDictionary.WILDCARD_VALUE),         resIlluminator,             1, ResearchProgression.BASIC_CRAFT);
+        registerItemLookup(new ItemStack(ItemsAS.sextant),                                                            resSextant,                 1, ResearchProgression.BASIC_CRAFT);
 
         regCrafting.register(resIlluminator);
         regCrafting.register(resTelescope);

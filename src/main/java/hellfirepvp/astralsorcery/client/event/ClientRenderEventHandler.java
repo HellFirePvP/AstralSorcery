@@ -74,6 +74,7 @@ public class ClientRenderEventHandler {
     private static final BindableResource texChargeFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame");
     private static final BindableResource texChargeCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge");
     public static final BindableResource texHUDItemFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame");
+    public static final BindableResource texHUDItemFrameEx = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame_extender");
 
     private static final Map<ItemHudRender, ItemStackHudRenderInstance> ongoingItemRenders = new HashMap<>();
 

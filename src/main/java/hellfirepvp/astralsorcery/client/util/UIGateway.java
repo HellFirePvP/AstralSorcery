@@ -117,7 +117,7 @@ public class UIGateway {
                 Random rand = new Random(seed);
                 direction = Vector3.positiveYRandom(rand).normalize().multiply(sphereRadius);
                 potentialEntry = new GatewayEntry(other, dimId, direction);
-                int tries = 30;
+                int tries = 50;
                 boolean foundSpace = false;
                 while (!foundSpace && tries > 0) {
                     boolean mayAdd = true;

@@ -173,10 +173,22 @@ public class GuiJournalProgression extends GuiScreenJournal {
     public void updateScreen() {
         super.updateScreen();
 
-        if(Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode())) {
+        if(queryInput(mc.gameSettings.keyBindForward.getKeyCode())) {
             progressionRenderer.handleZoomIn();
-        } else if(Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
+        } else if(queryInput(mc.gameSettings.keyBindBack.getKeyCode())) {
             progressionRenderer.handleZoomOut();
+        }
+    }
+
+    private boolean queryInput(int key) {
+        try {
+            return Keyboard.isKeyDown(key);
+        } catch (Throwable tr) {
+            try {
+                return Mouse.isButtonDown(key);
+            } catch (Throwable tr2) {
+                return false;
+            }
         }
     }
 

@@ -358,16 +358,19 @@ astralsorcery.journal.BORE_HEAD_LIQUID.2.text=While the fountain cannot be mecha
 astralsorcery.journal.BORE_HEAD_LIQUID.4.text=Recalling the large area the fosic resonator could gather its information from, adjusting the tool would allow it to draw forth very small samples of liquid for some random positions around the wielder of the resonator. Not enough liquid to be usable, but enough to determine if setting up the fountain might be beneficial or not.<NL>The resonator, even with two modes, only works during the night. Modes can be changed by shift-right-clicking while holding it.
 
 research.BORE_HEAD_VORTEX.name=Fysallidic Prime
-astralsorcery.journal.BORE_HEAD_VORTEX.1.text=
-astralsorcery.journal.BORE_HEAD_VORTEX.3.text=
-astralsorcery.journal.BORE_HEAD_VORTEX.4.text=
+astralsorcery.journal.BORE_HEAD_VORTEX.1.text=The basic principle behind manipulating the energies from a Fountain focuses on shaping the natural tendency of Starlight energy to gather to itself.<NL>While the Neromantic Prime shapes the energies into a vertical stream that draws sympathetic liquids from below bedrock, you believe you've found another use in encouraging localized vortical currents.
+astralsorcery.journal.BORE_HEAD_VORTEX.3.text=When turned back upon themselves and accelerated, these currents react with creatures in an odd fashion: drawing them up into the center of the vortex and "locking" them in place for as long as the vortex is powered by converted liquid starlight.<NL>While trapped in this starlight vortex, the creatures seem largely unable to defend themselves, though the cost in starlight to maintain this vortex is influenced by the strength of the creatures to fight back against its effects.
+astralsorcery.journal.BORE_HEAD_VORTEX.4.text=Even mythical creatures are capable of being held by this Prime, though it seems to require the full power of this focus to do so.<NL>Additionally, it seems that some creatures require more starlight power than a lightwell is able to consistently provide over a prolonged time, and so certain creatures may not be contained for long; only as long as the internal reservoir lasts.
 
 research.ENCHANTMENT_AMULET.name=Resplendent Prism
-astralsorcery.journal.ENCHANTMENT_AMULET.1.text=
-astralsorcery.journal.ENCHANTMENT_AMULET.3.text=
+astralsorcery.journal.ENCHANTMENT_AMULET.1.text=Experimentations with starlight show that shifting stars seem to react in strange patterns, halting the shifting of their normally chaotic magical energies when exposed to filtered starlight.<NL>With the emanating power no longer constantly in flux, a more focused benefit may be achieved.<NL>Directing these energies into an Eye of Ender causes them to softly radiate outwards a short distance, rather than harshly piercing their surroundings.
+astralsorcery.journal.ENCHANTMENT_AMULET.3.text=While worn, such a prism adds or empowers magical effects applied to the rest of the wearer's equipment.<NL>The exact nature of this empowerment seems random and based entirely on the magical frequency to which the nether star was locked.<NL>Re-exposing this prism to more filtered starlight seems to release the frequency lock, and select a new one, with the uncontrollable chaos of the shifting star itself determining the magical results.
 
 research.SEXTANT.name=Sextant
 astralsorcery.journal.SEXTANT.1.text=
+
+research.SEXTANT_UPGRADE.name=
+astralsorcery.journal.SEXTANT_UPGRADE.1.text=
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
@@ -441,6 +444,7 @@ item.itemusabledust.nocturnal.name=Nocturnal Powder
 item.itemcape.name=Mantle of Stars
 item.itemskyresonator.name=Fosic Resonator
 item.itemsextant.name=Sextant
+item.itemsextant.upgraded=Advanced
 item.itemenchantmentamulet.name=Resplendent Prism
 
 item.itemskyresonator.starlight.name=Fosic Resonator
@@ -527,6 +531,7 @@ tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 
 gui.journal.cst.enchantments=Refraction Table:
 gui.journal.cst.ritual=Ritual Effect:
+gui.journal.cst.ritual.trait=Ritual Trait Modifier:
 gui.journal.cst.capeeffect=Mantle Effect:
 
 astralsorcery.constellation.discidia=Discidia
@@ -605,12 +610,24 @@ astralsorcery.constellation.pelotrio.capeeffect=A cape infused with this constel
 
 astralsorcery.constellation.gelu=Gelu
 astralsorcery.constellation.gelu.info=Frigidity
+astralsorcery.constellation.gelu.effect=
+astralsorcery.constellation.gelu.enchantments=
+astralsorcery.constellation.gelu.trait=
 astralsorcery.constellation.ulteria=Ulteria
 astralsorcery.constellation.ulteria.info=Tenacity
+astralsorcery.constellation.ulteria.effect=
+astralsorcery.constellation.ulteria.enchantments=
+astralsorcery.constellation.ulteria.trait=
 astralsorcery.constellation.alcara=Alcara
 astralsorcery.constellation.alcara.info=Resonance
+astralsorcery.constellation.alcara.effect=
+astralsorcery.constellation.alcara.enchantments=
+astralsorcery.constellation.alcara.trait=
 astralsorcery.constellation.vorux=Vorux
 astralsorcery.constellation.vorux.info=Ferocity
+astralsorcery.constellation.vorux.effect=
+astralsorcery.constellation.vorux.enchantments=
+astralsorcery.constellation.vorux.trait=
 
 perk.info.locked=§7Locked
 perk.info.available=§9Available

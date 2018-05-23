@@ -91,7 +91,8 @@ public class EnchantmentAmuletRecipe extends ConstellationRecipe implements ISpe
                 mot = center.clone().subtract(pos).normalize().multiply(0.15);
 
                 particle = EffectHelper.genericFlareParticle(pos);
-                particle.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).scale(rand.nextFloat() * 0.4F + 0.25F);
+                particle.gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.PYRAMID).scale(rand.nextFloat() * 0.4F + 0.27F);
+                particle.setMaxAge(50);
                 particle.setColor(Color.WHITE);
                 particle.motion(mot.getX(), mot.getY(), mot.getZ());
             }

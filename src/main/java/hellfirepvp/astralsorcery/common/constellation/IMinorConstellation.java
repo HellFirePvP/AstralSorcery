@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation;
 
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface IMinorConstellation extends IConstellation {
 
     @Override
     default boolean canDiscover(PlayerProgress progress) {
-        return false;
+        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
     }
 
 }

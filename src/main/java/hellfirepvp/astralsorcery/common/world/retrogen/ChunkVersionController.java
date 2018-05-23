@@ -35,7 +35,6 @@ public class ChunkVersionController {
     public static ChunkVersionController instance = new ChunkVersionController();
 
     private Map<ChunkPos, Integer> versionBuffer = new ConcurrentHashMap<>();
-    private Collection<ChunkPos> queuedSaveBuffer = new ConcurrentLinkedDeque<>();
 
     private ChunkVersionController() {}
 
@@ -46,18 +45,6 @@ public class ChunkVersionController {
 
     public void setGenerationVersion(ChunkPos pos, Integer version) {
         versionBuffer.put(pos, version);
-    }
-
-    @SubscribeEvent
-    public void onChUnload(ChunkEvent.Unload ev) {
-        if(ev.getChunk().getWorld().isRemote) return;
-
-        ChunkPos cp = ev.getChunk().getPos();
-        //To be fair. We don't expect the dequeue to ever get bigger than 1-2 entries...
-        //If it does, someone REALLY MESSED UP.
-        if(!queuedSaveBuffer.contains(cp)) {
-            queuedSaveBuffer.add(cp);
-        }
     }
 
     @SubscribeEvent

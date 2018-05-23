@@ -10,7 +10,10 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
+import hellfirepvp.astralsorcery.common.event.ItemEnchantmentTooltipEvent;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,6 +38,7 @@ public class EventHandlerMisc {
     public void onToolTip(ItemTooltipEvent event) {
         List<String> toolTip = event.getToolTip();
         ItemStack stack = event.getItemStack();
+
         if(SwordSharpenHelper.isSwordSharpened(stack)) {
             List<String> newTooltip = new LinkedList<>();
             if(toolTip.size() > 1) {
@@ -45,6 +50,20 @@ public class EventHandlerMisc {
             }
             toolTip.clear();
             toolTip.addAll(newTooltip);
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onEnchTooltip(ItemEnchantmentTooltipEvent event) {
+        List<String> toolTip = event.getToolTip();
+        ItemStack stack = event.getItemStack();
+
+        Map<Enchantment, Integer> enchantments;
+        if(!stack.hasTagCompound() && !(enchantments = EnchantmentHelper.getEnchantments(stack)).isEmpty()) {
+            for (Enchantment e : enchantments.keySet()) {
+                toolTip.add(e.getTranslatedName(enchantments.get(e)));
+            }
         }
     }
 

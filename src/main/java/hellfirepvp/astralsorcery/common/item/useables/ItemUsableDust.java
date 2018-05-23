@@ -143,12 +143,12 @@ public class ItemUsableDust extends Item implements IItemVariants, IBehaviorDisp
             switch (this) {
                 case ILLUMINATION:
                     EntityIlluminationSpark spark = new EntityIlluminationSpark(source.getWorld(), pos.getX(), pos.getY(), pos.getZ());
-                    spark.setThrowableHeading(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
+                    spark.shoot(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
                     source.getWorld().spawnEntity(spark);
                     return true;
                 case NOCTURNAL:
                     EntityNocturnalSpark nocSpark = new EntityNocturnalSpark(source.getWorld(), pos.getX(), pos.getY(), pos.getZ());
-                    nocSpark.setThrowableHeading(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
+                    nocSpark.shoot(rotation.getFrontOffsetX(), rotation.getFrontOffsetY() + 0.1F, rotation.getFrontOffsetZ(), 0.7F, 0.9F);
                     source.getWorld().spawnEntity(nocSpark);
                     return true;
             }

@@ -36,6 +36,8 @@ public class ModIntegrationCrafttweaker {
         CraftTweakerAPI.registerClass(LightTransmutations.class);
         CraftTweakerAPI.registerClass(AltarRecipe.class);
         CraftTweakerAPI.registerClass(WellRecipe.class);
+        CraftTweakerAPI.registerClass(LiquidInteraction.class);
+        CraftTweakerAPI.registerClass(Utils.class);
     }
 
     public void pushChanges() {

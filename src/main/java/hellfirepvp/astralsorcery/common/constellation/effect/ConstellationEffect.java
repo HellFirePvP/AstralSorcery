@@ -71,7 +71,7 @@ public abstract class ConstellationEffect extends ConfigEntry {
         if(te == null) return null;
         if(te instanceof TileRitualLink) {
             TileRitualLink link = (TileRitualLink) te;
-            pos = link.getPos();
+            pos = link.getLinkedTo();
             return MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
         }
         return te instanceof TileRitualPedestal ? (TileRitualPedestal) te : null;

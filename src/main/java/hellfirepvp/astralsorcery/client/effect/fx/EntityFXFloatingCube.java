@@ -21,6 +21,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.util.function.Function;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -51,6 +54,8 @@ public class EntityFXFloatingCube extends EntityComplexFX {
     private float textureSubSizePercentage = 1F;
     private int lightCoordX = -1, lightCoordY = -1;
 
+    private Function<EntityFXFloatingCube, Color> colorHandler = null;
+
     public EntityFXFloatingCube(IBlockState blockState) {
         this.tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(blockState);
     }
@@ -68,6 +73,11 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         int light = iba.isBlockLoaded(pos) ? iba.getCombinedLight(pos, 0) : 0;
         this.lightCoordX = light >> 16 & 65535;
         this.lightCoordY = light & 65535;
+        return this;
+    }
+
+    public EntityFXFloatingCube setColorHandler(Function<EntityFXFloatingCube, Color> colorHandler) {
+        this.colorHandler = colorHandler;
         return this;
     }
 
@@ -236,15 +246,27 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         double uLength = (tas.getMaxU() - tas.getMinU()) * textureSubSizePercentage;
         double vLength = (tas.getMaxV() - tas.getMinV()) * textureSubSizePercentage;
 
+        Color c = Color.WHITE;
+        if (colorHandler != null) {
+            Color tmp = colorHandler.apply(this);
+            if (tmp != null) {
+                c = tmp;
+            }
+        }
+
+        float cR = ((float) c.getRed()) / 255F;
+        float cG = ((float) c.getGreen()) / 255F;
+        float cB = ((float) c.getBlue()) / 255F;
+
         if(lightCoordX == -1 && lightCoordY == -1) {
             RenderingUtils.renderTexturedCubeCentralWithColor(new Vector3(), scaleF,
                     u, v, uLength, vLength,
-                    1F, 1F, 1F, 1F);
+                    cR, cG, cB, 1F);
         } else {
             RenderingUtils.renderTexturedCubeCentralWithLightAndColor(new Vector3(), scaleF,
                     u, v, uLength, vLength,
                     lightCoordX, lightCoordY,
-                    1F, 1F, 1F, 1F);
+                    cR, cG, cB, 1F);
         }
 
         GL11.glEnable(GL11.GL_CULL_FACE);

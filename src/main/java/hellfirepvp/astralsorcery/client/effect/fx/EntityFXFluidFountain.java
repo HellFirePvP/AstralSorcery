@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -29,16 +30,18 @@ public class EntityFXFluidFountain extends EntityComplexFX {
     private static final Random rand = new Random();
     private TextureAtlasSprite tas;
     private Vector3 offset;
+    private FluidStack fluidStack;
 
-    private EntityFXFluidFountain(Vector3 offset, int maxAge, TextureAtlasSprite tas) {
+    private EntityFXFluidFountain(Vector3 offset, int maxAge, TextureAtlasSprite tas, FluidStack fluid) {
         this.offset = offset;
         this.maxAge = maxAge;
         this.tas = tas;
+        this.fluidStack = fluid;
     }
 
     public static EntityFXFluidFountain spawnAt(Vector3 pos, FluidStack fluid) {
         TextureAtlasSprite tas = RenderingUtils.tryGetFlowingTextureOfFluidStack(fluid);
-        EntityFXFluidFountain f = new EntityFXFluidFountain(pos, 70, tas);
+        EntityFXFluidFountain f = new EntityFXFluidFountain(pos, 60, tas, fluid);
         EffectHandler.getInstance().registerFX(f);
         return f;
     }
@@ -58,6 +61,7 @@ public class EntityFXFluidFountain extends EntityComplexFX {
                 0.01F + rand.nextFloat() * 0.015F));
         cube.setMotion(v);
         cube.setMotionController((c, motion) -> motion.setY(motion.getY() - 0.003F));
+        cube.setColorHandler(cb -> new Color(fluidStack.getFluid().getColor(fluidStack)));
         EffectHandler.getInstance().registerFX(cube);
     }
 

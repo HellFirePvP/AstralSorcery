@@ -20,6 +20,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import vazkii.botania.api.item.IBlockProvider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,7 +63,8 @@ public class ModIntegrationBotania {
     }
 
     //-1 = infinite
-    public static int getItemCount(EntityPlayer requestingPlayer, ItemStack requestingStack, IBlockState stateSearch) {
+    public static int getItemCount(EntityPlayer requestingPlayer, ItemStack requestingStack, @Nullable IBlockState stateSearch) {
+        if(stateSearch == null) return 0;
         Block block = stateSearch.getBlock();
         int meta;
         try {

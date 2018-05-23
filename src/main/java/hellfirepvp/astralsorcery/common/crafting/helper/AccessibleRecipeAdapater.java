@@ -73,7 +73,7 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
         NonNullList<ItemStack> out = NonNullList.create();
         for (ItemStack oreDictIn : applicableItems) {
             if(oreDictIn.getItemDamage() == OreDictionary.WILDCARD_VALUE && !oreDictIn.isItemStackDamageable()) {
-                oreDictIn.getItem().getSubItems(CreativeTabs.BUILDING_BLOCKS, out);
+                oreDictIn.getItem().getSubItems(oreDictIn.getItem().getCreativeTab(), out);
             } else {
                 out.add(oreDictIn);
             }
@@ -92,8 +92,8 @@ public class AccessibleRecipeAdapater extends AccessibleRecipe {
     }
 
     @Override
-    public boolean isHidden() {
-        return parent.isHidden();
+    public boolean isDynamic() {
+        return parent.isDynamic();
     }
 
     @Override

@@ -124,7 +124,7 @@ public class BlockArrayRenderHelper {
                 renderData.tileEntity.setPos(offset);
             }
             if(renderData.type != Blocks.AIR) {
-                brd.renderBlock(renderData.state, offset, renderAccess, vb);
+                RenderingUtils.renderBlockSafely(renderAccess, offset, renderData.state, vb);
             }
         }
         tes.draw();

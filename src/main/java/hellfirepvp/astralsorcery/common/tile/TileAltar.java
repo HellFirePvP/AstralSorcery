@@ -286,45 +286,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             out = ItemUtils.copyStackWithSize(out, out.getCount());
         }
 
-        for (int i = 0; i < 9; i++) {
-            ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i / 3, i % 3);
-            if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(getInventoryHandler(), i);
-            } else {
-                recipe.handleItemConsumption(this, slot);
-            }
-        }
-
-        for (AttunementRecipe.AttunementAltarSlot slot : AttunementRecipe.AttunementAltarSlot.values()) {
-            int slotId = slot.getSlotId();
-            if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
-            } else {
-                recipe.handleItemConsumption(this, slot);
-            }
-        }
-
-        for (ConstellationRecipe.ConstellationAtlarSlot slot : ConstellationRecipe.ConstellationAtlarSlot.values()) {
-            int slotId = slot.getSlotId();
-            if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
-            } else {
-                recipe.handleItemConsumption(this, slot);
-            }
-        }
-
-        for (TraitRecipe.TraitRecipeSlot slot : TraitRecipe.TraitRecipeSlot.values()) {
-            int slotId = slot.getSlotId();
-            if(recipe.mayDecrement(this, slot)) {
-                ItemUtils.decrStackInInventory(getInventoryHandler(), slotId);
-            } else {
-                recipe.handleItemConsumption(this, slot);
-            }
-        }
-
-        if(recipe instanceof TraitRecipe) {
-            ((TraitRecipe) recipe).consumeOuterInputs(this, craftingTask);
-        }
+        recipe.handleInputConsumption(this, craftingTask, getInventoryHandler());
 
         if(!out.isEmpty() && !(out.getItem() instanceof ItemBlockAltar)) {
             if(out.getCount() > 0) {

@@ -34,7 +34,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
     private boolean ignoreSnowCondition = false;
 
     public GenAttributeGlowstoneFlower() {
-        super(1, 2, false, "glowstone_flower", false, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD);
+        super(1, 2, "glowstone_flower", false, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.COLD);
     }
 
     private boolean isApplicableBiome(World world, BlockPos pos) {
@@ -48,6 +48,17 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
             if (cfgEntry.getTypes().contains(t)) applicable = true;
         }
         return applicable;
+    }
+
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -82,6 +93,7 @@ public class GenAttributeGlowstoneFlower extends WorldGenAttributeCommon {
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
         return isApplicableBiome(world, pos) &&
+                isApplicableWorld(world) &&
                 pos.getY() >= cfgEntry.getMinY() && pos.getY() <= cfgEntry.getMaxY() &&
                 world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) &&
                 (ignoreSnowCondition || world.canSnowAt(pos, false));

@@ -267,7 +267,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 EntityLivingBase.class,
                                 new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
                                 e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSqToEntity(this.parentEntity));
+                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                         return entity != null;
                 }
                 return false;
@@ -363,7 +363,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                                 EntityLivingBase.class,
                                 new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
                                 e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSqToEntity(this.parentEntity));
+                        EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                         if(entity != null) {
                             double d0 = entity.posX;
                             double d1 = entity.posY;
@@ -440,7 +440,7 @@ public class EntitySpectralTool extends EntityFlying implements EntityTechnicalA
                             EntityLivingBase.class,
                             new AxisAlignedBB(-8, -8, -8, 8, 8, 8).offset(this.parentEntity.getPosition()),
                             e -> e != null && !e.isDead && e.isCreatureType(EnumCreatureType.MONSTER, false));
-                    EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSqToEntity(this.parentEntity));
+                    EntityLivingBase entity = EntityUtils.selectClosest(eList, (e) -> e.getDistanceSq(this.parentEntity));
                     if(entity != null) {
                         this.designatedAttackTarget = entity;
 

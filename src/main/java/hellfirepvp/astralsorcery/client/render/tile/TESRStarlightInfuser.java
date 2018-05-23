@@ -30,6 +30,6 @@ public class TESRStarlightInfuser extends TileEntitySpecialRenderer<TileStarligh
         EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, in);
         ei.age = te.getTicksExisted();
         ei.hoverStart = 0;
-        Minecraft.getMinecraft().getRenderManager().doRenderEntity(ei, x + 0.5, y + 0.6, z + 0.5, 0, partialTicks, true);
+        Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.6, z + 0.5, 0, partialTicks, true);
     }
 }

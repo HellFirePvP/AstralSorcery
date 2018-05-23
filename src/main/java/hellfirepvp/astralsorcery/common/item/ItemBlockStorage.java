@@ -12,17 +12,23 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -38,37 +44,58 @@ public abstract class ItemBlockStorage extends Item {
         IBlockState stateToStore = w.getBlockState(pos);
         if(Item.getItemFromBlock(stateToStore.getBlock()) == Items.AIR) return; //Can't charge the player anyway.
         if(stateToStore.getBlockHardness(w, pos) == -1) return;
+        NBTTagCompound stateTag = NBTHelper.getBlockStateNBTTag(stateToStore);
+        if(stateTag == null) return;
+
+        if(getStoredStates(storeIn).size() >= 1) {
+            NBTHelper.getPersistentData(storeIn).removeTag("storedStates");
+        }
+
         NBTTagCompound cmp = NBTHelper.getPersistentData(storeIn);
-        cmp.setString("storedBlock", stateToStore.getBlock().getRegistryName().toString());
-        cmp.setInteger("storedMeta", stateToStore.getBlock().damageDropped(stateToStore));
+        NBTTagList list = cmp.getTagList("storedStates", Constants.NBT.TAG_COMPOUND);
+        list.appendTag(stateTag);
+        cmp.setTag("storedStates", list);
     }
 
     @Nonnull
-    public static ItemStack getStoredStateAsStack(ItemStack stack) {
-        IBlockState stored = getStoredState(stack);
-        if(stored == null) return ItemStack.EMPTY; //Guarantees also that the block has an itemblock.
-        return ItemUtils.createBlockStack(stored);
+    public static Map<IBlockState, ItemStack> getMappedStoredStates(ItemStack referenceContainer) {
+        List<IBlockState> blockStates = getStoredStates(referenceContainer);
+        Map<IBlockState, ItemStack> map = new LinkedHashMap<>();
+        for (IBlockState state : blockStates) {
+            ItemStack stack = ItemUtils.createBlockStack(state);
+            if(!stack.isEmpty()) {
+                map.put(state, stack);
+            }
+        }
+        return map;
     }
 
-    @Nullable
-    public static IBlockState getStoredState(ItemStack stack) {
-        NBTTagCompound persistentTag = NBTHelper.getPersistentData(stack);
-        ResourceLocation blockRes;
-        if(persistentTag.hasKey("storedBlock")) {
-            blockRes = new ResourceLocation(persistentTag.getString("storedBlock"));
-        } else {
-            blockRes = new ResourceLocation("air");
+    @Nonnull
+    private static NonNullList<IBlockState> getStoredStates(ItemStack referenceContainer) {
+        NonNullList<IBlockState> states = NonNullList.create();
+        if(!referenceContainer.isEmpty() && referenceContainer.getItem() instanceof ItemBlockStorage) {
+            NBTTagCompound persistent = NBTHelper.getPersistentData(referenceContainer);
+            NBTTagList stored = persistent.getTagList("storedStates", Constants.NBT.TAG_COMPOUND);
+            for (int i = 0; i < stored.tagCount(); i++) {
+                IBlockState state = NBTHelper.getBlockStateFromTag(stored.getCompoundTagAt(i));
+                if(state != null) {
+                    states.add(state);
+                }
+            }
         }
-        Block b = ForgeRegistries.BLOCKS.getValue(blockRes);
-        if(b == null) return null;
-        if(Item.getItemFromBlock(b) == Items.AIR) return null; //Can't charge the user properly anyway...
+        return states;
+    }
 
-        boolean hasMeta = persistentTag.hasKey("storedMeta");
-        int meta = persistentTag.getInteger("storedMeta");
-        if(hasMeta) {
-            return b.getStateFromMeta(meta);
-        } else {
-            return b.getDefaultState();
+    public static void tryClearContainerFor(EntityPlayer player) {
+        ItemStack used = player.getHeldItem(EnumHand.MAIN_HAND);
+        if(!used.isEmpty() && used.getItem() instanceof ItemBlockStorage) {
+            NBTHelper.getPersistentData(used).removeTag("storedStates");
         }
+    }
+
+    protected static Random getPreviewRandomFromWorld(World world) {
+        long tempSeed = 0x6834F10A91B03F15L;
+        tempSeed *= (world.getTotalWorldTime() / 40) << 8;
+        return new Random(tempSeed);
     }
 }

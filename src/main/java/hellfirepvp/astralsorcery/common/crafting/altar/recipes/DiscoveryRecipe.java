@@ -14,12 +14,15 @@ import hellfirepvp.astralsorcery.common.crafting.IGatedRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -45,6 +48,20 @@ public class DiscoveryRecipe extends AbstractAltarRecipe implements IGatedRecipe
     @Override
     public int craftingTickTime() {
         return 100;
+    }
+
+    @Override
+    public void handleInputConsumption(TileAltar ta, ActiveCraftingTask craftingTask, ItemStackHandler inventory) {
+        super.handleInputConsumption(ta, craftingTask, inventory);
+
+        for (int i = 0; i < 9; i++) {
+            ShapedRecipeSlot slot = ShapedRecipeSlot.getByRowColumnIndex(i / 3, i % 3);
+            if(mayDecrement(ta, slot)) {
+                ItemUtils.decrStackInInventory(inventory, i);
+            } else {
+                handleItemConsumption(ta, slot);
+            }
+        }
     }
 
     @Override

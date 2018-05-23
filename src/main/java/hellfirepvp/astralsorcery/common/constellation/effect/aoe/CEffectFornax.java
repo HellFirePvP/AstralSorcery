@@ -167,7 +167,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
     @SideOnly(Side.CLIENT)
     public static void playParticles(PktParticleEvent event) {
         Vector3 at = event.getVec();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     at.getX() + rand.nextFloat(),
                     at.getY() + 0.2,

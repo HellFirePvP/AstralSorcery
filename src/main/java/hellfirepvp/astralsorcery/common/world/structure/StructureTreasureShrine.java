@@ -20,11 +20,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Random;
 
 /**
@@ -73,7 +75,33 @@ public class StructureTreasureShrine extends WorldGenAttributeStructure {
 
     @Override
     public boolean fulfillsSpecificConditions(BlockPos pos, World world, Random random) {
+        if(!isApplicableWorld(world)) return false;
+        if(!isApplicableBiome(world, pos)) return false;
         return true;
+    }
+
+    private boolean isApplicableWorld(World world) {
+        if(cfgEntry.shouldIgnoreDimensionSpecifications()) return true;
+
+        Integer dimId = world.provider.getDimension();
+        if(cfgEntry.getApplicableDimensions().isEmpty()) return false;
+        for (Integer dim : cfgEntry.getApplicableDimensions()) {
+            if(dim.equals(dimId)) return true;
+        }
+        return false;
+    }
+
+    private boolean isApplicableBiome(World world, BlockPos pos) {
+        if(cfgEntry.shouldIgnoreBiomeSpecifications()) return true;
+
+        Biome b = world.getBiome(pos);
+        Collection<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
+        if(types.isEmpty()) return false;
+        boolean applicable = false;
+        for (BiomeDictionary.Type t : types) {
+            if (cfgEntry.getTypes().contains(t)) applicable = true;
+        }
+        return applicable;
     }
 
     @Override

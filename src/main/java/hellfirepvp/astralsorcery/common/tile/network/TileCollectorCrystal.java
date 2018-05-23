@@ -114,7 +114,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
                     p.setColor(Color.WHITE);
                 }
             } else {
-                if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL) {
+                if(isEnhanced() && type == BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL && associatedType != null) {
                     playEnhancedEffects();
                 }
             }
@@ -183,16 +183,17 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
         p.motion(mov.getX(), mov.getY(), mov.getZ()).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
         p.gravity(0.004).scale(0.25F).setMaxAge(30 + rand.nextInt(10));
-        Color c = new Color(60, 0, 255);
+        Color c;
         switch (rand.nextInt(4)) {
             case 0:
                 c = Color.WHITE;
                 break;
             case 1:
-                c = new Color(0x69B5FF);
+                c = associatedType.getConstellationColor().brighter();
                 break;
             case 2:
-                c = new Color(0x0078FF);
+            default:
+                c = associatedType.getConstellationColor();
                 break;
         }
         p.setColor(c);

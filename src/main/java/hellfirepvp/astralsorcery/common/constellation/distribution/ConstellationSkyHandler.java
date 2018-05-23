@@ -73,10 +73,17 @@ public class ConstellationSkyHandler implements ITickHandler {
         if(w != null) {
             WorldSkyHandler handle = worldHandlersClient.get(w.provider.getDimension());
             if(handle == null) {
-                int dim = w.provider.getDimension();
+                Integer dim = w.provider.getDimension();
                 long seed;
                 if(cacheSeedLookup.containsKey(dim)) {
-                    seed = cacheSeedLookup.get(dim);
+                    try {
+                        seed = cacheSeedLookup.get(dim);
+                    } catch (Exception exc) { //lulwut
+                        cacheSeedLookup.remove(dim);
+                        PktRequestSeed req = new PktRequestSeed(activeSession, dim);
+                        PacketChannel.CHANNEL.sendToServer(req);
+                        return;
+                    }
                 } else {
                     PktRequestSeed req = new PktRequestSeed(activeSession, dim);
                     PacketChannel.CHANNEL.sendToServer(req);

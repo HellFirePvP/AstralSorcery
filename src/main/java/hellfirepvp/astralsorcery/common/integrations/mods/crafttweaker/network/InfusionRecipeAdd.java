@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe;
+import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.BasicInfusionRecipe;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
@@ -69,7 +70,7 @@ public class InfusionRecipeAdd implements SerializeableRecipe {
     }
 
     public AbstractInfusionRecipe compile() {
-        return new AbstractInfusionRecipe(out, this.in) {
+        return new BasicInfusionRecipe(out, this.in) {
             @Override
             public int craftingTickTime() {
                 return craftingTickTime;

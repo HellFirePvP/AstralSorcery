@@ -39,7 +39,7 @@ public class EntityIlluminationSpark extends EntityThrowable implements EntityTe
 
     public EntityIlluminationSpark(World worldIn, EntityLivingBase throwerIn) {
         super(worldIn, throwerIn);
-        setHeadingFromThrower(throwerIn, throwerIn.rotationPitch, throwerIn.rotationYaw, 0.0F, 0.7F, 0.9F);
+        shoot(throwerIn, throwerIn.rotationPitch, throwerIn.rotationYaw, 0.0F, 0.7F, 0.9F);
     }
 
     @Override

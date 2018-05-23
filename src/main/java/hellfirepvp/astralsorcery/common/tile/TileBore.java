@@ -688,6 +688,7 @@ public class TileBore extends TileInventoryBase implements IMultiblockDependantT
         List<BlockPos> out = pos.stream().filter((p) -> !world.isAirBlock(p) && world.getTileEntity(p) == null &&
                 world.getBlockState(p).getBlockHardness(world, p) >= 0).collect(Collectors.toList());
         if(!out.isEmpty() && world instanceof WorldServer) {
+            //TODO check drops again
             BlockDropCaptureAssist.startCapturing();
             try {
                 for (BlockPos p : out) {

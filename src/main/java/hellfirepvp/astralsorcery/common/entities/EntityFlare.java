@@ -174,7 +174,7 @@ public class EntityFlare extends EntityFlying {
                     }
                 }
 
-                if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistanceToEntity(this) < 10 && rand.nextInt(40) == 0) {
+                if(getAttackTarget() != null && !getAttackTarget().isDead && getAttackTarget().getDistance(this) < 10 && rand.nextInt(40) == 0) {
                     getAttackTarget().attackEntityFrom(CommonProxy.dmgSourceStellar, 4F);
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.FLARE_PROC, new Vector3(posX, posY + this.height / 2, posZ));
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, getPosition(), 16));

@@ -31,7 +31,7 @@ public class FluidLiquidStarlight extends Fluid {
         setLuminosity(15);
         setDensity(1001);
         setViscosity(300);
-        setTemperature(10);
+        setTemperature(120);
         setFillSound(SoundEvents.ITEM_BUCKET_FILL);
     }
 

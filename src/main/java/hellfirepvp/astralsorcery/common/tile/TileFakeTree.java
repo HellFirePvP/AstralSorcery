@@ -200,9 +200,6 @@ public class TileFakeTree extends TileEntityTick {
             if(player != null && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && tft.fakedState != null) {
                 NonNullList<ItemStack> out = NonNullList.create();
                 harvestAndAppend(tft, out);
-                if(rand.nextBoolean()) {
-                    harvestAndAppend(tft, out);
-                }
                 Vector3 plPos = Vector3.atEntityCenter(player);
                 for (ItemStack stack : out) {
                     ItemUtils.dropItemNaturally(player.getEntityWorld(),
@@ -224,8 +221,15 @@ public class TileFakeTree extends TileEntityTick {
 
         private void harvestAndAppend(TileFakeTree tft, NonNullList<ItemStack> out) {
             BlockDropCaptureAssist.startCapturing();
-            tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
-            out.addAll(BlockDropCaptureAssist.getCapturedStacksAndStop());
+            try {
+                tft.getFakedState().getBlock().harvestBlock(player.getEntityWorld(), player, tft.getPos(), tft.getFakedState(), null, usedTool);
+            } finally {
+                BlockDropCaptureAssist.getCapturedStacksAndStop().forEach(stack -> {
+                    if(stack != null && !stack.isEmpty()) {
+                        out.add(stack);
+                    }
+                });
+            }
         }
 
         @Override

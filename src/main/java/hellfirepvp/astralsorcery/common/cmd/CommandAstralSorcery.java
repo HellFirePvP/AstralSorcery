@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.cmd;
 
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
@@ -30,9 +31,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +80,74 @@ public class CommandAstralSorcery extends CommandBase {
         return index == 1;
     }
 
+    private static final String[] COMMANDS = new String[]{
+            "help",
+            "constellations",
+            "research",
+            "progress",
+            "reset",
+            "charge",
+            "attune",
+            "build",
+            "maximize",
+            "slnetwork"
+    };
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, COMMANDS);
+        } else {
+            String identifier = args[0].toLowerCase();
+            if (identifier.equals("build")) {
+                Field[] fields = MultiBlockArrays.class.getDeclaredFields();
+                List<String> names = new ArrayList<>(fields.length);
+
+                for (Field f: fields) {
+                    if (f.isAnnotationPresent(MultiBlockArrays.PasteBlacklist.class)) {
+                        continue;
+                    }
+                    names.add(f.getName());
+                }
+                return getListOfStringsMatchingLastWord(args, names);
+            } else if (args.length == 2) {
+                return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+            } else if (args.length == 3) {
+                switch (identifier) {
+                    case "constellations": {
+                        List<String> names = new ArrayList<String>();
+                        for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
+                            names.add(c.getUnlocalizedName());
+                        }
+                        names.add("all");
+                        return getListOfStringsMatchingLastWord(args, names);
+                    }
+                    case "research": {
+                        List<String> names = new ArrayList<String>();
+                        for (ResearchProgression r : ResearchProgression.values()) {
+                            names.add(r.name());
+                        }
+                        names.add("all");
+                        return getListOfStringsMatchingLastWord(args, names);
+
+                    }
+                    case "progress":
+                        return getListOfStringsMatchingLastWord(args, "all"); // fixme
+
+                    case "attune": {
+                        List<String> names = new ArrayList<String>();
+                        for (IConstellation c : ConstellationRegistry.getMajorConstellations()) {
+                            names.add(c.getUnlocalizedName());
+                        }
+                        return getListOfStringsMatchingLastWord(args, names);
+                    }
+                }
+
+            }
+        }
+        return Collections.<String>emptyList();
+    }
+
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if (args.length == 0) {
@@ -88,6 +159,8 @@ public class CommandAstralSorcery extends CommandBase {
             String identifier = args[0];
             if (identifier.equalsIgnoreCase("help")) {
                 displayHelp(sender);
+            } else if (identifier.equalsIgnoreCase("slnetwork")) {
+                tryEnterSLNetworkDebugMode(server, sender);
             } else if (identifier.equalsIgnoreCase("constellation") || identifier.equalsIgnoreCase("constellations")) {
                 if (args.length == 1) {
                     listConstellations(sender);
@@ -130,6 +203,21 @@ public class CommandAstralSorcery extends CommandBase {
                 }
             }
         }
+    }
+
+    private void tryEnterSLNetworkDebugMode(MinecraftServer server, ICommandSender sender) {
+        if(!(sender instanceof EntityPlayer)) {
+            sender.sendMessage(new TextComponentString("This command can only be executed by a player!"));
+            return;
+        }
+
+        EntityPlayer player = (EntityPlayer) sender;
+        if (!player.isCreative()) {
+            sender.sendMessage(new TextComponentString("§cYou have to be in creative-mode to use the debug mode!"));
+            return;
+        }
+        StarlightNetworkDebugHandler.INSTANCE.awaitDebugInteraction(player, () -> sender.sendMessage(new TextComponentString("§cStarlight network debug-rightclick timed out.")));
+        sender.sendMessage(new TextComponentString("§aRightclick a block within 20 seconds to collect information about its starlight network activity."));
     }
 
     private void attuneToConstellation(MinecraftServer server, ICommandSender sender, String otherPlayerName, String majorConstellationStr) {
@@ -408,19 +496,20 @@ public class CommandAstralSorcery extends CommandBase {
         sender.sendMessage(new TextComponentString("§a/astralsorcery maximize [playerName]§7 - unlocks everything for that player."));
         sender.sendMessage(new TextComponentString("§a/astralsorcery charge [playerName] <charge>§7 - sets the alignment charge for a player"));
         sender.sendMessage(new TextComponentString("§a/astralsorcery attune [playerName] <majorConstellationName>§7 - sets the attunement constellation for a player"));
+        sender.sendMessage(new TextComponentString("§a/astralsorcery slnetwork§7 - Executing player enters StarlightNetwork debug mode for the next block"));
     }
 
     private void listConstellations(ICommandSender sender) {
-        sender.sendMessage(new TextComponentString("§cMajor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMajor \"Bright\" Constellations:"));
         for (IMajorConstellation c : ConstellationRegistry.getMajorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§Weak Constellations:"));
+        sender.sendMessage(new TextComponentString("§Weak \"Dim\" Constellations:"));
         for (IWeakConstellation c : ConstellationRegistry.getWeakConstellations()) {
             if(c instanceof IMajorConstellation) continue;
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }
-        sender.sendMessage(new TextComponentString("§cMinor Constellations:"));
+        sender.sendMessage(new TextComponentString("§cMinor \"Faint\" Constellations:"));
         for (IMinorConstellation c : ConstellationRegistry.getMinorConstellations()) {
             sender.sendMessage(new TextComponentString("§7" + c.getUnlocalizedName()));
         }

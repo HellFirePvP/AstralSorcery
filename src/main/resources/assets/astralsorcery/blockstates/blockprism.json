@@ -1,5 +1,30 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockprism" }
+        "against=up": {
+            "model":"astralsorcery:blockprism",
+            "x": 180
+        },
+        "against=down": {
+            "model":"astralsorcery:blockprism"
+        },
+        "against=north": {
+            "model":"astralsorcery:blockprism",
+            "x": 90,
+            "y": 180
+        },
+        "against=south": {
+            "model":"astralsorcery:blockprism",
+            "x": 90
+        },
+        "against=east": {
+            "model":"astralsorcery:blockprism",
+            "x": 90,
+            "y": 270
+        },
+        "against=west": {
+            "model":"astralsorcery:blockprism",
+            "x": 90,
+            "y": 90
+        }
     }
 }

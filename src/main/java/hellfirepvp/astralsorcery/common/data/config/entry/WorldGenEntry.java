@@ -30,8 +30,10 @@ public class WorldGenEntry extends ConfigEntry {
     private int generationChance;
     private boolean doGenerate = false;
     private boolean doIgnoreBiomeSpecifications = false;
+    private boolean doIgnoreDimensionSpecifications = true;
     private BiomeDictionary.Type[] defaultBiomeTypes;
     private List<BiomeDictionary.Type> biomeTypes = new ArrayList<>();
+    private List<Integer> applicableDimensions = new ArrayList<>();
     private int minY, maxY;
 
     private boolean loaded = false;
@@ -49,6 +51,7 @@ public class WorldGenEntry extends ConfigEntry {
     public void loadFromConfig(Configuration cfg) {
         doGenerate = cfg.getBoolean("Generate", getConfigurationSection(), true, "Generate " + getKey());
         doIgnoreBiomeSpecifications = cfg.getBoolean("IgnoreBiomes", getConfigurationSection(), this.doIgnoreBiomeSpecifications, "Ignore Biome specifications when trying to generate " + getKey());
+        doIgnoreDimensionSpecifications = cfg.getBoolean("IgnoreDimensionSettings", getConfigurationSection(), this.doIgnoreDimensionSpecifications, "Ignore dimension-whitelist when trying to generate " + getKey());
         generationChance = cfg.getInt("Chance", getConfigurationSection(), this.generationChance, 1, Integer.MAX_VALUE, "Chance to generate the structure in a chunk. The higher, the lower the chance.");
         minY = cfg.getInt("MinY" , getConfigurationSection(), this.minY, 0, 255, "Set the minimum Y level to spawn this structure on");
         maxY = cfg.getInt("MaxY" , getConfigurationSection(), this.maxY, 0, 255, "Set the maximum Y level to spawn this structure on");
@@ -62,6 +65,15 @@ public class WorldGenEntry extends ConfigEntry {
             }
         }
         biomeTypes = Lists.newArrayList(resolvedTypes);
+        String[] dimensionWhitelist = cfg.getStringList("DimensionWhitelist", getConfigurationSection(), new String[0], "Define an array of dimensionID's where the structure is allowed to spawn in.");
+        applicableDimensions = new ArrayList<>();
+        for (String s : dimensionWhitelist) {
+            try {
+                applicableDimensions.add(Integer.parseInt(s));
+            } catch (NumberFormatException exc) {
+                AstralSorcery.log.error("[AstralSorcery] Could not add " + s + " to dimension whitelist for " + getKey() + " - It is not a number!");
+            }
+        }
         loaded = true;
     }
 
@@ -99,6 +111,14 @@ public class WorldGenEntry extends ConfigEntry {
 
     public List<BiomeDictionary.Type> getTypes() {
         return biomeTypes;
+    }
+
+    public List<Integer> getApplicableDimensions() {
+        return applicableDimensions;
+    }
+
+    public boolean shouldIgnoreDimensionSpecifications() {
+        return doIgnoreDimensionSpecifications;
     }
 
     public boolean shouldGenerate() {

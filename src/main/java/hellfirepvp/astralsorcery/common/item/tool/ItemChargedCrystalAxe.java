@@ -52,6 +52,7 @@ public class ItemChargedCrystalAxe extends ItemCrystalAxe implements ChargedCrys
                     TileFakeTree tt = MiscUtils.getTileAt(world, blocks.getKey(), TileFakeTree.class, true);
                     if(tt != null) {
                         tt.setupTile(player, itemstack, blocks.getValue().state);
+                        itemstack.damageItem(1, player);
                     } else {
                         world.setBlockState(blocks.getKey(), blocks.getValue().state);
                     }

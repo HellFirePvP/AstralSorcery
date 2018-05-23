@@ -143,7 +143,7 @@ public class ItemUtils {
                 int meta = b.damageDropped(consumeState);
 
                 for (int i = 0; i < toConsume.getCount(); i++) {
-                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, simulate);
+                    ItemStack res = ModIntegrationBotania.requestFromInventory(player, requestingItemStack, b, meta, !simulate);
                     if (!res.isEmpty()) {
                         consumed++;
                     }

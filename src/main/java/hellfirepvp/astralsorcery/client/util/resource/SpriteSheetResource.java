@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.util.resource;
 
+import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -17,7 +20,7 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
  * Created by HellFirePvP
  * Date: 14.09.2016 / 09:15
  */
-public class SpriteSheetResource {
+public class SpriteSheetResource extends AbstractRenderableTexture {
 
     private final double uPart, vPart;
 
@@ -36,6 +39,28 @@ public class SpriteSheetResource {
 
         this.uPart = 1D / ((double) columns);
         this.vPart = 1D / ((double) rows);
+    }
+
+    @Override
+    public void bindTexture() {
+        this.resource.bindTexture();
+    }
+
+    @Override
+    public Point.Double getUVOffset() {
+        long timer = ClientScheduler.getClientTick();
+        Tuple<Double, Double> offset = getUVOffset(timer);
+        return new Point.Double(offset.key, offset.value);
+    }
+
+    @Override
+    public double getUWidth() {
+        return getULength();
+    }
+
+    @Override
+    public double getVWidth() {
+        return getVLength();
     }
 
     public BindableResource getResource() {

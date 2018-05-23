@@ -42,23 +42,24 @@ public class TexturePreloader {
     private static void preloadMandatoryTextures() {
         //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")        .allocateGlId();
         //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")       .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation").allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmark")          .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmarkstretched") .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow")             .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")            .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg")              .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst")           .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijresoverlay")        .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame")      .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame")        .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")         .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")    .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solareclipse")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation") .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmark")           .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijbookmarkstretched")  .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow")              .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")             .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg")               .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst")            .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijresoverlay")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame")       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_charge")      .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame")         .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame_extender").allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")          .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")     .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solareclipse")   .allocateGlId();
     }
 
     private static void preloadTextures() {

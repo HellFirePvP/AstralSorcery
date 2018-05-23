@@ -55,6 +55,9 @@ public class BlockMarbleSlab extends BlockSlab {
         setDefaultState(state.withProperty(MARBLE_TYPE, EnumType.BRICKS));
         setSoundType(SoundType.STONE);
         setLightOpacity(0);
+        setHardness(1.0F);
+        setHarvestLevel("pickaxe", 1);
+        setResistance(3.0F);
         setCreativeTab(RegistryItems.creativeTabAstralSorcery);
     }
 

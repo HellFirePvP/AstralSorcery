@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
+import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -18,10 +19,12 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationDraconicEvolution;
+import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemCape;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktClearBlockStorageStack;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
@@ -42,7 +45,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -51,16 +53,15 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.awt.*;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -91,16 +92,14 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onClone(PlayerEvent.Clone event) {
         EventHandlerServer.PlayerWrapperContainer ctOld = new EventHandlerServer.PlayerWrapperContainer(event.getOriginal());
-        EventHandlerServer.PlayerWrapperContainer ctNew = new EventHandlerServer.PlayerWrapperContainer(event.getEntityPlayer());
-        mergeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld, ctNew);
-        mergeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld, ctNew);
+        removeTimeoutContents(EventHandlerServer.perkCooldowns, ctOld);
+        removeTimeoutContents(EventHandlerServer.perkCooldownsClient, ctOld);
     }
 
-    private <V> void mergeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
-                                          EventHandlerServer.PlayerWrapperContainer old, EventHandlerServer.PlayerWrapperContainer newPlayer) {
+    private <V> void removeTimeoutContents(TimeoutListContainer<EventHandlerServer.PlayerWrapperContainer, V> container,
+                                           EventHandlerServer.PlayerWrapperContainer old) {
         if(container.hasList(old)) {
-            TimeoutList<V> list = container.removeList(old);
-            container.getOrCreateList(newPlayer).addAll(list);
+            container.removeList(old);
         }
     }
 
@@ -227,6 +226,33 @@ public class EventHandlerEntity {
         }
     }
 
+    //Just... do the clear.
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack held = event.getItemStack();
+        if(!event.getWorld().isRemote && !held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+            ItemBlockStorage.tryClearContainerFor(event.getEntityPlayer());
+        }
+    }
+
+    //Send clear to server
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public void onLeftClickAir(PlayerInteractEvent.LeftClickEmpty event) {
+        ItemStack held = event.getItemStack();
+        if(!held.isEmpty() && held.getItem() instanceof ItemBlockStorage) {
+            PacketChannel.CHANNEL.sendToServer(new PktClearBlockStorageStack());
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onRightClickDebug(PlayerInteractEvent.RightClickBlock event) {
+        if(event.getEntityPlayer().isCreative() && !event.getWorld().isRemote) {
+            if(StarlightNetworkDebugHandler.INSTANCE.beginDebugFor(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onDamage(LivingHurtEvent event) {
         EntityLivingBase living = event.getEntityLiving();
@@ -243,6 +269,10 @@ public class EventHandlerEntity {
         if(Mods.DRACONICEVOLUTION.isPresent()) {
             ItemStack chest = living.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if(!chest.isEmpty() && chest.getItem() instanceof ItemCape && ModIntegrationDraconicEvolution.isChaosDamage(source)) {
+                if(living instanceof EntityPlayer && ((EntityPlayer) living).isCreative()) {
+                    event.setCanceled(true);
+                    return;
+                }
                 event.setAmount(event.getAmount() * (1F - Config.capeChaosResistance));
                 if(event.getAmount() <= 1E-4) {
                     event.setCanceled(true);

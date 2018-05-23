@@ -15,17 +15,21 @@ import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchan
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,8 +46,6 @@ import java.util.UUID;
  * Date: 27.01.2018 / 11:27
  */
 public class EnchantmentUpgradeHelper {
-
-    public static String NBT_KEY_WEARER = "amulet-wearer";
 
     public static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item) {
         if(isItemBlacklisted(item)) return current;
@@ -67,7 +69,7 @@ public class EnchantmentUpgradeHelper {
     private static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item, @Nullable List<AmuletEnchantment> context) {
         if(isItemBlacklisted(item)) return current;
 
-        if(item.isEmpty() || !item.hasTagCompound() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
+        if(item.isEmpty() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
             return current;
         }
 
@@ -169,8 +171,12 @@ public class EnchantmentUpgradeHelper {
         return copyRet;
     }
 
-    private static boolean isItemBlacklisted(ItemStack stack) {
+    public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
+            if(stack.getMaxStackSize() > 1) {
+                return true; //Only swords & armor and stuff that isn't stackable
+            }
+
             ResourceLocation rl = stack.getItem().getRegistryName();
             if(rl == null) return true; //Yea... no questions asked i guess.
 
@@ -197,36 +203,62 @@ public class EnchantmentUpgradeHelper {
         return ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet);
     }
 
-    private static boolean hasAmuletTag(ItemStack anyTool) {
-        if(anyTool.isEmpty() || !anyTool.hasTagCompound()) {
-            return false;
+    public static void removeAmuletTagsAndCleanup(EntityPlayer player, boolean keepEquipped) {
+        InventoryPlayer inv = player.inventory;
+        for (int i = 0; i < inv.mainInventory.size(); i++) {
+            if (i == inv.currentItem && keepEquipped) continue;
+            removeAmuletOwner(inv.mainInventory.get(i));
         }
-        NBTTagCompound tag = NBTHelper.getPersistentData(anyTool);
-        return tag.hasUniqueId(NBT_KEY_WEARER);
+        removeAmuletOwner(inv.getItemStack());
+        if(!keepEquipped) {
+            for (int i = 0; i < inv.armorInventory.size(); i++) {
+                removeAmuletOwner(inv.armorInventory.get(i));
+            }
+            for (int i = 0; i < inv.offHandInventory.size(); i++) {
+                removeAmuletOwner(inv.offHandInventory.get(i));
+            }
+        }
     }
 
     @Nullable
     private static UUID getWornPlayerUUID(ItemStack anyTool) {
-        if(!hasAmuletTag(anyTool)) return null;
-        return NBTHelper.getPersistentData(anyTool).getUniqueId(NBT_KEY_WEARER);
+        if(!anyTool.isEmpty() && anyTool.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
+            AmuletHolderCapability cap = anyTool.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+            if(cap != null) {
+                return cap.getHolderUUID();
+            }
+        }
+        return null;
     }
 
-    public static void applyAmuletTag(ItemStack tool, EntityPlayer wearer) {
-        if(tool.isEmpty()) return;
-        UUID playerUUID = wearer.getUniqueID();
-        NBTTagCompound tag = NBTHelper.getPersistentData(tool);
-        tag.setUniqueId(NBT_KEY_WEARER, playerUUID);
+    public static void applyAmuletOwner(ItemStack tool, EntityPlayer wearer) {
+        if(tool.isEmpty() || !tool.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) return;
+        AmuletHolderCapability cap = tool.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+        if(cap == null) return;
+        cap.setHolderUUID(wearer.getUniqueID());
+    }
+
+    private static void removeAmuletOwner(ItemStack stack) {
+        if(stack.isEmpty() || !stack.hasCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null)) {
+            return;
+        }
+        AmuletHolderCapability cap = stack.getCapability(AmuletHolderCapability.CAPABILITY_AMULET_HOLDER, null);
+        if(cap == null) return;
+        cap.setHolderUUID(null);
     }
 
     private static ItemStack getWornAmulet(ItemStack anyTool) {
-        if(!hasAmuletTag(anyTool)) return ItemStack.EMPTY;
-
         //Check if the player is online and exists & is set properly
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return ItemStack.EMPTY;
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if(server == null) return ItemStack.EMPTY;
-        EntityPlayer player = server.getPlayerList().getPlayerByUUID(plUUID);
+        EntityPlayer player;
+        if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            player = resolvePlayerClient(plUUID);
+        } else {
+            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+            if(server == null) return ItemStack.EMPTY;
+            player = server.getPlayerList().getPlayerByUUID(plUUID);
+        }
         if(player == null) return ItemStack.EMPTY;
 
         //Check if the player actually wears/carries the tool
@@ -245,6 +277,13 @@ public class EnchantmentUpgradeHelper {
             return BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
         }
         return ItemStack.EMPTY;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static EntityPlayer resolvePlayerClient(UUID plUUID) {
+        World w = FMLClientHandler.instance().getWorldClient();
+        if (w == null) return null;
+        return w.getPlayerEntityByUUID(plUUID);
     }
 
 }

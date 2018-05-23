@@ -59,7 +59,7 @@ public class CrystalCalculations {
             return 0F;
         }
         int remaining = castTimes - cap;
-        return Math.max(1E-5F, remaining / 40000F);
+        return Math.max(1E-8F, remaining / 90_000F);
     }
 
     public static float getPerfection(CrystalProperties properties, int maxSize) {

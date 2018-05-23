@@ -94,6 +94,7 @@ public class RegistryRecipes {
     public static VortexBoreRecipe rBoreHeadVortex;
     public static ConstellationRecipe rEnchAmuletOriginal, rEnchAmuletReroll;
     public static DiscoveryRecipe rSextant;
+    public static SextantUpgradeRecipe rSextantUpgrade;
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
 
@@ -401,6 +402,8 @@ public class RegistryRecipes {
 
         rBoreHeadLiquid = registerAltarRecipe(new LiquidBoreRecipe());
         rBoreHeadVortex = registerAltarRecipe(new VortexBoreRecipe());
+
+        rSextantUpgrade = registerAltarRecipe(new SextantUpgradeRecipe());
 
         rSextant = registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/sextant", ItemsAS.sextant)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
@@ -1130,6 +1133,7 @@ public class RegistryRecipes {
                 .unregisteredAccessibleShapedRecipe())).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(rMarbleStairs)).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(rMarbleSlab)).setPassiveStarlightRequirement(20);
 
         registerAltarRecipe(new DiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/marble_engraved", new ItemStack(BlocksAS.blockMarble, 5, BlockMarble.MarbleBlockType.ENGRAVED.ordinal()))
                 .addPart(BlockMarble.MarbleBlockType.RAW.asStack(),

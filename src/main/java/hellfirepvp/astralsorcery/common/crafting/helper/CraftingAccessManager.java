@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
-import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.base.OreTypes;
-import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
+import hellfirepvp.astralsorcery.common.base.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
@@ -25,6 +22,7 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -76,6 +74,7 @@ public class CraftingAccessManager {
         InfusionRecipeRegistry.recipes.clear();
         LightOreTransmutations.mtTransmutations.clear();
         WellLiquefaction.mtLiquefactions.clear();
+        LiquidInteraction.mtInteractions.clear();
         GrindstoneRecipeRegistry.mtRecipes.clear();
         AltarRecipeRegistry.mtRecipes.clear();
         AltarRecipeRegistry.recipes.clear();
@@ -97,6 +96,7 @@ public class CraftingAccessManager {
         AltarRecipeRegistry.loadFromFallback();
         LightOreTransmutations.loadFromFallback();
         WellLiquefaction.loadFromFallback();
+        LiquidInteraction.loadFromFallback();
         GrindstoneRecipeRegistry.loadFromFallback();
     }
 
@@ -147,6 +147,15 @@ public class CraftingAccessManager {
 
     public static void removeMTLiquefaction(ItemStack match, @Nullable Fluid fluid) {
         markForRemoval(WellLiquefaction.tryRemoveLiquefaction(match, fluid));
+    }
+
+    public static void addLiquidInteraction(int weight, FluidStack component1, FluidStack component2, float chance1, float chance2, ItemStack output) {
+        LiquidInteraction interaction = new LiquidInteraction(weight, component1, component2, LiquidInteraction.createItemDropAction(chance1, chance2, output));
+        LiquidInteraction.mtInteractions.add(interaction);
+    }
+
+    public static void removeLiquidInteraction(Fluid comp1, Fluid comp2, @Nullable ItemStack output) {
+        LiquidInteraction.removeInteraction(comp1, comp2, output);
     }
 
     public static void addGrindstoneRecipe(ItemHandle in, ItemStack out, int chance) {

@@ -31,7 +31,7 @@ public class SwordSharpenHelper {
     public static List<String> blacklistedSharpenableSwordClassNames = new LinkedList<>();
 
     public static boolean isSwordSharpened(@Nonnull ItemStack stack) {
-        if(!isSharpenableItem(stack)) return false;
+        if(!isSharpenableItem(stack) || !stack.hasTagCompound()) return false;
         return NBTHelper.getData(stack).getBoolean("sharp");
     }
 

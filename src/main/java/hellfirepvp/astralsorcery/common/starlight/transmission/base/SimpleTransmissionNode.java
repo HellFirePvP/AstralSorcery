@@ -95,7 +95,7 @@ public class SimpleTransmissionNode implements ITransmissionNode {
         this.nextPos = pos;
         this.assistNext = new RaytraceAssist(thisPos, nextPos);
         if(doRayTest) {
-            this.nextReachable = assistNext.isClear(world);
+            this.nextReachable = this.ignoreBlockCollision || assistNext.isClear(world);
         } else {
             this.nextReachable = oldRayState;
         }

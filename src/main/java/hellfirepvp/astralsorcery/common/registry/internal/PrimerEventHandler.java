@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.registry.internal;
 
 import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.registry.*;
 import net.minecraft.block.Block;
@@ -83,6 +84,7 @@ public class PrimerEventHandler {
         RegistryRecipes.initVanillaRecipes();
         RegistryRecipes.initAstralRecipes();
         WellLiquefaction.init();
+        LiquidInteraction.init();
         LightOreTransmutations.init();
         fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }

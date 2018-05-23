@@ -171,6 +171,7 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
                     e -> e != null && !e.isDead && e.getHealth() > 0 && e.isCreatureType(EnumCreatureType.MONSTER, false));
             for (EntityLivingBase el : eList) {
                 int preTime = el.hurtResistantTime;
+                el.hurtResistantTime = 0;
                 el.attackEntityFrom(ds, damage);
                 el.hurtResistantTime = Math.max(preTime, el.hurtResistantTime);
             }

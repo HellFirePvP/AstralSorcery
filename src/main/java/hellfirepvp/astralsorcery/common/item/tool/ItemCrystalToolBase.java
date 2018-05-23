@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.item.tool;
 
 import hellfirepvp.astralsorcery.common.entities.EntityCrystalTool;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalPropertyItem;
 import hellfirepvp.astralsorcery.common.item.crystal.ToolCrystalProperties;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
@@ -35,7 +36,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 18.09.2016 / 12:25
  */
-public abstract class ItemCrystalToolBase extends ItemTool {
+public abstract class ItemCrystalToolBase extends ItemTool implements CrystalPropertyItem {
 
     private static final Random rand = new Random();
     private final int crystalCount;
@@ -48,7 +49,7 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     }
 
     public void setDamageVsEntity(float damageVsEntity) {
-        this.damageVsEntity = damageVsEntity;
+        this.attackDamage = damageVsEntity;
     }
 
     public void setAttackSpeed(float attackSpeed) {
@@ -63,15 +64,26 @@ public abstract class ItemCrystalToolBase extends ItemTool {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ToolCrystalProperties prop = getToolProperties(stack);
-        CrystalProperties.addPropertyTooltip(prop, tooltip, CrystalProperties.getMaxSize(stack));
+        CrystalProperties.addPropertyTooltip(prop, tooltip, getMaxSize(stack));
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
-        float str = super.getStrVsBlock(stack, state);
+    public int getMaxSize(ItemStack stack) {
+        return CrystalProperties.MAX_SIZE_CELESTIAL * getCrystalCount();
+    }
+
+    @Nullable
+    @Override
+    public CrystalProperties provideCurrentPropertiesOrNull(ItemStack stack) {
+        return getToolProperties(stack);
+    }
+
+    @Override
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+        float str = super.getDestroySpeed(stack, state);
         ToolCrystalProperties properties = getToolProperties(stack);
-        return str * properties.getEfficiencyMultiplier() * 1.5F;
+        return str * properties.getEfficiencyMultiplier() * 2F;
     }
 
     public static ToolCrystalProperties getToolProperties(ItemStack stack) {
@@ -137,10 +149,10 @@ public abstract class ItemCrystalToolBase extends ItemTool {
         for (int i = 0; i < damage; i++) {
             double chance = Math.pow(((double) prop.getCollectiveCapability()) / 100D, 2);
             if(chance >= rand.nextFloat()) {
-                if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+                if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 double purity = ((double) prop.getPurity()) / 100D;
                 if(purity <= rand.nextFloat()) {
-                    if(rand.nextInt(3) == 0) prop = prop.copyDamagedCutting();
+                    if(rand.nextInt(8) == 0) prop = prop.copyDamagedCutting();
                 }
             }
         }
