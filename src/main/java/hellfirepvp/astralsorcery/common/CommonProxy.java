@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
+import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletEnchantHelper;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.AmuletHolderCapability;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.PlayerAmuletHandler;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
@@ -113,6 +114,7 @@ public class CommonProxy implements IGuiHandler {
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
         Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
+        Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
     }
 
     public void registerConfigDataRegistries() {
@@ -157,6 +159,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     private void registerCapabilities() {
+        //Chunk Fluid storage for Neromantic primes
         CapabilityManager.INSTANCE.register(FluidRarityRegistry.ChunkFluidEntry.class, new Capability.IStorage<FluidRarityRegistry.ChunkFluidEntry>() {
             @Nullable
             @Override

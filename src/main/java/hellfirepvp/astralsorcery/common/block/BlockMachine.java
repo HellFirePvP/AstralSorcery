@@ -158,7 +158,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+        return createTileEntity(worldIn, getStateFromMeta(meta));
     }
 
     @Override

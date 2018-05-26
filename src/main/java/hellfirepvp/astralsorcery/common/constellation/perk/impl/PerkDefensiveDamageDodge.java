@@ -46,7 +46,7 @@ public class PerkDefensiveDamageDodge extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceDodgeDamage = cfg.getInt(getKey() + "DodgeChance", getConfigurationSection(), 20, 1, 1000, "Sets the chance the player has to completely avoid/dodge an attack");
+        chanceDodgeDamage = cfg.getInt(getKey() + "DodgeChance", getConfigurationSection(), chanceDodgeDamage, 1, 1000, "Sets the chance the player has to completely avoid/dodge an attack");
     }
 
 }

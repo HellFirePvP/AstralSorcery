@@ -8,8 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.item.tool.sextant;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktDisplaySextantTarget;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -20,12 +23,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -77,6 +79,20 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
     public static void setAdvanced(ItemStack sextantStack) {
         if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return;
         NBTHelper.getPersistentData(sextantStack).setBoolean("advanced", true);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
+        if(!worldIn.isRemote && AstralSorcery.isRunningInDevEnvironment() && worldIn instanceof WorldServer && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
+            SextantFinder.TargetObject to = SextantTargets.TARGET_VANILLA_MONUMENT;
+            BlockPos result = to.searchFor((WorldServer) worldIn, player.getPosition());
+            if(result != null) {
+                PktDisplaySextantTarget target = new PktDisplaySextantTarget(to, result);
+                PacketChannel.CHANNEL.sendTo(target, (EntityPlayerMP) player);
+            }
+            return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(handIn));
+        }
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(handIn));
     }
 
     @Override

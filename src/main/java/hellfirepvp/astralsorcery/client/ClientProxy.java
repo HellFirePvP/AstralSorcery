@@ -239,6 +239,7 @@ public class ClientProxy extends CommonProxy {
         registerTESR(TileAttunementRelay.class, new TESRAttunementRelay());
         registerTESR(TileMapDrawingTable.class, new TESRMapDrawingTable());
         registerTESR(TileChalice.class, new TESRChalice());
+        registerTESR(TileObservatory.class, new TESRObservatory());
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.registerGeolosysSampleRender();
         }

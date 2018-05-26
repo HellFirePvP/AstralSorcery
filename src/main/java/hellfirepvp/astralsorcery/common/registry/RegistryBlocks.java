@@ -134,6 +134,8 @@ public class RegistryBlocks {
         queueDefaultItemBlock(drawingTable);
         celestialGateway = registerBlock(new BlockCelestialGateway());
         queueDefaultItemBlock(celestialGateway);
+        blockObservatory = registerBlock(new BlockObservatory());
+        queueDefaultItemBlock(blockObservatory);
 
         lens = registerBlock(new BlockLens());
         lensPrism = registerBlock(new BlockPrism());
@@ -193,6 +195,7 @@ public class RegistryBlocks {
         registerTile(TileChalice.class);
         registerTile(TileBore.class);
         registerTile(TilePortalNode.class);
+        registerTile(TileObservatory.class);
 
         registerTile(TileCrystalLens.class);
         registerTile(TileCrystalPrismLens.class);

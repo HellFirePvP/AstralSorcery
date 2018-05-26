@@ -41,6 +41,7 @@ public class RegistryEntities {
         registerEntity(EntityGrapplingHook.class, "EntityGrapplingHook", modEid++, 128, 1, true);
         registerEntity(EntitySpectralTool.class, "EntitySpectralTool", modEid++, 128, 1, true);
         registerEntity(EntityLiquidSpark.class, "EntityLiquidSpark", modEid++, 64, 1, true);
+        registerEntity(EntityObservatoryHelper.class, "EntityObservatoryHelper", modEid++, 64, 1, true);
         //registerEntity(SpellProjectile.class, "EntitySpellProjectile", modEid++, 128, 1, true);
     }
 

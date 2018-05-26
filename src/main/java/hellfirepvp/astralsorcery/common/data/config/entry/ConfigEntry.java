@@ -45,7 +45,8 @@ public abstract class ConfigEntry {
         PERK_LEVELS,
         PERKS,
         COSTS,
-        CAPE
+        CAPE,
+        TOOLS
 
     }
 
