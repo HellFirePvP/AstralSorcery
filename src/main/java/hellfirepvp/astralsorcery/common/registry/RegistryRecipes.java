@@ -208,7 +208,7 @@ public class RegistryRecipes {
                     output.setCount(output.getCount() * 4);
                 }
             }
-            registerGrindstoneRecipe(new DustGrindstoneRecipe(new ItemHandle(inputs), output, 12, doubleChance));
+            registerGrindstoneRecipe(new hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe(new ItemHandle(inputs), output, 12, doubleChance));
         }
     }
 
