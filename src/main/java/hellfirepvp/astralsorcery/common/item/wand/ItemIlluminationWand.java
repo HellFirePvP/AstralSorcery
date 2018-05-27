@@ -24,6 +24,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -116,12 +117,20 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if (!block.isReplaceable(worldIn, pos)) {
                     pos = pos.offset(facing);
                 }
-                if(playerIn.canPlayerEdit(pos, facing, stack) && worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null) &&
-                        drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
-                    if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
+                if(playerIn.canPlayerEdit(pos, facing, stack)) {
+                    if (worldIn.getBlockState(pos).equals(getPlacingState(stack))) {
                         SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
-                        worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                        drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                        if (worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3)) {
+                            worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                        }
+                    }
+                    else if (worldIn.mayPlace(BlocksAS.blockVolatileLight, pos, true, facing, null) &&
+                            drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
+                        if (worldIn.setBlockState(pos, getPlacingState(stack), 3)) {
+                            SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
+                            worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                            drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                        }
                     }
                 }
             } else {
