@@ -526,6 +526,7 @@ tile.blockborehead.liquid.name=Neromantic Prime
 tile.blockborehead.ore.name=Petromantic Prime
 tile.blockborehead.vortex.name=Fysallidic Prime
 tile.blockportalnode.name=
+tile.blockobservatory.name=Observatory
 
 tile.blockgeolosyssamplecluster.name=Rock Crystal Sample
 

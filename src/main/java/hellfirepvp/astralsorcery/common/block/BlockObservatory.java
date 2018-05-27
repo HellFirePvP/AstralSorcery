@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -68,13 +70,16 @@ public class BlockObservatory extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (player.getRidingEntity() == null) {
-                TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
-                if (to != null && to.isUsable()) {
-                    Entity e = to.findRidableObservatoryEntity();
-                    if (e != null) {
+            TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
+            if (to != null && to.isUsable()) {
+                Entity e = to.findRidableObservatoryEntity();
+                if (e != null) {
+                    if(player.getRidingEntity() == null) {
                         player.startRiding(e);
+                    } else if(!player.getRidingEntity().equals(e)) {
+                        return true;
                     }
+                    player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.OBSERVATORY.ordinal(), world, pos.getX(), pos.getY(), pos.getZ());
                 }
             }
         }

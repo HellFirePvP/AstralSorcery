@@ -32,6 +32,14 @@ public class GrindstoneRecipe {
     protected final int chance;
     protected final float doubleChance;
 
+    public GrindstoneRecipe(ItemStack input, ItemStack output, int chance) {
+        this(input, output, chance, 0F);
+    }
+
+    public GrindstoneRecipe(ItemHandle input, ItemStack output, int chance) {
+        this(input, output, chance, 0F);
+    }
+
     public GrindstoneRecipe(ItemStack input, ItemStack output, int chance, float doubleChance) {
         this.input = new ItemHandle(input);
         this.output = output;

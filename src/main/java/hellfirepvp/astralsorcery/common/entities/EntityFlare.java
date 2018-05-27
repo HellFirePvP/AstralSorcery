@@ -25,6 +25,7 @@ import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,6 +104,20 @@ public class EntityFlare extends EntityFlying {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
+    }
+
+    @Override
+    public void applyEntityCollision(Entity entityIn) {
+        if(entityIn != null && entityIn instanceof EntityFlare) {
+            super.applyEntityCollision(entityIn);
+        }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
+        if(entityIn != null && entityIn instanceof EntityFlare) {
+            super.collideWithEntity(entityIn);
+        }
     }
 
     @Override

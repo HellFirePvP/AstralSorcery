@@ -465,16 +465,15 @@ public class RenderingUtils {
             TileEntityRendererDispatcher.staticPlayerY = y;
             TileEntityRendererDispatcher.staticPlayerZ = z;
 
-            Minecraft.getMinecraft().setIngameFocus();
-            Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
-
             if(Minecraft.getMinecraft().currentScreen != null) {
                 Minecraft.getMinecraft().displayGuiScreen(null);
             }
+            Minecraft.getMinecraft().inGameHasFocus = false;
+            Minecraft.getMinecraft().setIngameFocus();
 
             if (Minecraft.IS_RUNNING_ON_MAC) {
                 Mouse.setGrabbed(false);
-                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
+                Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
                 Mouse.setGrabbed(true);
             }
         }

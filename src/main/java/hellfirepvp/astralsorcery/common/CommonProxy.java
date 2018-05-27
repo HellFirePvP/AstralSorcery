@@ -224,6 +224,7 @@ public class CommonProxy implements IGuiHandler {
             ModIntegrationCrafttweaker.instance.pushChanges();
         }
         ModIntegrationChisel.sendVariantIMC();
+        MappingMigrationHandler.init();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
@@ -242,7 +243,6 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(BlockDropCaptureAssist.instance);
         MinecraftForge.EVENT_BUS.register(ChunkVersionController.instance);
         MinecraftForge.EVENT_BUS.register(CelestialGatewaySystem.instance);
-        MinecraftForge.EVENT_BUS.register(new MappingMigrationHandler());
         MinecraftForge.EVENT_BUS.register(EventHandlerCapeEffects.INSTANCE);
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
@@ -368,6 +368,8 @@ public class CommonProxy implements IGuiHandler {
                     }
                 }
             }
+            case OBSERVATORY:
+                return new ContainerObservatory();
         }
         return null;
     }
@@ -392,7 +394,8 @@ public class CommonProxy implements IGuiHandler {
         ALTAR_TRAIT(TileAltar.class),
         MAP_DRAWING(TileMapDrawingTable.class),
         JOURNAL,
-        JOURNAL_STORAGE;
+        JOURNAL_STORAGE,
+        OBSERVATORY(TileObservatory.class);
 
         private final Class<? extends TileEntity> tileClass;
 

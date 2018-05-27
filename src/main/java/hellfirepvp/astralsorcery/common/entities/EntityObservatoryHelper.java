@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.entities;
 
 import com.google.common.collect.Iterables;
+import hellfirepvp.astralsorcery.common.container.ContainerObservatory;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -82,7 +83,7 @@ public class EntityObservatoryHelper extends Entity {
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if(riding != null && riding instanceof EntityPlayer) {
+        if(riding != null && riding instanceof EntityPlayer && ((EntityPlayer) riding).openContainer != null && ((EntityPlayer) riding).openContainer instanceof ContainerObservatory) {
             this.rotationYaw = ((EntityPlayer) riding).rotationYawHead;
             this.prevRotationYaw = ((EntityPlayer) riding).prevRotationYawHead;
             this.rotationPitch = riding.rotationPitch;

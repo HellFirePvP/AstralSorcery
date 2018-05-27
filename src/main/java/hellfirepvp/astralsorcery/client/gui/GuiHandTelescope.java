@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -118,20 +119,22 @@ public class GuiHandTelescope extends GuiWHScreen {
     public void onGuiClosed() {
         super.onGuiClosed();
 
-        mc.setIngameFocus();
-
-        if (Minecraft.IS_RUNNING_ON_MAC) {
-            Mouse.setGrabbed(false);
-            Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
-            Mouse.setGrabbed(true);
+        if (!Minecraft.IS_RUNNING_ON_MAC) {
+            KeyBinding.updateKeyBindState();
         }
+        mc.mouseHelper.grabMouseCursor();
+        mc.inGameHasFocus = true;
     }
 
     @Override
     public void initGui() {
         super.initGui();
 
+        if (!Minecraft.IS_RUNNING_ON_MAC) {
+            KeyBinding.updateKeyBindState();
+        }
         mc.mouseHelper.grabMouseCursor();
+        mc.inGameHasFocus = true;
     }
 
     @Override
@@ -179,19 +182,24 @@ public class GuiHandTelescope extends GuiWHScreen {
 
     private void handleMouseMovement(float pticks) {
         boolean ctrl = isShiftKeyDown();
+
         if (grabCursor && !ctrl) {
+            if(!Minecraft.IS_RUNNING_ON_MAC) {
+                KeyBinding.updateKeyBindState();
+            }
             Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
+            Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
             clearLines();
         }
         if (!grabCursor && ctrl) {
             Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
+            Minecraft.getMinecraft().inGameHasFocus = false;
             grabCursor = true;
         }
 
         if (!ctrl) {
 
-            this.mc.mouseHelper.mouseXYChange();
             float f = this.mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
             float f2 = (float) this.mc.mouseHelper.deltaX * f1;
