@@ -24,56 +24,50 @@ public class AStelescope extends ModelBase {
 
     public ModelRenderer mountpiece;
     public ModelRenderer opticalTube;
-    public ModelRenderer leg1;
-    public ModelRenderer leg2;
-    public ModelRenderer leg3;
-    public ModelRenderer mount;
+    public ModelRenderer leg;
+    public ModelRenderer mountpiece_1;
     public ModelRenderer aperture;
-    public ModelRenderer extension1;
-    public ModelRenderer extension2;
+    public ModelRenderer extension;
+    public ModelRenderer detail;
+    public ModelRenderer aperture_1;
 
     public AStelescope() {
+
         this.textureWidth = 64;
-        this.textureHeight = 32;
-        this.mountpiece = new ModelRenderer(this, 40, 22);
-        this.mountpiece.setRotationPoint(0.0F, -2.0F, -1.0F);
-        this.mountpiece.addBox(-2.0F, 6.0F, -2.0F, 4, 4, 4, 0.0F);
-        this.leg3 = new ModelRenderer(this, 52, 0);
-        this.leg3.setRotationPoint(0.0F, 8.0F, 0.0F);
-        this.leg3.addBox(-0.5F, 0.0F, -1.0F, 1, 20, 2, 0.0F);
-        this.setRotateAngle(leg3, -0.39269908169872414F, 0.7853981633974483F, 0.0F);
-        this.leg1 = new ModelRenderer(this, 46, 0);
-        this.leg1.setRotationPoint(0.0F, 8.0F, 0.0F);
-        this.leg1.addBox(-0.5F, 0.0F, -1.0F, 1, 20, 2, 0.0F);
-        this.setRotateAngle(leg1, 0.39269908169872414F, 0.0F, 0.0F);
-        this.extension2 = new ModelRenderer(this, 14, 20);
-        this.extension2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.extension2.addBox(-1.0F, -1.0F, 8.0F, 2, 2, 4, 0.0F);
-        this.aperture = new ModelRenderer(this, 24, 0);
+        this.textureHeight = 64;
+
+        this.leg = new ModelRenderer(this, 56, 0);
+        this.leg.setRotationPoint(0.0F, 8.0F, 0.0F);
+        this.leg.addBox(-1.0F, -10.0F, -1.0F, 2, 36, 2, 0.0F);
+        this.mountpiece_1 = new ModelRenderer(this, 32, 0);
+        this.mountpiece_1.setRotationPoint(0.0F, 0.0F, -1.0F);
+        this.mountpiece_1.addBox(-2.0F, 20.0F, -1.0F, 4, 6, 4, 0.0F);
+        this.aperture_1 = new ModelRenderer(this, 28, 28);
+        this.aperture_1.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.aperture_1.addBox(-1.0F, -3.0F, -6.0F, 6, 6, 2, 0.0F);
+        this.aperture = new ModelRenderer(this, 0, 28);
         this.aperture.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.aperture.addBox(-2.5F, -2.5F, -13.0F, 5, 5, 6, 0.0F);
+        this.aperture.addBox(-1.0F, -3.0F, -16.0F, 6, 6, 8, 0.0F);
+        this.extension = new ModelRenderer(this, 0, 12);
+        this.extension.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.extension.addBox(-2.0F, -6.0F, 6.0F, 2, 6, 2, 0.0F);
+        this.detail = new ModelRenderer(this, 0, 8);
+        this.detail.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.detail.addBox(1.0F, -1.0F, 10.0F, 2, 2, 2, 0.0F);
         this.opticalTube = new ModelRenderer(this, 0, 0);
-        this.opticalTube.setRotationPoint(0.0F, -1.0F, 0.0F);
-        this.opticalTube.addBox(-2.0F, -2.0F, -12.0F, 4, 4, 16, 0.0F);
+        this.opticalTube.setRotationPoint(1.0F, -3.0F, 0.0F);
+        this.opticalTube.addBox(0.0F, -2.0F, -14.0F, 4, 4, 24, 0.0F);
         this.setRotateAngle(opticalTube, -0.7853981633974483F, 0.0F, 0.0F);
-        this.leg2 = new ModelRenderer(this, 52, 0);
-        this.leg2.mirror = true;
-        this.leg2.setRotationPoint(0.0F, 8.0F, 0.0F);
-        this.leg2.addBox(-0.5F, 0.0F, -1.0F, 1, 20, 2, 0.0F);
-        this.setRotateAngle(leg2, -0.39269908169872414F, -0.7853981633974483F, 0.0F);
-        this.mount = new ModelRenderer(this, 56, 22);
-        this.mount.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.mount.addBox(-1.0F, 0.0F, -1.0F, 2, 6, 2, 0.0F);
-        this.extension1 = new ModelRenderer(this, 0, 20);
-        this.extension1.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.extension1.addBox(-1.5F, -1.5F, 4.0F, 3, 3, 4, 0.0F);
-        this.mountpiece.addChild(this.leg3);
-        this.mountpiece.addChild(this.leg1);
-        this.opticalTube.addChild(this.extension2);
+        this.mountpiece = new ModelRenderer(this, 0, 0);
+        this.mountpiece.setRotationPoint(0.0F, -2.0F, 0.0F);
+        this.mountpiece.addBox(-2.0F, 4.0F, -2.0F, 4, 4, 4, 0.0F);
+
+        this.opticalTube.addChild(this.extension);
+        this.opticalTube.addChild(this.aperture_1);
         this.opticalTube.addChild(this.aperture);
-        this.mountpiece.addChild(this.leg2);
-        this.mountpiece.addChild(this.mount);
-        this.opticalTube.addChild(this.extension1);
+        this.opticalTube.addChild(this.detail);
+        this.mountpiece.addChild(this.leg);
+        this.mountpiece.addChild(this.mountpiece_1);
     }
 
     @Override
