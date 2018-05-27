@@ -372,6 +372,11 @@ astralsorcery.journal.SEXTANT.1.text=
 research.SEXTANT_UPGRADE.name=
 astralsorcery.journal.SEXTANT_UPGRADE.1.text=
 
+research.OBSERVATORY.name=Observatory
+astralsorcery.journal.OBSERVATORY.1.text=
+astralsorcery.journal.OBSERVATORY.3.text=
+astralsorcery.journal.OBSERVATORY.4.text=
+
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime
 astralsorcery.journal.recipe.constellation=Requires focus to constellation %s

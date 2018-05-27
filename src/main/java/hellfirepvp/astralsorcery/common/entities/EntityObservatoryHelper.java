@@ -83,11 +83,18 @@ public class EntityObservatoryHelper extends Entity {
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if(riding != null && riding instanceof EntityPlayer && ((EntityPlayer) riding).openContainer != null && ((EntityPlayer) riding).openContainer instanceof ContainerObservatory) {
-            this.rotationYaw = ((EntityPlayer) riding).rotationYawHead;
-            this.prevRotationYaw = ((EntityPlayer) riding).prevRotationYawHead;
-            this.rotationPitch = riding.rotationPitch;
-            this.prevRotationPitch = riding.prevRotationPitch;
+        if(riding != null && riding instanceof EntityPlayer ) {
+            if (((EntityPlayer) riding).openContainer != null && ((EntityPlayer) riding).openContainer instanceof ContainerObservatory) {
+                //Adjust observatory pitch and jaw to player head
+                this.rotationYaw = ((EntityPlayer) riding).rotationYawHead;
+                this.prevRotationYaw = ((EntityPlayer) riding).prevRotationYawHead;
+                this.rotationPitch = riding.rotationPitch;
+                this.prevRotationPitch = riding.prevRotationPitch;
+            } else {
+                //Adjust observatory to player-body
+                this.rotationYaw = ((EntityPlayer) riding).renderYawOffset;
+                this.prevRotationYaw = ((EntityPlayer) riding).prevRenderYawOffset;
+            }
 
             to.updatePitchYaw(this.rotationPitch, this.prevRotationPitch, this.rotationYaw, this.prevRotationYaw);
         }

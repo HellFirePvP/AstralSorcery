@@ -89,14 +89,21 @@ public class TileGrindstone extends TileEntitySynchronized implements ITickable 
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        grindingItem = new ItemStack(compound);
+        NBTTagCompound itemTag = compound.getCompoundTag("item");
+        if (itemTag.getSize() <= 0) {
+            grindingItem = ItemStack.EMPTY;
+        } else {
+            grindingItem = new ItemStack(itemTag);
+        }
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        grindingItem.writeToNBT(compound);
+        NBTTagCompound itemTag = new NBTTagCompound();
+        grindingItem.writeToNBT(itemTag);
+        compound.setTag("item", itemTag);
     }
 
 }

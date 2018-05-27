@@ -68,6 +68,12 @@ public class RegistryResearch {
         resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.1"));
         resHintRecipes.addPage(getTextPage("CRAFTING_FOCUS_HINT.2"));
 
+        ResearchNode resObservatory = new ResearchNode(new ItemStack(BlocksAS.blockObservatory), "OBSERVATORY", 4, 7);
+        resObservatory.addPage(getTextPage("OBSERVATORY.1"));
+        resObservatory.addPage(new JournalPageTraitRecipe(RegistryRecipes.rObservatory));
+        resObservatory.addPage(getTextPage("OBSERVATORY.3"));
+        resObservatory.addPage(getTextPage("OBSERVATORY.4"));
+
         ResearchNode resAttWands = new ResearchNode(new ItemStack(ItemsAS.wand), "ATT_WANDS", 3, 4);
         resAttWands.addPage(getTextPage("ATT_WANDS.1"));
         resAttWands.addPage(getTextPage("ATT_WANDS.2"));
@@ -130,6 +136,7 @@ public class RegistryResearch {
         registerItemLookup(new ItemStack(BlocksAS.blockBore),                           resBore,       2, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 0),   resBoreLiquid, 1, ResearchProgression.RADIANCE);
         registerItemLookup(new ItemStack(BlocksAS.blockBoreHead, 1, 1),   resBoreVortex, 1, ResearchProgression.RADIANCE);
+        registerItemLookup(new ItemStack(BlocksAS.blockObservatory),                    resObservatory,1, ResearchProgression.RADIANCE);
 
         resAttWandArmara.addSourceConnectionFrom(resAttWands);
         resAttWandDiscidia.addSourceConnectionFrom(resAttWands);
@@ -142,6 +149,7 @@ public class RegistryResearch {
         resBore.addSourceConnectionFrom(resChalice);
         resBoreLiquid.addSourceConnectionFrom(resBore);
         resBoreVortex.addSourceConnectionFrom(resBore);
+        resObservatory.addSourceConnectionFrom(resHintRecipes);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -155,6 +163,7 @@ public class RegistryResearch {
         regRadiance.register(resBore);
         regRadiance.register(resBoreLiquid);
         regRadiance.register(resBoreVortex);
+        regRadiance.register(resObservatory);
     }
 
     private static void initConstellation() {
@@ -538,6 +547,7 @@ public class RegistryResearch {
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));
         resAltarUpgradeAttenuation.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rAltarUpgradeAttenuation));
         resAltarUpgradeAttenuation.addPage(new JournalPageStructure(MultiBlockArrays.patternAltarAttunement));
+        resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.4"));
 
         ResearchNode resIlluminationPowder = new ResearchNode(ItemUsableDust.DustType.ILLUMINATION.asStack(), "ILLUM_POWDER", 3, 3);
         resIlluminationPowder.addPage(getTextPage("ILLUM_POWDER.1"));

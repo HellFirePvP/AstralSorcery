@@ -130,7 +130,6 @@ public class RegistryConstellations {
                 Arrays.asList(new PotionMapEffect(MobEffects.FIRE_RESISTANCE, 0, 0)));
         registerMapEffect(pelotrio,
                 Arrays.asList(
-                        new EnchantmentMapEffect(Enchantments.MENDING, 2, 3),
                         new EnchantmentMapEffect(Enchantments.INFINITY, 1, 1),
                         new EnchantmentMapEffect(Enchantments.LURE, 4, 6)),
                 Arrays.asList(

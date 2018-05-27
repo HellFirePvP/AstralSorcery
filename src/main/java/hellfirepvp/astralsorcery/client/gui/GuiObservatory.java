@@ -130,10 +130,10 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
 
         float pitch = Minecraft.getMinecraft().player.rotationPitch;
         float transparency = 0F;
-        if (pitch < -20F) {
+        if (pitch < 0F) {
             transparency = 1F;
-        } else if (pitch < -10F) {
-            transparency = (Math.abs(pitch) - 10F) / 10F;
+        } else if (pitch < 10F) {
+            transparency = (Math.abs(pitch) + 10F) / 10F;
             if (ConstellationSkyHandler.getInstance().isNight(w)) {
                 transparency *= transparency;
             }
@@ -305,6 +305,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             this.mc.player.turn(movementX, movementY);
             if(this.mc.player.rotationPitch >= -10F) {
                 this.mc.player.rotationPitch = -10F;
+                nullify = true;
             }
             if (nullify) movementY = 0;
 
@@ -314,20 +315,26 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
 
     private void moveIdleStars(int changeX, int changeY) {
         int width = guiWidth, height = guiHeight;
+        changeX *= 3F;
+        changeY *= 2F;
 
         for (StarPosition sl : usedStars) {
             sl.x -= changeX;
             sl.y += changeY;
 
-            if (sl.x < frameSize) {
-                sl.x += width;
-            } else if (sl.x > (frameSize + width)) {
-                sl.x -= width;
+            if (Math.abs(changeX) > 0) {
+                if (sl.x < 0) {
+                    sl.x += width;
+                } else if (sl.x > width) {
+                    sl.x -= width;
+                }
             }
-            if (sl.y < frameSize) {
-                sl.y += height;
-            } else if (sl.y > (frameSize + height)) {
-                sl.y -= height;
+            if (Math.abs(changeY) > 0) {
+                if (sl.y < 0) {
+                    sl.y += height;
+                } else if (sl.y > height) {
+                    sl.y -= height;
+                }
             }
         }
         /*for (int i = 0; i < (randomStars - usedStars.size()); i++) {
