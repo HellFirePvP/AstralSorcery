@@ -209,7 +209,6 @@ public class ASobservatory extends ModelBase {
         this.seat.addChild(this.seat9);
         this.tube.addChild(this.tube1);
         this.tube.addChild(this.tube14);
-        this.tube.addChild(this.tube9);
         this.seat.addChild(this.seat6);
         this.seat.addChild(this.seat11);
         this.base.addChild(this.base4);
@@ -239,6 +238,7 @@ public class ASobservatory extends ModelBase {
         this.base.addChild(this.base8);
         this.base.addChild(this.base2);
         this.tube.addChild(this.tube10);
+        this.tube.addChild(this.tube9);
 
         this.seat.addChild(this.tube);
     }

@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.models.base.ASobservatory;
+import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -75,7 +76,10 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
     private void renderModel(TileObservatory te, float partialTicks, float iYaw, float iPitch) {
         texTelescope.bind();
         GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
         modelTelescope.render(null, iYaw, iPitch, 0, 0, 0, 1);
+        GlStateManager.disableBlend();
         GlStateManager.enableCull();
     }
 
