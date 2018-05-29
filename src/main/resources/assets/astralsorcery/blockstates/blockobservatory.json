@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model":"astralsorcery:blockmodel_nothing" }
+        "normal": { "model":"astralsorcery:blockmodel_nothing_observatory" }
     }
 }
