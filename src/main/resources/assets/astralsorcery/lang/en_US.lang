@@ -715,4 +715,4 @@ perk.DTR_ARMORBREAK.info=Attacks have a chance of disarming the target
 perk.DTR_STACK=Stacking destruction
 perk.DTR_STACK.info=Higher attack damage and faster mining over time
 
-Constellation.noInformation=There is nothing here.
+constellation.noInformation=There is nothing here.
