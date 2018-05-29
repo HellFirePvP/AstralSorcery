@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.container.ContainerObservatory;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -64,6 +65,11 @@ public class EntityObservatoryHelper extends Entity {
         return this.dataManager.get(FIXED);
     }
 
+    @Nullable
+    public TileObservatory tryGetObservatory() {
+        return MiscUtils.getTileAt(this.world, getFixedObservatoryPos(), TileObservatory.class, false);
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -83,31 +89,31 @@ public class EntityObservatoryHelper extends Entity {
             return;
         }
         Entity riding = Iterables.getFirst(passengers, null);
-        if(riding != null && riding instanceof EntityPlayer ) {
-            if (((EntityPlayer) riding).openContainer != null && ((EntityPlayer) riding).openContainer instanceof ContainerObservatory) {
-                //Adjust observatory pitch and jaw to player head
-                this.rotationYaw = ((EntityPlayer) riding).rotationYawHead;
-                this.prevRotationYaw = ((EntityPlayer) riding).prevRotationYawHead;
-                this.rotationPitch = riding.rotationPitch;
-                this.prevRotationPitch = riding.prevRotationPitch;
-            } else {
-                //Adjust observatory to player-body
-                this.rotationYaw = ((EntityPlayer) riding).renderYawOffset;
-                this.prevRotationYaw = ((EntityPlayer) riding).prevRenderYawOffset;
-            }
-
-            to.updatePitchYaw(this.rotationPitch, this.prevRotationPitch, this.rotationYaw, this.prevRotationYaw);
+        if(riding != null && riding instanceof EntityPlayer) {
+            applyObservatoryRotationsFrom(to, (EntityPlayer) riding);
         }
+    }
+
+    public void applyObservatoryRotationsFrom(TileObservatory to, EntityPlayer riding) {
+        if (riding.openContainer != null && riding.openContainer instanceof ContainerObservatory) {
+            //Adjust observatory pitch and jaw to player head
+            this.rotationYaw = riding.rotationYawHead;
+            this.prevRotationYaw = riding.prevRotationYawHead;
+            this.rotationPitch = riding.rotationPitch;
+            this.prevRotationPitch = riding.prevRotationPitch;
+        } else  {
+            //Adjust observatory to player-body
+            this.rotationYaw = riding.renderYawOffset;
+            this.prevRotationYaw = riding.prevRenderYawOffset;
+        }
+
+        to.updatePitchYaw(this.rotationPitch, this.prevRotationPitch, this.rotationYaw, this.prevRotationYaw);
     }
 
     @Nullable
     private TileObservatory isOnTelescope() {
-        BlockPos at = getPosition();
         BlockPos fixed = getFixedObservatoryPos();
-        if(!at.equals(fixed)) {
-            return null;
-        }
-        TileObservatory to = MiscUtils.getTileAt(this.world, at, TileObservatory.class, true);
+        TileObservatory to = MiscUtils.getTileAt(this.world, fixed, TileObservatory.class, true);
         if (to == null) {
             return null;
         }

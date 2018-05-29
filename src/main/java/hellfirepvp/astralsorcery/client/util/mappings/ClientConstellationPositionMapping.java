@@ -59,7 +59,7 @@ public class ClientConstellationPositionMapping {
 
         availablePositions.add(RenderPosition.createRenderInfoFor( 0.15, -0.5,   0.2,  15));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  32));
-        availablePositions.add(RenderPosition.createRenderInfoFor(-0.5,  -1.1,  -0.2,  30));
+        availablePositions.add(RenderPosition.createRenderInfoFor( 0.5,  -1.1,  -0.2,  30));
         availablePositions.add(RenderPosition.createRenderInfoFor(-0.4,  -1.3,   0.5,  35));
         availablePositions.add(RenderPosition.createRenderInfoFor(   0,  -1.1,  -0.5,  28));
     }

@@ -74,6 +74,10 @@ public class RegistryResearch {
         resObservatory.addPage(getTextPage("OBSERVATORY.3"));
         resObservatory.addPage(getTextPage("OBSERVATORY.4"));
 
+        ResearchNode resAttTrait = new ResearchNode(new ItemStack(ItemsAS.tunedCelestialCrystal), "ATT_TRAIT", 5, 8);
+        resAttTrait.addPage(getTextPage("ATT_TRAIT.1"));
+        resAttTrait.addPage(getTextPage("ATT_TRAIT.2"));
+
         ResearchNode resAttWands = new ResearchNode(new ItemStack(ItemsAS.wand), "ATT_WANDS", 3, 4);
         resAttWands.addPage(getTextPage("ATT_WANDS.1"));
         resAttWands.addPage(getTextPage("ATT_WANDS.2"));
@@ -150,6 +154,7 @@ public class RegistryResearch {
         resBoreLiquid.addSourceConnectionFrom(resBore);
         resBoreVortex.addSourceConnectionFrom(resBore);
         resObservatory.addSourceConnectionFrom(resHintRecipes);
+        resAttTrait.addSourceConnectionFrom(resObservatory);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -164,6 +169,7 @@ public class RegistryResearch {
         regRadiance.register(resBoreLiquid);
         regRadiance.register(resBoreVortex);
         regRadiance.register(resObservatory);
+        regRadiance.register(resAttTrait);
     }
 
     private static void initConstellation() {
@@ -301,6 +307,7 @@ public class RegistryResearch {
         resRitualLink.addSourceConnectionFrom(resInfuser);
         resTraitUpgrade.addSourceConnectionFrom(resCelCrystals);
         resEnchantmentAmulet.addSourceConnectionFrom(resInfuser);
+        resSextantUpgrade.addSourceConnectionFrom(resInfuser);
 
         regConstellation.register(resColoredLenses);
         regConstellation.register(resPrism);
@@ -492,6 +499,7 @@ public class RegistryResearch {
         ResearchNode resSextant = new ResearchNode(new ItemStack(ItemsAS.sextant), "SEXTANT", 2, 3);
         resSextant.addPage(getTextPage("SEXTANT.1"));
         resSextant.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rSextant));
+        resSextant.addPage(getTextPage("SEXTANT.3"));
 
         ResearchNode resRelay = new ResearchNode(new ItemStack(BlocksAS.attunementRelay), "SPEC_RELAY", 2, 0);
         resRelay.addPage(getTextPage("SPEC_RELAY.1"));
@@ -542,6 +550,7 @@ public class RegistryResearch {
 
         ResearchNode resCrystalGrowth = new ResearchNode(new ItemStack(ItemsAS.rockCrystal), "CRYSTAL_GROWTH",1, 3);
         resCrystalGrowth.addPage(getTextPage("CRYSTAL_GROWTH.1"));
+        resCrystalGrowth.addPage(getTextPage("CRYSTAL_GROWTH.2"));
 
         ResearchNode resAltarUpgradeAttenuation = new ResearchNode(new ItemStack(BlocksAS.blockAltar, 1, BlockAltar.AltarType.ALTAR_2.ordinal()), "ALTAR2", 2, 1);
         resAltarUpgradeAttenuation.addPage(getTextPage("ALTAR2.1"));

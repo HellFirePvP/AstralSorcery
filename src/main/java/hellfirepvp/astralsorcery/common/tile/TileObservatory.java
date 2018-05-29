@@ -10,10 +10,14 @@ package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.entities.EntityObservatoryHelper;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -31,7 +35,7 @@ public class TileObservatory extends TileEntityTick {
     private Integer entityIdServerRef = null;
 
     public float observatoryYaw = 0, prevObservatoryYaw = 0;
-    public float observatoryPitch = 0, prevObservatoryPitch = 0;
+    public float observatoryPitch = -45, prevObservatoryPitch = -45;
 
     @Override
     protected void onFirstTick() {}
@@ -47,6 +51,14 @@ public class TileObservatory extends TileEntityTick {
                 Entity e;
                 if((e = resolveEntity(this.entityHelperRef)) == null || e.isDead) {
                     createNewObservatoryEntity();
+                } else {
+                    double xOffset = -0.85;
+                    double zOffset = 0.15;
+                    double yawRad = -Math.toRadians(this.observatoryYaw);
+                    double xComp = 0.5F + Math.sin(yawRad) * xOffset - Math.cos(yawRad) * zOffset;
+                    double zComp = 0.5F + Math.cos(yawRad) * xOffset + Math.sin(yawRad) * zOffset;
+                    Vector3 pos = new Vector3(getPos()).add(xComp, 0.4F, zComp);
+                    e.setPositionAndUpdate(pos.getX(), pos.getY(), pos.getZ());
                 }
             }
         }
@@ -83,7 +95,7 @@ public class TileObservatory extends TileEntityTick {
     @Nullable
     private Entity resolveEntity(UUID entityUUID) {
         if(entityUUID == null) return null;
-        for (Entity e : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(-1, -1, -1), pos.add(1, 1, 1)))) {
+        for (Entity e : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(-3, -1, -3), pos.add(3, 2, 3)))) {
             if (e.getUniqueID().equals(entityUUID)) {
                 this.entityIdServerRef = e.getEntityId();
                 return e;
@@ -93,7 +105,7 @@ public class TileObservatory extends TileEntityTick {
     }
 
     @Nullable
-    public Entity findRidableObservatoryEntity() {
+    public Entity findRideableObservatoryEntity() {
         if(this.entityHelperRef == null || this.entityIdServerRef == null) {
             return null;
         }
@@ -116,6 +128,12 @@ public class TileObservatory extends TileEntityTick {
         this.observatoryYaw = yaw;
         this.prevObservatoryYaw = prevYaw;
         markForUpdate();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getRenderBoundingBox() {
+        return TileObservatory.INFINITE_EXTENT_AABB;
     }
 
     @Override

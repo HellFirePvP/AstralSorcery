@@ -9,13 +9,22 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.models.base.ASobservatory;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
+import hellfirepvp.astralsorcery.common.entities.EntityObservatoryHelper;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -32,26 +41,46 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
 
     @Override
     public void render(TileObservatory te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        if(new Vector3(x, y, z).length() >= 64) {
+            return;
+        }
+
+        Entity ridden;
+        EntityPlayer player;
+        if ((player = Minecraft.getMinecraft().player) != null && (ridden = Minecraft.getMinecraft().player.getRidingEntity()) != null &&
+                ridden instanceof EntityObservatoryHelper && ((EntityObservatoryHelper) ridden).tryGetObservatory() != null) {
+            ((EntityObservatoryHelper) ridden).applyObservatoryRotationsFrom(te, player);
+        }
+
+        float prevYaw = te.prevObservatoryYaw;
+        float yaw = te.observatoryYaw;
+        float prevPitch = te.prevObservatoryPitch;
+        float pitch = te.observatoryPitch;
+
+        float iYaw = RenderingUtils.interpolateRotation(prevYaw + 180, yaw + 180, partialTicks);
+        float iPitch = RenderingUtils.interpolateRotation(prevPitch, pitch, partialTicks);
+
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x + 0.5, y + 1.28, z + 0.5);
+        GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
         GlStateManager.rotate(180, 1, 0, 0);
         GlStateManager.rotate(180, 0, 1, 0);
-        GlStateManager.scale(0.053, 0.053, 0.053);
+        GlStateManager.scale(0.0625, 0.0625, 0.0625);
 
-        GlStateManager.pushMatrix();
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.popMatrix();
+        RenderHelper.disableStandardItemLighting();
 
-        renderModel(te, 1);
+        renderModel(te, partialTicks, iYaw, iPitch);
         GlStateManager.popMatrix();
-        GL11.glPopAttrib();
     }
 
-    private void renderModel(TileObservatory te, float partialTicks) {
+    private void renderModel(TileObservatory te, float partialTicks, float iYaw, float iPitch) {
         texTelescope.bind();
         GlStateManager.disableCull();
-        modelTelescope.render(null, 0, 0, 0, 0, 0, 1);
+        modelTelescope.render(null, iYaw, iPitch, 0, 0, 0, 1);
         GlStateManager.enableCull();
+    }
+
+    @Override
+    public boolean isGlobalRenderer(TileObservatory te) {
+        return true;
     }
 }

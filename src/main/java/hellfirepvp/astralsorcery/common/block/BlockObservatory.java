@@ -72,7 +72,7 @@ public class BlockObservatory extends BlockContainer {
         if (!world.isRemote) {
             TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
             if (to != null && to.isUsable()) {
-                Entity e = to.findRidableObservatoryEntity();
+                Entity e = to.findRideableObservatoryEntity();
                 if (e != null) {
                     if(player.getRidingEntity() == null) {
                         player.startRiding(e);

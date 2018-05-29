@@ -68,8 +68,6 @@ public class ItemConstellationPaper extends Item implements ItemHighlighted, Ite
             items.add(new ItemStack(this, 1));
 
             for (IConstellation c : ConstellationRegistry.getAllConstellations()) {
-                if (c instanceof IMinorConstellation) continue;
-
                 ItemStack cPaper = new ItemStack(this, 1);
                 setConstellation(cPaper, c);
                 items.add(cPaper);

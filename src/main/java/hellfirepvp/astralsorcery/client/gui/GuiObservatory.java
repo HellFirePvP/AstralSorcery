@@ -29,6 +29,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -88,6 +89,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
     public void onGuiClosed() {
         super.onGuiClosed();
 
+        mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
+
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
         }
@@ -104,6 +107,14 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
     @Override
     public void initGui() {
         super.initGui();
+
+        this.mc.player.rotationPitch = getOwningTileEntity().observatoryPitch;
+        this.mc.player.prevRotationPitch = getOwningTileEntity().prevObservatoryPitch;
+
+        this.mc.player.rotationYaw = getOwningTileEntity().observatoryYaw;
+        this.mc.player.rotationYawHead = getOwningTileEntity().observatoryYaw;
+        this.mc.player.prevRotationYaw = this.mc.player.rotationYaw;
+        this.mc.player.prevRotationYawHead = this.mc.player.rotationYaw;
 
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
@@ -305,6 +316,9 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             this.mc.player.turn(movementX, movementY);
             if(this.mc.player.rotationPitch >= -10F) {
                 this.mc.player.rotationPitch = -10F;
+                nullify = true;
+            } else if(this.mc.player.rotationPitch <= -75F) {
+                this.mc.player.rotationPitch = -75F;
                 nullify = true;
             }
             if (nullify) movementY = 0;

@@ -8,9 +8,11 @@
 
 package hellfirepvp.astralsorcery.client.models.base;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -237,12 +239,22 @@ public class ASobservatory extends ModelBase {
         this.base.addChild(this.base8);
         this.base.addChild(this.base2);
         this.tube.addChild(this.tube10);
+
+        this.seat.addChild(this.tube);
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    public void render(Entity entity, float iYaw, float iPitch, float f2, float f3, float f4, float f5) {
+        float yawRad = (float) Math.toRadians(iYaw);
+        float pitchRad = (float) Math.toRadians(iPitch);
+
+        this.seat.rotateAngleY = yawRad;
+        this.base.rotateAngleY = yawRad;
+
+        this.tube.rotateAngleY = 0;
+        this.tube.rotateAngleX = pitchRad;
+
         this.seat.render(f5);
-        this.tube.render(f5);
         this.base.render(f5);
     }
 
