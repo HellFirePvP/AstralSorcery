@@ -18,10 +18,13 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -36,6 +39,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.List;
 
@@ -97,11 +101,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
         mc.mouseHelper.grabMouseCursor();
         mc.inGameHasFocus = true;
 
-        //if (Minecraft.IS_RUNNING_ON_MAC) {
-        //    Mouse.setGrabbed(false);
-        //    Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2 - 20);
-        //    Mouse.setGrabbed(true);
-        //}
+        mc.player.renderYawOffset = mc.player.rotationYawHead;
+        mc.player.prevRenderYawOffset = mc.player.prevRotationYawHead;
     }
 
     @Override
@@ -204,9 +205,11 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             Map<IConstellation, Map<StarLocation, Rectangle>> stars = drawCellEffect(offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
             zLevel -= 1;
         }
+
+        GlStateManager.disableBlend();
     }
 
-    private Map<IConstellation, Map<StarLocation, Rectangle>> drawCellEffect(int offsetX, int offsetY, int guiWidth, int guiHeight, float partialTicks, float transparency) {
+    private Map<IConstellation, Map<StarLocation, Rectangle>> drawCellEffect(int offsetX, int offsetY, int width, int height, float partialTicks, float transparency) {
         GlStateManager.disableAlpha();
 
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
@@ -229,10 +232,95 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             GlStateManager.popMatrix();
         }
 
-        r.setSeed(lastTracked * 31);
+        Random cstRand = new Random(lastTracked * 31);
+        for (int i = 0; i < 5 + cstRand.nextInt(10); i++) {
+            cstRand.nextLong();
+        }
+
+        double playerYaw = (Minecraft.getMinecraft().player.rotationYaw + 180) % 360F;
+        double playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+
+        if (playerYaw < 0) {
+            playerYaw += 360F;
+        }
+        if (playerYaw >= 180F) {
+            playerYaw -= 360F;
+        }
+        float cstSizeX = 55F;
+        float cstSizeY = 35F;
+
+        Map<IConstellation, Map<StarLocation, Rectangle>> cstMap = new HashMap<>();
+        if(handle != null && transparency > 0) {
+            List<IConstellation> actives = handle.getActiveConstellations();
+            Map<IConstellation, Point.Double> cstOffsets = generateOffsets(actives, cstRand);
+
+            for (Map.Entry<IConstellation, Point.Double> constellationOffset : cstOffsets.entrySet()) {
+
+                double diffYaw = playerYaw - ((float) constellationOffset.getValue().x);
+                double diffPitch = playerPitch - ((float) constellationOffset.getValue().y);
+
+                if ((Math.abs(diffYaw) <= cstSizeX || Math.abs(diffYaw += 360F) <= cstSizeX) &&
+                        Math.abs(diffPitch) <= cstSizeY) {
+
+                    int wPart = ((int) (((float) width) * 0.1F));
+                    int hPart = ((int) (((float) height) * 0.1F));
+
+                    Map<StarLocation, Rectangle> rectangles = RenderConstellation.renderConstellationIntoGUI(
+                            constellationOffset.getKey(),
+                            offsetX + wPart + MathHelper.floor((diffYaw / cstSizeX) * width),
+                            offsetY + hPart + MathHelper.floor((diffPitch / cstSizeY) * height),
+                            zLevel,
+                            ((int) (height * 0.6F)),
+                            ((int) (height * 0.6F)),
+                            2,
+                            new RenderConstellation.BrightnessFunction() {
+                                @Override
+                                public float getBrightness() {
+                                    return (0.4F + 0.6F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency;
+                                }
+                            },
+                            ResearchManager.clientProgress.hasConstellationDiscovered(constellationOffset.getKey().getUnlocalizedName()),
+                            true
+                    );
+
+                    cstMap.put(constellationOffset.getKey(), rectangles);
+                }
+            }
+        }
 
         GlStateManager.enableAlpha();
-        return null;
+        return cstMap;
+    }
+
+    private Map<IConstellation, Point.Double> generateOffsets(List<IConstellation> actives, Random r) {
+        float cstGap = 10F;
+
+        r.nextLong();
+
+        Map<IConstellation, Point.Double> offsets = new HashMap<>();
+        for (IConstellation cst : actives) {
+            Point.Double at;
+            while (true) {
+                float pitch = -6.5F + r.nextFloat() * -80F;
+                float yaw = r.nextFloat() * 360F;
+                at = new Point2D.Double(yaw, pitch);
+                if (!cstCollides(offsets, at, cstGap)) {
+                    break;
+                }
+            }
+            offsets.put(cst, at);
+        }
+        return offsets;
+    }
+
+    private boolean cstCollides(Map<IConstellation, Point2D.Double> offsets, Point2D.Double at, float cstGap) {
+        double sq = Math.sqrt((cstGap * cstGap) * 2);
+        for (Point2D.Double point : offsets.values()) {
+            if (point.distance(at) <= sq) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void drawFrame(float pticks) {
@@ -329,8 +417,6 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
 
     private void moveIdleStars(int changeX, int changeY) {
         int width = guiWidth, height = guiHeight;
-        changeX *= 3F;
-        changeY *= 2F;
 
         for (StarPosition sl : usedStars) {
             sl.x -= changeX;

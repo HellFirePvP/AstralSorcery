@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.starlight.network;
 
+import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.block.network.IBlockStarlightRecipient;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
@@ -167,6 +168,10 @@ public class TransmissionWorldHandler {
             }
             sources.add(source);
         }
+    }
+
+    public Collection<TransmissionChain> getTransmissionChains() {
+        return ImmutableList.copyOf(this.cachedSourceChain.values());
     }
 
     //Fired if the node's state related to the network changes.

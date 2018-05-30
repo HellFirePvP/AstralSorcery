@@ -239,9 +239,7 @@ public class GuiHandTelescope extends GuiWHScreen {
         int offsetX = 6, offsetY = 6;
         int width = guiWidth - 12, height = guiHeight - 12;
 
-        Iterator<StarPosition> iterator = usedStars.iterator();
-        while (iterator.hasNext()) {
-            StarPosition sl = iterator.next();
+        for (StarPosition sl : usedStars) {
             sl.x -= changeX;
             sl.y += changeY;
 
@@ -256,9 +254,6 @@ public class GuiHandTelescope extends GuiWHScreen {
                 sl.y -= height;
             }
         }
-        /*for (int i = 0; i < (randomStars - usedStars.size()); i++) {
-            usedStars.add(new StarPosition(offsetX + random.nextFloat() * width, offsetY + random.nextFloat() * height));
-        }*/
     }
 
     private void drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
