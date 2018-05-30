@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationBase;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase;
 import hellfirepvp.astralsorcery.common.constellation.cape.impl.*;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -29,6 +30,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.Random;
 
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
@@ -391,7 +394,17 @@ public class RegistryConstellations {
         horologium = new ConstellationBase.WeakSpecial("horologium", new Color(0x7D16B4)) {
             @Override
             public boolean doesShowUp(WorldSkyHandler handle, World world, long day) {
-                return isDayOfSolarEclipse(day);
+                long rSeed;
+                if(world.isRemote) {
+                    Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
+                    if (!testSeed.isPresent()) {
+                        return false;
+                    }
+                    rSeed = testSeed.get();
+                } else {
+                    rSeed = new Random(world.getSeed()).nextLong();
+                }
+                return isDayOfSolarEclipse(rSeed, day);
             }
 
             @Override
