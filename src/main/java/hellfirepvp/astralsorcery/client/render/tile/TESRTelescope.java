@@ -38,7 +38,7 @@ public class TESRTelescope extends TileEntitySpecialRenderer<TileTelescope> {
         GlStateManager.rotate(180, 1, 0, 0);
         GlStateManager.rotate(180, 0, 1, 0);
         GlStateManager.rotate(te.getRotation().ordinal() * 45, 0, 1, 0);
-        GlStateManager.scale(0.053, 0.053, 0.053);
+        GlStateManager.scale(0.0625, 0.0625, 0.0625);
 
         GlStateManager.pushMatrix();
         GlStateManager.rotate((te.getRotation().ordinal()) * 45 + 152.0F, 0.0F, 1.0F, 0.0F);
