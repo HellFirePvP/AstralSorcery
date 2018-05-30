@@ -95,6 +95,7 @@ public class RegistryRecipes {
     public static ConstellationRecipe rEnchAmuletOriginal, rEnchAmuletReroll;
     public static DiscoveryRecipe rSextant;
     public static SextantUpgradeRecipe rSextantUpgrade;
+    public static TraitRecipe rObservatory;
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
 
@@ -207,7 +208,7 @@ public class RegistryRecipes {
                     output.setCount(output.getCount() * 4);
                 }
             }
-            registerGrindstoneRecipe(new DustGrindstoneRecipe(new ItemHandle(inputs), output, 12, doubleChance));
+            registerGrindstoneRecipe(new hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe(new ItemHandle(inputs), output, 12, doubleChance));
         }
     }
 
@@ -405,6 +406,47 @@ public class RegistryRecipes {
 
         rSextantUpgrade = registerAltarRecipe(new SextantUpgradeRecipe());
 
+
+        rObservatory = registerTraitRecipe(newShapedRecipe("internal/altar/observatory", BlocksAS.blockObservatory)
+                .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.LOWER_RIGHT)
+                .addPart(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(ItemsAS.infusedGlass,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+                .addPart(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                        ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
+        rObservatory.setAttItem(ItemCraftingComponent.MetaType.GLASS_LENS.asStack(),
+                AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT);
+        rObservatory.setAttItem(OreDictAlias.ITEM_GOLD_INGOT,
+                AttunementRecipe.AttunementAltarSlot.LOWER_LEFT);
+        rObservatory.setCstItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
+                ConstellationRecipe.ConstellationAtlarSlot.UP_UP_RIGHT,
+                ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
+        rObservatory.setCstItem(OreDictAlias.ITEM_GOLD_INGOT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationRecipe.ConstellationAtlarSlot.DOWN_DOWN_LEFT);
+        rObservatory.setInnerTraitItem(OreDictAlias.ITEM_GOLD_INGOT,
+                TraitRecipe.TraitRecipeSlot.LOWER_CENTER);
+        rObservatory.setInnerTraitItem(OreDictAlias.ITEM_GOLD_NUGGET,
+                TraitRecipe.TraitRecipeSlot.UPPER_CENTER,
+                TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
+        rObservatory.addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
+                .addOuterTraitItem(OreDictAlias.ITEM_STARMETAL_DUST)
+                .addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
+                .addOuterTraitItem(ItemUsableDust.DustType.NOCTURNAL.asStack())
+                .addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
+                .addOuterTraitItem(OreDictAlias.ITEM_STARMETAL_DUST)
+                .addOuterTraitItem(ItemUsableDust.DustType.ILLUMINATION.asStack())
+                .addOuterTraitItem(ItemUsableDust.DustType.NOCTURNAL.asStack());
+
+        rObservatory.setRequiredConstellation(Constellations.lucerna);
+
         rSextant = registerAltarRecipe(new DiscoveryRecipe(newShapedRecipe("internal/altar/sextant", ItemsAS.sextant)
                 .addPart(OreDictAlias.ITEM_GOLD_INGOT,
                         ShapedRecipeSlot.LEFT,
@@ -571,6 +613,7 @@ public class RegistryRecipes {
         ItemHandle first = Iterables.getFirst(Constellations.aevitas.getConstellationSignatureItems(), null);
         rWandAugmentAevitas.addOuterTraitItem(first).addOuterTraitItem(first)
                 .addOuterTraitItem(first).addOuterTraitItem(first);
+        rWandAugmentAevitas.setRequiredConstellation(Constellations.aevitas);
 
         rWandAugmentArmara = registerAltarRecipe(new WandAttunementRecipe(Constellations.armara, newShapedRecipe("internal/altar/wand/armara", ItemsAS.wand)
                 .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
@@ -592,6 +635,7 @@ public class RegistryRecipes {
         first = Iterables.getFirst(Constellations.armara.getConstellationSignatureItems(), null);
         rWandAugmentArmara.addOuterTraitItem(first).addOuterTraitItem(first)
                 .addOuterTraitItem(first).addOuterTraitItem(first);
+        rWandAugmentArmara.setRequiredConstellation(Constellations.armara);
 
         rWandAugmentDiscidia = registerAltarRecipe(new WandAttunementRecipe(Constellations.discidia, newShapedRecipe("internal/altar/wand/discidia", ItemsAS.wand)
                 .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
@@ -613,6 +657,7 @@ public class RegistryRecipes {
         first = Iterables.getFirst(Constellations.discidia.getConstellationSignatureItems(), null);
         rWandAugmentDiscidia.addOuterTraitItem(first).addOuterTraitItem(first)
                 .addOuterTraitItem(first).addOuterTraitItem(first);
+        rWandAugmentDiscidia.setRequiredConstellation(Constellations.discidia);
 
         rWandAugmentEvorsio = registerAltarRecipe(new WandAttunementRecipe(Constellations.evorsio, newShapedRecipe("internal/altar/wand/evorsio", ItemsAS.wand)
                 .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
@@ -634,6 +679,7 @@ public class RegistryRecipes {
         first = Iterables.getFirst(Constellations.evorsio.getConstellationSignatureItems(), null);
         rWandAugmentEvorsio.addOuterTraitItem(first).addOuterTraitItem(first)
                 .addOuterTraitItem(first).addOuterTraitItem(first);
+        rWandAugmentEvorsio.setRequiredConstellation(Constellations.evorsio);
 
         rWandAugmentVicio = registerAltarRecipe(new WandAttunementRecipe(Constellations.vicio, newShapedRecipe("internal/altar/wand/vicio", ItemsAS.wand)
                 .addPart(ItemsAS.wand, ShapedRecipeSlot.CENTER)
@@ -655,6 +701,7 @@ public class RegistryRecipes {
         first = Iterables.getFirst(Constellations.vicio.getConstellationSignatureItems(), null);
         rWandAugmentVicio.addOuterTraitItem(first).addOuterTraitItem(first)
                 .addOuterTraitItem(first).addOuterTraitItem(first);
+        rWandAugmentVicio.setRequiredConstellation(Constellations.vicio);
 
         rCapeBase = registerTraitRecipe(newShapedRecipe("internal/altar/capebase", ItemsAS.armorImbuedCape)
                 .addPart(Items.LEATHER_CHESTPLATE,

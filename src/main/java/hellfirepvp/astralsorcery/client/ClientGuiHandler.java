@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.item.ItemJournal;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileMapDrawingTable;
+import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.tile.TileTelescope;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,6 +79,8 @@ public class ClientGuiHandler {
                         return new GuiJournalContainer(player.inventory, held, player.inventory.currentItem);
                     }
                 }
+            case OBSERVATORY:
+                return new GuiObservatory((TileObservatory) t);
             default:
                 return null;
         }

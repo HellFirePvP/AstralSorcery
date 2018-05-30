@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
@@ -92,19 +93,18 @@ public class RenderConstellation {
 
     //non-rotating, builds into x/z space
     public static void renderConstellationIntoWorldFlat(IConstellation c, Color rC, Vector3 offsetPos, double scale, double lineBreadth, float br) {
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
 
         double s = 1D / 31D * scale;
 
-        GL11.glTranslated(-15.5D * s, 0, -15.5D * s);
+        GlStateManager.translate(-15.5D * s, 0, -15.5D * s);
 
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.apply();
+        GlStateManager.disableCull();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
 
         float fRed = ((float) rC.getRed()) / 255F;
         float fGreen = ((float) rC.getGreen()) / 255F;
@@ -116,6 +116,7 @@ public class RenderConstellation {
             float brightness = br;
             brightness *= 0.8;
             float fAlpha = brightness < 0 ? 0 : brightness;
+            offsetPos.addY(0.001);
 
             Vector3 offset = offsetPos.clone().addX(sc.from.x * s).addZ(sc.from.y * s);
             Vector3 dirU = new Vector3(sc.to.x, 0, sc.to.y).subtract(sc.from.x, 0, sc.from.y).multiply(s);
@@ -154,8 +155,9 @@ public class RenderConstellation {
         }
         tes.draw();
 
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        GlStateManager.enableCull();
+        GlStateManager.enableAlpha();
+        GlStateManager.popMatrix();
     }
 
     public static void renderConstellationIntoWorld(IConstellation c, Color rC, Vector3 offsetPos, double lineBreadth, BrightnessFunction func) {

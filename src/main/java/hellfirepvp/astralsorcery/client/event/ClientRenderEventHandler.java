@@ -23,6 +23,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.common.block.BlockObservatory;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
@@ -49,6 +50,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -245,6 +247,15 @@ public class ClientRenderEventHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onBoxDraw(DrawBlockHighlightEvent event) {
+        if(event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK &&
+                event.getPlayer().getEntityWorld().getBlockState(event.getTarget().getBlockPos()).getBlock() instanceof BlockObservatory) {
+            event.setCanceled(true);
         }
     }
 

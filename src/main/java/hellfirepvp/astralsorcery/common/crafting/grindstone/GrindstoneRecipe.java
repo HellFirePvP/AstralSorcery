@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.crafting.grindstone;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -29,17 +30,28 @@ public class GrindstoneRecipe {
     protected final ItemHandle input;
     protected final ItemStack output;
     protected final int chance;
+    protected final float doubleChance;
 
     public GrindstoneRecipe(ItemStack input, ItemStack output, int chance) {
-        this.input = new ItemHandle(input);
-        this.output = output;
-        this.chance = chance;
+        this(input, output, chance, 0F);
     }
 
     public GrindstoneRecipe(ItemHandle input, ItemStack output, int chance) {
+        this(input, output, chance, 0F);
+    }
+
+    public GrindstoneRecipe(ItemStack input, ItemStack output, int chance, float doubleChance) {
+        this.input = new ItemHandle(input);
+        this.output = output;
+        this.chance = chance;
+        this.doubleChance = doubleChance;
+    }
+
+    public GrindstoneRecipe(ItemHandle input, ItemStack output, int chance, float doubleChance) {
         this.input = input;
         this.output = output;
         this.chance = chance;
+        this.doubleChance = doubleChance;
     }
 
     public boolean matches(ItemStack stackIn) {
@@ -50,10 +62,18 @@ public class GrindstoneRecipe {
         return this.input.getApplicableItems().size() > 0 && !this.output.isEmpty();
     }
 
+    public float getChanceToDoubleOutput() {
+        return MathHelper.clamp(this.doubleChance, 0, 1);
+    }
+
     @Nonnull
     public GrindResult grind(ItemStack stackIn) {
         if(rand.nextInt(chance) == 0) {
-            return GrindResult.itemChange(ItemUtils.copyStackWithSize(this.output, this.output.getCount()));
+            int out = this.output.getCount();
+            if (rand.nextFloat() > getChanceToDoubleOutput()) {
+                out *= 2;
+            }
+            return GrindResult.itemChange(ItemUtils.copyStackWithSize(this.output, out));
         }
         return GrindResult.failNoOp();
     }

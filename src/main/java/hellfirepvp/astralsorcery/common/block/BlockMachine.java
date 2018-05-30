@@ -82,10 +82,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(MACHINE_TYPE)) {
             case TELESCOPE:
-                RenderingUtils.playBlockBreakParticles(pos.up(), Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
-            case GRINDSTONE:
-                RenderingUtils.playBlockBreakParticles(pos, Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, BlockPlanks.EnumType.SPRUCE));
-                break;
+                RenderingUtils.playBlockBreakParticles(pos.up(), BlocksAS.blockMachine.getDefaultState().withProperty(MACHINE_TYPE, MachineType.TELESCOPE));
         }
         return false;
     }
@@ -158,7 +155,7 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return null;
+        return createTileEntity(worldIn, getStateFromMeta(meta));
     }
 
     @Override

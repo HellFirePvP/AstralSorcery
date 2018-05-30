@@ -41,7 +41,7 @@ public class PerkDamageIncrease extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        dmgMultiplier = cfg.getFloat(getKey() + "DamageIncrease", getConfigurationSection(), dmgMultiplier, 1F, 2F, "Sets the damage multiplier that is applied to entity damage if the player has this perk.");
+        dmgMultiplier = cfg.getFloat(getKey() + "DamageIncrease", getConfigurationSection(), dmgMultiplier, 1F, 5F, "Sets the damage multiplier that is applied to entity damage if the player has this perk.");
     }
 
 }

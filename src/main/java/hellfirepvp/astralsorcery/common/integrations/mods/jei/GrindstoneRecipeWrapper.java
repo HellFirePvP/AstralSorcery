@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.jei;
 
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.common.crafting.grindstone.DustGrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseWrapper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,11 +42,13 @@ public class GrindstoneRecipeWrapper extends JEIBaseWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        if(minecraft.fontRenderer != null && recipe instanceof DustGrindstoneRecipe) {
-            int displChance = Math.round(((DustGrindstoneRecipe) recipe).getDoubleChance() * 100);
-            String out = I18n.format("misc.grindstone.double", displChance + "%");
-            int length = minecraft.fontRenderer.getStringWidth(out);
-            minecraft.fontRenderer.drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
+        if(minecraft.fontRenderer != null) {
+            if(recipe.getChanceToDoubleOutput() > 1E-4) {
+                int displChance = Math.round(recipe.getChanceToDoubleOutput() * 100);
+                String out = I18n.format("misc.grindstone.double", displChance + "%");
+                int length = minecraft.fontRenderer.getStringWidth(out);
+                minecraft.fontRenderer.drawString(out, recipeWidth / 2 - length / 2, recipeHeight - 12, 0xFF454545, false);
+            }
         }
     }
 

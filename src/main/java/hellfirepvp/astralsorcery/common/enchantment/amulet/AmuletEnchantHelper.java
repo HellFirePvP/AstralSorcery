@@ -8,10 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
+import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -30,13 +32,13 @@ public class AmuletEnchantHelper {
 
     private static final Random rand = new Random();
 
-    private static final float chance2nd = 0.8F;
-    private static final float chance3rd = 0.35F;
+    private static float chance2nd = 0.8F;
+    private static float chance3rd = 0.25F;
 
-    private static final float chance2Level = 0.15F;
+    private static float chance2Level = 0.15F;
 
-    private static final float chanceToAll = 0.02F;
-    private static final float chanceToNonExisting = 0.35F;
+    private static float chanceToAll = 0.02F;
+    private static float chanceToNonExisting = 0.35F;
 
     public static void rollAmulet(ItemStack stack, float perfectionDegree) {
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemEnchantmentAmulet)) {
@@ -139,6 +141,29 @@ public class AmuletEnchantHelper {
             }
         }
         return enchantments;
+    }
+
+    public static class CfgEntry extends ConfigEntry {
+
+        public CfgEntry() {
+            super(Section.TOOLS, "enchantment_amulet");
+        }
+
+        @Override
+        public String getConfigurationSection() {
+            return super.getConfigurationSection() + "." + getKey();
+        }
+
+        @Override
+        public void loadFromConfig(Configuration cfg) {
+            chance2nd = cfg.getFloat("chance2nd", getConfigurationSection(), chance2nd, 0F, 1F, "Defines the chance to roll a 2nd-enchantment-manipulating roll on the amulet. Value defines a percent chance from 0% to 100%. Setting this to 0 also prevents a 3rd roll");
+            chance3rd = cfg.getFloat("chance3rd", getConfigurationSection(), chance3rd, 0F, 1F, "Defines the chance to roll a 3rd-enchantment-manipulation roll on the amulet. Value defines a percent chance from 0% to 100%.");
+
+            chance2Level = cfg.getFloat("chanceLevel2", getConfigurationSection(), chance2Level, 0F, 1F, "Defines the chance the roll will be +2 instead of +1 to existing enchantment/to enchantment/to all enchantments");
+
+            chanceToAll = cfg.getFloat("chanceToAll", getConfigurationSection(), chanceToAll, 0F, 1F, "Defines the chance the amulet-roll 'to all existing enchantments' will appear.");
+            chanceToNonExisting = cfg.getFloat("chanceToNonExisting", getConfigurationSection(), chanceToNonExisting, 0F, 1F, "Defines the chance the amulet roll 'to <encahntment>' will appear. (Don't mistake this for 'to exsting <enchantment>'!)");
+        }
     }
 
 }

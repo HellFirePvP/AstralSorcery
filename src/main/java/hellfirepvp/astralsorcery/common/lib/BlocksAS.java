@@ -56,6 +56,7 @@ public class BlocksAS {
     public static BlockBore blockBore;
     public static BlockBoreHead blockBoreHead;
     public static BlockPortalNode blockPortalNode;
+    public static BlockObservatory blockObservatory;
 
     public static Fluid fluidLiquidStarlight;
     public static FluidBlockLiquidStarlight blockLiquidStarlight;

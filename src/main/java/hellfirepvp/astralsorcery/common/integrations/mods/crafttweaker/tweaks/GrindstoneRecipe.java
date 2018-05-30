@@ -33,6 +33,11 @@ public class GrindstoneRecipe extends BaseTweaker {
 
     @ZenMethod
     public static void addRecipe(IItemStack input, IItemStack output) {
+        addRecipe(input, output, 0F);
+    }
+
+    @ZenMethod
+    public static void addRecipe(IItemStack input, IItemStack output, float doubleChance) {
         ItemHandle in = convertToHandle(input);
         if (in == null || in.handleType == ItemHandle.Type.FLUID) { //No fluid inputs :thonk:
             CraftTweakerAPI.logError("[" + name + "] Skipping recipe-add due to invalid input itemstack.");
@@ -45,7 +50,7 @@ public class GrindstoneRecipe extends BaseTweaker {
             return;
         }
 
-        ModIntegrationCrafttweaker.recipeModifications.add(new GrindstoneRecipeAdd(in, out));
+        ModIntegrationCrafttweaker.recipeModifications.add(new GrindstoneRecipeAdd(in, out, doubleChance));
     }
 
     @ZenMethod

@@ -158,8 +158,8 @@ public class CraftingAccessManager {
         LiquidInteraction.removeInteraction(comp1, comp2, output);
     }
 
-    public static void addGrindstoneRecipe(ItemHandle in, ItemStack out, int chance) {
-        GrindstoneRecipe gr = new GrindstoneRecipe(in, out, chance);
+    public static void addGrindstoneRecipe(ItemHandle in, ItemStack out, int chance, float doubleChance) {
+        GrindstoneRecipe gr = new GrindstoneRecipe(in, out, chance, doubleChance);
 
         GrindstoneRecipeRegistry.mtRecipes.add(gr);
         addRecipe(gr);
