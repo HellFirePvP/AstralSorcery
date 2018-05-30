@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.base.GuiTileBase;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
@@ -22,15 +23,21 @@ import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
 import hellfirepvp.astralsorcery.common.tile.TileObservatory;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.math.BlockPos;
@@ -40,6 +47,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -56,9 +64,12 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
 
     private static final int frameSize = 16;
     private static final AbstractRenderableTexture texPartFrame = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "observatoryframe");
+    private static final AbstractRenderableTexture textureConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
 
     private static final int randomStars = 220;
     private List<StarPosition> usedStars = new ArrayList<>(randomStars);
+
+    private Map<IConstellation, Map<StarLocation, Rectangle>> drawnStars = null;
 
     private boolean grabCursor = false;
 
@@ -134,6 +145,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
         Minecraft.getMinecraft().gameSettings.thirdPersonView = 0;
+        this.drawnStars = null;
 
         handleMouseMovement(partialTicks);
 
@@ -202,11 +214,86 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             int offsetX = guiLeft;
             int offsetZ = guiTop;
             zLevel += 1;
-            Map<IConstellation, Map<StarLocation, Rectangle>> stars = drawCellEffect(offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
+            drawnStars = drawCellEffect(offsetX, offsetZ, getGuiWidth(), getGuiHeight(), partialTicks, transparency);
             zLevel -= 1;
+        } else {
+            clearLines();
+            abortDrawing();
         }
 
+        zLevel += 2;
+        drawDrawnLines(r, partialTicks);
+        zLevel -= 2;
+
         GlStateManager.disableBlend();
+    }
+
+    private void drawDrawnLines(final Random r, final float pTicks) {
+        if (!canStartDrawing()) {
+            clearLines();
+            abortDrawing();
+            return;
+        }
+
+        float linebreadth = 2F;
+        RenderConstellation.BrightnessFunction func = new RenderConstellation.BrightnessFunction() {
+            @Override
+            public float getBrightness() {
+                return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), pTicks, 5 + r.nextInt(15));
+            }
+        };
+
+        textureConnection.bindTexture();
+
+        for (int j = 0; j < 2; j++) {
+            for (GuiTelescope.Line l : drawnLines) {
+                drawLine(l.start, l.end, func, linebreadth, true);
+            }
+
+            if (start != null && end != null) {
+                Point adjStart = new Point(start.x - guiLeft, start.y - guiTop);
+                Point adjEnd = new Point(end.x - guiLeft, end.y - guiTop);
+                drawLine(adjStart, adjEnd, func, linebreadth, false);
+            }
+        }
+    }
+
+    private void drawLine(Point start, Point end, RenderConstellation.BrightnessFunction func, float linebreadth, boolean applyFunc) {
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+
+        float brightness;
+        if (applyFunc) {
+            brightness = func.getBrightness();
+        } else {
+            brightness = 1F;
+        }
+        float starBr = Minecraft.getMinecraft().world.getStarBrightness(1.0F);
+        if (starBr <= 0.0F) {
+            return;
+        }
+        brightness *= (starBr * 2);
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        GlStateManager.color(brightness, brightness, brightness, brightness < 0 ? 0 : brightness);
+
+        Vector3 fromStar = new Vector3(guiLeft + start.getX(), guiTop + start.getY(), zLevel);
+        Vector3 toStar = new Vector3(guiLeft + end.getX(), guiTop + end.getY(), zLevel);
+
+        Vector3 dir = toStar.clone().subtract(fromStar);
+        Vector3 degLot = dir.clone().crossProduct(new Vector3(0, 0, 1)).normalize().multiply(linebreadth);//.multiply(j == 0 ? 1 : -1);
+
+        Vector3 vec00 = fromStar.clone().add(degLot);
+        Vector3 vecV = degLot.clone().multiply(-2);
+
+        for (int i = 0; i < 4; i++) {
+            int u = ((i + 1) & 2) >> 1;
+            int v = ((i + 2) & 2) >> 1;
+
+            Vector3 pos = vec00.clone().add(dir.clone().multiply(u)).add(vecV.clone().multiply(v));
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(u, v).endVertex();
+        }
+
+        tes.draw();
     }
 
     private Map<IConstellation, Map<StarLocation, Rectangle>> drawCellEffect(int offsetX, int offsetY, int width, int height, float partialTicks, float transparency) {
@@ -325,6 +412,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
 
     private void drawFrame(float pticks) {
         texPartFrame.bindTexture();
+        GlStateManager.color(1F, 1F, 1F, 1F);
 
         //Draw corners
         GlStateManager.pushMatrix();
@@ -362,7 +450,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             Minecraft.getMinecraft().mouseHelper.grabMouseCursor();
             Minecraft.getMinecraft().inGameHasFocus = true;
             grabCursor = false;
-            //clearLines();
+            clearLines();
         }
         if (!grabCursor && ctrl) {
             Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
@@ -560,6 +648,144 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
             int red = (int) (perc * 140);
             return (red << 16) | (green << 8) | 0xFF;
         }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            tryStartDrawing(mouseX, mouseY);
+        }
+    }
+
+    @Override
+    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        if (clickedMouseButton == 0) {
+            informMovement(mouseX, mouseY);
+        }
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        if (mouseButton == 0) {
+            informRelease(mouseX, mouseY);
+        }
+    }
+
+    private LinkedList<GuiTelescope.Line> drawnLines = new LinkedList<>();
+    private Point start, end;
+
+    private void tryStartDrawing(int mouseX, int mouseY) {
+        if (!canStartDrawing()) return;
+
+        start = new Point(mouseX, mouseY);
+        end = new Point(mouseX, mouseY);
+    }
+
+    private boolean canStartDrawing() {
+        return Minecraft.getMinecraft().world.getStarBrightness(1.0F) >= 0.35F &&
+                Minecraft.getMinecraft().world.getRainStrength(1.0F) <= 0.1F;
+    }
+
+    private void clearLines() {
+        drawnLines.clear();
+    }
+
+    private void informMovement(int mouseX, int mouseY) {
+        end = new Point(mouseX, mouseY);
+    }
+
+    private void informRelease(int mouseX, int mouseY) {
+        if (start != null) {
+            end = new Point(mouseX, mouseY);
+            pushDrawnLine(start, end);
+        } else {
+            start = null;
+            end = null;
+        }
+        abortDrawing();
+
+        checkConstellation(drawnLines);
+    }
+
+    private void checkConstellation(List<GuiTelescope.Line> drawnLines) {
+        lblInfos: for (Map.Entry<IConstellation, Map<StarLocation, Rectangle>> info : this.drawnStars.entrySet()) {
+            IConstellation c = info.getKey();
+            if (c == null || ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()))
+                continue;
+            PlayerProgress client = ResearchManager.clientProgress;
+            if (client == null) return;
+
+            boolean has = false;
+            for (String strConstellation : client.getSeenConstellations()) {
+                IConstellation ce = ConstellationRegistry.getConstellationByName(strConstellation);
+                if (ce != null && ce.equals(c)) {
+                    has = true;
+                    break;
+                }
+            }
+
+            if (!has) continue;
+
+            List<StarConnection> sc = c.getStarConnections();
+            if (sc.size() != drawnLines.size()) continue; //Can't match otherwise anyway.
+            if (!c.canDiscover(ResearchManager.clientProgress)) continue;
+
+            Map<StarLocation, Rectangle> stars = info.getValue();
+
+            for (StarConnection connection : sc) {
+                Rectangle fromRect = stars.get(connection.from);
+                if (fromRect == null) {
+                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    continue lblInfos;
+                }
+                Rectangle toRect = stars.get(connection.to);
+                if (toRect == null) {
+                    AstralSorcery.log.info("[AstralSorcery] Could not check constellation of telescope drawing - starLocation is missing?");
+                    continue lblInfos;
+                }
+                if (!containsMatch(drawnLines, fromRect, toRect)) {
+                    continue lblInfos;
+                }
+            }
+
+            //We found a match. horray.
+            PacketChannel.CHANNEL.sendToServer(new PktDiscoverConstellation(c.getUnlocalizedName()));
+            clearLines();
+            abortDrawing();
+            return;
+        }
+    }
+
+    private boolean containsMatch(List<GuiTelescope.Line> drawnLines, Rectangle r1, Rectangle r2) {
+        for (GuiTelescope.Line l : drawnLines) {
+            Point start = l.start;
+            Point end = l.end;
+            start = new Point(start.x + guiLeft, start.y + guiTop);
+            end = new Point(end.x + guiLeft, end.y + guiTop);
+            if ((r1.contains(start) && r2.contains(end)) ||
+                    (r2.contains(start) && r1.contains(end))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void pushDrawnLine(Point start, Point end) {
+        if (Math.abs(start.getX() - end.getX()) <= 2 &&
+                Math.abs(start.getY() - end.getY()) <= 2) {
+            return; //Rather a point than a line. probably not the users intention...
+        }
+        Point adjStart = new Point(start.x - guiLeft, start.y - guiTop);
+        Point adjEnd = new Point(end.x - guiLeft, end.y - guiTop);
+        GuiTelescope.Line l = new GuiTelescope.Line(adjStart, adjEnd);
+        this.drawnLines.addLast(l);
+    }
+
+    private void abortDrawing() {
+        start = null;
+        end = null;
     }
 
     private static class StarPosition {
