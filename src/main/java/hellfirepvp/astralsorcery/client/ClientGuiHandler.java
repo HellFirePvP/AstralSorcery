@@ -81,6 +81,8 @@ public class ClientGuiHandler {
                 }
             case OBSERVATORY:
                 return new GuiObservatory((TileObservatory) t);
+            case SEXTANT:
+                return new GuiSextantSelector();
             default:
                 return null;
         }

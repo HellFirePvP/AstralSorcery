@@ -41,7 +41,7 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
                     "(ILnet/minecraft/enchantment/Enchantment;Lnet/minecraft/item/ItemStack;)I",
                     false));
 
-            peek = peekFirstInstructionAfter(mn, peek + 4, Opcodes.IRETURN);
+            peek = peekFirstInstructionAfter(mn, mn.instructions.indexOf(node) + 1, Opcodes.IRETURN);
         }
 
         mn = getMethodLazy(cn, "getEnchantments", "func_82781_a");
@@ -57,7 +57,7 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
                     "(Ljava/util/Map;Lnet/minecraft/item/ItemStack;)Ljava/util/Map;",
                     false));
 
-            peek = peekFirstInstructionAfter(mn, peek + 3, Opcodes.IRETURN);
+            peek = peekFirstInstructionAfter(mn, mn.instructions.indexOf(node) + 1, Opcodes.IRETURN);
         }
 
         mn = getMethodLazy(cn, "applyEnchantmentModifier", "func_77518_a");
@@ -83,7 +83,7 @@ public class PatchModifyEnchantmentLevels extends ClassPatch {
                     "getEnchantmentTagList",
                     "func_77986_q",
                     "()Lnet/minecraft/nbt/NBTTagList;",
-                    peek + 3);
+                    mn.instructions.indexOf(node) + 1);
         }
     }
 

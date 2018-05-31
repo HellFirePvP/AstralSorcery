@@ -51,7 +51,7 @@ public class PatchModifyEnchantmentLevelsTooltip extends ClassPatch {
                     "getEnchantmentTagList",
                     "func_77986_q",
                     "()Lnet/minecraft/nbt/NBTTagList;",
-                    peek + 3);
+                    mn.instructions.indexOf(node) + 1);
         }
     }
 

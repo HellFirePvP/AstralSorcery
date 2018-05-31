@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.item.tool.sextant;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -94,7 +93,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
-        if(!worldIn.isRemote && AstralSorcery.isRunningInDevEnvironment() && worldIn instanceof WorldServer && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
+        if(!worldIn.isRemote && worldIn instanceof WorldServer && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
             SextantFinder.TargetObject to = getTarget(player.getHeldItem(handIn));
             if(to != null && to.isSelectable(player.getHeldItem(handIn))) {
                 Thread tr = new Thread(() -> {

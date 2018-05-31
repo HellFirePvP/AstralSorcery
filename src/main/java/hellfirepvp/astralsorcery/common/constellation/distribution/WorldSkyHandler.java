@@ -317,7 +317,26 @@ public class WorldSkyHandler {
     }
 
     private void evaluateCelestialEventTimes(World world) {
-        int solarTime = (int) (world.getWorldTime() % 864000);
+        long seed = new Random(world.getWorldInfo().getSeed()).nextLong();
+        if(world.isRemote) {
+            Optional<Long> testSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(world);
+            if (!testSeed.isPresent()) {
+                return;
+            }
+            seed = testSeed.get();
+        }
+        Random r = new Random(seed);
+        for (int i = 0; i < 10 + r.nextInt(10); i++) {
+            r.nextLong(); //Flush
+        }
+        int rand = r.nextInt(35);
+        if (rand >= 18) {
+            rand -= 36;
+        }
+
+        int offset = 36 - rand;
+        int repeat = 36;
+        int solarTime = (int) ((world.getWorldTime() - offset * 24000) % (repeat * 24000));
         dayOfSolarEclipse = solarTime < 24000;
         if (world.getWorldTime() > 24000 && solarTime > 3600 && solarTime < 8400) {
             solarEclipse = true;
@@ -329,7 +348,8 @@ public class WorldSkyHandler {
             prevSolarEclipseTick = 0;
         }
 
-        int lunarTime = (int) (world.getWorldTime() % 1632000);
+        repeat = 68;
+        int lunarTime = (int) (world.getWorldTime() % (repeat * 24000));
         dayOfLunarEclipse = lunarTime < 24000;
         if (world.getWorldTime() > 24000 && lunarTime > 15600 && lunarTime < 20400) {
             lunarEclipse = true;

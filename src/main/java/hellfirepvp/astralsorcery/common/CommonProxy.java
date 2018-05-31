@@ -395,7 +395,8 @@ public class CommonProxy implements IGuiHandler {
         MAP_DRAWING(TileMapDrawingTable.class),
         JOURNAL,
         JOURNAL_STORAGE,
-        OBSERVATORY(TileObservatory.class);
+        OBSERVATORY(TileObservatory.class),
+        SEXTANT;
 
         private final Class<? extends TileEntity> tileClass;
 

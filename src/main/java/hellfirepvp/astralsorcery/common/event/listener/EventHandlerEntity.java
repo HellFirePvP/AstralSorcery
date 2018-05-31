@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -54,6 +56,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -112,6 +115,16 @@ public class EventHandlerEntity {
                 if (event.getEntityLiving() instanceof EntityLiving) {
                     ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSleep(PlayerSleepInBedEvent event) {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(event.getEntityPlayer().getEntityWorld());
+        if(wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
+            if (event.getResultStatus() == null) {
+                event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
             }
         }
     }
