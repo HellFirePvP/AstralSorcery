@@ -103,7 +103,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
             if(state.getBlock().equals(Blocks.WATER) &&
                     state.getBlock() instanceof BlockStaticLiquid) {
                 if(state.getValue(BlockStaticLiquid.LEVEL) == 0) {
-                    world.setBlockState(at, Blocks.STONE.getDefaultState());
+                    world.setBlockState(at, Blocks.PACKED_ICE.getDefaultState());
                     changed = true;
                 }
             } else if(state.getBlock().equals(Blocks.LAVA) &&
@@ -121,7 +121,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                     Fluid f = ((BlockFluidBase) state.getBlock()).getFluid();
                     if(f != null) {
                         if(f.getTemperature(world, at) <= 200) {
-                            generate = Blocks.ICE.getDefaultState();
+                            generate = Blocks.PACKED_ICE.getDefaultState();
                         } else if(f.getTemperature(world, at) >= 500) {
                             generate = Blocks.OBSIDIAN.getDefaultState();
                         }

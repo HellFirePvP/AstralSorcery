@@ -118,7 +118,7 @@ public class WorldSkyHandler {
             if(c instanceof IConstellationSpecialShowup) continue;
 
             if(c instanceof IMinorConstellation) {
-                for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases()) {
+                for (MoonPhase ph : ((IMinorConstellation) c).getShowupMoonPhases(savedSeed)) {
                     initialValueMappings.get(ph.ordinal()).add(c);
                 }
                 for (int i = 0; i < 8; i++) {

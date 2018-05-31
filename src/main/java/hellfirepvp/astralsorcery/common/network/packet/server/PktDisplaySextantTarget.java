@@ -60,9 +60,7 @@ public class PktDisplaySextantTarget implements IMessage, IMessageHandler<PktDis
     @SideOnly(Side.CLIENT)
     private void handleClient(PktDisplaySextantTarget pkt) {
         if(pkt.target != null && Minecraft.getMinecraft().world != null) {
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                EffectHandler.getInstance().requestSextantTargetAt(Minecraft.getMinecraft().world, pkt.targetPos, pkt.target);
-            });
+            Minecraft.getMinecraft().addScheduledTask(() -> EffectHandler.getInstance().requestSextantTargetAt(Minecraft.getMinecraft().world, pkt.targetPos, pkt.target));
         }
     }
 }

@@ -81,16 +81,32 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         NBTHelper.getPersistentData(sextantStack).setBoolean("advanced", true);
     }
 
+    @Nullable
+    public static SextantFinder.TargetObject getTarget(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return null;
+        return SextantFinder.getByName(NBTHelper.getPersistentData(sextantStack).getString("target"));
+    }
+
+    public static void setTarget(ItemStack sextantStack, SextantFinder.TargetObject target) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return;
+        NBTHelper.getPersistentData(sextantStack).setString("target", target.getRegistryName());
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         if(!worldIn.isRemote && AstralSorcery.isRunningInDevEnvironment() && worldIn instanceof WorldServer && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
-            SextantFinder.TargetObject to = SextantTargets.TARGET_VANILLA_MONUMENT;
-            BlockPos result = to.searchFor((WorldServer) worldIn, player.getPosition());
-            if(result != null) {
-                PktDisplaySextantTarget target = new PktDisplaySextantTarget(to, result);
-                PacketChannel.CHANNEL.sendTo(target, (EntityPlayerMP) player);
+            SextantFinder.TargetObject to = getTarget(player.getHeldItem(handIn));
+            if(to != null && to.isSelectable(player.getHeldItem(handIn))) {
+                Thread tr = new Thread(() -> {
+                    BlockPos result = to.searchFor((WorldServer) worldIn, player.getPosition());
+                    if(result != null) {
+                        PktDisplaySextantTarget target = new PktDisplaySextantTarget(to, result);
+                        PacketChannel.CHANNEL.sendTo(target, (EntityPlayerMP) player);
+                    }
+                });
+                tr.start();
+                return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(handIn));
             }
-            return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(handIn));
         }
         return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(handIn));
     }

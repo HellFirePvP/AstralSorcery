@@ -104,6 +104,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     public Optional<Long> getSeedIfPresent(World world) {
+        if(world == null) return Optional.empty();
         return getSeedIfPresent(world.provider.getDimension());
     }
 
