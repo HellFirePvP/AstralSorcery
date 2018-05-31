@@ -272,7 +272,7 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
         }
         ActiveCraftingTask.CraftingState prev = craftingTask.getState();
         craftingTask.setState(ActiveCraftingTask.CraftingState.ACTIVE);
-        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), rand);
+        craftingTask.getRecipeToCraft().onCraftServerTick(this, ActiveCraftingTask.CraftingState.ACTIVE, craftingTask.getTicksCrafting(), craftingTask.getTotalCraftingTime(), rand);
         return (prev != craftingTask.getState()) || needUpdate;
     }
 
@@ -465,7 +465,9 @@ public class TileAltar extends TileReceiverBaseInventory implements IWandInterac
             if(!((IGatedRecipe) recipe).hasProgressionServer(crafter)) return;
         }
         if(recipe != null) {
-            this.craftingTask = new ActiveCraftingTask(recipe, crafter.getUniqueID());
+            int divisor = Math.max(0, this.getAltarLevel().ordinal() - recipe.getNeededLevel().ordinal());
+            divisor = (int) Math.round(Math.pow(2, divisor));
+            this.craftingTask = new ActiveCraftingTask(recipe, divisor, crafter.getUniqueID());
             markForUpdate();
         }
     }

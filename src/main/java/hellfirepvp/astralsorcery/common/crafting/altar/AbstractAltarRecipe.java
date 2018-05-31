@@ -308,7 +308,7 @@ public abstract class AbstractAltarRecipe {
 
     public void onCraftServerFinish(TileAltar altar, Random rand) {}
 
-    public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, Random rand) {}
+    public void onCraftServerTick(TileAltar altar, ActiveCraftingTask.CraftingState state, int tick, int totalCraftingTime, Random rand) {}
 
     @SideOnly(Side.CLIENT)
     public void onCraftClientTick(TileAltar altar, ActiveCraftingTask.CraftingState state, long tick, Random rand) {

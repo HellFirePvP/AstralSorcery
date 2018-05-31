@@ -215,7 +215,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
     }
 
     @Override
-    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick) {
+    public boolean tryProcess(TileAltar altar, ActiveCraftingTask runningTask, NBTTagCompound craftingData, int activeCraftingTick, int totalCraftingTime) {
         if(!fulfillesStarlightRequirement(altar)) {
             return false; //Duh.
         }
@@ -226,8 +226,8 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         }
 
         int required = additionallyRequiredStacks.size();
-        int part = craftingTickTime() / 2;
-        int offset = craftingTickTime() / 10;
+        int part = totalCraftingTime / 2;
+        int offset = totalCraftingTime / 10;
         int cttPart = part / required;
         for (int i = 0; i < required; i++) {
             int timing = (i * cttPart) + offset;

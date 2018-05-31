@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.block.network;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -138,6 +139,14 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
             if(c != null) {
                 if(EnumGatedKnowledge.COLLECTOR_TYPE.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName())) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("crystal.collect.type", TextFormatting.BLUE + I18n.format(c.getUnlocalizedName())));
+                    IMinorConstellation tr = ItemCollectorCrystal.getTrait(stack);
+                    if(tr != null) {
+                        if(EnumGatedKnowledge.CRYSTAL_TRAIT.canSee(tier) && ResearchManager.clientProgress.hasConstellationDiscovered(tr.getUnlocalizedName())) {
+                            tooltip.add(TextFormatting.GRAY + I18n.format("crystal.trait", TextFormatting.BLUE + I18n.format(tr.getUnlocalizedName())));
+                        } else {
+                            tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
+                        }
+                    }
                 } else if(!missing.get()) {
                     tooltip.add(TextFormatting.GRAY + I18n.format("progress.missing.knowledge"));
                 }
@@ -193,7 +202,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
 
         IWeakConstellation c = ItemCollectorCrystal.getConstellation(stack);
         if(c != null) {
-            te.onPlace(c, CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
+            te.onPlace(c, ItemCollectorCrystal.getTrait(stack), CrystalProperties.getCrystalProperties(stack), true, ItemCollectorCrystal.getType(stack));
         }
     }
 
@@ -225,6 +234,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
             ItemStack stack = new ItemStack(this);
             CrystalProperties.applyCrystalProperties(stack, te.getCrystalProperties());
             ItemCollectorCrystal.setConstellation(stack, te.getConstellation());
+            ItemCollectorCrystal.setTraitConstellation(stack, te.getTrait());
             ItemCollectorCrystal.setType(stack, te.getType());
             return stack;
         }
@@ -265,6 +275,7 @@ public abstract class BlockCollectorCrystalBase extends BlockStarlightNetwork im
                     CrystalProperties.applyCrystalProperties(drop, te.getCrystalProperties());
                     ItemCollectorCrystal.setType(drop, te.getType() != null ? te.getType() : CollectorCrystalType.ROCK_CRYSTAL);
                     ItemCollectorCrystal.setConstellation(drop, te.getConstellation());
+                    ItemCollectorCrystal.setTraitConstellation(drop, te.getTrait());
                     ItemUtils.dropItemNaturally(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
                 }
             }

@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.effect.fx.EntityFXBurst;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
@@ -77,6 +78,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
     private boolean playerMade;
     private boolean enhanced = false;
     private IWeakConstellation associatedType;
+    private IMinorConstellation associatedTrait;
 
     private Object[] orbitals = new Object[4];
 
@@ -227,8 +229,13 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         return associatedType;
     }
 
-    public void onPlace(IWeakConstellation constellation, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
+    public IMinorConstellation getTrait() {
+        return associatedTrait;
+    }
+
+    public void onPlace(IWeakConstellation constellation, @Nullable IMinorConstellation trait, CrystalProperties properties, boolean player, BlockCollectorCrystalBase.CollectorCrystalType type) {
         this.associatedType = constellation;
+        this.associatedTrait = trait;
         this.playerMade = player;
         this.usedCrystalProperties = properties;
         this.type = type;
@@ -277,6 +284,7 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
         this.playerMade = compound.getBoolean("player");
         this.associatedType = (IWeakConstellation) IConstellation.readFromNBT(compound);
+        this.associatedTrait = (IMinorConstellation) IConstellation.readFromNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         this.usedCrystalProperties = CrystalProperties.readFromNBT(compound);
         this.type = BlockCollectorCrystalBase.CollectorCrystalType.values()[compound.getInteger("collectorType")];
         this.enhanced = compound.getBoolean("enhanced");
@@ -289,6 +297,9 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         compound.setBoolean("player", playerMade);
         if (associatedType != null) {
             associatedType.writeToNBT(compound);
+        }
+        if (associatedTrait != null) {
+            associatedTrait.writeToNBT(compound, IConstellation.getDefaultSaveKey() + "trait");
         }
         if (usedCrystalProperties != null) {
             usedCrystalProperties.writeToNBT(compound);

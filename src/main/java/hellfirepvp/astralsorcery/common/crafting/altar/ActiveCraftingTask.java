@@ -37,16 +37,22 @@ public class ActiveCraftingTask {
     private final AbstractAltarRecipe recipeToCraft;
     private final UUID playerCraftingUUID;
     private int ticksCrafting = 0;
+    private int totalCraftingTime;
 
     private CraftingState state;
     private NBTTagCompound craftingData = new NBTTagCompound();
 
-    public ActiveCraftingTask(AbstractAltarRecipe recipeToCraft, UUID playerCraftingUUID) {
+    private ActiveCraftingTask(AbstractAltarRecipe recipeToCraft, UUID playerCraftingUUID) {
+        this(recipeToCraft, 1, playerCraftingUUID);
+    }
+
+    public ActiveCraftingTask(AbstractAltarRecipe recipeToCraft, int durationDivisor, UUID playerCraftingUUID) {
         Objects.requireNonNull(recipeToCraft);
 
         this.recipeToCraft = recipeToCraft;
         this.playerCraftingUUID = playerCraftingUUID;
         this.state = CraftingState.ACTIVE;
+        this.totalCraftingTime = recipeToCraft.craftingTickTime() / durationDivisor;
     }
 
     private void attemptRecoverEffects(@Nullable ActiveCraftingTask previous) {
@@ -88,7 +94,7 @@ public class ActiveCraftingTask {
     //True if the recipe progressed, false if it's stuck
     public boolean tick(TileAltar altar) {
         if(recipeToCraft instanceof ICraftingProgress) {
-            if (!((ICraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting)) {
+            if (!((ICraftingProgress) recipeToCraft).tryProcess(altar, this, craftingData, ticksCrafting, totalCraftingTime)) {
                 return false;
             }
         }
@@ -100,12 +106,16 @@ public class ActiveCraftingTask {
         return ticksCrafting;
     }
 
+    public int getTotalCraftingTime() {
+        return totalCraftingTime;
+    }
+
     public AbstractAltarRecipe getRecipeToCraft() {
         return recipeToCraft;
     }
 
     public boolean isFinished() {
-        return ticksCrafting >= recipeToCraft.craftingTickTime();
+        return ticksCrafting >= totalCraftingTime;
     }
 
     @Nullable
@@ -118,9 +128,11 @@ public class ActiveCraftingTask {
         } else {
             UUID uuidCraft = compound.getUniqueId("crafterUUID");
             int tick = compound.getInteger("recipeTick");
+            int total = compound.getInteger("totalCraftingTime");
             CraftingState state = CraftingState.values()[compound.getInteger("craftingState")];
             ActiveCraftingTask task = new ActiveCraftingTask(recipe, uuidCraft);
             task.ticksCrafting = tick;
+            task.totalCraftingTime = total;
             task.setState(state);
             task.craftingData = compound.getCompoundTag("craftingData");
             task.attemptRecoverEffects(previous);
@@ -133,6 +145,7 @@ public class ActiveCraftingTask {
         NBTTagCompound compound = new NBTTagCompound();
         compound.setInteger("recipeId", getRecipeToCraft().getUniqueRecipeId());
         compound.setInteger("recipeTick", getTicksCrafting());
+        compound.setInteger("totalCraftingTime", getTotalCraftingTime());
         compound.setUniqueId("crafterUUID", getPlayerCraftingUUID());
         compound.setInteger("craftingState", getState().ordinal());
         compound.setTag("craftingData", craftingData);

@@ -159,7 +159,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                                 .filter((c) -> ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()))
                                 .collect(Collectors.toList());
 
-                        for (int i = 0; i < filtered.size(); i++) {
+                        for (int i = 0; i < Math.min(filtered.size(), 12); i++) {
                             IConstellation c = filtered.get(i);
                             int offsetX = i % 2 == 0 ? 8 : 232;
                             int offsetY = 40 + (i / 2) * 23;
