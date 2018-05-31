@@ -26,7 +26,7 @@ public interface IMinorConstellation extends IConstellation {
 
     @Override
     default boolean canDiscover(PlayerProgress progress) {
-        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
+        return progress.wasOnceAttuned() && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
     }
 
 }

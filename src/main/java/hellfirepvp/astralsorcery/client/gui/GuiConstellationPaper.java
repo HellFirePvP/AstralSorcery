@@ -53,19 +53,21 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void testPhases() {
-        if(constellation instanceof IWeakConstellation) {
-            Collections.addAll(phases, MoonPhase.values());
-        } else if(constellation instanceof IMinorConstellation) {
-            //Why this way? To maintain phase-order.
-            Optional<Long> seedOpt = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
-            if(seedOpt.isPresent()) {
-                for (MoonPhase ph : MoonPhase.values()) {
-                    if(((IMinorConstellation) constellation).getShowupMoonPhases(seedOpt.get()).contains(ph)) {
-                        phases.add(ph);
-                    }
-                }
-            }
-        }
+        Collections.addAll(phases, MoonPhase.values());
+
+        //if(constellation instanceof IWeakConstellation) {
+        //    Collections.addAll(phases, MoonPhase.values());
+        //} else if(constellation instanceof IMinorConstellation) {
+        //    //Why this way? To maintain phase-order.
+        //    Optional<Long> seedOpt = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
+        //    if(seedOpt.isPresent()) {
+        //        for (MoonPhase ph : MoonPhase.values()) {
+        //            if(((IMinorConstellation) constellation).getShowupMoonPhases(seedOpt.get()).contains(ph)) {
+        //                phases.add(ph);
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     @Override

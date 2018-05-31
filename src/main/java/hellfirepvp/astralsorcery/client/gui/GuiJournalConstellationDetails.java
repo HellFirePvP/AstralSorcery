@@ -197,19 +197,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testPhases() {
-        if(constellation instanceof IWeakConstellation) {
-            Collections.addAll(phases, MoonPhase.values());
-        } else if(constellation instanceof IMinorConstellation) {
-            Optional<Long> seedOpt = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
-            if(seedOpt.isPresent()) {
-                //Why this way? To maintain phase-order.
-                for (MoonPhase ph : MoonPhase.values()) {
-                    if(((IMinorConstellation) constellation).getShowupMoonPhases(seedOpt.get()).contains(ph)) {
-                        phases.add(ph);
-                    }
-                }
-            }
-        }
+        Collections.addAll(phases, MoonPhase.values());
     }
 
     private void testActivePhases() {
