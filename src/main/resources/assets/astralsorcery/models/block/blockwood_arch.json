@@ -1,4 +1,4 @@
-{=
+{
     "parent": "block/cube",
     "textures": {
         "particle": "astralsorcery:blocks/wood_arch",
