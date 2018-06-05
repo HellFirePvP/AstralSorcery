@@ -164,8 +164,10 @@ astralsorcery.journal.ALTAR2.4.text=The Starlight reservoir in the crafting alta
 
 research.WELL.name=Lightwell
 astralsorcery.journal.WELL.1.text=At night, a strange crystalline liquid seems to collect on Aquamarine gems and Rock Crystals. On closer examination, the liquid is a condensate of pure energy derived from Starlight.<NL>A carefully carved basin of marble makes the collection of this liquid quite easy. The liquid emits a bright and pure light, feels very cold, and a bucket full of it weighs almost nothing. Standing in Liquid Starlight results in nightvision being bestowed on you until it evaporates away.
-
 astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an Aquamarine gem or Rock Crystal needs to be placed on top to condense Starlight into liquid. Gems and crystals used to gather Starlight will constantly degrade until the point of completely shattering. Once placed on the Lightwell, they cannot be retrieved.<NL>This Liquid Starlight seems to have interesting interactions with Rock Crystals and other liquids. Perhaps this warrants some experimentation.<NL>You cannot help but wonder if other materials in a Lightwell would produce other liquids.
+
+research.INFUSED_WOOD.name=Infused Wood
+astralsorcery.journal.INFUSED_WOOD.1.text=
 
 research.ILLUM_POWDER.name=Illumination Powder
 astralsorcery.journal.ILLUM_POWDER.1.text=Glowstone and Aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out. Shattering Aquamarine into dust and mixing it with Glowstone dust creates a small pile of radiant powder, illuminating the space around it. This powder may prove to be an improved alternative to plebeian torches that are commonly used, as it is harder to accidentally remove them, requiring the light be smothered with another block.
@@ -508,6 +510,13 @@ tile.blockblackmarble.chiseled.name=Chiseled Sooty Marble
 tile.blockblackmarble.arch.name=Sooty Marble Arch
 tile.blockblackmarble.runed.name=Runed Sooty Marble
 tile.blockblackmarble.engraved.name=Engraved Sooty Marble
+tile.blockinfusedwood.raw.name=Infused Wood
+tile.blockinfusedwood.planks.name=Infused Wood Planks
+tile.blockinfusedwood.column.name=Infused Wood Column
+tile.blockinfusedwood.arch.name=Infused Wood Arch
+tile.blockinfusedwood.engraved.name=Engraved Infused Wood
+tile.blockinfusedwood.enriched.name=Enriched Infused Wood
+tile.blockinfusedwood.infused.name=Vibrant Infused Wood
 tile.blockmarble.raw.name=Marble
 tile.blockmarble.bricks.name=Marble Bricks
 tile.blockmarble.pillar.name=Marble Pillar

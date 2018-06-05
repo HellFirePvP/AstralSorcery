@@ -6,8 +6,8 @@
         "woodtype=column_top": { "model":"astralsorcery:blockwood_column_top" },
         "woodtype=column_bottom": { "model":"astralsorcery:blockwood_column_bottom" },
         "woodtype=arch": { "model":"astralsorcery:blockwood_arch" },
-        "woodtype=carved": { "model":"astralsorcery:blockwood_carved" },
         "woodtype=engraved": { "model":"astralsorcery:blockwood_engraved" },
-        "woodtype=enriched": { "model":"astralsorcery:blockwood_enriched" }
+        "woodtype=enriched": { "model":"astralsorcery:blockwood_enriched" },
+        "woodtype=infused": { "model":"astralsorcery:blockwood_infused" }
     }
 }

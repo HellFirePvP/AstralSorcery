@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.event.listener;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,6 +25,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EventHandlerRedirect {
 
     public static float getSunBrightnessFactorInj(float prevBrightness, World world) {
+        if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+            return prevBrightness;
+        }
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
@@ -33,13 +37,16 @@ public class EventHandlerRedirect {
                 eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
             }
             float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
-            return prevBrightness * (0.15F + (0.85F * perc));
+            return prevBrightness * (0.05F + (0.95F * perc));
         }
         return prevBrightness;
     }
 
     @SideOnly(Side.CLIENT)
     public static float getSunBrightnessBodyInj(float prevBrightness, World world) {
+        if(Config.weakSkyRendersWhitelist.contains(world.provider.getDimension())) {
+            return prevBrightness;
+        }
         WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(world);
         if (wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
             int eclTick = wsh.solarEclipseTick;
@@ -49,7 +56,7 @@ public class EventHandlerRedirect {
                 eclTick = ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR - eclTick;
             }
             float perc = ((float) eclTick) / ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR;
-            return prevBrightness * (0.1F + (0.9F * perc));
+            return prevBrightness * (0.05F + (0.95F * perc));
         }
         return prevBrightness;
     }

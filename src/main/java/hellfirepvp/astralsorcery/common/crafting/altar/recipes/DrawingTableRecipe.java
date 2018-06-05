@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
+import hellfirepvp.astralsorcery.common.block.BlockInfusedWood;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
 import hellfirepvp.astralsorcery.common.crafting.ISpecialCraftingEffects;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
@@ -58,7 +59,7 @@ public class DrawingTableRecipe extends ConstellationRecipe implements ISpecialC
         setAttItem(BlockMarble.MarbleBlockType.RUNED.asStack(),
                 AttunementAltarSlot.LOWER_LEFT,
                 AttunementAltarSlot.LOWER_RIGHT);
-        setCstItem(OreDictAlias.BLOCK_WOOD_LOGS,
+        setCstItem(BlockInfusedWood.WoodType.COLUMN.asStack(),
                 ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationAtlarSlot.DOWN_LEFT_LEFT,
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
