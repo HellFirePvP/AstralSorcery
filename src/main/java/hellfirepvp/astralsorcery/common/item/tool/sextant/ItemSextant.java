@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.item.tool.sextant;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.common.CommonProxy;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
@@ -127,7 +129,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
         ItemStack held = player.getHeldItem(handIn);
-        if(worldIn.isRemote) {
+        if(worldIn.isRemote && ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) {
             player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.SEXTANT.ordinal(), worldIn, 0, 0, 0);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, held);

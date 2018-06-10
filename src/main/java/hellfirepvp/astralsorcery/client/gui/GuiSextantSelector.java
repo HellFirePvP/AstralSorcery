@@ -18,17 +18,21 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -67,21 +71,20 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     private static final Rectangle.Float partFrameEdgeDown = new Rectangle2D.Float(146F / 172F, 104F / 140F, 1F / 172F, 6F / 140F);
 
     private static final int selectionsPerFrame = 4;
-    private static final int randomStars = 50;
+    private static final int randomStars = 85;
     private List<StarPosition> usedStars = new ArrayList<>(randomStars);
 
     private static final int showupDelay = 20;
     private Map<SextantFinder.TargetObject, Tuple<BlockPos, Integer>> showupTargets = new HashMap<>();
 
     private List<SextantFinder.TargetObject> availableTargets = new LinkedList<>();
-    private BlockPos target = null;
     private SextantFinder.TargetObject selectedTarget = null;
     private int selectionOffset;
 
     private boolean grabCursor = false;
 
     public GuiSextantSelector(ItemStack sextant) {
-        super(140, 140);
+        super(280, 280);
 
         Optional<Long> currSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
         currSeed.ifPresent(this::setupInitialStars);
@@ -90,12 +93,11 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         if (target != null && Minecraft.getMinecraft().world != null && target.value == Minecraft.getMinecraft().world.provider.getDimension()) {
             SextantFinder.TargetObject selectedTarget = ItemSextant.getTarget(sextant);
             if (selectedTarget != null) {
-                this.target = target.key;
                 this.selectedTarget = selectedTarget;
             }
         }
         for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
-            if (to.isSelectable(sextant)) {
+            if (to.isSelectable(sextant, ResearchManager.clientProgress)) {
                 availableTargets.add(to);
             }
         }
@@ -183,19 +185,25 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         }
         GlStateManager.pushMatrix();
 
-        textureSextant.bindTexture();
-        drawTexturedRect(guiLeft, guiTop, guiWidth, guiHeight, partFrame);
-        TextureHelper.refreshTextureBindState();
-
         handleMouseMovement(partialTicks);
 
         ScaledResolution res = new ScaledResolution(mc);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((guiLeft + 5) * res.getScaleFactor(), (guiTop + 5) * res.getScaleFactor(), (guiWidth - 10) * res.getScaleFactor(), (guiHeight - 10) * res.getScaleFactor());
+        GL11.glScissor(
+                (guiLeft + 16) * res.getScaleFactor(),
+                (guiTop + 17) * res.getScaleFactor(),
+                (guiWidth - 32) * res.getScaleFactor(),
+                (guiHeight - 33) * res.getScaleFactor());
 
         drawSkyScreen(partialTicks);
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        textureSextant.bindTexture();
+        zLevel += 5;
+        drawTexturedRect(guiLeft, guiTop, guiWidth, guiHeight, partFrame);
+        zLevel -= 5;
+        TextureHelper.refreshTextureBindState();
 
         drawSelectorBox(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2D - (selectionsPerFrame / 2D) * 16 - 6),
                 availableTargets, this.selectedTarget == null ? -1 : availableTargets.indexOf(this.selectedTarget));
@@ -208,10 +216,10 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         World w = Minecraft.getMinecraft().world;
         float pitch = Minecraft.getMinecraft().player.rotationPitch;
         float transparency = 0F;
-        if (pitch < -30F) {
+        if (pitch < -20F) {
             transparency = 1F;
-        } else if (pitch < -10F) {
-            transparency = (Math.abs(pitch) - 10F) / 20F;
+        } else if (pitch < 10F) {
+            transparency = 1F - (Math.abs(pitch + 20) / 30F);
             if (ConstellationSkyHandler.getInstance().isNight(w)) {
                 transparency *= transparency;
             }
@@ -236,7 +244,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         zLevel -= 5;
     }
 
-    private void drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
+    private Map<Rectangle, SextantFinder.TargetObject> drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Optional<Long> seed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
@@ -258,10 +266,77 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             zLevel -= 1;
         }
 
+        Vector3 iPosPlayer = RenderingUtils.interpolatePosition(Minecraft.getMinecraft().player, partialTicks).setY(0);
 
+        zLevel += 10;
 
+        Map<Rectangle, SextantFinder.TargetObject> targets = new HashMap<>();
+        for (Map.Entry<SextantFinder.TargetObject, Tuple<BlockPos, Integer>> visibleTarget : this.showupTargets.entrySet()) {
+            float dayMultiplier = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
+            if(dayMultiplier <= 0.1F) {
+                continue;
+            }
 
+            SextantFinder.TargetObject target = visibleTarget.getKey();
+            BlockPos actualPos = visibleTarget.getValue().key;
+            float alphaShowup = MathHelper.clamp(((float) visibleTarget.getValue().value + partialTicks) / ((float) showupDelay), 0F, 1F);
+
+            Vector3 dir = new Vector3(actualPos).setY(0).subtract(iPosPlayer);
+            //length, yaw, pitch
+            Vector3 polar = dir.clone().copyToPolar();
+            if(polar.getX() <= 20D) {
+                continue;
+            }
+            //float proximity = polar.getX() >= 350D ? 1F : MathHelper.sqrt(((float) polar.getX()) / 350F);
+            double yaw = 180D - polar.getZ();
+            double pitch = polar.getX() >= 350D ? -20D : Math.min(-20D, -20D - (70D - (70D * (polar.getX() / 350D))));
+
+            float playerYaw = Minecraft.getMinecraft().player.rotationYaw % 360F;
+            if (playerYaw < 0) {
+                playerYaw += 360F;
+            }
+            if (playerYaw >= 180F) {
+                playerYaw -= 360F;
+            }
+            float playerPitch = Minecraft.getMinecraft().player.rotationPitch;
+
+            double diffYaw = playerYaw - yaw;
+            double diffPitch = playerPitch - pitch;
+
+            if (diffYaw >= 180F) {
+                diffYaw -= 360F;
+            }
+
+            float xsFactor = 100F;
+            float ysFactor = 60F;
+            int wPart = ((int) (((float) width) * 0.1F));
+            int hPart = ((int) (((float) height) * 0.1F));
+
+            GlStateManager.disableAlpha();
+            float alpha = RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 8);
+            alpha = (0.2F + 0.8F * alpha) * dayMultiplier * alphaShowup * transparency;
+            Color c = new Color(target.getColorTheme(), false);
+            GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
+            RenderAstralSkybox.TEX_STAR_1.bind();
+
+            double offsetX = guiLeft + wPart - MathHelper.floor((diffYaw / xsFactor) * width);
+            double offsetY = guiTop + hPart - MathHelper.floor((diffPitch / ysFactor) * height);
+            drawTexturedRect(
+                    offsetX,
+                    offsetY,
+                    16,
+                    16,
+                    0, 0, 1, 1);
+            TextureHelper.refreshTextureBindState();
+
+            targets.put(new Rectangle(MathHelper.ceil(offsetX), MathHelper.ceil(offsetY), 16, 16), target);
+        }
+
+        zLevel -= 10;
+
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.disableBlend();
+        return targets;
     }
 
     private void drawCellEffect(int offsetX, int offsetY, int guiWidth, int guiHeight, float partialTicks, float transparency) {
@@ -281,7 +356,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             brightness *= Minecraft.getMinecraft().world.getStarBrightness(partialTicks) * 2 * transparency;
             brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
             GlStateManager.color(brightness, brightness, brightness, brightness);
-            int size = r.nextInt(4) + 2;
+            int size = r.nextInt(4) + 3;
             drawRect(MathHelper.floor(offsetX + stars.x), MathHelper.floor(offsetY + stars.y), size, size);
             GlStateManager.color(1, 1, 1, 1);
             GlStateManager.popMatrix();
@@ -291,8 +366,6 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         for (int i = 0; i < 5 + cstRand.nextInt(10); i++) {
             cstRand.nextLong();
         }
-
-
 
         GlStateManager.enableAlpha();
     }

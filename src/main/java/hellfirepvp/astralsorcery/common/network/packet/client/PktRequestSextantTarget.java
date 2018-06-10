@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.client.util.UISextantCache;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -93,7 +94,8 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
                 if (to == null) return;
                 EntityPlayerMP player = ctx.getServerHandler().player;
                 if (!MiscUtils.isPlayerFakeMP(player)) {
-                    Tuple<EnumHand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant, to::isSelectable);
+                    Tuple<EnumHand, ItemStack> heldStack = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant,
+                            (st) -> to.isSelectable(st, ResearchManager.getProgress(player, Side.SERVER)));
                     if (heldStack == null) {
                         return;
                     }

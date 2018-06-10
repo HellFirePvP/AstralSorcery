@@ -12,12 +12,20 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantTargets;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -33,22 +41,42 @@ import java.awt.*;
  */
 public class UISextantTarget {
 
-    private World world;
-    private BlockPos pos;
-    private SextantFinder.TargetObject sextantTarget;
+    public static void renderTargets(float pTicks) {
+        EntityPlayer pl = Minecraft.getMinecraft().player;
+        World w = Minecraft.getMinecraft().world;
+        if (pl == null || w == null) {
+            return;
+        }
+        ItemStack held = pl.getHeldItem(EnumHand.MAIN_HAND);
+        Tuple<BlockPos, Integer> info;
+        SextantFinder.TargetObject target;
 
-    private UISextantTarget(World world, BlockPos target, SextantFinder.TargetObject sextantTarget) {
-        this.world = world;
-        this.pos = target;
-        this.sextantTarget = sextantTarget;
+        if (!held.isEmpty() && held.getItem() instanceof ItemSextant &&
+                (info = ItemSextant.getCurrentTargetInformation(held)) != null &&
+                (target = ItemSextant.getTarget(held)) != null &&
+                target.isSelectable(held, ResearchManager.clientProgress) &&
+                info.value == w.provider.getDimension()) {
+            renderStar(info.key, target, pTicks);
+        }
+
+        for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
+            BlockPos at = UISextantCache.queryLocation(pl.getPosition(), 0, to);
+            if (at != null) {
+                renderStar(at, to, pTicks);
+            }
+        }
+
+        held = pl.getHeldItem(EnumHand.OFF_HAND);
+        if (!held.isEmpty() && held.getItem() instanceof ItemSextant &&
+                (info = ItemSextant.getCurrentTargetInformation(held)) != null &&
+                (target = ItemSextant.getTarget(held)) != null &&
+                target.isSelectable(held, ResearchManager.clientProgress) &&
+                info.value == w.provider.getDimension()) {
+            renderStar(info.key, target, pTicks);
+        }
     }
 
-    public static UISextantTarget initialize(World world, BlockPos actualTarget, SextantFinder.TargetObject sextantTarget) {
-        UISextantTarget target = new UISextantTarget(world, actualTarget, sextantTarget);
-        return target;
-    }
-
-    public void renderStar(float pTicks) {
+    private static void renderStar(BlockPos actPos, SextantFinder.TargetObject target, float pTicks) {
         if(Minecraft.getMinecraft().world == null) {
             return;
         }
@@ -61,17 +89,17 @@ public class UISextantTarget {
         }
         float dayMultiplier = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
         if(dayMultiplier <= 0.1F) {
-            EffectHandler.getInstance().resetSextantTarget();
             return;
         }
         //Flattened distance
-        Vector3 dir = new Vector3(pos).setY(0).subtract(Vector3.atEntityCenter(e).setY(0));
+        Vector3 dir = new Vector3(actPos).setY(0).subtract(Vector3.atEntityCenter(e).setY(0));
         //length, yaw, pitch
         Vector3 polar = dir.clone().copyToPolar();
         if(polar.getX() <= 20D) {
-            EffectHandler.getInstance().resetSextantTarget();
             return;
         }
+        float proximity = polar.getX() >= 350D ? 1F : MathHelper.sqrt(((float) polar.getX()) / 350F);
+
         double yaw = 180D - polar.getZ();
         double pitch = polar.getX() >= 350D ? -20D : Math.min(-20D, -20D - (70D - (70D * (polar.getX() / 350D))));
         Vector3 act = new Vector3(Vec3d.fromPitchYaw((float) pitch, (float) yaw)).normalize().multiply(200);
@@ -82,8 +110,8 @@ public class UISextantTarget {
         Blending.DEFAULT.applyStateManager();
         GlStateManager.disableAlpha();
         float alpha = RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), pTicks, 16);
-        alpha = (0.4F + 0.6F * alpha) * dayMultiplier;
-        Color c = new Color(sextantTarget.getColorTheme(), false);
+        alpha = (0.4F + 0.6F * alpha) * dayMultiplier * proximity;
+        Color c = new Color(target.getColorTheme(), false);
         GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
         RenderAstralSkybox.TEX_STAR_1.bind();
         RenderingUtils.renderFacingFullQuad(act.getX(), act.getY(), act.getZ(), pTicks, 7F, 0);
@@ -94,7 +122,4 @@ public class UISextantTarget {
         GlStateManager.popMatrix();
     }
 
-    public World getWorld() {
-        return world;
-    }
 }

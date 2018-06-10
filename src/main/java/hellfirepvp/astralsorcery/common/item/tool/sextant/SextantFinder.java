@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import hellfirepvp.astralsorcery.client.util.resource.TextureSubQuery;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.world.data.StructureGenBuffer;
 import hellfirepvp.astralsorcery.common.util.StructureFinder;
 import net.minecraft.item.ItemStack;
@@ -122,7 +124,7 @@ public class SextantFinder {
 
         public abstract String getRegistryName();
 
-        public abstract boolean isSelectable(ItemStack stack);
+        public abstract boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress);
 
         @Nonnull
         @SideOnly(Side.CLIENT)
@@ -172,8 +174,10 @@ public class SextantFinder {
         }
 
         @Override
-        public boolean isSelectable(ItemStack stack) {
-            return !advanced || ItemSextant.isAdvanced(stack);
+        public boolean isSelectable(ItemStack stack, @Nullable PlayerProgress progress) {
+            if (progress == null) return false;
+            return (!advanced && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.BASIC_CRAFT)) ||
+                    (ItemSextant.isAdvanced(stack) && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.CONSTELLATION_CRAFT));
         }
 
         @Nonnull
