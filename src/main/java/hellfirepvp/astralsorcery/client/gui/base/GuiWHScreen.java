@@ -6,8 +6,9 @@
  * For further details, see the License file there.
  ******************************************************************************/
 
-package hellfirepvp.astralsorcery.client.gui;
+package hellfirepvp.astralsorcery.client.gui.base;
 
+import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -65,8 +66,8 @@ public abstract class GuiWHScreen extends GuiScreen {
         guiTop = height / 2 - guiHeight / 2;
     }
 
-    protected void drawWHRect(BindableResource resource) {
-        resource.bind();
+    protected void drawWHRect(AbstractRenderableTexture resource) {
+        resource.bindTexture();
         drawRect(guiLeft, guiTop, guiWidth, guiHeight);
     }
 
@@ -107,6 +108,33 @@ public abstract class GuiWHScreen extends GuiScreen {
         int guiMouseX =          Mouse.getEventX() * width  / mc.displayWidth;
         int guiMouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1;
         return new Point(guiMouseX, guiMouseY);
+    }
+
+    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, Rectangle.Float uvBounds) {
+        drawTexturedRect(offsetX, offsetY, width, height, uvBounds.x, uvBounds.y, uvBounds.width, uvBounds.height);
+    }
+
+    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX,         offsetY + height, zLevel).tex(uFrom,          vFrom + vWidth).endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel).tex(uFrom + uWidth, vFrom + vWidth).endVertex();
+        vb.pos(offsetX + width, offsetY,          zLevel).tex(uFrom + uWidth, vFrom)         .endVertex();
+        vb.pos(offsetX,         offsetY,          zLevel).tex(uFrom,          vFrom)         .endVertex();
+        tes.draw();
+    }
+
+    protected void drawTexturedRect(double offsetX, double offsetY, double width, double height, AbstractRenderableTexture tex) {
+        Point.Double off = tex.getUVOffset();
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX,         offsetY + height, zLevel).tex(off.x,          off.y + tex.getVWidth()).endVertex();
+        vb.pos(offsetX + width, offsetY + height, zLevel).tex(off.x + tex.getUWidth(), off.y + tex.getVWidth()).endVertex();
+        vb.pos(offsetX + width, offsetY,          zLevel).tex(off.x + tex.getUWidth(), off.y)         .endVertex();
+        vb.pos(offsetX,         offsetY,          zLevel).tex(off.x,          off.y)         .endVertex();
+        tes.draw();
     }
 
     protected void drawTexturedRectAtCurrentPos(double width, double height, float uFrom, float vFrom, float uWidth, float vWidth) {

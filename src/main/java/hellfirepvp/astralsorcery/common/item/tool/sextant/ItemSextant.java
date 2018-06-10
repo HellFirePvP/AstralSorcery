@@ -8,14 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.item.tool.sextant;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.item.base.ISpecialInteractItem;
-import hellfirepvp.astralsorcery.common.network.PacketChannel;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktDisplaySextantTarget;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -25,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -68,6 +71,10 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         if(isAdvanced(stack)) {
             tooltip.add(TextFormatting.BLUE.toString() + I18n.format("item.itemsextant.upgraded"));
         }
+        SextantFinder.TargetObject to = getTarget(stack);
+        if (to != null) {
+            tooltip.add(TextFormatting.GOLD.toString() + I18n.format("item.itemsextant.target." + to.getRegistryName() + ".name"));
+        }
     }
 
     public static boolean isAdvanced(ItemStack sextantStack) {
@@ -91,23 +98,39 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         NBTHelper.getPersistentData(sextantStack).setString("target", target.getRegistryName());
     }
 
+    @Nullable
+    public static Tuple<BlockPos, Integer> getCurrentTargetInformation(ItemStack sextantStack) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return null;
+        NBTTagCompound pers = NBTHelper.getPersistentData(sextantStack);
+        if (!pers.hasKey("targetPos") || !pers.hasKey("targetDim")) {
+            return null;
+        }
+        BlockPos pos = NBTUtils.readBlockPosFromNBT(pers.getCompoundTag("targetPos"));
+        Integer dim = pers.getInteger("targetDim");
+        return new Tuple<>(pos, dim);
+    }
+
+    public static void setCurrentTargetInformation(ItemStack sextantStack, @Nullable BlockPos pos, @Nullable Integer dim) {
+        if (sextantStack.isEmpty() || !(sextantStack.getItem() instanceof ItemSextant)) return;
+        NBTTagCompound pers = NBTHelper.getPersistentData(sextantStack);
+        if (pos == null || dim == null) {
+            pers.removeTag("targetPos");
+            pers.removeTag("targetDim");
+        } else {
+            NBTTagCompound posTag = new NBTTagCompound();
+            NBTUtils.writeBlockPosToNBT(pos, posTag);
+            pers.setTag("targetPos", posTag);
+            pers.setInteger("targetDim", dim);
+        }
+    }
+
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
-        if(!worldIn.isRemote && worldIn instanceof WorldServer && player instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
-            SextantFinder.TargetObject to = getTarget(player.getHeldItem(handIn));
-            if(to != null && to.isSelectable(player.getHeldItem(handIn))) {
-                Thread tr = new Thread(() -> {
-                    BlockPos result = to.searchFor((WorldServer) worldIn, player.getPosition());
-                    if(result != null) {
-                        PktDisplaySextantTarget target = new PktDisplaySextantTarget(to, result);
-                        PacketChannel.CHANNEL.sendTo(target, (EntityPlayerMP) player);
-                    }
-                });
-                tr.start();
-                return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(handIn));
-            }
+        ItemStack held = player.getHeldItem(handIn);
+        if(worldIn.isRemote) {
+            player.openGui(AstralSorcery.instance, CommonProxy.EnumGuiId.SEXTANT.ordinal(), worldIn, 0, 0, 0);
         }
-        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(handIn));
+        return new ActionResult<>(EnumActionResult.SUCCESS, held);
     }
 
     @Override
@@ -115,10 +138,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         TileEntity te = world.getTileEntity(at);
         if(te != null && te instanceof IMultiblockDependantTile) {
             PatternBlockArray struct = ((IMultiblockDependantTile) te).getRequiredStructure();
-            if(struct != null &&
-                    !struct.matches(world, at)) {
-                return true;
-            }
+            return struct != null;
         }
         return false;
     }
@@ -128,19 +148,20 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         TileEntity te = world.getTileEntity(pos);
         if(te != null && te instanceof IMultiblockDependantTile) {
             PatternBlockArray struct = ((IMultiblockDependantTile) te).getRequiredStructure();
-            if(struct != null &&
-                    !struct.matches(world, pos)) {
-                if(!world.isRemote && world instanceof WorldServer &&
-                        entityPlayer.isCreative() && entityPlayer.isSneaking() &&
-                        MiscUtils.isChunkLoaded(world, pos)) {
-                    IBlockState current = world.getBlockState(pos);
-                    struct.placeInWorld(world, pos);
-                    if(!world.getBlockState(pos).equals(current)) {
-                        world.setBlockState(pos, current);
+            if (struct != null) {
+                if (!struct.matches(world, pos)) {
+                    if(!world.isRemote && world instanceof WorldServer &&
+                            entityPlayer.isCreative() && entityPlayer.isSneaking() &&
+                            MiscUtils.isChunkLoaded(world, pos)) {
+                        IBlockState current = world.getBlockState(pos);
+                        struct.placeInWorld(world, pos);
+                        if(!world.getBlockState(pos).equals(current)) {
+                            world.setBlockState(pos, current);
+                        }
                     }
-                }
-                if(world.isRemote) {
-                    requestPreview(te);
+                    if(world.isRemote) {
+                        requestPreview(te);
+                    }
                 }
                 return true;
             }

@@ -198,7 +198,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
 
         if(tile.getPercRunning() > 1E-4) {
             SpriteSheetResource halo = SpriteLibrary.spriteHalo2;
-            halo.getResource().bind();
+            halo.getResource().bindTexture();
             Tuple<Double, Double> uvFrame = halo.getUVOffset(ClientScheduler.getClientTick());
             GlStateManager.pushMatrix();
 

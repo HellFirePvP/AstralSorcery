@@ -31,11 +31,11 @@ public class TextureQuery {
     }
 
     @SideOnly(Side.CLIENT)
-    public BindableResource resolve() {
+    public AbstractRenderableTexture resolve() {
         if(resolvedResource == null) {
             resolvedResource = AssetLibrary.loadTexture(location, name);
         }
-        return (BindableResource) resolvedResource;
+        return (AbstractRenderableTexture) resolvedResource;
     }
 
 }

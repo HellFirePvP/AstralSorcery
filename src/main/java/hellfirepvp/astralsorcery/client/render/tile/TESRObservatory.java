@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.render.tile;
 import hellfirepvp.astralsorcery.client.models.base.ASobservatory;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
@@ -71,6 +72,8 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
 
         renderModel(te, partialTicks, iYaw, iPitch);
         GlStateManager.popMatrix();
+
+        TextureHelper.refreshTextureBindState();
     }
 
     private void renderModel(TileObservatory te, float partialTicks, float iYaw, float iPitch) {

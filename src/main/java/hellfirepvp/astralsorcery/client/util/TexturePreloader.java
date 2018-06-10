@@ -57,6 +57,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame_extender").allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "observatoryframe")       .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridsextant")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")          .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")     .allocateGlId();

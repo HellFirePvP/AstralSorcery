@@ -265,7 +265,7 @@ public class ClientRenderEventHandler {
         if(event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
             if(visibilityTempCharge > 0) {
                 SpriteSheetResource ssr = SpriteLibrary.spriteCharge;
-                ssr.getResource().bind();
+                ssr.getResource().bindTexture();
 
                 ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
                 int width = res.getScaledWidth();

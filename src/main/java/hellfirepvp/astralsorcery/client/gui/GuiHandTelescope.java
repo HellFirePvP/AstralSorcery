@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
+import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -29,6 +31,7 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.client.PktDiscoverConstellation;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -40,8 +43,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -56,7 +57,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 28.12.2016 / 12:18
  */
-public class GuiHandTelescope extends GuiWHScreen {
+public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
 
     private static final Random random = new Random();
 
@@ -459,19 +460,8 @@ public class GuiHandTelescope extends GuiWHScreen {
     private void drawGridBackground(float partialTicks, boolean canSeeSky, float angleTransparency) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         Blending.PREALPHA.apply();
-        World renderWorld = Minecraft.getMinecraft().world;
-        int rgbFrom, rgbTo;
-        if (canSeeSky && angleTransparency > 1.0E-4) {
-            float starBr = renderWorld.getStarBrightness(partialTicks) * 2;
-            float rain = renderWorld.getRainStrength(partialTicks);
-            rgbFrom = RenderingUtils.clampToColorWithMultiplier(calcRGBFromWithRain(starBr, rain), angleTransparency).getRGB();
-            rgbTo = RenderingUtils.clampToColorWithMultiplier(calcRGBToWithRain(starBr, rain), angleTransparency).getRGB();
-        } else {
-            rgbFrom = 0x000000;
-            rgbTo = 0x000000;
-        }
-        int alphaMask = 0xFF000000; //100% opacity.
-        RenderingUtils.drawGradientRect(guiLeft + 4, guiTop + 4, zLevel, guiLeft + guiWidth - 4, guiTop + guiHeight - 4, new Color(alphaMask | rgbFrom), new Color(alphaMask | rgbTo));
+        Tuple<Color, Color> fromTo = GuiSkyScreen.getRBGFromTo(canSeeSky, angleTransparency, partialTicks);
+        RenderingUtils.drawGradientRect(guiLeft + 4, guiTop + 4, zLevel, guiLeft + guiWidth - 4, guiTop + guiHeight - 4, fromTo.key, fromTo.value);
         Blending.DEFAULT.apply();
         GL11.glPopAttrib();
     }
@@ -487,94 +477,6 @@ public class GuiHandTelescope extends GuiWHScreen {
             }
         }
         return renderWorld.canSeeSky(pos);
-    }
-
-    private static final float THRESHOLD_TO_START = 0.8F;
-    private static final float THRESHOLD_TO_SHIFT_BLUEGRAD = 0.5F;
-    private static final float THRESHOLD_TO_MAX_BLUEGRAD = 0.2F;
-
-    private int calcRGBToWithRain(float starBr, float rain) {
-        int to = calcRGBTo(starBr);
-        if (starBr <= THRESHOLD_TO_START) {
-            float starMul = 1F;
-            if (starBr > THRESHOLD_TO_SHIFT_BLUEGRAD) {
-                starMul = 1F - (starBr - THRESHOLD_TO_SHIFT_BLUEGRAD) / (THRESHOLD_TO_START - THRESHOLD_TO_SHIFT_BLUEGRAD);
-            }
-            float interpDeg = starMul * rain;
-            Color safeTo = RenderingUtils.clampToColor(to);
-            Vector3 vTo = new Vector3(safeTo.getRed(), safeTo.getGreen(), safeTo.getBlue()).divide(255D);
-            Vector3 rainC = new Vector3(102, 114, 137).divide(255D);
-            Vector3 interpVec = vTo.copyInterpolateWith(rainC, interpDeg);
-            Color newColor = RenderingUtils.clampToColor((int) (interpVec.getX() * 255), (int) (interpVec.getY() * 255), (int) (interpVec.getZ() * 255));
-            to = newColor.getRGB();
-        }
-        return RenderingUtils.clampToColor(to).getRGB();
-    }
-
-    private int calcRGBTo(float starBr) {
-        if (starBr >= THRESHOLD_TO_START) { //Blue ranges from 0 (1.0F starBr) to 170 (0.7F starBr)
-            return 0; //Black.
-        } else if (starBr >= THRESHOLD_TO_SHIFT_BLUEGRAD) { //Blue ranges from 170/AA (0.7F) to 255 (0.4F), green from 0 (0.7F) to 85(0.4F)
-            float partSize = (THRESHOLD_TO_START - THRESHOLD_TO_SHIFT_BLUEGRAD);
-            float perc = 1F - (starBr - THRESHOLD_TO_SHIFT_BLUEGRAD) / partSize;
-            return (int) (perc * 170F);
-        } else if (starBr >= THRESHOLD_TO_MAX_BLUEGRAD) {
-            float partSize = (THRESHOLD_TO_SHIFT_BLUEGRAD - THRESHOLD_TO_MAX_BLUEGRAD);
-            float perc = 1F - (starBr - THRESHOLD_TO_MAX_BLUEGRAD) / partSize;
-            int green = (int) (perc * 85F);
-            int blue = green + 0xAA; //LUL
-            return (green << 8) | blue;
-        } else {
-            float partSize = (THRESHOLD_TO_MAX_BLUEGRAD - 0.0F); //Blue is 255, green from 85 (0.4F) to 175 (0.0F)
-            float perc = 1F - (starBr - 0) / partSize;
-            int green = 85 + ((int) (perc * 90));
-            int red = (int) (perc * 140);
-            return (red << 16) | (green << 8) | 0xFF;
-        }
-    }
-
-    private static final float THRESHOLD_FROM_START = 1.0F;
-    private static final float THRESHOLD_FROM_SHIFT_BLUEGRAD = 0.6F;
-    private static final float THRESHOLD_FROM_MAX_BLUEGRAD = 0.3F;
-
-    private int calcRGBFromWithRain(float starBr, float rain) {
-        int to = calcRGBFrom(starBr);
-        if (starBr <= THRESHOLD_FROM_START) {
-            float starMul = 1F;
-            if (starBr > THRESHOLD_FROM_SHIFT_BLUEGRAD) {
-                starMul = 1F - (starBr - THRESHOLD_FROM_SHIFT_BLUEGRAD) / (THRESHOLD_FROM_START - THRESHOLD_FROM_SHIFT_BLUEGRAD);
-            }
-            float interpDeg = starMul * rain;
-            Color safeTo = RenderingUtils.clampToColor(to);
-            Vector3 vTo = new Vector3(safeTo.getRed(), safeTo.getGreen(), safeTo.getBlue()).divide(255D);
-            Vector3 rainC = new Vector3(102, 114, 137).divide(255D);
-            Vector3 interpVec = vTo.copyInterpolateWith(rainC, interpDeg);
-            Color newColor = RenderingUtils.clampToColor((int) (interpVec.getX() * 255), (int) (interpVec.getY() * 255), (int) (interpVec.getZ() * 255));
-            to = newColor.getRGB();
-        }
-        return RenderingUtils.clampToColor(to).getRGB();
-    }
-
-    private int calcRGBFrom(float starBr) {
-        if (starBr >= THRESHOLD_FROM_START) { //Blue ranges from 0 (1.0F starBr) to 170 (0.7F starBr)
-            return 0; //Black.
-        } else if (starBr >= THRESHOLD_FROM_SHIFT_BLUEGRAD) { //Blue ranges from 170/AA (0.7F) to 255 (0.4F), green from 0 (0.7F) to 85(0.4F)
-            float partSize = (THRESHOLD_FROM_START - THRESHOLD_FROM_SHIFT_BLUEGRAD);
-            float perc = 1F - (starBr - THRESHOLD_FROM_SHIFT_BLUEGRAD) / partSize;
-            return (int) (perc * 170F);
-        } else if (starBr >= THRESHOLD_FROM_MAX_BLUEGRAD) {
-            float partSize = (THRESHOLD_FROM_SHIFT_BLUEGRAD - THRESHOLD_FROM_MAX_BLUEGRAD);
-            float perc = 1F - (starBr - THRESHOLD_FROM_MAX_BLUEGRAD) / partSize;
-            int green = (int) (perc * 85F);
-            int blue = green + 0xAA; //LUL
-            return (green << 8) | blue;
-        } else {
-            float partSize = (THRESHOLD_FROM_MAX_BLUEGRAD - 0.0F); //Blue is 255, green from 85 (0.4F) to 175 (0.0F)
-            float perc = 1F - (starBr - 0) / partSize;
-            int green = 85 + ((int) (perc * 90));
-            int red = (int) (perc * 140);
-            return (red << 16) | (green << 8) | 0xFF;
-        }
     }
 
     @Override

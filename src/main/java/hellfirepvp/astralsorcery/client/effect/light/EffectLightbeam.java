@@ -142,7 +142,7 @@ public class EffectLightbeam implements IComplexEffect, IComplexEffect.PreventRe
         if(lighting) {
             GlStateManager.disableLighting();
         }
-        SpriteLibrary.spriteLightbeam.getResource().bind();
+        SpriteLibrary.spriteLightbeam.getResource().bindTexture();
 
         renderCurrentTextureAroundAxis(Math.toRadians(0F));
         renderCurrentTextureAroundAxis(Math.toRadians(120F));

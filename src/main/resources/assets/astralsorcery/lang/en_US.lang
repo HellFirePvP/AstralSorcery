@@ -167,7 +167,7 @@ astralsorcery.journal.WELL.1.text=At night, a strange crystalline liquid seems t
 astralsorcery.journal.WELL.3.text=In order to use the Lightwell, an Aquamarine gem or Rock Crystal needs to be placed on top to condense Starlight into liquid. Gems and crystals used to gather Starlight will constantly degrade until the point of completely shattering. Once placed on the Lightwell, they cannot be retrieved.<NL>This Liquid Starlight seems to have interesting interactions with Rock Crystals and other liquids. Perhaps this warrants some experimentation.<NL>You cannot help but wonder if other materials in a Lightwell would produce other liquids.
 
 research.INFUSED_WOOD.name=Infused Wood
-astralsorcery.journal.INFUSED_WOOD.1.text=
+astralsorcery.journal.INFUSED_WOOD.1.text=As infusing materials with Liquid Starlight empowers them, the versatility of strengthened wood would have great value in construction and crafting.<NL>Because it's an organic material, leaving it to soak in Liquid Starlight seems to have a different absorption pattern than the crystals, though the end result is the same: the starlight is drawn fully into the wood, though it may not be completely even in distribution. This could require some further investigation in the future, but for now functions sufficiently for your needs.
 
 research.ILLUM_POWDER.name=Illumination Powder
 astralsorcery.journal.ILLUM_POWDER.1.text=Glowstone and Aquamarine exhibit a strange reaction when brought in close proximity of each other. Tiny flame-like sparks rapidly flicker between both of them. These sparks can scatter quite far from their source before going out. Shattering Aquamarine into dust and mixing it with Glowstone dust creates a small pile of radiant powder, illuminating the space around it. This powder may prove to be an improved alternative to plebeian torches that are commonly used, as it is harder to accidentally remove them, requiring the light be smothered with another block.
@@ -400,6 +400,23 @@ astralsorcery.journal.recipe.amt.more=Above average
 astralsorcery.journal.recipe.amt.high=Quite some
 astralsorcery.journal.recipe.amt.highest=Large amounts
 astralsorcery.journal.recipe.amt.toomuch=§cToo much
+
+item.itemsextant.target.mountain_shrine.name=Ancient Shrine
+item.itemsextant.target.desert_shrine.name=Desert Shrine
+item.itemsextant.target.small_shrine.name=Small Shrine
+item.itemsextant.target.village.name=Village
+item.itemsextant.target.temple.name=Temple
+item.itemsextant.target.oceanmonument.name=Ocean Monument
+item.itemsextant.target.fortress.name=Hell Fortress
+item.itemsextant.target.endcity.name=End City
+item.itemsextant.target.biome_plains.name=Plains
+item.itemsextant.target.biome_forest.name=Forest
+item.itemsextant.target.biome_desert.name=Desert
+item.itemsextant.target.biome_cold.name=Cold
+item.itemsextant.target.biome_jungle.name=Jungle
+item.itemsextant.target.biome_mesa.name=Mesa
+item.itemsextant.target.biome_ocean.name=Ocean
+item.itemsextant.target.biome_mountains.name=Mountains
 
 crystal.size=Size
 crystal.purity=Purity

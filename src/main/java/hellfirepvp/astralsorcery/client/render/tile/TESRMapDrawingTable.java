@@ -123,7 +123,7 @@ public class TESRMapDrawingTable extends TileEntitySpecialRenderer<TileMapDrawin
             GlStateManager.color(1F, 1F, 1F, te.getPercRunning());
 
             SpriteSheetResource halo = SpriteLibrary.spriteHalo2;
-            halo.getResource().bind();
+            halo.getResource().bindTexture();
             Tuple<Double, Double> uvFrame = halo.getUVOffset(ClientScheduler.getClientTick());
             float rot = 360F - ((float) (ClientScheduler.getClientTick()     % 2000) / 2000F * 360F);
 
