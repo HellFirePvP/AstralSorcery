@@ -12,10 +12,7 @@ import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderConstellation;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
@@ -73,10 +70,13 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     private static final int randomStars = 50;
     private List<StarPosition> usedStars = new ArrayList<>(randomStars);
 
+    private static final int showupDelay = 20;
+    private Map<SextantFinder.TargetObject, Tuple<BlockPos, Integer>> showupTargets = new HashMap<>();
+
     private List<SextantFinder.TargetObject> availableTargets = new LinkedList<>();
     private BlockPos target = null;
     private SextantFinder.TargetObject selectedTarget = null;
-    private int selectionOffset = 0;
+    private int selectionOffset;
 
     private boolean grabCursor = false;
 
@@ -119,6 +119,33 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
         for (int i = 0; i < randomStars; i++) {
             usedStars.add(new StarPosition(offsetX + rand.nextFloat() * width, offsetY + rand.nextFloat() * height));
+        }
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+
+        if (Minecraft.getMinecraft().player == null ||
+                Minecraft.getMinecraft().world == null) {
+            return;
+        }
+
+        for (SextantFinder.TargetObject to : this.availableTargets) {
+            if (!this.showupTargets.containsKey(to)) {
+                BlockPos target = UISextantCache.queryLocation(Minecraft.getMinecraft().player.getPosition(),
+                        Minecraft.getMinecraft().world.provider.getDimension(), to);
+                if (target != null) {
+                    this.showupTargets.put(to, new Tuple<>(target, 0));
+                }
+            }
+        }
+
+        for (SextantFinder.TargetObject to : this.showupTargets.keySet()) {
+            Tuple<BlockPos, Integer> showupTpl = this.showupTargets.get(to);
+            if (showupTpl.value < showupDelay) {
+                this.showupTargets.put(to, new Tuple<>(showupTpl.key, showupTpl.value + 1));
+            }
         }
     }
 
@@ -181,10 +208,10 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         World w = Minecraft.getMinecraft().world;
         float pitch = Minecraft.getMinecraft().player.rotationPitch;
         float transparency = 0F;
-        if (pitch < -60F) {
+        if (pitch < -30F) {
             transparency = 1F;
         } else if (pitch < -10F) {
-            transparency = (Math.abs(pitch) - 10F) / 50F;
+            transparency = (Math.abs(pitch) - 10F) / 20F;
             if (ConstellationSkyHandler.getInstance().isNight(w)) {
                 transparency *= transparency;
             }

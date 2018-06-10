@@ -47,8 +47,6 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
     private BlockPos resultPos = null;
     private Integer resultDim = null;
 
-    private boolean emptyResult = false;
-
     public PktRequestSextantTarget() {}
 
     public PktRequestSextantTarget(SextantFinder.TargetObject object) {
@@ -59,7 +57,6 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
         this.regNameExpected = to.getRegistryName();
         this.resultPos = result;
         this.resultDim = dimension;
-        this.emptyResult = result == null;
     }
 
     @Override
@@ -71,7 +68,6 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
         if (buf.readBoolean()) {
             this.resultDim = buf.readInt();
         }
-        this.emptyResult = buf.readBoolean();
     }
 
     @Override
@@ -87,7 +83,6 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
         if (resultDim != null) {
             buf.writeInt(resultDim);
         }
-        buf.writeBoolean(this.emptyResult);
     }
 
     @Override
@@ -123,9 +118,7 @@ public class PktRequestSextantTarget implements IMessageHandler<PktRequestSextan
     private void handlePacketClient(PktRequestSextantTarget pkt, MessageContext ctx) {
         Minecraft.getMinecraft().addScheduledTask(() -> {
             if (Minecraft.getMinecraft().player == null ||
-                    Minecraft.getMinecraft().world == null ||
-                    pkt.resultDim == null ||
-                    pkt.resultPos == null) {
+                    Minecraft.getMinecraft().world == null) {
                 return;
             }
             SextantFinder.TargetObject to = SextantFinder.getByName(pkt.regNameExpected);
