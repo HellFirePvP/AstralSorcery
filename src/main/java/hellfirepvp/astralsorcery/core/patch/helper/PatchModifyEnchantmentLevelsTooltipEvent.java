@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.core.patch.helper;
 
 import hellfirepvp.astralsorcery.core.ClassPatch;
+import net.minecraftforge.fml.relauncher.Side;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -54,5 +55,9 @@ public class PatchModifyEnchantmentLevelsTooltipEvent extends ClassPatch {
         mn.instructions.insertBefore(n, new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "net/minecraftforge/fml/common/eventhandler/EventBus", "post", "(Lnet/minecraftforge/fml/common/eventhandler/Event;)Z", false));
         mn.instructions.insertBefore(n, new InsnNode(Opcodes.POP));
     }
-
+    
+    @Override
+    public boolean canExecuteForSide(Side side) {
+        return side == Side.CLIENT;
+    }
 }
