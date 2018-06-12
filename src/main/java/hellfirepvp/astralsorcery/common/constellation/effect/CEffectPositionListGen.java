@@ -98,6 +98,25 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         return false;
     }
 
+    public boolean findNewPositionAt(World world, BlockPos pos, BlockPos at, ConstellationEffectProperties prop) {
+        if(maxCount > elements.size()) {
+            double searchRange = prop.getSize();
+            if (Math.abs(pos.getX() - at.getX()) > searchRange ||
+                    Math.abs(pos.getY() - at.getY()) > searchRange ||
+                    Math.abs(pos.getZ() - at.getZ()) > searchRange) {
+                return false;
+            }
+            if(MiscUtils.isChunkLoaded(world, at) && verifier.isValid(world, at) && !containsElementAt(at)) {
+                T element = newElement(world, at);
+                if(element != null) {
+                    elements.add(element);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     public T newElement(World world, BlockPos at) {
         return elementProvider.apply(at);
     }

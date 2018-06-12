@@ -28,6 +28,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -129,6 +130,8 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                     world.setBlockState(at, generate);
                     changed = true;
                 }
+            } else if (state.getBlock().isAir(state, world, at) && state.getBlock().isReplaceable(world, at)) {
+                world.setBlockState(at, Blocks.ICE.getDefaultState());
             }
             return changed;
         } else {
@@ -150,6 +153,12 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                                 world.setBlockToAir(bp);
                             } else {
                                 melt.placeResultAt(world, bp);
+                                for (EnumFacing f : EnumFacing.VALUES) {
+                                    BlockPos test = bp.offset(f);
+                                    if(findNewPositionAt(world, pos, test, modified) && rand.nextBoolean()) {
+                                        break;
+                                    }
+                                }
                             }
                             removeElement(entry);
                         }

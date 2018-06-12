@@ -61,7 +61,7 @@ public class CEffectBootes extends CEffectEntityCollect<EntityLivingBase> {
                 if(modified.isCorrupted()) {
                     did = true;
                     e.hurtResistantTime = 0;
-                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 0));
+                    e.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 4000, 5));
                     e.attackEntityFrom(CommonProxy.dmgSourceStellar, 5000);
                     continue;
                 }

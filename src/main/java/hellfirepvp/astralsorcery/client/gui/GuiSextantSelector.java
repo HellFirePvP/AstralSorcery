@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.gui;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.journal.page.IGuiRenderablePage;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
@@ -21,15 +22,22 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandl
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktSetSextantTarget;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -38,6 +46,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -54,21 +63,21 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     private static final AbstractRenderableTexture textureSextant = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridsextant");
 
-    private static final Rectangle.Float partFrame = new Rectangle.Float(0, 0, 140F / 172F, 1F);
-    private static final Rectangle.Float partSelectFrame = new Rectangle.Float(140F / 172F, 110F / 140F, 30F / 172F, 30F / 140F);
-    private static final Rectangle.Float partIconSize = new Rectangle2D.Float(0F, 0F, 16F / 172F, 16F / 140F);
-    private static final Rectangle.Float partArrowDown = new Rectangle2D.Float(140F / 172F, 80F / 140F, 12F / 172F, 8F / 140F);
-    private static final Rectangle.Float partArrowUp = new Rectangle2D.Float(140F / 172F, 88F / 140F, 12F / 172F, 8F / 140F);
+    private static final Rectangle.Float partFrame = new Rectangle.Float(0, 0, 280F / 312F, 1F);
+    private static final Rectangle.Float partSelectFrame = new Rectangle.Float(280F / 312F, 110F / 280F, 30F / 312F, 30F / 280F);
+    private static final Rectangle.Float partIconSize = new Rectangle2D.Float(0F, 0F, 16F / 312F, 16F / 140F);
+    private static final Rectangle.Float partArrowDown = new Rectangle2D.Float(280F / 312F, 80F / 280F, 12F / 312F, 8F / 280F);
+    private static final Rectangle.Float partArrowUp = new Rectangle2D.Float(280F / 312F, 88F / 280F, 12F / 312F, 8F / 280F);
 
-    private static final Rectangle.Float partFrameCornerUpLeft = new Rectangle2D.Float(140F / 172F, 97F / 140F, 6F / 172F, 6F / 140F);
-    private static final Rectangle.Float partFrameCornerUpRight = new Rectangle2D.Float(147F / 172F, 97F / 140F, 6F / 172F, 6F / 140F);
-    private static final Rectangle.Float partFrameCornerDownLeft = new Rectangle2D.Float(140F / 172F, 104F / 140F, 6F / 172F, 6F / 140F);
-    private static final Rectangle.Float partFrameCornerDownRight = new Rectangle2D.Float(147F / 172F, 104F / 140F, 6F / 172F, 6F / 140F);
+    private static final Rectangle.Float partFrameCornerUpLeft = new Rectangle2D.Float(280F / 312F, 97F / 280F, 6F / 312F, 6F / 280F);
+    private static final Rectangle.Float partFrameCornerUpRight = new Rectangle2D.Float(287F / 312F, 97F / 280F, 6F / 312F, 6F / 280F);
+    private static final Rectangle.Float partFrameCornerDownLeft = new Rectangle2D.Float(280F / 312F, 104F / 280F, 6F / 312F, 6F / 280F);
+    private static final Rectangle.Float partFrameCornerDownRight = new Rectangle2D.Float(287F / 312F, 104F / 280F, 6F / 312F, 6F / 280F);
 
-    private static final Rectangle.Float partFrameEdgeLeft = new Rectangle2D.Float(140F / 172F, 103F / 140F, 6F / 172F, 1F / 140F);
-    private static final Rectangle.Float partFrameEdgeUp = new Rectangle2D.Float(146F / 172F, 97F / 140F, 1F / 172F, 6F / 140F);
-    private static final Rectangle.Float partFrameEdgeRight = new Rectangle2D.Float(147F / 172F, 103F / 140F, 6F / 172F, 1F / 140F);
-    private static final Rectangle.Float partFrameEdgeDown = new Rectangle2D.Float(146F / 172F, 104F / 140F, 1F / 172F, 6F / 140F);
+    private static final Rectangle.Float partFrameEdgeLeft = new Rectangle2D.Float(280F / 312F, 103F / 280F, 6F / 312F, 1F / 280F);
+    private static final Rectangle.Float partFrameEdgeUp = new Rectangle2D.Float(286F / 312F, 97F / 280F, 1F / 312F, 6F / 280F);
+    private static final Rectangle.Float partFrameEdgeRight = new Rectangle2D.Float(287F / 312F, 103F / 280F, 6F / 312F, 1F / 280F);
+    private static final Rectangle.Float partFrameEdgeDown = new Rectangle2D.Float(286F / 312F, 104F / 280F, 1F / 312F, 6F / 280F);
 
     private static final int selectionsPerFrame = 4;
     private static final int randomStars = 85;
@@ -80,11 +89,19 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
     private List<SextantFinder.TargetObject> availableTargets = new LinkedList<>();
     private SextantFinder.TargetObject selectedTarget = null;
     private int selectionOffset;
+    private final EnumHand usedHand;
+
+    private Rectangle.Double rArrowDown, rArrowUp;
+    private Map<Rectangle.Double, SextantFinder.TargetObject> selectMap = new HashMap<>();
+    private Map<Rectangle.Double, SextantFinder.TargetObject> dropMap = new HashMap<>();
+
+    private SextantFinder.TargetObject dragging = null;
 
     private boolean grabCursor = false;
 
-    public GuiSextantSelector(ItemStack sextant) {
+    public GuiSextantSelector(ItemStack sextant, EnumHand hand) {
         super(280, 280);
+        this.usedHand = hand;
 
         Optional<Long> currSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
         currSeed.ifPresent(this::setupInitialStars);
@@ -94,6 +111,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             SextantFinder.TargetObject selectedTarget = ItemSextant.getTarget(sextant);
             if (selectedTarget != null) {
                 this.selectedTarget = selectedTarget;
+                this.showupTargets.put(selectedTarget, target);
             }
         }
         for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
@@ -180,22 +198,31 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.selectMap.clear();
+        this.dropMap.clear();
+        this.rArrowDown = null;
+        this.rArrowUp = null;
+
         if(Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().world == null) {
             return;
         }
         GlStateManager.pushMatrix();
+        GlStateManager.disableAlpha();
+
+        GlStateManager.enableBlend();
+        Blending.DEFAULT.applyStateManager();
 
         handleMouseMovement(partialTicks);
 
         ScaledResolution res = new ScaledResolution(mc);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor(
-                (guiLeft + 16) * res.getScaleFactor(),
-                (guiTop + 17) * res.getScaleFactor(),
-                (guiWidth - 32) * res.getScaleFactor(),
-                (guiHeight - 33) * res.getScaleFactor());
+                (guiLeft + 8) * res.getScaleFactor(),
+                (guiTop + 8) * res.getScaleFactor(),
+                (guiWidth - 16) * res.getScaleFactor(),
+                (guiHeight - 15) * res.getScaleFactor());
 
-        drawSkyScreen(partialTicks);
+        drawSkyScreen(partialTicks, mouseX, mouseY);
 
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
@@ -208,11 +235,21 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         drawSelectorBox(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2D - (selectionsPerFrame / 2D) * 16 - 6),
                 availableTargets, this.selectedTarget == null ? -1 : availableTargets.indexOf(this.selectedTarget));
 
+        if (dragging != null) {
+            Blending.DEFAULT.applyStateManager();
+            zLevel += 30;
+            dragging.getRenderable().bindTexture();
+            drawTexturedRect(mouseX - 8, mouseY - 8, 16, 16, dragging.getRenderable());
+            zLevel -= 30;
+        }
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
         TextureHelper.refreshTextureBindState();
         GlStateManager.popMatrix();
     }
 
-    private void drawSkyScreen(float partialTicks) {
+    private void drawSkyScreen(float partialTicks, double mouseX, double mouseY) {
         World w = Minecraft.getMinecraft().world;
         float pitch = Minecraft.getMinecraft().player.rotationPitch;
         float transparency = 0F;
@@ -227,10 +264,10 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         boolean canSeeSky = canSeeSky(w);
 
         drawGridBackground(partialTicks, canSeeSky, transparency);
-        drawEffectBackground(partialTicks, canSeeSky, transparency);
+        drawEffectBackground(partialTicks, canSeeSky, transparency, mouseX, mouseY);
     }
 
-    private void drawEffectBackground(float partialTicks, boolean canSeeSky, float transparency) {
+    private void drawEffectBackground(float partialTicks, boolean canSeeSky, float transparency, double mouseX, double mouseY) {
         if (usedStars.isEmpty()) {
             Optional<Long> currSeed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
             if (!currSeed.isPresent()) {
@@ -240,24 +277,11 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         }
 
         zLevel += 5;
-        drawCellWithEffects(partialTicks, canSeeSky, transparency);
+        this.dropMap.putAll(drawCellWithEffects(partialTicks, canSeeSky, transparency, mouseX, mouseY));
         zLevel -= 5;
     }
 
-    private Map<Rectangle, SextantFinder.TargetObject> drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency) {
-        WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
-        int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
-        Optional<Long> seed = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
-        long s = 0;
-        if(seed.isPresent()) {
-            s = seed.get();
-        }
-        Random r = new Random(s * 31 + lastTracked * 31);
-
-        GlStateManager.enableBlend();
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.applyStateManager();
-
+    private Map<Rectangle.Double, SextantFinder.TargetObject> drawCellWithEffects(float partialTicks, boolean canSeeSky, float transparency, double mouseX, double mouseY) {
         if (canSeeSky) {
             int offsetX = guiLeft;
             int offsetZ = guiTop;
@@ -270,7 +294,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
 
         zLevel += 10;
 
-        Map<Rectangle, SextantFinder.TargetObject> targets = new HashMap<>();
+        Map<Rectangle.Double, SextantFinder.TargetObject> targets = new HashMap<>();
         for (Map.Entry<SextantFinder.TargetObject, Tuple<BlockPos, Integer>> visibleTarget : this.showupTargets.entrySet()) {
             float dayMultiplier = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(Minecraft.getMinecraft().world);
             if(dayMultiplier <= 0.1F) {
@@ -311,37 +335,52 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             float ysFactor = 60F;
             int wPart = ((int) (((float) width) * 0.1F));
             int hPart = ((int) (((float) height) * 0.1F));
-
-            GlStateManager.disableAlpha();
-            float alpha = RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 8);
-            alpha = (0.2F + 0.8F * alpha) * dayMultiplier * alphaShowup * transparency;
-            Color c = new Color(target.getColorTheme(), false);
-            GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
             RenderAstralSkybox.TEX_STAR_1.bind();
 
             double offsetX = guiLeft + wPart - MathHelper.floor((diffYaw / xsFactor) * width);
             double offsetY = guiTop + hPart - MathHelper.floor((diffPitch / ysFactor) * height);
-            drawTexturedRect(
-                    offsetX,
-                    offsetY,
-                    16,
-                    16,
-                    0, 0, 1, 1);
+
+            if (this.selectedTarget != null && target.equals(this.selectedTarget)) {
+                float alpha = RenderConstellation.conCFlicker(ClientScheduler.getClientTick() + actualPos.getX(), partialTicks, 8);
+                alpha = (0.6F + 0.4F * alpha) * dayMultiplier * alphaShowup * transparency;
+                Color c = new Color(target.getColorTheme(), false);
+                GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
+
+                drawInfoStar(((float) offsetX + 8), ((float) offsetY + 8), zLevel, 24, partialTicks);
+            } else {
+                float alpha = RenderConstellation.conCFlicker(ClientScheduler.getClientTick() + actualPos.getX(), partialTicks, 8);
+                alpha = (0.2F + 0.8F * alpha) * dayMultiplier * alphaShowup * transparency;
+                Color c = new Color(target.getColorTheme(), false);
+                GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, alpha);
+
+                drawTexturedRect(
+                        offsetX,
+                        offsetY,
+                        16,
+                        16,
+                        0, 0, 1, 1);
+            }
+            Rectangle.Double rct = new Rectangle.Double(offsetX, offsetY, 16, 16);
+
+            if ((this.selectedTarget != null && this.selectedTarget.equals(target)) || (grabCursor && rct.contains(mouseX, mouseY) && ResearchManager.clientProgress.getUsedTargets().contains(target))) {
+                GlStateManager.color(1F, 1F, 1F, 0.4F);
+                target.getRenderable().bindTexture();
+                drawTexturedRect(offsetX - 8, offsetY - 8, 32, 32, target.getRenderable());
+                GlStateManager.color(1F, 1F, 1F, 1F);
+            }
+
             TextureHelper.refreshTextureBindState();
 
-            targets.put(new Rectangle(MathHelper.ceil(offsetX), MathHelper.ceil(offsetY), 16, 16), target);
+            targets.put(rct, target);
         }
 
         zLevel -= 10;
 
         GlStateManager.color(1, 1, 1, 1);
-        GlStateManager.disableBlend();
         return targets;
     }
 
     private void drawCellEffect(int offsetX, int offsetY, int guiWidth, int guiHeight, float partialTicks, float transparency) {
-        GlStateManager.disableAlpha();
-
         WorldSkyHandler handle = ConstellationSkyHandler.getInstance().getWorldHandler(Minecraft.getMinecraft().world);
         int lastTracked = handle == null ? 5 : handle.lastRecordedDay;
         Random r = new Random();
@@ -366,22 +405,26 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         for (int i = 0; i < 5 + cstRand.nextInt(10); i++) {
             cstRand.nextLong();
         }
-
-        GlStateManager.enableAlpha();
     }
 
     private void drawGridBackground(float partialTicks, boolean canSeeSky, float transparency) {
         Blending.PREALPHA.applyStateManager();
         Tuple<Color, Color> fromTo = GuiSkyScreen.getRBGFromTo(canSeeSky, transparency, partialTicks);
         RenderingUtils.drawGradientRect(guiLeft, guiTop, zLevel, guiLeft + guiWidth, guiTop + guiHeight, fromTo.key, fromTo.value);
+
         Blending.DEFAULT.applyStateManager();
+        Blending.DEFAULT.apply();
+        GlStateManager.enableBlend();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
     }
 
     private void drawSelectorBox(double offsetX, double offsetY, List<SextantFinder.TargetObject> objects, int selectedOption) {
         textureSextant.bindTexture();
         GlStateManager.color(1F, 1F, 1F, 1F);
-        GlStateManager.disableDepth();
         int totalInnerHeight = Math.min(selectionsPerFrame, objects.size()) * 16;
+
+        GL11.glEnable(GL11.GL_BLEND);
 
         //Re-center selection
         int yShift = objects.size() >= selectionsPerFrame ? 0 : (selectionsPerFrame - objects.size()) * 8;
@@ -416,10 +459,6 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         drawTexturedRect(offsetX + 6 + 16, offsetY + 6, 6, totalInnerHeight,
                 partFrameEdgeRight);
 
-        GlStateManager.enableBlend();
-        GL11.glEnable(GL11.GL_BLEND);
-        Blending.DEFAULT.applyStateManager();
-
         //"Blur" center
         GlStateManager.disableTexture2D();
         GlStateManager.enableColorMaterial();
@@ -435,10 +474,12 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         if (drawPrevArrow) {
             drawTexturedRect(offsetX + 8D, offsetY - 10, 12, 7,
                     partArrowUp);
+            this.rArrowUp = new Rectangle.Double(offsetX + 8, offsetY - 10, 12, 7);
         }
         if (drawNextArrow) {
             drawTexturedRect(offsetX + 8, offsetY + 3 + 12 + totalInnerHeight, 12, 7,
                     partArrowDown);
+            this.rArrowDown = new Rectangle.Double(offsetX + 8, offsetY + 3 + 12 + totalInnerHeight, 12, 7);
         }
 
         int internalOffset = 0;
@@ -448,6 +489,7 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             AbstractRenderableTexture tex = to.getRenderable();
             tex.bindTexture();
             drawTexturedRect(offsetX + 6, offsetY + 6 + (internalOffset * 16), 16, 16, tex);
+            this.selectMap.put(new Rectangle2D.Double(offsetX + 6, offsetY + 6 + (internalOffset * 16), 16, 16), to);
 
             if(i == selectedOption) {
                 selectedInternal = internalOffset;
@@ -456,11 +498,10 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         }
 
         if (selectedInternal >= 0) {
+            textureSextant.bindTexture();
             drawTexturedRect(offsetX, offsetY + selectedInternal * 16, 28, 28, partSelectFrame);
         }
 
-        GlStateManager.disableBlend();
-        GlStateManager.enableDepth();
         TextureHelper.refreshTextureBindState();
     }
 
@@ -550,6 +591,75 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
             } else if (sl.y > (offsetY + height)) {
                 sl.y -= height;
             }
+        }
+    }
+
+    private Rectangle drawInfoStar(float offsetX, float offsetY, float zLevel, float widthHeightBase, float pTicks) {
+        float tick = ClientScheduler.getClientTick() + pTicks;
+        float deg = (tick * 2) % 360F;
+        float wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        deg = ((tick + 22.5F) * 2) % 360F;
+        wh = widthHeightBase - (widthHeightBase / 6F) * (MathHelper.sin((float) Math.toRadians(((tick + 45F) * 4) % 360F)) + 1F);
+        drawInfoStarSingle(offsetX, offsetY, zLevel, wh, Math.toRadians(deg));
+
+        return new Rectangle(MathHelper.floor(offsetX - widthHeightBase / 2F), MathHelper.floor(offsetY - widthHeightBase / 2F),
+                MathHelper.floor(widthHeightBase), MathHelper.floor(widthHeightBase));
+    }
+
+    private void drawInfoStarSingle(float offsetX, float offsetY, float zLevel, float widthHeight, double deg) {
+        GlStateManager.pushMatrix();
+        RenderAstralSkybox.TEX_STAR_1.bind();
+        Vector3 offset = new Vector3(-widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv01   = new Vector3(-widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv11   = new Vector3( widthHeight / 2D,  widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+        Vector3 uv10   = new Vector3( widthHeight / 2D, -widthHeight / 2D, 0).rotate(deg, Vector3.RotAxis.Z_AXIS);
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        vb.pos(offsetX + uv01.getX(),   offsetY + uv01.getY(),   zLevel).tex(0, 1).endVertex();
+        vb.pos(offsetX + uv11.getX(),   offsetY + uv11.getY(),   zLevel).tex(1, 1).endVertex();
+        vb.pos(offsetX + uv10.getX(),   offsetY + uv10.getY(),   zLevel).tex(1, 0).endVertex();
+        vb.pos(offsetX + offset.getX(), offsetY + offset.getY(), zLevel).tex(0, 0).endVertex();
+        tes.draw();
+
+        TextureHelper.refreshTextureBindState();
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (mouseButton == 0) {
+            if (rArrowUp != null && rArrowUp.contains(mouseX, mouseY)) {
+                this.selectionOffset -= 1;
+            } else if (rArrowDown != null && rArrowDown.contains(mouseX, mouseY)) {
+                this.selectionOffset += 1;
+            } else {
+                SextantFinder.TargetObject to;
+                Rectangle.Double sel = MiscUtils.iterativeSearch(this.selectMap.keySet(), (rect) -> rect.contains(mouseX, mouseY));
+                if (sel != null && (to = this.selectMap.get(sel)) != null) {
+                    this.dragging = to;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+
+        if (state == 0 && this.dragging != null) {
+            SextantFinder.TargetObject to;
+            Rectangle.Double sel = MiscUtils.iterativeSearch(this.dropMap.keySet(), (rect) -> rect.contains(mouseX, mouseY));
+            if (sel != null && (to = this.dropMap.get(sel)) != null && to.equals(this.dragging)) {
+                PacketChannel.CHANNEL.sendToServer(new PktSetSextantTarget(to, this.usedHand));
+                this.selectedTarget = to;
+            }
+            this.dragging = null;
         }
     }
 

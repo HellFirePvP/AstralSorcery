@@ -86,7 +86,7 @@ public class ClientGuiHandler {
             case SEXTANT:
                 Tuple<EnumHand, ItemStack> heldSextant = MiscUtils.getMainOrOffHand(player, ItemsAS.sextant);
                 if (heldSextant != null) {
-                    return new GuiSextantSelector(heldSextant.value);
+                    return new GuiSextantSelector(heldSextant.value, heldSextant.key);
                 }
             default:
                 return null;

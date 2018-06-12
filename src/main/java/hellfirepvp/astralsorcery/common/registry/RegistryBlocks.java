@@ -199,7 +199,7 @@ public class RegistryBlocks {
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
         registerTile(TileBore.class);
-        registerTile(TilePortalNode.class);
+        registerTile(TileStructController.class);
         registerTile(TileObservatory.class);
 
         registerTile(TileCrystalLens.class);

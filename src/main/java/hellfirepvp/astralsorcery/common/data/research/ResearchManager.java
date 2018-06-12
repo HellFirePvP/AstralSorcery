@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
@@ -204,6 +205,17 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean useSextantTarget(SextantFinder.TargetObject to, EntityPlayer player) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if(progress == null) return false;
+
+        progress.useTarget(to);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean discoverConstellations(Collection<IConstellation> csts, EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
@@ -344,6 +356,9 @@ public class ResearchManager {
         ResearchManager.maximizeTier(player);
         ResearchManager.forceMaximizeResearch(player);
         ResearchManager.setAttunedBefore(player, true);
+        for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
+            progress.useTarget(to);
+        }
 
         if(progress.getTierReached().isThisLater(before)) {
             PktProgressionUpdate pkt = new PktProgressionUpdate(progress.getTierReached());

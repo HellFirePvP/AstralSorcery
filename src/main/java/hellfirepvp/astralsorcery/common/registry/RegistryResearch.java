@@ -502,6 +502,7 @@ public class RegistryResearch {
         resSextant.addPage(getTextPage("SEXTANT.1"));
         resSextant.addPage(new JournalPageDiscoveryRecipe(RegistryRecipes.rSextant));
         resSextant.addPage(getTextPage("SEXTANT.3"));
+        resSextant.addPage(getTextPage("SEXTANT.4"));
 
         ResearchNode resRelay = new ResearchNode(new ItemStack(BlocksAS.attunementRelay), "SPEC_RELAY", 2, 0);
         resRelay.addPage(getTextPage("SPEC_RELAY.1"));

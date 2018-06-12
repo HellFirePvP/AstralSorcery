@@ -59,13 +59,6 @@ public class UISextantTarget {
             renderStar(info.key, target, pTicks);
         }
 
-        for (SextantFinder.TargetObject to : SextantFinder.getSelectableTargets()) {
-            BlockPos at = UISextantCache.queryLocation(pl.getPosition(), 0, to);
-            if (at != null) {
-                renderStar(at, to, pTicks);
-            }
-        }
-
         held = pl.getHeldItem(EnumHand.OFF_HAND);
         if (!held.isEmpty() && held.getItem() instanceof ItemSextant &&
                 (info = ItemSextant.getCurrentTargetInformation(held)) != null &&
