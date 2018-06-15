@@ -132,6 +132,7 @@ public class CEffectFornax extends CEffectPositionListGen<WorldMeltables.ActiveM
                 }
             } else if (state.getBlock().isAir(state, world, at) && state.getBlock().isReplaceable(world, at)) {
                 world.setBlockState(at, Blocks.ICE.getDefaultState());
+                changed = true;
             }
             return changed;
         } else {

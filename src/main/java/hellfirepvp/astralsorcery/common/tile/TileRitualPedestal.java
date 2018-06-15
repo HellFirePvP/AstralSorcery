@@ -262,6 +262,17 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
     }
 
+    @Override
+    public void onBreak() {
+        super.onBreak();
+
+        if (!world.isRemote && getUpdateCache() != null) {
+            ItemStack crystal = getUpdateCache().getCrystal();
+            ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, crystal);
+            getUpdateCache().setChannelingCrystal(ItemStack.EMPTY, this.world);
+        }
+    }
+
     public boolean isWorking() {
         return working;
     }

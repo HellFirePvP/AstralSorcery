@@ -81,6 +81,7 @@ public class TESRObservatory extends TileEntitySpecialRenderer<TileObservatory> 
         GlStateManager.disableCull();
         GlStateManager.enableBlend();
         Blending.DEFAULT.applyStateManager();
+        Blending.DEFAULT.apply();
         modelTelescope.render(null, iYaw, iPitch, 0, 0, 0, 1);
         GlStateManager.disableBlend();
         GlStateManager.enableCull();
