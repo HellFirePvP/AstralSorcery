@@ -130,6 +130,10 @@ public class ItemKnowledgeShare extends Item implements INBTModel {
     }
 
     private void tryGiveKnowledge(ItemStack stack, EntityPlayer player) {
+        if (player instanceof EntityPlayerMP && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
+            return;
+        }
+
         if(isCreative(stack)) {
             ResearchManager.forceMaximizeAll(player);
             return;

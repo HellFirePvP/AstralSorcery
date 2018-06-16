@@ -86,9 +86,9 @@ public final class EffectHandler {
         return instance;
     }
 
-    public void requestGatewayUIFor(World world, Vector3 pos, double sphereRadius) {
+    public void requestGatewayUIFor(World world, BlockPos gateway, Vector3 pos, double sphereRadius) {
         if(uiGateway == null || !uiGateway.getPos().equals(pos)) {
-            uiGateway = UIGateway.initialize(world, pos, sphereRadius);
+            uiGateway = UIGateway.initialize(world, gateway, pos, sphereRadius);
         }
         gatewayUITicks = 20;
     }

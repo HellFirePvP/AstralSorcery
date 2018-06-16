@@ -169,7 +169,7 @@ public class TileCelestialGateway extends TileEntityTick implements IMultiblockD
                 Minecraft.getMinecraft().gameSettings.thirdPersonView = 0;
             }
             if(playerDst < 2.5) {
-                EffectHandler.getInstance().requestGatewayUIFor(world, sphereVec, 5.5);
+                EffectHandler.getInstance().requestGatewayUIFor(world, pos, sphereVec, 5.5);
             }
         } else {
             if(clientSphere != null) {

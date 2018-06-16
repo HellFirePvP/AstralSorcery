@@ -227,9 +227,9 @@ public class GuiSextantSelector extends GuiWHScreen implements GuiSkyScreen {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         textureSextant.bindTexture();
-        zLevel += 5;
+        zLevel += 20;
         drawTexturedRect(guiLeft, guiTop, guiWidth, guiHeight, partFrame);
-        zLevel -= 5;
+        zLevel -= 20;
         TextureHelper.refreshTextureBindState();
 
         drawSelectorBox(guiLeft + guiWidth + 10, guiTop + (guiHeight / 2D - (selectionsPerFrame / 2D) * 16 - 6),

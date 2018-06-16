@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.client.event.ClientGatewayHandler;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.data.world.data.GatewayCache;
+import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -22,6 +24,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,9 +48,11 @@ public class UIGateway {
 
     private List<GatewayEntry> gatewayEntries = new LinkedList<>();
     private final Vector3 origin;
+    private final BlockPos gatewayPos;
     private final double radius;
 
-    private UIGateway(Vector3 pos, double radius) {
+    private UIGateway(BlockPos gatewayPos, Vector3 pos, double radius) {
+        this.gatewayPos = gatewayPos;
         this.origin = pos;
         this.radius = radius;
     }
@@ -60,8 +65,8 @@ public class UIGateway {
         return radius;
     }
 
-    public static UIGateway initialize(World world, Vector3 source, double sphereRadius) {
-        UIGateway ui = new UIGateway(source, sphereRadius);
+    public static UIGateway initialize(World world, BlockPos gatewayPos, Vector3 source, double sphereRadius) {
+        UIGateway ui = new UIGateway(gatewayPos, source, sphereRadius);
         CelestialGatewaySystem system = CelestialGatewaySystem.instance;
         int dimid = world.provider.getDimension();
         List<GatewayCache.GatewayNode> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
@@ -88,6 +93,11 @@ public class UIGateway {
             }
         }
         return null;
+    }
+
+    public boolean isValid(World w) {
+        //true is fine for clientside here. doesn't load a new chunk, just fails into empty chunk which is fine for the effect.
+        return MiscUtils.getTileAt(w, this.gatewayPos, TileCelestialGateway.class, true) != null;
     }
 
     private static void gatherStars(UIGateway gateway, int dimId, List<GatewayCache.GatewayNode> otherPositions, boolean sameWorld, double sphereRadius) {
