@@ -36,6 +36,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -179,9 +180,13 @@ public class BlockMachine extends BlockContainer implements BlockCustomName, Blo
     }
 
     public boolean handleSpecificActivateEvent(PlayerInteractEvent.RightClickBlock event) {
+        EntityPlayer player = event.getEntityPlayer();
+        if (player instanceof EntityPlayerMP && MiscUtils.isPlayerFakeMP((EntityPlayerMP) player)) {
+            return false;
+        }
+
         EnumHand hand = event.getHand();
         World world = event.getWorld();
-        EntityPlayer player = event.getEntityPlayer();
         BlockPos pos = event.getPos();
         IBlockState state = world.getBlockState(pos);
         MachineType type = state.getValue(MACHINE_TYPE);
