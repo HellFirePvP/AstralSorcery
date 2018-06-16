@@ -91,7 +91,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         Random rand = new Random(seed);
 
         int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / 24000);
-        for (int i = 0; i < day; i++) {
+        for (int i = 0; i < Math.abs(day); i++) {
             rand.nextLong(); //Flush
         }
 

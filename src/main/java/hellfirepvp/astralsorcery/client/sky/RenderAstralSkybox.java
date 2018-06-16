@@ -450,7 +450,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     }
 
     private static void renderConstellations(final World w, final float partialTicks) {
-        long wTime = w.getWorldTime() % 24000;
+        long wTime = ((w.getWorldTime() % 24000) + 24000) % 24000;
         if (wTime < 12000) return; //Daytime.
         float rainDim = 1.0F - w.getRainStrength(partialTicks);
         final float brightness = w.getStarBrightness(partialTicks) * rainDim;

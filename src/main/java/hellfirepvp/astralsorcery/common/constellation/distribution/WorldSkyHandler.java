@@ -187,7 +187,7 @@ public class WorldSkyHandler {
         activeConstellations.clear();
         activeDistributions.clear();
 
-        int activeDay = lastRecordedDay % 8;
+        int activeDay = ((lastRecordedDay % 8) + 8) % 8;
         LinkedList<IConstellation> linkedConstellations = initialValueMappings.computeIfAbsent(activeDay, day -> new LinkedList<>());
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
@@ -336,9 +336,11 @@ public class WorldSkyHandler {
 
         int offset = 36 - rand;
         int repeat = 36;
-        int solarTime = (int) ((world.getWorldTime() - offset * 24000) % (repeat * 24000));
+        long wTime = world.getWorldTime();
+
+        int solarTime = (int) ((wTime - offset * 24000) % (repeat * 24000));
         dayOfSolarEclipse = solarTime < 24000;
-        if (world.getWorldTime() > 24000 && solarTime > 3600 && solarTime < 8400) {
+        if (wTime > 24000 && solarTime > 3600 && solarTime < 8400) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
             solarEclipseTick = solarTime - 3600;
@@ -349,9 +351,9 @@ public class WorldSkyHandler {
         }
 
         repeat = 68;
-        int lunarTime = (int) (world.getWorldTime() % (repeat * 24000));
+        int lunarTime = (int) (wTime % (repeat * 24000));
         dayOfLunarEclipse = lunarTime < 24000;
-        if (world.getWorldTime() > 24000 && lunarTime > 15600 && lunarTime < 20400) {
+        if (wTime > 24000 && lunarTime > 15600 && lunarTime < 20400) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
             lunarEclipseTick = lunarTime - 15600;
