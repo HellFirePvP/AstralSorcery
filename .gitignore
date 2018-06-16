@@ -50,3 +50,6 @@ hs_err_pid*
 *.ipr
 *.iws
 .idea/
+
+# For good measure...
+*.jks
