@@ -22,6 +22,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.lang.Math;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -187,7 +188,7 @@ public class WorldSkyHandler {
         activeConstellations.clear();
         activeDistributions.clear();
 
-        int activeDay = lastRecordedDay % 8;
+        int activeDay = Math.abs(lastRecordedDay % 8);
         LinkedList<IConstellation> linkedConstellations = initialValueMappings.computeIfAbsent(activeDay, day -> new LinkedList<>());
         for (int i = 0; i < Math.min(10, linkedConstellations.size()); i++) {
             activeConstellations.addLast(linkedConstellations.get(i));
