@@ -207,7 +207,7 @@ public abstract class ConstellationBase implements IConstellation {
         public List<MoonPhase> getShowupMoonPhases(long rSeed) {
             List<MoonPhase> shifted = new ArrayList<>(phases.size());
             for (MoonPhase mp : this.phases) {
-                int index = mp.ordinal() + ((int) (rSeed % MoonPhase.values().length));
+                int index = mp.ordinal() + (((int) (rSeed % MoonPhase.values().length)) + MoonPhase.values().length);
                 while (index >= MoonPhase.values().length) {
                     index -= MoonPhase.values().length;
                 }
