@@ -35,10 +35,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.util.data.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -53,6 +50,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -126,6 +124,14 @@ public class EventHandlerEntity {
             if (event.getResultStatus() == null) {
                 event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSpawnDropCloud(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof EntityAreaEffectCloud &&
+                MiscUtils.iterativeSearch(((EntityAreaEffectCloud) event.getEntity()).effects, (pEffect) -> pEffect.getPotion().equals(RegistryPotions.potionDropModifier)) != null) {
+            event.setCanceled(true);
         }
     }
 

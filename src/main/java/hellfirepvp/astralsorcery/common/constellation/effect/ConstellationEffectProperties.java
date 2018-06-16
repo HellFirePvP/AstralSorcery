@@ -66,7 +66,7 @@ public class ConstellationEffectProperties {
             }
             if(trait.equals(Constellations.alcara)) {
                 fracturationLower *= 0.015F;
-                fracturationRate *= 10_000F;
+                fracturationRate *= 50_000F;
 
                 size *= 2F;
                 effectAmplifier *= 2F;
@@ -74,7 +74,7 @@ public class ConstellationEffectProperties {
             }
             if(trait.equals(Constellations.vorux)) {
                 fracturationLower *= 0.25F;
-                fracturationRate *= 100F;
+                fracturationRate *= 3_000F;
 
                 effectAmplifier *= 2F;
                 size *= 1.75F;

@@ -769,7 +769,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 prop = prop.modify(trait);
             }
 
-            double maxDrain = 7D;
+            double maxDrain = 14D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(this.properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
             collectionChannelBuffer *= prop.getPotency();
