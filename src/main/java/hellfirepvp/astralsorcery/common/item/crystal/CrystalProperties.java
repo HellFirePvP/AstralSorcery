@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
 import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -154,7 +155,7 @@ public class CrystalProperties {
 
     @SideOnly(Side.CLIENT)
     public static Optional<Boolean> addPropertyTooltip(CrystalProperties prop, List<String> tooltip, int maxSize) {
-        return addPropertyTooltip(prop, tooltip, Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54), maxSize);
+        return addPropertyTooltip(prop, tooltip, GuiScreen.isShiftKeyDown(), maxSize);
     }
 
     @SideOnly(Side.CLIENT)

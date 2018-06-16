@@ -84,6 +84,7 @@ public class CEffectMineralis extends CEffectPositionList {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
+        boolean changed = false;
         if(modified.isCorrupted()) {
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(modified.getSize()));
             for (EntityLivingBase entity : entities) {
@@ -99,15 +100,23 @@ public class CEffectMineralis extends CEffectPositionList {
                                 if(!blockStack.isEmpty()) {
                                     state = ItemUtils.createBlockState(blockStack);
                                     if(state != null) {
-                                        world.setBlockState(at, state);
+                                        if(world.setBlockState(at, state)) {
+                                            changed = true;
+                                        }
                                     } else {
-                                        world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                        if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                            changed = true;
+                                        }
                                     }
                                 } else {
-                                    world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                    if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                        changed = true;
+                                    }
                                 }
                             } else {
-                                world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                    changed = true;
+                                }
                             }
                         }
                     }
@@ -115,14 +124,13 @@ public class CEffectMineralis extends CEffectPositionList {
             }
         }
 
-        boolean changed = false;
         GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
         if(entry != null) {
             BlockPos sel = entry.getPos();
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
                 if(verifier.isValid(world, sel)) {
                     ItemStack blockStack = OreTypes.RITUAL_MINERALIS.getRandomOre(rand);
-                    if(rand.nextInt(200_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
+                    if(rand.nextInt(2_000_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
                     if(!blockStack.isEmpty()) {
                         IBlockState state = ItemUtils.createBlockState(blockStack);
                         if(state != null) {

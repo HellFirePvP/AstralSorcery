@@ -85,20 +85,26 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
             IBlockState state = world.getBlockState(at);
             if((world.isAirBlock(at) || state.getBlock().isReplaceable(world, at)) &&
                     ((Math.abs(offX) > 5 || Math.abs(offZ) > 5) || offY < 0)) {
-                world.setBlockState(at, Blocks.WATER.getDefaultState());
-                world.neighborChanged(at, Blocks.WATER, at);
-                did = true;
+                if(world.setBlockState(at, Blocks.WATER.getDefaultState())) {
+                    for (int i = 0; i < 3; i++) {
+                        spawnFishDropsAt(at, world);
+                    }
+                    world.neighborChanged(at, Blocks.WATER, at);
+                    did = true;
+                }
             } else if((state.getBlock() instanceof BlockLiquid ||
                     state.getBlock() instanceof BlockFluidBase) &&
                     !state.getBlock().equals(Blocks.WATER) &&
                     !state.getBlock().equals(Blocks.FLOWING_WATER)) {
                 if(rand.nextBoolean()) {
-                    world.setBlockState(at, Blocks.SAND.getDefaultState());
-                    world.neighborChanged(at, Blocks.SAND, at);
-                    did = true;
+                    if(world.setBlockState(at, Blocks.SAND.getDefaultState())) {
+                        world.neighborChanged(at, Blocks.SAND, at);
+                        did = true;
+                    }
                 } else {
-                    world.setBlockToAir(at);
-                    did = true;
+                    if(world.setBlockToAir(at)) {
+                        did = true;
+                    }
                 }
             }
             return did;
@@ -118,15 +124,10 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
                     } while (rand.nextFloat() < percStrength);
                     changed = true;
                     if(entry.counter >= entry.maxCount) {
-                        Vector3 dropLoc = new Vector3(entry.getPos()).add(0.5, 0.85, 0.5);
                         entry.maxCount = minFishTickTime + rand.nextInt(maxFishTickTime - minFishTickTime + 1);
                         entry.counter = 0;
-                        LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
-                        builder.withLuck(rand.nextInt(2) * rand.nextFloat());
-                        for(ItemStack loot : world.getLootTableManager().getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING).generateLootForPools(rand, builder.build())) {
-                            EntityItem ei = ItemUtils.dropItemNaturally(world, dropLoc.getX(), dropLoc.getY(), dropLoc.getZ(), loot);
-                            ei.motionY = Math.abs(ei.motionY);
-                        }
+
+                        spawnFishDropsAt(entry.getPos(), world);
                     }
                     PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_WATER_FISH, entry.getPos());
                     PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, entry.getPos(), 8));
@@ -137,6 +138,16 @@ public class CEffectOctans extends CEffectPositionListGen<GenListEntries.Counter
         if(findNewPosition(world, pos, modified)) changed = true;
 
         return changed;
+    }
+
+    private void spawnFishDropsAt(BlockPos pos, World world) {
+        Vector3 dropLoc = new Vector3(pos).add(0.5, 0.85, 0.5);
+        LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
+        builder.withLuck(rand.nextInt(2) * rand.nextFloat());
+        for(ItemStack loot : world.getLootTableManager().getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING).generateLootForPools(rand, builder.build())) {
+            EntityItem ei = ItemUtils.dropItemNaturally(world, dropLoc.getX(), dropLoc.getY(), dropLoc.getZ(), loot);
+            ei.motionY = Math.abs(ei.motionY);
+        }
     }
 
     @Override

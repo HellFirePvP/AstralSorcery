@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -93,7 +94,7 @@ public class ItemInfusedGlass extends Item implements INBTModel {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         ActiveStarMap map = getMapEngravingInformations(stack);
         if(map != null) {
-            if(Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)) {
+            if(GuiScreen.isShiftKeyDown()) {
                 for(IConstellation c : map.getConstellations()) {
                     String out = TextFormatting.GRAY + "- " + TextFormatting.BLUE + I18n.format(c.getUnlocalizedName());
                     if(Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {

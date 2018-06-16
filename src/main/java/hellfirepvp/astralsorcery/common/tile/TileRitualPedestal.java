@@ -52,7 +52,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -774,7 +776,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);
 
             int freeCap = MathHelper.floor(CrystalCalculations.getChannelingCapacity(this.properties) * prop.getFracturationLowerBoundaryMultiplier());
-            double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * prop.getFracturationRate();
+            double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * CrystalCalculations.getCstFractureModifier(this.channeling) * prop.getFracturationRate();
             int part = Math.max(1, executeTimes - freeCap);
 
             if(ce instanceof ConstellationEffectStatus && executeTimes > 0) {
@@ -783,7 +785,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 if(ritualLinkTo != null) to = ritualLinkTo;
                 if(((ConstellationEffectStatus) ce).runEffect(world, to, getCollectedBackmirrors(), prop, trait)) {
                     for (int i = 0; i < part; i++) {
-                        if(rand.nextFloat() < (addFractureChance / part)) {
+                        if(rand.nextFloat() < (addFractureChance * prop.getEffectAmplifier() / part)) {
                             fractureCrystal(world);
                         }
                     }
@@ -805,7 +807,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
                 if(ce.playEffect(world, to, perc, prop, trait)) {
-                    if(rand.nextFloat() < (addFractureChance / prop.getEffectAmplifier() / part)) {
+                    if(rand.nextFloat() < (addFractureChance * prop.getEffectAmplifier() / part)) {
                         fractureCrystal(world);
                     }
                     markDirty(world);
@@ -818,6 +820,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 CrystalProperties prop = CrystalProperties.getCrystalProperties(this.crystal);
                 if(prop != null) {
                     prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1, prop.getSizeOverride());
+                    System.out.println(prop.getFracturation());
                     if(prop.getFracturation() >= 100) {
                         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, world, getPos(), 7.5F, 1.4F);
                         Vector3 at = new Vector3(getPos()).add(0.5, 1.5, 0.5);
@@ -883,15 +886,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void tryGainMirrorPos(World world) {
-            //AstralSorcery.log.info("size: " + offsetMirrors.size());
-            //AstralSorcery.log.info("collected: " + (getCollectedBackmirrors() - 1));
             if(offsetMirrors.size() < 0 || offsetMirrors.size() >= 5) return;
             int mirrors = offsetMirrors.size();
             if((getCollectedBackmirrors() - 1) < mirrors) return;
             int step = secToNext[mirrors];
-            //AstralSorcery.log.info("step: " + step + ", channeling: " + channeled);
             if(channeled > step) {
-                //AstralSorcery.log.info("try find new.");
                 if(world.rand.nextInt(chanceToNext[mirrors]) == 0) {
                     findPossibleMirror(world);
                 }
@@ -899,16 +898,37 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void findPossibleMirror(World world) {
-            BlockPos offset = possibleOffsets[world.rand.nextInt(possibleOffsets.length)];
-            RaytraceAssist ray = new RaytraceAssist(getPos(), getPos().add(offset));
-            Vector3 from = new Vector3(0.5, 0.7, 0.5);
-            Vector3 newDir = new Vector3(offset).add(0.5, 0.5, 0.5).subtract(from);
-            for (BlockPos p : offsetMirrors.keySet()) {
-                Vector3 toDir = new Vector3(p).add(0.5, 0.5, 0.5).subtract(from);
-                if(Math.toDegrees(toDir.angle(newDir)) <= 30) return;
-                if(offset.distanceSq(p) <= 3) return;
+            long seed = 3451968351053166105L;
+            seed |= this.getPos().toLong() * 31;
+            seed |= this.channeling.getUnlocalizedName().hashCode() * 31;
+            Random r = new Random(seed);
+            for (int i = 0; i < this.getCollectedBackmirrors(); i++) {
+                r.nextInt(possibleOffsets.length);
             }
-            if(ray.isClear(world)) {
+            BlockPos offset = null;
+            boolean isValid = false;
+            int c = 100;
+            lblWhile: while (!isValid && c > 0) {
+                c--;
+                offset = possibleOffsets[r.nextInt(possibleOffsets.length)];
+                RaytraceAssist ray = new RaytraceAssist(getPos(), getPos().add(offset));
+                Vector3 from = new Vector3(0.5, 0.7, 0.5);
+                Vector3 newDir = new Vector3(offset).add(0.5, 0.5, 0.5).subtract(from);
+                for (BlockPos p : offsetMirrors.keySet()) {
+                    Vector3 toDir = new Vector3(p).add(0.5, 0.5, 0.5).subtract(from);
+                    if(Math.toDegrees(toDir.angle(newDir)) <= 30) {
+                        continue lblWhile;
+                    }
+                    if(offset.distanceSq(p) <= 3) {
+                        continue lblWhile;
+                    }
+                    if(!ray.isClear(world)) {
+                        continue lblWhile;
+                    }
+                }
+                isValid = true;
+            }
+            if (isValid) {
                 addMirrorPosition(world, offset);
             }
         }
