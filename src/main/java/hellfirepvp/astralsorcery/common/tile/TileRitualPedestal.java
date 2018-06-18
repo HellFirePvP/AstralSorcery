@@ -668,10 +668,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
 
             if(channeling != null && properties != null && hasMultiblock) {
-                TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
-                if(ped != null) {
-                    ped.markForUpdate();
-                }
                 if(ce == null) {
                     ce = channeling.getRitualEffect(getRitualOrigin());
                     /*if(channeling.equals(Constellations.ara)) {
@@ -1086,7 +1082,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            if(this.channeling == null || this.channeling != prev) {
+            if(this.channeling != prev) {
                 this.clearAllMirrorPositions(world);
             }
 
