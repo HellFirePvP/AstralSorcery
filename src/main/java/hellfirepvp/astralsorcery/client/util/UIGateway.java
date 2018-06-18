@@ -109,15 +109,17 @@ public class UIGateway {
             Vector3 direction = otherPos.subtract(gatePosition).normalize().multiply(sphereRadius);
             GatewayEntry potentialEntry = new GatewayEntry(other, dimId, direction);
             if(sameWorld) {
-                boolean mayAdd = true;
+                GatewayEntry closest = null;
                 for (GatewayEntry entry : gateway.gatewayEntries) {
                     if(Math.abs(entry.pitch - potentialEntry.pitch) < 10 &&
                             (Math.abs(entry.yaw - potentialEntry.yaw) <= 10 || Math.abs(entry.yaw - potentialEntry.yaw - 360F) <= 10)) {
-                        mayAdd = false;
+                        if (closest == null || gatePosition.distanceSquared(entry.relativePos) < gatePosition.distanceSquared(closest.relativePos)) {
+                            closest = entry;
+                        }
                     }
                 }
-                if(mayAdd) {
-                    gateway.gatewayEntries.add(potentialEntry);
+                if(closest != null) {
+                    gateway.gatewayEntries.add(closest);
                 }
             } else {
                 long seed = 0xA7401CE1466A1095L;
