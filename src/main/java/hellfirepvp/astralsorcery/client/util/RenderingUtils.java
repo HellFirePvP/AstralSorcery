@@ -129,6 +129,14 @@ public class RenderingUtils {
         return cube;
     }
 
+    public static void renderBlockSafelyWithOptionalColor(IBlockAccess world, BlockPos offset, IBlockState state, BufferBuilder vb, int color) {
+        if (color == -1) {
+            renderBlockSafely(world, offset, state, vb);
+        } else {
+            BlockModelRenderHelper.renderBlockModelWithColor(world, offset, state, vb, color);
+        }
+    }
+
     public static void renderBlockSafely(IBlockAccess world, BlockPos offset, IBlockState state, BufferBuilder vb) {
         BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         if (brd != null) {

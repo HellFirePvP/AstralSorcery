@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightbeam;
 import hellfirepvp.astralsorcery.common.base.TreeTypes;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
@@ -39,6 +41,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,6 +60,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -72,6 +77,7 @@ public class TileTreeBeacon extends TileReceiverBase {
     private double starlightCharge = 0D;
 
     private NonDuplicateCappedWeightedList<BlockPos> treePositions = new NonDuplicateCappedWeightedList<>(MathHelper.floor(ConfigEntryTreeBeacon.maxCount));
+    private UUID placedBy = null;
 
     @Override
     public void update() {
@@ -109,7 +115,13 @@ public class TileTreeBeacon extends TileReceiverBase {
                                 changed = true;
                             }
                         }
+                        int color = 0xFF00FF00; //Green
+                        PatreonEffectHelper.PatreonEffect pe;
+                        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+                            color = ((PtEffectTreeBeacon) pe).getColorTreeDrainEffects();
+                        }
                         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
+                        ev.setAdditionalData(color);
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
                     } else {
                         if(treePositions.removeElement(randPos)) {
@@ -200,6 +212,9 @@ public class TileTreeBeacon extends TileReceiverBase {
                             TileFakeTree tft = MiscUtils.getTileAt(world, snapshot.getPos(), TileFakeTree.class, true);
                             if (tft != null) {
                                 tft.setupTile(origin, setBlock);
+                                if (this.placedBy != null) {
+                                    tft.setPlayerEffectRef(this.placedBy);
+                                }
                             }
                             boolean isTreeBlock = false;
                             if(current.getBlock().isWood(world, at)) {
@@ -230,6 +245,13 @@ public class TileTreeBeacon extends TileReceiverBase {
 
     @SideOnly(Side.CLIENT)
     private void playEffects() {
+        int color = 0xFF3FFF3F;
+        PatreonEffectHelper.PatreonEffect pe;
+        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+            color = ((PtEffectTreeBeacon) pe).getColorTreeEffects();
+        }
+        Color col = new Color(color);
+
         if(rand.nextInt(3) == 0) {
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat() * 5 * (rand.nextBoolean() ? 1 : -1) + 0.5,
@@ -238,7 +260,7 @@ public class TileTreeBeacon extends TileReceiverBase {
             p.motion((rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1),
                     (rand.nextFloat() * 0.03F) * (rand.nextBoolean() ? 1 : -1));
-            p.scale(0.45F).setColor(new Color(63, 255, 63)).gravity(0.008).setMaxAge(55);
+            p.scale(0.45F).setColor(col).gravity(0.008).setMaxAge(55);
         }
         if((ticksExisted % 32) == 0) {
             float alphaDaytime = ConstellationSkyHandler.getInstance().getCurrentDaytimeDistribution(world);
@@ -247,7 +269,7 @@ public class TileTreeBeacon extends TileReceiverBase {
             MiscUtils.applyRandomOffset(from, EffectHandler.STATIC_EFFECT_RAND, 0.05F);
             EffectLightbeam lightbeam = EffectHandler.getInstance().lightbeam(from.clone().addY(7), from, 1.5F);
             lightbeam.setAlphaMultiplier(alphaDaytime);
-            lightbeam.setColorOverlay(63F / 255F, 1F, 63F / 255F, 1F);
+            lightbeam.setColorOverlay(col.getRed() / 255F, col.getGreen() / 255F, col.getBlue() / 255F, col.getAlpha() / 255F);
             lightbeam.setMaxAge(64);
         }
     }
@@ -258,12 +280,13 @@ public class TileTreeBeacon extends TileReceiverBase {
         TileFakeTree tft = MiscUtils.getTileAt(Minecraft.getMinecraft().world, fakeTree, TileFakeTree.class, false);
         if(tft != null && tft.getReference() != null) {
             Vector3 to = new Vector3(tft.getReference()).add(0.5, 0.5, 0.5);
+            Color col = new Color(MathHelper.floor(event.getAdditionalData()), true);
             for (int i = 0; i < 10; i++) {
                 Vector3 from = new Vector3(fakeTree).add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
                 Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1 + 0.1 * rand.nextFloat());
                 EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
                 p.motion(mov.getX(), mov.getY(), mov.getZ()).setMaxAge(30 + rand.nextInt(25));
-                p.gravity(0.004).scale(0.25F).setColor(Color.GREEN);
+                p.gravity(0.004).scale(0.25F).setColor(col);
             }
         }
     }
@@ -298,6 +321,12 @@ public class TileTreeBeacon extends TileReceiverBase {
             int weight = NBTHelper.getInteger(tag, "weight", 1);
             treePositions.offerElement(new WRItemObject<>(weight, pos));
         }
+
+        if (compound.hasUniqueId("placer")) {
+            this.placedBy = compound.getUniqueId("placer");
+        } else {
+            this.placedBy = null;
+        }
     }
 
     @Override
@@ -314,6 +343,10 @@ public class TileTreeBeacon extends TileReceiverBase {
             listPositions.appendTag(tag);
         }
         compound.setTag("positions", listPositions);
+
+        if (this.placedBy != null) {
+            compound.setUniqueId("placer", this.placedBy);
+        }
     }
 
     @Nullable
@@ -333,6 +366,14 @@ public class TileTreeBeacon extends TileReceiverBase {
         if(type == Constellations.aevitas) {
             this.starlightCharge += amount * 3;
         }
+    }
+
+    public void setPlacedBy(EntityPlayer placedBy) {
+        this.placedBy = placedBy == null ? null : placedBy.getUniqueID();
+    }
+
+    public UUID getPlacedBy() {
+        return placedBy;
     }
 
     public static class TransmissionReceiverTreeBeacon extends SimpleTransmissionReceiver {

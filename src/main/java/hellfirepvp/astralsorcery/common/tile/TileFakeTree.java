@@ -36,6 +36,7 @@ import net.minecraft.util.math.ChunkPos;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -48,6 +49,8 @@ public class TileFakeTree extends TileEntityTick {
 
     private TickAction ta;
     private IBlockState fakedState;
+
+    private UUID playerEffectRef = null;
 
     @Override
     public void update() {
@@ -88,6 +91,14 @@ public class TileFakeTree extends TileEntityTick {
         markForUpdate();
     }
 
+    public void setPlayerEffectRef(UUID playerEffectRef) {
+        this.playerEffectRef = playerEffectRef;
+    }
+
+    public UUID getPlayerEffectRef() {
+        return playerEffectRef;
+    }
+
     public IBlockState getFakedState() {
         return fakedState;
     }
@@ -114,6 +125,12 @@ public class TileFakeTree extends TileEntityTick {
             this.ta = new ClearAction();
         }
 
+        if (compound.hasUniqueId("playerEffectRef")) {
+            this.playerEffectRef = compound.getUniqueId("playerEffectRef");
+        } else {
+            this.playerEffectRef = null;
+        }
+
         if(compound.hasKey("Block") && compound.hasKey("Data")) {
             int data = compound.getInteger("Data");
             Block b = Block.getBlockFromName(compound.getString("Block"));
@@ -138,6 +155,10 @@ public class TileFakeTree extends TileEntityTick {
         if(fakedState != null) {
             compound.setString("Block", Block.REGISTRY.getNameForObject(fakedState.getBlock()).toString());
             compound.setInteger("Data", fakedState.getBlock().getMetaFromState(fakedState));
+        }
+
+        if (this.playerEffectRef != null) {
+            compound.setUniqueId("playerEffectRef", this.playerEffectRef);
         }
     }
 

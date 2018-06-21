@@ -101,6 +101,15 @@ public class MiscUtils {
                 .collect(Collectors.toList());
     }
 
+    public static <K, V, L> Map<K, V> splitMap(Collection<L> col, Function<L, Tuple<K, V>> split) {
+        Map<K, V> map = new HashMap<>();
+        col.forEach(l -> {
+            Tuple<K, V> result = split.apply(l);
+            map.put(result.key, result.value);
+        });
+        return map;
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
         for (T element : collection) {
