@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.data.DataPatreonFlares;
+import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.ConfigDataAdapter;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -26,6 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -111,6 +114,7 @@ public class AstralSorcery {
         EventHandlerEntity.ritualFlight.clear();
         EventHandlerEntity.attackStack.clear();
         EventHandlerEntity.spawnDenyRegions.clear();
+        ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.SERVER);
     }
 
     @Mod.EventHandler

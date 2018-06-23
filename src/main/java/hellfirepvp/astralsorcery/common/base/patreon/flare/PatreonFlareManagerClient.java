@@ -45,8 +45,9 @@ public class PatreonFlareManagerClient implements ITickHandler {
         DataPatreonFlares dataFlares = SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES);
         for (PartialEntityFlare flare : dataFlares.getFlares(Side.CLIENT)) {
             if (flare.getLastTickedDim() == null || clDim != flare.getLastTickedDim()) continue;
-            if (flare.getPos().distanceSquared(thisPlayerPos) > Config.maxEffectRenderDistanceSq) continue;
-            flare.setupSprite();
+            if (flare.getPos().distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
+                flare.setupSprite();
+            }
             flare.update(clWorld);
         }
     }

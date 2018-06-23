@@ -9,6 +9,9 @@
 package hellfirepvp.astralsorcery.common.base.patreon.flare;
 
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingSprite;
 import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.RowSpriteSheetResource;
@@ -24,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -39,7 +43,6 @@ import java.util.UUID;
 public class PartialEntityFlare {
 
     private static final Random rand = new Random();
-    private static final double radSize = 0.2;
     private static int counter = 0;
 
     private final PatreonEffectHelper.FlareColor flareColor;
@@ -101,7 +104,34 @@ public class PartialEntityFlare {
             changed = true;
         }
 
+        if (world.isRemote) {
+            spawnEffects();
+        }
+
         return changed;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void spawnEffects() {
+        if (rand.nextBoolean()) return;
+
+        int age = 30 + rand.nextInt(15);
+        float scale = 0.1F + rand.nextFloat() * 0.1F;
+        Vector3 at = new Vector3(this.pos);
+        at.add(rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1),
+                rand.nextFloat() * 0.08 * (rand.nextBoolean() ? 1 : -1));
+        EntityFXFacingParticle particle = EffectHelper.genericFlareParticle(at);
+        particle.scale(scale).gravity(0.004).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+        particle.setColor(rand.nextInt(3) == 0 ? this.flareColor.color2 : this.flareColor.color1);
+        particle.setMaxAge(age);
+
+        if (rand.nextBoolean()) {
+            particle = EffectHelper.genericFlareParticle(at);
+            particle.setColor(Color.WHITE).enableAlphaFade(EntityComplexFX.AlphaFunction.FADE_OUT);
+            particle.scale(scale * 0.3F).gravity(0.004);
+            particle.setMaxAge(age - 10);
+        }
     }
 
     private boolean trySetMoveTarget(World world) {
@@ -113,7 +143,7 @@ public class PartialEntityFlare {
         } else {
             Vector3 moveTarget = Vector3.atEntityCenter(target).addY(1.5);
             if (moveTarget.distanceSquared(this.pos) <= 3D) {
-                this.motion.multiply(0.85F);
+                this.motion.multiply(0.95F);
             } else {
                 double diffX = (moveTarget.getX() - pos.getX()) / 8;
                 double diffY = (moveTarget.getY() - pos.getY()) / 8;
@@ -152,7 +182,7 @@ public class PartialEntityFlare {
 
     @SideOnly(Side.CLIENT)
     public SpriteSheetResource getSprite() {
-        return RowSpriteSheetResource.crop(SpriteLibrary.spritePatreonFlares, this.flareColor.spriteRowIndex());
+        return RowSpriteSheetResource.crop(this.flareColor.getTexture(), this.flareColor.spriteRowIndex());
     }
 
     @SideOnly(Side.CLIENT)
@@ -163,7 +193,7 @@ public class PartialEntityFlare {
                 EffectHandler.getInstance().registerFX(p);
             }
         } else {
-            EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(getSprite(), pos.getX(), pos.getY(), pos.getZ(), 0.25F, 2);
+            EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(getSprite(), pos.getX(), pos.getY(), pos.getZ(), 0.35F, 2);
             p.setPositionUpdateFunction((fx, v, m) -> this.getPos());
             p.setRefreshFunc(() -> !removed);
             EffectHandler.getInstance().registerFX(p);

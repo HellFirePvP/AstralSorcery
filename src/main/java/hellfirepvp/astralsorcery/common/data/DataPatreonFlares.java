@@ -85,6 +85,17 @@ public class DataPatreonFlares extends AbstractData {
         flare.setRemoved(true);
     }
 
+    public void cleanUp(Side side) {
+        if (side == Side.CLIENT) {
+            this.patreonFlaresClient.clear();
+            this.clientReadBuffer = new NBTTagCompound();
+        } else {
+            this.patreonFlaresServer.clear();
+            this.flareRemovals.clear();
+            this.flareAdditions.clear();
+        }
+    }
+
     @Override
     public void writeAllDataToPacket(NBTTagCompound compound) {
         NBTTagList entries = new NBTTagList();
@@ -168,8 +179,8 @@ public class DataPatreonFlares extends AbstractData {
             }
         }
     }
-
     public static class Provider extends ProviderAutoAllocate<DataPatreonFlares> {
+
 
         public Provider(String key) {
             super(key);
