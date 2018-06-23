@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -40,7 +39,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,12 +48,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -524,7 +520,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
 
         if(compound.hasKey("ritualLinkPos")) {
-            this.ritualLink = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+            this.ritualLink = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
         } else {
             this.ritualLink = null;
         }
@@ -532,7 +528,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         offsetMirrorPositions.clear();
         NBTTagList listPos = compound.getTagList("positions", 10);
         for (int i = 0; i < listPos.tagCount(); i++) {
-            offsetMirrorPositions.add(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)));
+            offsetMirrorPositions.add(NBTHelper.readBlockPosFromNBT(listPos.getCompoundTagAt(i)));
         }
     }
 
@@ -549,14 +545,14 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         if(ritualLink != null) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(ritualLink, tag);
+            NBTHelper.writeBlockPosToNBT(ritualLink, tag);
             compound.setTag("ritualLinkPos", tag);
         }
 
         NBTTagList listPositions = new NBTTagList();
         for (BlockPos pos : offsetMirrorPositions) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, cmp);
+            NBTHelper.writeBlockPosToNBT(pos, cmp);
             listPositions.appendTag(cmp);
         }
         compound.setTag("positions", listPositions);
@@ -992,7 +988,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             offsetMirrors.clear();
             NBTTagList listPos = compound.getTagList("positions", 10);
             for (int i = 0; i < listPos.tagCount(); i++) {
-                offsetMirrors.put(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
+                offsetMirrors.put(NBTHelper.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
             }
 
             if(compound.hasKey("crystal")) {
@@ -1002,7 +998,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
 
             if(compound.hasKey("ritualLinkPos")) {
-                this.ritualLinkTo = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+                this.ritualLinkTo = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
             } else {
                 this.ritualLinkTo = null;
             }
@@ -1027,7 +1023,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             NBTTagList listPositions = new NBTTagList();
             for (BlockPos pos : offsetMirrors.keySet()) {
                 NBTTagCompound cmp = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(pos, cmp);
+                NBTHelper.writeBlockPosToNBT(pos, cmp);
                 listPositions.appendTag(cmp);
             }
             compound.setTag("positions", listPositions);
@@ -1048,7 +1044,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
             if(ritualLinkTo != null) {
                 NBTTagCompound tag = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(ritualLinkTo, tag);
+                NBTHelper.writeBlockPosToNBT(ritualLinkTo, tag);
                 compound.setTag("ritualLinkPos", tag);
             }
             if(ce != null) {

@@ -22,10 +22,10 @@ import java.awt.*;
  */
 public class SpriteSheetResource extends AbstractRenderableTexture {
 
-    private final double uPart, vPart;
+    protected double uPart, vPart;
+    protected int frameCount;
+    protected int rows, columns;
 
-    private final int frameCount;
-    private final int rows, columns;
     private final AbstractRenderableTexture resource;
 
     public SpriteSheetResource(AbstractRenderableTexture resource, int rows, int columns) {

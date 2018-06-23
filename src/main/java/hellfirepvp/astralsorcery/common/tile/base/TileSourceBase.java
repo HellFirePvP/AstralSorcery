@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.tile.base;
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -67,7 +67,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
             NBTTagList list = compound.getTagList("linked", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound tag = list.getCompoundTagAt(i);
-                positions.add(NBTUtils.readBlockPosFromNBT(tag));
+                positions.add(NBTHelper.readBlockPosFromNBT(tag));
             }
         }
 
@@ -81,7 +81,7 @@ public abstract class TileSourceBase extends TileNetworkSkybound implements ISta
         NBTTagList list = new NBTTagList();
         for (BlockPos pos : positions) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, tag);
+            NBTHelper.writeBlockPosToNBT(pos, tag);
             list.appendTag(tag);
         }
         compound.setTag("linked", list);

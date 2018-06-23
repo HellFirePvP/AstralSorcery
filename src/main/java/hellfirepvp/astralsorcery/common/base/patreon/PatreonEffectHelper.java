@@ -9,12 +9,18 @@
 package hellfirepvp.astralsorcery.common.base.patreon;
 
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -34,11 +40,23 @@ public class PatreonEffectHelper {
                         .setOverlayColor(0xFFC30711)
                         .setDrainColor(0xFFFF0000)
                         .setTreeColor(0xFFC30711));
+        effectMap.put(
+                UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+                new PatreonEffect(FlareColor.STANDARD));
     }
 
     @Nullable
     public static PatreonEffect getEffect(UUID uuid) {
         return effectMap.get(uuid);
+    }
+
+    public static <T extends EntityPlayer> Map<UUID, PatreonEffect> getFlarePatrons(Collection<T> players) {
+        Collection<UUID> playerUUIDs = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
+        return effectMap.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getChosenColor() != null)
+                .filter(e -> playerUUIDs.contains(e.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static class PatreonEffect {
@@ -72,7 +90,11 @@ public class PatreonEffectHelper {
         WATER,
         EARTH,
         AIR,
-        STANDARD
+        STANDARD;
+
+        public int spriteRowIndex() {
+            return ordinal();
+        }
 
     }
 

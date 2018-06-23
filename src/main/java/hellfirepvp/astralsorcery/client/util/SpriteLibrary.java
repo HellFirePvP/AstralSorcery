@@ -42,6 +42,7 @@ public class SpriteLibrary {
     private static final BindableResource texFlare2 = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "flare2");
     private static final BindableResource texCharge = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "charge");
     private static final BindableResource texHook = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "hook");
+    private static final BindableResource texPatreonFlares = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "patreonflares");
     private static final BindableResource texSpriteStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store");
     private static final BindableResource texLiquidStarlight = AssetLibrary.loadTexture(AssetLoader.TextureLocation.BLOCKS, "fluid/starlight_still");
 
@@ -65,6 +66,7 @@ public class SpriteLibrary {
     public static final SpriteSheetResource spriteFlare2 = texFlare2.asSpriteSheet(8, 8);
     public static final SpriteSheetResource spriteCharge = texCharge.asSpriteSheet(8, 4);
     public static final SpriteSheetResource spriteHook = texHook.asSpriteSheet(4, 8);
+    public static final SpriteSheetResource spritePatreonFlares = texPatreonFlares.asSpriteSheet(16, 48);
     public static final SpriteSheetResource spriteCollectorBurst = texCollectorBurst.asSpriteSheet(5, 16);
     public static final SpriteSheetResource spriteLiquidStarlight = texLiquidStarlight.asSpriteSheet(64, 1);
 

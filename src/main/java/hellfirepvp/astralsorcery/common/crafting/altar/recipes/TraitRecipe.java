@@ -31,7 +31,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -39,8 +39,6 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -547,7 +545,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         for (CraftingFocusStack stack : stacks) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setInteger("focusIndex", stack.stackIndex);
-            NBTUtils.writeBlockPosToNBT(stack.offset, tag);
+            NBTHelper.writeBlockPosToNBT(stack.offset, tag);
             list.appendTag(tag);
         }
         craftingStorage.setTag("offsetFocusList", list);
@@ -559,7 +557,7 @@ public class TraitRecipe extends ConstellationRecipe implements ICraftingProgres
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound cmp = list.getCompoundTagAt(i);
             int index = cmp.getInteger("focusIndex");
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(cmp);
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(cmp);
             stacks.add(new CraftingFocusStack(index, pos));
         }
         return stacks;

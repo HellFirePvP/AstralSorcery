@@ -14,7 +14,7 @@ import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.tile.TileCelestialGateway;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -96,7 +96,7 @@ public class GatewayCache extends CachedWorldData {
         NBTTagList list = compound.getTagList("posList", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
             String display = tag.getString("display");
             GatewayNode node = new GatewayNode(pos, display);
             gatewayPositions.add(node);
@@ -108,7 +108,7 @@ public class GatewayCache extends CachedWorldData {
         NBTTagList list = new NBTTagList();
         for (GatewayNode node : gatewayPositions) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(node, tag);
+            NBTHelper.writeBlockPosToNBT(node, tag);
             tag.setString("display", node.display);
             list.appendTag(tag);
         }

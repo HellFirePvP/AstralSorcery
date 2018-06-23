@@ -9,14 +9,12 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -136,7 +134,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         NBTTagList list = cmp.getTagList("positions", 10);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
             T element = elementProvider.apply(pos);
             if(element != null) {
                 element.readFromNBT(tag);
@@ -150,7 +148,7 @@ public abstract class CEffectPositionListGen<T extends CEffectPositionListGen.CE
         NBTTagList listPositions = new NBTTagList();
         for (T elem : elements) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(elem.getPos(), tag);
+            NBTHelper.writeBlockPosToNBT(elem.getPos(), tag);
             elem.writeToNBT(tag);
             listPositions.appendTag(tag);
         }

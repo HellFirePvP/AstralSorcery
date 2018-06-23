@@ -31,17 +31,14 @@ import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.TreeCaptureHelper;
 import hellfirepvp.astralsorcery.common.util.WRItemObject;
-import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedList;
 import hellfirepvp.astralsorcery.common.util.data.NonDuplicateCappedWeightedList;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.data.WorldBlockPos;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -317,7 +314,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         NBTTagList list = compound.getTagList("positions", 10);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            BlockPos pos = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos pos = NBTHelper.readBlockPosFromNBT(tag);
             int weight = NBTHelper.getInteger(tag, "weight", 1);
             treePositions.offerElement(new WRItemObject<>(weight, pos));
         }
@@ -338,7 +335,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         NBTTagList listPositions = new NBTTagList();
         for (WRItemObject<BlockPos> pos : treePositions) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos.getValue(), tag);
+            NBTHelper.writeBlockPosToNBT(pos.getValue(), tag);
             tag.setInteger("weight", pos.itemWeight);
             listPositions.appendTag(tag);
         }

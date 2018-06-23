@@ -13,7 +13,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.constellation.effect.CEffectPositionListGen;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktPlayEffect;
 import hellfirepvp.astralsorcery.common.util.data.TickTokenizedMap;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -116,14 +116,14 @@ public class BlockBreakAssist {
         @Override
         public void readFromNBT(NBTTagCompound nbt) {
             this.breakProgress = nbt.getFloat("breakProgress");
-            this.pos = NBTUtils.readBlockPosFromNBT(nbt);
+            this.pos = NBTHelper.readBlockPosFromNBT(nbt);
             this.expected = Block.getStateById(nbt.getInteger("expectedStateId"));
         }
 
         @Override
         public void writeToNBT(NBTTagCompound nbt) {
             nbt.setFloat("breakProgress", this.breakProgress);
-            NBTUtils.writeBlockPosToNBT(this.pos, nbt);
+            NBTHelper.writeBlockPosToNBT(this.pos, nbt);
             nbt.setInteger("expectedStateId", Block.getStateId(this.expected));
         }
 

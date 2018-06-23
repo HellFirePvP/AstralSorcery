@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalAxe;
-import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalShovel;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktDualParticleEvent;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
@@ -17,7 +16,7 @@ import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -282,13 +281,13 @@ public class TileFakeTree extends TileEntityTick {
         @Override
         public void write(NBTTagCompound cmp) {
             if(ref != null) {
-                NBTUtils.writeBlockPosToNBT(ref, cmp);
+                NBTHelper.writeBlockPosToNBT(ref, cmp);
             }
         }
 
         @Override
         public void read(NBTTagCompound cmp) {
-            ref = NBTUtils.readBlockPosFromNBT(cmp);
+            ref = NBTHelper.readBlockPosFromNBT(cmp);
         }
     }
 

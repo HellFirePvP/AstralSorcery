@@ -23,11 +23,10 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.Crys
 import hellfirepvp.astralsorcery.common.tile.base.TileTransmissionBase;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -217,7 +216,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         NBTTagList list = compound.getTagList("listOccupied", 10);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            BlockPos bp = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos bp = NBTHelper.readBlockPosFromNBT(tag);
             this.occupiedConnections.add(bp);
         }
     }
@@ -232,7 +231,7 @@ public class TileCrystalLens extends TileTransmissionBase {
         NBTTagList list = new NBTTagList();
         for (BlockPos to : occupiedConnections) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(to, cmp);
+            NBTHelper.writeBlockPosToNBT(to, cmp);
             list.appendTag(cmp);
         }
         compound.setTag("listOccupied", list);

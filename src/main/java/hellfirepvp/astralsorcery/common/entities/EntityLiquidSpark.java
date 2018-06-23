@@ -22,7 +22,6 @@ import hellfirepvp.astralsorcery.common.util.ASDataSerializers;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -253,7 +251,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         super.readEntityFromNBT(compound);
 
         if(compound.hasKey("tileTarget")) {
-            this.resolvableTilePos = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
+            this.resolvableTilePos = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("tileTarget"));
         }
     }
 
@@ -263,7 +261,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
 
         if(this.tileTarget != null) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
+            NBTHelper.writeBlockPosToNBT(this.tileTarget.getPos(), cmp);
             compound.setTag("tileTarget", cmp);
         }
     }

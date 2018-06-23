@@ -16,7 +16,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissio
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -128,19 +128,19 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.thisPos = NBTUtils.readBlockPosFromNBT(compound);
+        this.thisPos = NBTHelper.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
         this.ignoreBlockCollision = compound.getBoolean("ignoreBlockCollision");
 
         NBTTagList list = compound.getTagList("sources", 10);
         for (int i = 0; i < list.tagCount(); i++) {
-            sourcesToThis.add(NBTUtils.readBlockPosFromNBT(list.getCompoundTagAt(i)));
+            sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompoundTagAt(i)));
         }
 
         NBTTagList nextList = compound.getTagList("nextList", 10);
         for (int i = 0; i < nextList.tagCount(); i++) {
             NBTTagCompound tag = nextList.getCompoundTagAt(i);
-            BlockPos next = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos next = NBTHelper.readBlockPosFromNBT(tag);
             boolean oldState = tag.getBoolean("rayState");
             addLink(null, next, false, oldState); //Rebuild link.
         }
@@ -148,13 +148,13 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        NBTUtils.writeBlockPosToNBT(thisPos, compound);
+        NBTHelper.writeBlockPosToNBT(thisPos, compound);
         compound.setBoolean("ignoreBlockCollision", this.ignoreBlockCollision);
 
         NBTTagList sources = new NBTTagList();
         for (BlockPos source : sourcesToThis) {
             NBTTagCompound comp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(source, comp);
+            NBTHelper.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
         compound.setTag("sources", sources);
@@ -163,7 +163,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
         for (BlockPos next : nextNodes.keySet()) {
             PrismNext prism = nextNodes.get(next);
             NBTTagCompound pos = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(next, pos);
+            NBTHelper.writeBlockPosToNBT(next, pos);
             pos.setBoolean("rayState", prism.reachable);
             nextList.appendTag(pos);
         }

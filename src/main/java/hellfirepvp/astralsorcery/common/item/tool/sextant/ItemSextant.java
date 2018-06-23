@@ -19,14 +19,12 @@ import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -107,7 +105,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
         if (!pers.hasKey("targetPos") || !pers.hasKey("targetDim")) {
             return null;
         }
-        BlockPos pos = NBTUtils.readBlockPosFromNBT(pers.getCompoundTag("targetPos"));
+        BlockPos pos = NBTHelper.readBlockPosFromNBT(pers.getCompoundTag("targetPos"));
         Integer dim = pers.getInteger("targetDim");
         return new Tuple<>(pos, dim);
     }
@@ -120,7 +118,7 @@ public class ItemSextant extends Item implements ISpecialInteractItem {
             pers.removeTag("targetDim");
         } else {
             NBTTagCompound posTag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, posTag);
+            NBTHelper.writeBlockPosToNBT(pos, posTag);
             pers.setTag("targetPos", posTag);
             pers.setInteger("targetDim", dim);
         }
