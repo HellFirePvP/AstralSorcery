@@ -40,15 +40,16 @@ public class PatreonEffectHelper {
     private static Map<UUID, PatreonEffect> effectMap = new HashMap<>();
 
     public static void init() {
-        effectMap.put(
+        effectMap.put( //i, myself, hellfire :thonk:
+                UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
+                new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(null)
                         .setOverlayColor(0xFFC30711)
                         .setDrainColor(0xFFFF0000)
                         .setTreeColor(0xFFC30711));
-        effectMap.put(
-                UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
-                new PatreonEffect(FlareColor.WATER));
     }
 
     @Nullable
