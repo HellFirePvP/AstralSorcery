@@ -62,7 +62,6 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "solareclipse")     .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "patreonflares")         .allocateGlId();
     }
 
     private static void preloadTextures() {

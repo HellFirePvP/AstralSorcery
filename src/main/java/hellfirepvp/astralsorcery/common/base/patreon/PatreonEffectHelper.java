@@ -44,6 +44,10 @@ public class PatreonEffectHelper {
                 UUID.fromString("7f6971c5-fb58-4519-a975-b1b5766e92d1"),
                 new PatreonEffect(FlareColor.WATER));
 
+        effectMap.put( //ChosenArchitect
+                UUID.fromString("e3298bd7-61bf-427f-af89-4e418a20bf57"),
+                new PatreonEffect(FlareColor.STANDARD));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(null)
