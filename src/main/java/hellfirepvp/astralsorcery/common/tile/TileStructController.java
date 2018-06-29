@@ -115,7 +115,7 @@ public class TileStructController extends TileEntityTick {
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        compound.setInteger("structtype", this.type.ordinal());
+        compound.setInteger("structtype", this.type == null ? StructType.GATE.ordinal() : this.type.ordinal());
     }
 
     public static enum StructType {

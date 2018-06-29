@@ -66,6 +66,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
     public TileChalice() {
         tank = new SimpleSingleFluidCapabilityTank(TANK_SIZE, EnumFacing.DOWN);
+        this.tank.setOnUpdate(this::markForUpdate);
     }
 
     @Override
@@ -298,6 +299,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         if(!tank.hasCapability(EnumFacing.DOWN)) {
             tank.accessibleSides.add(EnumFacing.DOWN);
         }
+        this.tank.setOnUpdate(this::markForUpdate);
     }
 
     @Override
