@@ -157,7 +157,7 @@ public class DataPatreonFlares extends AbstractData {
             UUID owner = cmp.getUniqueId("owner");
             NBTTagCompound flareTag = cmp.getCompoundTag("flareData");
 
-            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(owner);
+            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(Side.SERVER, owner);
             if (pe != null && pe.getChosenColor() != null) {
                 PartialEntityFlare flare = this.patreonFlaresClient.get(owner);
                 if (flare == null) {

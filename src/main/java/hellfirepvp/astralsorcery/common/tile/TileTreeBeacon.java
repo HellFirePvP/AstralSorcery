@@ -112,13 +112,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                                 changed = true;
                             }
                         }
-                        int color = 0xFF00FF00; //Green
-                        PatreonEffectHelper.PatreonEffect pe;
-                        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
-                            color = ((PtEffectTreeBeacon) pe).getColorTreeDrainEffects();
-                        }
                         PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.TREE_VORTEX, actPos);
-                        ev.setAdditionalData(color);
                         PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, actPos, 32));
                     } else {
                         if(treePositions.removeElement(randPos)) {
@@ -244,7 +238,7 @@ public class TileTreeBeacon extends TileReceiverBase {
     private void playEffects() {
         int color = 0xFF3FFF3F;
         PatreonEffectHelper.PatreonEffect pe;
-        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+        if (getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
             color = ((PtEffectTreeBeacon) pe).getColorTreeEffects();
         }
         Color col = new Color(color);
@@ -276,14 +270,22 @@ public class TileTreeBeacon extends TileReceiverBase {
         BlockPos fakeTree = event.getVec().toBlockPos();
         TileFakeTree tft = MiscUtils.getTileAt(Minecraft.getMinecraft().world, fakeTree, TileFakeTree.class, false);
         if(tft != null && tft.getReference() != null) {
-            Vector3 to = new Vector3(tft.getReference()).add(0.5, 0.5, 0.5);
-            Color col = new Color(MathHelper.floor(event.getAdditionalData()), true);
-            for (int i = 0; i < 10; i++) {
-                Vector3 from = new Vector3(fakeTree).add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-                Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1 + 0.1 * rand.nextFloat());
-                EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
-                p.motion(mov.getX(), mov.getY(), mov.getZ()).setMaxAge(30 + rand.nextInt(25));
-                p.gravity(0.004).scale(0.25F).setColor(col);
+            TileTreeBeacon ttb = MiscUtils.getTileAt(Minecraft.getMinecraft().world, tft.getReference(), TileTreeBeacon.class, false);
+            if (ttb != null) {
+                int color = 0xFF00FF00; //Green
+                PatreonEffectHelper.PatreonEffect pe;
+                if (ttb.getPlacedBy() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, ttb.getPlacedBy())) != null && pe instanceof PtEffectTreeBeacon) {
+                    color = ((PtEffectTreeBeacon) pe).getColorTreeDrainEffects();
+                }
+                Vector3 to = new Vector3(tft.getReference()).add(0.5, 0.5, 0.5);
+                Color col = new Color(color, true);
+                for (int i = 0; i < 10; i++) {
+                    Vector3 from = new Vector3(fakeTree).add(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+                    Vector3 mov = to.clone().subtract(from).normalize().multiply(0.1 + 0.1 * rand.nextFloat());
+                    EntityFXFacingParticle p = EffectHelper.genericFlareParticle(from.getX(), from.getY(), from.getZ());
+                    p.motion(mov.getX(), mov.getY(), mov.getZ()).setMaxAge(30 + rand.nextInt(25));
+                    p.gravity(0.004).scale(0.25F).setColor(col);
+                }
             }
         }
     }
@@ -425,12 +427,17 @@ public class TileTreeBeacon extends TileReceiverBase {
         }
 
         @Override
+        public String getConfigurationSection() {
+            return super.getConfigurationSection() + "." + getKey();
+        }
+
+        @Override
         public void loadFromConfig(Configuration cfg) {
-            speedLimiter = cfg.getFloat(getKey() + "EfficiencyLimiter", getConfigurationSection(), 1F, 0F, 1F, "Percentage, how hard the speed limiter should slow down production of the tree beacon. 1=max, 0=no limiter");
-            maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 600, 1, 4000, "Defines the amount of blocks the treeBeacon can support at max count");
-            treeBeaconRange = cfg.getFloat(getKey() + "Range", getConfigurationSection(), 16F, 4F, 64F, "Defines the Range where the TreeBeacon will scan for Tree's to grow.");
-            dropsChance = cfg.getInt(getKey() + "DropsChance", getConfigurationSection(), dropsChance, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
-            breakChance = cfg.getInt(getKey() + "BreakChance", getConfigurationSection(), breakChance, 20, Integer.MAX_VALUE, "Defines the chance that the block harvested is going to break per random-selection tick. The higher the value the lower the chance");
+            speedLimiter = cfg.getFloat("EfficiencyLimiter", getConfigurationSection(), 1F, 0F, 1F, "Percentage, how hard the speed limiter should slow down production of the tree beacon. 1=max, 0=no limiter");
+            maxCount = cfg.getInt("Count", getConfigurationSection(), 600, 1, 4000, "Defines the amount of blocks the treeBeacon can support at max count");
+            treeBeaconRange = cfg.getFloat("Range", getConfigurationSection(), 16F, 4F, 64F, "Defines the Range where the TreeBeacon will scan for Tree's to grow.");
+            dropsChance = cfg.getInt("DropsChance", getConfigurationSection(), dropsChance, 1, Integer.MAX_VALUE, "Defines the chance that a drop is generated per random-selection tick. The higher the value the lower the chance.");
+            breakChance = cfg.getInt("BreakChance", getConfigurationSection(), breakChance, 20, Integer.MAX_VALUE, "Defines the chance that the block harvested is going to break per random-selection tick. The higher the value the lower the chance");
         }
 
     }

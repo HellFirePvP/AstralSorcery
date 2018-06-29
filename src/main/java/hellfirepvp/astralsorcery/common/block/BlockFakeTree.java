@@ -73,7 +73,7 @@ public class BlockFakeTree extends BlockContainer {
         if(rand.nextInt(20) == 0) {
             Color c = new Color(63, 255, 63);
             PatreonEffectHelper.PatreonEffect pe;
-            if (tft.getPlayerEffectRef() != null && (pe = PatreonEffectHelper.getEffect(tft.getPlayerEffectRef())) != null &&
+            if (tft.getPlayerEffectRef() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, tft.getPlayerEffectRef())) != null &&
                     pe instanceof PtEffectTreeBeacon) {
                 c = new Color(((PtEffectTreeBeacon) pe).getColorTreeDrainEffects());
             }

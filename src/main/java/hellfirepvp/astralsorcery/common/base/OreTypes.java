@@ -166,4 +166,9 @@ public class OreTypes implements ConfigDataAdapter<OreEntry> {
         return Optional.of(entry);
     }
 
+    @Override
+    public void resetRegistry() {
+        oreDictWeights.clear();
+        totalWeight = 0.0D;
+    }
 }

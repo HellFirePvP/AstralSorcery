@@ -335,7 +335,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
         @Override
         public String getConfigurationSection() {
-            return super.getConfigurationSection() + getKey();
+            return super.getConfigurationSection() + "." + getKey();
         }
 
         private ConfigEntryChalice() {

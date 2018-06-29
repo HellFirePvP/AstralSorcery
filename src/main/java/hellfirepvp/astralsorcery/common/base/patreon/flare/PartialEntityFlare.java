@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.client.util.SpriteLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.RowSpriteSheetResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -113,7 +114,7 @@ public class PartialEntityFlare {
 
     @SideOnly(Side.CLIENT)
     private void spawnEffects() {
-        if (rand.nextBoolean()) return;
+        if (rand.nextBoolean() || !Config.enablePatreonEffects) return;
 
         int age = 30 + rand.nextInt(15);
         float scale = 0.1F + rand.nextFloat() * 0.1F;
@@ -189,13 +190,13 @@ public class PartialEntityFlare {
     public void setupSprite() {
         if (clientSprite != null) {
             EntityFXFacingSprite p = (EntityFXFacingSprite) clientSprite;
-            if(p.isRemoved()) {
+            if(p.isRemoved() && Config.enablePatreonEffects) {
                 EffectHandler.getInstance().registerFX(p);
             }
         } else {
             EntityFXFacingSprite p = EntityFXFacingSprite.fromSpriteSheet(getSprite(), pos.getX(), pos.getY(), pos.getZ(), 0.35F, 2);
             p.setPositionUpdateFunction((fx, v, m) -> this.getPos());
-            p.setRefreshFunc(() -> !removed);
+            p.setRefreshFunc(() -> !removed && Config.enablePatreonEffects);
             EffectHandler.getInstance().registerFX(p);
             this.clientSprite = p;
         }

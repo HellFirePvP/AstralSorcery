@@ -13,10 +13,9 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -72,6 +71,22 @@ public class PatreonEffectHelper {
                 UUID.fromString("4ecf6284-b1e8-45bb-b2b3-151c95c3b10f"),
                 new PatreonEffect(FlareColor.ELDRITCH));
 
+        effectMap.put( //Alchimous
+                UUID.fromString("b2327e92-0a3c-4a8e-9cc0-fba3b101c268"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
+        effectMap.put( //Superfrogman98
+                UUID.fromString("34b89066-05d7-467f-b439-8f037699713d"),
+                new PatreonEffect(FlareColor.DARK_GREEN));
+
+        effectMap.put( //halacon / Alikari
+                UUID.fromString("f833e145-d6bb-4fc6-889f-7d6aaf70e5a6"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
+        effectMap.put( //Corsaka
+                UUID.fromString("edc5008d-17e0-413d-ad82-3e57ae088cd7"),
+                new PatreonEffect(FlareColor.ELDRITCH));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(FlareColor.DAWN)
@@ -81,7 +96,10 @@ public class PatreonEffectHelper {
     }
 
     @Nullable
-    public static PatreonEffect getEffect(UUID uuid) {
+    public static PatreonEffect getEffect(Side side, UUID uuid) {
+        if (side == Side.CLIENT && !Config.enablePatreonEffects) {
+            return null; //That config is to be applied clientside
+        }
         return effectMap.get(uuid);
     }
 

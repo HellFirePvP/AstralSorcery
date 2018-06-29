@@ -50,7 +50,6 @@ public class PacketChannel {
         int id = 0;
 
         //(server -> client)
-        CHANNEL.registerMessage(PktSyncConfig.class, PktSyncConfig.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncKnowledge.class, PktSyncKnowledge.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktSyncData.class, PktSyncData.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktParticleEvent.class, PktParticleEvent.class, id++, Side.CLIENT);

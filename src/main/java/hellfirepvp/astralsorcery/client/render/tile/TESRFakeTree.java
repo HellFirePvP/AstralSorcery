@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.*;
 
@@ -32,7 +33,7 @@ public class TESRFakeTree extends TileEntitySpecialRenderer<TileFakeTree> {
         if(x * x + y * y + z * z >= 64 * 64) return;
         Color effect = null;
         if (te.getPlayerEffectRef() != null) {
-            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(te.getPlayerEffectRef());
+            PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(Side.CLIENT, te.getPlayerEffectRef());
             if (pe != null && pe instanceof PtEffectTreeBeacon) {
                 effect = new Color(((PtEffectTreeBeacon) pe).getColorTranslucentOverlay(), true);
             }

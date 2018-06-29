@@ -41,6 +41,7 @@ import org.apache.logging.log4j.Logger;
  */
 @Mod(modid = AstralSorcery.MODID, name = AstralSorcery.NAME, version = AstralSorcery.VERSION,
         dependencies = "required-after:forge@[14.23.2.2611,);required-after:baubles;after:crafttweaker",
+        guiFactory = "hellfirepvp.astralsorcery.common.data.config.ingame.ConfigGuiFactory",
         certificateFingerprint = "a0f0b759d895c15ceb3e3bcb5f3c2db7c582edf0",
         acceptedMinecraftVersions = "[1.12.2]")
 public class AstralSorcery {
@@ -66,8 +67,9 @@ public class AstralSorcery {
         event.getModMetadata().version = VERSION;
         devEnvChache = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
-        proxy.preLoadConfigEntries();
-        Config.load(event.getSuggestedConfigurationFile());
+        proxy.setupConfiguration();
+
+        Config.loadAndSetup(event.getSuggestedConfigurationFile());
 
         proxy.registerConfigDataRegistries();
         Config.loadDataRegistries(event.getModConfigurationDirectory());

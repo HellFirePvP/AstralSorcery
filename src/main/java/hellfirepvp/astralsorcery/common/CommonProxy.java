@@ -107,7 +107,7 @@ public class CommonProxy implements IGuiHandler {
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
     private CommonScheduler commonScheduler = new CommonScheduler();
 
-    public void preLoadConfigEntries() {
+    public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
         ConstellationPerks.addDynamicConfigEntries();

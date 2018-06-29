@@ -51,7 +51,6 @@ public class ClientConnectionEventHandler {
         AstralSorcery.log.info("[AstralSorcery] Cleaning client cache...");
         EffectHandler.cleanUp();
         ClientCameraManager.getInstance().removeAllAndCleanup();
-        Config.rebuildClientConfig();
         ConstellationSkyHandler.getInstance().clientClearCache();
         GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
