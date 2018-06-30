@@ -186,7 +186,7 @@ public class EnchantmentUpgradeHelper {
                 return true;
             }
         }
-        return false;
+        return true;
     }
 
     //---------------------------------------------------
