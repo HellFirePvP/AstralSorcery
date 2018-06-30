@@ -185,6 +185,7 @@ public class EnchantmentUpgradeHelper {
                 //causes infinite feedback loop stacking enchantments higher and higher.
                 return true;
             }
+            return false;
         }
         return true;
     }
