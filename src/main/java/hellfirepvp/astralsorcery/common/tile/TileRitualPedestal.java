@@ -114,9 +114,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
                     recNode.markDirty(world);
 
-                    if(!getInventoryHandler().getStackInSlot(0).isEmpty()) {
+                    if(!getInventoryHandler().getStackInSlot(0).isEmpty() && recNode.getCrystal().isEmpty()) {
                         recNode.setChannelingCrystal(getInventoryHandler().getStackInSlot(0), this.world);
-                        getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
                     }
                 }
                 markForUpdate();
@@ -260,17 +259,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
     }
 
-    @Override
-    public void onBreak() {
-        super.onBreak();
-
-        if (!world.isRemote && getUpdateCache() != null) {
-            ItemStack crystal = getUpdateCache().getCrystal();
-            ItemUtils.dropItemNaturally(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, crystal);
-            getUpdateCache().setChannelingCrystal(ItemStack.EMPTY, this.world);
-        }
-    }
-
     public boolean isWorking() {
         return working;
     }
@@ -280,14 +268,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
     }
 
     public ItemStack placeCrystalIntoPedestal(ItemStack crystal) {
+        getInventoryHandler().setStackInSlot(0, ItemUtils.copyStackWithSize(crystal, Math.min(crystal.getCount(), 1)));
+
         TransmissionReceiverRitualPedestal recNode = getUpdateCache();
         if(recNode != null) {
             if(recNode.getCrystal().isEmpty()) {
                 markForUpdate();
-                return recNode.setChannelingCrystal(crystal, this.world);
+                recNode.setChannelingCrystal(crystal, this.world);
             }
         }
-        return crystal;
+        return ItemUtils.copyStackWithSize(crystal, Math.max(0, crystal.getCount() - 1));
     }
 
     public ItemStack getCurrentPedestalCrystal() {
@@ -473,37 +463,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         offsetMirrorPositions.clear();
         offsetMirrorPositions.addAll(offsetMirrors);
         markForUpdate();
-    }
-
-    @Override
-    public void readNetNBT(NBTTagCompound compound) {
-        super.readNetNBT(compound);
-
-        if(compound.hasKey("crystalSlot")) {
-            ItemStack crystal = new ItemStack(compound.getCompoundTag("crystalSlot"));
-            if(!crystal.isEmpty()) {
-                getInventoryHandler().setStackInSlot(0, crystal);
-            } else {
-                getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
-            }
-        } else {
-            getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
-        }
-    }
-
-    @Override
-    public void writeNetNBT(NBTTagCompound compound) {
-        super.writeNetNBT(compound);
-
-        TransmissionReceiverRitualPedestal recNode = getUpdateCache();
-        if(recNode != null) {
-            ItemStack crystal = recNode.getCrystal();
-            if(!crystal.isEmpty()) {
-                NBTTagCompound serialized = new NBTTagCompound();
-                crystal.writeToNBT(serialized);
-                compound.setTag("crystalSlot", serialized);
-            }
-        }
     }
 
     @Override
@@ -1097,11 +1056,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
         }
 
-        public ItemStack setChannelingCrystal(ItemStack crystal, World world) {
-            this.crystal = ItemUtils.copyStackWithSize(crystal, 1);
-            crystal = ItemUtils.copyStackWithSize(crystal, crystal.getCount() - 1);
+        public void setChannelingCrystal(ItemStack crystal, World world) {
+            this.crystal = ItemUtils.copyStackWithSize(crystal, Math.min(crystal.getCount(), 1));
             markDirty(world);
-            return crystal;
         }
 
         public ItemStack getCrystal() {
