@@ -348,12 +348,14 @@ public class RegistryResearch {
         resStarOre.addPage(getTextPage("STARMETAL_ORE.1"));
 
         ResearchNode resOtherOres = new ResearchNode(new ItemStack[] {
-                new ItemStack(Blocks.COAL_BLOCK),
+                new ItemStack(Blocks.MAGMA),
                 new ItemStack(Blocks.SAND),
                 new ItemStack(Blocks.DIAMOND_ORE),
                 new ItemStack(Blocks.NETHER_WART_BLOCK),
+                new ItemStack(Blocks.SANDSTONE),
+                new ItemStack(Blocks.NETHERRACK),
                 new ItemStack(Blocks.PUMPKIN),
-                new ItemStack(Blocks.LAPIS_BLOCK)
+                new ItemStack(Blocks.SEA_LANTERN)
         }, "TRANSMUTATION_ORES", 3, 3);
         resOtherOres.addPage(getTextPage("TRANSMUTATION_ORES.1"));
 
