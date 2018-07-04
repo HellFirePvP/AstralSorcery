@@ -29,8 +29,8 @@ public class PerkCreationBreedables extends ConstellationPerk {
 
     private static AxisAlignedBB boxSearch = new AxisAlignedBB(0, 0, 0, 0, 0, 0).expand(6, 6, 6);
 
-    private static int chanceToAge = 30;
-    private static int chanceToBreed = 70;
+    private static int chanceToAge = 80;
+    private static int chanceToBreed = 180;
 
     public PerkCreationBreedables() {
         super("CRE_BREEDING", Target.PLAYER_TICK);
@@ -44,8 +44,8 @@ public class PerkCreationBreedables extends ConstellationPerk {
             EntityAnimal animal = animals.get(rand.nextInt(animals.size()));
             if(!animal.isDead) {
                 if(animal.getGrowingAge() < 0 && rand.nextInt(chanceToAge) == 0) {
-                    animal.setGrowingAge(0);
-                    addAlignmentCharge(player, 0.1);
+                    animal.setGrowingAge(Math.min(animal.getGrowingAge() + 500, 0));
+                    addAlignmentCharge(player, 0.03);
                 }
                 if(animal.getGrowingAge() >= 0 && rand.nextInt(chanceToBreed) == 0) {
                     animal.setGrowingAge(-2000);
@@ -54,7 +54,7 @@ public class PerkCreationBreedables extends ConstellationPerk {
                         child.setGrowingAge(-24000);
                         child.setLocationAndAngles(animal.posX, animal.posY, animal.posZ, 0.0F, 0.0F);
                         player.getEntityWorld().spawnEntity(child);
-                        addAlignmentCharge(player, 0.2);
+                        addAlignmentCharge(player, 0.09);
                     }
                 }
             }
@@ -68,8 +68,8 @@ public class PerkCreationBreedables extends ConstellationPerk {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        chanceToAge = cfg.getInt(getKey() + "ChanceToAge", getConfigurationSection(), 30, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will grow into an adult");
-        chanceToBreed = cfg.getInt(getKey() + "ChangeToBreed", getConfigurationSection(), 70, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will create a child");
+        chanceToAge = cfg.getInt(getKey() + "ChanceToAge", getConfigurationSection(), chanceToAge, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will grow into an adult");
+        chanceToBreed = cfg.getInt(getKey() + "ChangeToBreed", getConfigurationSection(), chanceToBreed, 10, 4000, "Sets the chance (Random.nextInt(chance) == 0) to try to see if a random animal near the player will create a child");
         float search = cfg.getFloat(getKey() + "EffectRadius", getConfigurationSection(), 6F, 1F, 40F, "Sets the radius in which this effect tries to find animals");
         boxSearch = new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(search);
     }
