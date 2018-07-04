@@ -285,7 +285,7 @@ public class WorldSkyHandler {
     }
 
     public MoonPhase getCurrentMoonPhase() {
-        return MoonPhase.values()[lastRecordedDay % 8];
+        return MoonPhase.values()[((lastRecordedDay % 8) + 8) % 8];
     }
 
     public List<IConstellation> getConstellationsForMoonPhase(MoonPhase phase) {
