@@ -87,6 +87,10 @@ public class PatreonEffectHelper {
                 UUID.fromString("edc5008d-17e0-413d-ad82-3e57ae088cd7"),
                 new PatreonEffect(FlareColor.ELDRITCH));
 
+        effectMap.put( //Mekle
+                UUID.fromString("12d35783-db25-49cb-8ede-4530ea256864"),
+                new PatreonEffect(FlareColor.WATER));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(FlareColor.DAWN)
