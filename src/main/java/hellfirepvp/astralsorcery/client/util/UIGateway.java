@@ -71,7 +71,7 @@ public class UIGateway {
         int dimid = world.provider.getDimension();
         List<GatewayCache.GatewayNode> sameDimensionPositions = system.getGatewaysForWorld(world, Side.CLIENT);
         if(sameDimensionPositions != null) {
-            gatherStars(ui, world.provider.getDimension(), sameDimensionPositions, true, sphereRadius);
+            gatherStars(ui, dimid, sameDimensionPositions, true, sphereRadius);
         }
 
         for (Map.Entry<Integer, List<GatewayCache.GatewayNode>> entries : system.getGatewayCache(Side.CLIENT).entrySet()) {
@@ -110,16 +110,18 @@ public class UIGateway {
             GatewayEntry potentialEntry = new GatewayEntry(other, dimId, direction);
             if(sameWorld) {
                 GatewayEntry closest = null;
-                for (GatewayEntry entry : gateway.gatewayEntries) {
-                    if(Math.abs(entry.pitch - potentialEntry.pitch) < 10 &&
-                            (Math.abs(entry.yaw - potentialEntry.yaw) <= 10 || Math.abs(entry.yaw - potentialEntry.yaw - 360F) <= 10)) {
-                        if (closest == null || gatePosition.distanceSquared(entry.relativePos) < gatePosition.distanceSquared(closest.relativePos)) {
-                            closest = entry;
+                for (GatewayEntry otherEntry : gateway.gatewayEntries) {
+
+                    if(Math.abs(otherEntry.pitch - potentialEntry.pitch) < 10 &&
+                            (Math.abs(otherEntry.yaw - potentialEntry.yaw) <= 10 || Math.abs(otherEntry.yaw - potentialEntry.yaw - 360F) <= 10)) {
+
+                        if (closest == null || gatePosition.distanceSquared(otherEntry.relativePos) < gatePosition.distanceSquared(closest.relativePos)) {
+                            closest = otherEntry;
                         }
                     }
                 }
-                if(closest != null) {
-                    gateway.gatewayEntries.add(closest);
+                if(closest == null) {
+                    gateway.gatewayEntries.add(potentialEntry);
                 }
             } else {
                 long seed = 0xA7401CE1466A1095L;
