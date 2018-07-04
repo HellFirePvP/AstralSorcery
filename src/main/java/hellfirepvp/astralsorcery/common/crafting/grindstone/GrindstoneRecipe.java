@@ -70,7 +70,7 @@ public class GrindstoneRecipe {
     public GrindResult grind(ItemStack stackIn) {
         if(rand.nextInt(chance) == 0) {
             int out = this.output.getCount();
-            if (rand.nextFloat() > getChanceToDoubleOutput()) {
+            if (rand.nextFloat() <= getChanceToDoubleOutput()) {
                 out *= 2;
             }
             return GrindResult.itemChange(ItemUtils.copyStackWithSize(this.output, out));
