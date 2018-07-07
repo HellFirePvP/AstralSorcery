@@ -16,8 +16,10 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -36,7 +38,7 @@ public class PerkTreePoint {
     private final AbstractPerk perk;
     private int renderSize;
 
-    private static final int spriteSize = 6;
+    private static final int spriteSize = 11;
     private SpriteQuery querySpriteUnallocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkinactive", 1, 40);
     private SpriteQuery querySpriteAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactive", 1, 40);
     private SpriteQuery querySpriteUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable", 1, 40);
@@ -101,6 +103,7 @@ public class PerkTreePoint {
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         Vector3 starVec = new Vector3(-renderSize, -renderSize, 0);
 

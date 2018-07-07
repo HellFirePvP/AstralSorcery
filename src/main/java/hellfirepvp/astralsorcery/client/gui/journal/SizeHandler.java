@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.client.gui.journal;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -174,7 +176,6 @@ public abstract class SizeHandler {
         return centerY;
     }
 
-
     //Translates a renderPos into a gui-valid renderPosition (zoomed)
     public double evRelativePosX(int relativeX) {
         return getMidX() + (relativeX * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
@@ -182,6 +183,10 @@ public abstract class SizeHandler {
 
     public double evRelativePosY(int relativeY) {
         return getMidY() + (relativeY * (getZoomedWHNode() + getZoomedSpaceBetweenNodes()));
+    }
+
+    public Point.Double evRelativePos(Point offset) {
+        return new Point.Double(evRelativePosX(offset.x), evRelativePosY(offset.y));
     }
 
 }

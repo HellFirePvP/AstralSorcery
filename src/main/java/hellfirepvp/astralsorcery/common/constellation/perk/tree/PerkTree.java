@@ -14,6 +14,8 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
@@ -85,6 +87,12 @@ public class PerkTree {
 
     public Collection<PerkTreePoint> getPerkPoints() {
         return ImmutableList.copyOf(this.treePoints);
+    }
+
+    //Only for rendering purposes.
+    @SideOnly(Side.CLIENT)
+    public Collection<Tuple<AbstractPerk, AbstractPerk>> getConnections() {
+        return ImmutableList.copyOf(this.connections);
     }
 
     public class PointConnector {

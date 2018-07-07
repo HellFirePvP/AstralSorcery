@@ -389,7 +389,7 @@ public class ClientRenderEventHandler {
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityPermCharge)) << 24;
         if(visibilityPermCharge > 0.1E-4) {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level + 1), 0, 0, c);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level), 0, 0, c);
         }
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);

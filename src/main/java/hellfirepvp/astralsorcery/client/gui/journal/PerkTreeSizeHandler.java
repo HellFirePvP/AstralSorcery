@@ -25,6 +25,8 @@ public class PerkTreeSizeHandler extends SizeHandler {
 
     public PerkTreeSizeHandler(int height, int width) {
         super(height, width);
+        setWidthHeightNodes(10);
+        setSpaceBetweenNodes(10);
     }
 
     @Nullable
