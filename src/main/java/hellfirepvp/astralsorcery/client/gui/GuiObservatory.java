@@ -338,6 +338,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
         float cstSizeX = 55F;
         float cstSizeY = 35F;
 
+        float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
+
         Map<IConstellation, Map<StarLocation, Rectangle>> cstMap = new HashMap<>();
         if(handle != null && transparency > 0) {
             List<IConstellation> actives = handle.getActiveConstellations();
@@ -365,7 +367,7 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
                             new RenderConstellation.BrightnessFunction() {
                                 @Override
                                 public float getBrightness() {
-                                    return (0.4F + 0.6F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency;
+                                    return (0.4F + 0.6F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency * rainBr;
                                 }
                             },
                             ResearchManager.clientProgress.hasConstellationDiscovered(constellationOffset.getKey().getUnlocalizedName()),

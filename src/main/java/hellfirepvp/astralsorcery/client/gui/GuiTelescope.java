@@ -247,6 +247,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 float innerOffsetY = starSize + r.nextInt(MathHelper.floor(guiHeight - starSize));
                 float brightness = 0.3F + (RenderConstellation.stdFlicker(ClientScheduler.getClientTick(), partialTicks, 10 + r.nextInt(20))) * 0.6F;
                 brightness *= Minecraft.getMinecraft().world.getStarBrightness(1.0F) * 2;
+                brightness *= (1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks));
                 GL11.glColor4f(brightness, brightness, brightness, brightness);
                 drawRectDetailed(guiLeft + innerOffsetX - starSize, guiTop + innerOffsetY - starSize, starSize * 2, starSize * 2);
                 GL11.glColor4f(1, 1, 1, 1);
@@ -258,6 +259,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                 currentInformation.informationMap.get(rotation).informations.clear();
                 for (Map.Entry<Point, IConstellation> entry : info.constellations.entrySet()) {
 
+                    float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
                     float widthHeight = SkyConstellationDistribution.constellationWH;
 
                     Point offset = entry.getKey();
@@ -273,7 +275,7 @@ public class GuiTelescope extends GuiTileBase<TileTelescope> implements GuiSkySc
                             new RenderConstellation.BrightnessFunction() {
                                 @Override
                                 public float getBrightness() {
-                                    return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15));
+                                    return RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15)) * rainBr;
                                 }
                             },
                             ResearchManager.clientProgress.hasConstellationDiscovered(entry.getValue().getUnlocalizedName()),

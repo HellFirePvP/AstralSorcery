@@ -419,6 +419,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
             if ((Math.abs(diffYaw) <= sFactor || Math.abs(playerYaw + 360F) <= sFactor) &&
                     Math.abs(diffPitch) <= sFactor) {
 
+                float rainBr = 1F - Minecraft.getMinecraft().world.getRainStrength(partialTicks);
                 ScaledResolution res = new ScaledResolution(mc);
                 GL11.glEnable(GL11.GL_SCISSOR_TEST);
                 GL11.glScissor((guiLeft + 5) * res.getScaleFactor(), (guiTop + 5) * res.getScaleFactor(), (guiWidth - 10) * res.getScaleFactor(), (guiHeight - 10) * res.getScaleFactor());
@@ -437,7 +438,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
                         new RenderConstellation.BrightnessFunction() {
                             @Override
                             public float getBrightness() {
-                                return (0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency;
+                                return (0.3F + 0.7F * RenderConstellation.conCFlicker(ClientScheduler.getClientTick(), partialTicks, 5 + r.nextInt(15))) * transparency * rainBr;
                             }
                         },
                         ResearchManager.clientProgress.hasConstellationDiscovered(topFound.getUnlocalizedName()),
