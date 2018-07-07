@@ -91,6 +91,14 @@ public class PatreonEffectHelper {
                 UUID.fromString("12d35783-db25-49cb-8ede-4530ea256864"),
                 new PatreonEffect(FlareColor.WATER));
 
+        effectMap.put( //homerAttack
+                UUID.fromString("c6857827-1b26-497a-bf66-1ff0fae06499"),
+                new PatreonEffect(FlareColor.MAGENTA));
+
+        effectMap.put( //Beariserious
+                UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
+                new PatreonEffect(null));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(FlareColor.DAWN)
