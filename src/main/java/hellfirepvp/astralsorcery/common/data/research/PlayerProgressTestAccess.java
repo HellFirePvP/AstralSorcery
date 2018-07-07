@@ -10,8 +10,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 
 import java.util.Collections;
@@ -43,18 +42,13 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public double getAlignmentCharge() {
+    public double getPerkExp() {
         return 0;
     }
 
     @Override
     public IMajorConstellation getAttunedConstellation() {
         return null;
-    }
-
-    @Override
-    public int getAlignmentLevel() {
-        return 0;
     }
 
     @Override
@@ -68,7 +62,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public Map<ConstellationPerk, Integer> getAppliedPerks() {
+    public Map<AbstractPerk, Integer> getAppliedPerks() {
         return Collections.emptyMap();
     }
 
@@ -91,22 +85,12 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public boolean hasPerkUnlocked(ConstellationPerks perk) {
-        return false;
-    }
-
-    @Override
-    public boolean hasPerkUnlocked(ConstellationPerk perk) {
+    public boolean hasPerkUnlocked(AbstractPerk perk) {
         return false;
     }
 
     @Override
     public boolean wasOnceAttuned() {
-        return false;
-    }
-
-    @Override
-    public boolean isPerkActive(ConstellationPerk perk) {
         return false;
     }
 

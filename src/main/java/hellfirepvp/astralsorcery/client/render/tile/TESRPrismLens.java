@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.LinkedList;

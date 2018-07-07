@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.data;
 
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
 import hellfirepvp.astralsorcery.common.base.patreon.flare.PartialEntityFlare;
-import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

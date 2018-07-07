@@ -10,8 +10,8 @@ package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.gui.base.GuiSkyScreen;
+import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.sky.RenderAstralSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;

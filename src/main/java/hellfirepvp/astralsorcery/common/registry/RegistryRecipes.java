@@ -18,12 +18,17 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.*;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.GrindstoneRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.AttunementUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.ConstellationUpgradeRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.upgrade.TraitUpgradeRecipe;
-import hellfirepvp.astralsorcery.common.crafting.grindstone.*;
-import hellfirepvp.astralsorcery.common.crafting.helper.*;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.CrystalSharpeningRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.CrystalToolSharpeningRecipe;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry;
+import hellfirepvp.astralsorcery.common.crafting.grindstone.SwordSharpeningRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipeAdapater;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
+import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
+import hellfirepvp.astralsorcery.common.crafting.helper.SmeltingRecipe;
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.crafting.infusion.recipes.InfusionRecipeChargeTool;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -46,11 +51,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
+import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.helper.ShapelessRecipe.Builder.newShapelessRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
-import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
 import static hellfirepvp.astralsorcery.common.lib.RecipesAS.*;
 
 /**

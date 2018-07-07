@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
@@ -35,7 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.List;
 import java.util.Random;
 
 /**

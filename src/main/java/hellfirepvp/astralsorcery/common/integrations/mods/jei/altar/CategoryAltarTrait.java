@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.jei.altar;
 
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationJEI;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.base.JEIBaseCategory;

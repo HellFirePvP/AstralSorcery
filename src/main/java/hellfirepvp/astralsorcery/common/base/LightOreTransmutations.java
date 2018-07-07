@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.base;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

@@ -13,7 +13,6 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 

@@ -14,7 +14,6 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -83,13 +82,9 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
         }
 
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
-        //attuned = Constellations.discidia;
         if(attuned != null) {
-            ConstellationPerkMap map = attuned.getPerkMap();
-            if(map != null) {
-                offsetY = guiTop + 60;
-                rectPerkMapBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5), zLevel, "gui.journal.bm.perks.name", 0xDDDDDDDD, mousePoint);
-            }
+            offsetY = guiTop + 60;
+            rectPerkMapBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 2 ? 0 : 5), zLevel, "gui.journal.bm.perks.name", 0xDDDDDDDD, mousePoint);
         }
 
         GL11.glPopMatrix();

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
-import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;

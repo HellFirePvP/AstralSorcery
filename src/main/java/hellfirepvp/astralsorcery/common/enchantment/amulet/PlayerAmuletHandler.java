@@ -10,8 +10,11 @@ package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
 import baubles.api.BaubleType;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
+import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
+import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -42,7 +45,16 @@ public class PlayerAmuletHandler implements ITickHandler {
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-        clearAmuletTags((EntityPlayer) context[0]);
+        EntityPlayer player = (EntityPlayer) context[0];
+        clearAmuletTags(player);
+
+        boolean client = player.getEntityWorld().isRemote;
+        for (EnchantmentPlayerWornTick e : RegistryEnchantments.wearableTickEnchantments) {
+            int max = EnchantmentHelper.getMaxEnchantmentLevel(e, player);
+            if(max > 0) {
+                e.onWornTick(client, player, max);
+            }
+        }
     }
 
     public void clearAmuletTags(EntityPlayer player) {

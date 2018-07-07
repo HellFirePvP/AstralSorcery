@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.aoe.*;
 import hellfirepvp.astralsorcery.common.entities.EntityFlare;
 import hellfirepvp.astralsorcery.common.entities.EntityItemStardust;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.wand.ItemArchitectWand;
 import hellfirepvp.astralsorcery.common.potion.PotionCheatDeath;

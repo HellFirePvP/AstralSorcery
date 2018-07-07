@@ -15,7 +15,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.CEffectEntityCollec
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.registry.RegistryPotions;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import net.minecraft.entity.EntityLivingBase;

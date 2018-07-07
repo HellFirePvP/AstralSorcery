@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.EnchantmentsAS;
-import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -35,9 +34,9 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
 
+import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.registerCapeArmorEffect;
 import static hellfirepvp.astralsorcery.common.constellation.starmap.ConstellationMapEffectRegistry.*;
 import static hellfirepvp.astralsorcery.common.lib.Constellations.*;
-import static hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry.*;
 
 /**
  * This class is part of the Astral Sorcery Mod

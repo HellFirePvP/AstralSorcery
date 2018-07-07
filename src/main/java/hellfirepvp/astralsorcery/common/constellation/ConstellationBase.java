@@ -8,18 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
-import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -139,12 +133,6 @@ public abstract class ConstellationBase implements IConstellation {
 
         public Major(String name, Color color) {
             super(name, color);
-        }
-
-        @Override
-        @Nullable
-        public ConstellationPerkMap getPerkMap() {
-            return ConstellationPerkMapRegistry.getPerkMap(this);
         }
 
     }

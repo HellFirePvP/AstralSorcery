@@ -12,14 +12,9 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.journal.page.*;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
-import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.AttunementRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.ConstellationRecipe;
-import hellfirepvp.astralsorcery.common.crafting.altar.recipes.TraitRecipe;
-import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -29,19 +24,16 @@ import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
-import hellfirepvp.astralsorcery.common.lib.*;
+import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.ItemsAS;
+import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
+import hellfirepvp.astralsorcery.common.lib.RecipesAS;
 import hellfirepvp.astralsorcery.common.tile.TileBore;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.awt.*;
-
-import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.registerTraitRecipe;
-import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
 /**

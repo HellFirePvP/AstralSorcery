@@ -8,8 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
-import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.perk.impl.PerkCreationReach;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -52,6 +50,6 @@ public class PktUpdateReach implements IMessage, IMessageHandler<PktUpdateReach,
 
     @SideOnly(Side.CLIENT)
     private void updateReachClient(PktUpdateReach message) {
-        AstralSorcery.proxy.scheduleClientside(() -> PerkCreationReach.updateReach(message.apply));
+        //AstralSorcery.proxy.scheduleClientside(() -> PerkCreationReach.updateReach(message.apply));
     }
 }

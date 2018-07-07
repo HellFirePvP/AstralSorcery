@@ -8,10 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,7 +19,13 @@ import hellfirepvp.astralsorcery.common.lib.Constellations;
  */
 public class RegistryPerks {
 
-    public static void init() {
+    public static void initPerkTree() {
+        PerkTree.INSTANCE.initializeTree();
+
+
+    }
+
+    /*public static void init() {
         ConstellationPerkMap map = new ConstellationPerkMap();
         map.addPerk(ConstellationPerks.DMG_INCREASE,  ConstellationPerkMap.PerkOrder.DEFAULT,  1, 13);
 
@@ -128,6 +131,6 @@ public class RegistryPerks {
 
 
         ConstellationPerkMapRegistry.registerPerkMap(Constellations.evorsio, map);
-    }
+    }*/
 
 }

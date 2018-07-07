@@ -8,8 +8,10 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
-import hellfirepvp.astralsorcery.client.util.*;
-import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
+import hellfirepvp.astralsorcery.client.util.Blending;
+import hellfirepvp.astralsorcery.client.util.RenderWorldBuffer;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.tile.TileTranslucent;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
@@ -24,7 +26,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;

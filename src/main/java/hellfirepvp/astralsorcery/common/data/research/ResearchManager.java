@@ -15,8 +15,8 @@ import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -286,7 +287,7 @@ public class ResearchManager {
         if(progress == null) return false;
 
         progress.clearPerks();
-        progress.forceCharge(0);
+        progress.setExp(0);
         progress.setAttunedConstellation(constellation);
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
@@ -297,15 +298,15 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
+    public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
-        if(!progress.hasFreeAlignmentLevel()) return false;
-        if(progress.hasPerkUnlocked(perk)) return false;
+        if (progress == null) return false;
+        if (!progress.hasFreeAlignmentLevel()) return false;
+        if (progress.hasPerkUnlocked(perk)) return false;
 
         int free = progress.getNextFreeLevel();
-        if(free == -1) return false;
-        progress.addPerk(perk.getSingleInstance(), free);
+        if (free == -1) return false;
+        progress.addPerk(perk, free);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -314,7 +315,7 @@ public class ResearchManager {
 
     public static boolean resetPerks(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
 
         progress.clearPerks();
 
@@ -323,22 +324,22 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean forceCharge(EntityPlayer player, int charge) {
+    public static boolean setExp(EntityPlayer player, int exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
 
-        progress.forceCharge(charge);
+        progress.setExp(exp);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
-    public static boolean modifyAlignmentCharge(EntityPlayer player, double charge) {
+    public static boolean modifyExp(EntityPlayer player, double charge) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.modifyCharge(charge);
+        progress.modifyExp(charge);
 
         //AstralSorcery.log.info("NewCharge: " + player.getName() + " - " + progress.getAlignmentCharge());
 
@@ -531,10 +532,10 @@ public class ResearchManager {
     }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : ConstellationPerkLevelManager.getAlignmentLevel(clientProgress);
+        int currentLvl = clientProgress == null ? 0 : ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
-        if(ConstellationPerkLevelManager.getAlignmentLevel(clientProgress) > currentLvl) {
+        if(ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
             showBar();
         }
     }

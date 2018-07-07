@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.client.event;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.client.sky.RenderSkybox;
 import hellfirepvp.astralsorcery.client.util.Blending;
@@ -50,6 +50,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
@@ -61,7 +62,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -144,7 +144,7 @@ public class ClientRenderEventHandler {
 
             tickTimeFreezeEffects();
 
-            if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkMap) {
+            if(Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().currentScreen instanceof GuiJournalPerkTree) {
                 requestPermChargeReveal(20);
             }
             chargePermRevealTicks--;
@@ -363,7 +363,7 @@ public class ClientRenderEventHandler {
         tes.draw();
 
         //Draw charge
-        float filled = ConstellationPerkLevelManager.getPercToNextLevel(ResearchManager.clientProgress);
+        float filled = ConstellationPerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
         GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
@@ -380,7 +380,7 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
         //Draw level
-        int level = ResearchManager.clientProgress.getAlignmentLevel();
+        int level = ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();

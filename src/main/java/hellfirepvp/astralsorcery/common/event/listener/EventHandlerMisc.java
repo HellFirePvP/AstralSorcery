@@ -8,8 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.event.ItemEnchantmentTooltipEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import net.minecraft.client.resources.I18n;

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.network.packet.client;
 
 import hellfirepvp.astralsorcery.client.util.UISextantCache;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;

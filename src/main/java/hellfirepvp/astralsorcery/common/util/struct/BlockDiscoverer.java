@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common.util.struct;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

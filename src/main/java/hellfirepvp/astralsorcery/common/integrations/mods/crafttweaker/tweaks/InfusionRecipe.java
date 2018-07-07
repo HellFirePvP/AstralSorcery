@@ -9,12 +9,12 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IItemStack;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.InfusionRecipeAdd;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.InfusionRecipeRemove;
-import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import stanhebben.zenscript.annotations.ZenClass;

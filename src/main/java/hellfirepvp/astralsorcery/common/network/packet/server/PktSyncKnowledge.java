@@ -12,17 +12,21 @@ import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +51,10 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<ResearchProgression> researchProgression = new ArrayList<>();
     public List<SextantFinder.TargetObject> usedTargets = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
-    public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
     public int progressTier = 0;
     public boolean wasOnceAttuned = false;
-    public double alignmentCharge = 0.0;
+    public Map<AbstractPerk, Integer> usedPerks = new HashMap<>();
+    public double perkExp = 0;
 
     public PktSyncKnowledge() {}
 
@@ -64,8 +68,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
-        this.appliedPerks = progress.getAppliedPerks();
-        this.alignmentCharge = progress.getAlignmentCharge();
+        this.usedPerks = progress.getAppliedPerks();
+        this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
         this.usedTargets = progress.getUsedTargets();
     }
@@ -119,14 +123,17 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int perkLength = buf.readInt();
         if(perkLength != -1) {
-            this.appliedPerks = new HashMap<>(perkLength);
+            this.usedPerks = new HashMap<>(perkLength);
             for (int i = 0; i < perkLength; i++) {
-                int id = buf.readInt();
+                String key = ByteBufUtils.readString(buf);
                 int lvl = buf.readInt();
-                this.appliedPerks.put(ConstellationPerks.getById(id).getSingleInstance(), lvl);
+                AbstractPerk perk = PerkTree.INSTANCE.getPerk(new ResourceLocation(key));
+                if (perk != null) {
+                    this.usedPerks.put(perk, lvl);
+                }
             }
         } else {
-            this.appliedPerks = new HashMap<>();
+            this.usedPerks = new HashMap<>();
         }
 
         int targetLength = buf.readInt();
@@ -145,7 +152,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         this.wasOnceAttuned = buf.readBoolean();
         this.progressTier = buf.readInt();
-        this.alignmentCharge = buf.readDouble();
+        this.perkExp = buf.readDouble();
     }
 
     @Override
@@ -186,11 +193,11 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeByte(-1);
         }
 
-        if(appliedPerks != null) {
-            buf.writeInt(appliedPerks.size());
-            for (ConstellationPerk perk : appliedPerks.keySet()) {
-                buf.writeInt(perk.getId());
-                buf.writeInt(appliedPerks.get(perk));
+        if(usedPerks != null) {
+            buf.writeInt(usedPerks.size());
+            for (AbstractPerk perk : usedPerks.keySet()) {
+                ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
+                buf.writeInt(usedPerks.get(perk));
             }
         } else {
             buf.writeInt(-1);
@@ -207,19 +214,26 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         buf.writeBoolean(this.wasOnceAttuned);
         buf.writeInt(this.progressTier);
-        buf.writeDouble(this.alignmentCharge);
+        buf.writeDouble(this.perkExp);
     }
 
     @Override
     public PktSyncKnowledge onMessage(PktSyncKnowledge message, MessageContext ctx) {
-        switch (message.state) {
-            case STATE_ADD:
-                ResearchManager.recieveProgressFromServer(message);
-                break;
-            case STATE_WIPE:
-                ResearchManager.clientProgress = new PlayerProgress();
-                break;
-        }
+        receiveMessageClient(message, ctx);
         return null;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void receiveMessageClient(PktSyncKnowledge message, MessageContext ctx) {
+        Minecraft.getMinecraft().addScheduledTask(() -> {
+            switch (message.state) {
+                case STATE_ADD:
+                    ResearchManager.recieveProgressFromServer(message);
+                    break;
+                case STATE_WIPE:
+                    ResearchManager.clientProgress = new PlayerProgress();
+                    break;
+            }
+        });
     }
 }

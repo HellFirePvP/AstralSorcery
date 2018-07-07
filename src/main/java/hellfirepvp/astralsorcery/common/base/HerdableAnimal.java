@@ -136,7 +136,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
             LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
             builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
             List<ItemStack> drops = world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_MUSHROOM_COW).generateLootForPools(rand, builder.build());
-            if(rand.nextFloat() <= 0.05 * Math.max(0, herdingLuck)) {
+            if(rand.nextFloat() <= 0.03 * Math.max(0, herdingLuck)) {
                 drops.add(new ItemStack(Items.MUSHROOM_STEW));
             }
             return drops;
@@ -204,11 +204,7 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
         public List<ItemStack> getHerdingDropsTick(EntityCow entity, World world, Random rand, float herdingLuck) {
             LootContext.Builder builder = new LootContext.Builder((WorldServer) world);
             builder.withDamageSource(CommonProxy.dmgSourceStellar).withLootedEntity(entity).withLuck(herdingLuck);
-            List<ItemStack> drops = world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_COW).generateLootForPools(rand, builder.build());
-            if(rand.nextFloat() <= 0.15 * Math.max(0, herdingLuck)) {
-                drops.add(new ItemStack(Items.MILK_BUCKET));
-            }
-            return drops;
+            return world.getLootTableManager().getLootTableFromLocation(LootTableList.ENTITIES_COW).generateLootForPools(rand, builder.build());
         }
 
     }

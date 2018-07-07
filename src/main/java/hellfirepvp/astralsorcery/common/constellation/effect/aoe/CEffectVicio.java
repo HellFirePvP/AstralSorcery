@@ -15,14 +15,11 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectProperties;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;

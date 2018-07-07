@@ -19,12 +19,10 @@ import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.data.*;
-import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -55,12 +53,11 @@ public class ClientConnectionEventHandler {
         GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
         AstralSorcery.proxy.scheduleClientside(ClientScreenshotCache::cleanUp);
-        ConstellationPerkLevelManager.levelsRequired = ConstellationPerkLevelManager.levelsRequiredClientCache;
         ClientRenderEventHandler.resetPermChargeReveal();
         ClientRenderEventHandler.resetTempChargeReveal();
         AstralSorcery.proxy.scheduleClientside(TESRTranslucentBlock::cleanUp);
         PlayerChargeHandler.INSTANCE.setClientCharge(0F);
-        EventHandlerServer.perkCooldownsClient.clear();
+        PerkEffectHelper.perkCooldownsClient.clear();
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
         UISextantCache.INSTANCE.clearClient();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();

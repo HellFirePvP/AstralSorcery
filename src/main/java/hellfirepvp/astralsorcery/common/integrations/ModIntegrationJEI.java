@@ -26,7 +26,6 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
-import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;

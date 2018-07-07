@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block.network;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;

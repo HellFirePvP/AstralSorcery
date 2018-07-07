@@ -9,7 +9,10 @@
 package hellfirepvp.astralsorcery.client.render.tile;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.util.*;
+import hellfirepvp.astralsorcery.client.util.ItemColorizationHelper;
+import hellfirepvp.astralsorcery.client.util.RenderConstellation;
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystal;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;

@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;

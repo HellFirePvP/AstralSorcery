@@ -8,15 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.item.crystal;
 
-import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
-import hellfirepvp.astralsorcery.common.block.network.BlockLens;
-import hellfirepvp.astralsorcery.common.block.network.BlockPrism;
 import hellfirepvp.astralsorcery.common.data.research.EnumGatedKnowledge;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalSword;
-import hellfirepvp.astralsorcery.common.item.tool.ItemCrystalToolBase;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.util.List;

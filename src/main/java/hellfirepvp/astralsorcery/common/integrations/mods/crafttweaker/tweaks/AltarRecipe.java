@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.item.IItemStack;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
@@ -16,8 +18,6 @@ import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.*;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
-import crafttweaker.api.item.IIngredient;
-import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

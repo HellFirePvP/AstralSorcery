@@ -8,14 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker;
 
-import crafttweaker.api.minecraft.CraftTweakerMC;
-import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.oredict.IOreDictEntry;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.Fluid;

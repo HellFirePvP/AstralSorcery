@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.data.DataPatreonFlares;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -19,7 +20,6 @@ import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.event.ClientInitializedEvent;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightTransmissionHandler;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.MinecraftForge;
@@ -111,7 +111,7 @@ public class AstralSorcery {
     public void onServerStopping(FMLServerStoppingEvent event) {
         ResearchManager.saveAndClearServerCache();
         StarlightTransmissionHandler.getInstance().serverCleanHandlers();
-        EventHandlerServer.perkCooldowns.clear();
+        PerkEffectHelper.perkCooldowns.clear();
         EventHandlerEntity.invulnerabilityCooldown.clear();
         EventHandlerEntity.ritualFlight.clear();
         EventHandlerEntity.attackStack.clear();

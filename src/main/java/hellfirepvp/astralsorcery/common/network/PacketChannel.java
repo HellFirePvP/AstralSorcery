@@ -59,7 +59,6 @@ public class PacketChannel {
         CHANNEL.registerMessage(PktRequestSeed.class, PktRequestSeed.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktUpdateReach.class, PktUpdateReach.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktUnlockPerk.class, PktUnlockPerk.class, id++, Side.CLIENT);
-        CHANNEL.registerMessage(PktSyncAlignmentLevels.class, PktSyncAlignmentLevels.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktAttunementAltarState.class, PktAttunementAltarState.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktRotateTelescope.class, PktRotateTelescope.class, id++, Side.CLIENT);
         CHANNEL.registerMessage(PktLightningEffect.class, PktLightningEffect.class, id++, Side.CLIENT);
