@@ -19,34 +19,34 @@ import java.util.UUID;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: AttributeTypeAttackDamage
+ * Class: AttributeTypeArmor
  * Created by HellFirePvP
- * Date: 08.07.2018 / 15:31
+ * Date: 08.07.2018 / 23:34
  */
-public class AttributeTypeAttackDamage extends PerkAttributeType {
+public class AttributeTypeArmor extends PerkAttributeType {
 
-    private static final UUID ATTACK_DAMAGE_BOOST_ADD_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
-    private static final UUID ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
-    private static final UUID ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-9F56-831010FF91A2");
+    private static final UUID ARMOR_ADD_ID = UUID.fromString("92AAF3D7-D1CD-44CD-A721-7975FBFDB763");
+    private static final UUID ARMOR_ADD_MULTIPLY_ID = UUID.fromString("92AAF3D7-C4CD-44CD-A721-7975FBFDB763");
+    private static final UUID ARMOR_STACK_MULTIPLY_ID = UUID.fromString("92AAF3D7-FF4D-44CD-A721-7975FBFDB763");
 
-    public AttributeTypeAttackDamage() {
-        super(AttributeTypeRegistry.ATTR_TYPE_DAMAGE);
+    public AttributeTypeArmor() {
+        super(AttributeTypeRegistry.ATTR_TYPE_ARMOR);
     }
 
     @Override
     public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
         super.onModeApply(player, mode, side);
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE);
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
         switch (mode) {
             case ADDITION:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_ADD_ID, "Perk AttackDamage Add", getTypeString(), mode, player, side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_ADD_ID, "Perk Armor Add", getTypeString(), mode, player, side));
                 break;
             case ADDED_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID, "Perk AttackDamage Multiply Add", getTypeString(), mode, player, side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_ADD_MULTIPLY_ID, "Perk Armor Multiply Add", getTypeString(), mode, player, side));
                 break;
             case STACKING_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID, "Perk AttackDamage Stack Add", getTypeString(), mode, player, side));
+                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_STACK_MULTIPLY_ID, "Perk Armor Stack Add", getTypeString(), mode, player, side));
                 break;
         }
     }
@@ -55,18 +55,17 @@ public class AttributeTypeAttackDamage extends PerkAttributeType {
     public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
         super.onModeRemove(player, mode, side);
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE);
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
         switch (mode) {
             case ADDITION:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_ADD_ID);
+                attr.removeModifier(ARMOR_ADD_ID);
                 break;
             case ADDED_MULTIPLY:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID);
+                attr.removeModifier(ARMOR_ADD_MULTIPLY_ID);
                 break;
             case STACKING_MULTIPLY:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID);
+                attr.removeModifier(ARMOR_STACK_MULTIPLY_ID);
                 break;
         }
     }
-
 }

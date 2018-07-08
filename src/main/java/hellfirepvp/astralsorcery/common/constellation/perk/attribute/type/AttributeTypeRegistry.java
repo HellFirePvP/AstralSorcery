@@ -24,6 +24,9 @@ import java.util.Map;
 public class AttributeTypeRegistry {
 
     public static final String ATTR_TYPE_DAMAGE = AstralSorcery.MODID + ".attackdamage";
+    public static final String ATTR_TYPE_HEALTH = AstralSorcery.MODID + ".maxhealth";
+    public static final String ATTR_TYPE_MOVESPEED = AstralSorcery.MODID + ".movespeed";
+    public static final String ATTR_TYPE_ARMOR = AstralSorcery.MODID + ".armor";
 
     private static Map<String, PerkAttributeType> typeMap = new HashMap<>();
 

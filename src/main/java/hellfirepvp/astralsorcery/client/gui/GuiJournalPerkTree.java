@@ -19,6 +19,7 @@ import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
@@ -40,6 +41,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -91,8 +93,26 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         this.guiOffsetX = guiLeft + 10;
         this.guiOffsetY = guiTop + 10;
 
-        this.moveMouse(MathHelper.floor(this.sizeHandler.getTotalWidth() / 2),
-                MathHelper.floor(this.sizeHandler.getTotalHeight() / 2));
+
+        boolean shifted = false;
+        PlayerProgress progress = ResearchManager.clientProgress;
+        if (progress != null) {
+            IMajorConstellation attunement = progress.getAttunedConstellation();
+            if (attunement != null) {
+                AbstractPerk root = PerkTree.INSTANCE.getRootPerk(attunement);
+                if (root != null) {
+                    Point.Double shift = this.sizeHandler.evRelativePos(root.getOffset());
+                    this.moveMouse(MathHelper.floor(shift.x), MathHelper.floor(shift.y));
+                    shifted = true;
+                }
+            }
+        }
+
+        if (!shifted) {
+            this.moveMouse(MathHelper.floor(this.sizeHandler.getTotalWidth() / 2),
+                    MathHelper.floor(this.sizeHandler.getTotalHeight() / 2));
+        }
+
         this.applyMovedMouseOffset();
     }
 
@@ -208,10 +228,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             double y = this.sizeHandler.evRelativePosY(offset.y);
             Rectangle.Double perkRect = drawPerk(perkPoint, x, y, partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y);
             if (perkRect != null) {
-                if (this.guiBox.isInBox(perkRect.x, perkRect.y) ||
-                        this.guiBox.isInBox(perkRect.x + perkRect.width, perkRect.y + perkRect.height)) {
-                    this.thisFramePerks.put(perkRect, perkPoint.getPerk());
-                }
+                this.thisFramePerks.put(perkRect, perkPoint.getPerk());
             }
         }
 
@@ -347,17 +364,29 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        super.mouseReleased(mouseX, mouseY, state);
+
+        for (Rectangle.Double r : this.thisFramePerks.keySet()) {
+            if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
+                AbstractPerk clicked = this.thisFramePerks.get(r);
+                //System.out.println(clicked.getUnlocalizedName());
+            }
+        }
+    }
+
+    @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
         if(mouseButton != 0) return;
         Point p = new Point(mouseX, mouseY);
-        if(rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
+        if (rectResearchBookmark != null && rectResearchBookmark.contains(p)) {
             GuiJournalProgression.resetJournal();
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalProgression.getJournalInstance());
             return;
         }
-        if(rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
+        if (rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
         }
     }

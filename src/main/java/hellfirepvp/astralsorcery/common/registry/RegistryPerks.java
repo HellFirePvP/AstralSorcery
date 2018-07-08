@@ -8,23 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
-import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackDamage;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeOffset;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.PerkGenericIncreaseAttackDamage;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import hellfirepvp.astralsorcery.common.event.PerkTreeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,6 +42,9 @@ public class RegistryPerks {
 
     private static void initializeAttributeTypes() {
         AttributeTypeRegistry.registerType(new AttributeTypeAttackDamage());
+        AttributeTypeRegistry.registerType(new AttributeTypeMaxHealth());
+        AttributeTypeRegistry.registerType(new AttributeTypeMovementSpeed());
+        AttributeTypeRegistry.registerType(new AttributeTypeArmor());
 
         MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkAttributeTypeRegister());
     }
