@@ -36,6 +36,7 @@ import java.util.Objects;
 public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk> {
 
     protected final Point offset;
+    private List<String> tooltipCache = null;
 
     public AbstractPerk(String name, int x, int y) {
         this.setRegistryName(AstralSorcery.MODID, name.toLowerCase());
@@ -84,20 +85,23 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
 
     @SideOnly(Side.CLIENT)
     public Collection<String> getLocalizedTooltip() {
+        if (tooltipCache != null) {
+            return tooltipCache;
+        }
+
+        tooltipCache = Lists.newArrayList();
         String key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath() + ".";
         if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
-            List<String> tooltip = Lists.newArrayList();
             int count = 1;
             while (I18n.hasKey(key + ".desc." + count)) {
-                tooltip.add(I18n.format(key + ".desc." + count));
+                tooltipCache.add(I18n.format(key + ".desc." + count));
                 count++;
             }
-            return tooltip;
         } else if (I18n.hasKey(key + ".desc")) {
+            tooltipCache.add(I18n.format(key + ".desc"));
             return Lists.newArrayList(I18n.format(key + ".desc"));
-        } else {
-            return Lists.newArrayList();
         }
+        return tooltipCache;
     }
 
     @Override
