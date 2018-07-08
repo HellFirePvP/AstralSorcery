@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
@@ -289,6 +290,10 @@ public class ResearchManager {
         progress.clearPerks();
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
+        AbstractPerk root;
+        if ((root = PerkTree.INSTANCE.getRootPerk(constellation)) != null) {
+            progress.addPerk(root, 0);
+        }
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvPlayerAttunement);

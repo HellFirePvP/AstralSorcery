@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -34,8 +35,15 @@ import java.util.Objects;
  */
 public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk> {
 
-    public AbstractPerk(String name) {
+    protected final Point offset;
+
+    public AbstractPerk(String name, int x, int y) {
         this.setRegistryName(AstralSorcery.MODID, name.toLowerCase());
+        this.offset = new Point(x, y);
+    }
+
+    public Point getOffset() {
+        return offset;
     }
 
     public abstract PerkTreePoint getPoint();

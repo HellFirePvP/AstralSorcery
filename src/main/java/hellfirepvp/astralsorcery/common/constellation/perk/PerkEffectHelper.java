@@ -149,7 +149,7 @@ public class PerkEffectHelper implements ITickHandler {
         return container.getOrCreateList(ct).getTimeout(perk.getRegistryName());
     }
 
-    public final void addAlignmentCharge(EntityPlayer player, double exp) {
+    public final void addExp(EntityPlayer player, double exp) {
         if(!player.getEntityWorld().isRemote) {
             ResearchManager.modifyExp(player, exp);
         }

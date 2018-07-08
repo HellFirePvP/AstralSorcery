@@ -381,15 +381,17 @@ public class ClientRenderEventHandler {
         TextureHelper.refreshTextureBindState();
         //Draw level
         int level = ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
+        String strLevel = String.valueOf(level);
+        int strLength = Minecraft.getMinecraft().fontRenderer.getStringWidth(strLevel);
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glPushMatrix();
-        GL11.glTranslated(offsetX + 13, 94, 0);
+        GL11.glTranslated(offsetX + 15 - (strLength / 2), 94, 0);
         GL11.glScaled(1.2, 1.2, 1.2);
         int c = 0x00DDDDDD;
         c |= ((int) (255F * visibilityPermCharge)) << 24;
         if(visibilityPermCharge > 0.1E-4) {
-            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(String.valueOf(level), 0, 0, c);
+            Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(strLevel, 0, 0, c);
         }
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);

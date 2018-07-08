@@ -8,7 +8,23 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeAttackDamage;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeOffset;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.PerkGenericIncreaseAttackDamage;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
+import hellfirepvp.astralsorcery.common.event.PerkTreeEvent;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -20,9 +36,25 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 public class RegistryPerks {
 
     public static void initPerkTree() {
-        PerkTree.INSTANCE.initializeTree();
+        initializeRoot();
 
+        MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkRegister());
 
+        initializeAttributeTypes();
+    }
+
+    private static void initializeRoot() {
+        PerkTree.INSTANCE.registerRootPerk(new RootPerk("aevitas",   Constellations.aevitas, -6,  2));
+        PerkTree.INSTANCE.registerRootPerk(new RootPerk("vicio",     Constellations.vicio,    0,  7));
+        PerkTree.INSTANCE.registerRootPerk(new RootPerk("armara",    Constellations.armara,   6,  2));
+        PerkTree.INSTANCE.registerRootPerk(new RootPerk("discidia",  Constellations.discidia, 4, -5));
+        PerkTree.INSTANCE.registerRootPerk(new RootPerk("evorsio",   Constellations.evorsio, -4, -5));
+    }
+
+    private static void initializeAttributeTypes() {
+        AttributeTypeRegistry.registerType(new AttributeTypeAttackDamage());
+
+        MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkAttributeTypeRegister());
     }
 
     /*public static void init() {

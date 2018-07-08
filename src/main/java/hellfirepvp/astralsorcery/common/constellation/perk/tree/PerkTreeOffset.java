@@ -44,30 +44,27 @@ public class PerkTreeOffset extends PerkTreePoint {
     private SpriteQuery queryCstAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo5", 4, 8);
     private SpriteQuery queryCstUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "halo6", 4, 8);
 
-    public PerkTreeOffset(AbstractPerk perk, int offsetX, int offsetY, IConstellation associatedConstellation) {
-        super(perk, offsetX, offsetY);
-        this.associatedConstellation = associatedConstellation;
-    }
-
     public PerkTreeOffset(AbstractPerk perk, Point offset, IConstellation associatedConstellation) {
         super(perk, offset);
         this.associatedConstellation = associatedConstellation;
+        this.setRenderSize(haloSpriteSize / 2);
     }
 
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
     public Rectangle renderAtCurrentPos(AllocationStatus status, long spriteOffsetTick, float pTicks) {
-        GlStateManager.color(1, 1, 1, 0.85F);
-        super.renderAtCurrentPos(status, spriteOffsetTick, pTicks);
         GlStateManager.color(1, 1, 1, 1);
+        super.renderAtCurrentPos(status, spriteOffsetTick, pTicks);
 
+        int haloRenderSize = haloSpriteSize;
         SpriteSheetResource tex;
         switch (status) {
             case UNALLOCATED:
                 tex = queryCstUnAllocated.resolveSprite();
                 break;
             case ALLOCATED:
+                haloRenderSize *= 1.3;
                 tex = queryCstAllocated.resolveSprite();
                 break;
             case UNLOCKABLE:
@@ -83,7 +80,7 @@ public class PerkTreeOffset extends PerkTreePoint {
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-        Vector3 starVec = new Vector3(-haloSpriteSize, -haloSpriteSize, 0);
+        Vector3 starVec = new Vector3(-haloRenderSize, -haloRenderSize, 0);
 
         tex.bindTexture();
         double uLength = tex.getULength();
@@ -94,7 +91,7 @@ public class PerkTreeOffset extends PerkTreePoint {
             int u = ((i + 1) & 2) >> 1;
             int v = ((i + 2) & 2) >> 1;
 
-            Vector3 pos = starVec.clone().addX(haloSpriteSize * u * 2).addY(haloSpriteSize * v * 2);
+            Vector3 pos = starVec.clone().addX(haloRenderSize * u * 2).addY(haloRenderSize * v * 2);
             vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.key + uLength * u, frameUV.value + vLength * v).endVertex();
         }
 

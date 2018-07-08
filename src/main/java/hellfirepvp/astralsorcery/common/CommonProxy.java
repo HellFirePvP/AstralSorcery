@@ -226,6 +226,8 @@ public class CommonProxy implements IGuiHandler {
         ModIntegrationChisel.sendVariantIMC();
         MappingMigrationHandler.init();
 
+        ModIntegrationBloodMagic.sendIMC();
+
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
         MinecraftForge.TERRAIN_GEN_BUS.register(TreeCaptureHelper.eventInstance);
@@ -288,7 +290,6 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit() {
-        ModIntegrationBloodMagic.sendIMC();
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
 
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");

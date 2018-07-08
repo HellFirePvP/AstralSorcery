@@ -128,7 +128,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private void drawHoverTooltips(int mouseX, int mouseY) {
         for (Rectangle.Double r : this.thisFramePerks.keySet()) {
-            if (r.contains(mouseX, mouseY)) {
+            if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 List<String> toolTip = new LinkedList<>();
                 AbstractPerk perk = this.thisFramePerks.get(r);
                 toolTip.add(I18n.format(perk.getUnlocalizedName()));
@@ -137,9 +137,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 PlayerProgress prog = ResearchManager.clientProgress;
                 String unlockStr;
                 if(prog.hasPerkUnlocked(perk)) {
-                    int unlock = prog.getAppliedPerks().get(perk);
-                    if(unlock > 0) {
-                        toolTip.add(I18n.format("perk.info.unlocked.level", unlock));
+                    int unlockLevel = prog.getAppliedPerks().get(perk);
+                    if(unlockLevel > 0) {
+                        toolTip.add(I18n.format("perk.info.unlocked.level", unlockLevel));
                     } else {
                         toolTip.add(I18n.format("perk.info.unlocked.free"));
                     }

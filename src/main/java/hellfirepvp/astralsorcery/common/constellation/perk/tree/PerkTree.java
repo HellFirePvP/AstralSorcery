@@ -11,7 +11,9 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,33 +36,35 @@ public class PerkTree {
 
     public static final PerkTree INSTANCE = new PerkTree();
 
-    public static final ResourceLocation REGISTRY_PERKS_NAME = new ResourceLocation(AstralSorcery.MODID, "constellation_perks");
-    public static IForgeRegistry<AbstractPerk> PERK_REGISTRY = null;
+    private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
 
     private List<PerkTreePoint> treePoints = new LinkedList<>();
     private Map<AbstractPerk, Collection<AbstractPerk>> doubleConnections = new HashMap<>();
     private List<Tuple<AbstractPerk, AbstractPerk>> connections = new LinkedList<>();
 
+    private Map<IConstellation, AbstractPerk> rootPerks = new HashMap<>();
+
     private PerkTree() {}
 
-    public void initializeTree() {
-        if (PERK_REGISTRY != null) return;
-
-        PERK_REGISTRY = new RegistryBuilder<AbstractPerk>()
-                .disableSaving()
-                .setName(REGISTRY_PERKS_NAME)
-                .setType(AbstractPerk.class)
-                .create();
+    public PointConnector registerRootPerk(RootPerk perk) {
+        perkMap.put(perk.getRegistryName(), perk);
+        rootPerks.put(perk.getConstellation(), perk);
+        return INSTANCE.setPoint(perk);
     }
 
     public PointConnector registerPerk(AbstractPerk perk) {
-        PERK_REGISTRY.register(perk);
+        perkMap.put(perk.getRegistryName(), perk);
         return INSTANCE.setPoint(perk);
     }
 
     @Nullable
     public AbstractPerk getPerk(ResourceLocation key) {
-        return PERK_REGISTRY.getValue(key);
+        return perkMap.get(key);
+    }
+
+    @Nullable
+    public AbstractPerk getRootPerk(IConstellation constellation) {
+        return rootPerks.get(constellation);
     }
 
     @Nonnull
@@ -75,6 +79,7 @@ public class PerkTree {
 
     @Nullable
     public PointConnector tryGetConnector(AbstractPerk point) {
+        if (point == null) return null;
         if (this.treePoints.contains(point.getPoint())) {
             return new PointConnector(point);
         }

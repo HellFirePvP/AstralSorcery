@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
@@ -104,6 +105,7 @@ public class PerkTreePoint {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder vb = tes.getBuffer();
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        GlStateManager.disableAlpha();
 
         Vector3 starVec = new Vector3(-renderSize, -renderSize, 0);
 
@@ -121,6 +123,7 @@ public class PerkTreePoint {
         }
         tes.draw();
 
+        GlStateManager.enableAlpha();
         return new Rectangle(-renderSize, -renderSize, renderSize * 2, renderSize * 2);
     }
 
