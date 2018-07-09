@@ -122,7 +122,7 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
-        //SpellCastingManager.INSTANCE.clearEffects();
+        //SpellCastingManager.PERK_TREE.clearEffects();
     }
 
     public static boolean isRunningInDevEnvironment() {

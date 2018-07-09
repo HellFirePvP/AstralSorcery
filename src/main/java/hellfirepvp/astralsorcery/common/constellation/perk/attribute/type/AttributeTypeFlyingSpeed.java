@@ -20,40 +20,41 @@ import java.util.UUID;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: AttributeTypeMaxHealth
+ * Class: AttributeTypeFlyingSpeed
  * Created by HellFirePvP
- * Date: 08.07.2018 / 20:40
+ * Date: 09.07.2018 / 16:31
  */
-public class AttributeTypeMaxHealth extends VanillaAttributeType {
+public class AttributeTypeFlyingSpeed extends VanillaAttributeType {
 
-    private static final UUID MAX_HEALTH_ADD_ID = UUID.fromString("1FA85BB6-C2CF-45A3-A880-68045A46Dc39");
-    private static final UUID MAX_HEALTH_ADD_MULTIPLY_ID = UUID.fromString("1FA85BB6-4ECF-45A3-A880-68045A46Dc39");
-    private static final UUID MAX_HEALTH_STACK_MULTIPLY_ID = UUID.fromString("1FA85BB6-F6CF-45A3-A880-68045A46Dc39");
+    private static final UUID FLY_SPEED_ADD_ID = UUID.fromString("459A7BC0-51B4-444A-A478-AB346736DF8A");
+    private static final UUID FLY_SPEED_ADD_MULTIPLY_ID = UUID.fromString("459A7BC0-51B4-564A-A478-AB346736DF8A");
+    private static final UUID FLY_SPEED_STACK_MULTIPLY_ID = UUID.fromString("459A7BC0-51B4-F14A-A478-AB346736DF8A");
 
-    public AttributeTypeMaxHealth() {
-        super(AttributeTypeRegistry.ATTR_TYPE_HEALTH);
+    public AttributeTypeFlyingSpeed() {
+        super(AttributeTypeRegistry.ATTR_TYPE_FLYSPEED);
     }
 
     @Override
     public IAttribute getAttribute() {
-        return SharedMonsterAttributes.MAX_HEALTH;
+        return SharedMonsterAttributes.FLYING_SPEED;
     }
 
     @Override
     public String getDescription() {
-        return "Perk MaxHealth";
+        return "Perk FlySpeed";
     }
 
     @Override
     public UUID getID(PerkAttributeModifier.Mode mode) {
         switch (mode) {
             case ADDITION:
-                return MAX_HEALTH_ADD_ID;
+                return FLY_SPEED_ADD_ID;
             case ADDED_MULTIPLY:
-                return MAX_HEALTH_ADD_MULTIPLY_ID;
+                return FLY_SPEED_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
-                return MAX_HEALTH_STACK_MULTIPLY_ID;
+                return FLY_SPEED_STACK_MULTIPLY_ID;
         }
         return null;
     }
+
 }

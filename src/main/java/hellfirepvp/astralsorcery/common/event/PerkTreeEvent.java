@@ -20,12 +20,12 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class PerkTreeEvent {
 
     //Register perk-attribute types during this event.
-    //AttributeTypeRegistry.registerType
+    //AttributeTypeRegistry.registerPerkType
     //Called AFTER perks have been registered (or at least after the PerkRegister event has been fired)
     public static class PerkAttributeTypeRegister extends Event {}
 
     //Register your perks during this event.
-    //PerkTree.INSTANCE.register
+    //PerkTree.PERK_TREE.register
     public static class PerkRegister extends Event {}
 
 }

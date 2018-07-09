@@ -270,14 +270,14 @@ public class CommonProxy implements IGuiHandler {
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
-        manager.register(new LinkHandler()); //Only used as INSTANCE for tick handling
+        manager.register(new LinkHandler()); //Only used as PERK_TREE for tick handling
         manager.register(SyncDataHolder.getTickInstance());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
         manager.register(PlayerAmuletHandler.INSTANCE);
-        //manager.register(SpellCastingManager.INSTANCE);
+        //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
         manager.register(PerkEffectHelper.EVENT_INSTANCE);
 

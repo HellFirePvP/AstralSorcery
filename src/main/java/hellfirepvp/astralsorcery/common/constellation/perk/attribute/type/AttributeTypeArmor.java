@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +24,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 08.07.2018 / 23:34
  */
-public class AttributeTypeArmor extends PerkAttributeType {
+public class AttributeTypeArmor extends VanillaAttributeType {
 
     private static final UUID ARMOR_ADD_ID = UUID.fromString("92AAF3D7-D1CD-44CD-A721-7975FBFDB763");
     private static final UUID ARMOR_ADD_MULTIPLY_ID = UUID.fromString("92AAF3D7-C4CD-44CD-A721-7975FBFDB763");
@@ -34,38 +35,25 @@ public class AttributeTypeArmor extends PerkAttributeType {
     }
 
     @Override
-    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-        super.onModeApply(player, mode, side);
-
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
-        switch (mode) {
-            case ADDITION:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_ADD_ID, "Perk Armor Add", getTypeString(), mode, player, side));
-                break;
-            case ADDED_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_ADD_MULTIPLY_ID, "Perk Armor Multiply Add", getTypeString(), mode, player, side));
-                break;
-            case STACKING_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ARMOR_STACK_MULTIPLY_ID, "Perk Armor Stack Add", getTypeString(), mode, player, side));
-                break;
-        }
+    public IAttribute getAttribute() {
+        return SharedMonsterAttributes.ARMOR;
     }
 
     @Override
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-        super.onModeRemove(player, mode, side);
+    public String getDescription() {
+        return "Perk Armor";
+    }
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
+    @Override
+    public UUID getID(PerkAttributeModifier.Mode mode) {
         switch (mode) {
             case ADDITION:
-                attr.removeModifier(ARMOR_ADD_ID);
-                break;
+                return ARMOR_ADD_ID;
             case ADDED_MULTIPLY:
-                attr.removeModifier(ARMOR_ADD_MULTIPLY_ID);
-                break;
+                return ARMOR_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
-                attr.removeModifier(ARMOR_STACK_MULTIPLY_ID);
-                break;
+                return ARMOR_STACK_MULTIPLY_ID;
         }
+        return null;
     }
 }

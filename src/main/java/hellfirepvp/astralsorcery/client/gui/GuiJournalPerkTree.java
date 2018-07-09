@@ -25,6 +25,8 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
@@ -35,13 +37,13 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -99,7 +101,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if (progress != null) {
             IMajorConstellation attunement = progress.getAttunedConstellation();
             if (attunement != null) {
-                AbstractPerk root = PerkTree.INSTANCE.getRootPerk(attunement);
+                AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunement);
                 if (root != null) {
                     Point.Double shift = this.sizeHandler.evRelativePos(root.getOffset());
                     this.moveMouse(MathHelper.floor(shift.x), MathHelper.floor(shift.y));
@@ -151,8 +153,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 List<String> toolTip = new LinkedList<>();
                 AbstractPerk perk = this.thisFramePerks.get(r);
-                toolTip.add(I18n.format(perk.getUnlocalizedName()));
-                toolTip.addAll(perk.getLocalizedTooltip());
+                toolTip.add(I18n.format(perk.getUnlocalizedName() + ".name"));
+                perk.getLocalizedTooltip().forEach(line -> toolTip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + line));
                 toolTip.add("");
                 PlayerProgress prog = ResearchManager.clientProgress;
                 String unlockStr;
@@ -184,7 +186,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         if(!prog.hasFreeAlignmentLevel()) return false;
 
         boolean hasConnection = false;
-        for (AbstractPerk otherPerks : PerkTree.INSTANCE.getConnectedPerks(perk)) {
+        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(perk)) {
             if (prog.hasPerkUnlocked(otherPerks)) {
                 hasConnection = true;
                 break;
@@ -195,7 +197,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private void drawPerkTree(float partialTicks) {
         texturePerkConnection.bindTexture();
-        for (Tuple<AbstractPerk, AbstractPerk> perkConnection : PerkTree.INSTANCE.getConnections()) {
+        for (Tuple<AbstractPerk, AbstractPerk> perkConnection : PerkTree.PERK_TREE.getConnections()) {
             PerkTreePoint.AllocationStatus status = PerkTreePoint.AllocationStatus.UNALLOCATED;
             PlayerProgress progress = ResearchManager.getProgress(Minecraft.getMinecraft().player, Side.CLIENT);
             if (progress != null) {
@@ -222,7 +224,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             drawConnection(status, shiftOne, shiftTwo, partialTicks, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
         }
 
-        for (PerkTreePoint perkPoint : PerkTree.INSTANCE.getPerkPoints()) {
+        for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = perkPoint.getOffset();
             double x = this.sizeHandler.evRelativePosX(offset.x);
             double y = this.sizeHandler.evRelativePosY(offset.y);
@@ -370,7 +372,10 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         for (Rectangle.Double r : this.thisFramePerks.keySet()) {
             if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk clicked = this.thisFramePerks.get(r);
-                //System.out.println(clicked.getUnlocalizedName());
+                if (mayUnlockClient(ResearchManager.clientProgress, clicked)) {
+                    PktUnlockPerk pkt = new PktUnlockPerk(false, clicked);
+                    PacketChannel.CHANNEL.sendToServer(pkt);
+                }
             }
         }
     }

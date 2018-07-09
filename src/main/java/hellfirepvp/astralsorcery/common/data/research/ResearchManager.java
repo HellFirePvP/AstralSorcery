@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
@@ -25,6 +26,7 @@ import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -287,11 +289,14 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
+        PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
+
         progress.clearPerks();
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
-        if ((root = PerkTree.INSTANCE.getRootPerk(constellation)) != null) {
+        if ((root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             progress.addPerk(root, 0);
         }
 
@@ -313,6 +318,9 @@ public class ResearchManager {
         if (free == -1) return false;
         progress.addPerk(perk, free);
 
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
@@ -322,6 +330,8 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
 
+        PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
         progress.clearPerks();
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);

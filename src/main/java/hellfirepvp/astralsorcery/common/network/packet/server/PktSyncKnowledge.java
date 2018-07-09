@@ -127,7 +127,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             for (int i = 0; i < perkLength; i++) {
                 String key = ByteBufUtils.readString(buf);
                 int lvl = buf.readInt();
-                AbstractPerk perk = PerkTree.INSTANCE.getPerk(new ResourceLocation(key));
+                AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(key));
                 if (perk != null) {
                     this.usedPerks.put(perk, lvl);
                 }

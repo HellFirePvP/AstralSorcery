@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +24,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 08.07.2018 / 15:31
  */
-public class AttributeTypeAttackDamage extends PerkAttributeType {
+public class AttributeTypeAttackDamage extends VanillaAttributeType {
 
     private static final UUID ATTACK_DAMAGE_BOOST_ADD_ID = UUID.fromString("020E0DFB-87AE-4653-9556-831010FF91A0");
     private static final UUID ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID = UUID.fromString("020E0DFB-87AE-4653-95D6-831010FF91A1");
@@ -34,39 +35,26 @@ public class AttributeTypeAttackDamage extends PerkAttributeType {
     }
 
     @Override
-    public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-        super.onModeApply(player, mode, side);
-
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE);
-        switch (mode) {
-            case ADDITION:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_ADD_ID, "Perk AttackDamage Add", getTypeString(), mode, player, side));
-                break;
-            case ADDED_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID, "Perk AttackDamage Multiply Add", getTypeString(), mode, player, side));
-                break;
-            case STACKING_MULTIPLY:
-                attr.applyModifier(new DynamicPlayerAttributeModifier(ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID, "Perk AttackDamage Stack Add", getTypeString(), mode, player, side));
-                break;
-        }
+    public IAttribute getAttribute() {
+        return SharedMonsterAttributes.ATTACK_DAMAGE;
     }
 
     @Override
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-        super.onModeRemove(player, mode, side);
+    public String getDescription() {
+        return "Perk AttackDamage";
+    }
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE);
+    @Override
+    public UUID getID(PerkAttributeModifier.Mode mode) {
         switch (mode) {
             case ADDITION:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_ADD_ID);
-                break;
+                return ATTACK_DAMAGE_BOOST_ADD_ID;
             case ADDED_MULTIPLY:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID);
-                break;
+                return ATTACK_DAMAGE_BOOST_ADD_MULTIPLY_ID;
             case STACKING_MULTIPLY:
-                attr.removeModifier(ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID);
-                break;
+                return ATTACK_DAMAGE_BOOST_STACK_MULTIPLY_ID;
         }
+        return null;
     }
 
 }

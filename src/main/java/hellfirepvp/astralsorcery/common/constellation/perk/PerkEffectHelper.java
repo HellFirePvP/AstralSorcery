@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.ICooldownPerk;
@@ -65,10 +66,7 @@ public class PerkEffectHelper implements ITickHandler {
 
     @SubscribeEvent
     public void onConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-        MinecraftServer ms = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (ms != null) {
-            ms.addScheduledTask(() -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
-        }
+        AstralSorcery.proxy.scheduleDelayed(() -> handlePerkModification(((NetHandlerPlayServer) event.getHandler()).player, Side.SERVER, false));
     }
 
     @SubscribeEvent
@@ -103,6 +101,26 @@ public class PerkEffectHelper implements ITickHandler {
                 } else {
                     perk.applyPerk(player, side);
                 }
+            }
+        }
+    }
+
+    public void notifyPerkChange(EntityPlayer player, Side side, AbstractPerk perk, boolean remove) {
+        PlayerProgress progress = ResearchManager.getProgress(player, side);
+        if (progress != null) {
+            if (remove) {
+                perk.removePerk(player, side);
+            } else {
+                perk.applyPerk(player, side);
+            }
+        }
+    }
+
+    public void clearAllPerks(EntityPlayer player, Side side) {
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
+        if (prog != null) {
+            for (AbstractPerk perk : prog.getAppliedPerks().keySet()) {
+                perk.removePerk(player, side);
             }
         }
     }
@@ -189,7 +207,7 @@ public class PerkEffectHelper implements ITickHandler {
 
         @Override
         public void onContainerTimeout(PlayerWrapperContainer plWrapper, ResourceLocation key) {
-            AbstractPerk perk = PerkTree.INSTANCE.getPerk(key);
+            AbstractPerk perk = PerkTree.PERK_TREE.getPerk(key);
             if(perk != null && perk instanceof ICooldownPerk) {
                 ((ICooldownPerk) perk).handleCooldownTimeout(plWrapper.player);
             }

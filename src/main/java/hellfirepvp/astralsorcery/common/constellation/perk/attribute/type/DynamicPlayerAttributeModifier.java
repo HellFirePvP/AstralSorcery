@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -43,6 +44,8 @@ public class DynamicPlayerAttributeModifier extends AttributeModifier {
 
     @Override
     public double getAmount() {
-        return PerkAttributeHelper.getOrCreateMap(player, side).getModifier(type, PerkAttributeModifier.Mode.fromVanillaAttributeOperation(getOperation()));
+        PerkAttributeModifier.Mode mode = PerkAttributeModifier.Mode.fromVanillaAttributeOperation(getOperation());
+        double modifier = PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
+        return (PerkAttributeHelper.getOrCreateMap(player, side).getModifier(type, mode) * modifier) - 1; //Nullify original multiplier
     }
 }

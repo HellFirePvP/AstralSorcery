@@ -396,7 +396,7 @@ public class CommandAstralSorcery extends CommandBase {
         sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
         for (Map.Entry<AbstractPerk, Integer> entry : progress.getAppliedPerks().entrySet()) {
-            sender.sendMessage(new TextComponentString("§7" + entry.getKey().getUnlocalizedName() + " / " + entry.getValue()));
+            sender.sendMessage(new TextComponentString("§7" + (entry.getKey().getUnlocalizedName() + ".name") + " / " + entry.getValue()));
         }
         sender.sendMessage(new TextComponentString("§aUnlocked research groups:"));
         StringBuilder sb = new StringBuilder();

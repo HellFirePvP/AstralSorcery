@@ -12,13 +12,17 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.ClientReplyPacket;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -50,7 +54,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     @Override
     public void fromBytes(ByteBuf buf) {
         this.serverAccept = buf.readBoolean();
-        AbstractPerk perk = PerkTree.INSTANCE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
+        AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(ByteBufUtils.readString(buf)));
         if(perk != null) {
             this.perk = perk;
         }
@@ -65,28 +69,33 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
     @Override
     public PktUnlockPerk onMessage(PktUnlockPerk message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            EntityPlayer pl = ctx.getServerHandler().player;
-            if(pl != null) {
-                if(message.perk != null) {
-                    AbstractPerk perk = message.perk;
-                    PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
-                    if(prog != null) {
-                        Map<AbstractPerk, Integer> appliedPerks = prog.getAppliedPerks();
-                        if(!appliedPerks.containsKey(perk)) {
-                            boolean canUnlock = prog.hasFreeAlignmentLevel();
-                            boolean hasConnectedPoint = false;
-                            for (AbstractPerk otherPerk : PerkTree.INSTANCE.getConnectedPerks(perk)) {
-                                if (appliedPerks.containsKey(otherPerk)) {
-                                    hasConnectedPoint = true;
-                                    break;
+            MinecraftServer ms = FMLCommonHandler.instance().getMinecraftServerInstance();
+            if (ms != null) {
+                ms.addScheduledTask(() -> {
+                    EntityPlayer pl = ctx.getServerHandler().player;
+                    if(pl != null) {
+                        if(message.perk != null) {
+                            AbstractPerk perk = message.perk;
+                            PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
+                            if(prog != null) {
+                                Map<AbstractPerk, Integer> appliedPerks = prog.getAppliedPerks();
+                                if(!appliedPerks.containsKey(perk)) {
+                                    boolean canUnlock = prog.hasFreeAlignmentLevel();
+                                    boolean hasConnectedPoint = false;
+                                    for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(perk)) {
+                                        if (appliedPerks.containsKey(otherPerk)) {
+                                            hasConnectedPoint = true;
+                                            break;
+                                        }
+                                    }
+                                    if(canUnlock && hasConnectedPoint && ResearchManager.applyPerk(pl, message.perk)) {
+                                        PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
+                                    }
                                 }
-                            }
-                            if(canUnlock && hasConnectedPoint && ResearchManager.applyPerk(pl, message.perk)) {
-                                return new PktUnlockPerk(true, message.perk);
                             }
                         }
                     }
-                }
+                });
             }
         } else {
             recUnlockResultClient(message);

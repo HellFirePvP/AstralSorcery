@@ -44,10 +44,6 @@ public class PerkTreePoint {
     private SpriteQuery querySpriteAllocated = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactive", 1, 40);
     private SpriteQuery querySpriteUnlockable = new SpriteQuery(AssetLoader.TextureLocation.EFFECT, "flareperkactivateable", 1, 40);
 
-    public PerkTreePoint(AbstractPerk perk, int offsetX, int offsetY) {
-        this(perk, new Point(offsetX, offsetY));
-    }
-
     public PerkTreePoint(AbstractPerk perk, Point offset) {
         this.offset = offset;
         this.perk = perk;

@@ -10,7 +10,6 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
@@ -18,8 +17,6 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +31,7 @@ import java.util.*;
  */
 public class PerkTree {
 
-    public static final PerkTree INSTANCE = new PerkTree();
+    public static final PerkTree PERK_TREE = new PerkTree();
 
     private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
 
@@ -49,12 +46,12 @@ public class PerkTree {
     public PointConnector registerRootPerk(RootPerk perk) {
         perkMap.put(perk.getRegistryName(), perk);
         rootPerks.put(perk.getConstellation(), perk);
-        return INSTANCE.setPoint(perk);
+        return PERK_TREE.setPoint(perk);
     }
 
     public PointConnector registerPerk(AbstractPerk perk) {
         perkMap.put(perk.getRegistryName(), perk);
-        return INSTANCE.setPoint(perk);
+        return PERK_TREE.setPoint(perk);
     }
 
     @Nullable
@@ -108,7 +105,7 @@ public class PerkTree {
             this.point = point;
         }
 
-        public void connect(AbstractPerk other) {
+        public PointConnector connect(AbstractPerk other) {
             Collection<AbstractPerk> pointsTo = doubleConnections.computeIfAbsent(other, p -> new LinkedList<>());
             if (!pointsTo.contains(point)) {
                 pointsTo.add(point);
@@ -123,10 +120,11 @@ public class PerkTree {
             if (!connections.contains(connection) && !connections.contains(reverse)) {
                 connections.add(connection);
             }
+            return this;
         }
 
-        public void connect(PointConnector other) {
-            connect(other.point);
+        public PointConnector connect(PointConnector other) {
+            return connect(other.point);
         }
 
     }

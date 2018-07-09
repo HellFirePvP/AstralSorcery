@@ -26,13 +26,15 @@ public class AttributeTypeRegistry {
     public static final String ATTR_TYPE_DAMAGE = AstralSorcery.MODID + ".attackdamage";
     public static final String ATTR_TYPE_HEALTH = AstralSorcery.MODID + ".maxhealth";
     public static final String ATTR_TYPE_MOVESPEED = AstralSorcery.MODID + ".movespeed";
+    public static final String ATTR_TYPE_FLYSPEED = AstralSorcery.MODID + ".movespeed";
     public static final String ATTR_TYPE_ARMOR = AstralSorcery.MODID + ".armor";
+    public static final String ATTR_TYPE_INC_PERK_EFFECT = AstralSorcery.MODID + ".perkeffect";
 
     private static Map<String, PerkAttributeType> typeMap = new HashMap<>();
 
     AttributeTypeRegistry() {}
 
-    public static void registerType(PerkAttributeType type) {
+    public static void registerPerkType(PerkAttributeType type) {
         if(typeMap.putIfAbsent(type.getTypeString(), type) == null) {
             type.init();
         }

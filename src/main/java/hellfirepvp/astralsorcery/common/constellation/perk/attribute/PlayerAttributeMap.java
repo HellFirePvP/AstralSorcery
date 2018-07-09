@@ -14,9 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.PerkAt
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -72,29 +70,34 @@ public class PlayerAttributeMap {
                 .collect(Collectors.toList());
     }
 
+    public float getModifier(String type) {
+        return getModifier(type, Arrays.asList(PerkAttributeModifier.Mode.values()));
+    }
+
     public float getModifier(String type, PerkAttributeModifier.Mode mode) {
+        return getModifier(type, Lists.newArrayList(mode));
+    }
+
+    public float getModifier(String type, Collection<PerkAttributeModifier.Mode> applicableModes) {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return 1F;
 
         float mod = 1F;
-        List<PerkAttributeModifier> applicableModifiers = getModifiersByType(attributeType, mode);
-        switch (mode) {
-            case ADDITION:
-                for (PerkAttributeModifier m : applicableModifiers) {
-                    mod += m.getValue();
-                }
-                break;
-            case ADDED_MULTIPLY:
-                float value = mod;
-                for (PerkAttributeModifier m : applicableModifiers) {
-                    mod = value * m.getValue();
-                }
-                break;
-            case STACKING_MULTIPLY:
-                for (PerkAttributeModifier m : applicableModifiers) {
-                    mod *= m.getValue();
-                }
-                break;
+        if (applicableModes.contains(PerkAttributeModifier.Mode.ADDITION)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDITION)) {
+                mod += modifier.getValue();
+            }
+        }
+        if (applicableModes.contains(PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
+            float multiply = mod;
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
+                mod += multiply * modifier.getValue();
+            }
+        }
+        if (applicableModes.contains(PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
+            for (PerkAttributeModifier modifier : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
+                mod *= modifier.getValue();
+            }
         }
         return mod;
     }
@@ -108,7 +111,7 @@ public class PlayerAttributeMap {
         }
         float multiply = value;
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.ADDED_MULTIPLY)) {
-            value = multiply * mod.getValue();
+            value += multiply * mod.getValue();
         }
         for (PerkAttributeModifier mod : getModifiersByType(attributeType, PerkAttributeModifier.Mode.STACKING_MULTIPLY)) {
             value *= mod.getValue();

@@ -37,6 +37,7 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
 
     protected final Point offset;
     private List<String> tooltipCache = null;
+    private String ovrUnlocalizedNamePrefix = null;
 
     public AbstractPerk(String name, int x, int y) {
         this.setRegistryName(AstralSorcery.MODID, name.toLowerCase());
@@ -47,11 +48,18 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         return offset;
     }
 
-    public abstract PerkTreePoint getPoint();
+    public PerkTreePoint getPoint() {
+        return new PerkTreePoint(this, this.getOffset());
+    }
 
     public abstract void applyPerk(EntityPlayer player, Side side);
 
     public abstract void removePerk(EntityPlayer player, Side side);
+
+    public <T> T setNameOverride(String namePrefix) {
+        this.ovrUnlocalizedNamePrefix = namePrefix;
+        return (T) this;
+    }
 
     public PerkTreePoint.AllocationStatus getPerkStatus(@Nullable EntityPlayer player, Side side) {
         if (player == null) {
@@ -66,7 +74,7 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         }
         if (progress.hasFreeAlignmentLevel()) {
             boolean hasNextNode = false;
-            for (AbstractPerk otherPerk : PerkTree.INSTANCE.getConnectedPerks(this)) {
+            for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
                 if (progress.hasPerkUnlocked(otherPerk)) {
                     hasNextNode = true;
                     break;
@@ -80,7 +88,10 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
     }
 
     public String getUnlocalizedName() {
-        return "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath() + ".name";
+        if (this.ovrUnlocalizedNamePrefix != null) {
+            return this.ovrUnlocalizedNamePrefix;
+        }
+        return "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
     }
 
     @SideOnly(Side.CLIENT)
@@ -90,7 +101,10 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         }
 
         tooltipCache = Lists.newArrayList();
-        String key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath() + ".";
+        String key = this.ovrUnlocalizedNamePrefix;
+        if (key == null) {
+            key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
+        }
         if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
             int count = 1;
             while (I18n.hasKey(key + ".desc." + count)) {
@@ -99,7 +113,6 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
             }
         } else if (I18n.hasKey(key + ".desc")) {
             tooltipCache.add(I18n.format(key + ".desc"));
-            return Lists.newArrayList(I18n.format(key + ".desc"));
         }
         return tooltipCache;
     }

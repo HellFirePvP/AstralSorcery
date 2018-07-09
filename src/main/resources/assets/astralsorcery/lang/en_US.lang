@@ -687,9 +687,20 @@ perk.info.available=§9Available
 perk.info.active=§aActive
 perk.info.inactive=§cInactive (Missing Alignment)
 perk.info.unlock=§aUnlocked perk '%s'
-perk.info.unlock.level=§7Unlock with Alignment level %s
-perk.info.unlocked.level=§7Unlocked with Alignment level %s
+perk.info.unlock.level=§7Unlock with Level %s
+perk.info.unlocked.level=§7Unlocked with Level %s
 perk.info.unlocked.free=§7Basic perk
+
+perk.astralsorcery.base_inc_life.name=Increased Maximum Life
+perk.astralsorcery.base_inc_life.desc=5%% Increased Life
+perk.astralsorcery.base_inc_ms.name=Increased Movement Speed
+perk.astralsorcery.base_inc_ms.desc=5%% Increased Movement Speed
+
+perk.astralsorcery.major_inc_life.name=Bloom
+perk.astralsorcery.major_inc_life.desc=15%% More Life
+perk.astralsorcery.major_inc_ms_fs.name=Agility
+perk.astralsorcery.major_inc_ms_fs.desc.1=10%% Increased Movement Speed
+perk.astralsorcery.major_inc_ms_fs.desc.2=10%% Increased Flying Speed
 
 perk.DMG_KILL=Killing frenzy
 perk.DMG_KILL.info=Increased damage after killing a mob

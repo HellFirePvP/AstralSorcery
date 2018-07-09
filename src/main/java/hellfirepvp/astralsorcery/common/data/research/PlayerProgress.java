@@ -78,7 +78,7 @@ public class PlayerProgress {
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound tag = list.getCompoundTagAt(i);
                 String perkRegName = tag.getString("perkName");
-                AbstractPerk perk = PerkTree.INSTANCE.getPerk(new ResourceLocation(perkRegName));
+                AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
                 Integer unlockLevel = tag.getInteger("perkLevel");
                 if(perk != null) {
                     unlockedPerks.put(perk, unlockLevel);

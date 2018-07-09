@@ -8,43 +8,46 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PlayerAttributeMap;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: PerkGenericIncreaseAttackDamage
+ * Class: AttributeModifierPerk
  * Created by HellFirePvP
- * Date: 08.07.2018 / 15:45
+ * Date: 09.07.2018 / 15:10
  */
-public class PerkGenericIncreaseAttackDamage extends AbstractPerk {
+public class AttributeModifierPerk extends AbstractPerk {
 
-    private PerkAttributeModifier modifier;
+    private List<Tuple<String, PerkAttributeModifier>> typeModifierList = Lists.newArrayList();
 
-    public PerkGenericIncreaseAttackDamage(String name, int x, int y, float dmgIncrease) {
+    public AttributeModifierPerk(String name, int x, int y) {
         super(name, x, y);
-        this.modifier = new PerkAttributeModifier(PerkAttributeModifier.Mode.ADDED_MULTIPLY, dmgIncrease);
     }
 
-    @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreePoint(this, getOffset());
+    public <T> T addModifier(float modifier, PerkAttributeModifier.Mode mode, String type) {
+        typeModifierList.add(new Tuple<>(type, new PerkAttributeModifier(mode, modifier)));
+        return (T) this;
     }
 
     @Override
     public void applyPerk(EntityPlayer player, Side side) {
-        PerkAttributeHelper.getOrCreateMap(player, side).applyModifier(player, AttributeTypeRegistry.ATTR_TYPE_DAMAGE, this.modifier);
+        PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
+        this.typeModifierList.forEach(tplMod -> attr.applyModifier(player, tplMod.key, tplMod.value));
     }
 
     @Override
     public void removePerk(EntityPlayer player, Side side) {
-        PerkAttributeHelper.getOrCreateMap(player, side).removeModifier(player, AttributeTypeRegistry.ATTR_TYPE_DAMAGE, this.modifier);
+        PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
+        this.typeModifierList.forEach(tplMod -> attr.removeModifier(player, tplMod.key, tplMod.value));
     }
-
 }

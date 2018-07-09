@@ -8,12 +8,19 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import hellfirepvp.astralsorcery.common.event.PerkTreeEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraftforge.common.MinecraftForge;
+
+import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry.*;
+import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -27,24 +34,84 @@ public class RegistryPerks {
     public static void initPerkTree() {
         initializeRoot();
 
+        initializeAevitasRoot();
+        initializeVicioRoot();
+
+        initializeInnerPerkWheel();
+
         MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkRegister());
 
         initializeAttributeTypes();
     }
 
+    private static void initializeInnerPerkWheel() {
+
+    }
+
+    private static void initializeVicioRoot() {
+        AttributeModifierPerk moveRoot1 = new AttributeModifierPerk("base_inc_ms", 1, 10);
+        moveRoot1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        String unlocMoveSpeed = moveRoot1.getUnlocalizedName();
+        AttributeModifierPerk moveRoot2 = new AttributeModifierPerk("base_inc_ms_1", -1, 11).setNameOverride(unlocMoveSpeed);
+        moveRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        AttributeModifierPerk perkMajorMovement = new AttributeModifierPerk("major_inc_ms_fs", 0, 14) {
+            @Override
+            public PerkTreePoint getPoint() {
+                return new PerkTreeMajor(this, this.getOffset());
+            }
+        };
+        perkMajorMovement.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MOVESPEED);
+        perkMajorMovement.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_FLYSPEED);
+
+
+        PerkTree.PointConnector ctMove1 = PERK_TREE.registerPerk(moveRoot1);
+        PerkTree.PointConnector ctMove2 = PERK_TREE.registerPerk(moveRoot2);
+        PerkTree.PointConnector ctMajorMobility = PERK_TREE.registerPerk(perkMajorMovement);
+
+        ctMove1.connect(PERK_TREE.getRootPerk(Constellations.vicio));
+        ctMove2.connect(ctMove1);
+        ctMajorMobility.connect(ctMove2);
+    }
+
+    private static void initializeAevitasRoot() {
+        AttributeModifierPerk lifeRoot1 = new AttributeModifierPerk("base_inc_life", -9, 3);
+        lifeRoot1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        String unlocLife = lifeRoot1.getUnlocalizedName();
+        AttributeModifierPerk lifeRoot2 = new AttributeModifierPerk("base_inc_life_1", -8, 5).setNameOverride(unlocLife);
+        lifeRoot2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_HEALTH);
+        AttributeModifierPerk perkMajorLife = new AttributeModifierPerk("major_inc_life", -12, 6) {
+            @Override
+            public PerkTreePoint getPoint() {
+                return new PerkTreeMajor(this, this.getOffset());
+            }
+        };
+        perkMajorLife.addModifier(1.15F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_HEALTH);
+
+        PerkTree.PointConnector ctLife1 = PERK_TREE.registerPerk(lifeRoot1);
+        PerkTree.PointConnector ctLife2 = PERK_TREE.registerPerk(lifeRoot2);
+        PerkTree.PointConnector ctMajorLife = PERK_TREE.registerPerk(perkMajorLife);
+
+        ctLife1.connect(PERK_TREE.getRootPerk(Constellations.aevitas));
+        ctLife2.connect(ctLife1);
+        ctMajorLife.connect(ctLife2);
+    }
+
     private static void initializeRoot() {
-        PerkTree.INSTANCE.registerRootPerk(new RootPerk("aevitas",   Constellations.aevitas, -6,  2));
-        PerkTree.INSTANCE.registerRootPerk(new RootPerk("vicio",     Constellations.vicio,    0,  7));
-        PerkTree.INSTANCE.registerRootPerk(new RootPerk("armara",    Constellations.armara,   6,  2));
-        PerkTree.INSTANCE.registerRootPerk(new RootPerk("discidia",  Constellations.discidia, 4, -5));
-        PerkTree.INSTANCE.registerRootPerk(new RootPerk("evorsio",   Constellations.evorsio, -4, -5));
+        PERK_TREE.registerRootPerk(new RootPerk("aevitas",   Constellations.aevitas, -6,  2));
+        PERK_TREE.registerRootPerk(new RootPerk("vicio",     Constellations.vicio,    0,  7));
+        PERK_TREE.registerRootPerk(new RootPerk("armara",    Constellations.armara,   6,  2));
+        PERK_TREE.registerRootPerk(new RootPerk("discidia",  Constellations.discidia, 4, -5));
+        PERK_TREE.registerRootPerk(new RootPerk("evorsio",   Constellations.evorsio, -4, -5));
     }
 
     private static void initializeAttributeTypes() {
-        AttributeTypeRegistry.registerType(new AttributeTypeAttackDamage());
-        AttributeTypeRegistry.registerType(new AttributeTypeMaxHealth());
-        AttributeTypeRegistry.registerType(new AttributeTypeMovementSpeed());
-        AttributeTypeRegistry.registerType(new AttributeTypeArmor());
+        registerPerkType(new PerkAttributeType(ATTR_TYPE_INC_PERK_EFFECT));
+
+        registerPerkType(new AttributeTypeAttackDamage());
+        registerPerkType(new AttributeTypeMaxHealth());
+        registerPerkType(new AttributeTypeMovementSpeed());
+        registerPerkType(new AttributeTypeFlyingSpeed());
+        registerPerkType(new AttributeTypeArmor());
 
         MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkAttributeTypeRegister());
     }

@@ -201,9 +201,9 @@ public class RegistryItems {
 
     private static <T extends IForgeRegistryEntry> T registerItem(String modId, T item, String name) {
         try {
-            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.INSTANCE());
+            LoadController modController = (LoadController) Loader.class.getField("modController").get(Loader.PERK_TREE());
             Object oldMod = modController.getClass().getField("activeContainer").get(modController);
-            modController.getClass().getField("activeContainer").set(modController, Loader.INSTANCE().getIndexedModList().get(modId));
+            modController.getClass().getField("activeContainer").set(modController, Loader.PERK_TREE().getIndexedModList().get(modId));
 
             register(item, name);
 
