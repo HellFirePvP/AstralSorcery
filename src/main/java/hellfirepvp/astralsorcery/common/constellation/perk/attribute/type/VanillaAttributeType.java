@@ -34,20 +34,14 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     public void onApply(EntityPlayer player, Side side) {
         super.onApply(player, side);
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
-        double base = attr.getBaseValue();
-        attr.setBaseValue(0);
-        attr.setBaseValue(base);
+        refreshAttribute(player);
     }
 
     @Override
     public void onRemove(EntityPlayer player, Side side) {
         super.onRemove(player, side);
 
-        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
-        double base = attr.getBaseValue();
-        attr.setBaseValue(0);
-        attr.setBaseValue(base);
+        refreshAttribute(player);
     }
 
     @Override
@@ -84,6 +78,13 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
                 attr.removeModifier(getID(mode));
                 break;
         }
+    }
+
+    public void refreshAttribute(EntityPlayer player) {
+        IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
+        double base = attr.getBaseValue();
+        attr.setBaseValue(0);
+        attr.setBaseValue(base);
     }
 
     public abstract UUID getID(PerkAttributeModifier.Mode mode);

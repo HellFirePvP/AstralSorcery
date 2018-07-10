@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
@@ -57,6 +58,11 @@ public class PerkTree {
     @Nullable
     public AbstractPerk getPerk(ResourceLocation key) {
         return perkMap.get(key);
+    }
+
+    @Nullable
+    public AbstractPerk getAstralSorceryPerk(String keyName) {
+        return getPerk(new ResourceLocation(AstralSorcery.MODID, keyName));
     }
 
     @Nullable
