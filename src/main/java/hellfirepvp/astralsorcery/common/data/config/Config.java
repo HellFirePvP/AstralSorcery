@@ -66,6 +66,7 @@ public class Config {
     public static boolean liquidStarlightSand = true;
     public static boolean liquidStarlightIce = true;
 
+    public static boolean enableFlatGen = false;
     public static boolean enableRetroGen = false;
 
     //Also has a squared field to provide slightly faster rendering.
@@ -241,6 +242,7 @@ public class Config {
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
         respectIdealDistances = latestConfig.getBoolean("respectIdealStructureDistances", "worldgen", respectIdealDistances, "If this is set to true, the world generator will try and spawn structures more evenly distributed by their 'ideal' distance set in their config entries. WARNING: might add additional worldgen time.");
         String[] dimGenWhitelist = latestConfig.getStringList("worldGenWhitelist", "worldgen", new String[] { "0" }, "the Astral Sorcery-specific worldgen will only run in Dimension ID's listed here.");
+        enableFlatGen = latestConfig.getBoolean("enableFlatGen", "worldgen", false, "By default, Astral Sorcery does not generate structures or ores in Super-Flat worlds. If, for some reason, you wish to enable generation of structures and ores in a Super-Flat world, then set this value to true.");
 
         enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
 
