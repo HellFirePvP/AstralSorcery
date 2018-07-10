@@ -73,7 +73,7 @@ public class PatreonEffectHelper {
 
         effectMap.put( //Alchimous
                 UUID.fromString("b2327e92-0a3c-4a8e-9cc0-fba3b101c268"),
-                new PatreonEffect(FlareColor.ELDRITCH));
+                new PatreonEffect(FlareColor.STANDARD));
 
         effectMap.put( //Superfrogman98
                 UUID.fromString("34b89066-05d7-467f-b439-8f037699713d"),
