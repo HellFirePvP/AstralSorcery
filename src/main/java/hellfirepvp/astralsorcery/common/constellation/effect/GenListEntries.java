@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.effect;
 
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.event.listener.EventHandlerEntity;
 import hellfirepvp.astralsorcery.common.util.EntityUtils;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.NBTBase;
@@ -95,7 +96,9 @@ public class GenListEntries {
                             return;
                         }
                     }
+                    EventHandlerEntity.spawnSkipId = entity.getEntityId();
                     world.spawnEntity(entity);
+                    EventHandlerEntity.spawnSkipId = -1;
                     world.playEvent(2004, entity.getPosition(), 0);
                     world.playEvent(2004, entity.getPosition(), 0);
                 }

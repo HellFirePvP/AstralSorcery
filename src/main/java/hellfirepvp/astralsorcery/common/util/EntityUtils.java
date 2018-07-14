@@ -48,7 +48,7 @@ public class EntityUtils {
         entity.setLocationAndAngles(at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, world.rand.nextFloat() * 360.0F, 0.0F);
         if(respectConditions) {
             if(entity instanceof EntityLiving) {
-                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, false);
+                Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving) entity, world, at.getX() + 0.5F, at.getY() + 0.5F, at.getZ() + 0.5F, null);
                 if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || (!((EntityLiving) entity).getCanSpawnHere() || !((EntityLiving) entity).isNotColliding()))) {
                     return false;
                 }

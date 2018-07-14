@@ -79,6 +79,7 @@ public class EventHandlerEntity {
     private static final Random rand = new Random();
     private static final Color discidiaWandColor = new Color(0x880100);
 
+    public static int spawnSkipId = -1;
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> ritualFlight = new TimeoutList<>(player -> {
@@ -373,8 +374,13 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
+        if (event.getWorld().isRemote) return;
 
         EntityLivingBase toTest = event.getEntityLiving();
+        if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {
+            return;
+        }
+
         Vector3 at = Vector3.atEntityCorner(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {
