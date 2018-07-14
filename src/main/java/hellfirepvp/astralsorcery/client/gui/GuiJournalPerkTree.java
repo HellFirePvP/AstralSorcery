@@ -9,10 +9,7 @@
 package hellfirepvp.astralsorcery.client.gui;
 
 import hellfirepvp.astralsorcery.client.ClientScheduler;
-import hellfirepvp.astralsorcery.client.gui.journal.GuiRenderBoundingBox;
-import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
-import hellfirepvp.astralsorcery.client.gui.journal.PerkTreeSizeHandler;
-import hellfirepvp.astralsorcery.client.gui.journal.SizeHandler;
+import hellfirepvp.astralsorcery.client.gui.journal.*;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
@@ -45,10 +42,8 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -65,7 +60,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private SizeHandler sizeHandler;
     private GuiRenderBoundingBox guiBox;
 
-    private Point mousePosition = new Point(), previousMousePosition = new Point();
+    private ScalingPoint mousePosition, previousMousePosition;
     private int mouseBufferX, mouseBufferY;
     private boolean mouseDragging = false;
 
@@ -83,9 +78,12 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         this.guiBox = new GuiRenderBoundingBox(10, 10, guiWidth - 10, guiHeight - 10);
 
         this.sizeHandler = new PerkTreeSizeHandler(this.guiHeight - 20, this.guiWidth - 20);
+        this.sizeHandler.setScaleSpeed(0.04F);
         this.sizeHandler.setMaxScale(1F);
-        this.sizeHandler.setMinScale(1F);
+        this.sizeHandler.setMinScale(0.1F);
         this.sizeHandler.updateSize();
+
+        this.mousePosition = ScalingPoint.createPoint(0, 0, this.sizeHandler.getScalingFactor(), false);
     }
 
     @Override
@@ -94,7 +92,6 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
         this.guiOffsetX = guiLeft + 10;
         this.guiOffsetY = guiTop + 10;
-
 
         boolean shifted = false;
         PlayerProgress progress = ResearchManager.clientProgress;
@@ -122,6 +119,16 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.thisFramePerks.clear();
 
+        int dWheelChange = Mouse.getDWheel();
+        if(dWheelChange < 0) {
+            this.sizeHandler.handleZoomOut();
+            this.rescaleMouse();
+        }
+        if(dWheelChange > 0)  {
+            this.sizeHandler.handleZoomIn();
+            this.rescaleMouse();
+        }
+
         handleMouseMovement(mouseX, mouseY);
 
         GlStateManager.pushMatrix();
@@ -148,6 +155,14 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.popMatrix();
     }
 
+    private void rescaleMouse() {
+        this.mousePosition.rescale(this.sizeHandler.getScalingFactor());
+        if(this.previousMousePosition != null) {
+            this.previousMousePosition.rescale(this.sizeHandler.getScalingFactor());
+        }
+        this.moveMouse(0, 0);
+    }
+
     private void drawHoverTooltips(int mouseX, int mouseY) {
         for (Rectangle.Double r : this.thisFramePerks.keySet()) {
             if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
@@ -166,33 +181,27 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                         toolTip.add(I18n.format("perk.info.unlocked.free"));
                     }
                     unlockStr = "perk.info.active";
-                } else if(mayUnlockClient(prog, perk)) {
+                } else if(perk.mayUnlockPerk(prog)) {
                     toolTip.add(I18n.format("perk.info.unlock.level", prog.getNextFreeLevel()));
                     unlockStr = "perk.info.available";
                 } else {
                     unlockStr = "perk.info.locked";
                 }
                 toolTip.add(I18n.format(unlockStr));
+                Collection<String> modInfo = perk.getSource();
+                if (modInfo != null) {
+                    for (String line : modInfo) {
+                        toolTip.add(TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString() + line);
+                    }
+                }
                 RenderingUtils.renderBlueTooltip(mouseX, mouseY, toolTip, Minecraft.getMinecraft().fontRenderer);
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GL11.glColor4f(1F, 1F, 1F, 1F);
+                break;
             }
         }
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GlStateManager.enableAlpha();
-    }
-
-    private boolean mayUnlockClient(PlayerProgress prog, AbstractPerk perk) {
-        if(!prog.hasFreeAlignmentLevel()) return false;
-
-        boolean hasConnection = false;
-        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(perk)) {
-            if (prog.hasPerkUnlocked(otherPerks)) {
-                hasConnection = true;
-                break;
-            }
-        }
-        return hasConnection;
     }
 
     private void drawPerkTree(float partialTicks) {
@@ -268,8 +277,10 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         Vector3 fromStar = new Vector3(offsetSrc.x, offsetSrc.y, 0);
         Vector3 toStar   = new Vector3(offsetDst.x, offsetDst.y, 0);
 
+        double width = 4.0D * this.sizeHandler.getScalingFactor();
+
         Vector3 dir = toStar.clone().subtract(fromStar);
-        Vector3 degLot = dir.clone().crossProduct(new Vector3(0, 0, 1)).normalize().multiply(3D);//.multiply(j == 0 ? 1 : -1);
+        Vector3 degLot = dir.clone().crossProduct(new Vector3(0, 0, 1)).normalize().multiply(width);//.multiply(j == 0 ? 1 : -1);
 
         Vector3 vec00 = fromStar.clone().add(degLot);
         Vector3 vecV = degLot.clone().multiply(-2);
@@ -293,6 +304,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.translate(offset.x, offset.y, 0);
         GlStateManager.color(1, 1, 1, 1);
 
+        GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
         Rectangle draw = perkPoint.renderAtCurrentPos(perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT), effectTick, pTicks);
 
         GlStateManager.popMatrix();
@@ -304,8 +316,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     private Point.Double shift2DOffset(double x, double y) {
-        double scaledLeft = this.mousePosition.x - sizeHandler.widthToBorder;
-        double scaledTop =  this.mousePosition.y - sizeHandler.heightToBorder;
+        double scaledLeft = this.mousePosition.getScaledPosX() - sizeHandler.widthToBorder;
+        double scaledTop =  this.mousePosition.getScaledPosY() - sizeHandler.heightToBorder;
         double xAdd = x - scaledLeft;
         double yAdd = y - scaledTop;
         double offsetX = guiOffsetX + xAdd;
@@ -333,18 +345,24 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private void moveMouse(int changeX, int changeY) {
         if (this.previousMousePosition != null) {
-            this.mousePosition = new Point(
-                    MathHelper.floor(this.sizeHandler.clampX(this.previousMousePosition.getX() + changeX)),
-                    MathHelper.floor(this.sizeHandler.clampY(this.previousMousePosition.getY() + changeY)));
+            mousePosition.updateScaledPos(
+                    sizeHandler.clampX(previousMousePosition.getScaledPosX() + changeX),
+                    sizeHandler.clampY(previousMousePosition.getScaledPosY() + changeY),
+                    sizeHandler.getScalingFactor());
         } else {
-            this.mousePosition = new Point(
-                    MathHelper.floor(this.sizeHandler.clampX(changeX)),
-                    MathHelper.floor(this.sizeHandler.clampY(changeY)));
+            mousePosition.updateScaledPos(
+                    sizeHandler.clampX(changeX),
+                    sizeHandler.clampY(changeY),
+                    sizeHandler.getScalingFactor());
         }
     }
 
     private void applyMovedMouseOffset() {
-        this.previousMousePosition = new Point(this.mousePosition);
+        this.previousMousePosition = ScalingPoint.createPoint(
+                this.mousePosition.getScaledPosX(),
+                this.mousePosition.getScaledPosY(),
+                this.sizeHandler.getScalingFactor(),
+                true);
     }
 
     private void drawBackground(float zLevel) {
@@ -372,7 +390,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         for (Rectangle.Double r : this.thisFramePerks.keySet()) {
             if (r.contains(mouseX, mouseY) && this.guiBox.isInBox(mouseX - guiLeft, mouseY - guiTop)) {
                 AbstractPerk clicked = this.thisFramePerks.get(r);
-                if (mayUnlockClient(ResearchManager.clientProgress, clicked)) {
+                if (clicked.mayUnlockPerk(ResearchManager.clientProgress)) {
                     PktUnlockPerk pkt = new PktUnlockPerk(false, clicked);
                     PacketChannel.CHANNEL.sendToServer(pkt);
                 }

@@ -10,8 +10,10 @@ package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeOffset;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -41,9 +43,20 @@ public class RootPerk extends AbstractPerk {
     }
 
     @Override
-    public void applyPerk(EntityPlayer player, Side side) {}
+    public void applyPerkLogic(EntityPlayer player, Side side) {}
 
     @Override
-    public void removePerk(EntityPlayer player, Side side) {}
+    public void removePerkLogic(EntityPlayer player, Side side) {}
 
+    @Override
+    public boolean mayUnlockPerk(PlayerProgress progress) {
+        if (progress.hasFreeAlignmentLevel()) {
+            AbstractPerk core = PerkTree.PERK_TREE.getAstralSorceryPerk("core");
+            if (core != null && progress.hasPerkUnlocked(core)) {
+                return true;
+            }
+        }
+
+        return super.mayUnlockPerk(progress);
+    }
 }

@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,6 +33,7 @@ import java.util.*;
  */
 public class PerkTree {
 
+    public static final int PERK_TREE_VERSION = 1;
     public static final PerkTree PERK_TREE = new PerkTree();
 
     private static Map<ResourceLocation, AbstractPerk> perkMap = new HashMap<>();
@@ -112,6 +114,10 @@ public class PerkTree {
         }
 
         public PointConnector connect(AbstractPerk other) {
+            if (other ==  null) {
+                return this;
+            }
+
             Collection<AbstractPerk> pointsTo = doubleConnections.computeIfAbsent(other, p -> new LinkedList<>());
             if (!pointsTo.contains(point)) {
                 pointsTo.add(point);

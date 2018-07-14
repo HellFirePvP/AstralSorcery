@@ -73,18 +73,6 @@ public class PlayerProgress {
                 }
             }
         }
-        if(compound.hasKey("perks")) {
-            NBTTagList list = compound.getTagList("perks", 10);
-            for (int i = 0; i < list.tagCount(); i++) {
-                NBTTagCompound tag = list.getCompoundTagAt(i);
-                String perkRegName = tag.getString("perkName");
-                AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                Integer unlockLevel = tag.getInteger("perkLevel");
-                if(perk != null) {
-                    unlockedPerks.put(perk, unlockLevel);
-                }
-            }
-        }
 
         if (compound.hasKey("attuned")) {
             String cst = compound.getString("attuned");
@@ -93,6 +81,30 @@ public class PlayerProgress {
                 AstralSorcery.log.warn("[AstralSorcery] Failed to load attuned Constellation: " + cst + " - constellation doesn't exist or isn't major.");
             } else {
                 attunedConstellation = (IMajorConstellation) c;
+            }
+        }
+
+        int perkTreeLevel = compound.getInteger("perkTreeVersion");
+        if (perkTreeLevel < PerkTree.PERK_TREE_VERSION) { //If your perk tree version is outdated, clear it.
+            AstralSorcery.log.info("Clearing perk-tree because the player's skill-tree version was outdated!");
+            if (attunedConstellation != null) {
+                AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunedConstellation);
+                if (root != null) {
+                    unlockedPerks.put(root, 0);
+                }
+            }
+        } else {
+            if(compound.hasKey("perks")) {
+                NBTTagList list = compound.getTagList("perks", 10);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    NBTTagCompound tag = list.getCompoundTagAt(i);
+                    String perkRegName = tag.getString("perkName");
+                    AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
+                    Integer unlockLevel = tag.getInteger("perkLevel");
+                    if(perk != null) {
+                        unlockedPerks.put(perk, unlockLevel);
+                    }
+                }
             }
         }
 
@@ -159,6 +171,7 @@ public class PlayerProgress {
             list.appendTag(tag);
         }
         cmp.setTag("perks", list);
+        cmp.setInteger("perkTreeVersion", PerkTree.PERK_TREE_VERSION);
 
         list = new NBTTagList();
         for (SextantFinder.TargetObject to : usedTargets) {

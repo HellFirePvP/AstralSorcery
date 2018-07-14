@@ -35,8 +35,8 @@ public class AttributeTypePerkEffect extends PerkAttributeType {
     }
 
     @Override
-    public void onRemove(EntityPlayer player, Side side) {
-        super.onRemove(player, side);
+    public void onRemove(EntityPlayer player, Side side, boolean removedCompletely) {
+        super.onRemove(player, side, removedCompletely);
 
         AttributeTypeRegistry.getTypes()
                 .stream()

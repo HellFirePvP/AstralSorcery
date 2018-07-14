@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
@@ -16,15 +17,17 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -44,6 +47,11 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         this.offset = new Point(x, y);
     }
 
+    public AbstractPerk(ResourceLocation name, int x, int y) {
+        this.setRegistryName(name);
+        this.offset = new Point(x, y);
+    }
+
     public Point getOffset() {
         return offset;
     }
@@ -52,9 +60,18 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         return new PerkTreePoint(this, this.getOffset());
     }
 
-    public abstract void applyPerk(EntityPlayer player, Side side);
+    //Reserving application/removal methods to delegate for later pre-application logic
+    public final void applyPerk(EntityPlayer player, Side side) {
+        this.applyPerkLogic(player, side);
+    }
 
-    public abstract void removePerk(EntityPlayer player, Side side);
+    public final void removePerk(EntityPlayer player, Side side) {
+        this.removePerkLogic(player, side);
+    }
+
+    protected abstract void applyPerkLogic(EntityPlayer player, Side side);
+
+    protected abstract void removePerkLogic(EntityPlayer player, Side side);
 
     public <T> T setNameOverride(String namePrefix) {
         this.ovrUnlocalizedNamePrefix = namePrefix;
@@ -72,19 +89,19 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         if (progress.hasPerkUnlocked(this)) {
             return PerkTreePoint.AllocationStatus.ALLOCATED;
         }
-        if (progress.hasFreeAlignmentLevel()) {
-            boolean hasNextNode = false;
-            for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
-                if (progress.hasPerkUnlocked(otherPerk)) {
-                    hasNextNode = true;
-                    break;
-                }
-            }
-            if (hasNextNode) {
-                return PerkTreePoint.AllocationStatus.UNLOCKABLE;
+
+        return mayUnlockPerk(progress) ? PerkTreePoint.AllocationStatus.UNLOCKABLE : PerkTreePoint.AllocationStatus.UNALLOCATED;
+    }
+
+    public boolean mayUnlockPerk(PlayerProgress progress) {
+        if (!progress.hasFreeAlignmentLevel()) return false;
+
+        for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
+            if (progress.hasPerkUnlocked(otherPerks)) {
+                return true;
             }
         }
-        return PerkTreePoint.AllocationStatus.UNALLOCATED;
+        return false;
     }
 
     public String getUnlocalizedName() {
@@ -115,6 +132,19 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
             tooltipCache.add(I18n.format(key + ".desc"));
         }
         return tooltipCache;
+    }
+
+    //Should return a localized string of the mod (or part of a mod) that added this perk
+    //Default: modname of added mod
+    @Nullable
+    @SideOnly(Side.CLIENT)
+    public Collection<String> getSource() {
+        String modid = getRegistryName().getResourceDomain();
+        ModContainer mod = Loader.instance().getIndexedModList().get(modid);
+        if (mod != null) {
+            return Lists.newArrayList(mod.getName());
+        }
+        return null;
     }
 
     @Override

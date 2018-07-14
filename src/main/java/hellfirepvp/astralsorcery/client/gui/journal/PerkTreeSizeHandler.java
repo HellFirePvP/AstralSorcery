@@ -49,4 +49,28 @@ public class PerkTreeSizeHandler extends SizeHandler {
         return new int[] { leftMost, rightMost, upperMost, lowerMost };
     }
 
+    // --------------------------------------
+    //  Temporary fix to scaling position issues :P
+    // --------------------------------------
+
+    public double clampX(double centerX) {
+        if((centerX + widthToBorder) > getTotalWidth()) {
+            centerX = getTotalWidth() - widthToBorder;
+        }
+        if((centerX - widthToBorder) < 0) {
+            centerX = Math.min(widthToBorder, getMidX());
+        }
+        return centerX;
+    }
+
+    public double clampY(double centerY) {
+        if((centerY + heightToBorder) > getTotalHeight()) {
+            centerY = getTotalHeight() - heightToBorder;
+        }
+        if((centerY - heightToBorder) < 0) {
+            centerY = Math.min(heightToBorder, getMidY());
+        }
+        return centerY;
+    }
+
 }

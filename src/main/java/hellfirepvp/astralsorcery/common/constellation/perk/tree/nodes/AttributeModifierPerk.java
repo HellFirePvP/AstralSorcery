@@ -40,13 +40,13 @@ public class AttributeModifierPerk extends AbstractPerk {
     }
 
     @Override
-    public void applyPerk(EntityPlayer player, Side side) {
+    public void applyPerkLogic(EntityPlayer player, Side side) {
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         this.typeModifierList.forEach(tplMod -> attr.applyModifier(player, tplMod.key, tplMod.value));
     }
 
     @Override
-    public void removePerk(EntityPlayer player, Side side) {
+    public void removePerkLogic(EntityPlayer player, Side side) {
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         this.typeModifierList.forEach(tplMod -> attr.removeModifier(player, tplMod.key, tplMod.value));
     }

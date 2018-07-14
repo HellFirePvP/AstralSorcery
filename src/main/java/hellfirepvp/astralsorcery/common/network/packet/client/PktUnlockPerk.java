@@ -80,15 +80,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
                             if(prog != null) {
                                 Map<AbstractPerk, Integer> appliedPerks = prog.getAppliedPerks();
                                 if(!appliedPerks.containsKey(perk)) {
-                                    boolean canUnlock = prog.hasFreeAlignmentLevel();
-                                    boolean hasConnectedPoint = false;
-                                    for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(perk)) {
-                                        if (appliedPerks.containsKey(otherPerk)) {
-                                            hasConnectedPoint = true;
-                                            break;
-                                        }
-                                    }
-                                    if(canUnlock && hasConnectedPoint && ResearchManager.applyPerk(pl, message.perk)) {
+                                    if(perk.mayUnlockPerk(prog) && ResearchManager.applyPerk(pl, message.perk)) {
                                         PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
                                     }
                                 }

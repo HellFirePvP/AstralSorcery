@@ -20,6 +20,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.*;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -59,6 +60,7 @@ public class ClientConnectionEventHandler {
         PlayerChargeHandler.INSTANCE.setClientCharge(0F);
         PerkEffectHelper.perkCooldownsClient.clear();
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
+        AttributeTypeRegistry.getTypes().forEach(t -> t.clear(Side.CLIENT));
         UISextantCache.INSTANCE.clearClient();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();

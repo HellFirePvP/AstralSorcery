@@ -8,11 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -22,6 +24,11 @@ import java.util.Objects;
  * Date: 08.07.2018 / 12:22
  */
 public class PerkAttributeType {
+
+    protected static final Random rand = new Random();
+
+    //May be used by subclasses to more efficiently track who's got a perk applied
+    private Map<Side, List<UUID>> applicationCache = Maps.newHashMap();
 
     private final String type;
 
@@ -35,13 +42,30 @@ public class PerkAttributeType {
 
     protected void init() {}
 
-    public void onApply(EntityPlayer player, Side side) {}
+    public void onApply(EntityPlayer player, Side side) {
+        List<UUID> applied = applicationCache.computeIfAbsent(side, s -> Lists.newArrayList());
+        if (!applied.contains(player.getUniqueID())) {
+            applied.add(player.getUniqueID());
+        }
+    }
 
-    public void onRemove(EntityPlayer player, Side side) {}
+    public void onRemove(EntityPlayer player, Side side, boolean removedCompletely) {
+        if (removedCompletely) {
+            applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).remove(player.getUniqueID());
+        }
+    }
 
     public void onModeApply(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {}
 
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {}
+    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {}
+
+    protected boolean hasTypeApplied(EntityPlayer player, Side side) {
+        return applicationCache.computeIfAbsent(side, s -> Lists.newArrayList()).contains(player.getUniqueID());
+    }
+
+    public final void clear(Side side) {
+        applicationCache.remove(side);
+    }
 
     @Override
     public boolean equals(Object o) {

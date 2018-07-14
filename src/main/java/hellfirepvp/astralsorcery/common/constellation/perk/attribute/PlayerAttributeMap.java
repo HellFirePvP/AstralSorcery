@@ -55,9 +55,10 @@ public class PlayerAttributeMap {
         if (attributeType == null) return false;
 
         if (attributes.computeIfAbsent(attributeType, t -> Lists.newArrayList()).remove(modifier)) {
-            attributeType.onRemove(player, side);
+            boolean completelyRemoved = attributes.get(attributeType).isEmpty();
+            attributeType.onRemove(player, side, completelyRemoved);
             if (getModifiersByType(attributeType, modifier.getMode()).isEmpty()) {
-                attributeType.onModeRemove(player, modifier.getMode(), side);
+                attributeType.onModeRemove(player, modifier.getMode(), side, completelyRemoved);
             }
             return true;
         }

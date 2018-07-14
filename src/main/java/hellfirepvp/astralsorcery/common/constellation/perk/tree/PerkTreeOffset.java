@@ -96,9 +96,7 @@ public class PerkTreeOffset extends PerkTreePoint {
         }
 
         GlStateManager.disableAlpha();
-        GlStateManager.color(1, 1, 1, 0.85F);
         tes.draw();
-        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.enableAlpha();
 
         if (this.associatedConstellation != null) {

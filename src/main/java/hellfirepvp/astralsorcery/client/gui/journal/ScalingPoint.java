@@ -20,7 +20,7 @@ public class ScalingPoint {
     private double posX, posY;
     private double scaledX, scaledY;
 
-    ScalingPoint() {}
+    private ScalingPoint() {}
 
     public static ScalingPoint createPoint(double posX, double posY, double scale, boolean arePositionsScaled) {
         ScalingPoint sp = new ScalingPoint();

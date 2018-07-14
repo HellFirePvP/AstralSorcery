@@ -12,6 +12,10 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.PerkAttributeType;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.DataPatreonFlares;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -122,7 +126,7 @@ public class AstralSorcery {
     @Mod.EventHandler
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
-        //SpellCastingManager.PERK_TREE.clearEffects();
+        AttributeTypeRegistry.getTypes().forEach(t -> t.clear(Side.SERVER));
     }
 
     public static boolean isRunningInDevEnvironment() {

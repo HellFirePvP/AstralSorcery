@@ -38,8 +38,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     }
 
     @Override
-    public void onRemove(EntityPlayer player, Side side) {
-        super.onRemove(player, side);
+    public void onRemove(EntityPlayer player, Side side, boolean removedCompletely) {
+        super.onRemove(player, side, removedCompletely);
 
         refreshAttribute(player);
     }
@@ -63,8 +63,8 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     }
 
     @Override
-    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side) {
-        super.onModeRemove(player, mode, side);
+    public void onModeRemove(EntityPlayer player, PerkAttributeModifier.Mode mode, Side side, boolean removedCompletely) {
+        super.onModeRemove(player, mode, side, removedCompletely);
 
         IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
         switch (mode) {
