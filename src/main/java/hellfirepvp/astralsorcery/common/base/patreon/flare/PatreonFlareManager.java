@@ -41,25 +41,25 @@ public class PatreonFlareManager implements ITickHandler {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (server == null) return;
         DataPatreonFlares dataFlares = SyncDataHolder.getDataServer(SyncDataHolder.DATA_PATREON_FLARES);
-        for (Map.Entry<UUID, PatreonEffectHelper.PatreonEffect> effect : PatreonEffectHelper.getFlarePatrons(server.getPlayerList().getPlayers()).entrySet()) {
+        for (Map.Entry<UUID, PatreonEffectHelper.PatreonEffect> effect : PatreonEffectHelper.getEntityPatrons(server.getPlayerList().getPlayers()).entrySet()) {
             EntityPlayerMP owner = server.getPlayerList().getPlayerByUUID(effect.getKey());
-            PartialEntityFlare flare = dataFlares.getFlare(Side.SERVER, effect.getKey());
+            PatreonPartialEntity entity = dataFlares.getEntity(Side.SERVER, effect.getKey());
             if (owner == null) {
-                if (flare != null) {
-                    dataFlares.destoryFlare(flare);
+                if (entity != null) {
+                    dataFlares.destroyEntity(entity);
                 }
             } else {
-                if (flare == null) {
-                    flare = dataFlares.createFlare(owner, effect.getValue());
+                if (entity == null) {
+                    entity = dataFlares.createEntity(owner, effect.getValue());
                 }
 
                 World plWorld = owner.getEntityWorld();
-                if (flare.getLastTickedDim() != null && plWorld.provider.getDimension() != flare.getLastTickedDim()) {
-                    flare.setPositionNear(owner);
+                if (entity.getLastTickedDim() != null && plWorld.provider.getDimension() != entity.getLastTickedDim()) {
+                    entity.setPositionNear(owner);
                 }
 
-                if(flare.update(plWorld)) {
-                    dataFlares.updateFlare(flare);
+                if(entity.update(plWorld)) {
+                    dataFlares.updateEntity(entity);
                 }
             }
         }

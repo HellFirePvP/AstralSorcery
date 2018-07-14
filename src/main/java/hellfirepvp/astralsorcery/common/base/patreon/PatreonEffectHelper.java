@@ -8,11 +8,11 @@
 
 package hellfirepvp.astralsorcery.common.base.patreon;
 
-import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
-import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
-import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
+import hellfirepvp.astralsorcery.client.util.resource.*;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectFloatingCrystal;
 import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
+import hellfirepvp.astralsorcery.common.base.patreon.entity.PartialEntityFlare;
+import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -97,7 +97,11 @@ public class PatreonEffectHelper {
 
         effectMap.put( //Beariserious
                 UUID.fromString("4a175294-0b50-4a56-88aa-e6adf8c25c50"),
-                new PatreonEffect(null));
+                new PtEffectFloatingCrystal(new Color(0x9C1D15), new TextureQuery(AssetLoader.TextureLocation.MODELS, "crystal_big_red")));
+
+        effectMap.put( //Febilian
+                UUID.fromString("dce1900d-0761-4471-9a09-48b575c03457"),
+                new PatreonEffect(FlareColor.MAGENTA));
 
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
@@ -115,11 +119,11 @@ public class PatreonEffectHelper {
         return effectMap.get(uuid);
     }
 
-    public static <T extends EntityPlayer> Map<UUID, PatreonEffect> getFlarePatrons(Collection<T> players) {
+    public static <T extends EntityPlayer> Map<UUID, PatreonEffect> getEntityPatrons(Collection<T> players) {
         Collection<UUID> playerUUIDs = players.stream().map(Entity::getUniqueID).collect(Collectors.toList());
         return effectMap.entrySet()
                 .stream()
-                .filter(e -> e.getValue().getChosenColor() != null)
+                .filter(e -> e.getValue().hasPartialEntity())
                 .filter(e -> playerUUIDs.contains(e.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -136,6 +140,19 @@ public class PatreonEffectHelper {
         public FlareColor getChosenColor() {
             return chosenColor;
         }
+
+        public boolean hasPartialEntity() {
+            return this.chosenColor != null;
+        }
+
+        @Nullable
+        public PatreonPartialEntity createEntity(UUID playerUUID) {
+            if (hasPartialEntity()) {
+                return new PartialEntityFlare(this.chosenColor, playerUUID);
+            }
+            return null;
+        }
+
     }
 
     public static enum FlareColor {
