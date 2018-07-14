@@ -20,6 +20,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -173,8 +175,15 @@ public class EnchantmentUpgradeHelper {
 
     public static boolean isItemBlacklisted(ItemStack stack) {
         if(!stack.isEmpty()) {
-            if(stack.getMaxStackSize() > 1) {
+            if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+                return true; //We're not gonna apply enchantments to items used for querying matches
+            }
+
+            if (stack.getMaxStackSize() > 1) {
                 return true; //Only swords & armor and stuff that isn't stackable
+            }
+            if (stack.getItem() instanceof ItemPotion) {
+                return true; //We're not gonna apply enchantments to potions
             }
 
             ResourceLocation rl = stack.getItem().getRegistryName();

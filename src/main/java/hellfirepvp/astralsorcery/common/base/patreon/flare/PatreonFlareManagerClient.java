@@ -43,10 +43,10 @@ public class PatreonFlareManagerClient implements ITickHandler {
         Vector3 thisPlayerPos = Vector3.atEntityCenter(thisPlayer);
 
         DataPatreonFlares dataFlares = SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES);
-        for (PartialEntityFlare flare : dataFlares.getFlares(Side.CLIENT)) {
+        for (PatreonPartialEntity flare : dataFlares.getEntities(Side.CLIENT)) {
             if (flare.getLastTickedDim() == null || clDim != flare.getLastTickedDim()) continue;
             if (flare.getPos().distanceSquared(thisPlayerPos) <= Config.maxEffectRenderDistanceSq) {
-                flare.setupSprite();
+                flare.tickInRenderDistance();
             }
             flare.update(clWorld);
         }

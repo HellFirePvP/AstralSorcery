@@ -23,6 +23,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -192,6 +193,7 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     private static boolean canInfluenceType(AmuletEnchantment.Type type, ItemStack stack, Collection<AmuletEnchantment> enchantments) {
         for (AmuletEnchantment ench : enchantments) {
             Enchantment e = ench.getEnchantment();
+            if (e == null || e.type == null) continue;
             if(ench.getType() != type) continue;
 
             switch (type) {

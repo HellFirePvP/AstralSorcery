@@ -9,7 +9,7 @@
 package hellfirepvp.astralsorcery.common.data;
 
 import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
-import hellfirepvp.astralsorcery.common.base.patreon.flare.PartialEntityFlare;
+import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonPartialEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -28,16 +28,16 @@ import java.util.*;
  */
 public class DataPatreonFlares extends AbstractData {
 
-    private Map<UUID, PartialEntityFlare> patreonFlaresClient = new HashMap<>();
+    private Map<UUID, PatreonPartialEntity> patreonFlaresClient = new HashMap<>();
 
-    private Map<UUID, PartialEntityFlare> patreonFlaresServer = new HashMap<>();
+    private Map<UUID, PatreonPartialEntity> patreonFlaresServer = new HashMap<>();
     private List<UUID> flareAdditions = new LinkedList<>();
     private List<UUID> flareRemovals = new LinkedList<>();
 
     private NBTTagCompound clientReadBuffer = new NBTTagCompound();
 
     @Nullable
-    public PartialEntityFlare getFlare(Side side, UUID uuid) {
+    public PatreonPartialEntity getEntity(Side side, UUID uuid) {
         if (side == Side.CLIENT) {
             return patreonFlaresClient.get(uuid);
         } else {
@@ -45,26 +45,27 @@ public class DataPatreonFlares extends AbstractData {
         }
     }
 
-    public Collection<PartialEntityFlare> getFlares(Side side) {
+    public Collection<PatreonPartialEntity> getEntities(Side side) {
         return side == Side.CLIENT ? patreonFlaresClient.values() : patreonFlaresServer.values();
     }
 
-    public PartialEntityFlare createFlare(EntityPlayer player, PatreonEffectHelper.PatreonEffect value) {
+    //Only actually called when there's an entity to be provided.
+    public PatreonPartialEntity createEntity(EntityPlayer player, PatreonEffectHelper.PatreonEffect value) {
         UUID owner = player.getUniqueID();
-        PartialEntityFlare flare = new PartialEntityFlare(value.getChosenColor(), owner);
-        flare.setPositionNear(player);
+        PatreonPartialEntity entity = value.createEntity(owner);
+        entity.setPositionNear(player);
 
-        patreonFlaresServer.put(owner, flare);
+        patreonFlaresServer.put(owner, entity);
         flareRemovals.remove(owner);
         if (!flareAdditions.contains(owner)) {
             flareAdditions.add(owner);
         }
         markDirty();
 
-        return flare;
+        return entity;
     }
 
-    public void updateFlare(PartialEntityFlare flare) {
+    public void updateEntity(PatreonPartialEntity flare) {
         UUID owner = flare.getOwnerUUID();
         flareRemovals.remove(owner);
         if (!flareAdditions.contains(owner)) {
@@ -73,7 +74,7 @@ public class DataPatreonFlares extends AbstractData {
         markDirty();
     }
 
-    public void destoryFlare(PartialEntityFlare flare) {
+    public void destroyEntity(PatreonPartialEntity flare) {
         UUID owner = flare.getOwnerUUID();
         flareAdditions.remove(owner);
         if (!flareRemovals.contains(owner)) {
@@ -98,7 +99,7 @@ public class DataPatreonFlares extends AbstractData {
     @Override
     public void writeAllDataToPacket(NBTTagCompound compound) {
         NBTTagList entries = new NBTTagList();
-        for (Map.Entry<UUID, PartialEntityFlare> flares : this.patreonFlaresServer.entrySet()) {
+        for (Map.Entry<UUID, PatreonPartialEntity> flares : this.patreonFlaresServer.entrySet()) {
             NBTTagCompound tag = new NBTTagCompound();
 
             tag.setUniqueId("owner", flares.getKey());
@@ -118,7 +119,7 @@ public class DataPatreonFlares extends AbstractData {
         NBTTagList additions = new NBTTagList();
         for (UUID added : this.flareAdditions) {
             NBTTagCompound tag = new NBTTagCompound();
-            PartialEntityFlare flare = this.patreonFlaresServer.get(added);
+            PatreonPartialEntity flare = this.patreonFlaresServer.get(added);
             if (flare == null) continue;
 
             tag.setUniqueId("owner", added);
@@ -157,13 +158,16 @@ public class DataPatreonFlares extends AbstractData {
             NBTTagCompound flareTag = cmp.getCompoundTag("flareData");
 
             PatreonEffectHelper.PatreonEffect pe = PatreonEffectHelper.getEffect(Side.SERVER, owner);
-            if (pe != null && pe.getChosenColor() != null) {
-                PartialEntityFlare flare = this.patreonFlaresClient.get(owner);
-                if (flare == null) {
-                    flare = new PartialEntityFlare(pe.getChosenColor(), owner);
-                    this.patreonFlaresClient.put(owner, flare);
+            if (pe != null && pe.hasPartialEntity()) {
+                PatreonPartialEntity entity = this.patreonFlaresClient.get(owner);
+                if (entity == null) {
+                    entity = pe.createEntity(owner);
+                    if (entity == null) {
+                        throw new IllegalStateException("FATAL ERROR: Eventhough a PatreonEffect guaranteed a proper partial entity, it was unable to provide one!");
+                    }
+                    this.patreonFlaresClient.put(owner, entity);
                 }
-                flare.readFromNBT(flareTag);
+                entity.readFromNBT(flareTag);
             }
         }
 
@@ -172,7 +176,7 @@ public class DataPatreonFlares extends AbstractData {
             NBTTagCompound cmp = remove.getCompoundTagAt(i);
             UUID owner = cmp.getUniqueId("owner");
 
-            PartialEntityFlare flare = this.patreonFlaresClient.remove(owner);
+            PatreonPartialEntity flare = this.patreonFlaresClient.remove(owner);
             if (flare != null) {
                 flare.setRemoved(true);
             }

@@ -33,7 +33,7 @@ public interface IConstellationSpecialShowup extends IConstellation {
         for (int i = 0; i < 10 + r.nextInt(10); i++) {
             r.nextLong(); //Flush
         }
-        int rand = r.nextInt(35);
+        int rand = r.nextInt(36);
         if (rand >= 18) {
             rand -= 36;
         }
