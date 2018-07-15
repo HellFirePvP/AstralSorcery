@@ -32,6 +32,8 @@ public abstract class GuiWHScreen extends GuiScreen {
     protected final int guiWidth;
     protected int guiLeft, guiTop;
 
+    protected boolean closeWithInventoryKey = true;
+
     protected GuiWHScreen(int guiHeight, int guiWidth) {
         this.guiHeight = guiHeight;
         this.guiWidth = guiWidth;
@@ -74,7 +76,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        if(keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
+        if(closeWithInventoryKey && keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
             Minecraft.getMinecraft().displayGuiScreen(null);
 
             if(Minecraft.getMinecraft().currentScreen == null) {

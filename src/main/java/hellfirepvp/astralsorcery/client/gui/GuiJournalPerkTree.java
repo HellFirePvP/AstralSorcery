@@ -8,14 +8,14 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.ClientScheduler;
 import hellfirepvp.astralsorcery.client.gui.journal.*;
-import hellfirepvp.astralsorcery.client.util.Blending;
-import hellfirepvp.astralsorcery.client.util.RenderingUtils;
-import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.*;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
+import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,6 +37,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -56,6 +58,8 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private static final AbstractRenderableTexture textureResBack = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg2");
     private static final AbstractRenderableTexture texturePerkConnection = AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks");
+    private static final AbstractRenderableTexture textureSearchTextBG = AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijtextarea");
+    private static final AbstractRenderableTexture textureSearchMark = new SpriteSheetResource(AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo4"), 4, 8);
 
     private SizeHandler sizeHandler;
     private GuiRenderBoundingBox guiBox;
@@ -68,8 +72,13 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
 
     private Map<Rectangle.Double, AbstractPerk> thisFramePerks = new HashMap<>();
 
+    private GuiTextEntry searchTextEntry = new GuiTextEntry();
+    private List<AbstractPerk> searchMatches = Lists.newArrayList();
+
     public GuiJournalPerkTree() {
         super(2);
+        this.closeWithInventoryKey = false;
+        this.searchTextEntry.setChangeCallback(this::updateSearchHighlight);
 
         buildTree();
     }
@@ -149,10 +158,48 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         drawPerkTree(partialTicks);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
+        drawSearchBox();
         drawHoverTooltips(mouseX, mouseY);
 
         TextureHelper.refreshTextureBindState();
         GlStateManager.popMatrix();
+    }
+
+    private void drawSearchBox() {
+        GlStateManager.color(1F, 1F, 1F, 1F);
+
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(guiLeft + 300, guiTop + 16, 0);
+        textureSearchTextBG.bindTexture();
+        drawTexturedRectAtCurrentPos(88.5, 15);
+
+        String text = this.searchTextEntry.getText();
+
+        int length = fontRenderer.getStringWidth(text);
+        boolean addDots = length > 75;
+        while (length > 75) {
+            text = text.substring(1, text.length());
+            length = fontRenderer.getStringWidth("..." + text);
+        }
+        if (addDots) {
+            text = "..." + text;
+        }
+
+        if ((ClientScheduler.getClientTick() % 20) > 10) {
+            text += "_";
+        }
+
+        GlStateManager.translate(4, 4, 0);
+        fontRenderer.drawString(text, 0, 0, new Color(0xCCCCCC).getRGB(), false);
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        TextureHelper.refreshTextureBindState();
+        GlStateManager.popMatrix();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
     }
 
     private void rescaleMouse() {
@@ -233,16 +280,18 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             drawConnection(status, shiftOne, shiftTwo, partialTicks, ClientScheduler.getClientTick() + offsetOne.x + offsetOne.y + offsetTwo.x + offsetTwo.y);
         }
 
+        List<Runnable> drawHighlight = Lists.newArrayList();
         for (PerkTreePoint perkPoint : PerkTree.PERK_TREE.getPerkPoints()) {
             Point offset = perkPoint.getOffset();
             double x = this.sizeHandler.evRelativePosX(offset.x);
             double y = this.sizeHandler.evRelativePosY(offset.y);
-            Rectangle.Double perkRect = drawPerk(perkPoint, x, y, partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y);
+            Rectangle.Double perkRect = drawPerk(perkPoint, x, y, partialTicks, ClientScheduler.getClientTick() + offset.x + offset.y, drawHighlight);
             if (perkRect != null) {
                 this.thisFramePerks.put(perkRect, perkPoint.getPerk());
             }
         }
 
+        drawHighlight.forEach(Runnable::run);
         TextureHelper.refreshTextureBindState();
     }
 
@@ -297,22 +346,60 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     }
 
     @Nullable
-    private Rectangle.Double drawPerk(PerkTreePoint perkPoint, double lowX, double lowY, float pTicks, long effectTick) {
+    private Rectangle.Double drawPerk(PerkTreePoint perkPoint, double lowX, double lowY, float pTicks, long effectTick, List<Runnable> outRenderHighlights) {
         Point.Double offset = shift2DOffset(lowX, lowY);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(offset.x, offset.y, 0);
         GlStateManager.color(1, 1, 1, 1);
-
         GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
         Rectangle draw = perkPoint.renderAtCurrentPos(perkPoint.getPerk().getPerkStatus(Minecraft.getMinecraft().player, Side.CLIENT), effectTick, pTicks);
-
+        if (draw == null) {
+            GlStateManager.popMatrix();
+            return null;
+        }
+        if (this.searchMatches.contains(perkPoint.getPerk())) {
+            outRenderHighlights.add(() -> {
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(offset.x, offset.y, 0);
+                GlStateManager.scale(this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor(), this.sizeHandler.getScalingFactor());
+                GlStateManager.color(0.8F, 0.1F, 0.1F, 1F);
+                drawSearchMarkHalo(draw, effectTick, pTicks);
+                GlStateManager.color(1, 1, 1, 1);
+                GlStateManager.popMatrix();
+            });
+        }
         GlStateManager.popMatrix();
 
-        if (draw == null) return null;
         double rctWidth = draw.width * sizeHandler.getScalingFactor();
         double rctHeight = draw.height * sizeHandler.getScalingFactor();
         return new Rectangle.Double(offset.x - (rctWidth / 2), offset.y - (rctHeight / 2), rctWidth, rctHeight);
+    }
+
+    private void drawSearchMarkHalo(Rectangle draw, long effectTick, float pTicks) {
+        int size = draw.width;
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder vb = tes.getBuffer();
+        vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        Vector3 starVec = new Vector3(-size, -size, 0);
+        textureSearchMark.bindTexture();
+        double uLength = textureSearchMark.getUWidth();
+        double vLength = textureSearchMark.getVWidth();
+        Point.Double frameUV = textureSearchMark.getUVOffset();
+
+        for (int i = 0; i < 4; i++) {
+            int u = ((i + 1) & 2) >> 1;
+            int v = ((i + 2) & 2) >> 1;
+
+            Vector3 pos = starVec.clone().addX(size * u * 2).addY(size * v * 2);
+            vb.pos(pos.getX(), pos.getY(), pos.getZ()).tex(frameUV.x + uLength * u, frameUV.y + vLength * v).endVertex();
+        }
+
+        GlStateManager.disableAlpha();
+        tes.draw();
+        GlStateManager.enableAlpha();
     }
 
     private Point.Double shift2DOffset(double x, double y) {
@@ -383,6 +470,27 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
+    private void updateSearchHighlight() {
+        this.searchMatches.clear();
+
+        String matchText = this.searchTextEntry.getText().toLowerCase();
+        if (matchText.length() < 3) return;
+        for (PerkTreePoint point : PerkTree.PERK_TREE.getPerkPoints()) {
+            AbstractPerk perk = point.getPerk();
+            String name = I18n.format(perk.getUnlocalizedName() + ".name").toLowerCase();
+            if (name.contains(matchText)) {
+                this.searchMatches.add(perk);
+            } else {
+                for (String tooltip : perk.getLocalizedTooltip()) {
+                    if (tooltip.toLowerCase().contains(matchText)) {
+                        this.searchMatches.add(perk);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
@@ -413,4 +521,15 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
             Minecraft.getMinecraft().displayGuiScreen(GuiJournalConstellationCluster.getConstellationScreen());
         }
     }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        super.keyTyped(typedChar, keyCode);
+
+        if (keyCode != Keyboard.KEY_ESCAPE) {
+            searchTextEntry.textboxKeyTyped(typedChar, keyCode);
+        }
+    }
+
+
 }
