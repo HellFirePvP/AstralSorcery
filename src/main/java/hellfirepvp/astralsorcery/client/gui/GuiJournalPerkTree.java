@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.common.network.packet.client.PktUnlockPerk;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -86,7 +85,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
     private void buildTree() {
         this.guiBox = new GuiRenderBoundingBox(10, 10, guiWidth - 10, guiHeight - 10);
 
-        this.sizeHandler = new PerkTreeSizeHandler(this.guiHeight - 20, this.guiWidth - 20);
+        this.sizeHandler = new PerkTreeSizeHandler(this.guiHeight - 40, this.guiWidth - 20);
         this.sizeHandler.setScaleSpeed(0.04F);
         this.sizeHandler.setMaxScale(1F);
         this.sizeHandler.setMinScale(0.1F);
@@ -159,10 +158,31 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         drawSearchBox();
+        drawMiscInfo();
         drawHoverTooltips(mouseX, mouseY);
 
         TextureHelper.refreshTextureBindState();
         GlStateManager.popMatrix();
+    }
+
+    private void drawMiscInfo() {
+        PlayerProgress prog = ResearchManager.clientProgress;
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+
+        if (prog.getAttunedConstellation() != null && prog.getAvailablePerkPoints() > 0) {
+            GlStateManager.disableDepth();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(guiLeft + 40, guiTop + 18, 0);
+            fontRenderer.drawString(I18n.format("perk.info.points", prog.getAvailablePerkPoints()), 0, 0, new Color(0xCCCCCC).getRGB(), false);
+
+            GlStateManager.color(1F, 1F, 1F, 1F);
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            TextureHelper.refreshTextureBindState();
+            GlStateManager.popMatrix();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableDepth();
+        }
     }
 
     private void drawSearchBox() {
@@ -221,15 +241,9 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 PlayerProgress prog = ResearchManager.clientProgress;
                 String unlockStr;
                 if(prog.hasPerkUnlocked(perk)) {
-                    int unlockLevel = prog.getAppliedPerks().get(perk);
-                    if(unlockLevel > 0) {
-                        toolTip.add(I18n.format("perk.info.unlocked.level", unlockLevel));
-                    } else {
-                        toolTip.add(I18n.format("perk.info.unlocked.free"));
-                    }
                     unlockStr = "perk.info.active";
                 } else if(perk.mayUnlockPerk(prog)) {
-                    toolTip.add(I18n.format("perk.info.unlock.level", prog.getNextFreeLevel()));
+                    toolTip.add(I18n.format("perk.info.unlock.click"));
                     unlockStr = "perk.info.available";
                 } else {
                     unlockStr = "perk.info.locked";
@@ -266,7 +280,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
                 }
                 if (alloc == 2) {
                     status = PerkTreePoint.AllocationStatus.ALLOCATED;
-                } else if (alloc == 1 && progress.hasFreeAlignmentLevel()) {
+                } else if (alloc == 1 && progress.hasFreeAllocationPoint()) {
                     status = PerkTreePoint.AllocationStatus.UNLOCKABLE;
                 } else {
                     status = PerkTreePoint.AllocationStatus.UNALLOCATED;

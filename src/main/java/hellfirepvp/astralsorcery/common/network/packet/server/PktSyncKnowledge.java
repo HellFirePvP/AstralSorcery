@@ -28,10 +28,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -53,7 +50,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public IMajorConstellation attunedConstellation = null;
     public int progressTier = 0;
     public boolean wasOnceAttuned = false;
-    public Map<AbstractPerk, Integer> usedPerks = new HashMap<>();
+    public List<AbstractPerk> usedPerks = new LinkedList<>();
+    public int additionalFreePoints = 0;
     public double perkExp = 0;
 
     public PktSyncKnowledge() {}
@@ -68,6 +66,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
+        this.additionalFreePoints = progress.getAdditionalFreePerks();
         this.usedPerks = progress.getAppliedPerks();
         this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
@@ -123,17 +122,16 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int perkLength = buf.readInt();
         if(perkLength != -1) {
-            this.usedPerks = new HashMap<>(perkLength);
+            this.usedPerks = new ArrayList<>(perkLength);
             for (int i = 0; i < perkLength; i++) {
                 String key = ByteBufUtils.readString(buf);
-                int lvl = buf.readInt();
                 AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(key));
                 if (perk != null) {
-                    this.usedPerks.put(perk, lvl);
+                    this.usedPerks.add(perk);
                 }
             }
         } else {
-            this.usedPerks = new HashMap<>();
+            this.usedPerks = new LinkedList<>();
         }
 
         int targetLength = buf.readInt();
@@ -153,6 +151,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.wasOnceAttuned = buf.readBoolean();
         this.progressTier = buf.readInt();
         this.perkExp = buf.readDouble();
+        this.additionalFreePoints = buf.readInt();
     }
 
     @Override
@@ -195,9 +194,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         if(usedPerks != null) {
             buf.writeInt(usedPerks.size());
-            for (AbstractPerk perk : usedPerks.keySet()) {
+            for (AbstractPerk perk : usedPerks) {
                 ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
-                buf.writeInt(usedPerks.get(perk));
             }
         } else {
             buf.writeInt(-1);
@@ -215,6 +213,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         buf.writeBoolean(this.wasOnceAttuned);
         buf.writeInt(this.progressTier);
         buf.writeDouble(this.perkExp);
+        buf.writeInt(this.additionalFreePoints);
     }
 
     @Override

@@ -107,12 +107,10 @@ public class CommonProxy implements IGuiHandler {
     public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
-        //ConstellationPerks.addDynamicConfigEntries();
         CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
-        //Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
     }
 

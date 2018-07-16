@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
@@ -73,6 +72,9 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
 
     protected abstract void removePerkLogic(EntityPlayer player, Side side);
 
+    //Called ONCE when the perk is unlocked
+    public void onUnlockPerkServer(EntityPlayer player, PlayerProgress progress) {}
+
     public <T> T setNameOverride(String namePrefix) {
         this.ovrUnlocalizedNamePrefix = namePrefix;
         return (T) this;
@@ -94,7 +96,7 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
     }
 
     public boolean mayUnlockPerk(PlayerProgress progress) {
-        if (!progress.hasFreeAlignmentLevel()) return false;
+        if (!progress.hasFreeAllocationPoint()) return false;
 
         for (AbstractPerk otherPerks : PerkTree.PERK_TREE.getConnectedPerks(this)) {
             if (progress.hasPerkUnlocked(otherPerks)) {

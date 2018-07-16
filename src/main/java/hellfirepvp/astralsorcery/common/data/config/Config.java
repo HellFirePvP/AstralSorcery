@@ -131,7 +131,8 @@ public class Config {
 
     public static void addDynamicEntry(ConfigEntry entry) {
         if(latestConfig != null) {
-            throw new IllegalStateException("Too late to add dynamic configuration entries");
+            entry.loadFromConfig(latestConfig);
+            latestConfig.save();
         }
         dynamicConfigEntries.add(entry);
     }

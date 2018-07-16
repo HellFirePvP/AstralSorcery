@@ -16,25 +16,25 @@ import java.util.Map;
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: ConstellationPerkLevelManager
+ * Class: PerkLevelManager
  * Created by HellFirePvP
  * Date: 12.12.2016 / 00:33
  */
-public class ConstellationPerkLevelManager {
+public class PerkLevelManager {
 
-    public static final ConstellationPerkLevelManager INSTANCE = new ConstellationPerkLevelManager();
+    public static final PerkLevelManager INSTANCE = new PerkLevelManager();
 
-    private final int LEVEL_CAP = 15;
+    private final int LEVEL_CAP = 20;
     private Map<Integer, Integer> totalExpLevelRequired = new HashMap<>();
 
-    private ConstellationPerkLevelManager() {
+    private PerkLevelManager() {
         setupLevels();
     }
 
     private void setupLevels() {
         for (int i = 1; i <= LEVEL_CAP; i++) {
             int prev = totalExpLevelRequired.getOrDefault(i - 1, 0);
-            totalExpLevelRequired.put(i, prev + 50 + (MathHelper.floor(Math.pow(2, (i / 2) + 4))));
+            totalExpLevelRequired.put(i, prev + 50 + (MathHelper.floor(Math.pow(2, (i / 3) + 4))));
         }
     }
 
@@ -50,6 +50,16 @@ public class ConstellationPerkLevelManager {
         return LEVEL_CAP;
     }
 
+    public int getExpForLevel(int level) {
+        if (level <= 1) {
+            return 0;
+        }
+        if (level > LEVEL_CAP) {
+            level = LEVEL_CAP;
+        }
+        return totalExpLevelRequired.get(level);
+    }
+
     public float getNextLevelPercent(double totalExp) {
         int level = getLevel(MathHelper.floor(totalExp));
         if (level >= LEVEL_CAP) {
@@ -60,4 +70,7 @@ public class ConstellationPerkLevelManager {
         return ((float) (totalExp - prevLevel)) / ((float) (nextLevel - prevLevel));
     }
 
+    public int getLevelCap() {
+        return LEVEL_CAP;
+    }
 }

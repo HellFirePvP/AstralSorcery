@@ -11,7 +11,7 @@ package hellfirepvp.astralsorcery.common.cmd;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -393,10 +393,10 @@ public class CommandAstralSorcery extends CommandBase {
 
         sender.sendMessage(new TextComponentString("§aProgression tier: " + progress.getTierReached().name()));
         sender.sendMessage(new TextComponentString("§aAttuned to: " + (progress.getAttunedConstellation() == null ? "<none>" : progress.getAttunedConstellation().getUnlocalizedName())));
-        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
+        sender.sendMessage(new TextComponentString("§aPerk-Exp: " + progress.getPerkExp() + " - As level: " + PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(progress.getPerkExp()))));
         sender.sendMessage(new TextComponentString("§aUnlocked perks + unlock-level:"));
-        for (Map.Entry<AbstractPerk, Integer> entry : progress.getAppliedPerks().entrySet()) {
-            sender.sendMessage(new TextComponentString("§7" + (entry.getKey().getUnlocalizedName() + ".name") + " / " + entry.getValue()));
+        for (AbstractPerk perk : progress.getAppliedPerks()) {
+            sender.sendMessage(new TextComponentString("§7" + (perk.getUnlocalizedName() + ".name")));
         }
         sender.sendMessage(new TextComponentString("§aUnlocked research groups:"));
         StringBuilder sb = new StringBuilder();

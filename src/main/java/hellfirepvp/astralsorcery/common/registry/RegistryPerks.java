@@ -15,8 +15,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeModifierPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.CoreRootPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.RootPerk;
-import hellfirepvp.astralsorcery.common.event.PerkTreeEvent;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.PerkTreeConnector;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
+import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -58,10 +59,75 @@ public class RegistryPerks {
         initializeEvorsioBranch();
 
         initializePerkExteriorTravelWheel();
+        initializeTreeConnectorPerks();
 
-        MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkRegister());
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
+    }
+
+    private static void initializeTreeConnectorPerks() {
+        float more_ch = 1.02F;
+
+        AttributeModifierPerk perkEvorsioCh1 = new AttributeModifierPerk("threshold_evorsio", -11, -21);
+        perkEvorsioCh1.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkEvorsioCh2 = new AttributeModifierPerk("threshold_evorsio_1", -13, -24).setNameOverride(perkEvorsioCh1.getUnlocalizedName());
+        perkEvorsioCh2.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkEvorsioCh3 = new AttributeModifierPerk("threshold_evorsio_2", -9, -24).setNameOverride(perkEvorsioCh1.getUnlocalizedName());
+        perkEvorsioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        PerkTreeConnector thresholdEvorsio = new PerkTreeConnector("epi_evorsio", -11, -23);
+
+        PERK_TREE.registerPerk(perkEvorsioCh1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4"));
+        PERK_TREE.registerPerk(perkEvorsioCh2)
+                .connect(perkEvorsioCh1);
+        PERK_TREE.registerPerk(perkEvorsioCh3)
+                .connect(perkEvorsioCh2)
+                .connect(perkEvorsioCh1);
+        PERK_TREE.registerPerk(thresholdEvorsio)
+                .connect(perkEvorsioCh1)
+                .connect(perkEvorsioCh2)
+                .connect(perkEvorsioCh3);
+
+        AttributeModifierPerk perkArmaraCh1 = new AttributeModifierPerk("threshold_armara", 21, 0);
+        perkArmaraCh1.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkArmaraCh2 = new AttributeModifierPerk("threshold_armara_1", 24, 2).setNameOverride(perkArmaraCh1.getUnlocalizedName());
+        perkArmaraCh2.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkArmaraCh3 = new AttributeModifierPerk("threshold_armara_2", 24, -2).setNameOverride(perkArmaraCh1.getUnlocalizedName());
+        perkArmaraCh3.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        PerkTreeConnector thresholdArmara = new PerkTreeConnector("epi_armara", 23, 0);
+
+        PERK_TREE.registerPerk(perkArmaraCh1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_6"));
+        PERK_TREE.registerPerk(perkArmaraCh2)
+                .connect(perkArmaraCh1);
+        PERK_TREE.registerPerk(perkArmaraCh3)
+                .connect(perkArmaraCh2)
+                .connect(perkArmaraCh1);
+        PERK_TREE.registerPerk(thresholdArmara)
+                .connect(perkArmaraCh1)
+                .connect(perkArmaraCh2)
+                .connect(perkArmaraCh3);
+
+        AttributeModifierPerk perkVicioCh1 = new AttributeModifierPerk("threshold_vicio", -10, 22);
+        perkVicioCh1.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkVicioCh2 = new AttributeModifierPerk("threshold_vicio_1", -8, 25).setNameOverride(perkVicioCh1.getUnlocalizedName());
+        perkVicioCh2.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        AttributeModifierPerk perkVicioCh3 = new AttributeModifierPerk("threshold_vicio_2", -12, 25).setNameOverride(perkVicioCh1.getUnlocalizedName());
+        perkVicioCh3.addModifier(more_ch, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        PerkTreeConnector thresholdVicio = new PerkTreeConnector("epi_vicio", -10, 24);
+
+        PERK_TREE.registerPerk(perkVicioCh1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_14"));
+        PERK_TREE.registerPerk(perkVicioCh2)
+                .connect(perkVicioCh1);
+        PERK_TREE.registerPerk(perkVicioCh3)
+                .connect(perkVicioCh2)
+                .connect(perkVicioCh1);
+        PERK_TREE.registerPerk(thresholdVicio)
+                .connect(perkVicioCh1)
+                .connect(perkVicioCh2)
+                .connect(perkVicioCh3);
     }
 
     private static void initializePerkExteriorTravelWheel() {
@@ -471,7 +537,7 @@ public class RegistryPerks {
 
     //Registers T1 perk-effect perks
     private static void initializePerkCore() {
-        float inc_t1 = 0.12F;
+        float inc_t1 = 0.7F;
         String unloc;
 
         AttributeModifierPerk perkEff1 = new AttributeModifierPerk("base_inc_perkeffect_t1", 1, -2);
@@ -506,7 +572,7 @@ public class RegistryPerks {
 
     //Registers T2 perk-effect perks
     private static void initializePerkInteriorTravelWheel() {
-        float inc_t2 = 0.07F;
+        float inc_t2 = 0.05F;
         String unloc;
 
         AttributeModifierPerk perkEffectEvDis1 = new AttributeModifierPerk("base_inc_perkeffect_t2", -1, -10);
@@ -762,11 +828,26 @@ public class RegistryPerks {
     }
 
     private static void initializeRoot() {
-        PERK_TREE.registerRootPerk(new RootPerk("aevitas",   Constellations.aevitas, -6,  2));
-        PERK_TREE.registerRootPerk(new RootPerk("vicio",     Constellations.vicio,    0,  7));
-        PERK_TREE.registerRootPerk(new RootPerk("armara",    Constellations.armara,   6,  2));
-        PERK_TREE.registerRootPerk(new RootPerk("discidia",  Constellations.discidia, 4, -5));
-        PERK_TREE.registerRootPerk(new RootPerk("evorsio",   Constellations.evorsio, -4, -5));
+        RootPerk rootAevitas = new AevitasRootPerk(-6,  2);
+        rootAevitas.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_HEALTH);
+
+        RootPerk rootVicio = new VicioRootPerk(0,  7);
+        rootVicio.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_REACH);
+
+        RootPerk rootArmara = new ArmaraRootPerk(6,  2);
+        rootArmara.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+
+        RootPerk rootDiscidia = new DiscidiaRootPerk(4, -5);
+        rootDiscidia.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+
+        RootPerk rootEvorsio = new EvorsioRootPerk(-4, -5);
+        rootEvorsio.addModifier(1.2F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+
+        PERK_TREE.registerRootPerk(rootAevitas);
+        PERK_TREE.registerRootPerk(rootVicio);
+        PERK_TREE.registerRootPerk(rootArmara);
+        PERK_TREE.registerRootPerk(rootDiscidia);
+        PERK_TREE.registerRootPerk(rootEvorsio);
     }
 
     private static void initializeAttributeTypes() {
@@ -786,7 +867,7 @@ public class RegistryPerks {
         registerPerkType(new AttributeTypeAttackSpeed());
         registerPerkType(new AttributeTypeMaxReach());
 
-        MinecraftForge.EVENT_BUS.post(new PerkTreeEvent.PerkAttributeTypeRegister());
+        MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkAttributeTypeRegister());
     }
 
     /*public static void init() {

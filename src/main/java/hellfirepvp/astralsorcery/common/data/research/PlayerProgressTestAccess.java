@@ -52,18 +52,13 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getNextFreeLevel() {
-        return 0;
-    }
-
-    @Override
     public ProgressionTier getTierReached() {
         return ProgressionTier.DISCOVERY;
     }
 
     @Override
-    public Map<AbstractPerk, Integer> getAppliedPerks() {
-        return Collections.emptyMap();
+    public List<AbstractPerk> getAppliedPerks() {
+        return Lists.newArrayList();
     }
 
     @Override
@@ -80,7 +75,20 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public boolean hasFreeAlignmentLevel() {
+    public void grantFreeAllocationPoint() {}
+
+    @Override
+    public int getAdditionalFreePerks() {
+        return 0;
+    }
+
+    @Override
+    public int getAvailablePerkPoints() {
+        return 0;
+    }
+
+    @Override
+    public boolean hasFreeAllocationPoint() {
         return false;
     }
 

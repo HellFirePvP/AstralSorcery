@@ -49,11 +49,13 @@ public class PerkTree {
     public PointConnector registerRootPerk(RootPerk perk) {
         perkMap.put(perk.getRegistryName(), perk);
         rootPerks.put(perk.getConstellation(), perk);
+        MinecraftForge.EVENT_BUS.register(perk);
         return PERK_TREE.setPoint(perk);
     }
 
     public PointConnector registerPerk(AbstractPerk perk) {
         perkMap.put(perk.getRegistryName(), perk);
+        MinecraftForge.EVENT_BUS.register(perk);
         return PERK_TREE.setPoint(perk);
     }
 

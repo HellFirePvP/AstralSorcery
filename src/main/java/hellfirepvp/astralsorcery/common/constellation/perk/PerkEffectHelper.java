@@ -21,8 +21,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -31,8 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -92,10 +93,37 @@ public class PerkEffectHelper implements ITickHandler {
         }
     }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void expRemoval(LivingDeathEvent event) {
+        if (event.getEntityLiving() instanceof EntityPlayer) {
+            Side side = event.getEntityLiving().world.isRemote ? Side.CLIENT : Side.SERVER;
+            if (side != Side.SERVER) return;
+
+            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+            PlayerProgress prog = ResearchManager.getProgress(player, side);
+            if (prog != null) {
+                int exp = MathHelper.floor(prog.getPerkExp());
+                int level = PerkLevelManager.INSTANCE.getLevel(exp);
+                int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(level - 1);
+                int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(level);
+
+                float removePerDeath = 0.25F;
+                int remove = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * removePerDeath);
+                if (exp - remove < expThisLevel) {
+                    exp = expThisLevel;
+                } else {
+                    exp -= remove;
+                }
+
+                ResearchManager.setExp(player, exp);
+            }
+        }
+    }
+
     private void handlePerkModification(EntityPlayer player, Side side, boolean remove) {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if (progress != null) {
-            for (AbstractPerk perk : progress.getAppliedPerks().keySet()) {
+            for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
                     perk.removePerk(player, side);
                 } else {
@@ -119,7 +147,7 @@ public class PerkEffectHelper implements ITickHandler {
     public void clearAllPerks(EntityPlayer player, Side side) {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
-            for (AbstractPerk perk : prog.getAppliedPerks().keySet()) {
+            for (AbstractPerk perk : prog.getAppliedPerks()) {
                 perk.removePerk(player, side);
             }
         }
@@ -179,8 +207,7 @@ public class PerkEffectHelper implements ITickHandler {
         Side side = (Side) context[1];
         PlayerProgress prog = ResearchManager.getProgress(ticked, side);
         if(prog != null) {
-            Map<AbstractPerk, Integer> perks = new HashMap<>(prog.getAppliedPerks());
-            for (AbstractPerk perk : perks.keySet()) {
+            for (AbstractPerk perk : prog.getAppliedPerks()) {
                 if (perk instanceof IPlayerTickPerk) {
                     ((IPlayerTickPerk) perk).onPlayerTick(ticked, side);
                 }

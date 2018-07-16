@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.block.BlockObservatory;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -102,6 +102,8 @@ public class ClientRenderEventHandler {
 
         playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND), EnumHand.MAIN_HAND, event.getPartialTicks());
         playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND),  EnumHand.OFF_HAND,  event.getPartialTicks());
+
+        requestPermChargeReveal(20);
     }
 
     @SubscribeEvent
@@ -363,7 +365,7 @@ public class ClientRenderEventHandler {
         tes.draw();
 
         //Draw charge
-        float filled = ConstellationPerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
+        float filled = PerkLevelManager.INSTANCE.getNextLevelPercent(ResearchManager.clientProgress.getPerkExp());
         height = 78F;
         offsetY = 27.5F + (1F - filled) * height;
         GL11.glColor4f(255F / 255F, 230F / 255F, 0F / 255F, visibilityPermCharge * 0.9F);
@@ -380,7 +382,7 @@ public class ClientRenderEventHandler {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         TextureHelper.refreshTextureBindState();
         //Draw level
-        int level = ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
+        int level = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(ResearchManager.clientProgress.getPerkExp()));
         String strLevel = String.valueOf(level);
         int strLength = Minecraft.getMinecraft().fontRenderer.getStringWidth(strLevel);
         GL11.glColor4f(0.86F, 0.86F, 0.86F, visibilityPermCharge);

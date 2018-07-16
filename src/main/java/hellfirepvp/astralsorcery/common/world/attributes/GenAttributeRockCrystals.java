@@ -85,11 +85,6 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                 }, "Defines the blockstates that may be replaced by rock crystal ore when trying to generate a rock crystal ore. format: <modid>:<name>:<meta> - Use meta -1 for wildcard");
                 replaceableStatesSerialized = Arrays.asList(applicableReplacements);
             }
-
-            @Override
-            public String getConfigurationSection() {
-                return super.getConfigurationSection() + "." + getKey();
-            }
         };
         Config.addDynamicEntry(this.entry);
     }

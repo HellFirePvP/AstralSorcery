@@ -17,7 +17,6 @@ import hellfirepvp.astralsorcery.common.base.Mods;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.data.config.Config;
-import hellfirepvp.astralsorcery.common.event.EntityKnockbackEvent;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationDraconicEvolution;
 import hellfirepvp.astralsorcery.common.item.ItemBlockStorage;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
@@ -119,12 +118,6 @@ public class EventHandlerEntity {
                 MiscUtils.iterativeSearch(((EntityAreaEffectCloud) event.getEntity()).effects, (pEffect) -> pEffect.getPotion().equals(RegistryPotions.potionDropModifier)) != null) {
             event.setCanceled(true);
         }
-    }
-
-    @SubscribeEvent
-    public void onKnockback(EntityKnockbackEvent event) {
-        Entity attacker = event.getAttacker();
-        if (attacker == null || attacker.getEntityWorld().isRemote) return;
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)

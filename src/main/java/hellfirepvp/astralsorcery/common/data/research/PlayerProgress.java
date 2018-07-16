@@ -9,13 +9,12 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
@@ -44,7 +43,8 @@ public class PlayerProgress {
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private List<SextantFinder.TargetObject> usedTargets = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
-    private Map<AbstractPerk, Integer> unlockedPerks = new HashMap<>();
+    private int additionalFreePerks = 0;
+    private List<AbstractPerk> unlockedPerks = new LinkedList<>();
     private double perkExp = 0;
 
     public void load(NBTTagCompound compound) {
@@ -90,7 +90,7 @@ public class PlayerProgress {
             if (attunedConstellation != null) {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunedConstellation);
                 if (root != null) {
-                    unlockedPerks.put(root, 0);
+                    unlockedPerks.add(root);
                 }
             }
         } else {
@@ -100,9 +100,8 @@ public class PlayerProgress {
                     NBTTagCompound tag = list.getCompoundTagAt(i);
                     String perkRegName = tag.getString("perkName");
                     AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
-                    Integer unlockLevel = tag.getInteger("perkLevel");
                     if(perk != null) {
-                        unlockedPerks.put(perk, unlockLevel);
+                        unlockedPerks.add(perk);
                     }
                 }
             }
@@ -164,10 +163,9 @@ public class PlayerProgress {
             cmp.setString("attuned", attunedConstellation.getUnlocalizedName());
         }
         list = new NBTTagList();
-        for (AbstractPerk perk : unlockedPerks.keySet()) {
+        for (AbstractPerk perk : unlockedPerks) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("perkName", perk.getRegistryName().toString());
-            tag.setInteger("perkLevel", unlockedPerks.get(perk));
             list.appendTag(tag);
         }
         cmp.setTag("perks", list);
@@ -277,16 +275,16 @@ public class PlayerProgress {
         this.wasOnceAttuned = true;
     }
 
-    public Map<AbstractPerk, Integer> getAppliedPerks() {
-        return unlockedPerks == null ? Maps.newHashMap() : Collections.unmodifiableMap(unlockedPerks);
+    public List<AbstractPerk> getAppliedPerks() {
+        return unlockedPerks == null ? Lists.newArrayList() : Collections.unmodifiableList(unlockedPerks);
     }
 
     public boolean hasPerkUnlocked(AbstractPerk perk) {
-        return unlockedPerks.containsKey(perk);
+        return unlockedPerks.contains(perk);
     }
 
-    public void addPerk(AbstractPerk perk, Integer alignmentLevelUnlocked) {
-        this.unlockedPerks.put(perk, alignmentLevelUnlocked);
+    public void addPerk(AbstractPerk perk) {
+        this.unlockedPerks.add(perk);
     }
 
     public void clearPerks() {
@@ -324,19 +322,22 @@ public class PlayerProgress {
         this.wasOnceAttuned = attuned;
     }
 
-    // -1 -> no free level
-    public int getNextFreeLevel() {
-        int level = ConstellationPerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
-        for (int i = 1; i <= level; i++) {
-            if(!unlockedPerks.values().contains(i)) {
-                return i;
-            }
-        }
-        return -1;
+    public void grantFreeAllocationPoint() {
+        this.additionalFreePerks++;
     }
 
-    public boolean hasFreeAlignmentLevel() {
-        return getNextFreeLevel() > -1;
+    public int getAdditionalFreePerks() {
+        return additionalFreePerks;
+    }
+
+    public int getAvailablePerkPoints() {
+        int allocatedPerks = this.unlockedPerks.size() - 1; //Root perk doesn't count
+        int allocationLevels = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
+        return (allocationLevels + additionalFreePerks) - allocatedPerks;
+    }
+
+    public boolean hasFreeAllocationPoint() {
+        return getAvailablePerkPoints() > 0;
     }
 
     public double getPerkExp() {
@@ -344,6 +345,17 @@ public class PlayerProgress {
     }
 
     protected void modifyExp(double exp) {
+        int currLevel = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
+        if (exp >= 0 && currLevel >= PerkLevelManager.INSTANCE.getLevelCap()) {
+            return;
+        }
+        int expThisLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel);
+        int expNextLevel = PerkLevelManager.INSTANCE.getExpForLevel(currLevel + 1);
+        int cap = MathHelper.floor(((float) (expNextLevel - expThisLevel)) * 0.08F);
+        if (exp > cap) {
+            exp = cap;
+        }
+
         this.perkExp = Math.max(this.perkExp + exp, 0);
     }
 
@@ -392,6 +404,7 @@ public class PlayerProgress {
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
         this.usedTargets = message.usedTargets;
+        this.additionalFreePerks = message.additionalFreePoints;
         this.unlockedPerks = message.usedPerks;
         this.perkExp = message.perkExp;
     }

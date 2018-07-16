@@ -176,11 +176,6 @@ public class TileOreGenerator extends TileEntitySynchronized {
         }
 
         @Override
-        public String getConfigurationSection() {
-            return super.getConfigurationSection() + "." + getKey();
-        }
-
-        @Override
         public void loadFromConfig(Configuration cfg) {
             guaranteedOres = cfg.getInt("guaranteedBlocks", getConfigurationSection(), guaranteedOres, 0, Integer.MAX_VALUE, "This value defines how often the block can be broken and will 100% respawn again.");
             chanceDespawn = cfg.getInt("chanceDespawn", getConfigurationSection(), chanceDespawn, 1, Integer.MAX_VALUE, "This value defines how high the chance is after 'guaranteedBlocks' has been reached that the block-respawner despawns. The higher this number, the more unlikely it is to despawn.");

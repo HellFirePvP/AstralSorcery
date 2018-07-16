@@ -77,11 +77,6 @@ public class WorldGenEntry extends ConfigEntry {
         loaded = true;
     }
 
-    @Override
-    public String getConfigurationSection() {
-        return super.getConfigurationSection() + "." + getKey();
-    }
-
     private String[] getDefaultBiomeTypes() {
         String[] def = new String[defaultBiomeTypes.length];
         for (int i = 0; i < defaultBiomeTypes.length; i++) {

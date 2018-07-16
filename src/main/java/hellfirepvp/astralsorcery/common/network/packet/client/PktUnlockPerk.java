@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,9 +79,9 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
                             AbstractPerk perk = message.perk;
                             PlayerProgress prog = ResearchManager.getProgress(pl, ctx.side);
                             if(prog != null) {
-                                Map<AbstractPerk, Integer> appliedPerks = prog.getAppliedPerks();
-                                if(!appliedPerks.containsKey(perk)) {
+                                if(!prog.hasPerkUnlocked(perk)) {
                                     if(perk.mayUnlockPerk(prog) && ResearchManager.applyPerk(pl, message.perk)) {
+                                        message.perk.onUnlockPerkServer(pl, prog);
                                         PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
                                     }
                                 }

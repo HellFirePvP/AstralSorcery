@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public interface IPlayerTickPerk {
 
+    //The player being ticked definitely has the perk unlocked
     public void onPlayerTick(EntityPlayer player, Side side);
 
 }
