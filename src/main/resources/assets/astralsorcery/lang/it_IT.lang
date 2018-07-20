@@ -263,27 +263,28 @@ research.LINKTOOL.name=Strumento di collegamento
 astralsorcery.journal.LINKTOOL.1.text=Richiamando i leggere effetti di attrazione dell'acquamarina dentro la luce stellare liquida, avendo più di quelle condensate in un solo cristallo potrebbe provvedere abbastanza per dirigere e focalizzare i raggi grezzi di luce stellare un una maniera più organizzata.<NL>Fondendoli insieme con un cristallo di roccia potrebbe essere un po tedioso senza luce stellare sufficiente. Fortunatamente l'altare appena aggiornato potrebbe dare un po' di aiuto.
 astralsorcery.journal.LINKTOOL.3.text=Comunque, tenere il cristallo creato con le proprie mani potrebbe rischiare di appannarlo, e dunque di diminuire l'abilita di manipolare la luce stellare. La forma più pratica di uno Strumento di collegamento ha la forma di una bacchetta.<NL>Il la bacchetta di cristallo creata da questa fusione di gemme sembra deviare la luce stellare attorno ad esso, persistentemente alterando il flusso della luce.
 astralsorcery.journal.LINKTOOL.4.text=Per selezionare la sorgente di luce, semplicemente fai tasto destro sul produttore di luce stellare, cosi come un cristallo comunemente trovato in un tempio. Per direzionarlo ad un luogo specifico, fai tasto destro sul luogo successivo. Per dissolvere il link, fai tasto destro sulla destinazione della luce mentre abbassato. Per deselezionare la sorgente e fermare il processo di collegamento, cambia l'oggetto attivo con un altro.<NL>Collegando un cristallo a destinazioni multiple dividera la luce stellare tra le varie destinazioni.
+
+research.ILLUMINATION_WAND.name=La bacchetta da illuminazione
+astralsorcery.journal.ILLUMINATION_WAND.1.text=Mentre cerchi di raggiungere le stelle più e più lontano per potenziare i benefici, è diventato evidente che la potenza interna può anche essere usata per illuminare il mondo.<NL>Incanalando una parte di questa carica luminescente nei blocchi solidi o nell'aria può rinforzare quei blocchi per resiste a qualsiasi tipo di danno.
+astralsorcery.journal.ILLUMINATION_WAND.3.text=Dopo aver dato abbastanza carica, facendo shift tasto destro su un blocco si proverà a convertirlo nel suo stato luminescente o farlo ritornare allo stato originale. Facendo tasto destro si potrà creare un piccolo bagliore, proprio come quelli creati dalla polvere dell'illuminazione.<NL>Dovrebbe essere possibile alterare le proprieta della luce craftando la bacchetta insieme a un colorante.
+
+research.SHIFT_STAR.name=La stella dello Shift
+astralsorcery.journal.SHIFT_STAR.1.text=Mentre sintonizzarsi con una costellazione provvede beneifici passivi significativi, essa limita anche la flessibilità della potenza e le possibilità delle altre costellazioni sono perse.<NL>Potrebbe esserci un modo per dissipare la sintonizzazione celestiale e i suoi poteri conferiti, rilasciando tutta la carica e annullando la connessione alla costellazione.<NL>Sfortunatamente, il catalizzatore utilizzato per quello si crepa e poi si rompe dopo che tutta l'energia è stata dissipata.
+
+research.STARMETAL_ORE.name=La trasmutazione del ferro
+astralsorcery.journal.STARMETAL_ORE.1.text=Questi raggi di luce potrebbero avere altri usi oltre ad sembrare molto carini, e avere effetti generali sul mondo. Cosa ne pensi di focalizzare la luce direttamente sopra ad un mondano minerale di ferro con uno strumento di collegamento? Una fonte di luce stellare focalizzata potrebbe funzionare, potresti anche utilizzare uno di quei cristalli fluttuanti trovati nelle rovine. Dare una visione chiara del cielo potrebbe aiutare.<NL>Sembra che il ferro rifletta la luce stellare e lampeggi leggermente blu... Forse qualcosa potrebbe cambiare col tempo...
+
+research.TRANSMUTATION_ORES.name=Trasmutazione di blocchi
+astralsorcery.journal.TRANSMUTATION_ORES.1.text=Forse il ferro non è il solo blocco che reagisce a uno di quei raggi focalizzati di luce stellare... Potrebbe avere senso provare anche altro cose....
+
+research.STARMETAL_RES.name=Metallo stellare
+astralsorcery.journal.STARMETAL_RES.1.text=Blue brillante, Freddo come il ghiaccio, e scintillante come il cielo di notte; Il minerale di ferro fuso con quell'effetto blue dato all'inizio ha formato un metallo scintillante dal normale grigio ferro.
+astralsorcery.journal.STARMETAL_RES.2.text=Il più delle volte esso sembra ancora comportarsi come del ferro normale. Esponendo un lingotto di esso al cielo notturno però lo fa scintillare quasi come se fosse uno specchio.<NL>Il lingotto in se comunque sembra essere abbastanza mondano e non reattivo a niente oltre a sembrare molto carino. Forse macinando il lingotto in polvere su di una macina potrbbe servire a renderlo meno passivo
+
+
+research.PRISM.name=Il prisma di cristallo
+astralsorcery.journal.PRISM.1.text=Mentre le lenti di cristallo sono utili e tutto, certe volte è desiderabile direzionare la luce in locazioni multiple invece che solo una.<NL>Dopo un po di test, si può concludere che avendo un cristallo a forma di prisma permette di dividere la luce in uscita in più raggi che la rendono più funzionalmente flessibile. Oltre a dividere il raggio dovrebbe funzionare allo stesso modo di una lente di cristallo normale.
 #----------------------------------------------------------------------------------------------------------------------	TODO 
-research.ILLUMINATION_WAND.name=Illumination Wand
-astralsorcery.journal.ILLUMINATION_WAND.1.text=While trying to reach for the stars further and further out to empower perks, it’s become evident that this internal power can also be used to illuminate the world.<NL>Channeling a bit of that luminescent charge into sufficiently solid blocks or the air can reinforce those blocks to withstand almost all kinds of damage.
-astralsorcery.journal.ILLUMINATION_WAND.3.text=Given sufficient charge, shift-right-clicking a block will try to convert it into its luminescent state or revert it back into its normal form. Right-clicking will create a small flare, much like the ones created by the illumination powder.<NL>It should be possible to alter the light properties by crafting a dye with the wand.
-
-research.SHIFT_STAR.name=Shifting Star
-astralsorcery.journal.SHIFT_STAR.1.text=While attunement with a constellation provides significant passive benefits, it also limits flexibility as the powers and possibilities of the other constellations are missed.<NL>There may be a way to dissipate the celestial attunement and its currently granted powers into the surroundings, releasing all charge and the celestial connection to that constellation.<NL>Unfortunately, the catalyst used for that cracks and shatters after all energy is dissipated making this a costly endeavor.
-
-research.STARMETAL_ORE.name=Iron Transmutation
-astralsorcery.journal.STARMETAL_ORE.1.text=Most likely, these beams of light could have other uses than looking pretty, and have general effects on the world. How about focusing the light directly onto one mundane iron ore with a linking tool? A source of focused starlight could work, may as well use one of those floating crystals in the shrines that have been found. Giving that one a clear view to the sky may help, too.<NL>It seems like the iron reflects the starlight back and shimmers slightly blue... Maybe something will change when given enough time...
-
-research.TRANSMUTATION_ORES.name=Block Transmutation
-astralsorcery.journal.TRANSMUTATION_ORES.1.text=Maybe iron ore is not the only block that reacts to those focused rays of starlight? It would make sense to try some other things as well...
-
-research.STARMETAL_RES.name=Starmetal
-astralsorcery.journal.STARMETAL_RES.1.text=Shimmering blue, ice cold and sparkling as the night sky above; The iron ore fused with the blue effect it gave off from the very beginning and formed a shimmering metal from the plain, grey iron.
-astralsorcery.journal.STARMETAL_RES.2.text=On most occasions, it seems to still behave almost like iron. Exposing an ingot of it to the night sky makes it sparkle and look almost like a mirror of it.<NL>The ingot itself however seems to be rather mundane and not reactive to anything besides looking pretty. Maybe grind the ingot down into its dust on a grindstone and see what happens?
-
-research.PRISM.name=Crystal Prism
-astralsorcery.journal.PRISM.1.text=While crystal lenses are useful and all, sometimes it is desirable to direct the light onto multiple locations other than just one.<NL>After some testing, it’s been concluded that having a crystal acting as prism and splitting the outgoing starlight evenly across them would be a functionally feasible apparatus. Other than splitting the beam it should most likely work the same way as the crystal lens.
-
 research.COLL_CRYSTAL.name=Collector Crystal
 astralsorcery.journal.COLL_CRYSTAL.1.text=Growing more and more familiar with handling attuned crystals and learning about their properties, recreating what was found in those shrines may be possible. A simple crystal alone has proven to be too weak to properly channel the same amount that those big floating crystals seem to contain.<NL>Enhancing the attuned crystals however might lead to something similar to the collector crystals. There might be more ways to enhance them even farther in the future.
 
