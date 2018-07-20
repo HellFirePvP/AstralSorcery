@@ -34,12 +34,16 @@ public class AttributeTypeRegistry {
     public static final String ATTR_TYPE_ARMOR = AstralSorcery.MODID + ".armor";
     public static final String ATTR_TYPE_ATTACK_SPEED = AstralSorcery.MODID + ".attackspeed";
     public static final String ATTR_TYPE_REACH = AstralSorcery.MODID + ".reach";
+    public static final String ATTR_TYPE_LIFE_RECOVERY = AstralSorcery.MODID + ".liferecovery";
+
+    public static final String ATTR_TYPE_ARC_CHAINS = AstralSorcery.MODID + ".archops";
 
     public static final String ATTR_TYPE_INC_PERK_EFFECT = AstralSorcery.MODID + ".perkeffect";
     public static final String ATTR_TYPE_INC_HARVEST_SPEED = AstralSorcery.MODID + ".harvestspeed";
     public static final String ATTR_TYPE_INC_CRIT_CHANCE = AstralSorcery.MODID + ".critchance";
     public static final String ATTR_TYPE_INC_CRIT_MULTIPLIER = AstralSorcery.MODID + ".critmulti";
     public static final String ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST = AstralSorcery.MODID + ".allres";
+    public static final String ATTR_TYPE_INC_PERK_EXP = AstralSorcery.MODID + ".expgain";
     public static final String ATTR_TYPE_INC_DODGE = AstralSorcery.MODID + ".dodge";
 
     private static Map<String, PerkAttributeType> typeMap = new HashMap<>();

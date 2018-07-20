@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -48,6 +50,15 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
     }
 
     @Override
+    public void clearCaches(Side side) {
+        super.clearCaches(side);
+
+        if (side == Side.SERVER) {
+            this.moveTrackMap.clear();
+        }
+    }
+
+    @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side == Side.SERVER && player instanceof EntityPlayerMP) {
             UUID uuid = player.getUniqueID();
@@ -72,6 +83,7 @@ public class VicioRootPerk extends RootPerk implements IPlayerTickPerk {
             if (added > 0) {
                 added *= 0.002F;
                 added *= expMultiplier;
+                added = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, added);
                 ResearchManager.modifyExp(player, added);
             }
         }

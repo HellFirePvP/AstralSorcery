@@ -8,6 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -30,8 +33,6 @@ import java.util.*;
  */
 public class AevitasRootPerk extends RootPerk {
 
-    //TODO clear caches
-
     private static final int trackLength = 20;
     private Map<UUID, Queue<BlockPos>> plInteractMap = new HashMap<>();
     private Map<UUID, Deque<IBlockState>> plDimReturns = new HashMap<>();
@@ -50,6 +51,16 @@ public class AevitasRootPerk extends RootPerk {
         }
     }
 
+    @Override
+    public void clearCaches(Side side) {
+        super.clearCaches(side);
+
+        if (side == Side.SERVER) {
+            plInteractMap.clear();
+            plDimReturns.clear();
+        }
+    }
+
     @SubscribeEvent
     public void onPlace(BlockEvent.PlaceEvent event) {
         EntityPlayer player = event.getPlayer();
@@ -65,7 +76,7 @@ public class AevitasRootPerk extends RootPerk {
         while (dim.size() >= trackLength) {
             dim.pollLast();
         }
-        int used = 0;
+        float used = 0;
         for (IBlockState placed : dim) {
             if (MiscUtils.matchStateExact(event.getPlacedBlock(), placed)) {
                 used++;
@@ -75,7 +86,7 @@ public class AevitasRootPerk extends RootPerk {
         if (dim.size() <= 0) {
             same = 1F;
         } else {
-            same = 0.15F + (1F - ((float) (used / dim.size()))) * 0.85F;
+            same = 0.15F + (1F - (used / trackLength)) * 0.85F;
         }
         dim.addFirst(event.getPlacedBlock());
 
@@ -84,9 +95,10 @@ public class AevitasRootPerk extends RootPerk {
         if (!tracked.contains(pos)) {
             tracked.add(pos);
 
-            float xp = 2.5F * Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
+            float xp = Math.max(event.getPlacedBlock().getBlockHardness(event.getWorld(), event.getPos()) / 20F, 1);
             xp *= expMultiplier;
             xp *= same;
+            xp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, xp);
             ResearchManager.modifyExp(player, xp);
         }
 

@@ -195,12 +195,6 @@ public class PerkEffectHelper implements ITickHandler {
         return container.getOrCreateList(ct).getTimeout(perk.getRegistryName());
     }
 
-    public final void addExp(EntityPlayer player, double exp) {
-        if(!player.getEntityWorld().isRemote) {
-            ResearchManager.modifyExp(player, exp);
-        }
-    }
-
     @Override
     public void tick(TickEvent.Type type, Object... context) {
         EntityPlayer ticked = (EntityPlayer) context[0];

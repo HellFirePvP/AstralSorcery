@@ -127,6 +127,7 @@ public class AstralSorcery {
     public void onServerStop(FMLServerStoppedEvent event) {
         WorldCacheManager.wipeCache();
         AttributeTypeRegistry.getTypes().forEach(t -> t.clear(Side.SERVER));
+        PerkTree.PERK_TREE.clearCache(Side.SERVER);
     }
 
     public static boolean isRunningInDevEnvironment() {

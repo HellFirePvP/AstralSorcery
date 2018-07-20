@@ -107,6 +107,10 @@ public class PerkTree {
         return ImmutableList.copyOf(this.connections);
     }
 
+    public void clearCache(Side side) {
+        this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
+    }
+
     public class PointConnector {
 
         private final AbstractPerk point;

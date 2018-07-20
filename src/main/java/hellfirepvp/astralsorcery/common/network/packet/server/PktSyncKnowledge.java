@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -21,6 +22,7 @@ import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -50,8 +52,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public IMajorConstellation attunedConstellation = null;
     public int progressTier = 0;
     public boolean wasOnceAttuned = false;
-    public List<AbstractPerk> usedPerks = new LinkedList<>();
-    public int additionalFreePoints = 0;
+    public Map<AbstractPerk, NBTTagCompound> usedPerks = new HashMap<>();
+    public List<String> freePointTokens = Lists.newArrayList();
     public double perkExp = 0;
 
     public PktSyncKnowledge() {}
@@ -66,8 +68,8 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.researchProgression = progress.getResearchProgression();
         this.progressTier = progress.getTierReached().ordinal();
         this.attunedConstellation = progress.getAttunedConstellation();
-        this.additionalFreePoints = progress.getAdditionalFreePerks();
-        this.usedPerks = progress.getAppliedPerks();
+        this.freePointTokens = progress.getFreePointTokens();
+        this.usedPerks = progress.getUnlockedPerkData();
         this.perkExp = progress.getPerkExp();
         this.wasOnceAttuned = progress.wasOnceAttuned();
         this.usedTargets = progress.getUsedTargets();
@@ -122,16 +124,17 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         int perkLength = buf.readInt();
         if(perkLength != -1) {
-            this.usedPerks = new ArrayList<>(perkLength);
+            this.usedPerks = new HashMap<>();
             for (int i = 0; i < perkLength; i++) {
                 String key = ByteBufUtils.readString(buf);
+                NBTTagCompound tag = ByteBufUtils.readNBTTag(buf);
                 AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(key));
                 if (perk != null) {
-                    this.usedPerks.add(perk);
+                    this.usedPerks.put(perk, tag);
                 }
             }
         } else {
-            this.usedPerks = new LinkedList<>();
+            this.usedPerks = new HashMap<>();
         }
 
         int targetLength = buf.readInt();
@@ -145,13 +148,22 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
                 }
             }
         } else {
-            this.usedTargets = new ArrayList<>();
+            this.usedTargets = Lists.newArrayList();
+        }
+
+        int tokenLength = buf.readInt();
+        if (tokenLength != -1) {
+            this.freePointTokens = new ArrayList<>(tokenLength);
+            for (int i = 0; i < tokenLength; i++) {
+                this.freePointTokens.add(ByteBufUtils.readString(buf));
+            }
+        } else {
+            this.freePointTokens = Lists.newArrayList();
         }
 
         this.wasOnceAttuned = buf.readBoolean();
         this.progressTier = buf.readInt();
         this.perkExp = buf.readDouble();
-        this.additionalFreePoints = buf.readInt();
     }
 
     @Override
@@ -194,8 +206,9 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
         if(usedPerks != null) {
             buf.writeInt(usedPerks.size());
-            for (AbstractPerk perk : usedPerks) {
-                ByteBufUtils.writeString(buf, perk.getRegistryName().toString());
+            for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : usedPerks.entrySet()) {
+                ByteBufUtils.writeString(buf, perkEntry.getKey().getRegistryName().toString());
+                ByteBufUtils.writeNBTTag(buf, perkEntry.getValue());
             }
         } else {
             buf.writeInt(-1);
@@ -210,10 +223,18 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             buf.writeInt(-1);
         }
 
+        if (freePointTokens != null) {
+            buf.writeInt(freePointTokens.size());
+            for (String token : freePointTokens) {
+                ByteBufUtils.writeString(buf, token);
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
         buf.writeBoolean(this.wasOnceAttuned);
         buf.writeInt(this.progressTier);
         buf.writeDouble(this.perkExp);
-        buf.writeInt(this.additionalFreePoints);
     }
 
     @Override

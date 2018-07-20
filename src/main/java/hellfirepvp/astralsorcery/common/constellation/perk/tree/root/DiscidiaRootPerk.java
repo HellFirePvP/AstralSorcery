@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -53,6 +55,7 @@ public class DiscidiaRootPerk extends RootPerk {
                 float dmgDealt = event.getAmount();
                 dmgDealt *= 0.2F;
                 dmgDealt *= expMultiplier;
+                dmgDealt = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, dmgDealt);
                 ResearchManager.modifyExp(player, dmgDealt);
             }
         }

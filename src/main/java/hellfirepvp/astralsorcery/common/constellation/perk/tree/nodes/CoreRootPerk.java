@@ -8,11 +8,15 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes;
 
-import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreeMajor;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
+import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
+import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -21,21 +25,37 @@ import net.minecraftforge.fml.relauncher.Side;
  * Created by HellFirePvP
  * Date: 11.07.2018 / 18:24
  */
-public class CoreRootPerk extends AbstractPerk {
+public class CoreRootPerk extends KeyPerk {
+
+    private static final int AMT_PERK_POINTS = 3;
 
     public CoreRootPerk() {
         super("core", 0, 0);
     }
 
     @Override
-    public PerkTreePoint getPoint() {
-        return new PerkTreeMajor(this, this.getOffset());
+    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
+        super.onUnlockPerkServer(player, progress, dataStorage);
+
+        NBTTagList listTokens = new NBTTagList();
+        for (int i = 0; i < AMT_PERK_POINTS; i++) {
+            String token = "core-root-tk-" + i;
+            if (ResearchManager.grantFreePerkPoint(player, token)) {
+                listTokens.appendTag(new NBTTagString(token));
+            }
+        }
+        dataStorage.setTag("tokens", listTokens);
     }
 
     @Override
-    public void applyPerkLogic(EntityPlayer player, Side side) {}
+    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
+        super.onRemovePerkServer(player, progress, dataStorage);
 
-    @Override
-    public void removePerkLogic(EntityPlayer player, Side side) {}
+        NBTTagList listTokens = dataStorage.getTagList("tokens", Constants.NBT.TAG_STRING);
+        for (int i = 0; i < listTokens.tagCount(); i++) {
+            String tk = listTokens.getStringTagAt(i);
+            ResearchManager.revokeFreePoint(player, tk);
+        }
+    }
 
 }

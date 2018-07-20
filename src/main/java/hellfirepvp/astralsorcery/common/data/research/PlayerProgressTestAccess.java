@@ -75,11 +75,13 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public void grantFreeAllocationPoint() {}
+    public boolean grantFreeAllocationPoint(String freePointToken) {
+        return false;
+    }
 
     @Override
-    public int getAdditionalFreePerks() {
-        return 0;
+    public List<String> getFreePointTokens() {
+        return Lists.newArrayList();
     }
 
     @Override

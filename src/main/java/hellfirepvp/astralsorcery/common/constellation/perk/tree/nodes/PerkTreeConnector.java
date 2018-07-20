@@ -16,8 +16,13 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -33,6 +38,7 @@ public class PerkTreeConnector extends AbstractPerk {
 
     public PerkTreeConnector(String name, int x, int y) {
         super(name, x, y);
+        setCategory(CATEGORY_KEY);
         connectorCache.add(this);
     }
 
@@ -65,13 +71,29 @@ public class PerkTreeConnector extends AbstractPerk {
     }
 
     @Override
-    public void onUnlockPerkServer(EntityPlayer player, PlayerProgress progress) {
-        super.onUnlockPerkServer(player, progress);
+    public void onUnlockPerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
+        super.onUnlockPerkServer(player, progress, dataStorage);
 
+        NBTTagList listTokens = new NBTTagList();
         for (AbstractPerk otherPerk : PerkTree.PERK_TREE.getConnectedPerks(this)) {
             if(ResearchManager.forceApplyPerk(player, otherPerk)) {
-                ResearchManager.grantFreePerkPoint(player);
+                String token = "connector-tk-" + otherPerk.getRegistryName().toString();
+                if(ResearchManager.grantFreePerkPoint(player, token)) {
+                    listTokens.appendTag(new NBTTagString(token));
+                }
             }
+        }
+        dataStorage.setTag("pointtokens", listTokens);
+    }
+
+    @Override
+    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {
+        super.onRemovePerkServer(player, progress, dataStorage);
+
+        NBTTagList list = dataStorage.getTagList("pointtokens", Constants.NBT.TAG_STRING);
+        for (int i = 0; i < list.tagCount(); i++) {
+            String token = list.getStringTagAt(i);
+            ResearchManager.revokeFreePoint(player, token);
         }
     }
 

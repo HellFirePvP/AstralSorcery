@@ -81,6 +81,7 @@ public abstract class GuiScreenJournal extends GuiWHScreen {
             rectConstellationBookmark = drawBookmark(offsetX, offsetY, bookmarkWidth, bookmarkHeight, bookmarkWidth + (bookmarkIndex == 1 ? 0 : 5), zLevel, "gui.journal.bm.constellations.name", 0xDDDDDDDD, mousePoint);
         }
 
+        //TODO ? if(ResearchManager.clientProgress.getTierReached().isThisLaterOrEqual(ProgressionTier.ATTUNEMENT))
         IMajorConstellation attuned = ResearchManager.clientProgress.getAttunedConstellation();
         if(attuned != null) {
             offsetY = guiTop + 60;

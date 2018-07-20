@@ -197,8 +197,8 @@ public class EffectLightning extends EntityComplexFX {
     }
 
     private void drawLine(Vector3 from, Vector3 to, BufferBuilder vb) {
-        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.02F, vb);
-        renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.02F, vb);
+        renderCurrentTextureAroundAxis(from, to, Math.toRadians(0F),  0.035F, vb);
+        renderCurrentTextureAroundAxis(from, to, Math.toRadians(90F), 0.035F, vb);
     }
 
     private void renderCurrentTextureAroundAxis(Vector3 from, Vector3 to, double angle, double size, BufferBuilder buf) {

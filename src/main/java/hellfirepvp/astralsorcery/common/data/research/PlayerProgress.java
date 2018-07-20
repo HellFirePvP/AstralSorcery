@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
@@ -25,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -43,8 +45,8 @@ public class PlayerProgress {
     private List<ResearchProgression> researchProgression = new LinkedList<>();
     private List<SextantFinder.TargetObject> usedTargets = new LinkedList<>();
     private ProgressionTier tierReached = ProgressionTier.DISCOVERY;
-    private int additionalFreePerks = 0;
-    private List<AbstractPerk> unlockedPerks = new LinkedList<>();
+    private List<String> freePointTokens = Lists.newArrayList();
+    private Map<AbstractPerk, NBTTagCompound> unlockedPerks = new HashMap<>();
     private double perkExp = 0;
 
     public void load(NBTTagCompound compound) {
@@ -90,7 +92,9 @@ public class PlayerProgress {
             if (attunedConstellation != null) {
                 AbstractPerk root = PerkTree.PERK_TREE.getRootPerk(attunedConstellation);
                 if (root != null) {
-                    unlockedPerks.add(root);
+                    NBTTagCompound data = new NBTTagCompound();
+                    root.onUnlockPerkServer(null, this, data);
+                    unlockedPerks.put(root, data);
                 }
             }
         } else {
@@ -99,9 +103,10 @@ public class PlayerProgress {
                 for (int i = 0; i < list.tagCount(); i++) {
                     NBTTagCompound tag = list.getCompoundTagAt(i);
                     String perkRegName = tag.getString("perkName");
+                    NBTTagCompound data = tag.getCompoundTag("perkData");
                     AbstractPerk perk = PerkTree.PERK_TREE.getPerk(new ResourceLocation(perkRegName));
                     if(perk != null) {
-                        unlockedPerks.add(perk);
+                        unlockedPerks.put(perk, data);
                     }
                 }
             }
@@ -163,9 +168,10 @@ public class PlayerProgress {
             cmp.setString("attuned", attunedConstellation.getUnlocalizedName());
         }
         list = new NBTTagList();
-        for (AbstractPerk perk : unlockedPerks) {
+        for (Map.Entry<AbstractPerk, NBTTagCompound> entry : unlockedPerks.entrySet()) {
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("perkName", perk.getRegistryName().toString());
+            tag.setString("perkName", entry.getKey().getRegistryName().toString());
+            tag.setTag("perkData", entry.getValue());
             list.appendTag(tag);
         }
         cmp.setTag("perks", list);
@@ -275,19 +281,32 @@ public class PlayerProgress {
         this.wasOnceAttuned = true;
     }
 
-    public List<AbstractPerk> getAppliedPerks() {
-        return unlockedPerks == null ? Lists.newArrayList() : Collections.unmodifiableList(unlockedPerks);
+    public Collection<AbstractPerk> getAppliedPerks() {
+        return unlockedPerks == null ? Lists.newArrayList() : Collections.unmodifiableCollection(unlockedPerks.keySet());
+    }
+
+    public Map<AbstractPerk, NBTTagCompound> getUnlockedPerkData() {
+        return unlockedPerks == null ? Maps.newHashMap() : Collections.unmodifiableMap(unlockedPerks);
+    }
+
+    @Nullable
+    protected NBTTagCompound getPerkData(AbstractPerk perk) {
+        return unlockedPerks.get(perk);
     }
 
     public boolean hasPerkUnlocked(AbstractPerk perk) {
-        return unlockedPerks.contains(perk);
+        return unlockedPerks.containsKey(perk);
     }
 
-    public void addPerk(AbstractPerk perk) {
-        this.unlockedPerks.add(perk);
+    public void putPerk(AbstractPerk perk, NBTTagCompound data) {
+        this.unlockedPerks.put(perk, data);
     }
 
-    public void clearPerks() {
+    protected boolean removePerk(AbstractPerk perk) {
+        return unlockedPerks.remove(perk) != null;
+    }
+
+    protected void clearPerks() {
         this.unlockedPerks.clear();
     }
 
@@ -322,18 +341,26 @@ public class PlayerProgress {
         this.wasOnceAttuned = attuned;
     }
 
-    public void grantFreeAllocationPoint() {
-        this.additionalFreePerks++;
+    protected boolean grantFreeAllocationPoint(String freePointToken) {
+        if (this.freePointTokens.contains(freePointToken)) {
+            return false;
+        }
+        this.freePointTokens.add(freePointToken);
+        return true;
     }
 
-    public int getAdditionalFreePerks() {
-        return additionalFreePerks;
+    protected boolean tryRevokeAllocationPoint(String token) {
+        return this.freePointTokens.remove(token);
+    }
+
+    public List<String> getFreePointTokens() {
+        return Collections.unmodifiableList(freePointTokens);
     }
 
     public int getAvailablePerkPoints() {
         int allocatedPerks = this.unlockedPerks.size() - 1; //Root perk doesn't count
         int allocationLevels = PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(getPerkExp()));
-        return (allocationLevels + additionalFreePerks) - allocatedPerks;
+        return (allocationLevels + this.freePointTokens.size()) - allocatedPerks;
     }
 
     public boolean hasFreeAllocationPoint() {
@@ -404,7 +431,7 @@ public class PlayerProgress {
         this.attunedConstellation = message.attunedConstellation;
         this.wasOnceAttuned = message.wasOnceAttuned;
         this.usedTargets = message.usedTargets;
-        this.additionalFreePerks = message.additionalFreePoints;
+        this.freePointTokens = message.freePointTokens;
         this.unlockedPerks = message.usedPerks;
         this.perkExp = message.perkExp;
     }

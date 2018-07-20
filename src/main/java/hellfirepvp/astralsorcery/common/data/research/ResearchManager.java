@@ -292,15 +292,19 @@ public class ResearchManager {
         PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
 
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : progress.getUnlockedPerkData().entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+        }
         progress.clearPerks();
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
         if ((root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
-            progress.addPerk(root);
+            NBTTagCompound data = new NBTTagCompound();
+            root.onUnlockPerkServer(player, progress, data);
+            progress.putPerk(root, data);
             PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
             PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
-            root.onUnlockPerkServer(player, progress);
         }
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
@@ -317,7 +321,9 @@ public class ResearchManager {
         if (!progress.hasFreeAllocationPoint()) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
-        progress.addPerk(perk);
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -327,11 +333,26 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean grantFreePerkPoint(EntityPlayer player) {
+    public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
 
-        progress.grantFreeAllocationPoint();
+        if (!progress.grantFreeAllocationPoint(token)) {
+            return false;
+        }
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean revokeFreePoint(EntityPlayer player, String token) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        if (!progress.tryRevokeAllocationPoint(token)) {
+            return false;
+        }
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -343,7 +364,9 @@ public class ResearchManager {
         if (progress == null) return false;
         if (progress.hasPerkUnlocked(perk)) return false;
 
-        progress.addPerk(perk);
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
 
         PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
@@ -353,9 +376,32 @@ public class ResearchManager {
         return true;
     }
 
+    public static boolean removePerk(EntityPlayer player, AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        NBTTagCompound data = progress.getPerkData(perk);
+        if (data == null) {
+            return false;
+        }
+        perk.onRemovePerkServer(player, progress, data);
+        progress.removePerk(perk);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
     public static boolean resetPerks(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
+
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : progress.getUnlockedPerkData().entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+        }
 
         PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);

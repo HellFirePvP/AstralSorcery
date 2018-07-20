@@ -16,13 +16,16 @@ import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.*;
@@ -37,7 +40,15 @@ import java.util.List;
  */
 public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk> {
 
+    protected static final Random rand = new Random();
+
+    public static final PerkCategory CATEGORY_BASE = new PerkCategory("base");
+    public static final PerkCategory CATEGORY_ROOT = new PerkCategory("root");
+    public static final PerkCategory CATEGORY_MAJOR = new PerkCategory("major");
+    public static final PerkCategory CATEGORY_KEY = new PerkCategory("key");
+
     protected final Point offset;
+    private PerkCategory category = CATEGORY_BASE;
     private List<String> tooltipCache = null;
     private String ovrUnlocalizedNamePrefix = null;
 
@@ -59,6 +70,11 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         return new PerkTreePoint(this, this.getOffset());
     }
 
+    public <T> T setCategory(PerkCategory category) {
+        this.category = category;
+        return (T) this;
+    }
+
     //Reserving application/removal methods to delegate for later pre-application logic
     public final void applyPerk(EntityPlayer player, Side side) {
         this.applyPerkLogic(player, side);
@@ -72,12 +88,27 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
 
     protected abstract void removePerkLogic(EntityPlayer player, Side side);
 
-    //Called ONCE when the perk is unlocked
-    public void onUnlockPerkServer(EntityPlayer player, PlayerProgress progress) {}
+    /**
+     * Called ONCE when the perk is unlocked
+     * You may use the NBTTagCompound to save data to remove it again later
+     * The player might be null for root perks on occasion.
+     */
+    public void onUnlockPerkServer(@Nullable EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
+
+    /**
+     * Clean up and remove the perk from that single player.
+     * Data in the dataStorage is filled with the data set in onUnlockPerkServer
+     */
+    public void onRemovePerkServer(EntityPlayer player, PlayerProgress progress, NBTTagCompound dataStorage) {}
 
     public <T> T setNameOverride(String namePrefix) {
         this.ovrUnlocalizedNamePrefix = namePrefix;
         return (T) this;
+    }
+
+    @Nonnull
+    public PerkCategory getCategory() {
+        return category;
     }
 
     public PerkTreePoint.AllocationStatus getPerkStatus(@Nullable EntityPlayer player, Side side) {
@@ -149,6 +180,13 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         return null;
     }
 
+    public void clearCaches(Side side) {}
+
+    @SideOnly(Side.CLIENT)
+    public void clearClientCaches() {
+        this.tooltipCache = null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,4 +199,48 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
     public int hashCode() {
         return Objects.hash(getRegistryName());
     }
+
+    public static class PerkCategory {
+
+        private final String unlocName;
+        private String textFormatting;
+
+        public PerkCategory(@Nonnull String unlocName) {
+            this.unlocName = unlocName;
+            this.textFormatting = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString();
+        }
+
+        public String getUnlocalizedName() {
+            return unlocName;
+        }
+
+        public String getTextFormatting() {
+            return textFormatting;
+        }
+
+        @Nullable
+        @SideOnly(Side.CLIENT)
+        public String getLocalizedName() {
+            String str = "perk.category." + unlocName + ".name";
+            if (I18n.hasKey(str)) {
+                return I18n.format("perk.category." + unlocName + ".name");
+            }
+            return null;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PerkCategory that = (PerkCategory) o;
+            return Objects.equals(unlocName, that.unlocName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(unlocName);
+        }
+
+    }
+
 }

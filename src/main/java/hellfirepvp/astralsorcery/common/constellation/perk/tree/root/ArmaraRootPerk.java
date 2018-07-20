@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -64,6 +66,7 @@ public class ArmaraRootPerk extends RootPerk {
                     expGain *= 1.3F;
                 }
                 expGain *= expMultiplier;
+                expGain = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, expGain);
                 ResearchManager.modifyExp(player, expGain);
             }
         }

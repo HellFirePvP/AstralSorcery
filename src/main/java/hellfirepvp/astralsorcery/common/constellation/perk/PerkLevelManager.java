@@ -34,7 +34,7 @@ public class PerkLevelManager {
     private void setupLevels() {
         for (int i = 1; i <= LEVEL_CAP; i++) {
             int prev = totalExpLevelRequired.getOrDefault(i - 1, 0);
-            totalExpLevelRequired.put(i, prev + 50 + (MathHelper.floor(Math.pow(2, (i / 3) + 4))));
+            totalExpLevelRequired.put(i, prev + 150 + (MathHelper.floor(Math.pow(2, (i / 2) + 3))));
         }
     }
 

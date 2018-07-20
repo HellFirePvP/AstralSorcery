@@ -8,6 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.root;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
@@ -58,6 +60,7 @@ public class EvorsioRootPerk extends RootPerk {
                 gainedExp *= Math.max(broken.getBlock().getExplosionResistance(world, at, player, exp) / 40F, 1F);
             } catch (Exception exc) {}
             gainedExp *= expMultiplier;
+            gainedExp = PerkAttributeHelper.getOrCreateMap(player, side).modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP, gainedExp);
             ResearchManager.modifyExp(player, gainedExp);
         }
     }

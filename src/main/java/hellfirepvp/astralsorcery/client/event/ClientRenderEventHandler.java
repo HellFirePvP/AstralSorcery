@@ -102,8 +102,6 @@ public class ClientRenderEventHandler {
 
         playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND), EnumHand.MAIN_HAND, event.getPartialTicks());
         playHandAndHudRenders(Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND),  EnumHand.OFF_HAND,  event.getPartialTicks());
-
-        requestPermChargeReveal(20);
     }
 
     @SubscribeEvent

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.client;
 
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -81,7 +82,6 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
                             if(prog != null) {
                                 if(!prog.hasPerkUnlocked(perk)) {
                                     if(perk.mayUnlockPerk(prog) && ResearchManager.applyPerk(pl, message.perk)) {
-                                        message.perk.onUnlockPerkServer(pl, prog);
                                         PacketChannel.CHANNEL.sendTo(new PktUnlockPerk(true, message.perk), (EntityPlayerMP) pl);
                                     }
                                 }
@@ -101,9 +101,9 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
         if(message.serverAccept) {
             AbstractPerk perk = message.perk;
             GuiScreen current = Minecraft.getMinecraft().currentScreen;
-            //if(current != null && current instanceof GuiJournalPerkMap) {
-            //    ((GuiJournalPerkMap) current).playUnlockAnimation(perk);
-            //}
+            if(current != null && current instanceof GuiJournalPerkTree) {
+                ((GuiJournalPerkTree) current).playUnlockAnimation(perk);
+            }
         }
     }
 

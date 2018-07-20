@@ -35,6 +35,7 @@ public class RootPerk extends AttributeModifierPerk {
 
     public RootPerk(String name, IConstellation constellation, int x, int y) {
         super(name, x, y);
+        setCategory(AbstractPerk.CATEGORY_ROOT);
         this.constellation = constellation;
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, "root_" + name) {
             @Override
