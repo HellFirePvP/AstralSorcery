@@ -9,9 +9,8 @@
 package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
-import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
 import hellfirepvp.astralsorcery.common.tile.TileStorageCore;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +57,7 @@ public class StorageNetworkBuffer extends CachedWorldData {
 
         NBTTagList list = compound.getTagList("coreLocations", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); i++) {
-            this.coreLocations.add(NBTUtils.readBlockPosFromNBT(list.getCompoundTagAt(i)));
+            this.coreLocations.add(NBTHelper.readBlockPosFromNBT(list.getCompoundTagAt(i)));
         }
     }
 
@@ -67,7 +66,7 @@ public class StorageNetworkBuffer extends CachedWorldData {
         NBTTagList list = new NBTTagList();
         for (BlockPos p : this.coreLocations) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(p, cmp);
+            NBTHelper.writeBlockPosToNBT(p, cmp);
             list.appendTag(cmp);
         }
         compound.setTag("coreLocations", list);

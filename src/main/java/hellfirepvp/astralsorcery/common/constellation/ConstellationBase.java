@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
+import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
@@ -19,6 +20,7 @@ import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -202,8 +204,20 @@ public abstract class ConstellationBase implements IConstellation {
         }
 
         @Override
-        public List<MoonPhase> getShowupMoonPhases() {
-            return Collections.unmodifiableList(phases);
+        public List<MoonPhase> getShowupMoonPhases(long rSeed) {
+            List<MoonPhase> shifted = new ArrayList<>(phases.size());
+            for (MoonPhase mp : this.phases) {
+                int index = mp.ordinal() + (((int) (rSeed % MoonPhase.values().length)) + MoonPhase.values().length);
+                while (index >= MoonPhase.values().length) {
+                    index -= MoonPhase.values().length;
+                }
+                index = MathHelper.clamp(index, 0, MoonPhase.values().length - 1);
+                MoonPhase offset = MoonPhase.values()[index];
+                if(!shifted.contains(offset)) {
+                    shifted.add(offset);
+                }
+            }
+            return shifted;
         }
 
     }

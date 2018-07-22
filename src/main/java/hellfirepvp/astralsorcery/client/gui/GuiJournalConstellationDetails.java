@@ -42,10 +42,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -199,16 +197,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void testPhases() {
-        if(constellation instanceof IWeakConstellation) {
-            Collections.addAll(phases, MoonPhase.values());
-        } else if(constellation instanceof IMinorConstellation) {
-            //Why this way? To maintain phase-order.
-            for (MoonPhase ph : MoonPhase.values()) {
-                if(((IMinorConstellation) constellation).getShowupMoonPhases().contains(ph)) {
-                    phases.add(ph);
-                }
-            }
-        }
+        Collections.addAll(phases, MoonPhase.values());
     }
 
     private void testActivePhases() {
@@ -452,6 +441,14 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
     }
 
     private void drawPhaseInformation() {
+        if(this.phases.isEmpty()) {
+            testPhases();
+            testActivePhases();
+            if(this.phases.isEmpty()) {
+                return;
+            }
+        }
+
         if(constellation instanceof IConstellationSpecialShowup) {
             GlStateManager.disableDepth();
             double scale = 1.8;

@@ -14,6 +14,7 @@ import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -117,7 +118,7 @@ public class DataActiveCelestials extends AbstractData {
         }
 
         @Override
-        public DataActiveCelestials provideNewInstance() {
+        public DataActiveCelestials provideNewInstance(Side side) {
             return new DataActiveCelestials();
         }
 

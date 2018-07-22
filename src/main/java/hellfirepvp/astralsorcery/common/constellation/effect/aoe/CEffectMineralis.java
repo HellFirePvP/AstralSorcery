@@ -53,7 +53,7 @@ public class CEffectMineralis extends CEffectPositionList {
     public static boolean enabled = true;
     public static double potencyMultiplier = 1;
 
-    public static int searchRange = 14;
+    public static int searchRange = 8;
     public static int maxCount = 2;
 
     public CEffectMineralis(@Nullable ILocatable origin) {
@@ -84,6 +84,7 @@ public class CEffectMineralis extends CEffectPositionList {
             if(world.rand.nextFloat() > percStrength) return false;
         }
 
+        boolean changed = false;
         if(modified.isCorrupted()) {
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(modified.getSize()));
             for (EntityLivingBase entity : entities) {
@@ -94,52 +95,58 @@ public class CEffectMineralis extends CEffectPositionList {
                         BlockPos at = center.add(xx, 0, zz);
                         IBlockState state = world.getBlockState(at);
                         if(world.isAirBlock(at) || state.getBlock().isReplaceable(world, at)) {
-                            if(rand.nextInt(50) == 0) {
+                            if(rand.nextInt(25) == 0) {
                                 ItemStack blockStack = OreTypes.RITUAL_MINERALIS.getRandomOre(rand);
                                 if(!blockStack.isEmpty()) {
                                     state = ItemUtils.createBlockState(blockStack);
                                     if(state != null) {
-                                        world.setBlockState(at, state);
+                                        if(world.setBlockState(at, state)) {
+                                            changed = true;
+                                        }
                                     } else {
-                                        world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                        if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                            changed = true;
+                                        }
                                     }
                                 } else {
-                                    world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                    if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                        changed = true;
+                                    }
                                 }
                             } else {
-                                world.setBlockState(at, Blocks.STONE.getDefaultState());
+                                if(world.setBlockState(at, Blocks.STONE.getDefaultState())) {
+                                    changed = true;
+                                }
                             }
                         }
                     }
                 }
             }
-            return true;
-        } else {
-            boolean changed = false;
-            GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
-            if(entry != null) {
-                BlockPos sel = entry.getPos();
-                if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
-                    if(verifier.isValid(world, sel)) {
-                        ItemStack blockStack = OreTypes.RITUAL_MINERALIS.getRandomOre(rand);
-                        if(rand.nextInt(200_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
-                        if(!blockStack.isEmpty()) {
-                            IBlockState state = ItemUtils.createBlockState(blockStack);
-                            if(state != null) {
-                                world.setBlockState(sel, state);
-                            }
-                        }
-                    } else {
-                        removeElement(entry);
-                        changed = true;
-                    }
-                }
-            }
-
-            if(findNewPosition(world, pos, modified)) changed = true;
-
-            return changed;
         }
+
+        GenListEntries.SimpleBlockPosEntry entry = getRandomElementByChance(rand);
+        if(entry != null) {
+            BlockPos sel = entry.getPos();
+            if(MiscUtils.isChunkLoaded(world, new ChunkPos(sel))) {
+                if(verifier.isValid(world, sel)) {
+                    ItemStack blockStack = OreTypes.RITUAL_MINERALIS.getRandomOre(rand);
+                    if(rand.nextInt(2_000_000) == 0) blockStack = new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal());
+                    if(!blockStack.isEmpty()) {
+                        IBlockState state = ItemUtils.createBlockState(blockStack);
+                        if(state != null) {
+                            world.setBlockState(sel, state);
+                        }
+                    }
+                } else {
+                    removeElement(entry);
+                    changed = true;
+                }
+            }
+        }
+
+        if(findNewPosition(world, pos, modified)) changed = true;
+
+        return changed;
     }
 
     @Override
@@ -149,8 +156,8 @@ public class CEffectMineralis extends CEffectPositionList {
 
     @Override
     public void loadFromConfig(Configuration cfg) {
-        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), 14, 1, 32, "Defines the radius (in blocks) in which the ritual will search for cleanStone to generate ores into.");
-        maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), 2, 1, 4000, "Defines the amount of block-positions the ritual can cache at max count");
+        searchRange = cfg.getInt(getKey() + "Range", getConfigurationSection(), searchRange, 1, 32, "Defines the radius (in blocks) in which the ritual will search for cleanStone to generate ores into.");
+        maxCount = cfg.getInt(getKey() + "Count", getConfigurationSection(), maxCount, 1, 4000, "Defines the amount of block-positions the ritual can cache at max count");
         enabled = cfg.getBoolean(getKey() + "Enabled", getConfigurationSection(), true, "Set to false to disable this ConstellationEffect.");
         potencyMultiplier = cfg.getFloat(getKey() + "PotencyMultiplier", getConfigurationSection(), 1.0F, 0.01F, 100F, "Set the potency multiplier for this ritual effect. Will affect all ritual effects and their efficiency.");
     }

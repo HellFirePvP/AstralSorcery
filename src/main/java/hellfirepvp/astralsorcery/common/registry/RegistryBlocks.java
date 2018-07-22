@@ -95,6 +95,8 @@ public class RegistryBlocks {
         blockMarbleDoubleSlab = registerBlock(new BlockMarbleDoubleSlab());
         blockBlackMarble = registerBlock(new BlockBlackMarble());
         queueCustomNameItemBlock(blockBlackMarble);
+        blockInfusedWood = registerBlock(new BlockInfusedWood());
+        queueCustomNameItemBlock(blockInfusedWood);
         blockVolatileLight = registerBlock(new BlockFlareLight());
         queueDefaultItemBlock(blockVolatileLight);
         blockVanishing = registerBlock(new BlockVanishing());
@@ -161,6 +163,7 @@ public class RegistryBlocks {
     public static void initRenderRegistry() {
         registerBlockRender(blockMarble);
         registerBlockRender(blockBlackMarble);
+        registerBlockRender(blockInfusedWood);
         registerBlockRender(blockAltar);
         registerBlockRender(blockBoreHead);
         registerBlockRender(customOre);
@@ -196,7 +199,7 @@ public class RegistryBlocks {
         registerTile(TileVanishing.class);
         registerTile(TileChalice.class);
         registerTile(TileBore.class);
-        registerTile(TilePortalNode.class);
+        registerTile(TileStructController.class);
         registerTile(TileObservatory.class);
 
         registerTile(TileCrystalLens.class);

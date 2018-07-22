@@ -18,7 +18,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -172,7 +172,7 @@ public class TileAttunementRelay extends TileInventoryBase {
         compound.setFloat("colMultiplier", this.collectionMultiplier);
         if(linked != null) {
             NBTTagCompound pos = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(linked, pos);
+            NBTHelper.writeBlockPosToNBT(linked, pos);
             compound.setTag("linked", pos);
         }
     }
@@ -185,7 +185,7 @@ public class TileAttunementRelay extends TileInventoryBase {
         this.hasMultiblock = compound.getBoolean("mbState");
         this.collectionMultiplier = compound.getFloat("colMultiplier");
         if(compound.hasKey("linked")) {
-            this.linked = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("linked"));
+            this.linked = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("linked"));
         } else {
             linked = null;
         }

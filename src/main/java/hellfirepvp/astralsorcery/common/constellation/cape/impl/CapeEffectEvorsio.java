@@ -77,9 +77,11 @@ public class CapeEffectEvorsio extends CapeArmorEffect {
             if(state != Blocks.AIR.getDefaultState()) {
                 ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
                 World world = Minecraft.getMinecraft().world;
-                if(!state.getBlock().addDestroyEffects(world, at.toBlockPos(), pm)) {
-                    RenderingUtils.playBlockBreakParticles(at.toBlockPos(), state);
-                }
+                try {
+                    if(!state.getBlock().addDestroyEffects(world, at.toBlockPos(), pm)) {
+                        RenderingUtils.playBlockBreakParticles(at.toBlockPos(), state);
+                    }
+                } catch (Exception ignored) {}
             }
         }
         for (int i = 0; i < 4; i++) {

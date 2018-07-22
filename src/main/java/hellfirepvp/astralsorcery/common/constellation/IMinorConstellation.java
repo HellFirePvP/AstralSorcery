@@ -22,11 +22,11 @@ import java.util.List;
  */
 public interface IMinorConstellation extends IConstellation {
 
-    public List<MoonPhase> getShowupMoonPhases();
+    public List<MoonPhase> getShowupMoonPhases(long rSeed);
 
     @Override
     default boolean canDiscover(PlayerProgress progress) {
-        return progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
+        return progress.wasOnceAttuned() && progress.getTierReached().isThisLaterOrEqual(ProgressionTier.TRAIT_CRAFT);
     }
 
 }

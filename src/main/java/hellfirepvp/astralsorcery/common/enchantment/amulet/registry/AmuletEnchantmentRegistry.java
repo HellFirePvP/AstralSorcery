@@ -91,4 +91,8 @@ public class AmuletEnchantmentRegistry implements ConfigDataAdapter<WeightedAmul
         return Optional.of(ench);
     }
 
+    @Override
+    public void resetRegistry() {
+        possibleEnchants.clear();
+    }
 }

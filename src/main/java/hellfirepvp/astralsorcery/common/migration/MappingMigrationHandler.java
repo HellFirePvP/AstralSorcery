@@ -63,6 +63,12 @@ public class MappingMigrationHandler {
                     }
                 }
 
+                tileId = new ResourceLocation(compound.getString("id"));
+
+                if ("astralsorcery:tileportalnode".equals(tileId.toString())) {
+                    compound.setString("id", "astralsorcery:tilestructcontroller");
+                }
+
                 return compound;
             }
         });

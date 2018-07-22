@@ -65,7 +65,7 @@ public class StructureMatchPreview {
             if(key.equals(BlockPos.ORIGIN)) continue;
             Optional<Boolean> match = pba.matchSingleBlock(Minecraft.getMinecraft().world, center, key);
             if(match.isPresent() && !match.get()) {
-                TESRTranslucentBlock.addForRender(pba.getPattern().get(key).state, center.add(key));
+                TESRTranslucentBlock.addForRender(null, pba.getPattern().get(key).state, center.add(key));
             }
         }
     }

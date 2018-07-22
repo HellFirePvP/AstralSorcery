@@ -25,7 +25,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceCl
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -224,7 +224,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             NBTTagList list = nbt.getTagList("sources", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound sourcePos = list.getCompoundTagAt(i);
-                BlockPos at = NBTUtils.readBlockPosFromNBT(sourcePos);
+                BlockPos at = NBTHelper.readBlockPosFromNBT(sourcePos);
                 ChunkSectionNetworkData section = getSectionData(at);
                 if(section == null) {
                     AstralSorcery.log.warn("[AstralSorcery] Expected source tile at " + at + " but didn't even find chunk section!");
@@ -273,7 +273,7 @@ public class LightNetworkBuffer extends CachedWorldData {
         NBTTagList sourceList = new NBTTagList();
         for (BlockPos pos : starlightSources.keySet()) {
             NBTTagCompound sourceTag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, sourceTag);
+            NBTHelper.writeBlockPosToNBT(pos, sourceTag);
             NBTTagCompound source = new NBTTagCompound();
             IIndependentStarlightSource sourceNode = starlightSources.get(pos);
             try {
@@ -514,7 +514,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             }*/
             for (int i = 0; i < sectionData.tagCount(); i++) {
                 NBTTagCompound nodeComp = sectionData.getCompoundTagAt(i);
-                BlockPos pos = NBTUtils.readBlockPosFromNBT(nodeComp);
+                BlockPos pos = NBTHelper.readBlockPosFromNBT(nodeComp);
 
                 NBTTagCompound prismComp = nodeComp.getCompoundTag("nodeTag");
                 String nodeIdentifier = prismComp.getString("trNodeId");
@@ -534,7 +534,7 @@ public class LightNetworkBuffer extends CachedWorldData {
             for (Map.Entry<BlockPos, IPrismTransmissionNode> node : nodes.entrySet()) {
                 try {
                     NBTTagCompound nodeComp = new NBTTagCompound();
-                    NBTUtils.writeBlockPosToNBT(node.getKey(), nodeComp);
+                    NBTHelper.writeBlockPosToNBT(node.getKey(), nodeComp);
 
                     NBTTagCompound prismComp = new NBTTagCompound();
                     IPrismTransmissionNode prismNode = node.getValue();

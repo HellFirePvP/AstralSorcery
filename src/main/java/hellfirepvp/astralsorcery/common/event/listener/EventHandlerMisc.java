@@ -11,10 +11,12 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.event.ItemEnchantmentTooltipEvent;
+import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,7 +41,22 @@ public class EventHandlerMisc {
         List<String> toolTip = event.getToolTip();
         ItemStack stack = event.getItemStack();
 
-        if(SwordSharpenHelper.isSwordSharpened(stack)) {
+        if (stack.getItem() instanceof ItemEnchantmentAmulet &&
+                ItemEnchantmentAmulet.getAmuletColor(stack).orElse(0) == 0xFFFFFFFF) {
+            List<String> newTooltip = new LinkedList<>();
+            if(toolTip.size() > 1) {
+                newTooltip.addAll(toolTip);
+                newTooltip.add(1, TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + I18n.format("item.itemenchantmentamulet.pure"));
+            } else {
+                newTooltip.add(TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + I18n.format("item.itemenchantmentamulet.pure"));
+                newTooltip.addAll(toolTip);
+            }
+
+            toolTip.clear();
+            toolTip.addAll(newTooltip);
+        }
+
+        if (SwordSharpenHelper.isSwordSharpened(stack)) {
             List<String> newTooltip = new LinkedList<>();
             if(toolTip.size() > 1) {
                 newTooltip.addAll(toolTip);

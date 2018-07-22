@@ -282,9 +282,9 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
         List<EntityItem> unfilteredItems = world.getEntitiesWithinAABB(EntityItem.class, box);
         if(unfilteredItems.size() == 1) {
             EntityItem item = unfilteredItems.get(0);
-            if(EntityUtils.selectItemStack(crystalAcceptor).apply(item)) {
+            if(EntityUtils.selectItemStack(crystalAcceptor).apply(item) && this.activeFound instanceof IWeakConstellation) {
                 setAttunementState(2, item);
-            } else if(EntityUtils.selectItemStack(traitAcceptor).apply(item)) {
+            } else if(EntityUtils.selectItemStack(traitAcceptor).apply(item) && this.activeFound instanceof IMinorConstellation) {
                 setAttunementState(2, item);
             }
         }

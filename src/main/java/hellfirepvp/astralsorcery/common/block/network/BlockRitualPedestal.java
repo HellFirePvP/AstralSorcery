@@ -31,6 +31,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 /**
@@ -82,6 +84,18 @@ public class BlockRitualPedestal extends BlockStarlightNetwork {
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_) {
         return BlockFaceShape.UNDEFINED;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileRitualPedestal pedestal = MiscUtils.getTileAt(worldIn, pos, TileRitualPedestal.class, true);
+        if(pedestal != null && !worldIn.isRemote) {
+            TileReceiverBaseInventory.ItemHandlerTile handle = pedestal.getInventoryHandler();
+            ItemUtils.dropInventory(handle, worldIn, pos);
+            handle.clearInventory();
+        }
+
+        super.breakBlock(worldIn, pos, state);
     }
 
     /*@Override

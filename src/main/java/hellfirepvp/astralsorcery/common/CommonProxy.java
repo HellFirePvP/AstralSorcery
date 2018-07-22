@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonFlareManager;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.block.BlockCustomSandOre;
 import hellfirepvp.astralsorcery.common.block.BlockMarble;
@@ -105,7 +107,7 @@ public class CommonProxy implements IGuiHandler {
     public static AstralWorldGenerator worldGenerator = new AstralWorldGenerator();
     private CommonScheduler commonScheduler = new CommonScheduler();
 
-    public void preLoadConfigEntries() {
+    public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
         ConstellationPerks.addDynamicConfigEntries();
@@ -217,6 +219,7 @@ public class CommonProxy implements IGuiHandler {
         RegistryResearch.init();
         RegistryRecipes.initGrindstoneOreRecipes();
         SextantFinder.initialize();
+        PatreonEffectHelper.init();
 
         RegistryConstellations.initMapEffects();
 
@@ -276,6 +279,7 @@ public class CommonProxy implements IGuiHandler {
         manager.register(TimeStopController.INSTANCE);
         manager.register(PlayerAmuletHandler.INSTANCE);
         //manager.register(SpellCastingManager.INSTANCE);
+        manager.register(PatreonFlareManager.INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
@@ -395,7 +399,8 @@ public class CommonProxy implements IGuiHandler {
         MAP_DRAWING(TileMapDrawingTable.class),
         JOURNAL,
         JOURNAL_STORAGE,
-        OBSERVATORY(TileObservatory.class);
+        OBSERVATORY(TileObservatory.class),
+        SEXTANT;
 
         private final Class<? extends TileEntity> tileClass;
 

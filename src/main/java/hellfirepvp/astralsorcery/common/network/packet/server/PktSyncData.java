@@ -18,6 +18,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class PktSyncData implements IMessage, IMessageHandler<PktSyncData, IMess
                 continue;
             }
 
-            AbstractData dat = provider.provideNewInstance();
+            AbstractData dat = provider.provideNewInstance(Side.CLIENT);
             dat.readRawFromPacket(cmp);
 
             data.put(key, dat);

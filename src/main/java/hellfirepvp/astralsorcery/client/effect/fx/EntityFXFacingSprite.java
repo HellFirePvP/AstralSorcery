@@ -141,7 +141,7 @@ public abstract class EntityFXFacingSprite extends EntityComplexFX implements IC
         GlStateManager.color(1F, 1F, 1F, 1F);
         int frame = getAgeBasedFrame();
         Tuple<Double, Double> uv = spriteSheet.getUVOffset(frame);
-        spriteSheet.getResource().bind();
+        spriteSheet.getResource().bindTexture();
         double iX = RenderingUtils.interpolate(prevX, x, pTicks);
         double iY = RenderingUtils.interpolate(prevY, y, pTicks);
         double iZ = RenderingUtils.interpolate(prevZ, z, pTicks);

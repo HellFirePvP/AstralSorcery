@@ -77,7 +77,9 @@ public class AstralPatchTransformer implements SubClassTransformer {
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchUpdateElytra",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevels",
                     "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltip",
-                    "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltipEvent"
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchModifyEnchantmentLevelsTooltipEvent",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldClient",
+                    "hellfirepvp.astralsorcery.core.patch.helper.PatchSunBrightnessWorldCommon"
             };
             for (String str : references) {
                 try {

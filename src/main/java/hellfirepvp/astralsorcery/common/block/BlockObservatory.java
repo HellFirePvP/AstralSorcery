@@ -71,7 +71,7 @@ public class BlockObservatory extends BlockContainer {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             TileObservatory to = MiscUtils.getTileAt(world, pos, TileObservatory.class, false);
-            if (to != null && to.isUsable()) {
+            if (to != null && to.isUsable() && !player.isSneaking()) {
                 Entity e = to.findRideableObservatoryEntity();
                 if (e != null) {
                     if(player.getRidingEntity() == null) {

@@ -125,6 +125,11 @@ public class FluidRarityRegistry implements ConfigDataAdapter<FluidRarityRegistr
         return Optional.of(entry);
     }
 
+    @Override
+    public void resetRegistry() {
+        rarityList.clear();
+    }
+
     @Nullable
     private static FluidRarityEntry selectFluidEntry(Random random) {
         FluidRarityEntry entry = WeightedRandom.getRandomItem(random, rarityList);

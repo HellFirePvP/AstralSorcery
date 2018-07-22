@@ -27,7 +27,6 @@ import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectStatus;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.item.crystal.base.ItemTunedCrystalBase;
-import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.MultiBlockArrays;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
@@ -40,7 +39,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.registry.Transmis
 import hellfirepvp.astralsorcery.common.tile.base.TileReceiverBaseInventory;
 import hellfirepvp.astralsorcery.common.util.*;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +48,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -116,9 +114,8 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
                     recNode.markDirty(world);
 
-                    if(!getInventoryHandler().getStackInSlot(0).isEmpty()) {
+                    if(!getInventoryHandler().getStackInSlot(0).isEmpty() && recNode.getCrystal().isEmpty()) {
                         recNode.setChannelingCrystal(getInventoryHandler().getStackInSlot(0), this.world);
-                        getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
                     }
                 }
                 markForUpdate();
@@ -271,14 +268,16 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
     }
 
     public ItemStack placeCrystalIntoPedestal(ItemStack crystal) {
+        getInventoryHandler().setStackInSlot(0, ItemUtils.copyStackWithSize(crystal, Math.min(crystal.getCount(), 1)));
+
         TransmissionReceiverRitualPedestal recNode = getUpdateCache();
         if(recNode != null) {
             if(recNode.getCrystal().isEmpty()) {
                 markForUpdate();
-                return recNode.setChannelingCrystal(crystal, this.world);
+                recNode.setChannelingCrystal(crystal, this.world);
             }
         }
-        return crystal;
+        return ItemUtils.copyStackWithSize(crystal, Math.max(0, crystal.getCount() - 1));
     }
 
     public ItemStack getCurrentPedestalCrystal() {
@@ -467,37 +466,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
     }
 
     @Override
-    public void readNetNBT(NBTTagCompound compound) {
-        super.readNetNBT(compound);
-
-        if(compound.hasKey("crystalSlot")) {
-            ItemStack crystal = new ItemStack(compound.getCompoundTag("crystalSlot"));
-            if(!crystal.isEmpty()) {
-                getInventoryHandler().setStackInSlot(0, crystal);
-            } else {
-                getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
-            }
-        } else {
-            getInventoryHandler().setStackInSlot(0, ItemStack.EMPTY);
-        }
-    }
-
-    @Override
-    public void writeNetNBT(NBTTagCompound compound) {
-        super.writeNetNBT(compound);
-
-        TransmissionReceiverRitualPedestal recNode = getUpdateCache();
-        if(recNode != null) {
-            ItemStack crystal = recNode.getCrystal();
-            if(!crystal.isEmpty()) {
-                NBTTagCompound serialized = new NBTTagCompound();
-                crystal.writeToNBT(serialized);
-                compound.setTag("crystalSlot", serialized);
-            }
-        }
-    }
-
-    @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
@@ -511,7 +479,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         this.hasMultiblock = compound.getBoolean("hasMultiblock");
 
         if(compound.hasKey("ritualLinkPos")) {
-            this.ritualLink = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+            this.ritualLink = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
         } else {
             this.ritualLink = null;
         }
@@ -519,7 +487,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         offsetMirrorPositions.clear();
         NBTTagList listPos = compound.getTagList("positions", 10);
         for (int i = 0; i < listPos.tagCount(); i++) {
-            offsetMirrorPositions.add(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)));
+            offsetMirrorPositions.add(NBTHelper.readBlockPosFromNBT(listPos.getCompoundTagAt(i)));
         }
     }
 
@@ -536,14 +504,14 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
 
         if(ritualLink != null) {
             NBTTagCompound tag = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(ritualLink, tag);
+            NBTHelper.writeBlockPosToNBT(ritualLink, tag);
             compound.setTag("ritualLinkPos", tag);
         }
 
         NBTTagList listPositions = new NBTTagList();
         for (BlockPos pos : offsetMirrorPositions) {
             NBTTagCompound cmp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(pos, cmp);
+            NBTHelper.writeBlockPosToNBT(pos, cmp);
             listPositions.appendTag(cmp);
         }
         compound.setTag("positions", listPositions);
@@ -655,10 +623,6 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
 
             if(channeling != null && properties != null && hasMultiblock) {
-                TileRitualPedestal ped = getTileAtPos(world, TileRitualPedestal.class);
-                if(ped != null) {
-                    ped.markForUpdate();
-                }
                 if(ce == null) {
                     ce = channeling.getRitualEffect(getRitualOrigin());
                     /*if(channeling.equals(Constellations.ara)) {
@@ -756,14 +720,14 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 prop = prop.modify(trait);
             }
 
-            double maxDrain = 7D;
+            double maxDrain = 14D;
             maxDrain /= CrystalCalculations.getMaxRitualReduction(this.properties);
             maxDrain /= Math.max(1, getCollectedBackmirrors() - 1);
             collectionChannelBuffer *= prop.getPotency();
             int executeTimes = MathHelper.floor(collectionChannelBuffer / maxDrain);
 
             int freeCap = MathHelper.floor(CrystalCalculations.getChannelingCapacity(this.properties) * prop.getFracturationLowerBoundaryMultiplier());
-            double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * prop.getFracturationRate();
+            double addFractureChance = CrystalCalculations.getFractureChance(executeTimes, freeCap) * CrystalCalculations.getCstFractureModifier(this.channeling) * prop.getFracturationRate();
             int part = Math.max(1, executeTimes - freeCap);
 
             if(ce instanceof ConstellationEffectStatus && executeTimes > 0) {
@@ -772,7 +736,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 if(ritualLinkTo != null) to = ritualLinkTo;
                 if(((ConstellationEffectStatus) ce).runEffect(world, to, getCollectedBackmirrors(), prop, trait)) {
                     for (int i = 0; i < part; i++) {
-                        if(rand.nextFloat() < (addFractureChance / part)) {
+                        if(rand.nextFloat() < (addFractureChance * prop.getEffectAmplifier() / part)) {
                             fractureCrystal(world);
                         }
                     }
@@ -794,7 +758,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 BlockPos to = getPos();
                 if(ritualLinkTo != null) to = ritualLinkTo;
                 if(ce.playEffect(world, to, perc, prop, trait)) {
-                    if(rand.nextFloat() < (addFractureChance / prop.getEffectAmplifier() / part)) {
+                    if(rand.nextFloat() < (addFractureChance * prop.getEffectAmplifier() / part)) {
                         fractureCrystal(world);
                     }
                     markDirty(world);
@@ -807,6 +771,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
                 CrystalProperties prop = CrystalProperties.getCrystalProperties(this.crystal);
                 if(prop != null) {
                     prop = new CrystalProperties(prop.getSize(), prop.getPurity(), prop.getCollectiveCapability(), prop.getFracturation() + 1, prop.getSizeOverride());
+                    System.out.println(prop.getFracturation());
                     if(prop.getFracturation() >= 100) {
                         SoundHelper.playSoundAround(SoundEvents.BLOCK_GLASS_BREAK, world, getPos(), 7.5F, 1.4F);
                         Vector3 at = new Vector3(getPos()).add(0.5, 1.5, 0.5);
@@ -872,15 +837,11 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void tryGainMirrorPos(World world) {
-            //AstralSorcery.log.info("size: " + offsetMirrors.size());
-            //AstralSorcery.log.info("collected: " + (getCollectedBackmirrors() - 1));
             if(offsetMirrors.size() < 0 || offsetMirrors.size() >= 5) return;
             int mirrors = offsetMirrors.size();
             if((getCollectedBackmirrors() - 1) < mirrors) return;
             int step = secToNext[mirrors];
-            //AstralSorcery.log.info("step: " + step + ", channeling: " + channeled);
             if(channeled > step) {
-                //AstralSorcery.log.info("try find new.");
                 if(world.rand.nextInt(chanceToNext[mirrors]) == 0) {
                     findPossibleMirror(world);
                 }
@@ -888,16 +849,37 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
         }
 
         private void findPossibleMirror(World world) {
-            BlockPos offset = possibleOffsets[world.rand.nextInt(possibleOffsets.length)];
-            RaytraceAssist ray = new RaytraceAssist(getPos(), getPos().add(offset));
-            Vector3 from = new Vector3(0.5, 0.7, 0.5);
-            Vector3 newDir = new Vector3(offset).add(0.5, 0.5, 0.5).subtract(from);
-            for (BlockPos p : offsetMirrors.keySet()) {
-                Vector3 toDir = new Vector3(p).add(0.5, 0.5, 0.5).subtract(from);
-                if(Math.toDegrees(toDir.angle(newDir)) <= 30) return;
-                if(offset.distanceSq(p) <= 3) return;
+            long seed = 3451968351053166105L;
+            seed |= this.getPos().toLong() * 31;
+            seed |= this.channeling.getUnlocalizedName().hashCode() * 31;
+            Random r = new Random(seed);
+            for (int i = 0; i < this.getCollectedBackmirrors(); i++) {
+                r.nextInt(possibleOffsets.length);
             }
-            if(ray.isClear(world)) {
+            BlockPos offset = null;
+            boolean isValid = false;
+            int c = 100;
+            lblWhile: while (!isValid && c > 0) {
+                c--;
+                offset = possibleOffsets[r.nextInt(possibleOffsets.length)];
+                RaytraceAssist ray = new RaytraceAssist(getPos(), getPos().add(offset));
+                Vector3 from = new Vector3(0.5, 0.7, 0.5);
+                Vector3 newDir = new Vector3(offset).add(0.5, 0.5, 0.5).subtract(from);
+                for (BlockPos p : offsetMirrors.keySet()) {
+                    Vector3 toDir = new Vector3(p).add(0.5, 0.5, 0.5).subtract(from);
+                    if(Math.toDegrees(toDir.angle(newDir)) <= 30) {
+                        continue lblWhile;
+                    }
+                    if(offset.distanceSq(p) <= 3) {
+                        continue lblWhile;
+                    }
+                    if(!ray.isClear(world)) {
+                        continue lblWhile;
+                    }
+                }
+                isValid = true;
+            }
+            if (isValid) {
                 addMirrorPosition(world, offset);
             }
         }
@@ -965,7 +947,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             offsetMirrors.clear();
             NBTTagList listPos = compound.getTagList("positions", 10);
             for (int i = 0; i < listPos.tagCount(); i++) {
-                offsetMirrors.put(NBTUtils.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
+                offsetMirrors.put(NBTHelper.readBlockPosFromNBT(listPos.getCompoundTagAt(i)), false);
             }
 
             if(compound.hasKey("crystal")) {
@@ -975,7 +957,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
 
             if(compound.hasKey("ritualLinkPos")) {
-                this.ritualLinkTo = NBTUtils.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
+                this.ritualLinkTo = NBTHelper.readBlockPosFromNBT(compound.getCompoundTag("ritualLinkPos"));
             } else {
                 this.ritualLinkTo = null;
             }
@@ -1000,7 +982,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             NBTTagList listPositions = new NBTTagList();
             for (BlockPos pos : offsetMirrors.keySet()) {
                 NBTTagCompound cmp = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(pos, cmp);
+                NBTHelper.writeBlockPosToNBT(pos, cmp);
                 listPositions.appendTag(cmp);
             }
             compound.setTag("positions", listPositions);
@@ -1021,7 +1003,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
             if(ritualLinkTo != null) {
                 NBTTagCompound tag = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(ritualLinkTo, tag);
+                NBTHelper.writeBlockPosToNBT(ritualLinkTo, tag);
                 compound.setTag("ritualLinkPos", tag);
             }
             if(ce != null) {
@@ -1055,7 +1037,7 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             this.properties = properties;
             this.channeling = channeling;
             this.trait = trait;
-            if(this.channeling == null || this.channeling != prev) {
+            if(this.channeling != prev) {
                 this.clearAllMirrorPositions(world);
             }
 
@@ -1074,11 +1056,9 @@ public class TileRitualPedestal extends TileReceiverBaseInventory implements IMu
             }
         }
 
-        public ItemStack setChannelingCrystal(ItemStack crystal, World world) {
-            this.crystal = ItemUtils.copyStackWithSize(crystal, 1);
-            crystal = ItemUtils.copyStackWithSize(crystal, crystal.getCount() - 1);
+        public void setChannelingCrystal(ItemStack crystal, World world) {
+            this.crystal = ItemUtils.copyStackWithSize(crystal, Math.min(crystal.getCount(), 1));
             markDirty(world);
-            return crystal;
         }
 
         public ItemStack getCrystal() {

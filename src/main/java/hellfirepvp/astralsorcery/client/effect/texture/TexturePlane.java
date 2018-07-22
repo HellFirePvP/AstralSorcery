@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.IComplexEffect;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -53,10 +54,10 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
     private EntityComplexFX.ScaleFunction<TexturePlane> scaleFunc;
     private boolean flagRemoved = true;
 
-    private final BindableResource texture;
+    private final AbstractRenderableTexture texture;
     private final Vector3 axis;
 
-    public TexturePlane(BindableResource texture, Vector3 axis) {
+    public TexturePlane(AbstractRenderableTexture texture, Vector3 axis) {
         this.texture = texture;
         this.axis = axis;
     }
@@ -245,7 +246,7 @@ public class TexturePlane implements IComplexEffect, IComplexEffect.PreventRemov
         if(scaleFunc != null) {
             scale = scaleFunc.getScale(this, parTicks, scale);
         }
-        texture.bind();
+        texture.bindTexture();
         RenderingUtils.renderAngleRotatedTexturedRect(pos, axis, angle, scale, u, v, uLength, vLength, parTicks);
     }
 

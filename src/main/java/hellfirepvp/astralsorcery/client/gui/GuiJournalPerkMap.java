@@ -150,7 +150,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
 
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-            sprite.getResource().bind();
+            sprite.getResource().bindTexture();
             int starX = position.x;
             int starY = position.y;
 
@@ -332,7 +332,7 @@ public class GuiJournalPerkMap extends GuiScreenJournal {
             } else {
                 sprite = SpriteLibrary.spritePerkInactive;
             }
-            sprite.getResource().bind();
+            sprite.getResource().bindTexture();
             int starX = star.getValue().x;
             int starY = star.getValue().y;
 

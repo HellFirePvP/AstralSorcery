@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 
 import java.util.Collections;
 import java.util.List;
@@ -70,6 +71,14 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     public Map<ConstellationPerk, Integer> getAppliedPerks() {
         return Collections.emptyMap();
     }
+
+    @Override
+    public List<SextantFinder.TargetObject> getUsedTargets() {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public void useTarget(SextantFinder.TargetObject target) {}
 
     @Override
     public boolean hasConstellationDiscovered(String constellation) {

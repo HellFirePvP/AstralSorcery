@@ -17,7 +17,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionNode
 import hellfirepvp.astralsorcery.common.starlight.transmission.NodeConnection;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -141,18 +141,18 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        this.thisPos = NBTUtils.readBlockPosFromNBT(compound);
+        this.thisPos = NBTHelper.readBlockPosFromNBT(compound);
         this.sourcesToThis.clear();
         this.ignoreBlockCollision = compound.getBoolean("ignoreBlockCollision");
 
         NBTTagList list = compound.getTagList("sources", 10);
         for (int i = 0; i < list.tagCount(); i++) {
-            sourcesToThis.add(NBTUtils.readBlockPosFromNBT(list.getCompoundTagAt(i)));
+            sourcesToThis.add(NBTHelper.readBlockPosFromNBT(list.getCompoundTagAt(i)));
         }
 
         if(compound.hasKey("nextPos")) {
             NBTTagCompound tag = compound.getCompoundTag("nextPos");
-            BlockPos next = NBTUtils.readBlockPosFromNBT(tag);
+            BlockPos next = NBTHelper.readBlockPosFromNBT(tag);
             boolean oldRay = tag.getBoolean("rayState");
             addLink(null, next, false, oldRay);
         }
@@ -160,20 +160,20 @@ public class SimpleTransmissionNode implements ITransmissionNode {
 
     @Override
     public void writeToNBT(NBTTagCompound compound) {
-        NBTUtils.writeBlockPosToNBT(thisPos, compound);
+        NBTHelper.writeBlockPosToNBT(thisPos, compound);
         compound.setBoolean("ignoreBlockCollision", this.ignoreBlockCollision);
 
         NBTTagList sources = new NBTTagList();
         for (BlockPos source : sourcesToThis) {
             NBTTagCompound comp = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(source, comp);
+            NBTHelper.writeBlockPosToNBT(source, comp);
             sources.appendTag(comp);
         }
         compound.setTag("sources", sources);
 
         if(nextPos != null) {
             NBTTagCompound pos = new NBTTagCompound();
-            NBTUtils.writeBlockPosToNBT(nextPos, pos);
+            NBTHelper.writeBlockPosToNBT(nextPos, pos);
             pos.setBoolean("rayState", nextReachable);
             compound.setTag("nextPos", pos);
         }

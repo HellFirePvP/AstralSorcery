@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -44,6 +45,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
     public List<String> knownConstellations = new ArrayList<>();
     public List<String> seenConstellations = new ArrayList<>();
     public List<ResearchProgression> researchProgression = new ArrayList<>();
+    public List<SextantFinder.TargetObject> usedTargets = new ArrayList<>();
     public IMajorConstellation attunedConstellation = null;
     public Map<ConstellationPerk, Integer> appliedPerks = new HashMap<>();
     public int progressTier = 0;
@@ -65,6 +67,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
         this.appliedPerks = progress.getAppliedPerks();
         this.alignmentCharge = progress.getAlignmentCharge();
         this.wasOnceAttuned = progress.wasOnceAttuned();
+        this.usedTargets = progress.getUsedTargets();
     }
 
     @Override
@@ -126,6 +129,20 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             this.appliedPerks = new HashMap<>();
         }
 
+        int targetLength = buf.readInt();
+        if (targetLength != -1) {
+            this.usedTargets = new ArrayList<>(targetLength);
+            for (int i = 0; i < targetLength; i++) {
+                String str = ByteBufUtils.readString(buf);
+                SextantFinder.TargetObject to = SextantFinder.getByName(str);
+                if (to != null) {
+                    this.usedTargets.add(to);
+                }
+            }
+        } else {
+            this.usedTargets = new ArrayList<>();
+        }
+
         this.wasOnceAttuned = buf.readBoolean();
         this.progressTier = buf.readInt();
         this.alignmentCharge = buf.readDouble();
@@ -174,6 +191,15 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
             for (ConstellationPerk perk : appliedPerks.keySet()) {
                 buf.writeInt(perk.getId());
                 buf.writeInt(appliedPerks.get(perk));
+            }
+        } else {
+            buf.writeInt(-1);
+        }
+
+        if(usedTargets != null) {
+            buf.writeInt(usedTargets.size());
+            for (SextantFinder.TargetObject to : usedTargets) {
+                ByteBufUtils.writeString(buf, to.getRegistryName());
             }
         } else {
             buf.writeInt(-1);

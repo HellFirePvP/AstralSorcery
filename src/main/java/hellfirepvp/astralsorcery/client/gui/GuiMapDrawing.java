@@ -159,7 +159,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
                                 .filter((c) -> ResearchManager.clientProgress.hasConstellationDiscovered(c.getUnlocalizedName()))
                                 .collect(Collectors.toList());
 
-                        for (int i = 0; i < filtered.size(); i++) {
+                        for (int i = 0; i < Math.min(filtered.size(), 12); i++) {
                             IConstellation c = filtered.get(i);
                             int offsetX = i % 2 == 0 ? 8 : 232;
                             int offsetY = 40 + (i / 2) * 23;
@@ -198,7 +198,7 @@ public class GuiMapDrawing extends GuiTileBase<TileMapDrawingTable> {
 
         if(tile.getPercRunning() > 1E-4) {
             SpriteSheetResource halo = SpriteLibrary.spriteHalo2;
-            halo.getResource().bind();
+            halo.getResource().bindTexture();
             Tuple<Double, Double> uvFrame = halo.getUVOffset(ClientScheduler.getClientTick());
             GlStateManager.pushMatrix();
 

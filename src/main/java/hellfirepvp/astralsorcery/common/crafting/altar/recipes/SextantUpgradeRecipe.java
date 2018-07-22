@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
+import hellfirepvp.astralsorcery.common.block.BlockInfusedWood;
 import hellfirepvp.astralsorcery.common.crafting.helper.AccessibleRecipe;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe;
@@ -54,7 +55,8 @@ public class SextantUpgradeRecipe extends ConstellationRecipe {
                 ConstellationAtlarSlot.UP_RIGHT_RIGHT,
                 ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationAtlarSlot.DOWN_RIGHT_RIGHT,
-                ConstellationAtlarSlot.DOWN_LEFT_LEFT,
+                ConstellationAtlarSlot.DOWN_LEFT_LEFT);
+        setCstItem(BlockInfusedWood.WoodType.INFUSED.asStack(),
                 ConstellationAtlarSlot.DOWN_DOWN_RIGHT,
                 ConstellationAtlarSlot.DOWN_DOWN_LEFT);
     }

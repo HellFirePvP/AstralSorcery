@@ -10,7 +10,7 @@ package hellfirepvp.astralsorcery.common.data.world.data;
 
 import hellfirepvp.astralsorcery.common.data.world.CachedWorldData;
 import hellfirepvp.astralsorcery.common.data.world.WorldCacheManager;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
+import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -87,7 +87,7 @@ public class StructureGenBuffer extends CachedWorldData {
             NBTTagList list = compound.getTagList(type.name().toLowerCase(), Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound cmp = list.getCompoundTagAt(i);
-                BlockPos pos = NBTUtils.readBlockPosFromNBT(cmp);
+                BlockPos pos = NBTHelper.readBlockPosFromNBT(cmp);
                 generatedStructures.get(type).add(pos);
             }
         }
@@ -99,7 +99,7 @@ public class StructureGenBuffer extends CachedWorldData {
             NBTTagList list = new NBTTagList();
             for (BlockPos pos : generatedStructures.get(type)) {
                 NBTTagCompound tag = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(pos, tag);
+                NBTHelper.writeBlockPosToNBT(pos, tag);
                 list.appendTag(tag);
             }
             compound.setTag(type.name().toLowerCase(), list);

@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -212,7 +213,7 @@ public class DataLightBlockEndpoints extends AbstractData {
         }
 
         @Override
-        public DataLightBlockEndpoints provideNewInstance() {
+        public DataLightBlockEndpoints provideNewInstance(Side side) {
             return new DataLightBlockEndpoints();
         }
 

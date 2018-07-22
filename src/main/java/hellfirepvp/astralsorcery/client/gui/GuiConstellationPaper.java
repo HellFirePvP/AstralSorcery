@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui;
 
+import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.MoonPhaseRenderHelper;
 import hellfirepvp.astralsorcery.client.util.RenderConstellation;
@@ -51,16 +52,21 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void testPhases() {
-        if(constellation instanceof IWeakConstellation) {
-            Collections.addAll(phases, MoonPhase.values());
-        } else if(constellation instanceof IMinorConstellation) {
-            //Why this way? To maintain phase-order.
-            for (MoonPhase ph : MoonPhase.values()) {
-                if(((IMinorConstellation) constellation).getShowupMoonPhases().contains(ph)) {
-                    phases.add(ph);
-                }
-            }
-        }
+        Collections.addAll(phases, MoonPhase.values());
+
+        //if(constellation instanceof IWeakConstellation) {
+        //    Collections.addAll(phases, MoonPhase.values());
+        //} else if(constellation instanceof IMinorConstellation) {
+        //    //Why this way? To maintain phase-order.
+        //    Optional<Long> seedOpt = ConstellationSkyHandler.getInstance().getSeedIfPresent(Minecraft.getMinecraft().world);
+        //    if(seedOpt.isPresent()) {
+        //        for (MoonPhase ph : MoonPhase.values()) {
+        //            if(((IMinorConstellation) constellation).getShowupMoonPhases(seedOpt.get()).contains(ph)) {
+        //                phases.add(ph);
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     @Override
@@ -125,8 +131,10 @@ public class GuiConstellationPaper extends GuiWHScreen {
     }
 
     private void drawPhaseInformation() {
+        GlStateManager.enableBlend();
         GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.apply();
+        Blending.DEFAULT.applyStateManager();
         GL11.glColor4f(1, 1, 1, 1);
         if(constellation instanceof IConstellationSpecialShowup) {
             double scale = 1.8;
@@ -144,6 +152,13 @@ public class GuiConstellationPaper extends GuiWHScreen {
             GL11.glColor4f(1, 1, 1, 1);
             TextureHelper.refreshTextureBindState();
         } else {
+            if(this.phases.isEmpty()) {
+                testPhases();
+                if(this.phases.isEmpty()) {
+                    return;
+                }
+            }
+
             int size = 15;
             int offsetX = (width / 2 + 5) - (phases.size() * (size + 2)) / 2;
             int offsetY = guiTop + 206;

@@ -8,7 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.gui.journal;
 
-import hellfirepvp.astralsorcery.client.gui.GuiWHScreen;
+import hellfirepvp.astralsorcery.client.gui.base.GuiWHScreen;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;

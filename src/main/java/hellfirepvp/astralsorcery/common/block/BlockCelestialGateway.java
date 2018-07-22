@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -59,10 +60,13 @@ public class BlockCelestialGateway extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        if(stack.hasDisplayName()) {
-            TileCelestialGateway gateway = MiscUtils.getTileAt(worldIn, pos, TileCelestialGateway.class, true);
-            if(gateway != null) {
+        TileCelestialGateway gateway = MiscUtils.getTileAt(worldIn, pos, TileCelestialGateway.class, true);
+        if(gateway != null) {
+            if (stack.hasDisplayName()) {
                 gateway.setGatewayName(stack.getDisplayName());
+            }
+            if (placer instanceof EntityPlayerMP && !MiscUtils.isPlayerFakeMP((EntityPlayerMP) placer)) {
+                gateway.setPlacedBy(placer.getUniqueID());
             }
         }
     }

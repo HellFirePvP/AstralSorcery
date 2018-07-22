@@ -38,6 +38,7 @@ import java.util.Map;
 public class RenderConstellation {
 
     //TODO sometimes on certain sky positions, completely vertical or completely horizontal lines go invisible due to the crossproduct returning a NAN vec
+    //TODO re-check blending states on calls
 
     @SideOnly(Side.CLIENT)
     public static void renderConstellation(IConstellation c, ClientConstellationPositionMapping.RenderPosition renderPos, BrightnessFunction brFunc) {
@@ -104,7 +105,9 @@ public class RenderConstellation {
         GlStateManager.disableCull();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
+        GL11.glEnable(GL11.GL_BLEND);
         Blending.DEFAULT.applyStateManager();
+        Blending.DEFAULT.apply();
 
         float fRed = ((float) rC.getRed()) / 255F;
         float fGreen = ((float) rC.getGreen()) / 255F;
@@ -157,6 +160,7 @@ public class RenderConstellation {
 
         GlStateManager.enableCull();
         GlStateManager.enableAlpha();
+        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
     }
 
@@ -223,6 +227,14 @@ public class RenderConstellation {
         BufferBuilder vb = tes.getBuffer();
         double ulength = ((double) width) / 31;
         double vlength = ((double) height) / 31;
+
+        //TODO maybe move this into the calling code. actually please do.... at some point.... please...... :|
+        if (!GL11.glGetBoolean(GL11.GL_BLEND)) {
+            GlStateManager.enableBlend();
+            GL11.glEnable(GL11.GL_BLEND);
+            Blending.DEFAULT.applyStateManager();
+            Blending.DEFAULT.apply();
+        }
 
         Vector3 offsetVec = new Vector3(offsetX, offsetY, zLevel);
         RenderAstralSkybox.TEX_CONNECTION.bind();

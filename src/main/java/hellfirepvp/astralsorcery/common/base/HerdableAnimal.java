@@ -21,6 +21,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTableList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,18 @@ public interface HerdableAnimal<T extends EntityLivingBase> {
 
     static Map<Class<?>, HerdableAnimal> registryHerdable = new HashMap<>();
 
+    @Nullable
     public static <T extends EntityLivingBase> HerdableAnimal<T> getHerdable(T entity) {
-        return registryHerdable.get(entity.getClass());
+        HerdableAnimal<T> herd = registryHerdable.get(entity.getClass());
+        if (herd == null) {
+            for (Class<?> clazz : registryHerdable.keySet()) {
+                if (clazz.isAssignableFrom(entity.getClass())) {
+                    herd = registryHerdable.get(clazz);
+                    break;
+                }
+            }
+        }
+        return herd;
     }
 
     public static void init() {

@@ -13,6 +13,8 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.auxiliary.StarlightNetworkDebugHandler;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
+import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -33,10 +35,7 @@ import hellfirepvp.astralsorcery.common.auxiliary.SwordSharpenHelper;
 import hellfirepvp.astralsorcery.common.util.data.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -51,9 +50,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -78,6 +79,7 @@ public class EventHandlerEntity {
     private static final Random rand = new Random();
     private static final Color discidiaWandColor = new Color(0x880100);
 
+    public static int spawnSkipId = -1;
     public static TickTokenizedMap<WorldBlockPos, TickTokenizedMap.SimpleTickToken<Double>> spawnDenyRegions = new TickTokenizedMap<>(TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> invulnerabilityCooldown = new TimeoutList<>(null, TickEvent.Type.SERVER);
     public static TimeoutList<EntityPlayer> ritualFlight = new TimeoutList<>(player -> {
@@ -113,6 +115,24 @@ public class EventHandlerEntity {
                     ((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSleep(PlayerSleepInBedEvent event) {
+        WorldSkyHandler wsh = ConstellationSkyHandler.getInstance().getWorldHandler(event.getEntityPlayer().getEntityWorld());
+        if(wsh != null && wsh.dayOfSolarEclipse && wsh.solarEclipse) {
+            if (event.getResultStatus() == null) {
+                event.setResult(EntityPlayer.SleepResult.NOT_POSSIBLE_NOW);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onSpawnDropCloud(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof EntityAreaEffectCloud &&
+                MiscUtils.iterativeSearch(((EntityAreaEffectCloud) event.getEntity()).effects, (pEffect) -> pEffect.getPotion().equals(RegistryPotions.potionDropModifier)) != null) {
+            event.setCanceled(true);
         }
     }
 
@@ -354,8 +374,13 @@ public class EventHandlerEntity {
     @SubscribeEvent
     public void onSpawnTest(LivingSpawnEvent.CheckSpawn event) {
         if (event.getResult() == Event.Result.DENY) return; //Already denied anyway.
+        if (event.getWorld().isRemote) return;
 
         EntityLivingBase toTest = event.getEntityLiving();
+        if (spawnSkipId != -1 && toTest.getEntityId() == spawnSkipId) {
+            return;
+        }
+
         Vector3 at = Vector3.atEntityCorner(toTest);
         boolean mayDeny = Config.doesMobSpawnDenyDenyEverything || toTest.isCreatureType(EnumCreatureType.MONSTER, false);
         if (mayDeny) {

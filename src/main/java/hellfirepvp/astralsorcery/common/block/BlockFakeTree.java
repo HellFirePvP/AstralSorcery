@@ -11,6 +11,8 @@ package hellfirepvp.astralsorcery.common.block;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
+import hellfirepvp.astralsorcery.common.base.patreon.PatreonEffectHelper;
+import hellfirepvp.astralsorcery.common.base.patreon.base.PtEffectTreeBeacon;
 import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.block.BlockContainer;
@@ -67,14 +69,21 @@ public class BlockFakeTree extends BlockContainer {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         TileFakeTree tft = MiscUtils.getTileAt(worldIn, pos, TileFakeTree.class, false);
-        if(tft != null && tft.getReference() == null) return;
+        if(tft == null || tft.getReference() == null) return;
         if(rand.nextInt(20) == 0) {
+            Color c = new Color(63, 255, 63);
+            PatreonEffectHelper.PatreonEffect pe;
+            if (tft.getPlayerEffectRef() != null && (pe = PatreonEffectHelper.getEffect(Side.CLIENT, tft.getPlayerEffectRef())) != null &&
+                    pe instanceof PtEffectTreeBeacon) {
+                c = new Color(((PtEffectTreeBeacon) pe).getColorTreeDrainEffects());
+            }
+
             EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
                     pos.getX() + rand.nextFloat(),
                     pos.getY() + rand.nextFloat(),
                     pos.getZ() + rand.nextFloat());
             p.motion(0, 0, 0);
-            p.scale(0.45F).setColor(new Color(63, 255, 63)).setMaxAge(65);
+            p.scale(0.45F).setColor(c).setMaxAge(65);
         }
     }
 

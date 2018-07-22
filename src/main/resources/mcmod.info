@@ -7,7 +7,7 @@
   "mcversion": "${mcversion}",
   "url": "https://minecraft.curseforge.com/projects/astral-sorcery",
   "updateUrl": "",
-  "authorList": ["HellFirePvP, wiiv"],
+  "authorList": ["HellFirePvP", "wiiv"],
   "credits": "HellFirePvP (code), wiiv (models & textures)",
   "logoFile": "assets/astralsorcery/textures/logo.png",
   "screenshots": [],

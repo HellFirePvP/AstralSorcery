@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.crafting.altar.recipes;
 
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapeMap;
 import hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipeSlot;
@@ -70,9 +71,11 @@ public class CollectorCrystalRecipe extends ConstellationRecipe {
         if(center.isEmpty() || !(center.getItem() instanceof ItemTunedCrystalBase)) return ItemStack.EMPTY;
         ItemStack out = super.getOutput(centralGridMap, altar);
         IWeakConstellation attuned = ItemTunedCrystalBase.getMainConstellation(center);
+        IMinorConstellation trait = ItemTunedCrystalBase.getTrait(center);
         CrystalProperties prop = CrystalProperties.getCrystalProperties(center);
         if(attuned == null || prop == null) return ItemStack.EMPTY;
         ItemCollectorCrystal.setConstellation(out, attuned);
+        ItemCollectorCrystal.setTraitConstellation(out, trait);
         CrystalProperties.applyCrystalProperties(out, prop);
         ItemCollectorCrystal.setType(out, celestial ?
                 BlockCollectorCrystalBase.CollectorCrystalType.CELESTIAL_CRYSTAL :

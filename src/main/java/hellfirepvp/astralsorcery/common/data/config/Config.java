@@ -8,14 +8,16 @@
 
 package hellfirepvp.astralsorcery.common.data.config;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncConfig;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -30,9 +32,10 @@ public class Config {
     //TODO remember to do a configurable itemSword-classname blacklist for sharpening.
 
     private static Configuration latestConfig;
-    public static List<PktSyncConfig.SyncTuple> savedSyncTuples = new LinkedList<>();
 
     private static File dirConfigurationRegistries;
+
+    public static boolean enablePatreonEffects = true;
 
     public static boolean respectIdealDistances = true;
     public static int aquamarineAmount = 64;
@@ -47,22 +50,23 @@ public class Config {
     public static boolean doesMobSpawnDenyDenyEverything = false;
     public static boolean rockCrystalOreSilkTouchHarvestable = false;
 
-    @Sync public static float capeChaosResistance = 0.8F;
+    public static float capeChaosResistance = 0.8F;
 
     //Attuned wands configs
-    @Sync public static float evorsioEffectChance = 0.8F;
-    @Sync public static int discidiaStackCap = 10;
-    @Sync public static float discidiaStackMultiplier = 1F;
+    public static float evorsioEffectChance = 0.8F;
+    public static int discidiaStackCap = 10;
+    public static float discidiaStackMultiplier = 1F;
 
-    @Sync public static boolean craftingLiqCrystalGrowth = true;
-    @Sync public static boolean craftingLiqCrystalToolGrowth = true;
-    @Sync public static boolean craftingLiqCelestialCrystalForm = true;
-    @Sync public static boolean canCrystalGrowthYieldDuplicates = true;
+    public static boolean craftingLiqCrystalGrowth = true;
+    public static boolean craftingLiqCrystalToolGrowth = true;
+    public static boolean craftingLiqCelestialCrystalForm = true;
+    public static boolean canCrystalGrowthYieldDuplicates = true;
 
     public static boolean liquidStarlightAquamarine = true;
     public static boolean liquidStarlightSand = true;
     public static boolean liquidStarlightIce = true;
 
+    public static boolean enableFlatGen = false;
     public static boolean enableRetroGen = false;
 
     //Also has a squared field to provide slightly faster rendering.
@@ -77,12 +81,12 @@ public class Config {
     public static int revertStart = 40;
     public static int revertChance = 80;
 
-    @Sync public static double swordSharpMultiplier = 0.1;
+    public static double swordSharpMultiplier = 0.1;
 
-    @Sync public static float illuminationWandUseCost = 0.5F;
-    @Sync public static float grappleWandUseCost = 0.7F;
-    @Sync public static float architectWandUseCost = 0.07F;
-    @Sync public static float exchangeWandUseCost = 0.08F;
+    public static float illuminationWandUseCost = 0.5F;
+    public static float grappleWandUseCost = 0.7F;
+    public static float architectWandUseCost = 0.07F;
+    public static float exchangeWandUseCost = 0.08F;
 
     public static float exchangeWandMaxHardness = -1;
 
@@ -95,13 +99,34 @@ public class Config {
     private static List<ConfigEntry> dynamicConfigEntries = new LinkedList<>();
     private static List<ConfigDataAdapter<?>> dataAdapters = new LinkedList<>();
 
+    private static Map<String, Configuration> cachedConfigs = new HashMap<>();
+
     private Config() {}
 
-    public static void load(File file) {
+    public static void loadAndSetup(File file) {
         latestConfig = new Configuration(file);
         latestConfig.load();
         loadData();
         latestConfig.save();
+        cachedConfigs.put(AstralSorcery.MODID, latestConfig);
+
+        MinecraftForge.EVENT_BUS.register(new Config());
+    }
+
+    @SubscribeEvent
+    public void onCfgChange(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (AstralSorcery.MODID.equals(event.getModID())) {
+            Configuration cfg = cachedConfigs.get(event.getConfigID());
+            if (cfg != null) {
+                cfg.save();
+
+                //Reload all configurations
+                loadData();
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.PRE_INIT);
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.INIT);
+                loadConfigRegistries(ConfigDataAdapter.LoadPhase.POST_INIT);
+            }
+        }
     }
 
     public static void addDynamicEntry(ConfigEntry entry) {
@@ -118,19 +143,6 @@ public class Config {
             }
         }
         dataAdapters.add(dataAdapter);
-    }
-
-    public static void rebuildClientConfig() {
-        try {
-            for (PktSyncConfig.SyncTuple tuple : savedSyncTuples) {
-                Field field = Config.class.getField(tuple.key);
-                field.set(null, tuple.value);
-            }
-            savedSyncTuples.clear();
-        } catch (Throwable exc) {
-            AstralSorcery.log.error("[AstralSorcery] Failed to reapply saved client config!");
-            throw new RuntimeException(exc);
-        }
     }
 
     public static void loadDataRegistries(File cfgDirectory) {
@@ -151,6 +163,7 @@ public class Config {
     }
 
     private static void attemptLoad(ConfigDataAdapter<?> cfg, File file) {
+        cfg.resetRegistry();
         String[] out = cfg.serializeDataSet();
 
         Configuration config = new Configuration(file);
@@ -163,6 +176,13 @@ public class Config {
             }
         }
         config.save();
+        if (!cachedConfigs.containsKey(cfg.getDataFileName())) {
+            cachedConfigs.put(cfg.getDataFileName(), config);
+        }
+    }
+
+    public static Map<String, Configuration> getAvailableConfigurations() {
+        return ImmutableMap.copyOf(cachedConfigs);
     }
 
     private static void loadData() {
@@ -222,8 +242,11 @@ public class Config {
         constellationPaperQuality = latestConfig.getInt("constellationPaperQuality", "worldgen", 2, 1, 128, "Defines the quality of the constellation paper item in loot chests.");
         respectIdealDistances = latestConfig.getBoolean("respectIdealStructureDistances", "worldgen", respectIdealDistances, "If this is set to true, the world generator will try and spawn structures more evenly distributed by their 'ideal' distance set in their config entries. WARNING: might add additional worldgen time.");
         String[] dimGenWhitelist = latestConfig.getStringList("worldGenWhitelist", "worldgen", new String[] { "0" }, "the Astral Sorcery-specific worldgen will only run in Dimension ID's listed here.");
+        enableFlatGen = latestConfig.getBoolean("enableFlatGen", "worldgen", false, "By default, Astral Sorcery does not generate structures or ores in Super-Flat worlds. If, for some reason, you wish to enable generation of structures and ores in a Super-Flat world, then set this value to true.");
 
         enableRetroGen = latestConfig.getBoolean("enableRetroGen", "retrogen", false, "WARNING: Setting this to true, will check on every chunk load if the chunk has been generated depending on the current AstralSorcery version. If the chunk was then generated with an older version, the mod will try and do the worldgen that's needed from the last recorded version to the current version. DO NOT ENABLE THIS FEATURE UNLESS SPECIFICALLY REQUIRED. It might/will slow down chunk loading.");
+
+        enablePatreonEffects = latestConfig.getBoolean("enablePatreonEffects", "patreon", enablePatreonEffects, "Enables/Disables all patreon effects.");
 
         fillWhitelistIDs(dimWhitelist);
         fillWeakSkyRenders(weakSkyRenders);

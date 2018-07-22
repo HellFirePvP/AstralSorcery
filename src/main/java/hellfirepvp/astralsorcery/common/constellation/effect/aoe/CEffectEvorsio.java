@@ -67,7 +67,12 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             return false;
         }
         if(origin != null && MiscUtils.isChunkLoaded(world, origin.getPos())) {
-            TileRitualPedestal pedestal = MiscUtils.getTileAt(world, origin.getPos(), TileRitualPedestal.class, true);
+            BlockPos originPedestal = origin.getPos();
+            TileRitualLink link = MiscUtils.getTileAt(world, originPedestal, TileRitualLink.class, true);
+            if(link != null && link.getLinkedTo() != null && MiscUtils.isChunkLoaded(world, link.getLinkedTo())) {
+                originPedestal = link.getLinkedTo();
+            }
+            TileRitualPedestal pedestal = MiscUtils.getTileAt(world, originPedestal, TileRitualPedestal.class, true);
             if(pedestal != null) {
                 if(copyResizedPedestal == null) {
                     if(MultiBlockArrays.patternRitualPedestalWithLink != null) {
@@ -79,19 +84,17 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                     }
                 }
                 if(copyResizedPedestal != null) {
-                    if(copyResizedPedestal.hasBlockAt(pos.subtract(origin.getPos()))) {
+                    if(copyResizedPedestal.hasBlockAt(pos.subtract(originPedestal))) {
                         return false;
                     }
                 }
-            } else {
-                TileRitualLink link = MiscUtils.getTileAt(world, origin.getPos(), TileRitualLink.class, true);
-                if(link != null) {
-                    return false;
-                }
+                return true;
             }
+            // Critical state: Has a link leading into a nonexistent pedestal OR
+            // is an unlinked anchor casting a ritual...
             return true;
         }
-        return false;
+        return true;
     }
 
     @Override

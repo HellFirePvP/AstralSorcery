@@ -31,6 +31,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonFlareManagerClient;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicStateMapper;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
@@ -215,6 +216,7 @@ public class ClientProxy extends CommonProxy {
         manager.register(new ClientLightbeamHandler());
         manager.register(scheduler);
         manager.register(ClientCameraManager.getInstance());
+        manager.register(PatreonFlareManagerClient.INSTANCE);
     }
 
     @Override

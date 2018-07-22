@@ -68,8 +68,10 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
             player.sendMessage(new TextComponentString("§cWorld is missing a starlight-transmission handler! Is this world not ticking?"));
         }
 
-        player.sendMessage(new TextComponentString("§aIs Network-Tile:§c " + (te instanceof TileNetwork)));
-        player.sendMessage(new TextComponentString("§aIs Starlight-Transmission-Tile:§c " + (te instanceof IStarlightTransmission)));
+        if(te != null) {
+            player.sendMessage(new TextComponentString("§aIs Network-Tile:§c " + (te instanceof TileNetwork)));
+            player.sendMessage(new TextComponentString("§aIs Starlight-Transmission-Tile:§c " + (te instanceof IStarlightTransmission)));
+        }
         player.sendMessage(new TextComponentString("§aIs Transmission-Node present:§c " + (tr != null)));
         if(tr != null) {
             player.sendMessage(new TextComponentString("§aFull Transmission-Node class:§c " + tr.getClass().getName()));
@@ -81,7 +83,7 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
                 player.sendMessage(new TextComponentString("§cNONE"));
             }
             for (BlockPos sPos : sources) {
-                player.sendMessage(new TextComponentString("§a" + sPos.toString()));
+                player.sendMessage(new TextComponentString("§c" + sPos.toString()));
             }
             List<NodeConnection<IPrismTransmissionNode>> next = tr.queryNext(wnh);
             player.sendMessage(new TextComponentString("§aTransmission-Node next links:"));
@@ -89,26 +91,34 @@ public class StarlightNetworkDebugHandler implements ITickHandler {
                 player.sendMessage(new TextComponentString("§cNONE"));
             }
             for (NodeConnection<IPrismTransmissionNode> nextNode : next) {
-                player.sendMessage(new TextComponentString("§a" + nextNode.getTo() + " - canSee/connected: " + nextNode.canConnect()));
+                player.sendMessage(new TextComponentString("§c" + nextNode.getTo() + "§a - canSee/connected:§c " + nextNode.canConnect()));
             }
 
             if(tr instanceof ITransmissionSource) {
                 IIndependentStarlightSource source = wnh.getSourceAt(tr.getPos());
                 if(source != null) {
-                    player.sendMessage(new TextComponentString("§aFound starlight source: " + source.getClass().getName()));
+                    player.sendMessage(new TextComponentString("§aFound starlight source:§c " + source.getClass().getName()));
 
                     if(twh != null) {
                         TransmissionChain chain = twh.getSourceChain(source);
                         if(chain == null) {
                             player.sendMessage(new TextComponentString("§cStarlight source does not have a transmission chain!"));
                         } else {
-                            player.sendMessage(new TextComponentString("§aAmount of nodes this source provides starlight for: " + chain.getEndpointsNodes().size()));
-                            player.sendMessage(new TextComponentString("§aAmount of normal blocks this source provides starlight for: " + chain.getUncheckedEndpointsBlock().size()));
-                            player.sendMessage(new TextComponentString("§aInvolved chunks in this transmission-chain: " + chain.getInvolvedChunks().size()));
+                            player.sendMessage(new TextComponentString("§aAmount of nodes this source provides starlight for:§c " + chain.getEndpointsNodes().size()));
+                            player.sendMessage(new TextComponentString("§aAmount of normal blocks this source provides starlight for:§c " + chain.getUncheckedEndpointsBlock().size()));
+                            player.sendMessage(new TextComponentString("§aInvolved chunks in this transmission-chain:§c " + chain.getInvolvedChunks().size()));
                         }
                     }
                 } else {
                     player.sendMessage(new TextComponentString("§cTransmission-Source-Node is missing starlight source!"));
+                }
+            }
+        }
+        if(twh != null) {
+            Collection<TransmissionChain> chains = twh.getTransmissionChains();
+            for (TransmissionChain ch : chains) {
+                if (ch.getUncheckedEndpointsBlock().contains(pos)) {
+                    player.sendMessage(new TextComponentString("§aFound TransmissionChain transmitting starlight to this block from " + (ch.getSourceNode() == null ? "null" : ch.getSourceNode().getPos().toString()) + "!"));
                 }
             }
         }

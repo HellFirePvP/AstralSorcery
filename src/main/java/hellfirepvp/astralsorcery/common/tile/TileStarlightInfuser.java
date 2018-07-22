@@ -37,7 +37,6 @@ import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.SoundHelper;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTUtils;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -329,7 +328,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
                 NBTTagList tl = compound.getTagList("chalicePositions", Constants.NBT.TAG_COMPOUND);
                 List<BlockPos> tcList = new LinkedList<>();
                 for (int i = 0; i < tl.tagCount(); i++) {
-                    tcList.add(NBTUtils.readBlockPosFromNBT(tl.getCompoundTagAt(i)));
+                    tcList.add(NBTHelper.readBlockPosFromNBT(tl.getCompoundTagAt(i)));
                 }
 
                 this.craftingTask = new ActiveInfusionTask(recipe, uuidCraft);
@@ -357,7 +356,7 @@ public class TileStarlightInfuser extends TileReceiverBase implements IWandInter
             NBTTagList chalicePositions = new NBTTagList();
             for (TileChalice tc : craftingTask.getSupportingChalices()) {
                 NBTTagCompound cmp = new NBTTagCompound();
-                NBTUtils.writeBlockPosToNBT(tc.getPos(), cmp);
+                NBTHelper.writeBlockPosToNBT(tc.getPos(), cmp);
                 chalicePositions.appendTag(cmp);
             }
             compound.setTag("chalicePositions", chalicePositions);

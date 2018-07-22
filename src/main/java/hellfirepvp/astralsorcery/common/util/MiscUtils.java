@@ -10,6 +10,8 @@ package hellfirepvp.astralsorcery.common.util;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.item.tool.sextant.ItemSextant;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -19,8 +21,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -97,6 +101,15 @@ public class MiscUtils {
                 .collect(Collectors.toList());
     }
 
+    public static <K, V, L> Map<K, V> splitMap(Collection<L> col, Function<L, Tuple<K, V>> split) {
+        Map<K, V> map = new HashMap<>();
+        col.forEach(l -> {
+            Tuple<K, V> result = split.apply(l);
+            map.put(result.key, result.value);
+        });
+        return map;
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
         for (T element : collection) {
@@ -105,6 +118,10 @@ public class MiscUtils {
             }
         }
         return null;
+    }
+
+    public static <T> boolean contains(Collection<T> collection, Function<T, Boolean> matchingFct) {
+        return iterativeSearch(collection, matchingFct) != null;
     }
 
     @Nullable
@@ -144,6 +161,25 @@ public class MiscUtils {
 
     public static boolean isConnectionEstablished(EntityPlayerMP player) {
         return player.connection != null && player.connection.netManager != null && player.connection.netManager.isChannelOpen();
+    }
+
+    @Nullable
+    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search) {
+        return getMainOrOffHand(entity, search, null);
+    }
+
+    @Nullable
+    public static Tuple<EnumHand, ItemStack> getMainOrOffHand(EntityLivingBase entity, Item search, @Nullable Function<ItemStack, Boolean> acceptorFnc) {
+        EnumHand hand = EnumHand.MAIN_HAND;
+        ItemStack held = entity.getHeldItem(hand);
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+            hand = EnumHand.OFF_HAND;
+            held = entity.getHeldItem(hand);
+        }
+        if (held.isEmpty() || !search.getClass().isAssignableFrom(held.getItem().getClass()) || (acceptorFnc != null && !acceptorFnc.apply(held))) {
+            return null;
+        }
+        return new Tuple<>(hand, held);
     }
 
     @Nonnull

@@ -31,11 +31,14 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
 import hellfirepvp.astralsorcery.common.util.Counter;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -69,7 +72,6 @@ public final class EffectHandler {
     public boolean renderGateway = true;
 
     private StructureMatchPreview structurePreview = null;
-    private UISextantTarget sextantTarget = null;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
@@ -84,9 +86,9 @@ public final class EffectHandler {
         return instance;
     }
 
-    public void requestGatewayUIFor(World world, Vector3 pos, double sphereRadius) {
+    public void requestGatewayUIFor(World world, BlockPos gateway, Vector3 pos, double sphereRadius) {
         if(uiGateway == null || !uiGateway.getPos().equals(pos)) {
-            uiGateway = UIGateway.initialize(world, pos, sphereRadius);
+            uiGateway = UIGateway.initialize(world, gateway, pos, sphereRadius);
         }
         gatewayUITicks = 20;
     }
@@ -97,14 +99,6 @@ public final class EffectHandler {
             structurePreview = new StructureMatchPreview(tile);
         }
         structurePreview.resetTimeout();
-    }
-
-    public void requestSextantTargetAt(World world, BlockPos target, SextantFinder.TargetObject sextantTarget) {
-        this.sextantTarget = UISextantTarget.initialize(world, target, sextantTarget);
-    }
-
-    public void resetSextantTarget() {
-        this.sextantTarget = null;
     }
 
     @Nullable
@@ -160,9 +154,7 @@ public final class EffectHandler {
         if(structurePreview != null) {
             structurePreview.appendPreviewBlocks();
         }
-        if(sextantTarget != null) {
-            sextantTarget.renderStar(pTicks);
-        }
+        UISextantTarget.renderTargets(pTicks);
         GlStateManager.disableDepth();
         EntityFXFacingParticle.renderFast(pTicks, fastRenderDepthParticles);
         GlStateManager.enableDepth();
@@ -310,7 +302,6 @@ public final class EffectHandler {
             objects.clear();
             toAddBuffer.clear();
             uiGateway = null;
-            resetSextantTarget();
             structurePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
@@ -323,13 +314,6 @@ public final class EffectHandler {
             structurePreview.tick();
             if(structurePreview.shouldBeRemoved()) {
                 structurePreview = null;
-            }
-        }
-
-        if(sextantTarget != null) {
-            if(Minecraft.getMinecraft().world != null &&
-                            sextantTarget.getWorld().provider.getDimension() != Minecraft.getMinecraft().world.provider.getDimension()) {
-                resetSextantTarget();
             }
         }
 

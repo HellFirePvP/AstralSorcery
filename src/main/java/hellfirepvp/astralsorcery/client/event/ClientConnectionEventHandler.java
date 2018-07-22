@@ -14,15 +14,13 @@ import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.render.tile.TESRTranslucentBlock;
 import hellfirepvp.astralsorcery.client.util.ClientScreenshotCache;
+import hellfirepvp.astralsorcery.client.util.UISextantCache;
 import hellfirepvp.astralsorcery.client.util.camera.ClientCameraManager;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
-import hellfirepvp.astralsorcery.common.data.DataLightBlockEndpoints;
-import hellfirepvp.astralsorcery.common.data.DataLightConnections;
-import hellfirepvp.astralsorcery.common.data.DataTimeFreezeEffects;
-import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.*;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
@@ -34,6 +32,7 @@ import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 
@@ -52,7 +51,6 @@ public class ClientConnectionEventHandler {
         AstralSorcery.log.info("[AstralSorcery] Cleaning client cache...");
         EffectHandler.cleanUp();
         ClientCameraManager.getInstance().removeAllAndCleanup();
-        Config.rebuildClientConfig();
         ConstellationSkyHandler.getInstance().clientClearCache();
         GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
@@ -64,9 +62,11 @@ public class ClientConnectionEventHandler {
         PlayerChargeHandler.INSTANCE.setClientCharge(0F);
         EventHandlerServer.perkCooldownsClient.clear();
         CelestialGatewaySystem.instance.updateClientCache(new HashMap<>());
+        UISextantCache.INSTANCE.clearClient();
         ((DataLightConnections) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_CONNECTIONS)).clientClean();
         ((DataLightBlockEndpoints) SyncDataHolder.getDataClient(SyncDataHolder.DATA_LIGHT_BLOCK_ENDPOINTS)).clientClean();
         ((DataTimeFreezeEffects) SyncDataHolder.getDataClient(SyncDataHolder.DATA_TIME_FREEZE_EFFECTS)).clientClean();
+        ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.CLIENT);
         ClientProxy.connected = false;
         AstralSorcery.log.info("[AstralSorcery] Cleared cached client data! Disconnected from server.");
     }

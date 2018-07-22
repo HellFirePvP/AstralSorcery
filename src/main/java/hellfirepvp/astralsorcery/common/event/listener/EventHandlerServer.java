@@ -210,15 +210,13 @@ public class EventHandlerServer {
         }
 
         ItemStack hand = event.getItemStack();
-        if (event.getHand() == EnumHand.OFF_HAND) {
-            hand = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
-        }
         if (hand.isEmpty()) return;
         if (hand.getItem() instanceof ISpecialInteractItem) {
             ISpecialInteractItem i = (ISpecialInteractItem) hand.getItem();
             if (i.needsSpecialHandling(event.getWorld(), event.getPos(), event.getEntityPlayer(), hand)) {
-                if(i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand)) {
+                if (i.onRightClick(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getFace(), event.getHand(), hand)) {
                     event.setCanceled(true);
+                    event.setCancellationResult(EnumActionResult.SUCCESS);
                 }
             }
         }

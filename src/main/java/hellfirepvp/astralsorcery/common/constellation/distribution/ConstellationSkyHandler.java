@@ -104,6 +104,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     @SideOnly(Side.CLIENT)
     public Optional<Long> getSeedIfPresent(World world) {
+        if(world == null) return Optional.empty();
         return getSeedIfPresent(world.provider.getDimension());
     }
 
@@ -119,7 +120,7 @@ public class ConstellationSkyHandler implements ITickHandler {
 
     //Convenience method
     public float getCurrentDaytimeDistribution(World world) {
-        float dayPart = world.getWorldTime() % 24000;
+        float dayPart = ((world.getWorldTime() % 24000) + 24000) % 24000;
         if(dayPart < 11000) return 0F;
         if(dayPart < 15000) return (dayPart - 11000F) / 4000F;
         if(dayPart > 20000) return 1F - (dayPart - 20000F) / 4000F;

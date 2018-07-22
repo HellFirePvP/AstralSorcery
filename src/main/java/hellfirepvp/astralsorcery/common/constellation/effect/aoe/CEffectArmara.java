@@ -125,6 +125,7 @@ public class CEffectArmara extends ConstellationEffect {
 
         EntityPlayer owner = getOwningPlayerInWorld(world, pos);
 
+        boolean foundEntity = false;
         if(!modified.isCorrupted()) {
             List<Entity> projectiles = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(protectionRange));
             if(!projectiles.isEmpty()) {
@@ -142,6 +143,7 @@ public class CEffectArmara extends ConstellationEffect {
                         } else if(e instanceof EntityLivingBase && !(e instanceof EntityPlayer)) {
                             ((EntityLivingBase) e).knockBack(owner == null ? e : owner, 0.4F, (pos.getX() + 0.5) - e.posX, (pos.getZ() + 0.5) - e.posZ);
                         }
+                        foundEntity = true;
                     }
                 }
             }
@@ -158,17 +160,18 @@ public class CEffectArmara extends ConstellationEffect {
                     entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 100, potionAmplifier + 4));
                     entity.addPotionEffect(new PotionEffect(MobEffects.HASTE, 100, potionAmplifier + 4));
-                    entity.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 40000, 2));
+                    entity.addPotionEffect(new PotionEffect(RegistryPotions.potionDropModifier, 40000, 6));
                 } else {
                     entity.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 30, potionAmplifier));
                     if (entity instanceof EntityPlayer) {
                         entity.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 30, potionAmplifier));
                     }
                 }
+                foundEntity = true;
             }
         }
 
-        return true;
+        return foundEntity;
     }
 
     @Override

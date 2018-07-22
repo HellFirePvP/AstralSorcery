@@ -30,12 +30,10 @@ import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.item.ItemColoredLens;
 import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
-import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
-import hellfirepvp.astralsorcery.common.tile.TileBore;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.OreDictAlias;
 import net.minecraft.init.Blocks;
@@ -49,6 +47,7 @@ import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.helper.ShapedRecipe.Builder.newShapedRecipe;
+import static hellfirepvp.astralsorcery.common.crafting.helper.ShapelessRecipe.Builder.newShapelessRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerInfusionRecipe;
 import static hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry.registerLowConsumptionInfusion;
 import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
@@ -67,6 +66,7 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rHandTelescope;
     public static TelescopeRecipe rTelescope;
     public static GrindstoneRecipe rGrindstone;
+    public static DiscoveryRecipe rWoodEnriched;
     public static RecipeRitualPedestal rRitualPedestal;
     public static DiscoveryRecipe rLightwell;
     public static DiscoveryRecipe rSkyResonator;
@@ -113,8 +113,8 @@ public class RegistryRecipes {
     //CraftingComponents
     public static DiscoveryRecipe rCCGlassLens;
     public static ConstellationRecipe rGlassLensFire, rGlassLensBreak, rGlassLensGrowth,
-            rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush,
-            rGlassLensSpectral;
+    rGlassLensDamage, rGlassLensRegeneration, rGlassLensPush,
+    rGlassLensSpectral;
 
     //Tools
     public static CrystalToolRecipe rCToolPick, rCToolShovel, rCToolAxe, rCToolSword;
@@ -159,6 +159,7 @@ public class RegistryRecipes {
         registerLowConsumptionInfusion(new ItemStack(Items.DIAMOND, 4, 0), new ItemStack(Blocks.DIAMOND_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Items.EMERALD, 4, 0), new ItemStack(Blocks.EMERALD_ORE, 1, 0));
         registerLowConsumptionInfusion(new ItemStack(Blocks.ICE, 1, 0), new ItemStack(Blocks.GLASS, 1, 0));
+        registerLowConsumptionInfusion(BlockInfusedWood.WoodType.INFUSED.asStack(), BlockInfusedWood.WoodType.RAW.asStack());
 
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalAxe));
         registerInfusionRecipe(new InfusionRecipeChargeTool(ItemsAS.chargedCrystalPickaxe));
@@ -362,6 +363,29 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_RIGHT)
         .buildAndRegisterShapedRecipe();
 
+        rWoodPlanks = newShapelessRecipe("infused_wood_planks", ItemUtils.copyStackWithSize(BlockInfusedWood.WoodType.PLANKS.asStack(), 4))
+                .addPart(new ItemHandle(BlockInfusedWood.WoodType.RAW.asStack()))
+        .buildAndRegisterShapelessRecipe();
+        rWoodArch = newShapedRecipe("infused_wood_arch", ItemUtils.copyStackWithSize(BlockInfusedWood.WoodType.ARCH.asStack(), 3))
+                .addPart(BlockInfusedWood.WoodType.PLANKS.asStack(),
+                        ShapedRecipeSlot.UPPER_LEFT,
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.UPPER_RIGHT)
+        .buildAndRegisterShapedRecipe();
+        rWoodPillar = newShapedRecipe("infused_wood_column", ItemUtils.copyStackWithSize(BlockInfusedWood.WoodType.COLUMN.asStack(), 3))
+                .addPart(BlockInfusedWood.WoodType.PLANKS.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.CENTER,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .buildAndRegisterShapedRecipe();
+        rWoodEngraved = newShapedRecipe("infused_wood_engraved", ItemUtils.copyStackWithSize(BlockInfusedWood.WoodType.ENGRAVED.asStack(), 4))
+                .addPart(BlockInfusedWood.WoodType.PLANKS.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .buildAndRegisterShapedRecipe();
+
         rSmeltStarmetalOre = SmeltingRecipe.Builder.newSmelting("smelting_starmetal_ore", ItemCraftingComponent.MetaType.STARMETAL_INGOT.asStack())
                 .setInput(new ItemStack(BlocksAS.customOre, 1, BlockCustomOre.OreType.STARMETAL.ordinal()))
                 .setExp(2F)
@@ -526,13 +550,13 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.LOWER_LEFT,
                         ShapedRecipeSlot.LOWER_RIGHT)
                 .unregisteredAccessibleShapedRecipe());
-        rBore.setAttItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+        rBore.setAttItem(BlockInfusedWood.WoodType.ENRICHED.asStack(),
                 AttunementRecipe.AttunementAltarSlot.UPPER_RIGHT,
                 AttunementRecipe.AttunementAltarSlot.UPPER_LEFT);
-        rBore.setCstItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+        rBore.setCstItem(BlockInfusedWood.WoodType.ENRICHED.asStack(),
                 ConstellationRecipe.ConstellationAtlarSlot.UP_LEFT_LEFT,
                 ConstellationRecipe.ConstellationAtlarSlot.UP_RIGHT_RIGHT);
-        rBore.setInnerTraitItem(OreDictAlias.BLOCK_WOOD_PLANKS,
+        rBore.setInnerTraitItem(BlockInfusedWood.WoodType.ENRICHED.asStack(),
                 TraitRecipe.TraitRecipeSlot.LEFT_CENTER,
                 TraitRecipe.TraitRecipeSlot.RIGHT_CENTER);
         rBore.setInnerTraitItem(BlockBlackMarble.BlackMarbleBlockType.RAW.asStack(),
@@ -1165,6 +1189,21 @@ public class RegistryRecipes {
                         ShapedRecipeSlot.UPPER_CENTER)
                 .unregisteredAccessibleShapedRecipe());
         rJournal.setPassiveStarlightRequirement(20);
+
+        registerAltarRecipe(new DiscoveryRecipe(rWoodPlanks)).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(rWoodArch)).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(rWoodPillar)).setPassiveStarlightRequirement(20);
+        registerAltarRecipe(new DiscoveryRecipe(rWoodEngraved)).setPassiveStarlightRequirement(20);
+
+        rWoodEnriched = registerDiscoveryRecipe(newShapedRecipe("internal/altar/enriched_wood", ItemUtils.copyStackWithSize(BlockInfusedWood.WoodType.ENRICHED.asStack(), 4))
+                .addPart(BlockInfusedWood.WoodType.PLANKS.asStack(),
+                        ShapedRecipeSlot.UPPER_CENTER,
+                        ShapedRecipeSlot.LEFT,
+                        ShapedRecipeSlot.RIGHT,
+                        ShapedRecipeSlot.LOWER_CENTER)
+                .addPart(OreDictAlias.ITEM_AQUAMARINE,
+                        ShapedRecipeSlot.CENTER)
+                .unregisteredAccessibleShapedRecipe());
 
         registerDiscoveryRecipe(ShapedRecipe.Builder.newShapedRecipe("internal/altar/marble_black_raw", new ItemStack(BlocksAS.blockBlackMarble, 8, BlockBlackMarble.BlackMarbleBlockType.RAW.ordinal()))
                 .addPart(OreDictAlias.BLOCK_MARBLE, ShapedRecipeSlot.values())
