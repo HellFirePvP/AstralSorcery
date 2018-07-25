@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Tuple;
 
 public final class OreTiersAPI {
@@ -31,6 +30,8 @@ public final class OreTiersAPI {
      */
     public static final Map<String, String> REPLACEMENT_IDS = new HashMap<>();
 
+    public static final List<IBlockState> NON_DEFAULTING = new ArrayList<>();
+
     /**
      * Adds a replacement for a block state.
      *
@@ -40,9 +41,9 @@ public final class OreTiersAPI {
      * @param replacement The replacement block.
      * @param replacementMeta The replacement block meta.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, int originalMeta, @Nonnull Block replacement, int replacementMeta) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, int originalMeta, @Nonnull Block replacement, int replacementMeta, boolean defAllow) {
 
-        addReplacement(stage, original.getStateFromMeta(originalMeta), replacement.getStateFromMeta(replacementMeta));
+        addReplacement(stage, original.getStateFromMeta(originalMeta), replacement.getStateFromMeta(replacementMeta), defAllow);
     }
 
     /**
@@ -52,9 +53,9 @@ public final class OreTiersAPI {
      * @param original The original block.
      * @param replacement The block to replace it with.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, @Nonnull Block replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull Block original, @Nonnull Block replacement, boolean defAllow) {
 
-        addReplacement(stage, original.getDefaultState(), replacement.getDefaultState());
+        addReplacement(stage, original.getDefaultState(), replacement.getDefaultState(), defAllow);
     }
 
     /**
@@ -64,7 +65,12 @@ public final class OreTiersAPI {
      * @param original The original block state.
      * @param replacement The state to replace it with.
      */
-    public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement) {
+    public static void addReplacement (@Nonnull String stage, @Nonnull IBlockState original, @Nonnull IBlockState replacement, boolean defAllow) {
+
+        if (hasReplacement(original)) {
+
+            //OreStages.LOG.info(String.format("Attempted to register duplicate replacement for %s on stage %s. It will be replaced.", original.toString(), stage));
+        }
 
         STATE_MAP.put(original, new Tuple<>(stage, replacement));
 
@@ -72,6 +78,11 @@ public final class OreTiersAPI {
         addRelevantState(replacement);
 
         REPLACEMENT_IDS.put(original.getBlock().getRegistryName().toString(), replacement.getBlock().getRegistryName().toString());
+
+        if (defAllow) {
+
+            NON_DEFAULTING.add(original);
+        }
     }
 
     /**
@@ -87,45 +98,12 @@ public final class OreTiersAPI {
     /**
      * Checks if a state has a replacement for it.
      *
-     * @param stage The stage to check.
      * @param state The state to check for.
      * @return Whether or not the state has a replacement.
      */
     public static boolean hasReplacement (@Nonnull IBlockState state) {
 
         return STATE_MAP.containsKey(state);
-    }
-
-    /**
-     * Unlocks a stage for a player.
-     *
-     * @param player The player to unlock the stage for.
-     * @param stage The stage to unlock.
-     */
-    //public static void unlockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
-    //    PlayerDataHandler.getStageData(player).unlockStage(stage);
-    //}
-
-    /**
-     * Locks a stage for a player.
-     *
-     * @param player The player to lock the stage for.
-     * @param stage The stage to lcok.
-     */
-    //public static void lockStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
-    //    PlayerDataHandler.getStageData(player).lockStage(stage);
-    //}
-
-    /**
-     * Checks if a player has a stage.
-     *
-     * @param player The player to check.
-     * @param stage The stage to check for.
-     * @return Whether or not the player has the stage.
-     */
-    public static boolean hasStage (@Nonnull EntityPlayer player, @Nonnull String stage) {
-        return false;
-        //return PlayerDataHandler.getStageData(player).hasUnlockedStage(stage);
     }
 
     /**
@@ -139,9 +117,8 @@ public final class OreTiersAPI {
     }
 
     /**
-     * Gets a list of all the relevant blockstates. This is used internally for getting the list of
-     * models to wrap. See
-     * {@link net.darkhax.orestages.OreTiersEventHandler#onModelBake(net.minecraftforge.client.event.ModelBakeEvent)}.
+     * Gets a list of all the relevant blockstates. This is used internally for getting the
+     * list of models to wrap. See
      *
      * @return A List of all the relevant states.
      */

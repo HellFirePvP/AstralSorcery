@@ -56,6 +56,11 @@ repositories {
         url 'http://maven.thiakil.com'
     }
 
+    maven {
+        // Gamestages stuff
+        url 'https://maven.mcmoddev.com'
+    }
+
 }
 
 dependencies {
@@ -73,6 +78,8 @@ dependencies {
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
 
     deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+
+    compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.91"
 
 }
 

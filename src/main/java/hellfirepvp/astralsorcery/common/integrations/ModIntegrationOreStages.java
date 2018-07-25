@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.integrations;
 
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,7 +34,7 @@ public class ModIntegrationOreStages {
         if(player == null) return false;
         Tuple<String, IBlockState> replacement;
         if((replacement = OreTiersAPI.getStageInfo(test)) != null) {
-            return OreTiersAPI.hasStage(player, replacement.getFirst());
+            return GameStageHelper.clientHasStage(player, replacement.getFirst());
         }
         return true;
     }
