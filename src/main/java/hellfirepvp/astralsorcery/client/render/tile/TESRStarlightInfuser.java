@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,9 +28,6 @@ public class TESRStarlightInfuser extends TileEntitySpecialRenderer<TileStarligh
     public void render(TileStarlightInfuser te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         ItemStack in = te.getInputStack();
         if(in.isEmpty()) return;
-        EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, in);
-        ei.age = te.getTicksExisted();
-        ei.hoverStart = 0;
-        Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.6, z + 0.5, 0, partialTicks, true);
+        RenderingUtils.renderItemAsEntity(in, x, y, z, partialTicks, te.getTicksExisted());
     }
 }

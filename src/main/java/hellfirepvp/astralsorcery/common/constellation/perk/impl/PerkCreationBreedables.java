@@ -42,7 +42,7 @@ public class PerkCreationBreedables extends ConstellationPerk {
             List<EntityAnimal> animals = player.getEntityWorld().getEntitiesWithinAABB(EntityAnimal.class, boxSearch.offset(player.getPosition()));
             if(animals.isEmpty()) return;
             EntityAnimal animal = animals.get(rand.nextInt(animals.size()));
-            if(!animal.isDead) {
+            if(!animal.isDead && animal.getPassengers().isEmpty()) {
                 if(animal.getGrowingAge() < 0 && rand.nextInt(chanceToAge) == 0) {
                     animal.setGrowingAge(Math.min(animal.getGrowingAge() + 500, 0));
                     addAlignmentCharge(player, 0.03);

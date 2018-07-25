@@ -35,10 +35,7 @@ public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
     public void render(TileWell te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         ItemStack catalyst = te.getInventoryHandler().getStackInSlot(0);
         if(!catalyst.isEmpty()) {
-            EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, catalyst);
-            ei.age = te.getTicksExisted();
-            ei.hoverStart = 0;
-            Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.8, z + 0.5, 0, partialTicks, true);
+            RenderingUtils.renderItemAsEntity(catalyst, x, y, z, partialTicks, te.getTicksExisted());
         }
         if(te.getFluidAmount() > 0 && te.getHeldFluid() != null) {
             GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);

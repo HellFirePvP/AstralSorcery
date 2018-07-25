@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -51,6 +53,7 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 
@@ -65,6 +68,8 @@ public class RenderingUtils {
 
     private static final Random rand = new Random();
     private static ParticleDigging.Factory diggingFactory = new ParticleDigging.Factory();
+
+    private static Field itemPhysics_fieldSkipRenderHook = null;
 
     public static void playBlockBreakParticles(BlockPos pos, IBlockState state) {
         ParticleManager pm = Minecraft.getMinecraft().effectRenderer;
@@ -85,6 +90,18 @@ public class RenderingUtils {
                 }
             }
         }
+    }
+
+    public static void renderItemAsEntity(ItemStack stack, double x, double y, double z, float pTicks, int age) {
+        EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, stack);
+        ei.age = age;
+        ei.hoverStart = 0;
+        if (itemPhysics_fieldSkipRenderHook != null) {
+            try {
+                itemPhysics_fieldSkipRenderHook.set(stack, true);
+            } catch (Exception ignored) {}
+        }
+        Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y + 0.6, z + 0.5, 0, pTicks, true);
     }
 
     @Nonnull
@@ -886,6 +903,17 @@ public class RenderingUtils {
         vb.pos(px + v3.getX() - iPX, py + v3.getY() - iPY, pz + v3.getZ() - iPZ).tex(u + uLength, v          ).color(cR, cG, cB, cA).endVertex();
         vb.pos(px + v4.getX() - iPX, py + v4.getY() - iPY, pz + v4.getZ() - iPZ).tex(u,              v          ).color(cR, cG, cB, cA).endVertex();
         t.draw();
+    }
+
+    static {
+        Field attempt;
+        try {
+            attempt = ReflectionHelper.findField(EntityItem.class, "skipPhysicRenderer");
+            attempt.setAccessible(true);
+        } catch(Exception e) {
+            attempt = null;
+        }
+        itemPhysics_fieldSkipRenderHook = attempt;
     }
 
 }
