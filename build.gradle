@@ -73,7 +73,7 @@ dependencies {
 
     def mc_version = "1.12"
     def ct_mc_version = "MC1120"
-    def ct_version = "4.1.2.404"
+    def ct_version = "4.1.8.9"
 
     deobfCompile("CraftTweaker2:CraftTweaker2-${ct_mc_version}-Main:${mc_version}-${ct_version}")
 
