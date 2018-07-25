@@ -265,7 +265,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             List<EntityPlayerMP> players = world.getEntitiesWithinAABB(EntityPlayerMP.class, box);
             if(!players.isEmpty()) {
                 EntityPlayerMP pl = EntityUtils.selectClosest(players, (player) -> thisVec.distanceSquared(player.getPositionVector()));
-                if (pl != null && !MiscUtils.isPlayerFakeMP(pl)) {
+                if (pl != null && !MiscUtils.isPlayerFakeMP(pl) && !pl.isSneaking()) {
                     PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
                     if (prog != null && prog.getAttunedConstellation() == null &&
                             prog.getResearchProgression().contains(ResearchProgression.ATTUNEMENT) &&

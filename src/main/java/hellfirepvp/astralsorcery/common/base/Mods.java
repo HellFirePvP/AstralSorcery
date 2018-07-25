@@ -36,6 +36,7 @@ public enum Mods {
     GALACTICRAFT_CORE("galacticraftcore"),
     GEOLOSYS("geolosys"),
     ORESTAGES("orestages"),
+    GAMESTAGES("gamestages"),
     DRACONICEVOLUTION("draconicevolution"),
     UNIVERSALREMOTE("universalremote");
 

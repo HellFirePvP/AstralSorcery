@@ -216,7 +216,7 @@ public class CrystalProperties {
         }
         int collectToAdd = 3 + rand.nextInt(4);
         copy.size = size - grind;
-        copy.collectiveCapability = Math.min(100, collectiveCapability + collectToAdd);
+        copy.collectiveCapability = Math.min((collectiveCapability > 100 ? collectiveCapability : 100), collectiveCapability + collectToAdd);
         if(copy.size <= 0)
             return null;
         return copy;

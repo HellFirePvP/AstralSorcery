@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.client.render.tile;
 
+import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.tile.TileAttunementRelay;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import net.minecraft.client.Minecraft;
@@ -30,10 +31,7 @@ public class TESRAttunementRelay extends TileEntitySpecialRenderer<TileAttunemen
         if (iht == null) return;
         ItemStack in = iht.getStackInSlot(0);
         if (in.isEmpty()) return;
-        EntityItem ei = new EntityItem(Minecraft.getMinecraft().world, 0, 0, 0, in);
-        ei.age = te.getTicksExisted();
-        ei.hoverStart = 0;
-        Minecraft.getMinecraft().getRenderManager().renderEntity(ei, x + 0.5, y, z + 0.5, 0, partialTicks, true);
+        RenderingUtils.renderItemAsEntity(in, x, y - 0.5, z, partialTicks, te.getTicksExisted());
     }
 
 }
