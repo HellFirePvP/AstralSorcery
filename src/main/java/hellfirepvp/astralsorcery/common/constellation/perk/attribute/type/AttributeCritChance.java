@@ -44,7 +44,7 @@ public class AttributeCritChance extends PerkAttributeType {
                 float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(getTypeString(), 0F);
                 critChance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-                if (critChance >= rand.nextFloat()) {
+                if ((critChance / 100F) >= rand.nextFloat()) {
                     arrow.setIsCritical(true);
                 }
             }
@@ -65,7 +65,7 @@ public class AttributeCritChance extends PerkAttributeType {
         float critChance = PerkAttributeHelper.getOrCreateMap(player, side)
                 .modifyValue(getTypeString(), 0F);
         critChance *= PerkAttributeHelper.getOrCreateMap(player, side).getModifier(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT);
-        if (critChance >= rand.nextFloat()) {
+        if ((critChance / 100F) >= rand.nextFloat()) {
             event.setResult(Event.Result.ALLOW);
         }
     }

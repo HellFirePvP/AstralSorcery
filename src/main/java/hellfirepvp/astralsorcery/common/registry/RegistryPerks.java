@@ -63,31 +63,150 @@ public class RegistryPerks {
         initializeTreeConnectorPerks();
         initializeAevitasKeyPerks();
         initializeEvorsioKeyPerks();
+        initializeDiscidiaKeyPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
     }
 
-    private static void initializeEvorsioKeyPerks() {
-        AttributeModifierPerk perkLL1 = new AttributeModifierPerk("key_lastbreath_path_node", -16, -2);
-        perkLL1.addModifier(-0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("key_lastbreath_path_node_1", -17, -3).setNameOverride(perkLL1.getUnlocalizedName());
-        perkLL2.addModifier(-0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        AttributeModifierPerk perkLL3 = new AttributeModifierPerk("key_lastbreath_path_node_2", -18, -2).setNameOverride(perkLL1.getUnlocalizedName());
-        perkLL3.addModifier(-0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_LIFE_RECOVERY);
-        KeyLastBreath lastBreathKey = new KeyLastBreath("key_lastbreath", -17, -1);
+    private static void initializeDiscidiaKeyPerks() {
+        KeyBleed bleedKey = new KeyBleed("key_bleed", 20, -13);
+        AttributeModifierPerk perkBl1 = new AttributeModifierPerk("key_bleed_inc_duration", 21, -14);
+        perkBl1.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
+        AttributeModifierPerk perkBl2 = new AttributeModifierPerk("key_bleed_inc_duration_greater", 20, -15);
+        perkBl2.addModifier(0.4F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
+        AttributeModifierPerk perkBl3 = new AttributeModifierPerk("key_bleed_inc_duration_2", 19, -14).setNameOverride(perkBl1.getUnlocalizedName());
+        perkBl3.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_BLEED_DURATION);
+
+        PERK_TREE.registerPerk(bleedKey)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_4"));
+        PERK_TREE.registerPerk(perkBl1)
+                .connect(bleedKey);
+        PERK_TREE.registerPerk(perkBl2)
+                .connect(perkBl1);
+        PERK_TREE.registerPerk(perkBl3)
+                .connect(perkBl2);
+
+        AttributeModifierPerk perkDst1 = new AttributeModifierPerk("key_dst_less_dmg", 14, -8);
+        perkDst1.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst2 = new AttributeModifierPerk("key_dst_less_dmg_2", 15, -7).setNameOverride(perkDst1.getUnlocalizedName());
+        perkDst2.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        KeyProjectileProximity projectileProximityKey = new KeyProjectileProximity("key_projectile_proximity", 14, -6);
+
+        PERK_TREE.registerPerk(perkDst1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_3"));
+        PERK_TREE.registerPerk(perkDst2)
+                .connect(perkDst1);
+        PERK_TREE.registerPerk(projectileProximityKey)
+                .connect(perkDst2);
+
+        AttributeModifierPerk perkDst3 = new AttributeModifierPerk("key_dst_less_dmg_3", 6, -17).setNameOverride(perkDst1.getUnlocalizedName());
+        perkDst3.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkDst4 = new AttributeModifierPerk("key_dst_less_dmg_4", 5, -16).setNameOverride(perkDst1.getUnlocalizedName());
+        perkDst4.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        KeyProjectileDistance projectileDistanceKey = new KeyProjectileDistance("key_projectile_distance", 6, -15);
+
+        PERK_TREE.registerPerk(perkDst3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
+        PERK_TREE.registerPerk(perkDst4)
+                .connect(perkDst3);
+        PERK_TREE.registerPerk(projectileDistanceKey)
+                .connect(perkDst4);
+
+        AttributeModifierPerk perkCrJ1 = new AttributeModifierPerk("crit_inc_chance_proj", 12, -19);
+        perkCrJ1.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrJ1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkCrJ2 = new AttributeModifierPerk("crit_inc_chance_proj_1", 14, -20).setNameOverride(perkCrJ1.getUnlocalizedName());
+        perkCrJ2.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrJ2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        MajorPerk perkProjMul = new MajorPerk("major_crit_proj", 15, -22);
+        perkProjMul.addModifier(0.25F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        perkProjMul.addModifier(0.3F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkCrM1 = new AttributeModifierPerk("crit_inc_chance_melee", 10, -20);
+        perkCrM1.addModifier(4F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrM1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkCrM2 = new AttributeModifierPerk("crit_inc_chance_melee_1", 9, -22).setNameOverride(perkCrM1.getUnlocalizedName());
+        perkCrM2.addModifier(4F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrM2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        MajorPerk perkMeleeMul = new MajorPerk("major_crit_melee", 10, -24);
+        perkMeleeMul.addModifier(0.3F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        perkMeleeMul.addModifier(0.2F , PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkCrit1 = new AttributeModifierPerk("crit_inc_ch_mul", 12, -25);
+        perkCrit1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrit1.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+        AttributeModifierPerk perkCrit2 = new AttributeModifierPerk("crit_inc_ch_mul_1", 14, -24).setNameOverride(perkCrit1.getUnlocalizedName());
+        perkCrit2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkCrit2.addModifier(0.2F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_CRIT_MULTIPLIER);
+
+        PERK_TREE.registerPerk(perkCrJ1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
+        PERK_TREE.registerPerk(perkCrJ2)
+                .connect(perkCrJ1);
+        PERK_TREE.registerPerk(perkProjMul)
+                .connect(perkCrJ2);
+        PERK_TREE.registerPerk(perkCrM1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_3"));
+        PERK_TREE.registerPerk(perkCrM2)
+                .connect(perkCrM1);
+        PERK_TREE.registerPerk(perkMeleeMul)
+                .connect(perkCrM2);
+        PERK_TREE.registerPerk(perkCrit1)
+                .connect(perkMeleeMul);
+        PERK_TREE.registerPerk(perkCrit2)
+                .connect(perkCrit1)
+                .connect(perkProjMul);
+
+        AttributeModifierPerk perkRPCrit = new AttributeModifierPerk("key_rampage_path_node_crit", 3, -19);
+        perkRPCrit.addModifier(3, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        AttributeModifierPerk perkRPDmg = new AttributeModifierPerk("key_rampage_path_node_dmg", 2, -16);
+        perkRPDmg.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkRPDmg.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        AttributeModifierPerk perkRPDmg2 = new AttributeModifierPerk("key_rampage_path_node_dmg_1", 3, -17).setNameOverride(perkRPDmg.getUnlocalizedName());
+        perkRPDmg2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        perkRPDmg2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
+        KeyRampage rampageKey = new KeyRampage("key_rampage", 2, -18);
+
+        PERK_TREE.registerPerk(perkRPCrit)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_2"));
+        PERK_TREE.registerPerk(rampageKey)
+                .connect(perkRPCrit);
+        PERK_TREE.registerPerk(perkRPDmg2)
+                .connect(rampageKey);
+        PERK_TREE.registerPerk(perkRPDmg)
+                .connect(perkRPDmg2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_1"));
+
+        AttributeModifierPerk perkLL1 = new AttributeModifierPerk("inc_leech_vamp", -1, -15);
+        perkLL1.addModifier(0.03F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
+        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("inc_leech_vamp_1", -2, -16).setNameOverride(perkLL1.getUnlocalizedName());
+        perkLL2.addModifier(0.03F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
+        MajorPerk perkVampirism = new MajorPerk("major_leech_vamp", -1, -17);
+        perkVampirism.addModifier(0.05F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ATTACK_LIFE_LEECH);
+        perkVampirism.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_HEALTH);
 
         PERK_TREE.registerPerk(perkLL1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_13"));
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_1"));
         PERK_TREE.registerPerk(perkLL2)
                 .connect(perkLL1);
-        PERK_TREE.registerPerk(perkLL3)
-                .connect(perkLL2)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_18"));
-        PERK_TREE.registerPerk(lastBreathKey)
-                .connect(perkLL3);
+        PERK_TREE.registerPerk(perkVampirism)
+                .connect(perkLL2);
 
+    }
+
+    private static void initializeEvorsioKeyPerks() {
+        AttributeModifierPerk perkLL1 = new AttributeModifierPerk("key_lastbreath_path_node", -7, -17);
+        perkLL1.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        AttributeModifierPerk perkLL2 = new AttributeModifierPerk("key_lastbreath_path_node_1", -6, -16).setNameOverride(perkLL1.getUnlocalizedName());
+        perkLL2.addModifier(0.08F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
+        KeyLastBreath lastBreathKey = new KeyLastBreath("key_lastbreath", -5, -17);
+
+        PERK_TREE.registerPerk(perkLL1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4"));
+        PERK_TREE.registerPerk(perkLL2)
+                .connect(perkLL1);
+        PERK_TREE.registerPerk(lastBreathKey)
+                .connect(perkLL2);
 
         AttributeModifierPerk perkDTM1 = new AttributeModifierPerk("key_digtypes_path_node_inc", -15, -8);
         perkDTM1.addModifier(0.06F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
@@ -107,18 +226,23 @@ public class RegistryPerks {
                 .connect(perkDTM2)
                 .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_20"));
 
-        AttributeModifierPerk perkAD1 = new AttributeModifierPerk("key_disarm_path_node", -17, -12);
-        perkAD1.addModifier(0.90F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
-        AttributeModifierPerk perkAD2 = new AttributeModifierPerk("key_disarm_path_node_1", -18, -11).setNameOverride(perkAD1.getUnlocalizedName());
-        perkAD2.addModifier(0.90F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ATTACK_SPEED);
-        KeyDisarm disarmKey = new KeyDisarm("key_disarm", -19, -13);
+        AttributeModifierPerk perkAD1 = new AttributeModifierPerk("key_disarm_path_node", -16, -2);
+        perkAD1.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkAD2 = new AttributeModifierPerk("key_disarm_path_node_1", -17, -1).setNameOverride(perkAD1.getUnlocalizedName());
+        perkAD2.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        AttributeModifierPerk perkAD3 = new AttributeModifierPerk("key_disarm_path_node_2", -18, -2).setNameOverride(perkAD1.getUnlocalizedName());
+        perkAD3.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
+        KeyDisarm disarmKey = new KeyDisarm("key_disarm", -17, -3);
 
         PERK_TREE.registerPerk(perkAD1)
-                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_20"));
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_13"));
         PERK_TREE.registerPerk(perkAD2)
                 .connect(perkAD1);
+        PERK_TREE.registerPerk(perkAD3)
+                .connect(perkAD2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_18"));
         PERK_TREE.registerPerk(disarmKey)
-                .connect(perkAD2);
+                .connect(perkAD3);
 
 
         AttributeModifierPerk perkACH1 = new AttributeModifierPerk("key_arc_chains", -5, -24);
@@ -137,6 +261,40 @@ public class RegistryPerks {
                 .connect(perkACH1);
         PERK_TREE.registerPerk(perkACH3)
                 .connect(perkACH2);
+
+        AttributeModifierPerk perkChainL1 = new AttributeModifierPerk("key_chain_mining_length", -21, -9);
+        perkChainL1.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
+        AttributeModifierPerk perkChainL2 = new AttributeModifierPerk("key_chain_mining_length_1", -22, -10).setNameOverride(perkChainL1.getUnlocalizedName());
+        perkChainL2.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
+        MajorPerk perkChainL3 = new MajorPerk("key_chain_mining_length_greater", -23, -12);
+        perkChainL3.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_LENGTH);
+        AttributeModifierPerk perkChanceL1 = new AttributeModifierPerk("key_chain_mining_chance", -22, -6);
+        perkChanceL1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_CHANCE);
+        AttributeModifierPerk perkChanceL2 = new AttributeModifierPerk("key_chain_mining_chance_1", -23, -5).setNameOverride(perkChanceL1.getUnlocalizedName());
+        perkChanceL2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_CHANCE);
+        MajorPerk perkChanceL3 = new MajorPerk("key_chain_mining_chance_greater", -24, -3);
+        perkChanceL3.addModifier(1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MINING_CHAIN_CHANCE);
+        MajorPerk perkDoubleL1 = new MajorPerk("key_chain_mining_double", -24, -8);
+        perkDoubleL1.addModifier(0.5F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN);
+        KeyChainMining chainMiningKey = new KeyChainMining("key_chain_mining", -20, -7);
+
+        PERK_TREE.registerPerk(chainMiningKey)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_19"));
+        PERK_TREE.registerPerk(perkChanceL1)
+                .connect(chainMiningKey);
+        PERK_TREE.registerPerk(perkChanceL2)
+                .connect(perkChanceL1);
+        PERK_TREE.registerPerk(perkChanceL3)
+                .connect(perkChanceL2);
+        PERK_TREE.registerPerk(perkChainL1)
+                .connect(chainMiningKey);
+        PERK_TREE.registerPerk(perkChainL2)
+                .connect(perkChainL1);
+        PERK_TREE.registerPerk(perkChainL3)
+                .connect(perkChainL2);
+        PERK_TREE.registerPerk(perkDoubleL1)
+                .connect(perkChainL2)
+                .connect(perkChanceL2);
     }
 
     private static void initializeAevitasKeyPerks() {
@@ -438,7 +596,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkProjCrit = new MajorPerk("not_dsc_proj_crit", 12, -11);
         perkProjCrit.addModifier(1.05F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_PROJ_DAMAGE);
-        perkProjCrit.addModifier(0.02F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        perkProjCrit.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
 
         AttributeModifierPerk perkM1 = new AttributeModifierPerk("med_inc_melee_damage", 10, -14);
         perkM1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_MELEE_DAMAGE);
@@ -877,10 +1035,10 @@ public class RegistryPerks {
         rootVicio.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_REACH);
 
         RootPerk rootArmara = new ArmaraRootPerk(6,  2);
-        rootArmara.addModifier(0.9F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        rootArmara.addModifier(0.8F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
 
         RootPerk rootDiscidia = new DiscidiaRootPerk(4, -5);
-        rootDiscidia.addModifier(3F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
+        rootDiscidia.addModifier(10F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_CRIT_CHANCE);
 
         RootPerk rootEvorsio = new EvorsioRootPerk(-4, -5);
         rootEvorsio.addModifier(1.2F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_HARVEST_SPEED);
@@ -904,6 +1062,12 @@ public class RegistryPerks {
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EXP));
         registerPerkType(new AttributeLifeRecovery());
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS));
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_BLEED_DURATION));
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_BLEED_STACKS));
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_LENGTH));
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE));
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN));
+        registerPerkType(new AttributeLifeLeech());
 
         registerPerkType(new AttributeTypeMeleeAttackDamage());
         registerPerkType(new AttributeTypeMaxHealth());

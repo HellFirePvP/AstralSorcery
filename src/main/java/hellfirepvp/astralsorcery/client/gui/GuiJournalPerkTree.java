@@ -387,7 +387,7 @@ public class GuiJournalPerkTree extends GuiScreenJournal {
         }
 
         double effectPart = (Math.sin(Math.toRadians(((effectTick) * 8) % 360D)) + 1D) / 4D;
-        float br = 0.2F + 0.4F * (2F - ((float) effectPart));
+        float br = 0.1F + 0.4F * (2F - ((float) effectPart));
         float rR = (overlay.getRed()   / 255F) * br;
         float rG = (overlay.getGreen() / 255F) * br;
         float rB = (overlay.getBlue()  / 255F) * br;

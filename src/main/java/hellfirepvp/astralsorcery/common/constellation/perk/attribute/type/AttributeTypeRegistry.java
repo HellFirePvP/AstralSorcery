@@ -35,6 +35,14 @@ public class AttributeTypeRegistry {
     public static final String ATTR_TYPE_ATTACK_SPEED = AstralSorcery.MODID + ".attackspeed";
     public static final String ATTR_TYPE_REACH = AstralSorcery.MODID + ".reach";
     public static final String ATTR_TYPE_LIFE_RECOVERY = AstralSorcery.MODID + ".liferecovery";
+    public static final String ATTR_TYPE_BLEED_DURATION = AstralSorcery.MODID + ".bleedduration";
+    public static final String ATTR_TYPE_BLEED_STACKS = AstralSorcery.MODID + ".bleedamount";
+    public static final String ATTR_TYPE_BLEED_CHANCE = AstralSorcery.MODID + ".bleedchance";
+    public static final String ATTR_TYPE_RAMPAGE_DURATION = AstralSorcery.MODID + ".rampageduration";
+    public static final String ATTR_TYPE_MINING_CHAIN_CHANCE = AstralSorcery.MODID + ".chainchance";
+    public static final String ATTR_TYPE_MINING_CHAIN_LENGTH = AstralSorcery.MODID + ".chainlength";
+    public static final String ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN = AstralSorcery.MODID + ".chainchancing";
+    public static final String ATTR_TYPE_ATTACK_LIFE_LEECH = AstralSorcery.MODID + ".lifeleech";
 
     public static final String ATTR_TYPE_ARC_CHAINS = AstralSorcery.MODID + ".archops";
 

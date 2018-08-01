@@ -25,6 +25,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -83,7 +84,9 @@ public class KeyLightningArc extends KeyPerk {
                 float chance = PerkAttributeHelper.getOrCreateMap(player, side)
                         .modifyValue(AttributeTypeRegistry.ATTR_TYPE_INC_PERK_EFFECT, arcChance);
                 if (rand.nextFloat() < chance) {
-                    new RepetitiveArcEffect(player.world, player, arcTicks, event.getEntityLiving().getEntityId(), event.getAmount()).fire();
+                    float dmg = event.getAmount();
+                    dmg = Math.max(MathHelper.sqrt(dmg), 1.5F);
+                    new RepetitiveArcEffect(player.world, player, arcTicks, event.getEntityLiving().getEntityId(), dmg).fire();
                 }
             }
         }
@@ -139,6 +142,7 @@ public class KeyLightningArc extends KeyPerk {
                     if(!entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
                         entities.removeIf(e -> e instanceof EntityPlayer);
                     }
+                    entities.removeIf(e -> e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator()));
 
                     if(!entities.isEmpty()) {
                         EntityLivingBase tmpEntity = entity; //Final for lambda

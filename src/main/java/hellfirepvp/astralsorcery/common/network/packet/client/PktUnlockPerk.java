@@ -102,7 +102,7 @@ public class PktUnlockPerk implements IMessage, IMessageHandler<PktUnlockPerk, P
             AbstractPerk perk = message.perk;
             GuiScreen current = Minecraft.getMinecraft().currentScreen;
             if(current != null && current instanceof GuiJournalPerkTree) {
-                ((GuiJournalPerkTree) current).playUnlockAnimation(perk);
+                Minecraft.getMinecraft().addScheduledTask(() -> ((GuiJournalPerkTree) current).playUnlockAnimation(perk));
             }
         }
     }

@@ -299,7 +299,7 @@ public class ResearchManager {
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
-        if ((root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
+        if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
             NBTTagCompound data = new NBTTagCompound();
             root.onUnlockPerkServer(player, progress, data);
             progress.putPerk(root, data);

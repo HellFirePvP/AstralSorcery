@@ -53,7 +53,12 @@ public class EvorsioRootPerk extends RootPerk {
             BlockPos at = event.getPos();
             IBlockState broken = event.getState();
             World world = event.getWorld();
-            float gainedExp = broken.getPlayerRelativeBlockHardness(player, world, event.getPos());
+            float gainedExp;
+            try {
+                gainedExp = broken.getPlayerRelativeBlockHardness(player, world, event.getPos());
+            } catch (Exception exc) {
+                gainedExp = 2F;
+            }
             gainedExp /= 3.0F;
             try {
                 Explosion exp = new Explosion(world, player, at.getX(), at.getY(), at.getZ(), 2F, true, true);

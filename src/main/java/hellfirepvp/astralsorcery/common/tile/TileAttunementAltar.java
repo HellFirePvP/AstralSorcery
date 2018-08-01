@@ -355,7 +355,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
             if(pos.equals(getPos())) continue;
             IBlockState state = world.getBlockState(pos);
             if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
-                    !state.getBlock().equals(BlocksAS.attunementAltar)) {
+                    !(pos.subtract(this.pos).equals(BlockPos.ORIGIN) && state.getBlock().equals(BlocksAS.attunementAltar))) {
                 valid = false;
             }
             if(state.getBlock().equals(BlocksAS.attunementRelay)) {
@@ -386,7 +386,7 @@ public class TileAttunementAltar extends TileEntityTick implements IMultiblockDe
                 if(pos.equals(getPos())) continue;
                 IBlockState state = world.getBlockState(pos);
                 if(!state.getBlock().equals(BlocksAS.attunementRelay) &&
-                        !state.getBlock().equals(BlocksAS.attunementAltar)) {
+                        !(pos.subtract(this.pos).equals(BlockPos.ORIGIN) && state.getBlock().equals(BlocksAS.attunementAltar))) {
                     valid = false;
                 }
             }

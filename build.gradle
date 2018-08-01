@@ -17,7 +17,7 @@ group= "hellfirepvp.astralsorcery"
 archivesBaseName = "astralsorcery"
 
 minecraft {
-    version = "14.23.3.2691"
+    version = "14.23.4.2740"
     runDir = "run"
     useDepAts = true
 

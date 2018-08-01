@@ -59,7 +59,9 @@ public class AttributeAllElementalResist extends PerkAttributeType {
             return false;
         }
         key = key.toLowerCase();
-        return key.contains("fire") || key.contains("lightning") || key.contains("cold");
+        return key.contains("fire") || key.contains("heat") || key.contains("lightning") ||
+                key.contains("cold") || key.contains("freeze") ||
+                key.contains("electr") || key.contains("froze") || key.contains("ice");
     }
 
 }
