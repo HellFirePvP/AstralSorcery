@@ -22,6 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
@@ -42,6 +44,8 @@ public class TESRWell extends TileEntitySpecialRenderer<TileWell> {
             GL11.glEnable(GL11.GL_BLEND);
             Blending.DEFAULT.apply();
             GL11.glColor4f(1F, 1F, 1F, 1F);
+            Color c = new Color(te.getHeldFluid().getColor(te.getWorld(), te.getPos()));
+            GL11.glColor4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, c.getAlpha() / 255F);
             GL11.glDisable(GL11.GL_ALPHA_TEST);
             RenderHelper.disableStandardItemLighting();
             Vector3 offset = new Vector3(te).add(0.5D, 0.32D, 0.5D);
