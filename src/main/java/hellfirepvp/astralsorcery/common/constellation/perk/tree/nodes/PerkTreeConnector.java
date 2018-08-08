@@ -32,7 +32,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 15.07.2018 / 17:29
  */
-public class PerkTreeConnector extends AbstractPerk {
+public class PerkTreeConnector extends AttributeModifierPerk {
 
     private static List<PerkTreeConnector> connectorCache = Lists.newArrayList();
 
@@ -96,11 +96,5 @@ public class PerkTreeConnector extends AbstractPerk {
             ResearchManager.revokeFreePoint(player, token);
         }
     }
-
-    @Override
-    protected void applyPerkLogic(EntityPlayer player, Side side) {}
-
-    @Override
-    protected void removePerkLogic(EntityPlayer player, Side side) {}
 
 }

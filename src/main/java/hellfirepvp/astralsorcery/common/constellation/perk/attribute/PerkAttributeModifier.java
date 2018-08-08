@@ -27,12 +27,28 @@ public class PerkAttributeModifier {
     private final int id;
     private float value;
     private final Mode mode;
+    private final String attributeType;
 
-    public PerkAttributeModifier(Mode mode, float value) {
+    private PerkAttributeModifier(int id, String type, Mode mode, float value) {
+        this.id = id;
+        this.attributeType = type;
+        this.value = value;
+        this.mode = mode;
+    }
+
+    public PerkAttributeModifier(String type, Mode mode, float value) {
         this.id = counter;
         counter++;
+        this.attributeType = type;
         this.mode = mode;
         this.value = value;
+    }
+
+    /**
+     * Use this method for PerkConverters returning a new PerkAttributeModifier!
+     */
+    public PerkAttributeModifier convert(String attributeType, Mode mode, float value) {
+        return new PerkAttributeModifier(this.id, attributeType, mode, value);
     }
 
     public float getValue() {
@@ -41,6 +57,10 @@ public class PerkAttributeModifier {
 
     public Mode getMode() {
         return mode;
+    }
+
+    public String getAttributeType() {
+        return attributeType;
     }
 
     @Override

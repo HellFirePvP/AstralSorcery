@@ -9,16 +9,19 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
-import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
-import hellfirepvp.astralsorcery.common.lib.BlocksAS;
-import hellfirepvp.astralsorcery.common.tile.TileFakeTree;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktParticleEvent;
+import hellfirepvp.astralsorcery.common.util.BlockDropCaptureAssist;
+import hellfirepvp.astralsorcery.common.util.ItemUtils;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
+import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.BlockArray;
 import hellfirepvp.astralsorcery.common.util.struct.BlockDiscoverer;
 import net.minecraft.block.Block;
@@ -27,9 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -38,6 +39,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -69,7 +72,7 @@ public class KeyChainMining extends KeyPerk {
         EntityPlayer player = event.getPlayer();
         Side side = player.world.isRemote ? Side.CLIENT : Side.SERVER;
         PlayerProgress prog = ResearchManager.getProgress(player, side);
-        if (prog != null && player instanceof EntityPlayerMP && prog.hasPerkUnlocked(this) &&
+        if (prog != null && side == Side.SERVER && player instanceof EntityPlayerMP && prog.hasPerkUnlocked(this) &&
                 !MiscUtils.isPlayerFakeMP((EntityPlayerMP) player) && !player.isSneaking()
                 && event.getWorld() instanceof WorldServer && !player.isCreative()) {
             WorldServer world = (WorldServer) event.getWorld();
@@ -114,7 +117,11 @@ public class KeyChainMining extends KeyPerk {
                     } catch (Exception exc) {
                         return false;
                     }
+                    boolean capturing = false;
                     try {
+                        BlockDropCaptureAssist.startCapturing();
+                        capturing = true;
+
                         TileEntity te = world.getTileEntity(at);
                         Block block = atState.getBlock();
                         if(block.removedByPlayer(atState, world, at, player, true)) {
@@ -123,9 +130,27 @@ public class KeyChainMining extends KeyPerk {
                             if (exp > 0) {
                                 block.dropXpOnBlockBreak(world, at, exp);
                             }
+                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, at);
+                            ev.setAdditionalData(Block.getStateId(atState));
+                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, at, 16));
                             broken++;
                         }
-                    } catch (Exception exc) {}
+                        List<ItemStack> drops = BlockDropCaptureAssist.getCapturedStacksAndStop();
+                        capturing = false;
+                        Vector3 plPos = Vector3.atEntityCenter(player);
+                        for (ItemStack stack : drops) {
+                            ItemUtils.dropItemNaturally(player.getEntityWorld(),
+                                    plPos.getX() + rand.nextFloat() - rand.nextFloat(),
+                                    player.posY,
+                                    plPos.getZ() + rand.nextFloat() - rand.nextFloat(),
+                                    stack);
+                        }
+                    } catch (Exception ignored) {
+                    } finally {
+                        if (capturing) {
+                            BlockDropCaptureAssist.getCapturedStacksAndStop(); //Discard.
+                        }
+                    }
                 }
                 return broken >= chain.getPattern().size() / 2;
             }

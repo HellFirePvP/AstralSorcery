@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.types.IConverterProvider;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.ICooldownPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
@@ -33,7 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.EnumSet;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -125,9 +126,9 @@ public class PerkEffectHelper implements ITickHandler {
         if (progress != null) {
             for (AbstractPerk perk : progress.getAppliedPerks()) {
                 if (remove) {
-                    perk.removePerk(player, side);
+                    handlePerkRemoval(perk, player, side);
                 } else {
-                    perk.applyPerk(player, side);
+                    handlePerkApplication(perk, player, side);
                 }
             }
         }
@@ -137,9 +138,9 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress progress = ResearchManager.getProgress(player, side);
         if (progress != null) {
             if (remove) {
-                perk.removePerk(player, side);
+                handlePerkRemoval(perk, player, side);
             } else {
-                perk.applyPerk(player, side);
+                handlePerkApplication(perk, player, side);
             }
         }
     }
@@ -148,8 +149,70 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             for (AbstractPerk perk : prog.getAppliedPerks()) {
-                perk.removePerk(player, side);
+                handlePerkRemoval(perk, player, side);
             }
+        }
+    }
+
+    private void handlePerkApplication(AbstractPerk perk, EntityPlayer player, Side side) {
+        if (perk instanceof IConverterProvider) {
+            Collection<PerkConverter> converters = ((IConverterProvider) perk).provideConverters();
+            if (!converters.isEmpty()) {
+                batchApplyConverters(player, side, converters);
+            }
+        }
+        perk.applyPerk(player, side);
+    }
+
+    private void handlePerkRemoval(AbstractPerk perk, EntityPlayer player, Side side) {
+        if (perk instanceof IConverterProvider) {
+            Collection<PerkConverter> converters = ((IConverterProvider) perk).provideConverters();
+            if (!converters.isEmpty()) {
+                batchRemoveConverters(player, side, converters);
+            }
+        }
+        perk.removePerk(player, side);
+    }
+
+    public void applyGlobalConverters(EntityPlayer player, Side side, PerkConverter... converters) {
+        applyGlobalConverters(player, side, Arrays.asList(converters));
+    }
+
+    public void applyGlobalConverters(EntityPlayer player, Side side, List<PerkConverter> converters) {
+        batchApplyConverters(player, side, converters);
+    }
+
+    public void removeGlobalConverters(EntityPlayer player, Side side, PerkConverter... converters) {
+        removeGlobalConverters(player, side, Arrays.asList(converters));
+    }
+
+    public void removeGlobalConverters(EntityPlayer player, Side side, List<PerkConverter> converters) {
+        batchRemoveConverters(player, side, converters);
+    }
+
+    private void batchApplyConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters) {
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
+        if (prog != null) {
+            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
+            perks.forEach(perk -> perk.removePerk(player, side));
+
+            PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
+            converters.forEach((c) -> attributeMap.applyConverter(player, c));
+
+            perks.forEach(perk -> perk.applyPerk(player, side));
+        }
+    }
+
+    private void batchRemoveConverters(EntityPlayer player, Side side, Collection<PerkConverter> converters) {
+        PlayerProgress prog = ResearchManager.getProgress(player, side);
+        if (prog != null) {
+            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
+            perks.forEach(perk -> perk.removePerk(player, side));
+
+            PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
+            converters.forEach((c) -> attributeMap.removeConverter(player, c));
+
+            perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
 
