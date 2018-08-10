@@ -16,6 +16,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -36,14 +38,27 @@ public abstract class PerkConverter {
     }
 
     public static final PerkConverter IDENTITY = new PerkConverter() {
+        @Nonnull
         @Override
         public PerkAttributeModifier convertModifier(PerkAttributeModifier perkAttributeModifier, @Nullable AbstractPerk owningPerk) {
             return perkAttributeModifier;
         }
     };
 
+    /**
+     * Use {@link PerkAttributeModifier#convertModifier(String, PerkAttributeModifier.Mode, float)} to convert the given modifier
+     */
     @Nonnull
     public abstract PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
+
+    /**
+     * Use {@link PerkAttributeModifier#gainAsExtraModifier(PerkConverter, String, PerkAttributeModifier.Mode, float)} to create new modifiers
+     * based off of the given modifier!
+     */
+    @Nonnull
+    public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+        return Collections.emptyList();
+    }
 
     public void onApply(EntityPlayer player, Side side) {}
 
@@ -52,6 +67,7 @@ public abstract class PerkConverter {
     public PerkConverter andThen(PerkConverter next) {
         PerkConverter thisConverter = this;
         return new PerkConverter() {
+            @Nonnull
             @Override
             public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 return thisConverter.convertModifier(next.convertModifier(modifier, owningPerk), owningPerk);
@@ -66,6 +82,12 @@ public abstract class PerkConverter {
             @Override
             public PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
                 return thisConverter.convertModifier(modifier, owningPerk);
+            }
+
+            @Nonnull
+            @Override
+            public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                return thisConverter.gainExtraModifiers(modifier, owningPerk);
             }
         };
     }
@@ -101,14 +123,14 @@ public abstract class PerkConverter {
             return new Radius(thisRadius.getOffset(), radius) {
                 @Nonnull
                 @Override
-                public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                    return thisRadius.convertModifier(modifier, owningPerk);
+                public PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                    return thisRadius.convertModifierInRange(modifier, owningPerk);
                 }
 
                 @Nonnull
                 @Override
-                public PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-                    return thisRadius.convertModifierInRange(modifier, owningPerk);
+                public Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                    return thisRadius.gainExtraModifiersInRange(modifier, owningPerk);
                 }
             };
         }
@@ -127,7 +149,19 @@ public abstract class PerkConverter {
         }
 
         @Nonnull
+        @Override
+        public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+            if (!canAffectPerk(owningPerk)) {
+                return Collections.emptyList();
+            }
+            return gainExtraModifiersInRange(modifier, owningPerk);
+        }
+
+        @Nonnull
         public abstract PerkAttributeModifier convertModifierInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
+
+        @Nonnull
+        public abstract Collection<PerkAttributeModifier> gainExtraModifiersInRange(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk);
 
     }
 

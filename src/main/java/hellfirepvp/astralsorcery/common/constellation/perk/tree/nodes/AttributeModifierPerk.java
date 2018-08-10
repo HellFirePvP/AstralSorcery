@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
+import java.util.Stack;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -45,8 +46,13 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : typeModifierList) {
-            modifier = attr.convertModifier(modifier, this);
-            attr.applyModifier(player, modifier.getAttributeType(), modifier, this);
+            List<PerkAttributeModifier> modify = new Stack<>();
+            modify.add(modifier);
+            modify.addAll(attr.gainModifiers(modifier, this));
+            for (PerkAttributeModifier mod : modify) {
+                mod = attr.convertModifier(modifier, this);
+                attr.applyModifier(player, mod.getAttributeType(), mod);
+            }
         }
     }
 
@@ -56,8 +62,13 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : typeModifierList) {
-            modifier = attr.convertModifier(modifier, this);
-            attr.removeModifier(player, modifier.getAttributeType(), modifier, this);
+            List<PerkAttributeModifier> modify = new Stack<>();
+            modify.add(modifier);
+            modify.addAll(attr.gainModifiers(modifier, this));
+            for (PerkAttributeModifier mod : modify) {
+                mod = attr.convertModifier(modifier, this);
+                attr.removeModifier(player, mod.getAttributeType(), mod);
+            }
         }
     }
 }

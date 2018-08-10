@@ -37,13 +37,9 @@ public class PlayerAttributeMap {
         this.side = side;
     }
 
-    public boolean applyModifier(EntityPlayer player, String type, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+    public boolean applyModifier(EntityPlayer player, String type, PerkAttributeModifier modifier) {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return false;
-
-        for (PerkConverter converter : converters) {
-            modifier = converter.convertModifier(modifier, owningPerk);
-        }
 
         boolean noModifiers = getModifiersByType(attributeType, modifier.getMode()).isEmpty();
         List<PerkAttributeModifier> modifiers = attributes.computeIfAbsent(attributeType, t -> Lists.newArrayList());
@@ -58,13 +54,9 @@ public class PlayerAttributeMap {
         return modifiers.add(modifier);
     }
 
-    public boolean removeModifier(EntityPlayer player, String type, PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+    public boolean removeModifier(EntityPlayer player, String type, PerkAttributeModifier modifier) {
         PerkAttributeType attributeType = AttributeTypeRegistry.getType(type);
         if (attributeType == null) return false;
-
-        for (PerkConverter converter : converters) {
-            modifier = converter.convertModifier(modifier, owningPerk);
-        }
 
         if (attributes.computeIfAbsent(attributeType, t -> Lists.newArrayList()).remove(modifier)) {
             boolean completelyRemoved = attributes.get(attributeType).isEmpty();
@@ -83,6 +75,15 @@ public class PlayerAttributeMap {
             modifier = converter.convertModifier(modifier, owningPerk);
         }
         return modifier;
+    }
+
+    @Nonnull
+    public Collection<PerkAttributeModifier> gainModifiers(@Nonnull PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+        Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
+        for (PerkConverter converter : converters) {
+            modifiers.addAll(converter.gainExtraModifiers(modifier, owningPerk));
+        }
+        return modifiers;
     }
 
     boolean applyConverter(EntityPlayer player, PerkConverter converter) {
