@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.common.enchantment.amulet;
 import baubles.api.BaubleType;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.enchantment.EnchantmentPlayerWornTick;
+import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentModifyEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
@@ -41,6 +42,15 @@ public class PlayerAmuletHandler implements ITickHandler {
         if(!EnchantmentUpgradeHelper.isItemBlacklisted(itemCapEvent.getObject())) {
             itemCapEvent.addCapability(AmuletHolderCapability.CAP_AMULETHOLDER_NAME, new AmuletHolderCapability.Provider());
         }
+    }
+
+    @SubscribeEvent
+    public void onAmuletEnchantApply(DynamicEnchantmentModifyEvent.Add event) {
+        if(EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
+        ItemStack linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
+        if(linkedAmulet.isEmpty()) return;
+
+        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet));
     }
 
     @Override

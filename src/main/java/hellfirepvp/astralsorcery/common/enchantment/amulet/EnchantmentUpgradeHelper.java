@@ -9,9 +9,10 @@
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
 import baubles.api.BaubleType;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
+import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
+import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentModifyEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -59,7 +61,7 @@ public class EnchantmentUpgradeHelper {
         return getNewEnchantmentLevel(current, enchantment, item, null);
     }
 
-    private static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item, @Nullable List<AmuletEnchantment> context) {
+    private static int getNewEnchantmentLevel(int current, int currentEnchantmentId, ItemStack item, @Nullable List<DynamicEnchantment> context) {
         if(isItemBlacklisted(item)) return current;
         Enchantment ench = Enchantment.getEnchantmentByID(currentEnchantmentId);
         if(ench != null) {
@@ -68,15 +70,15 @@ public class EnchantmentUpgradeHelper {
         return current;
     }
 
-    private static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item, @Nullable List<AmuletEnchantment> context) {
+    private static int getNewEnchantmentLevel(int current, Enchantment enchantment, ItemStack item, @Nullable List<DynamicEnchantment> context) {
         if(isItemBlacklisted(item)) return current;
 
         if(item.isEmpty() || !AmuletEnchantmentRegistry.canBeInfluenced(enchantment)) {
             return current;
         }
 
-        List<AmuletEnchantment> modifiers = context != null ? context : getEnchantmentAdditions(item);
-        for (AmuletEnchantment mod : modifiers) {
+        List<DynamicEnchantment> modifiers = context != null ? context : fireEnchantmentGatheringEvent(item);
+        for (DynamicEnchantment mod : modifiers) {
             Enchantment target = mod.getEnchantment();
             switch (mod.getType()) {
                 case ADD_TO_SPECIFIC:
@@ -102,7 +104,7 @@ public class EnchantmentUpgradeHelper {
     public static NBTTagList modifyEnchantmentTags(@Nonnull NBTTagList existingEnchantments, ItemStack stack) {
         if(isItemBlacklisted(stack)) return existingEnchantments;
 
-        List<AmuletEnchantment> context = getEnchantmentAdditions(stack);
+        List<DynamicEnchantment> context = fireEnchantmentGatheringEvent(stack);
         if(context.isEmpty()) return existingEnchantments;
 
         NBTTagList returnNew = new NBTTagList();
@@ -123,8 +125,8 @@ public class EnchantmentUpgradeHelper {
             }
         }
 
-        for (AmuletEnchantment mod : context) {
-            if(mod.getType() == AmuletEnchantment.Type.ADD_TO_SPECIFIC) {
+        for (DynamicEnchantment mod : context) {
+            if(mod.getType() == DynamicEnchantment.Type.ADD_TO_SPECIFIC) {
                 Enchantment ench = mod.getEnchantment();
                 if(!AmuletEnchantmentRegistry.canBeInfluenced(ench)) {
                     continue;
@@ -147,7 +149,7 @@ public class EnchantmentUpgradeHelper {
     public static Map<Enchantment, Integer> applyNewEnchantmentLevels(Map<Enchantment, Integer> enchantmentLevelMap, ItemStack stack) {
         if(isItemBlacklisted(stack)) return enchantmentLevelMap;
 
-        List<AmuletEnchantment> context = getEnchantmentAdditions(stack);
+        List<DynamicEnchantment> context = fireEnchantmentGatheringEvent(stack);
         if(context.isEmpty()) return enchantmentLevelMap;
 
         Map<Enchantment, Integer> copyRet = Maps.newLinkedHashMap();
@@ -155,8 +157,8 @@ public class EnchantmentUpgradeHelper {
             copyRet.put(enchant.getKey(), getNewEnchantmentLevel(enchant.getValue(), enchant.getKey(), stack, context));
         }
 
-        for (AmuletEnchantment mod : context) {
-            if(mod.getType() == AmuletEnchantment.Type.ADD_TO_SPECIFIC) {
+        for (DynamicEnchantment mod : context) {
+            if(mod.getType() == DynamicEnchantment.Type.ADD_TO_SPECIFIC) {
                 Enchantment ench = mod.getEnchantment();
                 if(!AmuletEnchantmentRegistry.canBeInfluenced(ench)) {
                     continue;
@@ -204,13 +206,12 @@ public class EnchantmentUpgradeHelper {
     //---------------------------------------------------
 
     //This is more or less just a map to say whatever we add upon.
-    private static List<AmuletEnchantment> getEnchantmentAdditions(ItemStack tool) {
-        if(isItemBlacklisted(tool)) return Lists.newArrayList();
-
-        ItemStack linkedAmulet = getWornAmulet(tool);
-        if(linkedAmulet.isEmpty()) return Lists.newArrayList();
-
-        return ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet);
+    private static List<DynamicEnchantment> fireEnchantmentGatheringEvent(ItemStack tool) {
+        DynamicEnchantmentModifyEvent.Add addEvent = new DynamicEnchantmentModifyEvent.Add(tool);
+        MinecraftForge.EVENT_BUS.post(addEvent);
+        DynamicEnchantmentModifyEvent.Modify modifyEvent = new DynamicEnchantmentModifyEvent.Modify(tool, addEvent.getEnchantmentsToApply());
+        MinecraftForge.EVENT_BUS.post(modifyEvent);
+        return modifyEvent.getEnchantmentsToApply();
     }
 
     public static void removeAmuletTagsAndCleanup(EntityPlayer player, boolean keepEquipped) {
@@ -257,7 +258,7 @@ public class EnchantmentUpgradeHelper {
         cap.setHolderUUID(null);
     }
 
-    private static ItemStack getWornAmulet(ItemStack anyTool) {
+    static ItemStack getWornAmulet(ItemStack anyTool) {
         //Check if the player is online and exists & is set properly
         UUID plUUID = getWornPlayerUUID(anyTool);
         if(plUUID == null) return ItemStack.EMPTY;

@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.enchantment.amulet;
 
+import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,41 +28,14 @@ import javax.annotation.Nullable;
  * Created by HellFirePvP
  * Date: 27.01.2018 / 13:37
  */
-public class AmuletEnchantment {
+public class AmuletEnchantment extends DynamicEnchantment {
 
-    private final AmuletEnchantment.Type type;
-    @Nullable private final Enchantment enchantment;
-    private int levelAddition;
-
-    public AmuletEnchantment(AmuletEnchantment.Type type, @Nonnull Enchantment enchantment, int levelAddition) {
-        if(!type.hasEnchantmentTag()) {
-            throw new IllegalArgumentException("Tried to create amulet enchantment that doesn't requires a std. enchantment together with an enchantment!");
-        }
-        this.type = type;
-        this.enchantment = enchantment;
-        this.levelAddition = levelAddition;
+    public AmuletEnchantment(Type type, @Nonnull Enchantment enchantment, int levelAddition) {
+        super(type, enchantment, levelAddition);
     }
 
-    public AmuletEnchantment(AmuletEnchantment.Type type, int levelAddition) {
-        if(type.hasEnchantmentTag()) {
-            throw new IllegalArgumentException("Tried to create amulet enchantment that requires a std. enchantment without an enchantment!");
-        }
-        this.type = type;
-        this.enchantment = null;
-        this.levelAddition = levelAddition;
-    }
-
-    public AmuletEnchantment.Type getType() {
-        return type;
-    }
-
-    @Nullable
-    public Enchantment getEnchantment() {
-        return enchantment;
-    }
-
-    public int getLevelAddition() {
-        return levelAddition;
+    public AmuletEnchantment(Type type, int levelAddition) {
+        super(type, levelAddition);
     }
 
     @SideOnly(Side.CLIENT)
@@ -99,7 +73,7 @@ public class AmuletEnchantment {
     @Nullable
     public static AmuletEnchantment deserialize(NBTTagCompound cmp) {
         int typeId = cmp.getInteger("type");
-        AmuletEnchantment.Type type = AmuletEnchantment.Type.values()[MathHelper.clamp(typeId, 0, AmuletEnchantment.Type.values().length - 1)];
+        Type type = Type.values()[MathHelper.clamp(typeId, 0, Type.values().length - 1)];
         int level = Math.max(0, cmp.getInteger("level"));
         if(type.hasEnchantmentTag()) {
             ResourceLocation res = new ResourceLocation(cmp.getString("ench"));
@@ -111,29 +85,6 @@ public class AmuletEnchantment {
             return new AmuletEnchantment(type, level);
         }
         return null;
-    }
-
-    //The ordering in the enum defines the order of how the types of amulet-enchantments are applied/calculated!
-    public enum Type {
-
-        ADD_TO_SPECIFIC,
-        ADD_TO_EXISTING_SPECIFIC,
-        ADD_TO_EXISTING_ALL(false);
-
-        private final boolean hasEnchantmentTag;
-
-        Type() {
-            this(true);
-        }
-
-        Type(boolean hasEnchantmentTag) {
-            this.hasEnchantmentTag = hasEnchantmentTag;
-        }
-
-        public boolean hasEnchantmentTag() {
-            return hasEnchantmentTag;
-        }
-
     }
 
 }
