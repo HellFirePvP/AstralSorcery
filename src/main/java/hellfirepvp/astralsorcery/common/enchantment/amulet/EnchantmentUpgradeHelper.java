@@ -12,7 +12,7 @@ import baubles.api.BaubleType;
 import com.google.common.collect.Maps;
 import hellfirepvp.astralsorcery.common.enchantment.amulet.registry.AmuletEnchantmentRegistry;
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
-import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentModifyEvent;
+import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
@@ -207,9 +207,9 @@ public class EnchantmentUpgradeHelper {
 
     //This is more or less just a map to say whatever we add upon.
     private static List<DynamicEnchantment> fireEnchantmentGatheringEvent(ItemStack tool) {
-        DynamicEnchantmentModifyEvent.Add addEvent = new DynamicEnchantmentModifyEvent.Add(tool);
+        DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool);
         MinecraftForge.EVENT_BUS.post(addEvent);
-        DynamicEnchantmentModifyEvent.Modify modifyEvent = new DynamicEnchantmentModifyEvent.Modify(tool, addEvent.getEnchantmentsToApply());
+        DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply());
         MinecraftForge.EVENT_BUS.post(modifyEvent);
         return modifyEvent.getEnchantmentsToApply();
     }
