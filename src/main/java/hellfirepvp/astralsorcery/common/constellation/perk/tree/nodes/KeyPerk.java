@@ -19,7 +19,7 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeM
  * Created by HellFirePvP
  * Date: 17.07.2018 / 18:24
  */
-public abstract class KeyPerk extends AttributeModifierPerk {
+public class KeyPerk extends AttributeModifierPerk {
     
     public KeyPerk(String name, int x, int y) {
         super(name, x, y);

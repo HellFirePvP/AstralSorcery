@@ -140,23 +140,6 @@ public class EventHandlerServer {
         }
         if (phoenixProtect(event.getEntityLiving())) {
             event.setCanceled(true);
-        } else {
-            if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote) return;
-
-            DamageSource source = event.getSource();
-            /*if (source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityPlayer) {
-                EntityPlayer p = (EntityPlayer) source.getImmediateSource();
-                PlayerProgress prog = ResearchManager.getProgress(p, Side.SERVER);
-                if (prog != null) {
-                    Map<ConstellationPerk, Integer> perks = prog.getAppliedPerks();
-                    for (ConstellationPerk perk : perks.keySet()) {
-                        if (!prog.isPerkActive(perk)) continue;
-                        if (perk.mayExecute(ConstellationPerk.Target.ENTITY_KILL)) {
-                            perk.onEntityKilled(p, event.getEntityLiving());
-                        }
-                    }
-                }
-            }*/
         }
     }
 

@@ -16,6 +16,8 @@ import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -46,12 +48,15 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : typeModifierList) {
-            List<PerkAttributeModifier> modify = new Stack<>();
+            List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
             modify.addAll(attr.gainModifiers(modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(modifier, this);
-                attr.applyModifier(player, mod.getAttributeType(), mod);
+                mod = attr.convertModifier(mod, this);
+                if(!attr.applyModifier(player, mod.getAttributeType(), mod)) {
+                    //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
+                    //System.out.println("FAILED TO ADD MODIFIER! ALREADY PRESENT!");
+                }
             }
         }
     }
@@ -62,12 +67,15 @@ public class AttributeModifierPerk extends AttributeConverterPerk {
 
         PlayerAttributeMap attr = PerkAttributeHelper.getOrCreateMap(player, side);
         for (PerkAttributeModifier modifier : typeModifierList) {
-            List<PerkAttributeModifier> modify = new Stack<>();
+            List<PerkAttributeModifier> modify = Lists.newArrayList();
             modify.add(modifier);
             modify.addAll(attr.gainModifiers(modifier, this));
             for (PerkAttributeModifier mod : modify) {
-                mod = attr.convertModifier(modifier, this);
-                attr.removeModifier(player, mod.getAttributeType(), mod);
+                mod = attr.convertModifier(mod, this);
+                if(!attr.removeModifier(player, mod.getAttributeType(), mod)) {
+                    //For testing if application/removal of perks goes wrong, set a debug breakpoint here.
+                    //System.out.println("FAILED TO REMOVE MODIFIER! NOT FOUND!");
+                }
             }
         }
     }

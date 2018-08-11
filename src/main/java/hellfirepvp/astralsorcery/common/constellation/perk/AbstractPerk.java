@@ -78,10 +78,12 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
     //Reserving application/removal methods to delegate for later pre-application logic
     final void applyPerk(EntityPlayer player, Side side) {
         this.applyPerkLogic(player, side);
+        PerkAttributeHelper.getOrCreateMap(player, side).markPerkApplied(this);
     }
 
     final void removePerk(EntityPlayer player, Side side) {
         this.removePerkLogic(player, side);
+        PerkAttributeHelper.getOrCreateMap(player, side).markPerkRemoved(this);
     }
 
     protected abstract void applyPerkLogic(EntityPlayer player, Side side);

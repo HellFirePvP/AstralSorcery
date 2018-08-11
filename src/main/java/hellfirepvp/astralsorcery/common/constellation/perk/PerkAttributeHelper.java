@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -37,6 +38,10 @@ public class PerkAttributeHelper {
         } else {
             return playerPerkAttributes.computeIfAbsent(player.getUniqueID(), (uuid) -> new PlayerAttributeMap(side));
         }
+    }
+
+    public static void clearServer() {
+        playerPerkAttributes.clear();
     }
 
 }

@@ -783,6 +783,14 @@ perk.astralsorcery.key_chain_mining_chance_greater.name=Increased Chained Mining
 perk.astralsorcery.key_chain_mining_chance_greater.desc=+100%% chance of Chained Mining
 perk.astralsorcery.inc_leech_vamp.name=Added Life Leech
 perk.astralsorcery.inc_leech_vamp.desc=+3%% of damage dealt gained as Life
+perk.astralsorcery.key_alc_inc_armor.name=Increased armor
+perk.astralsorcery.key_alc_inc_armor.desc=5%% increased armor
+perk.astralsorcery.thorns_inc_dmg.name=Increased Thorns
+perk.astralsorcery.thorns_inc_dmg.desc=+5%% of melee damage taken is reflected
+perk.astralsorcery.thorns_inc_dmg_gr.name=Increased Thorns
+perk.astralsorcery.thorns_inc_dmg_gr.desc=+10%% of melee damage taken is reflected
+perk.astralsorcery.key_phoenix_path.name=Increased Elemental Resistance
+perk.astralsorcery.key_phoenix_path.desc=5%% increased Elemental Resistances
 
 perk.astralsorcery.major_inc_life.name=Bloom
 perk.astralsorcery.major_inc_life.desc=15%% more Life
@@ -851,6 +859,9 @@ perk.astralsorcery.key_chain_mining_double.desc.2=Mining Chains when triggering 
 perk.astralsorcery.major_leech_vamp.name=Vampirism
 perk.astralsorcery.major_leech_vamp.desc.1=+5%% of damage dealt gained as Life
 perk.astralsorcery.major_leech_vamp.desc.2=+2 to maximum Life
+perk.astralsorcery.thorns_ranged.name=Dislocated Reflection
+perk.astralsorcery.thorns_ranged.desc.1=+10%% of melee damage taken is reflected
+perk.astralsorcery.thorns_ranged.desc.2=Ranged damage is also being reflected
 
 perk.astralsorcery.core.name=Singularity
 perk.astralsorcery.core.desc.1=Other tree roots may be unlocked without
@@ -911,6 +922,11 @@ perk.astralsorcery.key_rampage.desc.2=attack speed and damage after killing an e
 perk.astralsorcery.key_chain_mining.name=Chained Mining
 perk.astralsorcery.key_chain_mining.desc.1=Breaking a block has a chance of breaking up to 4
 perk.astralsorcery.key_chain_mining.desc.2=nearby blocks of the same type.
+perk.astralsorcery.key_armor_life_conversion.name=Bastion of Flesh
+perk.astralsorcery.key_armor_life_conversion.desc.1=Convert all increases and decreases of armor to life.
+perk.astralsorcery.key_armor_life_conversion.desc.2=You have no armor.
+perk.astralsorcery.key_cheat_death.name=Phoenix Blessing
+perk.astralsorcery.key_cheat_death.desc=Can save you from death in dire situations.
 
 perk.astralsorcery.aevitas.name=Root: Aevitas
 perk.astralsorcery.aevitas.desc.1=+2 to maximum Life
@@ -927,6 +943,8 @@ perk.astralsorcery.discidia.desc.2=Gain experience by dealing damage
 perk.astralsorcery.armara.name=Root: Armara
 perk.astralsorcery.armara.desc.1=20%% more Elemental Resistances
 perk.astralsorcery.armara.desc.2=Gain experience by taking damage
+
+// TODO remove
 
 perk.DMG_KILL=Killing frenzy
 perk.DMG_KILL.info=Increased damage after killing a mob

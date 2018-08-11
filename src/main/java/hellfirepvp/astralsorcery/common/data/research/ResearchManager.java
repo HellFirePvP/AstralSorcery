@@ -289,13 +289,15 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+        }
+
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
 
-        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : progress.getUnlockedPerkData().entrySet()) {
-            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
-        }
-        progress.clearPerks();
         progress.setExp(0);
         progress.setAttunedConstellation(constellation);
         AbstractPerk root;
@@ -399,13 +401,14 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if (progress == null) return false;
 
-        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : progress.getUnlockedPerkData().entrySet()) {
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
             perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
         }
 
-        PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(player, Side.SERVER);
         PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
-        progress.clearPerks();
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);

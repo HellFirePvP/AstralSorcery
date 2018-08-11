@@ -13,6 +13,7 @@ import com.google.common.collect.Table;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +35,9 @@ public class PerkAttributeModifier {
     private final Mode mode;
     private final String attributeType;
 
+    //Cannot be converted to anything else.
+    private boolean absolute = false;
+
     private Map<PerkConverter, Table<String, Mode, PerkAttributeModifier>> cachedConverters = new HashMap<>();
 
     private PerkAttributeModifier(int id, String type, Mode mode, float value) {
@@ -51,21 +55,31 @@ public class PerkAttributeModifier {
         this.value = value;
     }
 
+    private void setAbsolute() {
+        this.absolute = true;
+    }
+
     /**
      * Use this method for PerkConverters returning a new PerkAttributeModifier!
      */
-    public PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
+    @Nonnull
+    public final PerkAttributeModifier convertModifier(String attributeType, Mode mode, float value) {
+        if (absolute) {
+            return this;
+        }
         return new PerkAttributeModifier(this.id, attributeType, mode, value);
     }
 
     /**
      * Use this method for creating extra Modifiers depending on a given modifier.
      */
-    public PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode, float value) {
+    @Nonnull
+    public final PerkAttributeModifier gainAsExtraModifier(PerkConverter converter, String attributeType, Mode mode, float value) {
         Table<String, Mode, PerkAttributeModifier> cachedModifiers = cachedConverters.computeIfAbsent(converter, (c) -> HashBasedTable.create());
         PerkAttributeModifier modifier;
         if ((modifier = cachedModifiers.get(attributeType, mode)) == null) {
             modifier = new PerkAttributeModifier(attributeType, mode, value);
+            modifier.setAbsolute();
             cachedModifiers.put(attributeType, mode, modifier);
         }
         return modifier;

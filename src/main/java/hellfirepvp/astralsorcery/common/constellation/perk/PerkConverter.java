@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,11 +54,11 @@ public abstract class PerkConverter {
 
     /**
      * Use {@link PerkAttributeModifier#gainAsExtraModifier(PerkConverter, String, PerkAttributeModifier.Mode, float)} to create new modifiers
-     * based off of the given modifier!
+     * based off of the given modifier! The resulting modifiers cannot be modified with perk converters.
      */
     @Nonnull
     public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
-        return Collections.emptyList();
+        return Lists.newArrayList();
     }
 
     public void onApply(EntityPlayer player, Side side) {}

@@ -10,6 +10,7 @@ package hellfirepvp.astralsorcery.common.constellation.perk.attribute.type;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,6 +50,20 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
         super.onModeApply(player, mode, side);
 
         IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
+
+        //The attributes don't get written/read from bytebuffer on local connection, but ARE in dedicated connections.
+        //Remove minecraft's dummy instances in case we're on a dedicated server.
+        if (side == Side.CLIENT) {
+            AttributeModifier modifier;
+            if ((modifier = attr.getModifier(getID(mode))) != null) {
+                if (!(modifier instanceof DynamicPlayerAttributeModifier)) {
+                    attr.removeModifier(getID(mode));
+                } else {
+                    return;
+                }
+            }
+        }
+
         switch (mode) {
             case ADDITION:
                 attr.applyModifier(new DynamicPlayerAttributeModifier(getID(mode), getDescription() + " Add", getTypeString(), mode, player, side));
@@ -83,7 +98,11 @@ public abstract class VanillaAttributeType extends PerkAttributeType {
     public void refreshAttribute(EntityPlayer player) {
         IAttributeInstance attr = player.getAttributeMap().getAttributeInstance(getAttribute());
         double base = attr.getBaseValue();
-        attr.setBaseValue(0);
+        if (base == 0) {
+            attr.setBaseValue(1);
+        } else {
+            attr.setBaseValue(0);
+        }
         attr.setBaseValue(base);
     }
 

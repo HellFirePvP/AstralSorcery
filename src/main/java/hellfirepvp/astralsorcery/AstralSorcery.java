@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery;
 import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.cmd.CommandAstralSorcery;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkAttributeHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.PerkAttributeType;
@@ -121,6 +122,7 @@ public class AstralSorcery {
         EventHandlerEntity.attackStack.clear();
         EventHandlerEntity.spawnDenyRegions.clear();
         ((DataPatreonFlares) SyncDataHolder.getDataClient(SyncDataHolder.DATA_PATREON_FLARES)).cleanUp(Side.SERVER);
+        PerkAttributeHelper.clearServer();
     }
 
     @Mod.EventHandler

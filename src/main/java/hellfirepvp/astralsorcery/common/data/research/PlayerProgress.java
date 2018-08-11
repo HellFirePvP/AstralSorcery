@@ -25,6 +25,8 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -304,10 +306,6 @@ public class PlayerProgress {
 
     protected boolean removePerk(AbstractPerk perk) {
         return unlockedPerks.remove(perk) != null;
-    }
-
-    protected void clearPerks() {
-        this.unlockedPerks.clear();
     }
 
     public List<ResearchProgression> getResearchProgression() {

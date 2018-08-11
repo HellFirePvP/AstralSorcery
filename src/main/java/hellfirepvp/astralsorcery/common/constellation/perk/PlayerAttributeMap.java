@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class PlayerAttributeMap {
 
     private Side side;
+    private List<AbstractPerk> cacheAppliedPerks = new LinkedList<>();
     private Map<PerkAttributeType, List<PerkAttributeModifier>> attributes = new HashMap<>();
     private List<PerkConverter> converters = new ArrayList<>();
 
@@ -84,6 +85,25 @@ public class PlayerAttributeMap {
             modifiers.addAll(converter.gainExtraModifiers(modifier, owningPerk));
         }
         return modifiers;
+    }
+
+    boolean markPerkApplied(AbstractPerk perk) {
+        if (cacheAppliedPerks.contains(perk)) {
+            return false;
+        }
+        return cacheAppliedPerks.add(perk);
+    }
+
+    boolean markPerkRemoved(AbstractPerk perk) {
+        return cacheAppliedPerks.remove(perk);
+    }
+
+    boolean isPerkApplied(AbstractPerk perk) {
+        return cacheAppliedPerks.contains(perk);
+    }
+
+    List<AbstractPerk> getCacheAppliedPerks() {
+        return cacheAppliedPerks;
     }
 
     boolean applyConverter(EntityPlayer player, PerkConverter converter) {

@@ -8,15 +8,13 @@
 
 package hellfirepvp.astralsorcery.common.registry;
 
+import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.AttributeModifierPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.CoreRootPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.MajorPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.PerkTreeConnector;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
@@ -25,6 +23,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.Collection;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry.*;
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.*;
@@ -69,10 +69,79 @@ public class RegistryPerks {
         initializeAevitasKeyPerks();
         initializeEvorsioKeyPerks();
         initializeDiscidiaKeyPerks();
+        initializeArmaraKeyPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
+    }
+
+    private static void initializeArmaraKeyPerks() {
+        AttributeModifierPerk perkALC1 = new AttributeModifierPerk("key_alc_inc_armor", 15, -4);
+        perkALC1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkALC2 = new AttributeModifierPerk("key_alc_inc_armor_1", 16, -3).setNameOverride(perkALC1.getUnlocalizedName());
+        perkALC2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        KeyPerk keyArmorConversion = new KeyPerk("key_armor_life_conversion", 17, -4);
+        keyArmorConversion.addConverter(new PerkConverter() {
+            @Nonnull
+            @Override
+            public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_ARMOR)) {
+                    return modifier.convertModifier(AttributeTypeRegistry.ATTR_TYPE_HEALTH, modifier.getMode(), modifier.getValue());
+                }
+                return modifier;
+            }
+
+            @Nonnull
+            @Override
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                Collection<PerkAttributeModifier> modifiers = Lists.newArrayList();
+                if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_ARMOR)) {
+                    modifiers.add(modifier.gainAsExtraModifier(this, AttributeTypeRegistry.ATTR_TYPE_ARMOR, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 0F));
+                    modifiers.add(modifier.gainAsExtraModifier(this, AttributeTypeRegistry.ATTR_TYPE_ARMOR_TOUGHNESS, PerkAttributeModifier.Mode.STACKING_MULTIPLY, 0F));
+                }
+                return modifiers;
+            }
+        });
+
+        PERK_TREE.registerPerk(perkALC1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_4"));
+        PERK_TREE.registerPerk(perkALC2)
+                .connect(perkALC1);
+        PERK_TREE.registerPerk(keyArmorConversion)
+                .connect(perkALC2);
+
+        AttributeModifierPerk perkTh1 = new AttributeModifierPerk("thorns_inc_dmg", 16, 1);
+        perkTh1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDITION, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS);
+        AttributeModifierPerk perkTh2 = new AttributeModifierPerk("thorns_inc_dmg_gr", 17, 0);
+        perkTh2.addModifier(0.10F, PerkAttributeModifier.Mode.ADDITION, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS);
+        MajorPerk perkRangedThorns = new MajorPerk("thorns_ranged", 16, -1);
+        perkRangedThorns.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_INC_THORNS_RANGED);
+        perkRangedThorns.addModifier(0.10F, PerkAttributeModifier.Mode.ADDITION, AttributeTypeRegistry.ATTR_TYPE_INC_THORNS);
+
+        PERK_TREE.registerPerk(perkTh1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_5"));
+        PERK_TREE.registerPerk(perkTh2)
+                .connect(perkTh1);
+        PERK_TREE.registerPerk(perkRangedThorns)
+                .connect(perkTh2);
+
+        AttributeModifierPerk perkPhEle1 = new AttributeModifierPerk("key_phoenix_path", 17, 18);
+        perkPhEle1.addModifier(-0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkPhEle2 = new AttributeModifierPerk("key_phoenix_path_1", 18, 19).setNameOverride(perkPhEle1.getUnlocalizedName());
+        perkPhEle2.addModifier(-0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        AttributeModifierPerk perkPhEle3 = new AttributeModifierPerk("key_phoenix_path_2", 17, 20).setNameOverride(perkPhEle1.getUnlocalizedName());
+        perkPhEle3.addModifier(-0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        KeyCheatDeath cheatDeathKey = new KeyCheatDeath("key_cheat_death", 16, 19);
+
+        PERK_TREE.registerPerk(perkPhEle1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_10"));
+        PERK_TREE.registerPerk(perkPhEle2)
+                .connect(perkPhEle1);
+        PERK_TREE.registerPerk(perkPhEle3)
+                .connect(perkPhEle2);
+        PERK_TREE.registerPerk(cheatDeathKey)
+                .connect(perkPhEle3);
     }
 
     private static void initializeDiscidiaKeyPerks() {
@@ -196,7 +265,6 @@ public class RegistryPerks {
                 .connect(perkLL1);
         PERK_TREE.registerPerk(perkVampirism)
                 .connect(perkLL2);
-
     }
 
     private static void initializeEvorsioKeyPerks() {
@@ -656,7 +724,7 @@ public class RegistryPerks {
 
         AttributeModifierPerk perkResArmor = new MajorPerk("med_more_res", 18, 11);
         perkResArmor.addModifier(0.94F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
-        perkResArmor.addModifier(0.06F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
+        perkResArmor.addModifier(1.06F, PerkAttributeModifier.Mode.STACKING_MULTIPLY, ATTR_TYPE_ARMOR);
 
         PERK_TREE.registerPerk(perkAr1)
                 .connect(PERK_TREE.getAstralSorceryPerk("major_inc_armor"));
@@ -1073,11 +1141,14 @@ public class RegistryPerks {
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_CHANCE));
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_MINING_CHAIN_SUCCESSIVECHAIN));
         registerPerkType(new AttributeLifeLeech());
+        registerPerkType(new AttributeThorns());
+        registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED));
 
         registerPerkType(new AttributeTypeMeleeAttackDamage());
         registerPerkType(new AttributeTypeMaxHealth());
         registerPerkType(new AttributeTypeMovementSpeed());
         registerPerkType(new AttributeTypeArmor());
+        registerPerkType(new AttributeTypeArmorToughness());
         registerPerkType(new AttributeTypeAttackSpeed());
         registerPerkType(new AttributeTypeMaxReach());
 
