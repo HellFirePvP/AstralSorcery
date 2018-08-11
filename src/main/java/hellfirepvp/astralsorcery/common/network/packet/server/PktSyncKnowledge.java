@@ -245,7 +245,7 @@ public class PktSyncKnowledge implements IMessage, IMessageHandler<PktSyncKnowle
 
     @SideOnly(Side.CLIENT)
     private void receiveMessageClient(PktSyncKnowledge message, MessageContext ctx) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
+        AstralSorcery.proxy.scheduleClientside(() -> {
             switch (message.state) {
                 case STATE_ADD:
                     ResearchManager.recieveProgressFromServer(message);

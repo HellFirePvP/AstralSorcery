@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
@@ -69,14 +70,16 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
 
     @Override
     public IMessage onMessage(PktProgressionUpdate message, MessageContext ctx) {
-        if(message.isPresent) {
-            if(message.isProg) {
-                addProgressChatMessage(message.tier);
-            } else {
-                addResearchChatMessage(message.tier);
+        AstralSorcery.proxy.scheduleClientside(() -> {
+            if(message.isPresent) {
+                if(message.isProg) {
+                    addProgressChatMessage(message.tier);
+                } else {
+                    addResearchChatMessage(message.tier);
+                }
             }
-        }
-        closeAndRefreshJournal();
+            closeAndRefreshJournal();
+        });
         return null;
     }
 

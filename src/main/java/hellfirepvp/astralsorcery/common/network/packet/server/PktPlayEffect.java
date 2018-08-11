@@ -60,7 +60,7 @@ public class PktPlayEffect implements IMessage, IMessageHandler<PktPlayEffect, I
             EffectType type = EffectType.values()[message.typeOrdinal];
             EventAction trigger = type.getTrigger(ctx.side);
             if(trigger != null) {
-                trigger.trigger(message);
+                AstralSorcery.proxy.scheduleClientside(() -> trigger.trigger(message));
             }
         } catch (Exception exc) {
             AstralSorcery.log.warn("[AstralSorcery] Error executing ParticleEventType " + message.typeOrdinal + " for pos " + pos.toString());

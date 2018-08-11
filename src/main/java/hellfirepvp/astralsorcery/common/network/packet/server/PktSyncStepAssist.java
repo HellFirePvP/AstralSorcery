@@ -46,7 +46,7 @@ public class PktSyncStepAssist implements IMessage, IMessageHandler<PktSyncStepA
 
     @Override
     public IMessage onMessage(PktSyncStepAssist message, MessageContext ctx) {
-        apply(message.stepHeight);
+        AstralSorcery.proxy.scheduleClientside(() -> apply(message.stepHeight));
         return null;
     }
 

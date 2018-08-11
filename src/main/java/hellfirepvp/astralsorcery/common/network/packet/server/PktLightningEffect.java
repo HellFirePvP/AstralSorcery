@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.EffectHandler;
 import hellfirepvp.astralsorcery.client.effect.light.EffectLightning;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
@@ -72,7 +73,7 @@ public class PktLightningEffect implements IMessage, IMessageHandler<PktLightnin
 
     @Override
     public IMessage onMessage(PktLightningEffect message, MessageContext ctx) {
-        playLightningEffect(message);
+        AstralSorcery.proxy.scheduleClientside(() -> playLightningEffect(message));
         return null;
     }
 

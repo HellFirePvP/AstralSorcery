@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
@@ -70,10 +71,10 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
     }
 
     private void handleClientPerkUpdate(PktSyncPerkActivity pkt) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
+        AstralSorcery.proxy.scheduleClientside(() -> {
             if (Minecraft.getMinecraft().player != null) {
                 if (pkt.clearAll) {
-                    PerkEffectHelper.EVENT_INSTANCE.clearAllPerks(Minecraft.getMinecraft().player, Side.CLIENT);
+                    PerkEffectHelper.EVENT_INSTANCE.clearAllPerksClient(Minecraft.getMinecraft().player);
                 } else if (pkt.perk != null) {
                     PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(Minecraft.getMinecraft().player, Side.CLIENT, pkt.perk, !pkt.unlock);
                 }
