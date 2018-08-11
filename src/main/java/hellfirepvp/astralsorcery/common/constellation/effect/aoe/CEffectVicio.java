@@ -81,7 +81,7 @@ public class CEffectVicio extends ConstellationEffect implements ConstellationEf
             for (EntityLivingBase entity : entities) {
                 if(entity instanceof EntityPlayerMP) {
                     EntityPlayerMP pl = (EntityPlayerMP) entity;
-                    if(pl.interactionManager.getGameType() == GameType.SURVIVAL) {
+                    if(pl.interactionManager.getGameType().isSurvivalOrAdventure()) {
                         boolean prev = pl.capabilities.allowFlying;
                         pl.capabilities.allowFlying = false;
                         if (prev) {
