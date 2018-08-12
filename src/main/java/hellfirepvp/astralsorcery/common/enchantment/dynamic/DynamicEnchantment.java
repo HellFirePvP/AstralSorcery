@@ -58,6 +58,10 @@ public class DynamicEnchantment {
         return levelAddition;
     }
 
+    public void setLevelAddition(int levelAddition) {
+        this.levelAddition = levelAddition;
+    }
+
     //The ordering in the enum defines the order of how the types of enchantments are applied/calculated!
     public enum Type {
 

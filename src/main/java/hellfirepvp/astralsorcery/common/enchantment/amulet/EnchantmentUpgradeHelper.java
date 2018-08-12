@@ -16,6 +16,7 @@ import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -209,7 +210,7 @@ public class EnchantmentUpgradeHelper {
     private static List<DynamicEnchantment> fireEnchantmentGatheringEvent(ItemStack tool) {
         DynamicEnchantmentEvent.Add addEvent = new DynamicEnchantmentEvent.Add(tool);
         MinecraftForge.EVENT_BUS.post(addEvent);
-        DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply());
+        DynamicEnchantmentEvent.Modify modifyEvent = new DynamicEnchantmentEvent.Modify(tool, addEvent.getEnchantmentsToApply(), addEvent.getResolvedPlayer());
         MinecraftForge.EVENT_BUS.post(modifyEvent);
         return modifyEvent.getEnchantmentsToApply();
     }
@@ -258,19 +259,20 @@ public class EnchantmentUpgradeHelper {
         cap.setHolderUUID(null);
     }
 
-    static ItemStack getWornAmulet(ItemStack anyTool) {
+    @Nullable
+    static Tuple<ItemStack, EntityPlayer> getWornAmulet(ItemStack anyTool) {
         //Check if the player is online and exists & is set properly
         UUID plUUID = getWornPlayerUUID(anyTool);
-        if(plUUID == null) return ItemStack.EMPTY;
+        if(plUUID == null) return null;
         EntityPlayer player;
         if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
             player = resolvePlayerClient(plUUID);
         } else {
             MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-            if(server == null) return ItemStack.EMPTY;
+            if(server == null) return null;
             player = server.getPlayerList().getPlayerByUUID(plUUID);
         }
-        if(player == null) return ItemStack.EMPTY;
+        if(player == null) return null;
 
         //Check if the player actually wears/carries the tool
         boolean foundTool = false;
@@ -281,13 +283,14 @@ public class EnchantmentUpgradeHelper {
                 break;
             }
         }
-        if(!foundTool) return ItemStack.EMPTY;
+        if(!foundTool) return null;
 
         //Check if the player wears an amulet and return that one then..
         if(BaublesHelper.doesPlayerWearBauble(player, BaubleType.AMULET, (stack) -> !stack.isEmpty() && stack.getItem() instanceof ItemEnchantmentAmulet)) {
-            return BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
+            ItemStack stack =  BaublesHelper.getFirstWornBaublesForType(player, BaubleType.AMULET);
+            return new Tuple<>(stack, player);
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     @SideOnly(Side.CLIENT)

@@ -56,6 +56,7 @@ public class AttributeTypeRegistry {
     public static final String ATTR_TYPE_INC_DODGE = AstralSorcery.MODID + ".dodge";
     public static final String ATTR_TYPE_INC_THORNS = AstralSorcery.MODID + ".thorns";
     public static final String ATTR_TYPE_INC_THORNS_RANGED = AstralSorcery.MODID + ".rangedthorns";
+    public static final String ATTR_TYPE_INC_ENCH_EFFECT = AstralSorcery.MODID + ".dynenchantmenteffect";
 
     private static Map<String, PerkAttributeType> typeMap = new HashMap<>();
 

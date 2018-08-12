@@ -9,9 +9,11 @@
 package hellfirepvp.astralsorcery.common.event;
 
 import hellfirepvp.astralsorcery.common.enchantment.dynamic.DynamicEnchantment;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class DynamicEnchantmentEvent {
 
         private List<DynamicEnchantment> enchantmentsToApply = new LinkedList<>();
         private final ItemStack itemStack;
+        private EntityPlayer resolvedPlayer = null; //If the player could be resolved through this event, pass it down to modify
 
         public Add(ItemStack itemStack) {
             this.itemStack = itemStack;
@@ -36,6 +39,15 @@ public class DynamicEnchantmentEvent {
 
         public ItemStack getEnchantedItemStack() {
             return itemStack;
+        }
+
+        public void setResolvedPlayer(EntityPlayer resolvedPlayer) {
+            this.resolvedPlayer = resolvedPlayer;
+        }
+
+        @Nullable
+        public EntityPlayer getResolvedPlayer() {
+            return resolvedPlayer;
         }
 
         public List<DynamicEnchantment> getEnchantmentsToApply() {
@@ -48,10 +60,21 @@ public class DynamicEnchantmentEvent {
 
         private List<DynamicEnchantment> enchantmentsToApply;
         private final ItemStack itemStack;
+        private EntityPlayer resolvedPlayer;
 
-        public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply) {
+        public Modify(ItemStack itemStack, List<DynamicEnchantment> enchantmentsToApply, @Nullable EntityPlayer resolvedPlayer) {
             this.itemStack = itemStack;
             this.enchantmentsToApply = enchantmentsToApply;
+            this.resolvedPlayer = resolvedPlayer;
+        }
+
+        @Nullable
+        public EntityPlayer getResolvedPlayer() {
+            return resolvedPlayer;
+        }
+
+        public void setResolvedPlayer(EntityPlayer resolvedPlayer) {
+            this.resolvedPlayer = resolvedPlayer;
         }
 
         public ItemStack getEnchantedItemStack() {

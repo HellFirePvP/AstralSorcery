@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.common.event.DynamicEnchantmentEvent;
 import hellfirepvp.astralsorcery.common.item.wearable.ItemEnchantmentAmulet;
 import hellfirepvp.astralsorcery.common.registry.RegistryEnchantments;
 import hellfirepvp.astralsorcery.common.util.BaublesHelper;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -47,10 +48,11 @@ public class PlayerAmuletHandler implements ITickHandler {
     @SubscribeEvent
     public void onAmuletEnchantApply(DynamicEnchantmentEvent.Add event) {
         if(EnchantmentUpgradeHelper.isItemBlacklisted(event.getEnchantedItemStack())) return;
-        ItemStack linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
-        if(linkedAmulet.isEmpty()) return;
+        Tuple<ItemStack, EntityPlayer> linkedAmulet = EnchantmentUpgradeHelper.getWornAmulet(event.getEnchantedItemStack());
+        if(linkedAmulet == null || linkedAmulet.key.isEmpty() || linkedAmulet.value == null) return;
 
-        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet));
+        event.getEnchantmentsToApply().addAll(ItemEnchantmentAmulet.getAmuletEnchantments(linkedAmulet.key));
+        event.setResolvedPlayer(linkedAmulet.value);
     }
 
     @Override

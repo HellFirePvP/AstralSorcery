@@ -73,9 +73,75 @@ public class RegistryPerks {
         initializeArmaraKeyPerks();
         initializeVicioKeyPerks();
 
+        initializePerkEffectPerks();
+
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
+    }
+
+    private static void initializePerkEffectPerks() {
+        float addedIncPerkEffect = 0.15F;
+        float addedIncPerkExp = 0.2F;
+        String unlocEff, unlocExp;
+
+        MajorPerk majorPerkEffect1 = new MajorPerk("major_perk_eff_nt", 9, 9);
+        unlocEff = majorPerkEffect1.getUnlocalizedName();
+        majorPerkEffect1.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        MajorPerk majorPerkEffect2 = new MajorPerk("major_perk_eff_nt_1", 10, -4).setNameOverride(unlocEff);
+        majorPerkEffect2.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        MajorPerk majorPerkEffect3 = new MajorPerk("major_perk_eff_nt_2", -3, -11).setNameOverride(unlocEff);
+        majorPerkEffect3.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        MajorPerk majorPerkEffect4 = new MajorPerk("major_perk_eff_nt_3", -11, 0).setNameOverride(unlocEff);
+        majorPerkEffect4.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+        MajorPerk majorPerkEffect5 = new MajorPerk("major_perk_eff_nt_4", -5, 11).setNameOverride(unlocEff);
+        majorPerkEffect5.addModifier(addedIncPerkEffect, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EFFECT);
+
+        PERK_TREE.registerPerk(majorPerkEffect1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_7"));
+        PERK_TREE.registerPerk(majorPerkEffect2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_4"));
+        PERK_TREE.registerPerk(majorPerkEffect3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_1"));
+        PERK_TREE.registerPerk(majorPerkEffect4)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_13"));
+        PERK_TREE.registerPerk(majorPerkEffect5)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_10"));
+
+        MajorPerk majorPerkExp1 = new MajorPerk("major_perk_exp_nt", 5, 11);
+        unlocExp = majorPerkExp1.getUnlocalizedName();
+        majorPerkExp1.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        MajorPerk majorPerkExp2 = new MajorPerk("major_perk_exp_nt_1", 12, 0).setNameOverride(unlocExp);
+        majorPerkExp2.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        MajorPerk majorPerkExp3 = new MajorPerk("major_perk_exp_nt_2", 2, -11).setNameOverride(unlocExp);
+        majorPerkExp3.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        MajorPerk majorPerkExp4 = new MajorPerk("major_perk_exp_nt_3", -10, -5).setNameOverride(unlocExp);
+        majorPerkExp4.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+        MajorPerk majorPerkExp5 = new MajorPerk("major_perk_exp_nt_4", -9, 9).setNameOverride(unlocExp);
+        majorPerkExp5.addModifier(addedIncPerkExp, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_PERK_EXP);
+
+        PERK_TREE.registerPerk(majorPerkExp1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_7"));
+        PERK_TREE.registerPerk(majorPerkExp2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_4"));
+        PERK_TREE.registerPerk(majorPerkExp3)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_1"));
+        PERK_TREE.registerPerk(majorPerkExp4)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_13"));
+        PERK_TREE.registerPerk(majorPerkExp5)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_10"));
+
+        MajorPerk perkEE1 = new MajorPerk("major_inc_encheffect", -2, -3);
+        perkEE1.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT);
+        MajorPerk perkEE2 = new MajorPerk("major_inc_encheffect_1", -3, 1).setNameOverride(perkEE1.getUnlocalizedName());
+        perkEE2.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ENCH_EFFECT);
+
+        PERK_TREE.registerPerk(perkEE1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t2_14"))
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t2_2"));
+        PERK_TREE.registerPerk(perkEE2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t2_11"))
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t2_14"));
     }
 
     private static void initializeVicioKeyPerks() {
@@ -1285,6 +1351,7 @@ public class RegistryPerks {
         registerPerkType(new AttributeLifeLeech());
         registerPerkType(new AttributeThorns());
         registerPerkType(new PerkAttributeType(AttributeTypeRegistry.ATTR_TYPE_INC_THORNS_RANGED));
+        registerPerkType(new AttributeEnchantmentEffectiveness());
 
         registerPerkType(new AttributeTypeMeleeAttackDamage());
         registerPerkType(new AttributeTypeMaxHealth());

@@ -886,6 +886,13 @@ perk.astralsorcery.major_flat_armor.desc.1=+6 added Armor
 perk.astralsorcery.major_flat_armor.desc.2=+2 added Armor Toughness
 perk.astralsorcery.major_increased_ats_zeal.name=Zeal
 perk.astralsorcery.major_increased_ats_zeal.desc=15%% increased Attack Speed
+perk.astralsorcery.major_perk_eff_nt.name=Increased Perk Effect
+perk.astralsorcery.major_perk_eff_nt.desc=15%% increased Effectiveness of Perks
+perk.astralsorcery.major_perk_exp_nt.name=Increased Perk Experience
+perk.astralsorcery.major_perk_exp_nt.desc=20%% increased Perk Experience gained
+perk.astralsorcery.major_inc_encheffect.name=Increased Amulet Effectiveness
+perk.astralsorcery.major_inc_encheffect.desc.1=Enchantments gained by the Resplendent Prism
+perk.astralsorcery.major_inc_encheffect.desc.2=have 15%% increased levels.
 
 perk.astralsorcery.core.name=Singularity
 perk.astralsorcery.core.desc.1=Other tree roots may be unlocked without
