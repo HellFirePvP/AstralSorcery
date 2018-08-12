@@ -25,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry.*;
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.*;
@@ -64,16 +65,125 @@ public class RegistryPerks {
         initializeEvorsioBranch();
 
         initializePerkExteriorTravelWheel();
-
         initializeTreeConnectorPerks();
+
         initializeAevitasKeyPerks();
         initializeEvorsioKeyPerks();
         initializeDiscidiaKeyPerks();
         initializeArmaraKeyPerks();
+        initializeVicioKeyPerks();
 
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
+    }
+
+    private static void initializeVicioKeyPerks() {
+        AttributeModifierPerk perkSwimSpeed1 = new AttributeModifierPerk("key_path_swim_conversion", -2, 23);
+        perkSwimSpeed1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_SWIMSPEED);
+        AttributeModifierPerk perkSwimSpeed2 = new AttributeModifierPerk("key_path_swim_conversion_1", -3, 24).setNameOverride(perkSwimSpeed1.getUnlocalizedName());
+        perkSwimSpeed2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_SWIMSPEED);
+        AttributeModifierPerk perkSwimSpeed3 = new AttributeModifierPerk("key_path_swim_conversion_2", -2, 25).setNameOverride(perkSwimSpeed1.getUnlocalizedName());
+        perkSwimSpeed3.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_SWIMSPEED);
+        KeyPerk swimSpeedConversion = new KeyPerk("key_swim_conversion", -3, 26);
+        swimSpeedConversion.addConverter(new PerkConverter() {
+            @Nonnull
+            @Override
+            public PerkAttributeModifier convertModifier(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                return modifier;
+            }
+
+            @Nonnull
+            @Override
+            public Collection<PerkAttributeModifier> gainExtraModifiers(PerkAttributeModifier modifier, @Nullable AbstractPerk owningPerk) {
+                List<PerkAttributeModifier> modifiers = Lists.newArrayList();
+                if (modifier.getAttributeType().equals(AttributeTypeRegistry.ATTR_TYPE_MOVESPEED)) {
+                    switch (modifier.getMode()) {
+                        case ADDITION:
+                        case ADDED_MULTIPLY:
+                            modifiers.add(modifier.gainAsExtraModifier(this, AttributeTypeRegistry.ATTR_TYPE_SWIMSPEED, modifier.getMode(), modifier.getValue() / 2F));
+                            break;
+                        case STACKING_MULTIPLY:
+                            float val = modifier.getValue() - 1;
+                            val /= 2F; //Halve the actual value
+                            modifiers.add(modifier.gainAsExtraModifier(this, AttributeTypeRegistry.ATTR_TYPE_SWIMSPEED, modifier.getMode(), val + 1));
+                            break;
+                    }
+                }
+                return modifiers;
+            }
+        });
+
+        PERK_TREE.registerPerk(perkSwimSpeed1)
+                .connect(PERK_TREE.getAstralSorceryPerk("med_add_ats_dodge"));
+        PERK_TREE.registerPerk(perkSwimSpeed2)
+                .connect(perkSwimSpeed1);
+        PERK_TREE.registerPerk(perkSwimSpeed3)
+                .connect(perkSwimSpeed2);
+        PERK_TREE.registerPerk(swimSpeedConversion)
+                .connect(perkSwimSpeed3);
+
+        AttributeModifierPerk incAttackSpeed1 = new AttributeModifierPerk("major_ats_inc_ats", 9, 14);
+        incAttackSpeed1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_ATTACK_SPEED);
+        AttributeModifierPerk incAttackSpeed2 = new AttributeModifierPerk("major_ats_inc_ats_1", 8, 15).setNameOverride(incAttackSpeed1.getUnlocalizedName());
+        incAttackSpeed2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_ATTACK_SPEED);
+        MajorPerk perkZeal = new MajorPerk("major_increased_ats_zeal", 7, 14);
+        perkZeal.addModifier(0.15F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_ATTACK_SPEED);
+
+        PERK_TREE.registerPerk(incAttackSpeed1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_7"));
+        PERK_TREE.registerPerk(incAttackSpeed2)
+                .connect(incAttackSpeed1);
+        PERK_TREE.registerPerk(perkZeal)
+                .connect(incAttackSpeed2);
+
+        AttributeModifierPerk incReachStepAssist = new AttributeModifierPerk("key_stepassist_path_reach", -7, 15);
+        incReachStepAssist.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_REACH);
+        AttributeModifierPerk incMovespeedStepAssist1 = new AttributeModifierPerk("key_stepassist_path_movespeed", -6, 18);
+        incMovespeedStepAssist1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_MOVESPEED);
+        AttributeModifierPerk incMovespeedStepAssist2 = new AttributeModifierPerk("key_stepassist_path_movespeed_1", -7, 17).setNameOverride(incMovespeedStepAssist1.getUnlocalizedName());
+        incMovespeedStepAssist2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_MOVESPEED);
+        KeyStepAssist stepAssistKey = new KeyStepAssist("key_step_assist", -6, 16);
+
+        PERK_TREE.registerPerk(incReachStepAssist)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t3_10"));
+        PERK_TREE.registerPerk(stepAssistKey)
+                .connect(incReachStepAssist);
+        PERK_TREE.registerPerk(incMovespeedStepAssist2)
+                .connect(stepAssistKey);
+        PERK_TREE.registerPerk(incMovespeedStepAssist1)
+                .connect(incMovespeedStepAssist2)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_13"));
+
+        AttributeModifierPerk lightsMs1 = new AttributeModifierPerk("key_lights_path_ms", 6, 17);
+        lightsMs1.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_MOVESPEED);
+        AttributeModifierPerk lightsMs2 = new AttributeModifierPerk("key_lights_path_ms_1", 7, 16).setNameOverride(lightsMs1.getUnlocalizedName());
+        lightsMs2.addModifier(0.05F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_MOVESPEED);
+        KeySpawnLights spawnLightsKey = new KeySpawnLights("key_spawn_lights", 6, 15);
+
+        PERK_TREE.registerPerk(lightsMs1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_12"));
+        PERK_TREE.registerPerk(lightsMs2)
+                .connect(lightsMs1);
+        PERK_TREE.registerPerk(spawnLightsKey)
+                .connect(lightsMs2);
+
+        AttributeModifierPerk redFoodPathDodge1 = new AttributeModifierPerk("key_redfood_path_dodge", 4, 22);
+        redFoodPathDodge1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_INC_DODGE);
+        AttributeModifierPerk redFoodPathDodge2 = new AttributeModifierPerk("key_redfood_path_dodge_1", 3, 23).setNameOverride(redFoodPathDodge1.getUnlocalizedName());
+        redFoodPathDodge2.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_INC_DODGE);
+        AttributeModifierPerk redFoodPathDodge3 = new AttributeModifierPerk("key_redfood_path_dodge_2", 4, 24).setNameOverride(redFoodPathDodge1.getUnlocalizedName());
+        redFoodPathDodge3.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, AttributeTypeRegistry.ATTR_TYPE_INC_DODGE);
+        KeyReducedFood reducedFoodKey = new KeyReducedFood("key_reduced_food", 5, 23);
+
+        PERK_TREE.registerPerk(redFoodPathDodge1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_12"));
+        PERK_TREE.registerPerk(redFoodPathDodge2)
+                .connect(redFoodPathDodge1);
+        PERK_TREE.registerPerk(redFoodPathDodge3)
+                .connect(redFoodPathDodge2);
+        PERK_TREE.registerPerk(reducedFoodKey)
+                .connect(redFoodPathDodge3);
     }
 
     private static void initializeArmaraKeyPerks() {
@@ -142,6 +252,38 @@ public class RegistryPerks {
                 .connect(perkPhEle2);
         PERK_TREE.registerPerk(cheatDeathKey)
                 .connect(perkPhEle3);
+
+        AttributeModifierPerk perkArmor1 = new AttributeModifierPerk("inc_added_armor", 21, 5);
+        perkArmor1.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkArmor2 = new AttributeModifierPerk("inc_added_armor_1", 22, 4).setNameOverride(perkArmor1.getUnlocalizedName());
+        perkArmor2.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkArmor3 = new AttributeModifierPerk("inc_added_armor_2", 23, 5).setNameOverride(perkArmor1.getUnlocalizedName());
+        perkArmor3.addModifier(1F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
+        MajorPerk perkArmor4 = new MajorPerk("major_flat_armor", 22, 6);
+        perkArmor4.addModifier(6F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR);
+        perkArmor4.addModifier(2F, PerkAttributeModifier.Mode.ADDITION, ATTR_TYPE_ARMOR_TOUGHNESS);
+
+        PERK_TREE.registerPerk(perkArmor1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_7"));
+        PERK_TREE.registerPerk(perkArmor2)
+                .connect(perkArmor1);
+        PERK_TREE.registerPerk(perkArmor3)
+                .connect(perkArmor2);
+        PERK_TREE.registerPerk(perkArmor4)
+                .connect(perkArmor3);
+
+        AttributeModifierPerk perkNoArmorP1 = new AttributeModifierPerk("key_no_armor_armor", 12, 15);
+        perkNoArmorP1.addModifier(0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_ARMOR);
+        AttributeModifierPerk perkNoArmorP2 = new AttributeModifierPerk("key_no_armor_resist", 11, 14);
+        perkNoArmorP2.addModifier(-0.1F, PerkAttributeModifier.Mode.ADDED_MULTIPLY, ATTR_TYPE_INC_ALL_ELEMENTAL_RESIST);
+        KeyNoArmor noArmorKey = new KeyNoArmor("key_no_armor", 12, 13);
+
+        PERK_TREE.registerPerk(perkNoArmorP1)
+                .connect(PERK_TREE.getAstralSorceryPerk("base_inc_perkeffect_t4_9"));
+        PERK_TREE.registerPerk(perkNoArmorP2)
+                .connect(perkNoArmorP1);
+        PERK_TREE.registerPerk(noArmorKey)
+                .connect(perkNoArmorP2);
     }
 
     private static void initializeDiscidiaKeyPerks() {
@@ -1147,6 +1289,7 @@ public class RegistryPerks {
         registerPerkType(new AttributeTypeMeleeAttackDamage());
         registerPerkType(new AttributeTypeMaxHealth());
         registerPerkType(new AttributeTypeMovementSpeed());
+        registerPerkType(new AttributeTypeSwimSpeed());
         registerPerkType(new AttributeTypeArmor());
         registerPerkType(new AttributeTypeArmorToughness());
         registerPerkType(new AttributeTypeAttackSpeed());

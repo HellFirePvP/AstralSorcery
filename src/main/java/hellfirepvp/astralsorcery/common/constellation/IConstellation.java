@@ -45,6 +45,8 @@ public interface IConstellation {
 
     public List<StarConnection> getStarConnections();
 
+    public String getSimpleName();
+
     public String getUnlocalizedName();
 
     default public String getUnlocalizedInfo() {

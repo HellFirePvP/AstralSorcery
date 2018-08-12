@@ -59,7 +59,7 @@ public class EvorsioRootPerk extends RootPerk {
             } catch (Exception exc) {
                 gainedExp = 2F;
             }
-            gainedExp /= 3.0F;
+            gainedExp /= 4.0F;
             try {
                 Explosion exp = new Explosion(world, player, at.getX(), at.getY(), at.getZ(), 2F, true, true);
                 gainedExp *= Math.max(broken.getBlock().getExplosionResistance(world, at, player, exp) / 40F, 1F);

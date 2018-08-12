@@ -31,6 +31,7 @@ public class AttributeTypeRegistry {
     public static final String ATTR_TYPE_PROJ_SPEED = AstralSorcery.MODID + ".projectilespeed";
     public static final String ATTR_TYPE_HEALTH = AstralSorcery.MODID + ".maxhealth";
     public static final String ATTR_TYPE_MOVESPEED = AstralSorcery.MODID + ".movespeed";
+    public static final String ATTR_TYPE_SWIMSPEED = AstralSorcery.MODID + ".swimspeed";
     public static final String ATTR_TYPE_ARMOR = AstralSorcery.MODID + ".armor";
     public static final String ATTR_TYPE_ARMOR_TOUGHNESS = AstralSorcery.MODID + ".armortoughness";
     public static final String ATTR_TYPE_ATTACK_SPEED = AstralSorcery.MODID + ".attackspeed";
