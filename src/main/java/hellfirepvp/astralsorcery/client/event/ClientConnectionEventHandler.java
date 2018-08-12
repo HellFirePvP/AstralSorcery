@@ -55,6 +55,7 @@ public class ClientConnectionEventHandler {
         ConstellationSkyHandler.getInstance().clientClearCache();
         GuiJournalProgression.resetJournal(); //Refresh journal gui
         ResearchManager.clientProgress = new PlayerProgress();
+        ResearchManager.clientInitialized = false;
         AstralSorcery.proxy.scheduleClientside(ClientScreenshotCache::cleanUp);
         ClientRenderEventHandler.resetPermChargeReveal();
         ClientRenderEventHandler.resetTempChargeReveal();

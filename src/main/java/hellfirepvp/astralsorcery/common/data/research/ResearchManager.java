@@ -63,6 +63,7 @@ import java.util.*;
 public class ResearchManager {
 
     public static PlayerProgress clientProgress = new PlayerProgress();
+    public static boolean clientInitialized = false;
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
@@ -624,6 +625,7 @@ public class ResearchManager {
         int currentLvl = clientProgress == null ? 0 : PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
+        clientInitialized = true;
         if(PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
             showBar();
         }

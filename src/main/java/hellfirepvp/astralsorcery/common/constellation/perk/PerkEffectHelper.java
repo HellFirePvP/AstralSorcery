@@ -77,7 +77,7 @@ public class PerkEffectHelper implements ITickHandler {
         AstralSorcery.proxy.scheduleClientside(new Runnable() {
             @Override
             public void run() {
-                if (Minecraft.getMinecraft().player != null) {
+                if (Minecraft.getMinecraft().player != null && ResearchManager.clientInitialized) {
                     handlePerkModification(Minecraft.getMinecraft().player, Side.CLIENT, false);
                 } else {
                     AstralSorcery.proxy.scheduleClientside(this);
@@ -178,7 +178,6 @@ public class PerkEffectHelper implements ITickHandler {
             List<AbstractPerk> copyPerks = new ArrayList<>(attr.getCacheAppliedPerks());
             for (AbstractPerk perk : copyPerks) {
                 handlePerkRemoval(perk, player, Side.CLIENT);
-                attr.markPerkRemoved(perk);
             }
         }
     }
@@ -204,7 +203,9 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
+            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
+            perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
+
             perks.forEach(perk -> perk.removePerk(player, side));
 
             converters.forEach((c) -> attributeMap.applyConverter(player, c));

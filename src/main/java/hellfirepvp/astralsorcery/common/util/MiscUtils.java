@@ -109,6 +109,22 @@ public class MiscUtils {
         return map;
     }
 
+    public static <T> void mergeList(List<T> src, List<T> dst) {
+        for (T element : src) {
+            if (!dst.contains(element)) {
+                dst.add(element);
+            }
+        }
+    }
+
+    public static <T> void cutList(List<T> toRemove, List<T> from) {
+        for (T element : toRemove) {
+            if (from.contains(element)) {
+                from.remove(element);
+            }
+        }
+    }
+
     @Nullable
     public static <T> T iterativeSearch(Collection<T> collection, Function<T, Boolean> matchingFct) {
         for (T element : collection) {
