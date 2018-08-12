@@ -204,17 +204,14 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
-
-            perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
-            perks.forEach(perk -> {
-                if (onlyAdd == null || !perk.equals(onlyAdd)) {
-                    perk.removePerk(player, side);
-                }
-            });
+            List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
+            perks.forEach(perk -> perk.removePerk(player, side));
 
             converters.forEach((c) -> attributeMap.applyConverter(player, c));
 
+            if (!perks.contains(onlyAdd)) {
+                perks.add(onlyAdd);
+            }
             perks.forEach(perk -> perk.applyPerk(player, side));
         }
     }
@@ -223,8 +220,7 @@ public class PerkEffectHelper implements ITickHandler {
         PlayerProgress prog = ResearchManager.getProgress(player, side);
         if (prog != null) {
             PlayerAttributeMap attributeMap = PerkAttributeHelper.getOrCreateMap(player, side);
-            List<AbstractPerk> perks = new LinkedList<>(prog.getAppliedPerks());
-            perks = perks.stream().filter(attributeMap::isPerkApplied).collect(Collectors.toList());
+            List<AbstractPerk> perks = new LinkedList<>(attributeMap.getCacheAppliedPerks());
             perks.forEach(perk -> perk.removePerk(player, side));
 
             converters.forEach((c) -> attributeMap.removeConverter(player, c));
