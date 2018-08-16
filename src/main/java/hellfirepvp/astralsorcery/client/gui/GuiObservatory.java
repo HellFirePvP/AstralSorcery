@@ -61,7 +61,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 27.05.2018 / 07:29
  */
-public class GuiObservatory extends GuiTileBase<TileObservatory> {
+public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiSkyScreen {
 
     private static final Random random = new Random();
 
