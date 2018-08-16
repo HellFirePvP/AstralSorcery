@@ -15,6 +15,8 @@ import hellfirepvp.astralsorcery.client.util.resource.SpriteQuery;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchNode;
 import hellfirepvp.astralsorcery.common.data.research.ResearchProgression;
@@ -23,6 +25,7 @@ import hellfirepvp.astralsorcery.common.item.ItemCraftingComponent;
 import hellfirepvp.astralsorcery.common.item.block.ItemCollectorCrystal;
 import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.item.tool.wand.WandAugment;
+import hellfirepvp.astralsorcery.common.item.useables.ItemShiftingStar;
 import hellfirepvp.astralsorcery.common.item.useables.ItemUsableDust;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
@@ -33,6 +36,8 @@ import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 import static hellfirepvp.astralsorcery.common.registry.RegistryBookLookups.registerItemLookup;
 
@@ -94,6 +99,20 @@ public class RegistryResearch {
         resAttWandEvorsio.addPage(getTextPage("ATT_WAND_EVORSIO.1"));
         resAttWandEvorsio.addPage(new JournalPageTraitRecipe(RegistryRecipes.rWandAugmentEvorsio));
 
+        ItemStack[] stars = new ItemStack[ConstellationRegistry.getMajorConstellations().size()];
+        List<IMajorConstellation> majorConstellations = ConstellationRegistry.getMajorConstellations();
+        for (int i = 0; i < majorConstellations.size(); i++) {
+            IMajorConstellation cst = majorConstellations.get(i);
+            ItemStack st = new ItemStack(ItemsAS.shiftingStar);
+            ItemShiftingStar.setAttunement(st, cst);
+            stars[i] = st;
+        }
+        ResearchNode resEnhStar = new ResearchNode(stars, "ENH_SHIFTING_STAR", 5, 6);
+        resEnhStar.addPage(getTextPage("ENH_SHIFTING_STAR.1"));
+        for (IMajorConstellation cst : majorConstellations) {
+            resEnhStar.addPage(new JournalPageTraitRecipe(RegistryRecipes.rAttStarRecipes.get(cst)));
+        }
+
         ResearchNode resCape = new ResearchNode(new ItemStack(ItemsAS.armorImbuedCape), "ATT_CAPE", 3, 6);
         resCape.addPage(getTextPage("ATT_CAPE.1"));
         resCape.addPage(new JournalPageTraitRecipe(RegistryRecipes.rCapeBase));
@@ -147,6 +166,7 @@ public class RegistryResearch {
         resBoreVortex.addSourceConnectionFrom(resBore);
         resObservatory.addSourceConnectionFrom(resHintRecipes);
         resAttTrait.addSourceConnectionFrom(resObservatory);
+        resEnhStar.addSourceConnectionFrom(resHintRecipes);
 
         regRadiance.register(resAttWands);
         regRadiance.register(resAttWandArmara);
@@ -162,6 +182,7 @@ public class RegistryResearch {
         regRadiance.register(resBoreVortex);
         regRadiance.register(resObservatory);
         regRadiance.register(resAttTrait);
+        regRadiance.register(resEnhStar);
     }
 
     private static void initConstellation() {

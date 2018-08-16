@@ -102,7 +102,8 @@ progress.gain.research.chat=You learned more about '%s'.
 progress.discover.constellation.chat=Discovered Constellation %s!
 progress.seen.constellation.chat=You memorize a drawing of %s!
 progress.seen.constellation.first.chat=You add a tab to the Astral Tome to keep track of it.
-progress.remove.attunement=Your power fades...
+progress.remove.attunement=Your light fades...
+progress.switch.attunement=The light subtly shifts...
 
 astralsorcery.journal.cluster.discovery.name=Discovery
 astralsorcery.journal.cluster.basic_craft.name=Exploration
@@ -398,6 +399,9 @@ astralsorcery.journal.OBSERVATORY.4.text=While it is unlikely the light finally 
 research.ATT_TRAIT.name=Enhanced Crystal Attunement
 astralsorcery.journal.ATT_TRAIT.1.text=Your earlier suspicions concerning the Faint Constellations proved true, their light is too weak to fuel a ritual or even a full crystal Attunement. The spectrum of their light, however, leads you to believe that modification of existing Attunements may be possible.<NL>By ensuring the desired Faint Constellation is in the sky and setting the relays in the correct space, the Attunement Altar will react to their power.
 astralsorcery.journal.ATT_TRAIT.2.text=By placing an already Attuned crystal into the Attunement Altar, the Starlight of the Faint Constellation will alter the properties of the Attuned crystal, modifying the effects of rituals using that crystal.<NL>Additional information about the traits that can be applied have been added to the Faint Constellations in the Constellations tab.
+
+research.ENH_SHIFTING_STAR.name=Irradiant Star
+astralsorcery.journal.ENH_SHIFTING_STAR.1.text=
 
 astralsorcery.journal.recipe.starlight=Needs light shining at it when crafting
 astralsorcery.journal.recipe.nighttime=May only be performed during nighttime

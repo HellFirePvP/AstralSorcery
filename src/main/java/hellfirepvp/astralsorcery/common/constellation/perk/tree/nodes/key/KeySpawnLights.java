@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.KeyPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.config.Config;
@@ -29,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
  */
 public class KeySpawnLights extends KeyPerk implements IPlayerTickPerk {
 
-    private int chanceToSpawnLight = 15;
+    private int lightSpawnRate = 15;
     private int radiusToSpawnLight = 5;
 
     public KeySpawnLights(String name, int x, int y) {
@@ -37,8 +38,8 @@ public class KeySpawnLights extends KeyPerk implements IPlayerTickPerk {
         Config.addDynamicEntry(new ConfigEntry(ConfigEntry.Section.PERKS, name) {
             @Override
             public void loadFromConfig(Configuration cfg) {
-                chanceToSpawnLight = cfg.getInt("ChanceSpawnLight", getConfigurationSection(), chanceToSpawnLight, 5, 100_000,
-                        "Defines the chance per tick a position to spawn a light in is attempted to be found near the player. Chance is '1 in X' where X is the chance set here.");
+                lightSpawnRate = cfg.getInt("SpawnLightRate", getConfigurationSection(), lightSpawnRate, 5, 100_000,
+                        "Defines the rate in ticks a position to spawn a light in is attempted to be found near the player.");
                 radiusToSpawnLight = cfg.getInt("RadiusSpawnLight", getConfigurationSection(), radiusToSpawnLight, 2, 10,
                         "Defines the radius around the player the perk will search for a suitable position.");
             }
@@ -48,14 +49,20 @@ public class KeySpawnLights extends KeyPerk implements IPlayerTickPerk {
     @Override
     public void onPlayerTick(EntityPlayer player, Side side) {
         if (side == Side.SERVER) {
-            if(rand.nextInt(chanceToSpawnLight) == 0) {
-                BlockPos pos = player.getPosition().add(
-                        rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1),
-                        rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1));
-                if(MiscUtils.isChunkLoaded(player.getEntityWorld(), pos) &&
-                        TileIlluminator.illuminatorCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
-                    player.getEntityWorld().setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState());
+            if(player.ticksExisted % lightSpawnRate == 0) {
+                int attempts = 4;
+                while (attempts > 0) {
+                    BlockPos pos = player.getPosition().add(
+                            rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1),
+                            rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1),
+                            rand.nextInt(radiusToSpawnLight) * (rand.nextBoolean() ? 1 : -1));
+                    if(MiscUtils.isChunkLoaded(player.getEntityWorld(), pos) &&
+                            TileIlluminator.illuminatorCheck.isStateValid(player.getEntityWorld(), pos, player.getEntityWorld().getBlockState(pos))) {
+                        if (player.getEntityWorld().setBlockState(pos, BlocksAS.blockVolatileLight.getDefaultState())) {
+                            return;
+                        }
+                    }
+                    attempts--;
                 }
             }
         }

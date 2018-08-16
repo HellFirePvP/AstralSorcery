@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.common.CommonProxy;
 import hellfirepvp.astralsorcery.common.block.*;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
+import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMinorConstellation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.RecipeChangeWandColor;
@@ -48,7 +49,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry.*;
 import static hellfirepvp.astralsorcery.common.crafting.grindstone.GrindstoneRecipeRegistry.registerGrindstoneRecipe;
@@ -101,6 +104,7 @@ public class RegistryRecipes {
     public static DiscoveryRecipe rSextant;
     public static SextantUpgradeRecipe rSextantUpgrade;
     public static TraitRecipe rObservatory;
+    public static Map<IMajorConstellation, ReAttunementStarRecipe> rAttStarRecipes = new HashMap<>();
 
     public static ResonatorLiquidRecipe rResonatorLiquid;
 
@@ -435,6 +439,11 @@ public class RegistryRecipes {
 
         rSextantUpgrade = registerAltarRecipe(new SextantUpgradeRecipe());
 
+        for (IMajorConstellation cst : ConstellationRegistry.getMajorConstellations()) {
+            ReAttunementStarRecipe recipe = new ReAttunementStarRecipe(cst);
+            registerAltarRecipe(recipe);
+            rAttStarRecipes.put(cst, recipe);
+        }
 
         rObservatory = registerTraitRecipe(newShapedRecipe("internal/altar/observatory", BlocksAS.blockObservatory)
                 .addPart(OreDictAlias.ITEM_GOLD_NUGGET,
