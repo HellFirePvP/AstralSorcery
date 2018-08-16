@@ -156,7 +156,7 @@ public class GuiProgressionRenderer {
             if(sizeHandler.getScalingFactor() <= 6) {
                 long current = System.currentTimeMillis();
                 if(current - this.doubleClickLast < 400L) {
-                    int timeout = 20; //Handles irregular clicks on the GUI so it doesn't loop trying to find a focus cluster
+                    int timeout = 500; //Handles irregular clicks on the GUI so it doesn't loop trying to find a focus cluster
                     while (focusedClusterMouse != null && sizeHandler.getScalingFactor() < 9.9 && timeout > 0) {
                         handleZoomIn();
                         timeout--;
