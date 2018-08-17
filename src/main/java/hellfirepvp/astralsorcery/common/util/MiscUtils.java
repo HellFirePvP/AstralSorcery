@@ -32,6 +32,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -368,6 +369,22 @@ public class MiscUtils {
             }
         }
         entity.setPositionAndUpdate(targetPos.getX() + 0.5, targetPos.getY(), targetPos.getZ() + 0.5);
+    }
+
+    @Nullable
+    public static BlockPos itDownTopBlock(World world, BlockPos at) {
+        Chunk chunk = world.getChunkFromBlockCoords(at);
+        BlockPos downPos = null;
+
+        for (BlockPos blockpos = new BlockPos(at.getX(), chunk.getTopFilledSegment() + 16, at.getZ()); blockpos.getY() >= 0; blockpos = downPos) {
+            downPos = blockpos.down();
+            IBlockState test = world.getBlockState(downPos);
+            if (!world.isAirBlock(downPos) && !test.getBlock().isLeaves(test, world, downPos) && !test.getBlock().isFoliage(world, downPos)) {
+                break;
+            }
+        }
+
+        return downPos;
     }
 
     public static List<Vector3> getCirclePositions(Vector3 centerOffset, Vector3 axis, double radius, int amountOfPointsOnCircle) {
