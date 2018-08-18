@@ -40,6 +40,10 @@ public class PerkAttributeHelper {
         }
     }
 
+    public static PlayerAttributeMap getMockInstance(Side side) {
+        return new PlayerAttributeMap(side);
+    }
+
     public static void clearServer() {
         playerPerkAttributes.clear();
     }
