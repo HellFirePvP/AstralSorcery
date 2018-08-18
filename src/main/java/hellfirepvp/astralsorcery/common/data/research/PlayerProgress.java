@@ -408,6 +408,10 @@ public class PlayerProgress {
         return seenConstellations;
     }
 
+    public boolean hasConstellationDiscovered(IConstellation constellation) {
+        return hasConstellationDiscovered(constellation.getUnlocalizedName());
+    }
+
     public boolean hasConstellationDiscovered(String constellation) {
         return knownConstellations.contains(constellation);
     }

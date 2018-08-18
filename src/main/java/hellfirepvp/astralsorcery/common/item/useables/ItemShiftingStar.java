@@ -147,7 +147,7 @@ public class ItemShiftingStar extends Item implements INBTModel {
             IMajorConstellation cst;
             if ((cst = getAttunement(stack)) != null) {
                 PlayerProgress prog = ResearchManager.getProgress(pl, Side.SERVER);
-                if (prog == null || !prog.wasOnceAttuned()) {
+                if (prog == null || !prog.wasOnceAttuned() || !prog.hasConstellationDiscovered(cst.getUnlocalizedName())) {
                     return stack;
                 }
                 double exp = prog.getPerkExp();
