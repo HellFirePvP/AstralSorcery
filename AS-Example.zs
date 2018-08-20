@@ -1,3 +1,18 @@
+// Disables the modifiers and/or converters of a single perk on the perk tree
+// Enable the F3-debug screen (press f3...) and then open the perks-tab to see the registry names of the perks on their tooltip.
+// Parameters:
+// String (RegistryName)
+// Example:
+// mods.astralsorcery.PerkTree.disablePerk("astralsorcery:base_inc_perkeffect_t1");
+
+// Removes a perk and its connections from the perk tree.
+// It is highly advised to do any kind of removals from the perk tree BEFORE releasing the pack/allowing users to pick those perks.
+// Enable the F3-debug screen (press f3...) and then open the perks-tab to see the registry names of the perks on their tooltip.
+// Parameters:
+// String (RegistryName)
+// Example:
+// mods.astralsorcery.PerkTree.removePerk("astralsorcery:base_inc_perkeffect_t1_1");
+
 // Adds a new Infusion recipe to the starlight infusion
 // Parameters:
 // InputStack, OutputStack, consumeMultiple (true/false), consumptionChance, craftTickTime
