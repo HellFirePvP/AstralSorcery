@@ -18,7 +18,9 @@ import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.Attrib
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.PerkAttributeType;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.function.Function;
 
@@ -77,6 +79,70 @@ public class APIRegistryEvent {
             return PerkTree.PERK_TREE.registerPerk(perk);
         }
 
+    }
+
+    /**
+     * Use this event to disable certain perks
+     * A note will be displayed on the perk's tooltip in case it's disabled by the pack.
+     */
+    public static class PerkDisable extends Event {
+
+        private boolean perkDisabled;
+        private final AbstractPerk perk;
+        private final EntityPlayer player;
+        private final Side side;
+
+        public PerkDisable(AbstractPerk perk, EntityPlayer player, Side side) {
+            this.perk = perk;
+            this.player = player;
+            this.side = side;
+        }
+
+        public AbstractPerk getPerk() {
+            return perk;
+        }
+
+        public EntityPlayer getPlayer() {
+            return player;
+        }
+
+        public Side getSide() {
+            return side;
+        }
+
+        public boolean isPerkDisabled() {
+            return perkDisabled;
+        }
+
+        public void setPerkDisabled(boolean perkDisabled) {
+            this.perkDisabled = perkDisabled;
+        }
+    }
+
+    /**
+     * Use this event to remove perks at AS' post-init
+     * Removed associated connections aswell
+     */
+    public static class PerkPostRemove extends Event {
+
+        private boolean removed;
+        private final AbstractPerk perk;
+
+        public PerkPostRemove(AbstractPerk perk) {
+            this.perk = perk;
+        }
+
+        public AbstractPerk getPerk() {
+            return perk;
+        }
+
+        public boolean isRemoved() {
+            return removed;
+        }
+
+        public void setRemoved(boolean removed) {
+            this.removed = removed;
+        }
     }
 
 }

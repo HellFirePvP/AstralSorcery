@@ -9,6 +9,8 @@
 package hellfirepvp.astralsorcery.common.constellation.perk.types;
 
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Collection;
 
@@ -21,6 +23,6 @@ import java.util.Collection;
  */
 public interface IConverterProvider {
 
-    public Collection<PerkConverter> provideConverters();
+    public Collection<PerkConverter> provideConverters(EntityPlayer player, Side side);
 
 }

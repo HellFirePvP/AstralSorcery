@@ -111,12 +111,50 @@ public class PerkTree {
         this.treePoints.stream().map(PerkTreePoint::getPerk).forEach(p -> p.clearCaches(side));
     }
 
+    public void removePerk(AbstractPerk perk) {
+        if (perk instanceof RootPerk) {
+            rootPerks.remove(((RootPerk) perk).getConstellation());
+        }
+        perkMap.remove(perk.getRegistryName());
+        MinecraftForge.EVENT_BUS.unregister(perk);
+        PerkTreePoint point = perk.getPoint();
+        this.treePoints.remove(point);
+        new PointConnector(perk).disconnectAll();
+    }
+
     public class PointConnector {
 
         private final AbstractPerk point;
 
         public PointConnector(AbstractPerk point) {
             this.point = point;
+        }
+
+        public boolean disconnectAll() {
+            boolean removedAll = true;
+            Collection<AbstractPerk> otherLinked = new LinkedList<>(doubleConnections.get(this.point));
+            for (AbstractPerk other : otherLinked) {
+                if (!disconnect(other)) {
+                    removedAll = false;
+                }
+            }
+            return removedAll;
+        }
+
+        public boolean disconnect(AbstractPerk other) {
+            if (other ==  null) {
+                return false;
+            }
+
+            Collection<AbstractPerk> others = doubleConnections.get(this.point);
+            if (others == null) {
+                return false;
+            }
+            if (!others.remove(other)) {
+                return false;
+            }
+            return connections.removeIf(t -> (t.getKey().equals(other) && t.getValue().equals(point)) ||
+                    (t.getKey().equals(point) && t.getValue().equals(other)));
         }
 
         public PointConnector connect(AbstractPerk other) {

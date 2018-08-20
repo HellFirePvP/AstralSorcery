@@ -157,7 +157,7 @@ public class PerkEffectHelper implements ITickHandler {
     private void handlePerkApplication(AbstractPerk perk, EntityPlayer player, Side side) {
         Collection<PerkConverter> converters = Lists.newArrayList();
         if (perk instanceof IConverterProvider) {
-            converters = ((IConverterProvider) perk).provideConverters();
+            converters = ((IConverterProvider) perk).provideConverters(player, side);
         }
         batchApplyConverters(player, side, converters, perk);
     }
@@ -165,7 +165,7 @@ public class PerkEffectHelper implements ITickHandler {
     private void handlePerkRemoval(AbstractPerk perk, EntityPlayer player, Side side) {
         Collection<PerkConverter> converters = Lists.newArrayList();
         if (perk instanceof IConverterProvider) {
-            converters = ((IConverterProvider) perk).provideConverters();
+            converters = ((IConverterProvider) perk).provideConverters(player, side);
         }
         batchRemoveConverters(player, side, converters, perk);
     }

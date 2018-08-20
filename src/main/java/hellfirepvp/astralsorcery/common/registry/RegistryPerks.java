@@ -14,11 +14,13 @@ import hellfirepvp.astralsorcery.common.constellation.perk.PerkConverter;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.PerkAttributeModifier;
 import hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.nodes.key.*;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.root.*;
 import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
+import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nonnull;
@@ -26,6 +28,7 @@ import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static hellfirepvp.astralsorcery.common.constellation.perk.attribute.type.AttributeTypeRegistry.*;
 import static hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree.*;
@@ -78,6 +81,17 @@ public class RegistryPerks {
         MinecraftForge.EVENT_BUS.post(new APIRegistryEvent.PerkRegister());
 
         initializeAttributeTypes();
+    }
+
+    public static void postInitPerkRemoval() {
+        List<AbstractPerk> copyPerks = PerkTree.PERK_TREE.getPerkPoints().stream().map(PerkTreePoint::getPerk).collect(Collectors.toList());
+        for (AbstractPerk perk : copyPerks) {
+            APIRegistryEvent.PerkPostRemove remove = new APIRegistryEvent.PerkPostRemove(perk);
+            MinecraftForge.EVENT_BUS.post(remove);
+            if (remove.isRemoved()) {
+                PerkTree.PERK_TREE.removePerk(perk);
+            }
+        }
     }
 
     private static void initializePerkEffectPerks() {

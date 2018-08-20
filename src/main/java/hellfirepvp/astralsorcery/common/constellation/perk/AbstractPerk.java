@@ -14,11 +14,14 @@ import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.event.APIRegistryEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,13 +78,28 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
         return (T) this;
     }
 
+    //Return true to display that the perk's modifiers got disabled by pack's configurations
+    public boolean modifiersDisabled(EntityPlayer player, Side side) {
+        APIRegistryEvent.PerkDisable event = new APIRegistryEvent.PerkDisable(this, player, side);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.isPerkDisabled();
+    }
+
     //Reserving application/removal methods to delegate for later pre-application logic
     final void applyPerk(EntityPlayer player, Side side) {
+        if (modifiersDisabled(player, side)) {
+            return;
+        }
+
         this.applyPerkLogic(player, side);
         PerkAttributeHelper.getOrCreateMap(player, side).markPerkApplied(this);
     }
 
     final void removePerk(EntityPlayer player, Side side) {
+        if (modifiersDisabled(player, side)) {
+            return;
+        }
+
         this.removePerkLogic(player, side);
         PerkAttributeHelper.getOrCreateMap(player, side).markPerkRemoved(this);
     }
@@ -154,17 +172,21 @@ public abstract class AbstractPerk extends IForgeRegistryEntry.Impl<AbstractPerk
 
         tooltipCache = Lists.newArrayList();
         String key = this.ovrUnlocalizedNamePrefix;
-        if (key == null) {
-            key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
-        }
-        if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
-            int count = 1;
-            while (I18n.hasKey(key + ".desc." + count)) {
-                tooltipCache.add(I18n.format(key + ".desc." + count));
-                count++;
+        if (modifiersDisabled(Minecraft.getMinecraft().player, Side.CLIENT)) {
+            tooltipCache.add(TextFormatting.GRAY + I18n.format("perk.info.disabled"));
+        } else {
+            if (key == null) {
+                key = "perk." + getRegistryName().getResourceDomain() + "." + getRegistryName().getResourcePath();
             }
-        } else if (I18n.hasKey(key + ".desc")) {
-            tooltipCache.add(I18n.format(key + ".desc"));
+            if (I18n.hasKey(key + ".desc.1")) { // Might have a indexed list there
+                int count = 1;
+                while (I18n.hasKey(key + ".desc." + count)) {
+                    tooltipCache.add(I18n.format(key + ".desc." + count));
+                    count++;
+                }
+            } else if (I18n.hasKey(key + ".desc")) {
+                tooltipCache.add(I18n.format(key + ".desc"));
+            }
         }
         return tooltipCache;
     }

@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,7 +51,11 @@ public abstract class AttributeConverterPerk extends AbstractPerk implements ICo
     }
 
     @Override
-    public List<PerkConverter> provideConverters() {
+    public List<PerkConverter> provideConverters(EntityPlayer player, Side side) {
+        if (modifiersDisabled(player, side)) {
+            return Collections.emptyList();
+        }
+
         return ImmutableList.copyOf(converters);
     }
 

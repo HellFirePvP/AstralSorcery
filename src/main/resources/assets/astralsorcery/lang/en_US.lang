@@ -695,6 +695,7 @@ perk.info.unlock=§aUnlocked perk '%s'
 perk.info.unlock.click=§7Click to unlock
 perk.info.unlocked.free=§7Basic perk
 perk.info.points=Available points: %s
+perk.info.disabled=Perk effects disabled in your modpack.
 
 perk.category.root.name=Root Perk
 perk.category.major.name=Major Perk

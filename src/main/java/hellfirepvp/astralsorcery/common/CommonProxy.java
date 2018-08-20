@@ -290,6 +290,7 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
+        RegistryPerks.postInitPerkRemoval();
 
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 
