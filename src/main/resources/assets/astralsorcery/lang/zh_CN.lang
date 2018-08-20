@@ -695,6 +695,7 @@ perk.info.unlock=§a强化解锁'%s'
 perk.info.unlock.click=§7点击解锁
 perk.info.unlocked.free=§7基础强化
 perk.info.points=可用属性点数：%s
+perk.info.disabled=在你的整合包内禁用技能效果。
 
 perk.category.root.name=根源技能
 perk.category.major.name=主要技能
