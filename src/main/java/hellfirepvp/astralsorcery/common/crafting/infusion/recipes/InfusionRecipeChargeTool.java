@@ -55,7 +55,12 @@ public class InfusionRecipeChargeTool extends BasicInfusionRecipe {
                     ToolCrystalProperties prop = ChargedCrystalToolBase.getToolProperties(in);
                     ItemStack out = output.copy();
                     out.setTagCompound(in.getTagCompound());
-                    ChargedCrystalToolBase.applyToolProperties(out, new ToolCrystalProperties(prop.getSize(), prop.getPurity(), 100, prop.getFracturation(), prop.getSizeOverride()));
+                    ChargedCrystalToolBase.applyToolProperties(out, new ToolCrystalProperties(
+                            prop.getSize(),
+                            prop.getPurity(),
+                            Math.max(100, prop.getCollectiveCapability()),
+                            prop.getFracturation(),
+                            prop.getSizeOverride()));
                     ChargedCrystalToolBase.removeChargeRevertCounter(out);
                     return out;
                 }
@@ -63,7 +68,12 @@ public class InfusionRecipeChargeTool extends BasicInfusionRecipe {
                     ToolCrystalProperties prop = in.getItem() instanceof ItemCrystalToolBase ? ItemCrystalToolBase.getToolProperties(in) : ItemCrystalSword.getToolProperties(in);
                     ItemStack out = output.copy();
                     out.setTagCompound(in.getTagCompound());
-                    prop = new ToolCrystalProperties(prop.getSize(), prop.getPurity(), 100, prop.getFracturation(), prop.getSizeOverride());
+                    prop = new ToolCrystalProperties(
+                            prop.getSize(),
+                            prop.getPurity(),
+                            Math.max(100, prop.getCollectiveCapability()),
+                            prop.getFracturation(),
+                            prop.getSizeOverride());
                     ChargedCrystalToolBase.applyToolProperties(out, prop);
                     return out;
                 }

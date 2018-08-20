@@ -8,7 +8,8 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
-import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkMap;
+import hellfirepvp.astralsorcery.AstralSorcery;
+import hellfirepvp.astralsorcery.client.gui.GuiJournalPerkTree;
 import hellfirepvp.astralsorcery.client.gui.GuiJournalProgression;
 import hellfirepvp.astralsorcery.client.gui.journal.GuiScreenJournal;
 import hellfirepvp.astralsorcery.common.data.research.ProgressionTier;
@@ -69,14 +70,16 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
 
     @Override
     public IMessage onMessage(PktProgressionUpdate message, MessageContext ctx) {
-        if(message.isPresent) {
-            if(message.isProg) {
-                addProgressChatMessage(message.tier);
-            } else {
-                addResearchChatMessage(message.tier);
+        AstralSorcery.proxy.scheduleClientside(() -> {
+            if(message.isPresent) {
+                if(message.isProg) {
+                    addProgressChatMessage(message.tier);
+                } else {
+                    addResearchChatMessage(message.tier);
+                }
             }
-        }
-        closeAndRefreshJournal();
+            closeAndRefreshJournal();
+        });
         return null;
     }
 
@@ -84,7 +87,7 @@ public class PktProgressionUpdate implements IMessage, IMessageHandler<PktProgre
     private void closeAndRefreshJournal() {
         GuiScreen open = Minecraft.getMinecraft().currentScreen;
         if(open != null) {
-            if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkMap)) {
+            if(open instanceof GuiScreenJournal && !(open instanceof GuiJournalPerkTree)) {
                 Minecraft.getMinecraft().displayGuiScreen(null);
             }
         }

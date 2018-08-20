@@ -10,8 +10,7 @@ package hellfirepvp.astralsorcery.common.data.research;
 
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerk;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 
 import java.util.Collections;
@@ -43,7 +42,7 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public double getAlignmentCharge() {
+    public double getPerkExp() {
         return 0;
     }
 
@@ -53,23 +52,13 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public int getAlignmentLevel() {
-        return 0;
-    }
-
-    @Override
-    public int getNextFreeLevel() {
-        return 0;
-    }
-
-    @Override
     public ProgressionTier getTierReached() {
         return ProgressionTier.DISCOVERY;
     }
 
     @Override
-    public Map<ConstellationPerk, Integer> getAppliedPerks() {
-        return Collections.emptyMap();
+    public List<AbstractPerk> getAppliedPerks() {
+        return Lists.newArrayList();
     }
 
     @Override
@@ -86,27 +75,32 @@ public class PlayerProgressTestAccess extends PlayerProgress {
     }
 
     @Override
-    public boolean hasFreeAlignmentLevel() {
+    public boolean grantFreeAllocationPoint(String freePointToken) {
         return false;
     }
 
     @Override
-    public boolean hasPerkUnlocked(ConstellationPerks perk) {
+    public List<String> getFreePointTokens() {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public int getAvailablePerkPoints() {
+        return 0;
+    }
+
+    @Override
+    public boolean hasFreeAllocationPoint() {
         return false;
     }
 
     @Override
-    public boolean hasPerkUnlocked(ConstellationPerk perk) {
+    public boolean hasPerkUnlocked(AbstractPerk perk) {
         return false;
     }
 
     @Override
     public boolean wasOnceAttuned() {
-        return false;
-    }
-
-    @Override
-    public boolean isPerkActive(ConstellationPerk perk) {
         return false;
     }
 

@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.client.gui.base;
 
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
-import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -32,6 +31,8 @@ public abstract class GuiWHScreen extends GuiScreen {
     protected final int guiHeight;
     protected final int guiWidth;
     protected int guiLeft, guiTop;
+
+    protected boolean closeWithInventoryKey = true;
 
     protected GuiWHScreen(int guiHeight, int guiWidth) {
         this.guiHeight = guiHeight;
@@ -75,7 +76,7 @@ public abstract class GuiWHScreen extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
 
-        if(keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
+        if(closeWithInventoryKey && keyCode == Minecraft.getMinecraft().gameSettings.keyBindInventory.getKeyCode()) {
             Minecraft.getMinecraft().displayGuiScreen(null);
 
             if(Minecraft.getMinecraft().currentScreen == null) {

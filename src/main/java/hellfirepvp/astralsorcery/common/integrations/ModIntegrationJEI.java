@@ -26,7 +26,6 @@ import hellfirepvp.astralsorcery.common.crafting.infusion.AbstractInfusionRecipe
 import hellfirepvp.astralsorcery.common.crafting.infusion.InfusionRecipeRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.*;
 import hellfirepvp.astralsorcery.common.integrations.mods.jei.altar.*;
-import hellfirepvp.astralsorcery.common.item.tool.wand.ItemWand;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
 import hellfirepvp.astralsorcery.common.lib.RecipesAS;
@@ -157,6 +156,7 @@ public class ModIntegrationJEI implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.translucentBlock));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockVanishing));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockStructural));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockPortalNode));
         blacklist.addIngredientToBlacklist(new ItemStack(BlocksAS.blockAltar, 1, 4));
         if(Mods.GEOLOSYS.isPresent() && Mods.ORESTAGES.isPresent()) {
             ModIntegrationGeolosys.hideJEIGeolosysSample(blacklist);

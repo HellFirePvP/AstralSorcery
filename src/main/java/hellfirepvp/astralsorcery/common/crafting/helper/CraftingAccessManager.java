@@ -8,7 +8,10 @@
 
 package hellfirepvp.astralsorcery.common.crafting.helper;
 
-import hellfirepvp.astralsorcery.common.base.*;
+import hellfirepvp.astralsorcery.common.base.LightOreTransmutations;
+import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
+import hellfirepvp.astralsorcery.common.base.Mods;
+import hellfirepvp.astralsorcery.common.base.WellLiquefaction;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.altar.AbstractAltarRecipe;
 import hellfirepvp.astralsorcery.common.crafting.altar.AltarRecipeRegistry;

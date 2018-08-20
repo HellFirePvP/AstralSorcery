@@ -193,12 +193,11 @@ public class ItemEnchantmentAmulet extends Item implements ItemDynamicColor, IBa
     private static boolean canInfluenceType(AmuletEnchantment.Type type, ItemStack stack, Collection<AmuletEnchantment> enchantments) {
         for (AmuletEnchantment ench : enchantments) {
             Enchantment e = ench.getEnchantment();
-            if (e == null || e.type == null) continue;
-            if(ench.getType() != type) continue;
+            if (ench.getType() != type) continue;
 
             switch (type) {
                 case ADD_TO_SPECIFIC:
-                    if (e.type.canEnchantItem(stack.getItem())) {
+                    if (e.type != null && e.type.canEnchantItem(stack.getItem())) {
                         return true;
                     }
                     break;

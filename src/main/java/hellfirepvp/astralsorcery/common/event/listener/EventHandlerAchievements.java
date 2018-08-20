@@ -8,12 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.event.listener;
 
-import hellfirepvp.astralsorcery.common.item.crystal.ItemCelestialCrystal;
-import hellfirepvp.astralsorcery.common.item.crystal.base.ItemRockCrystalBase;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.

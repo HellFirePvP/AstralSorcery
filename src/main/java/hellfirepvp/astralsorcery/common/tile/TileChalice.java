@@ -335,11 +335,6 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
 
         public static float chaliceRange = 16F;
 
-        @Override
-        public String getConfigurationSection() {
-            return super.getConfigurationSection() + "." + getKey();
-        }
-
         private ConfigEntryChalice() {
             super(Section.MACHINERY, "chalice");
         }

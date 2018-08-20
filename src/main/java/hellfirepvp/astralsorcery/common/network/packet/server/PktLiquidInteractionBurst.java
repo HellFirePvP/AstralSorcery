@@ -8,6 +8,7 @@
 
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFloatingCube;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
@@ -63,7 +64,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
 
     @Override
     public IMessage onMessage(PktLiquidInteractionBurst message, MessageContext ctx) {
-        playClientEffect(message);
+        AstralSorcery.proxy.scheduleClientside(() -> playClientEffect(message));
         return null;
     }
 

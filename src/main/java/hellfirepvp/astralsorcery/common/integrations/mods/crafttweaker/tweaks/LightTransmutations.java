@@ -9,12 +9,12 @@
 package hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IItemStack;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationCrafttweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.BaseTweaker;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.LightTransmutationAdd;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.LightTransmutationRemove;
 import hellfirepvp.astralsorcery.common.util.ItemUtils;
-import crafttweaker.api.item.IItemStack;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;

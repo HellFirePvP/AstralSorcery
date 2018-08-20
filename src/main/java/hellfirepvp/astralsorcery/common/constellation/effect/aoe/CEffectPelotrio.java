@@ -40,7 +40,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**

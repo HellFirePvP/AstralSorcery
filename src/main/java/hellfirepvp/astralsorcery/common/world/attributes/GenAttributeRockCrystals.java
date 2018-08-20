@@ -19,7 +19,6 @@ import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.world.WorldGenAttribute;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -85,11 +84,6 @@ public class GenAttributeRockCrystals extends WorldGenAttribute {
                         "minecraft:stone:0"
                 }, "Defines the blockstates that may be replaced by rock crystal ore when trying to generate a rock crystal ore. format: <modid>:<name>:<meta> - Use meta -1 for wildcard");
                 replaceableStatesSerialized = Arrays.asList(applicableReplacements);
-            }
-
-            @Override
-            public String getConfigurationSection() {
-                return super.getConfigurationSection() + "." + getKey();
             }
         };
         Config.addDynamicEntry(this.entry);

@@ -150,11 +150,6 @@ public class AmuletEnchantHelper {
         }
 
         @Override
-        public String getConfigurationSection() {
-            return super.getConfigurationSection() + "." + getKey();
-        }
-
-        @Override
         public void loadFromConfig(Configuration cfg) {
             chance2nd = cfg.getFloat("chance2nd", getConfigurationSection(), chance2nd, 0F, 1F, "Defines the chance to roll a 2nd-enchantment-manipulating roll on the amulet. Value defines a percent chance from 0% to 100%. Setting this to 0 also prevents a 3rd roll");
             chance3rd = cfg.getFloat("chance3rd", getConfigurationSection(), chance3rd, 0F, 1F, "Defines the chance to roll a 3rd-enchantment-manipulation roll on the amulet. Value defines a percent chance from 0% to 100%.");

@@ -38,7 +38,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -145,7 +144,7 @@ public class BlockStructural extends BlockContainer implements BlockCustomName, 
         IBlockState state = world.getBlockState(pos);
         switch (state.getValue(BLOCK_TYPE)) {
             case TELESCOPE_STRUCT:
-                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlockHardness(world, pos.down());
+                return BlockType.TELESCOPE_STRUCT.getSupportedState().getBlock().getExplosionResistance(world, pos.down(), exploder, explosion);
         }
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }

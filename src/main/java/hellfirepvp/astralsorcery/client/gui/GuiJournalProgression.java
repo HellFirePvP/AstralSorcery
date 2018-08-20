@@ -205,7 +205,7 @@ public class GuiJournalProgression extends GuiScreenJournal {
         }
         if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
             resetJournal();
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
             return;
         }
         progressionRenderer.propagateClick(p);

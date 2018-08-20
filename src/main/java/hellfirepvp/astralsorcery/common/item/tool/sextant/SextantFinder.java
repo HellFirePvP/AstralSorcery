@@ -9,7 +9,6 @@
 package hellfirepvp.astralsorcery.common.item.tool.sextant;
 
 import com.google.common.collect.Iterables;
-import hellfirepvp.astralsorcery.client.util.image.ColorThief;
 import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.TextureQuery;

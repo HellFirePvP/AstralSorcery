@@ -8,7 +8,6 @@
 
 package hellfirepvp.astralsorcery.common.block;
 
-import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;

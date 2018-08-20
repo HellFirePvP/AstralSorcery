@@ -15,8 +15,10 @@ import hellfirepvp.astralsorcery.common.block.network.BlockAltar;
 import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.IMajorConstellation;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
 import hellfirepvp.astralsorcery.common.crafting.altar.ActiveCraftingTask;
 import hellfirepvp.astralsorcery.common.crafting.infusion.ActiveInfusionTask;
 import hellfirepvp.astralsorcery.common.item.ItemHandTelescope;
@@ -24,6 +26,7 @@ import hellfirepvp.astralsorcery.common.item.tool.sextant.SextantFinder;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktProgressionUpdate;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncKnowledge;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.tile.TileAltar;
 import hellfirepvp.astralsorcery.common.tile.TileStarlightInfuser;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
@@ -35,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -59,6 +63,7 @@ import java.util.*;
 public class ResearchManager {
 
     public static PlayerProgress clientProgress = new PlayerProgress();
+    public static boolean clientInitialized = false;
 
     private static Map<UUID, PlayerProgress> playerProgressServer = new HashMap<>();
 
@@ -285,9 +290,25 @@ public class ResearchManager {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.clearPerks();
-        progress.forceCharge(0);
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+        }
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
+
+        progress.setExp(0);
         progress.setAttunedConstellation(constellation);
+        AbstractPerk root;
+        if (constellation != null && (root = PerkTree.PERK_TREE.getRootPerk(constellation)) != null) {
+            NBTTagCompound data = new NBTTagCompound();
+            root.onUnlockPerkServer(player, progress, data);
+            progress.putPerk(root, data);
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, root, false);
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(root, true), (EntityPlayerMP) player);
+        }
 
         //FIXME RE-ADD AFTER ADVANCEMENTS
         //player.addStat(RegistryAchievements.achvPlayerAttunement);
@@ -297,15 +318,80 @@ public class ResearchManager {
         return true;
     }
 
-    public static boolean applyPerk(EntityPlayer player, @Nonnull ConstellationPerks perk) {
+    public static boolean applyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
-        if(!progress.hasFreeAlignmentLevel()) return false;
-        if(progress.hasPerkUnlocked(perk)) return false;
+        if (progress == null) return false;
+        if (!progress.hasFreeAllocationPoint()) return false;
+        if (progress.hasPerkUnlocked(perk)) return false;
 
-        int free = progress.getNextFreeLevel();
-        if(free == -1) return false;
-        progress.addPerk(perk.getSingleInstance(), free);
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean grantFreePerkPoint(EntityPlayer player, String token) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        if (!progress.grantFreeAllocationPoint(token)) {
+            return false;
+        }
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean revokeFreePoint(EntityPlayer player, String token) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        if (!progress.tryRevokeAllocationPoint(token)) {
+            return false;
+        }
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean forceApplyPerk(EntityPlayer player, @Nonnull AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+        if (progress.hasPerkUnlocked(perk)) return false;
+
+        NBTTagCompound data = new NBTTagCompound();
+        perk.onUnlockPerkServer(player, progress, data);
+        progress.putPerk(perk, data);
+
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, false);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, true), (EntityPlayerMP) player);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean removePerk(EntityPlayer player, AbstractPerk perk) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        NBTTagCompound data = progress.getPerkData(perk);
+        if (data == null) {
+            return false;
+        }
+        perk.onRemovePerkServer(player, progress, data);
+        progress.removePerk(perk);
+        PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perk, true);
+
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(perk, false), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -314,33 +400,38 @@ public class ResearchManager {
 
     public static boolean resetPerks(EntityPlayer player) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
+        if (progress == null) return false;
 
-        progress.clearPerks();
+        Map<AbstractPerk, NBTTagCompound> perkCopy = new HashMap<>(progress.getUnlockedPerkData());
+        for (Map.Entry<AbstractPerk, NBTTagCompound> perkEntry : perkCopy.entrySet()) {
+            perkEntry.getKey().onRemovePerkServer(player, progress, perkEntry.getValue());
+            progress.removePerk(perkEntry.getKey());
+            PerkEffectHelper.EVENT_INSTANCE.notifyPerkChange(player, Side.SERVER, perkEntry.getKey(), true);
+        }
 
-        pushProgressToClientUnsafe((EntityPlayerMP) player);
-        savePlayerKnowledge((EntityPlayerMP) player);
-        return true;
-    }
-
-    public static boolean forceCharge(EntityPlayer player, int charge) {
-        PlayerProgress progress = getProgress(player, Side.SERVER);
-        if(progress == null) return false;
-
-        progress.forceCharge(charge);
+        PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(true), (EntityPlayerMP) player);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
         return true;
     }
 
-    public static boolean modifyAlignmentCharge(EntityPlayer player, double charge) {
+    public static boolean setExp(EntityPlayer player, int exp) {
+        PlayerProgress progress = getProgress(player, Side.SERVER);
+        if (progress == null) return false;
+
+        progress.setExp(exp);
+
+        pushProgressToClientUnsafe((EntityPlayerMP) player);
+        savePlayerKnowledge((EntityPlayerMP) player);
+        return true;
+    }
+
+    public static boolean modifyExp(EntityPlayer player, double exp) {
         PlayerProgress progress = getProgress(player, Side.SERVER);
         if(progress == null) return false;
 
-        progress.modifyCharge(charge);
-
-        //AstralSorcery.log.info("NewCharge: " + player.getName() + " - " + progress.getAlignmentCharge());
+        progress.modifyExp(exp);
 
         pushProgressToClientUnsafe((EntityPlayerMP) player);
         savePlayerKnowledge((EntityPlayerMP) player);
@@ -531,10 +622,11 @@ public class ResearchManager {
     }*/
 
     public static void recieveProgressFromServer(PktSyncKnowledge message) {
-        int currentLvl = clientProgress == null ? 0 : ConstellationPerkLevelManager.getAlignmentLevel(clientProgress);
+        int currentLvl = clientProgress == null ? 0 : PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp()));
         clientProgress = new PlayerProgress();
         clientProgress.receive(message);
-        if(ConstellationPerkLevelManager.getAlignmentLevel(clientProgress) > currentLvl) {
+        clientInitialized = true;
+        if(PerkLevelManager.INSTANCE.getLevel(MathHelper.floor(clientProgress.getPerkExp())) > currentLvl) {
             showBar();
         }
     }

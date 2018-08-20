@@ -9,6 +9,7 @@
 package hellfirepvp.astralsorcery.common.network.packet.server;
 
 import com.google.common.collect.Lists;
+import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.item.tool.ItemChargedCrystalPickaxe;
 import hellfirepvp.astralsorcery.common.util.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
@@ -69,7 +70,7 @@ public class PktOreScan implements IMessage, IMessageHandler<PktOreScan, IMessag
 
     @SideOnly(Side.CLIENT)
     private void playEffect(PktOreScan message) {
-        Minecraft.getMinecraft().addScheduledTask(() -> ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble));
+        AstralSorcery.proxy.scheduleClientside(() -> ItemChargedCrystalPickaxe.playClientEffects(message.positions, message.tumble));
     }
 
 }

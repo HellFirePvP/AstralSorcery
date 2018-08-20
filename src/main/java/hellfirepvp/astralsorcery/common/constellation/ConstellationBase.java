@@ -8,18 +8,12 @@
 
 package hellfirepvp.astralsorcery.common.constellation;
 
-import com.google.common.collect.ImmutableList;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffect;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMap;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkMapRegistry;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
-import hellfirepvp.astralsorcery.common.tile.TileRitualPedestal;
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -44,7 +38,7 @@ public abstract class ConstellationBase implements IConstellation {
     private List<StarConnection> connections = new ArrayList<>(); //The connections between 2 tuples/stars in the constellation.
     private List<ItemHandle> signatureItems = new LinkedList<>();
 
-    private final String name;
+    private final String name, simpleName;
     private final Color color;
 
     public ConstellationBase(String name) {
@@ -52,6 +46,7 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     public ConstellationBase(String name, Color color) {
+        this.simpleName = name;
         ModContainer mod = Loader.instance().activeModContainer();
         if(mod != null) {
             this.name = mod.getModId() + ".constellation." + name;
@@ -113,6 +108,11 @@ public abstract class ConstellationBase implements IConstellation {
     }
 
     @Override
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    @Override
     public String toString() {
         return "Constellation={name:" + getUnlocalizedName() + "}";
     }
@@ -123,7 +123,6 @@ public abstract class ConstellationBase implements IConstellation {
         if (o == null || getClass() != o.getClass()) return false;
         ConstellationBase that = (ConstellationBase) o;
         return name.equals(that.name);
-
     }
 
     @Override
@@ -139,12 +138,6 @@ public abstract class ConstellationBase implements IConstellation {
 
         public Major(String name, Color color) {
             super(name, color);
-        }
-
-        @Override
-        @Nullable
-        public ConstellationPerkMap getPerkMap() {
-            return ConstellationPerkMapRegistry.getPerkMap(this);
         }
 
     }

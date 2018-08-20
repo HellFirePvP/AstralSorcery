@@ -11,12 +11,10 @@ package hellfirepvp.astralsorcery.common.event.listener;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
 import hellfirepvp.astralsorcery.common.network.packet.server.PktFinalizeLogin;
-import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncAlignmentLevels;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -35,9 +33,7 @@ public class EventHandlerNetwork {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onLogin(PlayerEvent.PlayerLoggedInEvent e) {
         EntityPlayerMP p = (EntityPlayerMP) e.player;
-        AstralSorcery.log.info("[AstralSorcery] Synchronizing configuration to " + p.getName());
-        PacketChannel.CHANNEL.sendTo(new PktSyncAlignmentLevels(ConstellationPerkLevelManager.levelsRequired), p);
-
+        AstralSorcery.log.info("[AstralSorcery] Synchronizing baseline information to " + p.getName());
         ResearchManager.sendInitClientKnowledge(p);
         CelestialGatewaySystem.instance.syncTo(p);
         SyncDataHolder.syncAllDataTo(p);

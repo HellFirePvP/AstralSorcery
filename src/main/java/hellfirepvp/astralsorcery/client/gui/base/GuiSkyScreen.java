@@ -12,6 +12,7 @@ import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 
 import java.awt.*;
@@ -27,6 +28,9 @@ public interface GuiSkyScreen {
 
     public static Tuple<Color, Color> getRBGFromTo(boolean canSeeSky, float angleTransparency, float partialTicks) {
         World renderWorld = Minecraft.getMinecraft().world;
+        if (renderWorld.provider.getDimensionType() == DimensionType.THE_END) {
+            canSeeSky = false; //Only for effect rendering purposes, not functionality.
+        }
         int rgbFrom, rgbTo;
         if (canSeeSky && angleTransparency > 1.0E-4) {
             float starBr = renderWorld.getStarBrightness(partialTicks) * 2;

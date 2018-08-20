@@ -10,12 +10,10 @@ package hellfirepvp.astralsorcery.common;
 
 import hellfirepvp.astralsorcery.common.auxiliary.tick.ITickHandler;
 import hellfirepvp.astralsorcery.common.util.Counter;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -29,31 +27,29 @@ public class CommonScheduler implements ITickHandler {
     private static final Object lock = new Object();
 
     private boolean inTick = false;
-    private Map<Runnable, Counter> queuedRunnables = new HashMap<>();
-    private Map<Runnable, Integer> waitingRunnables = new HashMap<>();
+    private LinkedList<Tuple<Runnable, Counter>> queue = new LinkedList<>();
+    private LinkedList<Tuple<Runnable, Integer>> waiting = new LinkedList<>();
 
     @Override
     public void tick(TickEvent.Type type, Object... context) {
-
         inTick = true;
         synchronized (lock) {
             inTick = true;
-            Iterator<Runnable> iterator = queuedRunnables.keySet().iterator();
+            Iterator<Tuple<Runnable, Counter>> iterator = queue.iterator();
             while (iterator.hasNext()) {
-                Runnable r = iterator.next();
-                Counter delay = queuedRunnables.get(r);
-                delay.decrement();
-                if(delay.value <= 0) {
-                    r.run();
+                Tuple<Runnable, Counter> r = iterator.next();
+                r.value.decrement();
+                if(r.value.value <= 0) {
+                    r.key.run();
                     iterator.remove();
                 }
             }
             inTick = false;
-            for (Map.Entry<Runnable, Integer> waiting : waitingRunnables.entrySet()) {
-                queuedRunnables.put(waiting.getKey(), new Counter(waiting.getValue()));
+            for (Tuple<Runnable, Integer> wait : waiting) {
+                queue.addLast(new Tuple<>(wait.key, new Counter(wait.value)));
             }
         }
-        waitingRunnables.clear();
+        waiting.clear();
     }
 
     @Override
@@ -74,9 +70,9 @@ public class CommonScheduler implements ITickHandler {
     public void addRunnable(Runnable r, int tickDelay) {
         synchronized (lock) {
             if(inTick) {
-                waitingRunnables.put(r, tickDelay);
+                waiting.addLast(new Tuple<>(r, tickDelay));
             } else {
-                queuedRunnables.put(r, new Counter(tickDelay));
+                queue.addLast(new Tuple<>(r, new Counter(tickDelay)));
             }
         }
     }

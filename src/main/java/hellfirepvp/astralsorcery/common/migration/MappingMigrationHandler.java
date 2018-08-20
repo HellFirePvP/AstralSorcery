@@ -10,12 +10,10 @@ package hellfirepvp.astralsorcery.common.migration;
 
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.lib.ItemsAS;
-import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.FixTypes;
-import net.minecraft.util.datafix.IFixType;
 import net.minecraft.util.datafix.IFixableData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ModFixs;

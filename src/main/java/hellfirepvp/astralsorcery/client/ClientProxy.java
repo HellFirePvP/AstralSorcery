@@ -35,13 +35,16 @@ import hellfirepvp.astralsorcery.common.base.patreon.flare.PatreonFlareManagerCl
 import hellfirepvp.astralsorcery.common.block.BlockDynamicColor;
 import hellfirepvp.astralsorcery.common.block.BlockDynamicStateMapper;
 import hellfirepvp.astralsorcery.common.block.BlockMachine;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTree;
+import hellfirepvp.astralsorcery.common.constellation.perk.tree.PerkTreePoint;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
 import hellfirepvp.astralsorcery.common.entities.*;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
-import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
-import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.item.base.IMetaItem;
 import hellfirepvp.astralsorcery.common.item.base.IOBJItem;
+import hellfirepvp.astralsorcery.common.item.base.render.INBTModel;
+import hellfirepvp.astralsorcery.common.item.base.render.ItemDynamicColor;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import hellfirepvp.astralsorcery.common.registry.RegistryItems;
@@ -178,6 +181,10 @@ public class ClientProxy extends CommonProxy {
         OBJModelLibrary.init();
 
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ItemColorizationHelper.instance);
+
+        //Clears tooltip on langfile change or texture changes
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager())
+                .registerReloadListener((mgr) -> PerkTree.PERK_TREE.getPerkPoints().stream().map(PerkTreePoint::getPerk).forEach(AbstractPerk::clearClientCaches));
 
         JournalRecipeDisplayRecovery.attemptRecipeRecovery();
     }

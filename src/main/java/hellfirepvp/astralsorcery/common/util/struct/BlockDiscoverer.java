@@ -11,17 +11,14 @@ package hellfirepvp.astralsorcery.common.util.struct;
 import com.google.common.collect.Lists;
 import hellfirepvp.astralsorcery.common.util.BlockStateCheck;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -31,6 +28,37 @@ import java.util.Map;
  * Date: 07.02.2017 / 01:09
  */
 public class BlockDiscoverer {
+
+    public static BlockArray discoverBlocksWithSameStateAroundChain(World world, BlockPos origin, IBlockState match, int length, @Nullable EnumFacing originalBreakDirection, BlockStateCheck addCheck) {
+        BlockArray out = new BlockArray();
+
+        BlockPos offset = new BlockPos(origin);
+        lbl: while (length > 0) {
+            List<EnumFacing> faces = new ArrayList<>();
+            Collections.addAll(faces, EnumFacing.VALUES);
+            if (originalBreakDirection != null && out.isEmpty()) {
+                faces.remove(originalBreakDirection);
+                faces.remove(originalBreakDirection.getOpposite());
+            }
+            Collections.shuffle(faces);
+            for (EnumFacing face : faces) {
+                BlockPos at = offset.offset(face);
+                if (out.getPattern().containsKey(at)) {
+                    continue;
+                }
+                IBlockState test = world.getBlockState(at);
+                if (MiscUtils.matchStateExact(match, test) && addCheck.isStateValid(world, at, test)) {
+                    out.addBlock(at.getX(), at.getY(), at.getZ(), test);
+                    length--;
+                    offset = at;
+                    continue lbl;
+                }
+            }
+            break;
+        }
+
+        return out;
+    }
 
     public static BlockArray searchForBlocksAround(World world, BlockPos origin, int cubeSize, BlockStateCheck match) {
         BlockArray out = new BlockArray();

@@ -12,6 +12,7 @@ import crafttweaker.CraftTweakerAPI;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.network.SerializeableRecipe;
 import hellfirepvp.astralsorcery.common.integrations.mods.crafttweaker.tweaks.*;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +38,11 @@ public class ModIntegrationCrafttweaker {
         CraftTweakerAPI.registerClass(AltarRecipe.class);
         CraftTweakerAPI.registerClass(WellRecipe.class);
         CraftTweakerAPI.registerClass(LiquidInteraction.class);
+        CraftTweakerAPI.registerClass(PerkTree.class);
         CraftTweakerAPI.registerClass(Utils.class);
+
+        //For the perk removal / disabling events
+        MinecraftForge.EVENT_BUS.register(new PerkTree());
     }
 
     public void pushChanges() {

@@ -42,8 +42,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -610,7 +612,7 @@ public class GuiJournalConstellationDetails extends GuiScreenJournal {
             return;
         }
         if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
             return;
         }
         if(rectBack != null && rectBack.contains(p)) {

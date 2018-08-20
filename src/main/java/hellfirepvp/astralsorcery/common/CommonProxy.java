@@ -11,7 +11,6 @@ package hellfirepvp.astralsorcery.common;
 import com.mojang.authlib.GameProfile;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.common.auxiliary.CelestialGatewaySystem;
-import hellfirepvp.astralsorcery.common.base.FluidRarityRegistry;
 import hellfirepvp.astralsorcery.common.auxiliary.link.LinkHandler;
 import hellfirepvp.astralsorcery.common.auxiliary.tick.TickManager;
 import hellfirepvp.astralsorcery.common.base.*;
@@ -24,9 +23,7 @@ import hellfirepvp.astralsorcery.common.constellation.cape.CapeEffectRegistry;
 import hellfirepvp.astralsorcery.common.constellation.charge.PlayerChargeHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.effect.ConstellationEffectRegistry;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerkLevelManager;
-import hellfirepvp.astralsorcery.common.constellation.perk.ConstellationPerks;
-import hellfirepvp.astralsorcery.common.constellation.perk.PlayerPerkHandler;
+import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.container.*;
 import hellfirepvp.astralsorcery.common.crafting.ItemHandle;
 import hellfirepvp.astralsorcery.common.crafting.helper.CraftingAccessManager;
@@ -100,6 +97,7 @@ import java.util.UUID;
 public class CommonProxy implements IGuiHandler {
 
     public static DamageSource dmgSourceBleed   = new DamageSource("as.bleed").setDamageBypassesArmor();
+    public static DamageSourceEntity dmgSourceReflect = (DamageSourceEntity) new DamageSourceEntity("thorns");
     public static DamageSourceEntity dmgSourceStellar = (DamageSourceEntity) new DamageSourceEntity("as.stellar").setDamageBypassesArmor().setMagicDamage();
     public static InternalRegistryPrimer registryPrimer;
     private static UUID fakePlayerUUID = UUID.fromString("BD4F59E2-4E26-4388-B903-B533D482C205");
@@ -110,12 +108,10 @@ public class CommonProxy implements IGuiHandler {
     public void setupConfiguration() {
         worldGenerator.pushConfigEntries();
         ConstellationEffectRegistry.addDynamicConfigEntries();
-        ConstellationPerks.addDynamicConfigEntries();
         CapeEffectRegistry.addDynamicConfigEntries();
         Config.addDynamicEntry(TileTreeBeacon.ConfigEntryTreeBeacon.instance);
         Config.addDynamicEntry(TileOreGenerator.ConfigEntryMultiOre.instance);
         Config.addDynamicEntry(TileChalice.ConfigEntryChalice.instance);
-        Config.addDynamicEntry(ConstellationPerkLevelManager.getLevelConfigurations());
         Config.addDynamicEntry(new AmuletEnchantHelper.CfgEntry());
     }
 
@@ -148,7 +144,7 @@ public class CommonProxy implements IGuiHandler {
         LootTableUtil.initLootTable();
         ConstellationEffectRegistry.init();
 
-        RegistryPerks.init();
+        RegistryPerks.initPerkTree();
 
         registerCapabilities();
 
@@ -229,6 +225,8 @@ public class CommonProxy implements IGuiHandler {
         ModIntegrationChisel.sendVariantIMC();
         MappingMigrationHandler.init();
 
+        ModIntegrationBloodMagic.sendIMC();
+
         NetworkRegistry.INSTANCE.registerGuiHandler(AstralSorcery.instance, this);
 
         MinecraftForge.TERRAIN_GEN_BUS.register(TreeCaptureHelper.eventInstance);
@@ -250,6 +248,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(TimeStopController.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FluidRarityRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(PlayerAmuletHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PerkEffectHelper.EVENT_INSTANCE);
 
         GameRegistry.registerWorldGenerator(worldGenerator.setupAttributes(), 50);
         if(Config.enableRetroGen) {
@@ -270,28 +269,28 @@ public class CommonProxy implements IGuiHandler {
         manager.register(StarlightTransmissionHandler.getInstance());
         manager.register(StarlightUpdateHandler.getInstance());
         manager.register(WorldCacheManager.getInstance());
-        manager.register(new LinkHandler()); //Only used as INSTANCE for tick handling
+        manager.register(new LinkHandler()); //Only used as PERK_TREE for tick handling
         manager.register(SyncDataHolder.getTickInstance());
-        manager.register(new PlayerPerkHandler());
         manager.register(commonScheduler);
         manager.register(PlayerChargeHandler.INSTANCE);
         manager.register(EventHandlerCapeEffects.INSTANCE);
         manager.register(TimeStopController.INSTANCE);
         manager.register(PlayerAmuletHandler.INSTANCE);
-        //manager.register(SpellCastingManager.INSTANCE);
+        //manager.register(SpellCastingManager.PERK_TREE);
         manager.register(PatreonFlareManager.INSTANCE);
+        manager.register(PerkEffectHelper.EVENT_INSTANCE);
 
         //TickTokenizedMaps
         manager.register(EventHandlerEntity.spawnDenyRegions);
-        manager.register(EventHandlerServer.perkCooldowns);
-        manager.register(EventHandlerServer.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
         manager.register(EventHandlerEntity.invulnerabilityCooldown);
         manager.register(EventHandlerEntity.ritualFlight);
+        manager.register(PerkEffectHelper.perkCooldowns);
+        manager.register(PerkEffectHelper.perkCooldownsClient); //Doesn't matter being registered on servers aswell. And prevent fckery in integrated.
     }
 
     public void postInit() {
-        ModIntegrationBloodMagic.sendIMC();
         AltarRecipeEffectRecovery.attemptRecipeRecovery();
+        RegistryPerks.postInitPerkRemoval();
 
         AstralSorcery.log.info("[AstralSorcery] Post compile recipes");
 

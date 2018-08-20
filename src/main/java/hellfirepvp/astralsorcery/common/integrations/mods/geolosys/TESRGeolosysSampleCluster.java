@@ -15,6 +15,7 @@ import hellfirepvp.astralsorcery.client.util.resource.AssetLibrary;
 import hellfirepvp.astralsorcery.client.util.resource.AssetLoader;
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.common.integrations.ModIntegrationGeolosys;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -45,7 +46,7 @@ public class TESRGeolosysSampleCluster extends TileEntitySpecialRenderer<TileGeo
         IBlockState relevantState = ModIntegrationGeolosys.geolosysSample.getDefaultState();
         if(OreTiersAPI.hasReplacement(relevantState)) {
             Tuple<String, IBlockState> info = OreTiersAPI.getStageInfo(relevantState);
-            if(info != null && Minecraft.getMinecraft().player != null && !OreTiersAPI.hasStage(Minecraft.getMinecraft().player, info.getFirst())) {
+            if(info != null && Minecraft.getMinecraft().player != null && !GameStageHelper.hasStage(Minecraft.getMinecraft().player, info.getFirst())) {
                 return;
             }
         }

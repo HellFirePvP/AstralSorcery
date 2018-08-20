@@ -40,8 +40,6 @@ public class TexturePreloader {
     }
 
     private static void preloadMandatoryTextures() {
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_left")        .allocateGlId();
-        //AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "arrow_right")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijblankbook")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspacebook")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijspaceconstellation")   .allocateGlId();
@@ -50,6 +48,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijarrow")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.MISC, "underline")               .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg")                 .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbg2")                .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guiresbgcst")              .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "guijresoverlay")           .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_charge_frame")         .allocateGlId();
@@ -58,6 +57,7 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "hud_item_frame_extender")  .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "observatoryframe")         .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.GUI, "gridsextant")              .allocateGlId();
+        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks")       .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star1")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "star2")            .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.ENVIRONMENT, "connection")       .allocateGlId();
@@ -86,7 +86,6 @@ public class TexturePreloader {
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect1")             .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect2")             .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "ceffect3")             .allocateGlId();
-        AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "connectionperks")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "lightningpart")        .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "starlight_store")      .allocateGlId();
         AssetLibrary.loadTexture(AssetLoader.TextureLocation.EFFECT, "halo1")                .allocateGlId();

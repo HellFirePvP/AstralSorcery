@@ -269,7 +269,7 @@ public class GuiJournalConstellationCluster extends GuiScreenJournal {
             return;
         }
         if(rectPerkMapBookmark != null && rectPerkMapBookmark.contains(p)) {
-            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkMap());
+            Minecraft.getMinecraft().displayGuiScreen(new GuiJournalPerkTree());
             return;
         }
         if(bookmarkIndex == -1 && rectConstellationBookmark != null && rectConstellationBookmark.contains(p)) {

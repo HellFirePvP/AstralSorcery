@@ -11,12 +11,10 @@ package hellfirepvp.astralsorcery.common.tile;
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
-import hellfirepvp.astralsorcery.client.util.obj.Face;
 import hellfirepvp.astralsorcery.common.base.OreTypes;
 import hellfirepvp.astralsorcery.common.block.BlockCustomOre;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.event.listener.EventHandlerIO;
-import hellfirepvp.astralsorcery.common.event.listener.EventHandlerServer;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
 import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -41,7 +39,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -176,11 +173,6 @@ public class TileOreGenerator extends TileEntitySynchronized {
 
         private ConfigEntryMultiOre() {
             super(Section.MACHINERY, "multi-ore");
-        }
-
-        @Override
-        public String getConfigurationSection() {
-            return super.getConfigurationSection() + "." + getKey();
         }
 
         @Override

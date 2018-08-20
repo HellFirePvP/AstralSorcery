@@ -8,9 +8,9 @@
 
 package hellfirepvp.astralsorcery.common.integrations;
 
-import hellfirepvp.astralsorcery.common.integrations.mods.geolosys.TESRGeolosysSampleCluster;
 import hellfirepvp.astralsorcery.client.util.item.ItemRenderRegistry;
 import hellfirepvp.astralsorcery.common.integrations.mods.geolosys.BlockGeolosysSampleCluster;
+import hellfirepvp.astralsorcery.common.integrations.mods.geolosys.TESRGeolosysSampleCluster;
 import hellfirepvp.astralsorcery.common.integrations.mods.geolosys.TileGeolosysSampleCluster;
 import hellfirepvp.astralsorcery.common.registry.RegistryBlocks;
 import mezz.jei.api.ingredients.IIngredientBlacklist;

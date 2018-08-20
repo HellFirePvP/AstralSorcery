@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 
 /**

@@ -427,11 +427,6 @@ public class TileTreeBeacon extends TileReceiverBase {
         }
 
         @Override
-        public String getConfigurationSection() {
-            return super.getConfigurationSection() + "." + getKey();
-        }
-
-        @Override
         public void loadFromConfig(Configuration cfg) {
             speedLimiter = cfg.getFloat("EfficiencyLimiter", getConfigurationSection(), 1F, 0F, 1F, "Percentage, how hard the speed limiter should slow down production of the tree beacon. 1=max, 0=no limiter");
             maxCount = cfg.getInt("Count", getConfigurationSection(), 600, 1, 4000, "Defines the amount of blocks the treeBeacon can support at max count");

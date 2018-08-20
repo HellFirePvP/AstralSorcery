@@ -41,6 +41,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketCloseWindow;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +61,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 27.05.2018 / 07:29
  */
-public class GuiObservatory extends GuiTileBase<TileObservatory> {
+public class GuiObservatory extends GuiTileBase<TileObservatory> implements GuiSkyScreen {
 
     private static final Random random = new Random();
 
@@ -107,6 +108,8 @@ public class GuiObservatory extends GuiTileBase<TileObservatory> {
         super.onGuiClosed();
 
         mc.player.connection.sendPacket(new CPacketCloseWindow(mc.player.openContainer.windowId));
+        mc.player.openContainer = mc.player.inventoryContainer;
+        mc.player.inventoryContainer.windowId = 0; //Don't question it. This is not a GUIContainer and thus mc overwrites the ID of the default container.
 
         if (!Minecraft.IS_RUNNING_ON_MAC) {
             KeyBinding.updateKeyBindState();
