@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class is part of the Astral Sorcery Mod
@@ -70,6 +71,7 @@ public class PktSyncPerkActivity implements IMessage, IMessageHandler<PktSyncPer
         return null;
     }
 
+    @SideOnly(Side.CLIENT)
     private void handleClientPerkUpdate(PktSyncPerkActivity pkt) {
         AstralSorcery.proxy.scheduleClientside(() -> {
             if (Minecraft.getMinecraft().player != null) {

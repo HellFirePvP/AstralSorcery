@@ -31,6 +31,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -130,8 +131,8 @@ public class ItemShiftingStar extends Item implements INBTModel {
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
-        return true;
+    public EnumRarity getRarity(ItemStack stack) {
+        return getAttunement(stack) != null ? RegistryItems.rarityRelic : super.getRarity(stack);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class RegistryItems {
     public static List<ItemDynamicColor> pendingDynamicColorItems = new LinkedList<>();
 
     public static Item.ToolMaterial crystalToolMaterial;
-    public static EnumRarity rarityCelestial;
+    public static EnumRarity rarityCelestial, rarityRelic;
     public static Material materialTransparentReplaceable;
     public static ItemArmor.ArmorMaterial imbuedLeatherMaterial;
 
@@ -94,6 +94,7 @@ public class RegistryItems {
         crystalToolMaterial.setRepairItem(ItemStack.EMPTY);
 
         rarityCelestial = EnumHelper.addRarity("CELESTIAL", TextFormatting.BLUE, "Celestial");
+        rarityRelic = EnumHelper.addRarity("AS_RELIC", TextFormatting.GOLD, "Relic");
         materialTransparentReplaceable = new MaterialAirish();
 
         imbuedLeatherMaterial = EnumHelper.addArmorMaterial("AS_IMBUEDLEATHER",
