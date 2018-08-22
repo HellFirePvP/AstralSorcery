@@ -137,13 +137,14 @@ public class ItemIlluminationWand extends Item implements ItemAlignmentChargeCon
                 if(at.isNormalCube()) {
                     TileEntity te = worldIn.getTileEntity(pos);
                     if(te == null && !at.getBlock().hasTileEntity(at) && drainTempCharge(playerIn, Config.illuminationWandUseCost, true)) {
-                        worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3);
-                        TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
-                        if(tt == null) {
-                            worldIn.setBlockState(pos, at, 3);
-                        } else {
-                            tt.setFakedState(at);
-                            drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                        if (worldIn.setBlockState(pos, BlocksAS.translucentBlock.getDefaultState(), 3)) {
+                            TileTranslucent tt = MiscUtils.getTileAt(worldIn, pos, TileTranslucent.class, true);
+                            if(tt == null) {
+                                worldIn.setBlockState(pos, at, 3);
+                            } else {
+                                tt.setFakedState(at);
+                                drainTempCharge(playerIn, Config.illuminationWandUseCost, false);
+                            }
                         }
                     }
                 } else if(at.getBlock() instanceof BlockTranslucentBlock) {

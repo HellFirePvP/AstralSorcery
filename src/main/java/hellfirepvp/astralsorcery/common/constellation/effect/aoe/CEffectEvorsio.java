@@ -157,9 +157,10 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
             TileRitualLink link = MiscUtils.getTileAt(world, pos, TileRitualLink.class, false);
             if(link != null) {
                 if(!at.equals(pos)) {
-                    world.setBlockState(at, toSet, 2);
-                    world.playEvent(2001, at, Block.getStateId(toSet));
-                    return true;
+                    if(world.setBlockState(at, toSet, 2)) {
+                        world.playEvent(2001, at, Block.getStateId(toSet));
+                        return true;
+                    }
                 }
             } else {
                 TileRitualPedestal ped = MiscUtils.getTileAt(world, pos, TileRitualPedestal.class, false);
@@ -174,9 +175,10 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                             ba.addAll(MultiBlockArrays.patternRitualPedestalWithLink, (p) -> p.add(pos).add(0, finalI, 0));
                         }
                         if(!ba.hasBlockAt(at)) {
-                            world.setBlockState(at, toSet, 2);
-                            world.playEvent(2001, at, Block.getStateId(toSet));
-                            return true;
+                            if(world.setBlockState(at, toSet, 2)) {
+                                world.playEvent(2001, at, Block.getStateId(toSet));
+                                return true;
+                            }
                         }
                     }
                 }
@@ -187,15 +189,19 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
                 BlockBreakAssist.BreakEntry be = getRandomElement(world.rand);
                 if(be != null) {
                     removeElement(be);
+
+                    boolean broken = false;
                     BlockDropCaptureAssist.startCapturing();
                     try {
-                        MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
+                        broken = MiscUtils.breakBlockWithoutPlayer((WorldServer) world, be.getPos(), world.getBlockState(be.getPos()), true, true, true);
                     } finally {
                         NonNullList<ItemStack> captured = BlockDropCaptureAssist.getCapturedStacksAndStop();
                         captured.forEach((stack) -> ItemUtils.dropItem(world, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack));
                     }
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+                    if (broken) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_BREAK_BLOCK, be.getPos());
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, be.getPos(), 16));
+                    }
                 }
             }
         }

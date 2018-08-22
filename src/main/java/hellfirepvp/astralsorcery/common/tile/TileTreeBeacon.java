@@ -107,8 +107,7 @@ public class TileTreeBeacon extends TileReceiverBase {
                     if(tft != null && tft.getFakedState() != null) {
                         IBlockState fake = tft.getFakedState();
                         if(tryHarvestBlock(world, pos, actPos, fake)) { //True, if block disappeared.
-                            world.setBlockToAir(actPos);
-                            if(treePositions.removeElement(randPos)) {
+                            if(world.setBlockToAir(actPos) && treePositions.removeElement(randPos)) {
                                 changed = true;
                             }
                         }
@@ -199,7 +198,9 @@ public class TileTreeBeacon extends TileReceiverBase {
                             continue;
                         }
                         if (!setBlock.getBlock().equals(BlocksAS.blockFakeTree) && !setBlock.getBlock().equals(Blocks.DIRT) && !setBlock.getBlock().equals(Blocks.GRASS)) {
-                            world.setBlockState(snapshot.getPos(), BlocksAS.blockFakeTree.getDefaultState());
+                            if (!world.setBlockState(snapshot.getPos(), BlocksAS.blockFakeTree.getDefaultState())) {
+                                continue;
+                            }
                             TileFakeTree tft = MiscUtils.getTileAt(world, snapshot.getPos(), TileFakeTree.class, true);
                             if (tft != null) {
                                 tft.setupTile(origin, setBlock);

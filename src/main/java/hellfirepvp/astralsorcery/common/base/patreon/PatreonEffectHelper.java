@@ -131,6 +131,14 @@ public class PatreonEffectHelper {
                 UUID.fromString("65e97a7c-87c1-412c-b173-76d4aeefbfcd"),
                 new PatreonEffect(FlareColor.EARTH));
 
+        effectMap.put( //VallenFrostweavr
+                UUID.fromString("564267c7-2ad2-4059-866a-6ca980b32777"),
+                new PatreonEffect(FlareColor.WATER));
+
+        effectMap.put( //kashcah
+                UUID.fromString("083c3cd5-9c94-40c7-a166-5692e4dc4b2c"),
+                new PatreonEffect(null));
+
         effectMap.put( //tree_of_chaos
                 UUID.fromString("2a6871c0-2dfa-41d8-af58-8608c81b8864"),
                 new PtEffectTreeBeacon(FlareColor.DAWN)

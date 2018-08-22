@@ -80,7 +80,9 @@ public class TileOreGenerator extends TileEntitySynchronized {
             }
             generatingOre = true;
             boolean stopGen = false;
-            world.setBlockState(pos, oldState);
+            if (!world.setBlockState(pos, oldState)) {
+                return true; //Rip gen. can't replace block.
+            }
             if(world instanceof WorldServer) {
                 BlockCustomOre.allowCrystalHarvest = true;
                 if(!MiscUtils.breakBlockWithoutPlayer((WorldServer) world, pos, oldState,
@@ -89,8 +91,7 @@ public class TileOreGenerator extends TileEntitySynchronized {
                 }
                 BlockCustomOre.allowCrystalHarvest = false;
             }
-            world.setBlockState(pos, newState);
-            if(stopGen) {
+            if(!world.setBlockState(pos, newState) || stopGen) {
                 return true; //Rip gen.
             }
 
@@ -108,7 +109,9 @@ public class TileOreGenerator extends TileEntitySynchronized {
                     }
                 }
             }
-            world.setBlockState(pos, state);
+            if (!world.setBlockState(pos, state)) {
+                return true;
+            }
             if(structural) {
                 PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.GEN_STRUCTURE, pos);
                 PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, pos, 32));

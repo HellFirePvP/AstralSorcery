@@ -295,9 +295,10 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 IBlockState state = pl.getEntityWorld().getBlockState(at);
                 if(Plants.matchesAny(state)) {
                     state = Plants.getAnyRandomState();
-                    pl.getEntityWorld().setBlockState(at, state);
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                    if (pl.getEntityWorld().setBlockState(at, state)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.CE_CROP_INTERACT, at);
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(pl.getEntityWorld(), at, 16));
+                    }
                 } else {
                     CropHelper.GrowablePlant growable = CropHelper.wrapPlant(pl.getEntityWorld(), at);
                     if(growable != null) {

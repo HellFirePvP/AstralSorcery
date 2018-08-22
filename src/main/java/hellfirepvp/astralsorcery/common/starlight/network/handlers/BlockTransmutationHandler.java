@@ -75,9 +75,11 @@ public class BlockTransmutationHandler implements StarlightNetworkRegistry.IStar
         PacketChannel.CHANNEL.sendToAllAround(pkt, PacketChannel.pointFromPos(world, pos, 16));
 
         if(node.accCharge >= node.runningTransmutation.getCost()) {
-            runningTransmutations.remove(pos);
-
-            world.setBlockState(pos, node.runningTransmutation.getOutput());
+            if (!world.setBlockState(pos, node.runningTransmutation.getOutput())) {
+                node.accCharge -= 1000;
+            } else {
+                runningTransmutations.remove(pos);
+            }
         }
 
     }

@@ -279,10 +279,11 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                     try {
                         place = applicable.key.getBlock().getStateForPlacement(world, placePos, sideHit, (float) rtr.hitVec.x, (float) rtr.hitVec.y, (float) rtr.hitVec.z, applicable.value.getMetadata(), playerIn, hand);
                     } catch (Exception exc) {}
-                    world.setBlockState(placePos, place);
-                    PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                    ev.setAdditionalData(Block.getStateId(applicable.key));
-                    PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                    if (world.setBlockState(placePos, place)) {
+                        PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                        ev.setAdditionalData(Block.getStateId(applicable.key));
+                        PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                    }
                 }
             }
         }
@@ -330,10 +331,11 @@ public class ItemArchitectWand extends ItemBlockStorage implements ItemHandRende
                             try {
                                 place = applicable.key.getBlock().getStateForPlacement(world, placePos, facing, hitX, hitY, hitZ, applicable.value.getMetadata(), playerIn, hand);
                             } catch (Exception exc) {}
-                            world.setBlockState(placePos, place);
-                            PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
-                            ev.setAdditionalData(Block.getStateId(applicable.key));
-                            PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                            if (world.setBlockState(placePos, place)) {
+                                PktParticleEvent ev = new PktParticleEvent(PktParticleEvent.ParticleEventType.ARCHITECT_PLACE, placePos);
+                                ev.setAdditionalData(Block.getStateId(applicable.key));
+                                PacketChannel.CHANNEL.sendToAllAround(ev, PacketChannel.pointFromPos(world, placePos, 40));
+                            }
                         }
                     }
                 }

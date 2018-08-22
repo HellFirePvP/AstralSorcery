@@ -88,7 +88,9 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
 
         if(!world.isRemote) {
             if(ticksExisted > 4 && associatedType == null) {
-                getWorld().setBlockToAir(getPos());
+                if (!getWorld().setBlockToAir(getPos())) {
+                    return;
+                }
             }
             if(isEnhanced() && getTicksExisted() % 10 == 0) {
                 checkAdjacentBlocks();

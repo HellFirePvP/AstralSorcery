@@ -315,12 +315,13 @@ public class EventHandlerServer {
                                         world.getBlockState(pos).getBlock().canHarvestBlock(world, pos, event.getPlayer()))));
                 for (BlockPos pos : foundBlocks.getPattern().keySet()) {
                     IBlockState atState = w.getBlockState(pos);
-                    w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState());
-                    TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
-                    if(tt != null) {
-                        tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
-                    } else {
-                        w.setBlockState(pos, atState);
+                    if (w.setBlockState(pos, BlocksAS.blockFakeTree.getDefaultState())) {
+                        TileFakeTree tt = MiscUtils.getTileAt(w, pos, TileFakeTree.class, true);
+                        if(tt != null) {
+                            tt.setupTile(event.getPlayer(), event.getPlayer().getHeldItemMainhand(), atState);
+                        } else {
+                            w.setBlockState(pos, atState);
+                        }
                     }
                 }
             }

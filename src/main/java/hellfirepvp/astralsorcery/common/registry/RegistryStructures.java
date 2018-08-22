@@ -30,6 +30,7 @@ public class RegistryStructures {
         smallShrine = new StructureSmallShrine();
         treasureShrine = new StructureTreasureShrine();
         smallRuin = new StructureSmallRuin();
+        smallRuinConduit = new StructureRuinConduit();
 
         patternRitualPedestal = new MultiblockRitualPedestal();
         patternAltarAttunement = new MultiblockAltarAttunement();
@@ -44,6 +45,8 @@ public class RegistryStructures {
 
         patternSmallRuin = new PatternBlockArray();
         patternSmallRuin.addAll(smallRuin);
+        patternSmallRuinConduit = new PatternBlockArray();
+        patternSmallRuinConduit.addAll(smallRuinConduit);
 
         patternRitualPedestalWithLink = new MultiblockRitualPedestal();
         patternRitualPedestalWithLink.addBlock(0, 5, 0, BlocksAS.ritualLink.getDefaultState());

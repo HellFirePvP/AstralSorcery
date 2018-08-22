@@ -91,12 +91,12 @@ public class LightNetworkBuffer extends CachedWorldData {
                         IBlockState there = world.getBlockState(pos);
                         AstralSorcery.log.warn("[AstralSorcery] Block that gets purged: " + there.getBlock().getUnlocalizedName() + " with meta " + there.getBlock().getMetaFromState(there));
                         iterator.remove();
-                        world.setBlockToAir(pos);
-                        ChunkNetworkData data = getChunkData(chPos);
-                        if(data != null) {
-                            data.removeSourceTile(pos);
+                        if (world.setBlockToAir(pos)) {
+                            ChunkNetworkData data = getChunkData(chPos);
+                            if(data != null) {
+                                data.removeSourceTile(pos);
+                            }
                         }
-                        continue;
                     }
                 }
             }

@@ -85,11 +85,13 @@ public class CEffectAevitas extends CEffectPositionListGen<CropHelper.GrowablePl
             if(MiscUtils.isChunkLoaded(world, new ChunkPos(plant.getPos()))) {
                 if(modified.isCorrupted()) {
                     if(world instanceof WorldServer) {
-                        MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), plant.getPos());
-                        changed = true;
+                        if (MiscUtils.breakBlockWithoutPlayer(((WorldServer) world), plant.getPos())) {
+                            changed = true;
+                        }
                     } else {
-                        world.setBlockToAir(plant.getPos());
-                        changed = true;
+                        if (world.setBlockToAir(plant.getPos())) {
+                            changed = true;
+                        }
                     }
                 } else {
                     if(!plant.isValid(world, true)) {
