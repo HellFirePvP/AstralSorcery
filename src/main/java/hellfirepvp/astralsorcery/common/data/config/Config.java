@@ -90,6 +90,8 @@ public class Config {
 
     public static float exchangeWandMaxHardness = -1;
 
+    public static int dayLength = 24000;
+
     public static List<Integer> constellationSkyDimWhitelist = Lists.newArrayList();
     public static List<Integer> weakSkyRendersWhitelist = Lists.newArrayList();
     public static List<String> modidOreGenBlacklist = Lists.newArrayList();
@@ -195,6 +197,7 @@ public class Config {
         String[] weakSkyRenders = latestConfig.getStringList("weakSkyRenders", "general", new String[] {}, "IF a dimensionId is listed in 'skySupportedDimensions' you can add it here to keep its sky render, but AS will try to render only constellations on top of its existing sky render.");
         String[] oreModidBlacklist = latestConfig.getStringList("oreGenBlacklist", "general", new String[] { "techreborn" }, "List any number of modid's here and the aevitas perk & mineralis ritual will not spawn ores that originate from any of the mods listed here.");
         modidOreGenBlacklist = Lists.newArrayList(oreModidBlacklist);
+        dayLength = latestConfig.getInt("dayLength", "general", dayLength, 100, Integer.MAX_VALUE, "Defines the length of a day (both daytime & nighttime obviously) for the mod's internal logic.");
 
         ambientFlareChance = latestConfig.getInt("EntityFlare.ambientspawn", "entities", ambientFlareChance, 0, 200_000, "Defines how common ***ambient*** flares are. the lower the more common. 0 = ambient ones don't appear/disabled.");
         flareKillsBats = latestConfig.getBoolean("EntityFlare.killbats", "entities", true, "If this is set to true, occasionally, a spawned flare will (attempt to) kill bats close to it.");

@@ -18,6 +18,7 @@ import hellfirepvp.astralsorcery.common.constellation.CelestialEvent;
 import hellfirepvp.astralsorcery.common.constellation.IConstellation;
 import hellfirepvp.astralsorcery.common.constellation.distribution.ConstellationSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -316,12 +317,12 @@ public class RenderAstralSkybox extends IRenderHandler {
 
         if(handle != null && handle.getCurrentlyActiveEvent() == CelestialEvent.LUNAR_ECLIPSE) {
             int eclTick = handle.lunarEclipseTick;
-            if (eclTick >= ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR) { //fading out
-                eclTick -= ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR;
+            if (eclTick >= ConstellationSkyHandler.getLunarEclipseHalfDuration()) { //fading out
+                eclTick -= ConstellationSkyHandler.getLunarEclipseHalfDuration();
             } else {
-                eclTick = ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR - eclTick;
+                eclTick = ConstellationSkyHandler.getLunarEclipseHalfDuration() - eclTick;
             }
-            float perc = ((float) eclTick) / ConstellationSkyHandler.LUNAR_ECLIPSE_HALF_DUR;
+            float perc = ((float) eclTick) / ConstellationSkyHandler.getLunarEclipseHalfDuration();
             GlStateManager.color(1F, 0.4F + (0.6F * perc), 0.4F + (0.6F * perc), alphaSubRain);
             renderMoon();
         } else {
@@ -403,7 +404,7 @@ public class RenderAstralSkybox extends IRenderHandler {
     private void renderSolarEclipseSun(WorldSkyHandler handle) {
         double xzSize = 30F;
 
-        float part = ((float) ConstellationSkyHandler.SOLAR_ECLIPSE_HALF_DUR * 2) / 7F;
+        float part = ((float) ConstellationSkyHandler.getSolarEclipseHalfDuration() * 2) / 7F;
         float u = 0;
         float tick = handle.solarEclipseTick;
         while (tick - part > 0) {
@@ -450,8 +451,8 @@ public class RenderAstralSkybox extends IRenderHandler {
     }
 
     private static void renderConstellations(final World w, final float partialTicks) {
-        long wTime = ((w.getWorldTime() % 24000) + 24000) % 24000;
-        if (wTime < 12000) return; //Daytime.
+        long wTime = ((w.getWorldTime() % Config.dayLength) + Config.dayLength) % Config.dayLength;
+        if (wTime < (Config.dayLength / 2F)) return; //Daytime.
         float rainDim = 1.0F - w.getRainStrength(partialTicks);
         final float brightness = w.getStarBrightness(partialTicks) * rainDim;
         if (brightness <= 0.0F) return;

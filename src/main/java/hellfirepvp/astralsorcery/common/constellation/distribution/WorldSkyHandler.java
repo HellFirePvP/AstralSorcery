@@ -13,6 +13,7 @@ import hellfirepvp.astralsorcery.client.util.mappings.ClientConstellationPositio
 import hellfirepvp.astralsorcery.common.constellation.*;
 import hellfirepvp.astralsorcery.common.data.DataActiveCelestials;
 import hellfirepvp.astralsorcery.common.data.SyncDataHolder;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,7 +81,7 @@ public class WorldSkyHandler {
 
         evaluateCelestialEventTimes(w);
 
-        int currentDay = (int) (w.getWorldTime() / 24000);
+        int currentDay = (int) (w.getWorldTime() / Config.dayLength);
 
         int trackingDifference = currentDay - lastRecordedDay;
         lastRecordedDay = currentDay;
@@ -338,12 +339,18 @@ public class WorldSkyHandler {
         int repeat = 36;
         long wTime = world.getWorldTime();
 
-        int solarTime = (int) ((wTime - offset * 24000) % (repeat * 24000));
-        dayOfSolarEclipse = solarTime < 24000;
-        if (wTime > 24000 && solarTime > 3600 && solarTime < 8400) {
+        int suggestedDayLength = Config.dayLength;
+
+        int solarTime = (int) ((wTime - offset * suggestedDayLength) % (repeat * suggestedDayLength));
+        dayOfSolarEclipse = solarTime < suggestedDayLength;
+        int midSOffset = suggestedDayLength / 4; //Rounding errors are not my fault.
+
+        if (wTime > suggestedDayLength &&
+                solarTime > (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration()) &&
+                solarTime < (midSOffset + ConstellationSkyHandler.getSolarEclipseHalfDuration())) {
             solarEclipse = true;
             prevSolarEclipseTick = solarEclipseTick;
-            solarEclipseTick = solarTime - 3600;
+            solarEclipseTick = solarTime - (midSOffset - ConstellationSkyHandler.getSolarEclipseHalfDuration());
         } else {
             solarEclipse = false;
             solarEclipseTick = 0;
@@ -351,12 +358,16 @@ public class WorldSkyHandler {
         }
 
         repeat = 68;
-        int lunarTime = (int) (wTime % (repeat * 24000));
-        dayOfLunarEclipse = lunarTime < 24000;
-        if (wTime > 24000 && lunarTime > 15600 && lunarTime < 20400) {
+        int lunarTime = (int) (wTime % (repeat * suggestedDayLength));
+        dayOfLunarEclipse = lunarTime < suggestedDayLength;
+        int midLOffset = Math.round(suggestedDayLength * 0.75F); //Rounding errors are not my fault.
+
+        if (wTime > suggestedDayLength &&
+                lunarTime > (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration()) &&
+                lunarTime < (midLOffset + ConstellationSkyHandler.getLunarEclipseHalfDuration())) {
             lunarEclipse = true;
             prevLunarEclipseTick = lunarEclipseTick;
-            lunarEclipseTick = lunarTime - 15600;
+            lunarEclipseTick = lunarTime - (midLOffset - ConstellationSkyHandler.getLunarEclipseHalfDuration());
         } else {
             lunarEclipse = false;
             lunarEclipseTick = 0;

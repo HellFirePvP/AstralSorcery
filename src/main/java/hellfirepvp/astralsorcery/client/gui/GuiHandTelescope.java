@@ -27,6 +27,7 @@ import hellfirepvp.astralsorcery.common.constellation.distribution.Constellation
 import hellfirepvp.astralsorcery.common.constellation.distribution.WorldSkyHandler;
 import hellfirepvp.astralsorcery.common.constellation.star.StarConnection;
 import hellfirepvp.astralsorcery.common.constellation.star.StarLocation;
+import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import hellfirepvp.astralsorcery.common.network.PacketChannel;
@@ -90,7 +91,7 @@ public class GuiHandTelescope extends GuiWHScreen implements GuiSkyScreen {
         int width = guiWidth - 6, height = guiHeight - 6;
         Random rand = new Random(seed);
 
-        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / 24000);
+        int day = (int) (Minecraft.getMinecraft().world.getWorldTime() / Config.dayLength);
         for (int i = 0; i < Math.abs(day); i++) {
             rand.nextLong(); //Flush
         }
