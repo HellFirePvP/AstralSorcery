@@ -68,6 +68,20 @@ public interface ConfigDataAdapter<T extends ConfigDataAdapter.DataSet> {
         @Nonnull
         public String serialize();
 
+        public static class StringElement implements DataSet {
+
+            private final String str;
+
+            public StringElement(@Nonnull String str) {
+                this.str = str;
+            }
+
+            @Nonnull
+            @Override
+            public String serialize() {
+                return str;
+            }
+        }
     }
 
 }

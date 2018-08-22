@@ -138,10 +138,11 @@ public class EntityUtils {
 
     @Nullable
     public static LootTable getLootTable(EntityLiving entity) {
+        ResourceLocation table = entity.deathLootTable;
         if(getLootTableMethod == null) return null;
         try {
-            ResourceLocation lootTable = (ResourceLocation) getLootTableMethod.invoke(entity);
-            return entity.world.getLootTableManager().getLootTableFromLocation(lootTable);
+            if (table == null) table = (ResourceLocation) getLootTableMethod.invoke(entity);
+            return entity.world.getLootTableManager().getLootTableFromLocation(table);
         } catch (Exception e) {
             return null;
         }

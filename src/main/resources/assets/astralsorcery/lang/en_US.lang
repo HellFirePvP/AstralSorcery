@@ -24,6 +24,8 @@ config.astralsorcery.category.treasure_shrine=Ore-Spawning: Treasure Shrine
 config.astralsorcery.category.treasure_shrine.tooltip=Defines the OreDictionary-ores the treasure shrine can spawn.
 config.astralsorcery.category.fluid_rarities=Fluids: Neromantic Prime
 config.astralsorcery.category.fluid_rarities.tooltip=Defines the fluids the prime can find.
+config.astralsorcery.category.herdable_animals_blacklist=Blacklist: Herdable Animals
+config.astralsorcery.category.herdable_animals_blacklist.tooltip=Defines which animals the bootes ritual can't interact with.
 
 potion.potency.1=II
 potion.potency.2=III
