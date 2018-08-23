@@ -17,9 +17,12 @@ import hellfirepvp.astralsorcery.common.constellation.perk.types.ICooldownPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.types.IPlayerTickPerk;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
 import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
+import hellfirepvp.astralsorcery.common.network.PacketChannel;
+import hellfirepvp.astralsorcery.common.network.packet.server.PktSyncPerkActivity;
 import hellfirepvp.astralsorcery.common.util.data.TimeoutListContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -101,6 +104,10 @@ public class PerkEffectHelper implements ITickHandler {
         if (perkCooldownsClient.hasList(container)) {
             perkCooldownsClient.removeList(container);
         }
+
+        if (newPlayer instanceof EntityPlayerMP) {
+            PacketChannel.CHANNEL.sendTo(new PktSyncPerkActivity(PktSyncPerkActivity.Type.UNLOCKALL), (EntityPlayerMP) newPlayer);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -179,6 +186,19 @@ public class PerkEffectHelper implements ITickHandler {
             for (AbstractPerk perk : copyPerks) {
                 handlePerkRemoval(perk, player, Side.CLIENT);
             }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void reapplyAllPerksClient(EntityPlayer player) {
+        handlePerkModification(player, Side.CLIENT, false);
+
+        PlayerWrapperContainer container = new PlayerWrapperContainer(player);
+        if (perkCooldowns.hasList(container)) {
+            perkCooldowns.removeList(container);
+        }
+        if (perkCooldownsClient.hasList(container)) {
+            perkCooldownsClient.removeList(container);
         }
     }
 
