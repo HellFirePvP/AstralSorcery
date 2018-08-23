@@ -122,7 +122,7 @@ public class ConstellationSkyHandler implements ITickHandler {
         float dayPart = ((world.getWorldTime() % dLength) + dLength) % dLength;
         if(dayPart < (dLength / 2F)) return 0F;
         float part = dLength / 7F;
-        if(dayPart < ((dLength / 2F) + part)) return (dayPart - ((dLength / 2F) + part)) / part;
+        if(dayPart < ((dLength / 2F) + part)) return ((dayPart - ((dLength / 2F) + part)) / part) + 1F;
         if(dayPart > (dLength - part)) return 1F - (dayPart - (dLength - part)) / part;
         return 1F;
     }
