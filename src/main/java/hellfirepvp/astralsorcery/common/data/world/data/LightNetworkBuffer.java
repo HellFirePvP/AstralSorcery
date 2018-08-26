@@ -115,13 +115,13 @@ public class LightNetworkBuffer extends CachedWorldData {
             for (ChunkNetworkData data : chunkSortedData.values()) {
                 for (ChunkSectionNetworkData secData : data.sections.values()) {
                     for (IPrismTransmissionNode node : secData.getAllTransmissionNodes()) {
-                        TileEntity te = world.getTileEntity(node.getPos());
+                        TileEntity te = world.getTileEntity(node.getLocationPos());
                         if(te == null || !(te instanceof IStarlightTransmission)) {
                             invalidRemoval.add(node);
                             continue;
                         }
                         IStarlightTransmission ism = (IStarlightTransmission) te;
-                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getPos());
+                        IPrismTransmissionNode newNode = ism.provideTransmissionNode(node.getLocationPos());
                         if(!node.getClass().isAssignableFrom(newNode.getClass())) {
                             invalidRemoval.add(node);
                             continue;
@@ -137,7 +137,7 @@ public class LightNetworkBuffer extends CachedWorldData {
 
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Performed StarlightNetwork integrity check. Found " + invalidRemoval.size() + " invalid transmission nodes.");
             for (IPrismTransmissionNode node : invalidRemoval) {
-                removeTransmission(node.getPos());
+                removeTransmission(node.getLocationPos());
             }
             AstralSorcery.log.info("[LightNetworkIntegrityCheck] Removed invalid transmission nodes from the network.");
 
@@ -550,7 +550,7 @@ public class LightNetworkBuffer extends CachedWorldData {
                         AstralSorcery.log.warn("[AstralSorcery] This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                     } catch (Exception exc2) {
                         try {
-                            BlockPos at = node.getValue().getPos();
+                            BlockPos at = node.getValue().getLocationPos();
                             AstralSorcery.log.warn("[AstralSorcery] Couldn't write node data for network node at " + at.toString() + "!");
                             AstralSorcery.log.warn("[AstralSorcery] This is a major problem. To be perfectly save, consider making a backup, then break or mcedit the tileentity out and place a proper/new one...");
                         } catch (Exception exc3) {

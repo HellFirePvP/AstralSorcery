@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Collection;
@@ -102,6 +103,12 @@ public class TileRitualLink extends TileEntityTick implements ILinkableTile, IMu
     @Override
     public PatternBlockArray getRequiredStructure() {
         return MultiBlockArrays.patternRitualPedestalWithLink;
+    }
+
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
     @Override

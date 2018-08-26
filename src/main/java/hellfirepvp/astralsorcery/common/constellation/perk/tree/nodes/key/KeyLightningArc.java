@@ -117,7 +117,7 @@ public class KeyLightningArc extends KeyPerk {
                     .modifyValue(AttributeTypeRegistry.ATTR_TYPE_ARC_CHAINS, arcBaseChains));
             List<EntityLivingBase> visitedEntities = Lists.newArrayList();
             Entity start = world.getEntityByID(entityStartId);
-            if (start != null && start instanceof EntityLivingBase) {
+            if (start != null && start instanceof EntityLivingBase && !start.isDead) {
                 AxisAlignedBB box = new AxisAlignedBB(-distanceSearch, -distanceSearch, -distanceSearch,
                         distanceSearch, distanceSearch, distanceSearch);
 
@@ -137,10 +137,14 @@ public class KeyLightningArc extends KeyPerk {
                     if (last != null) {
                         entities.remove(last);
                     }
+                    if (player != null) {
+                        entities.remove(player);
+                    }
                     entities.removeAll(visitedEntities);
                     if(!entity.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
                         entities.removeIf(e -> e instanceof EntityPlayer);
                     }
+                    entities.removeIf(e -> e.isDead);
                     entities.removeIf(e -> e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator()));
 
                     if(!entities.isEmpty()) {

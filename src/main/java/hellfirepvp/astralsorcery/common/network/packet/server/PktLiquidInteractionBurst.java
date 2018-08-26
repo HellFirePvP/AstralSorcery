@@ -79,7 +79,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
             cube.setColorHandler(cb -> new Color(message.comp1.getFluid().getColor(message.comp1)));
-            cube.setScale(0.35F).tumble().setMotion(
+            cube.setScale(0.1F).tumble().setMotion(
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.017F * (rand.nextBoolean() ? 1 : -1));
@@ -92,7 +92,7 @@ public class PktLiquidInteractionBurst implements IMessageHandler<PktLiquidInter
             cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, message.pos.toBlockPos());
             cube.setColorHandler(cb -> new Color(message.comp2.getFluid().getColor(message.comp2)));
-            cube.setScale(0.35F).tumble().setMotion(
+            cube.setScale(0.1F).tumble().setMotion(
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.027F * (rand.nextBoolean() ? 1 : -1));

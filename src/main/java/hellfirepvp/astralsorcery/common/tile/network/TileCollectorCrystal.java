@@ -30,6 +30,7 @@ import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSour
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
+import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.tile.base.TileSourceBase;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
@@ -58,7 +59,7 @@ import java.util.Random;
  * Created by HellFirePvP
  * Date: 01.08.2016 / 13:25
  */
-public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile {
+public class TileCollectorCrystal extends TileSourceBase implements IMultiblockDependantTile, IStructureAreaOfInfluence {
 
     public static final BlockPos[] offsetsLiquidStarlight = new BlockPos[] {
             new BlockPos(-1, -4, -1),
@@ -150,6 +151,12 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
         return null;
     }
 
+    @Nonnull
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     @SideOnly(Side.CLIENT)
     private void playEnhancedEffects() {
         if(Minecraft.isFancyGraphicsEnabled()) {
@@ -217,6 +224,27 @@ public class TileCollectorCrystal extends TileSourceBase implements IMultiblockD
             return false;
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public Color getEffectRenderColor() {
+        return providesEffect() ? Color.WHITE : null;
+    }
+
+    @Override
+    public double getRadius() {
+        return providesEffect() ? 16 : 0;
+    }
+
+    @Override
+    public boolean providesEffect() {
+        return this.doesSeeSky();
+    }
+
+    @Override
+    public int getDimensionId() {
+        return this.getWorld().provider.getDimension();
     }
 
     public boolean isPlayerMade() {

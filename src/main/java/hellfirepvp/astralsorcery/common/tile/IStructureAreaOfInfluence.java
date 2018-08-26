@@ -9,23 +9,36 @@
 package hellfirepvp.astralsorcery.common.tile;
 
 import hellfirepvp.astralsorcery.common.util.ILocatable;
-import hellfirepvp.astralsorcery.common.util.struct.PatternBlockArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * This class is part of the Astral Sorcery Mod
  * The complete source code for this mod can be found on github.
- * Class: IMultiblockDependantTile
+ * Class: IStructureAreaOfInfluence
  * Created by HellFirePvP
- * Date: 31.10.2017 / 15:51
+ * Date: 26.08.2018 / 09:39
  */
-public interface IMultiblockDependantTile extends ILocatable {
+public interface IStructureAreaOfInfluence extends ILocatable {
 
-    //'this' tile needs to be centered on that structure
     @Nullable
-    public PatternBlockArray getRequiredStructure();
+    @SideOnly(Side.CLIENT)
+    public Color getEffectRenderColor();
+
+    @SideOnly(Side.CLIENT)
+    default public BlockPos getActualRenderOffsetPos() {
+        return this.getLocationPos();
+    }
+
+    public int getDimensionId();
+
+    public double getRadius();
+
+    public boolean providesEffect();
 
 }

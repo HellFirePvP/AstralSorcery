@@ -24,7 +24,7 @@ public class PerkLevelManager {
 
     public static final PerkLevelManager INSTANCE = new PerkLevelManager();
 
-    private final int LEVEL_CAP = 20;
+    private final int LEVEL_CAP = 30;
     private Map<Integer, Integer> totalExpLevelRequired = new HashMap<>();
 
     private PerkLevelManager() {

@@ -277,7 +277,7 @@ public class EntityLiquidSpark extends EntityFlying implements EntityTechnicalAm
         cube.setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
         cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
         cube.setColorHandler(cb -> new Color(stack.getFluid().getColor(stack)));
-        cube.setScale(0.3F).tumble().setMotion(
+        cube.setScale(0.14F).tumble().setMotion(
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.02F * (rand.nextBoolean() ? 1 : -1));

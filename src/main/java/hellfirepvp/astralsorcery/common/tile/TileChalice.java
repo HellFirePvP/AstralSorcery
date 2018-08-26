@@ -17,6 +17,7 @@ import hellfirepvp.astralsorcery.common.base.LiquidInteraction;
 import hellfirepvp.astralsorcery.common.data.config.entry.ConfigEntry;
 import hellfirepvp.astralsorcery.common.entities.EntityLiquidSpark;
 import hellfirepvp.astralsorcery.common.lib.BlocksAS;
+import hellfirepvp.astralsorcery.common.lib.Constellations;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntityTick;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
 import hellfirepvp.astralsorcery.common.util.RaytraceAssist;
@@ -52,7 +53,7 @@ import java.util.List;
  * Created by HellFirePvP
  * Date: 18.10.2017 / 21:58
  */
-public class TileChalice extends TileEntityTick implements ILiquidStarlightPowered {
+public class TileChalice extends TileEntityTick implements ILiquidStarlightPowered, IStructureAreaOfInfluence {
 
     private static final int TANK_SIZE = 24000;
     private SimpleSingleFluidCapabilityTank tank;
@@ -179,7 +180,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, at.toBlockPos());
             cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
-            cube.setScale(0.08F * (getDrawSize().ordinal() + 1)).tumble().setMotion(
+            cube.setScale(0.03F * (getDrawSize().ordinal() + 1)).tumble().setMotion(
                     rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.005F * (rand.nextBoolean() ? 1 : -1));
@@ -193,7 +194,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
         cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
         cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
         cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
-        cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
+        cube.setScale(rand.nextFloat() * 0.05F + 0.05F).tumble().setMotion(
                 rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                 rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
@@ -218,7 +219,7 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             cube.setBlendMode(null).setTextureSubSizePercentage(1F / 16F).setMaxAge(20 + rand.nextInt(20));
             cube.setWorldLightCoord(Minecraft.getMinecraft().world, perp.toBlockPos());
             cube.setColorHandler(cb -> new Color(fs.getFluid().getColor(fs)));
-            cube.setScale(rand.nextFloat() * 0.1F + 0.2F).tumble().setMotion(
+            cube.setScale(rand.nextFloat() * 0.05F + 0.05F).tumble().setMotion(
                     rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1),
                     rand.nextFloat() * 0.008F * (rand.nextBoolean() ? 1 : -1));
@@ -254,6 +255,32 @@ public class TileChalice extends TileEntityTick implements ILiquidStarlightPower
             getTank().fill(new FluidStack(BlocksAS.fluidLiquidStarlight, mbLiquidStarlight), true);
             markForUpdate();
         }
+    }
+
+    @Nullable
+    @Override
+    public Color getEffectRenderColor() {
+        return providesEffect() ? Constellations.octans.getConstellationColor() : null;
+    }
+
+    @Override
+    public double getRadius() {
+        return providesEffect() ? ConfigEntryChalice.chaliceRange : 0;
+    }
+
+    @Override
+    public boolean providesEffect() {
+        return this.getWorld().isBlockIndirectlyGettingPowered(getPos()) == 0;
+    }
+
+    @Override
+    public int getDimensionId() {
+        return this.getWorld().provider.getDimension();
+    }
+
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
     }
 
     @Override

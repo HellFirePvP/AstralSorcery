@@ -129,7 +129,11 @@ public class EventHandlerCapeEffects implements ITickHandler {
                 if(rtr != null) {
                     EnumFacing faceHit = rtr.sideHit;
                     if(faceHit != null) {
-                        ev.breakBlocksPlane((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        if (faceHit.getAxis() == EnumFacing.Axis.Y) {
+                            ev.breakBlocksPlaneHorizontal((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        } else {
+                            ev.breakBlocksPlaneVertical((EntityPlayerMP) pl, faceHit, event.getWorld(), event.getPos());
+                        }
                     }
                 }
             } finally {

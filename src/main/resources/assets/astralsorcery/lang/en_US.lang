@@ -501,10 +501,10 @@ item.itemenchantmentamulet.pure=Pure
 
 item.itemskyresonator.starlight.name=Fosic Resonator
 item.itemskyresonator.liquid.name=Ichosic Resonator
-item.itemskyresonator.structure.name=Domi Resonator
+item.itemskyresonator.structure.name=Domic Resonator
 item.itemskyresonator.upgrade.starlight.name=Fosic
 item.itemskyresonator.upgrade.liquid.name=Ichosic
-item.itemskyresonator.upgrade.structure.name=Domi
+item.itemskyresonator.upgrade.structure.name=Domic
 
 item.itemcoloredlens.effect.fire.name=Ignition
 item.itemcoloredlens.effect.break.name=Break

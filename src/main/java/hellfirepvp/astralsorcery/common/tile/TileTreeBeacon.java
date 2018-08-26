@@ -66,7 +66,7 @@ import java.util.UUID;
  * Created by HellFirePvP
  * Date: 30.12.2016 / 13:28
  */
-public class TileTreeBeacon extends TileReceiverBase {
+public class TileTreeBeacon extends TileReceiverBase implements IStructureAreaOfInfluence {
 
     private static final Random rand = new Random();
 
@@ -307,6 +307,32 @@ public class TileTreeBeacon extends TileReceiverBase {
         TreeCaptureHelper.offerWeakWatcher(treeWatcher);
     }
 
+    @Nullable
+    @Override
+    public Color getEffectRenderColor() {
+        return providesEffect() ? Constellations.aevitas.getConstellationColor() : null;
+    }
+
+    @Override
+    public double getRadius() {
+        return providesEffect() ? ConfigEntryTreeBeacon.treeBeaconRange : 0;
+    }
+
+    @Override
+    public boolean providesEffect() {
+        return true;
+    }
+
+    @Override
+    public int getDimensionId() {
+        return this.getWorld().provider.getDimension();
+    }
+
+    @Override
+    public BlockPos getLocationPos() {
+        return this.getPos();
+    }
+
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
@@ -385,7 +411,7 @@ public class TileTreeBeacon extends TileReceiverBase {
         @Override
         public void onStarlightReceive(World world, boolean isChunkLoaded, IWeakConstellation type, double amount) {
             if(isChunkLoaded) {
-                TileTreeBeacon tw = MiscUtils.getTileAt(world, getPos(), TileTreeBeacon.class, false);
+                TileTreeBeacon tw = MiscUtils.getTileAt(world, getLocationPos(), TileTreeBeacon.class, false);
                 if(tw != null) {
                     tw.receiveStarlight(type, amount);
                 }

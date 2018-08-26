@@ -99,7 +99,7 @@ public class EventHandlerServer {
                 for (ConstellationPerk perk : perks.keySet()) {
                     if (!prog.isPerkActive(perk)) continue;
                     if (perk.mayExecute(ConstellationPerk.Target.PLAYER_HARVEST_SPEED)) {
-                        BlockPos p = event.getPos();
+                        BlockPos p = event.getLocationPos();
                         event.setNewSpeed(perk.onHarvestSpeed(harvester, event.getState(), (p == null || p.getY() < 0) ? null : p, event.getNewSpeed()));
                     }
                 }

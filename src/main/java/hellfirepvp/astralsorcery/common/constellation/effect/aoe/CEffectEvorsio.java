@@ -63,8 +63,8 @@ public class CEffectEvorsio extends CEffectPositionListGen<BlockBreakAssist.Brea
         if(world.isAirBlock(pos) || hardness < 0 || hardness > 75) {
             return false;
         }
-        if(origin != null && MiscUtils.isChunkLoaded(world, origin.getPos())) {
-            BlockPos originPedestal = origin.getPos();
+        if(origin != null && MiscUtils.isChunkLoaded(world, origin.getLocationPos())) {
+            BlockPos originPedestal = origin.getLocationPos();
             TileRitualLink link = MiscUtils.getTileAt(world, originPedestal, TileRitualLink.class, true);
             if(link != null && link.getLinkedTo() != null && MiscUtils.isChunkLoaded(world, link.getLinkedTo())) {
                 originPedestal = link.getLinkedTo();

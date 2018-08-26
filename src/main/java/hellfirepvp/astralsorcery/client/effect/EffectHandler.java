@@ -11,6 +11,7 @@ package hellfirepvp.astralsorcery.client.effect;
 import hellfirepvp.astralsorcery.AstralSorcery;
 import hellfirepvp.astralsorcery.client.effect.block.EffectTranslucentFallingBlock;
 import hellfirepvp.astralsorcery.client.effect.compound.CompoundObjectEffect;
+import hellfirepvp.astralsorcery.client.effect.controller.InfluenceSizePreview;
 import hellfirepvp.astralsorcery.client.effect.controller.orbital.OrbitalEffectController;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingDepthParticle;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -30,6 +31,7 @@ import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import hellfirepvp.astralsorcery.common.data.config.Config;
 import hellfirepvp.astralsorcery.common.tile.IMultiblockDependantTile;
+import hellfirepvp.astralsorcery.common.tile.IStructureAreaOfInfluence;
 import hellfirepvp.astralsorcery.common.util.Counter;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
@@ -69,6 +71,7 @@ public final class EffectHandler {
     public boolean renderGateway = true;
 
     private StructureMatchPreview structurePreview = null;
+    private InfluenceSizePreview influenceSizePreview = null;
 
     public static final Map<IComplexEffect.RenderTarget, Map<Integer, List<IComplexEffect>>> complexEffects = new HashMap<>();
     public static final List<EntityFXFacingDepthParticle> fastRenderDepthParticles = new LinkedList<>();
@@ -98,9 +101,21 @@ public final class EffectHandler {
         structurePreview.resetTimeout();
     }
 
+    public void requestSizePreviewFor(IStructureAreaOfInfluence tile) {
+        if (!(tile instanceof TileEntity)) return;
+        InfluenceSizePreview prev = new InfluenceSizePreview(tile);
+        this.influenceSizePreview = prev;
+        register(prev);
+    }
+
     @Nullable
     public UIGateway getUiGateway() {
         return uiGateway;
+    }
+
+    @Nullable
+    public IStructureAreaOfInfluence getCurrentActiveAOEView() {
+        return influenceSizePreview == null ? null : influenceSizePreview.getTile();
     }
 
     public static int getDebugEffectCount() {
@@ -300,21 +315,27 @@ public final class EffectHandler {
             toAddBuffer.clear();
             uiGateway = null;
             structurePreview = null;
+            influenceSizePreview = null;
             gatewayUITicks = 0;
             cleanRequested = false;
         }
+
+        if (influenceSizePreview != null && influenceSizePreview.isRemoved()) {
+            influenceSizePreview = null;
+        }
+
         if(Minecraft.getMinecraft().player == null) {
             return;
         }
 
-        if(structurePreview != null) {
+        if (structurePreview != null) {
             structurePreview.tick();
             if(structurePreview.shouldBeRemoved()) {
                 structurePreview = null;
             }
         }
 
-        if(gatewayUITicks > 0) {
+        if (gatewayUITicks > 0) {
             gatewayUITicks--;
             if(gatewayUITicks <= 0) {
                 uiGateway = null;

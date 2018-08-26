@@ -46,7 +46,7 @@ public class CrystalTransmissionNode extends SimpleTransmissionNode {
 
     @Override
     public void onTransmissionTick(World world) {
-        TileCrystalLens lens = MiscUtils.getTileAt(world, getPos(), TileCrystalLens.class, false);
+        TileCrystalLens lens = MiscUtils.getTileAt(world, getLocationPos(), TileCrystalLens.class, false);
         if(lens != null) {
             lens.onTransmissionTick();
         }

@@ -12,9 +12,12 @@ import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.util.Blending;
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import hellfirepvp.astralsorcery.client.util.TextureHelper;
+import hellfirepvp.astralsorcery.client.util.resource.AbstractRenderableTexture;
+import hellfirepvp.astralsorcery.common.util.data.Tuple;
 import hellfirepvp.astralsorcery.common.util.data.Vector3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,6 +36,7 @@ import java.util.function.Function;
 public class EntityFXFloatingCube extends EntityComplexFX {
 
     private final TextureAtlasSprite tas;
+    private final AbstractRenderableTexture tex;
 
     private MotionController<EntityFXFloatingCube> motionController = (fx, v) -> v;
     private PositionController<EntityFXFloatingCube> positionController = (fx, v, m) -> v.add(m);
@@ -45,7 +49,8 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     private Blending blending = Blending.ADDITIVEDARK;
     private AlphaFunction alphaFunction = AlphaFunction.CONSTANT;
-    private float alphaMultiplier = 1F;
+    private RefreshFunction refreshFunction = null;
+    private float alphaMultiplier = 1F, tumbleIntensityMultiplier = 1F;
     private ScaleFunction<EntityFXFloatingCube> scaleFunction = (fx, pTicks, scaleIn) -> scaleIn;
     private float scale = 1F;
     private boolean disableDepth = false;
@@ -57,10 +62,17 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     public EntityFXFloatingCube(IBlockState blockState) {
         this.tas = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(blockState);
+        this.tex = null;
     }
 
     public EntityFXFloatingCube(TextureAtlasSprite tas) {
         this.tas = tas;
+        this.tex = null;
+    }
+
+    public EntityFXFloatingCube(AbstractRenderableTexture tex) {
+        this.tas = null;
+        this.tex = tex;
     }
 
     public EntityFXFloatingCube setDisableDepth(boolean disableDepth) {
@@ -82,6 +94,11 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     public EntityFXFloatingCube setTextureSubSizePercentage(float textureSubSizePercentage) {
         this.textureSubSizePercentage = textureSubSizePercentage;
+        return this;
+    }
+
+    public EntityFXFloatingCube setTumbleIntensityMultiplier(float tumbleIntensityMultiplier) {
+        this.tumbleIntensityMultiplier = tumbleIntensityMultiplier;
         return this;
     }
 
@@ -109,6 +126,11 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     public EntityFXFloatingCube setMotion(double x, double y, double z) {
         this.motion = new Vector3(x, y, z);
+        return this;
+    }
+
+    public EntityFXFloatingCube setRefreshFunction(RefreshFunction refreshFunction) {
+        this.refreshFunction = refreshFunction;
         return this;
     }
 
@@ -176,12 +198,12 @@ public class EntityFXFloatingCube extends EntityComplexFX {
 
     @Override
     public int getLayer() {
-        return 1;
+        return 2;
     }
 
     @Override
     public void tick() {
-        super.tick();
+        this.age++;
 
         Vector3 motion = this.motion.clone();
         if (motionController != null) {
@@ -197,9 +219,23 @@ public class EntityFXFloatingCube extends EntityComplexFX {
             this.position.add(this.motion);
         }
 
-        if(this.rotationChange.lengthSquared() > 0) {
+        if(this.tumbleIntensityMultiplier > 0 && this.rotationChange.lengthSquared() > 0) {
+            Vector3 degAxis = rotationDegreeAxis.clone();
+            Vector3 modify = this.rotationChange.clone().multiply(tumbleIntensityMultiplier);
             this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
-            this.rotationDegreeAxis.add(this.rotationChange);
+            this.rotationDegreeAxis.add(modify);
+
+            Vector3 newDegAxis = rotationDegreeAxis;
+            newDegAxis.setX(newDegAxis.getX() % 360D).setY(newDegAxis.getY() % 360D).setZ(newDegAxis.getZ() % 360D);
+            if(!degAxis.add(modify).equals(newDegAxis)) {
+                this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone().subtract(modify);
+            }
+        } else {
+            this.prevRotationDegreeAxis = this.rotationDegreeAxis.clone();
+        }
+
+        if (this.refreshFunction != null && this.canRemove() && this.refreshFunction.shouldRefresh()) {
+            this.age = 0;
         }
     }
 
@@ -207,43 +243,49 @@ public class EntityFXFloatingCube extends EntityComplexFX {
     public void render(float pTicks) {
         TextureHelper.refreshTextureBindState();
         TextureHelper.setActiveTextureToAtlasSprite();
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GL11.glColor4f(1F, 1F, 1F, 1F);
         if(blending == null) {
-            GL11.glDisable(GL11.GL_BLEND);
+            GlStateManager.disableBlend();
         } else {
+            GlStateManager.enableBlend();
             GL11.glEnable(GL11.GL_BLEND);
+            blending.applyStateManager();
             blending.apply();
         }
         if(disableDepth) {
+            GlStateManager.disableDepth();
             GL11.glDisable(GL11.GL_DEPTH_TEST);
         }
+        GlStateManager.disableCull();
         GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
 
         RenderingUtils.removeStandartTranslationFromTESRMatrix(pTicks);
 
         Vector3 translateTo = getInterpolatedPosition(pTicks);
-        GL11.glTranslated(translateTo.getX(), translateTo.getY(), translateTo.getZ());
-
-        float alpha = alphaFunction.getAlpha(age, maxAge);
-        alpha *= alphaMultiplier;
-        GL11.glColor4f(1F, 1F, 1F, alpha);
+        GlStateManager.translate(translateTo.getX(), translateTo.getY(), translateTo.getZ());
 
         float scaleF = this.scale;
         scaleF = scaleFunction.getScale(this, pTicks, scaleF);
-        GL11.glScaled(scaleF, scaleF, scaleF);
 
         Vector3 rotation = getInterpolatedRotation(pTicks);
-        GL11.glRotated(rotation.getX(), 1, 0, 0);
-        GL11.glRotated(rotation.getY(), 0, 1, 0);
-        GL11.glRotated(rotation.getZ(), 0, 0, 1);
+        GlStateManager.rotate(((float) rotation.getX()), 1, 0, 0);
+        GlStateManager.rotate(((float) rotation.getY()), 0, 1, 0);
+        GlStateManager.rotate(((float) rotation.getZ()), 0, 0, 1);
 
-        double u = tas.getMinU();
-        double v = tas.getMinV();
+        Point.Double uv = null;
+        if (tex != null) {
+            tex.bindTexture();
+            uv = tex.getUVOffset();
+        }
 
-        double uLength = (tas.getMaxU() - tas.getMinU()) * textureSubSizePercentage;
-        double vLength = (tas.getMaxV() - tas.getMinV()) * textureSubSizePercentage;
+        double u = uv != null ? uv.x : tas.getMinU();
+        double v = uv != null ? uv.y : tas.getMinV();
+
+        double uLength = (uv != null ? tex.getUWidth() : (tas.getMaxU() - tas.getMinU())) * textureSubSizePercentage;
+        double vLength = (uv != null ? tex.getVWidth() : (tas.getMaxV() - tas.getMinV())) * textureSubSizePercentage;
 
         Color c = Color.WHITE;
         if (colorHandler != null) {
@@ -253,6 +295,9 @@ public class EntityFXFloatingCube extends EntityComplexFX {
             }
         }
 
+        float alpha = alphaFunction.getAlpha(age, maxAge);
+        alpha *= alphaMultiplier;
+
         float cR = ((float) c.getRed()) / 255F;
         float cG = ((float) c.getGreen()) / 255F;
         float cB = ((float) c.getBlue()) / 255F;
@@ -260,22 +305,22 @@ public class EntityFXFloatingCube extends EntityComplexFX {
         if(lightCoordX == -1 && lightCoordY == -1) {
             RenderingUtils.renderTexturedCubeCentralWithColor(new Vector3(), scaleF,
                     u, v, uLength, vLength,
-                    cR, cG, cB, 1F);
+                    cR, cG, cB, alpha);
         } else {
             RenderingUtils.renderTexturedCubeCentralWithLightAndColor(new Vector3(), scaleF,
                     u, v, uLength, vLength,
                     lightCoordX, lightCoordY,
-                    cR, cG, cB, 1F);
+                    cR, cG, cB, alpha);
         }
 
-        GL11.glEnable(GL11.GL_CULL_FACE);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.001F);
+        GlStateManager.enableCull();
         if(disableDepth) {
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GlStateManager.enableDepth();
         }
-        Blending.DEFAULT.apply();
-        GL11.glColor4f(1F, 1F, 1F, 1F);
-        GL11.glPopMatrix();
-        GL11.glPopAttrib();
+        Blending.DEFAULT.applyStateManager();
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.popMatrix();
         TextureHelper.refreshTextureBindState();
     }
 

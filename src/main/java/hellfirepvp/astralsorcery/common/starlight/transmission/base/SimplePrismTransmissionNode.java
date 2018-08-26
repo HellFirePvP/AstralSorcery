@@ -47,7 +47,7 @@ public class SimplePrismTransmissionNode implements IPrismTransmissionNode {
     }
 
     @Override
-    public BlockPos getPos() {
+    public BlockPos getLocationPos() {
         return thisPos;
     }
 

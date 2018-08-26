@@ -88,7 +88,7 @@ public class TransmissionWorldHandler {
 
                 Map<BlockPos, Float> lossMultipliers = chain.getLossMultipliers();
                 for (ITransmissionReceiver rec : chain.getEndpointsNodes()) {
-                    BlockPos pos = rec.getPos();
+                    BlockPos pos = rec.getLocationPos();
                     Float multiplier = lossMultipliers.get(pos);
                     if (multiplier != null) {
                         rec.onStarlightReceive(world, MiscUtils.isChunkLoaded(world, new ChunkPos(pos)), type, starlight * multiplier);
@@ -177,7 +177,7 @@ public class TransmissionWorldHandler {
     //Fired if the node's state related to the network changes.
     //Break all networks associated with that node to trigger recalculations as needed.
     public void notifyTransmissionNodeChange(IPrismTransmissionNode node) {
-        BlockPos pos = node.getPos();
+        BlockPos pos = node.getLocationPos();
         synchronized (accessLock) {
             List<IIndependentStarlightSource> sources = posToSourceMap.get(pos);
             if(sources != null) {
